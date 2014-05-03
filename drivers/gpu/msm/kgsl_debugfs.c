@@ -17,6 +17,7 @@
 #include "kgsl.h"
 #include "kgsl_device.h"
 
+/*default log levels is error for everything*/
 #define KGSL_LOG_LEVEL_DEFAULT 3
 #define KGSL_LOG_LEVEL_MAX     7
 

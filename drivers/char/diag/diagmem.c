@@ -74,6 +74,8 @@ void diagmem_exit(struct diagchar_dev *driver, int pool_type)
 		}
 
 	if (driver->diag_write_struct_pool) {
+		/* Free up struct pool ONLY if there are no outstanding
+		transactions(aggregation buffer) with USB */
 		if (driver->count_write_struct_pool == 0 &&
 		 driver->count_hdlc_pool == 0 && driver->ref_count == 0) {
 			mempool_destroy(driver->diag_write_struct_pool);
