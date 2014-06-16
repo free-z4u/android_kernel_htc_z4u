@@ -19,6 +19,23 @@
 #define FBIOGETCMAP		0x4604
 #define FBIOPUTCMAP		0x4605
 #define FBIOPAN_DISPLAY		0x4606
+
+#ifdef CONFIG_USB_PROJECTOR_ENABLE // USB_PROJECTOR_ENABLE
+struct msmfb_usb_projector_info {
+	uint32_t usb_offset;
+	uint32_t latest_offset;
+	uint32_t src_offset;
+	int width;
+	int height;
+};
+
+#define MSMFB_IOCTL_MAGIC 'm'
+#define MSMFB_GET_USB_PROJECTOR_INFO   _IOR(MSMFB_IOCTL_MAGIC, 301, struct msmfb_usb_projector_info)
+#define MSMFB_SET_USB_PROJECTOR_INFO   _IOW(MSMFB_IOCTL_MAGIC, 302, struct msmfb_usb_projector_info)
+#define MSMFB_CLEAR_USB_PROJECTOR_INFO _IO(MSMFB_IOCTL_MAGIC, 303)
+
+#endif
+
 #ifdef __KERNEL__
 #define FBIO_CURSOR            _IOWR('F', 0x08, struct fb_cursor_user)
 #else

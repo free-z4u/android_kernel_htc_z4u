@@ -535,6 +535,11 @@ static inline struct dst_entry *skb_dst(const struct sk_buff *skb)
  */
 static inline void skb_dst_set(struct sk_buff *skb, struct dst_entry *dst)
 {
+	if ((!skb) || (IS_ERR(skb))) {
+		printk("[NET] skb is NULL in %s\n", __func__);
+		return;
+	}
+
 	skb->_skb_refdst = (unsigned long)dst;
 }
 
@@ -1155,8 +1160,15 @@ static inline void __skb_unlink(struct sk_buff *skb, struct sk_buff_head *list)
 extern struct sk_buff *skb_dequeue(struct sk_buff_head *list);
 static inline struct sk_buff *__skb_dequeue(struct sk_buff_head *list)
 {
-	struct sk_buff *skb = skb_peek(list);
-	if (skb)
+	struct sk_buff *skb = NULL;
+	
+	if ((!list) || (IS_ERR(list))) {
+		printk("[NET] list is NULL in %s\n", __func__);
+		return NULL;
+	}
+	
+	skb = skb_peek(list);
+	if ((skb) && (!IS_ERR(skb)))
 		__skb_unlink(skb, list);
 	return skb;
 }
@@ -1657,8 +1669,15 @@ extern void skb_queue_purge(struct sk_buff_head *list);
 static inline void __skb_queue_purge(struct sk_buff_head *list)
 {
 	struct sk_buff *skb;
-	while ((skb = __skb_dequeue(list)) != NULL)
-		kfree_skb(skb);
+	
+	if ((!list) || (IS_ERR(list))) {
+		printk("[NET] list is NULL in %s\n", __func__);
+		return;
+	}
+	while ((skb = __skb_dequeue(list)) != NULL) {
+		if ((skb) && (!IS_ERR(skb)))
+			kfree_skb(skb);
+	}
 }
 
 /**

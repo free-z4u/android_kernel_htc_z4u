@@ -685,11 +685,13 @@ balanced:
 		 * runtime - in which case borrowing doesn't make sense.
 		 */
 		rt_rq->rt_runtime = RUNTIME_INF;
+		rt_rq->rt_throttled = 0;
 		raw_spin_unlock(&rt_rq->rt_runtime_lock);
 		raw_spin_unlock(&rt_b->rt_runtime_lock);
 	}
 }
 
+#if 0
 static void disable_runtime(struct rq *rq)
 {
 	unsigned long flags;
@@ -698,7 +700,7 @@ static void disable_runtime(struct rq *rq)
 	__disable_runtime(rq);
 	raw_spin_unlock_irqrestore(&rq->lock, flags);
 }
-
+#endif
 static void __enable_runtime(struct rq *rq)
 {
 	rt_rq_iter_t iter;
@@ -723,6 +725,7 @@ static void __enable_runtime(struct rq *rq)
 	}
 }
 
+#if 0
 static void enable_runtime(struct rq *rq)
 {
 	unsigned long flags;
@@ -753,7 +756,7 @@ int update_runtime(struct notifier_block *nfb, unsigned long action, void *hcpu)
 		return NOTIFY_DONE;
 	}
 }
-
+#endif
 static int balance_runtime(struct rt_rq *rt_rq)
 {
 	int more = 0;
@@ -1983,6 +1986,8 @@ static void watchdog(struct rq *rq, struct task_struct *p)
 
 static void task_tick_rt(struct rq *rq, struct task_struct *p, int queued)
 {
+	struct sched_rt_entity *rt_se = &p->rt;
+
 	update_curr_rt(rq);
 
 	watchdog(rq, p);
@@ -2000,12 +2005,15 @@ static void task_tick_rt(struct rq *rq, struct task_struct *p, int queued)
 	p->rt.time_slice = RR_TIMESLICE;
 
 	/*
-	 * Requeue to the end of queue if we are not the only element
-	 * on the queue:
+	 * Requeue to the end of queue if we (and all of our ancestors) are the
+	 * only element on the queue
 	 */
-	if (p->rt.run_list.prev != p->rt.run_list.next) {
-		requeue_task_rt(rq, p, 0);
-		set_tsk_need_resched(p);
+	for_each_sched_rt_entity(rt_se) {
+		if (rt_se->run_list.prev != rt_se->run_list.next) {
+			requeue_task_rt(rq, p, 0);
+			set_tsk_need_resched(p);
+			return;
+		}
 	}
 }
 

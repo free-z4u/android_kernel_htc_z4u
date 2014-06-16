@@ -71,11 +71,15 @@ struct f_rndis {
 	struct gether			port;
 	u8				ctrl_id, data_id;
 	u8				ethaddr[ETH_ALEN];
+	u32				vendorID;
+	const char			*manufacturer;
 	int				config;
 
 	struct usb_ep			*notify;
 	struct usb_request		*notify_req;
 	atomic_t			notify_count;
+
+	atomic_t			online;
 };
 
 static inline struct f_rndis *func_to_rndis(struct usb_function *f)
@@ -448,6 +452,16 @@ static void rndis_command_complete(struct usb_ep *ep, struct usb_request *req)
 	struct usb_composite_dev	*cdev = rndis->port.func.config->cdev;
 	int				status;
 
+	if (req->status < 0) {
+		pr_err("%s: staus error: %d\n", __func__, req->status);
+		return;
+	}
+
+	if (!atomic_read(&rndis->online)) {
+		pr_warning("%s: usb rndis is not online\n", __func__);
+		return;
+	}
+
 	/* received RNDIS command from USB_CDC_SEND_ENCAPSULATED_COMMAND */
 //	spin_lock(&dev->lock);
 	status = rndis_msg_parser(rndis->config, (u8 *) req->buf);
@@ -467,6 +481,11 @@ rndis_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 	u16			w_index = le16_to_cpu(ctrl->wIndex);
 	u16			w_value = le16_to_cpu(ctrl->wValue);
 	u16			w_length = le16_to_cpu(ctrl->wLength);
+
+	if (!atomic_read(&rndis->online)) {
+		pr_warning("%s: usb rndis is not online\n", __func__);
+		return -ENOTCONN;
+	}
 
 	/* composite driver infrastructure handles everything except
 	 * CDC class messages; interface activation uses set_alt().
@@ -599,6 +618,7 @@ static int rndis_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 	} else
 		goto fail;
 
+	atomic_set(&rndis->online, 1);
 	return 0;
 fail:
 	return -EINVAL;
@@ -608,6 +628,8 @@ static void rndis_disable(struct usb_function *f)
 {
 	struct f_rndis		*rndis = func_to_rndis(f);
 	struct usb_composite_dev *cdev = f->config->cdev;
+
+	atomic_set(&rndis->online, 0);
 
 	if (!rndis->notify->driver_data)
 		return;
@@ -684,6 +706,16 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 
 	status = -ENODEV;
 
+	/* NOTE:  a status/notification endpoint is, strictly speaking,
+	 * optional.  We don't treat it that way though!  It's simpler,
+	 * and some newer profiles don't treat it as optional.
+	 */
+	ep = usb_ep_autoconfig(cdev->gadget, &fs_notify_desc);
+	if (!ep)
+		goto fail;
+	rndis->notify = ep;
+	ep->driver_data = cdev;	/* claim */
+
 	/* allocate instance-specific endpoints */
 	ep = usb_ep_autoconfig(cdev->gadget, &fs_in_desc);
 	if (!ep)
@@ -695,16 +727,6 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 	if (!ep)
 		goto fail;
 	rndis->port.out_ep = ep;
-	ep->driver_data = cdev;	/* claim */
-
-	/* NOTE:  a status/notification endpoint is, strictly speaking,
-	 * optional.  We don't treat it that way though!  It's simpler,
-	 * and some newer profiles don't treat it as optional.
-	 */
-	ep = usb_ep_autoconfig(cdev->gadget, &fs_notify_desc);
-	if (!ep)
-		goto fail;
-	rndis->notify = ep;
 	ep->driver_data = cdev;	/* claim */
 
 	status = -ENOMEM;
@@ -768,12 +790,10 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 	rndis_set_param_medium(rndis->config, NDIS_MEDIUM_802_3, 0);
 	rndis_set_host_mac(rndis->config, rndis->ethaddr);
 
-#if 0
-// FIXME
-	if (rndis_set_param_vendor(rndis->config, vendorID,
-				manufacturer))
-		goto fail0;
-#endif
+	if (rndis->manufacturer && rndis->vendorID &&
+			rndis_set_param_vendor(rndis->config, rndis->vendorID,
+					       rndis->manufacturer))
+		goto fail;
 
 	/* NOTE:  all that is done without knowing or caring about
 	 * the network link ... which is unavailable to this code
@@ -820,6 +840,10 @@ rndis_unbind(struct usb_configuration *c, struct usb_function *f)
 
 	rndis_deregister(rndis->config);
 	rndis_exit();
+	/* XXX we dont want to reset the rndis_string_defs.id
+	 *     if we reset it, the open/close rndis may use a lot of usb_id
+	 */
+	/* rndis_string_defs[0].id = 0; */
 
 	if (gadget_is_superspeed(c->cdev->gadget))
 		usb_free_descriptors(f->ss_descriptors);
@@ -853,7 +877,8 @@ static inline bool can_support_rndis(struct usb_configuration *c)
  * for calling @gether_cleanup() before module unload.
  */
 int
-rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
+rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
+				u32 vendorID, const char *manufacturer)
 {
 	struct f_rndis	*rndis;
 	int		status;
@@ -861,13 +886,13 @@ rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 	if (!can_support_rndis(c) || !ethaddr)
 		return -EINVAL;
 
+	/* setup RNDIS itself */
+	status = rndis_init();
+	if (status < 0)
+		return status;
+
 	/* maybe allocate device-global string IDs */
 	if (rndis_string_defs[0].id == 0) {
-
-		/* ... and setup RNDIS itself */
-		status = rndis_init();
-		if (status < 0)
-			return status;
 
 		/* control interface label */
 		status = usb_string_id(c->cdev);
@@ -898,6 +923,8 @@ rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN])
 		goto fail;
 
 	memcpy(rndis->ethaddr, ethaddr, ETH_ALEN);
+	rndis->vendorID = vendorID;
+	rndis->manufacturer = manufacturer;
 
 	/* RNDIS activates when the host changes this filter */
 	rndis->port.cdc_filter = 0;

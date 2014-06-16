@@ -391,3 +391,43 @@ void usb_ep_autoconfig_reset (struct usb_gadget *gadget)
 	epnum = 0;
 }
 
+
+struct usb_ep *usb_ep_autoconfig_bulk_doublebuffer (
+	struct usb_gadget		*gadget,
+	struct usb_endpoint_descriptor	*desc
+)
+{
+	struct usb_ep	*ep;
+
+	/* current STE endpoint fifo assignment is depended on usb.c structure ux500_mode_cfg  */
+
+
+	if (USB_DIR_IN & desc->bEndpointAddress)
+		ep = find_ep (gadget, "ep2in");
+	else
+		ep = find_ep (gadget, "ep2out");
+
+	if (ep && ep_matches (gadget, ep, desc, NULL))
+		return ep;
+
+	if (USB_DIR_IN & desc->bEndpointAddress)
+		ep = find_ep (gadget, "ep3in");
+	else
+		ep = find_ep (gadget, "ep3out");
+
+	if (ep && ep_matches (gadget, ep, desc, NULL))
+		return ep;
+
+
+	if (USB_DIR_IN & desc->bEndpointAddress)
+		ep = find_ep (gadget, "ep6in");
+	else
+		ep = find_ep (gadget, "ep6out");
+
+	if (ep && ep_matches (gadget, ep, desc, NULL))
+		return ep;
+
+	/* Fail */
+	return NULL;
+}
+

@@ -48,3 +48,5 @@ source "net/bluetooth/hidp/Kconfig"
 
 source "drivers/bluetooth/Kconfig"
 
+source "net/bluetooth/hidbrcm/Kconfig"
+

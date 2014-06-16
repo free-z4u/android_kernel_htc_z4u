@@ -83,6 +83,11 @@ static ssize_t part_start_show(struct device *dev,
 ssize_t part_size_show(struct device *dev,
 		       struct device_attribute *attr, char *buf)
 {
+#if defined(CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+        u64 size = 76185600 >> 3;
+        if (!strcmp("mmcblk0", dev_name(dev)))
+            return sprintf(buf, "%llu\n",(unsigned long long)size);
+#endif
 	struct hd_struct *p = dev_to_part(dev);
 	return sprintf(buf, "%llu\n",(unsigned long long)p->nr_sects);
 }
@@ -216,10 +221,21 @@ static void part_release(struct device *dev)
 	kfree(p);
 }
 
+static int part_uevent(struct device *dev, struct kobj_uevent_env *env)
+{
+	struct hd_struct *part = dev_to_part(dev);
+
+	add_uevent_var(env, "PARTN=%u", part->partno);
+	if (part->info && part->info->volname[0])
+		add_uevent_var(env, "PARTNAME=%s", part->info->volname);
+	return 0;
+}
+
 struct device_type part_type = {
 	.name		= "partition",
 	.groups		= part_attr_groups,
 	.release	= part_release,
+	.uevent		= part_uevent,
 };
 
 static void delete_partition_rcu_cb(struct rcu_head *head)

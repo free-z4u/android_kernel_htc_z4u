@@ -22,6 +22,8 @@
 #define FAT_ERRORS_PANIC	2      /* panic on error */
 #define FAT_ERRORS_RO		3      /* remount r/o on error */
 
+#define FAT_CHARSET_ERROR	9999	/* VFAT may have charset error */
+
 struct fat_mount_options {
 	uid_t fs_uid;
 	gid_t fs_gid;
@@ -78,6 +80,7 @@ struct msdos_sb_info {
 	const void *dir_ops;		     /* Opaque; default directory operations */
 	int dir_per_block;	     /* dir entries per block */
 	int dir_per_block_bits;	     /* log2(dir_per_block) */
+	unsigned long vol_id;        /* volume ID */
 
 	int fatent_shift;
 	struct fatent_operations *fatent_ops;

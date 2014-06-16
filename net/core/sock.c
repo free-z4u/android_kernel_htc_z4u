@@ -983,7 +983,12 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
 		struct ucred peercred;
 		if (len > sizeof(peercred))
 			len = sizeof(peercred);
-		cred_to_ucred(sk->sk_peer_pid, sk->sk_peer_cred, &peercred);
+		if (sk != NULL) {
+			cred_to_ucred(sk->sk_peer_pid, sk->sk_peer_cred, &peercred);
+		} else {
+			printk(KERN_ERR "[NET]sock_getsockopt: sk is NULL\n");
+			return -EFAULT;
+		}
 		if (copy_to_user(optval, &peercred, len))
 			return -EFAULT;
 		goto lenout;
@@ -1125,7 +1130,7 @@ static struct sock *sk_prot_alloc(struct proto *prot, gfp_t priority,
 	slab = prot->slab;
 	if (slab != NULL) {
 		sk = kmem_cache_alloc(slab, priority & ~__GFP_ZERO);
-		if (!sk)
+		if ((!sk) && (!IS_ERR(sk)))
 			return sk;
 		if (priority & __GFP_ZERO) {
 			if (prot->clear_sk)
@@ -1136,7 +1141,7 @@ static struct sock *sk_prot_alloc(struct proto *prot, gfp_t priority,
 	} else
 		sk = kmalloc(prot->obj_size, priority);
 
-	if (sk != NULL) {
+	if ((sk != NULL) && (!IS_ERR(sk))) {
 		kmemcheck_annotate_bitfield(sk, flags);
 
 		if (security_sk_alloc(sk, family, priority))

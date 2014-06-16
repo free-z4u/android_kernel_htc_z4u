@@ -18,6 +18,10 @@
 
 #include "power.h"
 
+#ifdef CONFIG_PERFLOCK_HTC
+#include <mach/perflock.h>
+#endif
+
 DEFINE_MUTEX(pm_mutex);
 
 #ifdef CONFIG_PM_SLEEP
@@ -273,7 +277,11 @@ static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
 			   const char *buf, size_t n)
 {
 #ifdef CONFIG_SUSPEND
+#ifdef CONFIG_EARLYSUSPEND
+	suspend_state_t state = PM_SUSPEND_ON;
+#else
 	suspend_state_t state = PM_SUSPEND_STANDBY;
+#endif
 	const char * const *s;
 #endif
 	char *p;
@@ -292,8 +300,15 @@ static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
 #ifdef CONFIG_SUSPEND
 	for (s = &pm_states[state]; state < PM_SUSPEND_MAX; s++, state++) {
 		if (*s && len == strlen(*s) && !strncmp(buf, *s, len)) {
+#ifdef CONFIG_EARLYSUSPEND
+			if (state == PM_SUSPEND_ON || valid_state(state)) {
+				error = 0;
+				request_suspend_state(state);
+				break;
+			}
+#else
 			error = pm_suspend(state);
-			break;
+#endif
 		}
 	}
 #endif
@@ -339,7 +354,8 @@ static ssize_t wakeup_count_show(struct kobject *kobj,
 {
 	unsigned int val;
 
-	return pm_get_wakeup_count(&val) ? sprintf(buf, "%u\n", val) : -EINTR;
+	return pm_get_wakeup_count(&val, true) ?
+		sprintf(buf, "%u\n", val) : -EINTR;
 }
 
 static ssize_t wakeup_count_store(struct kobject *kobj,
@@ -347,15 +363,69 @@ static ssize_t wakeup_count_store(struct kobject *kobj,
 				const char *buf, size_t n)
 {
 	unsigned int val;
+	int error;
 
+	error = pm_autosleep_lock();
+	if (error)
+		return error;
+
+	if (pm_autosleep_state() > PM_SUSPEND_ON) {
+		error = -EBUSY;
+		goto out;
+	}
+
+	error = -EINVAL;
 	if (sscanf(buf, "%u", &val) == 1) {
 		if (pm_save_wakeup_count(val))
-			return n;
+			error = n;
 	}
-	return -EINVAL;
+
+ out:
+	pm_autosleep_unlock();
+	return error;
 }
 
 power_attr(wakeup_count);
+
+#ifdef CONFIG_PM_AUTOSLEEP
+static ssize_t autosleep_show(struct kobject *kobj,
+			      struct kobj_attribute *attr,
+			      char *buf)
+{
+	suspend_state_t state = pm_autosleep_state();
+
+	if (state == PM_SUSPEND_ON)
+		return sprintf(buf, "off\n");
+
+#ifdef CONFIG_SUSPEND
+	if (state < PM_SUSPEND_MAX)
+		return sprintf(buf, "%s\n", valid_state(state) ?
+						pm_states[state] : "error");
+#endif
+#ifdef CONFIG_HIBERNATION
+	return sprintf(buf, "disk\n");
+#else
+	return sprintf(buf, "error");
+#endif
+}
+
+static ssize_t autosleep_store(struct kobject *kobj,
+			       struct kobj_attribute *attr,
+			       const char *buf, size_t n)
+{
+	suspend_state_t state = decode_state(buf, n);
+	int error;
+
+	if (state == PM_SUSPEND_ON
+	    && strcmp(buf, "off") && strcmp(buf, "off\n"))
+		return -EINVAL;
+
+	error = pm_autosleep_set_state(state);
+	return error ? error : n;
+}
+
+power_attr(autosleep);
+#endif /* CONFIG_PM_AUTOSLEEP */
 #endif /* CONFIG_PM_SLEEP */
 
 #ifdef CONFIG_PM_TRACE
@@ -400,6 +470,307 @@ power_attr(pm_trace_dev_match);
 
 #endif /* CONFIG_PM_TRACE */
 
+#ifdef CONFIG_USER_WAKELOCK
+power_attr(wake_lock);
+power_attr(wake_unlock);
+#endif
+
+#ifdef CONFIG_PERFLOCK_HTC
+static struct perf_lock user_highest_perf_lock;
+static struct perf_lock user_high_ceiling_lock;
+static struct perf_lock user_perf_lock[PERF_LOCK_INVALID];
+static struct perf_lock user_ceiling_lock[PERF_LOCK_INVALID];
+static ssize_t
+perflock_show(struct kobject *kobj, struct kobj_attribute *attr,
+		char *buf)
+{
+	/* bit[0] = lowest, bit[1] = low, bit[2] = medium, bit[3] = high, bit[4] = highest, bit[5] = highest(old user perflock) */
+	int i, perf_enable = 0;
+
+	for (i = 0; i < PERF_LOCK_INVALID; i++)
+		if (is_perf_lock_active(&user_perf_lock[i]) != 0)
+			perf_enable |= (1 << i);
+
+	if (is_perf_lock_active(&user_highest_perf_lock) != 0)
+		perf_enable |= (1 << PERF_LOCK_INVALID);
+
+	return sprintf(buf, "%d\n", perf_enable);
+}
+
+static inline void user_cpufreq_perf_lock(int level, int val)
+{
+	if (val == 1 && !is_perf_lock_active(&user_perf_lock[level]))
+		perf_lock(&user_perf_lock[level]);
+	if (val == 0 && is_perf_lock_active(&user_perf_lock[level]))
+		perf_unlock(&user_perf_lock[level]);
+}
+
+#define perf_level_wrapper(off, on, level) \
+	case off:\
+		user_cpufreq_perf_lock(level, 0);\
+		break;\
+	case on:\
+		user_cpufreq_perf_lock(level, 1);\
+		break;
+
+
+static ssize_t
+perflock_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	int val , ret = -EINVAL;
+
+	if (sscanf(buf, "%d", &val) > 0) {
+		if (val == 11 && !is_perf_lock_active(&user_highest_perf_lock)) {
+			perf_lock(&user_highest_perf_lock);
+			ret = n;
+		} else if (val == 10 && is_perf_lock_active(&user_highest_perf_lock)) {
+			perf_unlock(&user_highest_perf_lock);
+			ret = n;
+		} else {
+			switch (val) {
+			perf_level_wrapper(0, 1, PERF_LOCK_LOWEST);
+			perf_level_wrapper(2, 3, PERF_LOCK_LOW);
+			perf_level_wrapper(4, 5, PERF_LOCK_MEDIUM);
+			perf_level_wrapper(6, 7, PERF_LOCK_HIGH);
+			perf_level_wrapper(8, 9, PERF_LOCK_HIGHEST);
+			default:
+				/* no matching level found */
+				break;
+			}
+			return n;
+		}
+	}
+	return ret;
+}
+power_attr(perflock);
+
+#if 0
+int launch_event_enabled = 0;
+static ssize_t
+launch_event_show(struct kobject *kobj, struct kobj_attribute *attr,
+		char *buf)
+{
+	return sprintf(buf, "%d\n", launch_event_enabled);
+}
+
+static ssize_t
+launch_event_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	unsigned long val;
+
+	if (strict_strtoul(buf, 10, &val))
+		return -EINVAL;
+
+	if (val > 1)
+		return -EINVAL;
+
+	launch_event_enabled = val;
+	sysfs_notify(kobj, NULL, "launch_event");
+	return n;
+}
+power_attr(launch_event);
+#endif
+
+static ssize_t
+cpufreq_ceiling_show(struct kobject *kobj, struct kobj_attribute *attr,
+		char *buf)
+{
+	/* bit[0] = lowest, bit[1] = low, bit[2] = medium, bit[3] = high, bit[4] = highest, bit[5] = high(old user cpufreq_ceiling lock) */
+	int i, ceiling_enable = 0;
+
+	for (i = 0; i < PERF_LOCK_INVALID; i++)
+		if(is_perf_lock_active(&user_ceiling_lock[i]) != 0)
+			ceiling_enable |= (1 << i);
+
+	if (is_perf_lock_active(&user_high_ceiling_lock) != 0)
+		ceiling_enable |= (1 << PERF_LOCK_INVALID);
+
+	return sprintf(buf, "%d\n", ceiling_enable);
+}
+
+static inline void user_cpufreq_ceiling_lock(int level, int val)
+{
+	if (val == 1 && !is_perf_lock_active(&user_ceiling_lock[level]))
+		perf_lock(&user_ceiling_lock[level]);
+	if (val == 0 && is_perf_lock_active(&user_ceiling_lock[level]))
+		perf_unlock(&user_ceiling_lock[level]);
+}
+
+#define ceiling_level_wrapper(off, on, level) \
+	case off:\
+		user_cpufreq_ceiling_lock(level, 0);\
+		break;\
+	case on:\
+		user_cpufreq_ceiling_lock(level, 1);\
+		break;
+
+static ssize_t
+cpufreq_ceiling_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	int val, ret = -EINVAL;
+	if (sscanf(buf, "%d", &val) > 0) {
+		if (val == 11 && !is_perf_lock_active(&user_high_ceiling_lock)) {
+			perf_lock(&user_high_ceiling_lock);
+			ret = n;
+		} else if (val == 10 && is_perf_lock_active(&user_high_ceiling_lock)) {
+			perf_unlock(&user_high_ceiling_lock);
+			ret = n;
+		} else {
+			switch (val){
+			ceiling_level_wrapper(0, 1, PERF_LOCK_LOWEST);
+			ceiling_level_wrapper(2, 3, PERF_LOCK_LOW);
+			ceiling_level_wrapper(4, 5, PERF_LOCK_MEDIUM);
+			ceiling_level_wrapper(6, 7, PERF_LOCK_HIGH);
+			ceiling_level_wrapper(8, 9, PERF_LOCK_HIGHEST);
+			default:
+				/* no matching level found */
+				break;
+			}
+			ret = n;
+		}
+	}
+
+	return ret;
+}
+power_attr(cpufreq_ceiling);
+
+#if 0
+static int cpunum_max;
+static int cpunum_min;
+
+/* Show the locked greatest cpu min number. Show 0 if no lock */
+static ssize_t
+cpunum_floor_show(struct kobject *kobj, struct kobj_attribute *attr,
+		char *buf)
+{
+	int i;
+	int all_cpus = num_possible_cpus();
+	for (i = all_cpus-1 ; i >= 0 ; i--) {
+		if (cpunum_min & (1 << i))
+		    break;
+	}
+	if (i < 0)
+	    i = 0;
+	else
+	    i++;
+
+	return sprintf(buf, "%d\n", i);
+}
+
+/* Store by bit. bit 0 = single core, bit 1 = dual core. */
+static ssize_t
+cpunum_floor_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	int val, bit, on;
+
+	if (sscanf(buf, "%d", &val) > 0) {
+		bit = val / 2;
+		on = val % 2;
+		if (bit >= num_possible_cpus() || bit < 0)
+		    return -EINVAL;
+		if (on)
+		    cpunum_min |= (1 << bit);
+		else
+		    cpunum_min &= ~(1 << bit);
+		sysfs_notify(kobj, NULL, "cpunum_floor");
+		return n;
+	}
+	return -EINVAL;
+}
+
+static ssize_t
+cpunum_ceiling_show(struct kobject *kobj, struct kobj_attribute *attr,
+		char *buf)
+{
+	int i;
+	int all_cpus = num_possible_cpus();
+	for (i = 0 ; i < all_cpus ; i++) {
+		if (cpunum_max & (1 << i))
+		    break;
+	}
+	if (i >= all_cpus)
+	    i = 0;
+	else
+	    i++;
+
+	return sprintf(buf, "%d\n", i);
+}
+
+static ssize_t
+cpunum_ceiling_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	int val, bit, on;
+
+	if (sscanf(buf, "%d", &val) > 0) {
+		bit = val / 2;
+		on = val % 2;
+		if (bit >= num_possible_cpus() || bit < 0)
+		    return -EINVAL;
+		if (on)
+		    cpunum_max |= (1 << bit);
+		else
+		    cpunum_max &= ~(1 << bit);
+		sysfs_notify(kobj, NULL, "cpunum_ceiling");
+		return n;
+	}
+	return -EINVAL;
+}
+
+power_attr(cpunum_floor);
+power_attr(cpunum_ceiling);
+#endif
+#endif
+
+/* HTC_KER_START,icey, implement on mode charging animation */
+#ifdef CONFIG_HTC_ONMODE_CHARGING
+static ssize_t state_onchg_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+{
+	char *s = buf;
+
+	printk(KERN_INFO "%s: in\n", __FUNCTION__);
+
+	if (get_onchg_state())
+		s += sprintf(s, "chgoff ");
+	else
+	s += sprintf(s, "chgon ");
+
+	if (s != buf)
+	/* convert the last space to a newline */
+	*(s-1) = '\n';
+
+	return (s - buf);
+}
+
+static ssize_t
+state_onchg_store(struct kobject *kobj, struct kobj_attribute *attr, const char *buf, size_t n)
+{
+	char *p;
+	int len;
+
+	printk(KERN_INFO "%s: in\n", __FUNCTION__);
+
+	p = memchr(buf, '\n', n);
+	len = p ? p - buf : n;
+
+	if (len == 5 || len == 6 || len == 7) {
+		if (!strncmp(buf, "chgon", len))
+			request_onchg_state(1);
+		else if (!strncmp(buf, "chgoff", len))
+			request_onchg_state(0);
+	}
+
+	return 0;
+}
+
+power_attr(state_onchg);
+#endif
+/* HTC_KER_END, icey */
+
 static struct attribute * g[] = {
 	&state_attr.attr,
 #ifdef CONFIG_PM_TRACE
@@ -409,9 +780,28 @@ static struct attribute * g[] = {
 #ifdef CONFIG_PM_SLEEP
 	&pm_async_attr.attr,
 	&wakeup_count_attr.attr,
+#ifdef CONFIG_PM_AUTOSLEEP
+	&autosleep_attr.attr,
+#endif
 #ifdef CONFIG_PM_DEBUG
 	&pm_test_attr.attr,
 #endif
+#ifdef CONFIG_USER_WAKELOCK
+	&wake_lock_attr.attr,
+	&wake_unlock_attr.attr,
+#endif
+/* HTC_KER_START,icey, implement on mode charging animation */
+#ifdef CONFIG_HTC_ONMODE_CHARGING
+	&state_onchg_attr.attr,
+#endif
+/* HTC_KER_END,icey */
+#endif
+#ifdef CONFIG_PERFLOCK_HTC
+	&perflock_attr.attr,
+	&cpufreq_ceiling_attr.attr,
+	/* &launch_event_attr.attr, */
+	/* &cpunum_floor_attr.attr, */
+	/* &cpunum_ceiling_attr.attr, */
 #endif
 	NULL,
 };
@@ -437,11 +827,30 @@ static inline int pm_start_workqueue(void) { return 0; }
 static int __init pm_init(void)
 {
 	int error = pm_start_workqueue();
+#ifdef CONFIG_PERFLOCK_HTC
+	int i;
+	static char ceil_buf[PERF_LOCK_INVALID][38];
+	static char perf_buf[PERF_LOCK_INVALID][24];
+#endif
 	if (error)
 		return error;
 	hibernate_image_size_init();
 	hibernate_reserved_size_init();
 	power_kobj = kobject_create_and_add("power", NULL);
+#ifdef CONFIG_PERFLOCK_HTC
+	perf_lock_init(&user_highest_perf_lock, TYPE_PERF_LOCK, PERF_LOCK_HIGHEST, "User Highest Perflock"); /* old user perf lock */
+
+	perf_lock_init(&user_high_ceiling_lock, TYPE_CPUFREQ_CEILING, PERF_LOCK_HIGHEST, "User High cpufreq_ceiling lock"); /* old user ceiling lock */
+	for (i = PERF_LOCK_LOWEST; i < PERF_LOCK_INVALID; i++) {
+		snprintf(perf_buf[i], 23, "User Perflock level(%d)", i);
+		perf_buf[i][23] = '\0';
+		perf_lock_init(&user_perf_lock[i], TYPE_PERF_LOCK, i, perf_buf[i]);
+
+		snprintf(ceil_buf[i], 37, "User cpufreq_ceiling lock level(%d)", i);
+		ceil_buf[i][37] = '\0';
+		perf_lock_init(&user_ceiling_lock[i], TYPE_CPUFREQ_CEILING, i, ceil_buf[i]);
+	}
+#endif
 	if (!power_kobj)
 		return -ENOMEM;
 	return sysfs_create_group(power_kobj, &attr_group);

@@ -270,7 +270,7 @@ config LEDS_DAC124S085
 config LEDS_PWM
 	tristate "PWM driven LED Support"
 	depends on LEDS_CLASS
-	depends on HAVE_PWM
+	default n
 	help
 	  This option enables support for pwm driven LEDs
 
@@ -401,6 +401,16 @@ config LEDS_OT200
 	  This option enables support for the LEDs on the Bachmann OT200.
 	  Say Y to enable LEDs on the Bachmann OT200.
 
+config LEDS_SC8810_KB
+	tristate "LED Support for SC8810 keyboard backlight"
+
+config LEDS_SPRD_KB
+	tristate "LED Support for sprd keyboard backlight"
+	depends on LEDS_CLASS
+	default n
+	help
+	  This option enables support.
+
 config LEDS_TRIGGERS
 	bool "LED Trigger support"
 	depends on LEDS_CLASS
@@ -408,6 +418,13 @@ config LEDS_TRIGGERS
 	  This option enables trigger support for the leds class.
 	  These triggers allow kernel events to drive the LEDs and can
 	  be configured via sysfs. If unsure, say Y.
+
+config FB_CABC_LEVEL_CONTROL
+	bool "CABC LEVEL CONTROL"
+	depends on LEDS_CLASS
+	default n
+	help
+	  Use attribute to switch CABC level.
 
 comment "LED Triggers"
 
@@ -467,6 +484,24 @@ config LEDS_TRIGGER_DEFAULT_ON
 	help
 	  This allows LEDs to be initialised in the ON state.
 	  If unsure, say Y.
+
+config LEDS_TRIGGER_SLEEP
+	tristate "LED Sleep Mode Trigger"
+	depends on LEDS_TRIGGERS && HAS_EARLYSUSPEND
+	help
+	  This turns LEDs on when the screen is off but the cpu still running.
+
+config FLASHLIGHT_TPS61310
+	tristate "TI TPS61310 flashlight"
+	help
+	  Say Y here to enable the TI TPS61310 flashlight
+
+config LEDS_HTC_SPRD
+	tristate "LED support for SPRD PMIC"
+	depends on LEDS_CLASS
+	help
+	  This option enables support for on-chip LED drivers on
+	  SPRD PMIC.
 
 comment "iptables trigger is under Netfilter config (LED target)"
 	depends on LEDS_TRIGGERS

@@ -17,6 +17,72 @@
 #include <linux/io.h>
 #include <linux/mmc/host.h>
 
+enum{
+    EMMC_VENDOR_SUMSUNG=0,
+    EMMC_VENDOR_HYNIX,
+    EMMC_VENDOR_MICRON,
+    EMMC_VENDOR_TOSHBA,
+    EMMC_VENDOR_SANDISK,
+    EMMC_VENDOR_DEFAULT,
+    EMMC_VENDOR_MAX
+};
+
+struct ddr50_timing_inf{
+    unsigned char ddr50_write_delay;
+    unsigned char ddr50_read_pos_delay;
+    unsigned char ddr50_read_neg_delay;
+};
+
+struct emmc_vendor_inf{
+    int vend_index;
+    int vend_id;
+    int clk_pin;
+    struct ddr50_timing_inf timing;
+};
+
+const static struct emmc_vendor_inf emmc_timing_inf[EMMC_VENDOR_MAX]={
+    {EMMC_VENDOR_SUMSUNG, 0x15, 0x0, {0x18, 0x07, 0x05}},
+    {EMMC_VENDOR_HYNIX,   0x90, 0x0, {0x1a, 0x07, 0x05}},
+    {EMMC_VENDOR_MICRON,  0xFE, 0x0, {0x18, 0x07, 0x05}},
+    {EMMC_VENDOR_TOSHBA,  0x11, 0x0, {0x18, 0x07, 0x05}},
+    {EMMC_VENDOR_SANDISK, 0x45, 0x0, {0x18, 0x07, 0x05}},
+    {EMMC_VENDOR_DEFAULT, 0xFF, 0x0, {0x18, 0x07, 0x05}},
+};
+
+struct sprd_host_platdata {
+	/* Data set by board or device resources */
+	int detect_gpio;
+	const char *hw_name;	/* Hardware bus name */
+	const char *vdd_name;
+	const char *vdd_ext_name;
+	int volt_level;
+	const char *clk_name;
+	const char *clk_parent;
+	int max_clock;
+	int enb_bit, rst_bit;
+	int enb_reg, rst_reg;
+
+	//HTC_WIFI_START
+	unsigned int (*status)(struct device *);
+	struct embedded_sdio_data *embedded_sdio;
+	int (*register_status_notify)(void (*callback)(int card_present, void *dev_id), void *dev_id);
+    unsigned int *slot_type;
+	//HTC_WIFI_END
+
+	/*Save/Restore host context */
+	struct {
+		unsigned int is_valid;
+		unsigned int addr;
+		unsigned int blk_size;
+		unsigned int blk_cnt;
+		unsigned int arg;
+		unsigned int tran_mode;
+		unsigned int ctrl;
+		unsigned int power;
+		unsigned int clk;
+	} regs;
+};
+
 struct sdhci_host {
 	/* Data set by hardware interface driver */
 	const char *hw_name;	/* Hardware bus name */
@@ -98,7 +164,8 @@ struct sdhci_host {
 	const struct sdhci_ops *ops;	/* Low level hw interface */
 
 	struct regulator *vmmc;	/* Power regulator */
-
+	struct regulator *vmmc_ext;	/* eMMC core Power regulator */
+	int		dev_attached;	/* device attache indicater */
 	/* Internal data */
 	struct mmc_host *mmc;	/* MMC structure */
 	u64 dma_mask;		/* custom DMA mask */
@@ -122,6 +189,7 @@ struct sdhci_host {
 #define SDHCI_PV_ENABLED	(1<<8)	/* Preset value enabled */
 #define SDHCI_SDIO_IRQ_ENABLED	(1<<9)	/* SDIO irq enabled */
 #define SDHCI_HS200_NEEDS_TUNING (1<<10)	/* HS200 needs tuning */
+#define SDHCI_USING_RETUNING_TIMER (1<<11)	/* Host is using a retuning timer for the card */
 
 	unsigned int version;	/* SDHCI spec. version */
 
@@ -144,6 +212,11 @@ struct sdhci_host {
 
 	int sg_count;		/* Mapped sg entries */
 
+	//HTC_WIFI_START
+	unsigned int		oldstat;
+	unsigned int            eject;
+    //HTC_WIFI_END
+
 	u8 *adma_desc;		/* ADMA descriptor table */
 	u8 *align_buffer;	/* Bounce buffer */
 
@@ -154,7 +227,10 @@ struct sdhci_host {
 	struct tasklet_struct finish_tasklet;
 
 	struct timer_list timer;	/* Timer for timeouts */
-
+	unsigned int suspending;
+	unsigned int suspended;
+	unsigned int is_resumed;
+	struct clk  *clk;	/* clock source */
 	unsigned int caps;	/* Alternative capabilities */
 
 	unsigned int            ocr_avail_sdio;	/* OCR bit masks */

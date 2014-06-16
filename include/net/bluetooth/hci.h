@@ -37,7 +37,9 @@
 #define HCI_DEV_DOWN			4
 #define HCI_DEV_SUSPEND			5
 #define HCI_DEV_RESUME			6
-
+#ifdef CONFIG_BT_BCM4330
+#define HCI_DEV_WRITE			7
+#endif
 /* HCI notify events */
 #define HCI_NOTIFY_CONN_ADD		1
 #define HCI_NOTIFY_CONN_DEL		2
@@ -174,8 +176,10 @@ enum {
 #define ESCO_2EV5	0x0100
 #define ESCO_3EV5	0x0200
 
-#define SCO_ESCO_MASK  (ESCO_HV1 | ESCO_HV2 | ESCO_HV3)
-#define EDR_ESCO_MASK  (ESCO_2EV3 | ESCO_3EV3 | ESCO_2EV5 | ESCO_3EV5)
+#define SCO_ESCO_MASK	(ESCO_HV1 | ESCO_HV2 | ESCO_HV3)
+#define EDR_ESCO_MASK	(ESCO_2EV3 | ESCO_3EV3 | ESCO_2EV5 | ESCO_3EV5)
+#define ALL_ESCO_MASK	(SCO_ESCO_MASK | ESCO_EV3 | ESCO_EV4 | ESCO_EV5 | \
+			EDR_ESCO_MASK)
 
 /* ACL flags */
 #define ACL_START_NO_FLUSH	0x00
@@ -1392,6 +1396,9 @@ struct hci_conn_info {
 	__u8     out;
 	__u16    state;
 	__u32    link_mode;
+	__u32    mtu;
+	__u32    cnt;
+	__u32    pkts;
 };
 
 struct hci_dev_req {

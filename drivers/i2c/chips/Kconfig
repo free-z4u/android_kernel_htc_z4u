@@ -1,0 +1,87 @@
+#
+# Miscellaneous I2C chip drivers configuration
+#
+# *** DEPRECATED! Do not add new entries! See Makefile ***
+#
+
+menu "Miscellaneous I2C Chip support"
+
+config SENSORS_AKM8963
+        tristate "AKM8963 compass support"
+        default n
+        depends on I2C
+        help
+            If you say yes here you will get support for it.
+
+config BOSCH_BMA250
+        tristate "BMA acceleration sensor support"
+        depends on I2C=y
+        help
+            If you say yes here you'll get support for Bosch Sensortec's
+            acceleration sensors BMA250
+
+config SENSORS_NFC_PN544
+        tristate "PN544 NFC sensor support"
+        depends on I2C=y
+        help
+          PN544 NFC Driver implemented.
+
+config INPUT_CAPELLA_CM36282
+	tristate "CM36282 proximity and light sensor"
+	help
+	  Say Y here to enable the CM36282 Short Distance Proximity
+	  Sensor with Ambient Light Sensor.
+
+config PSENSOR_KTHRESHOLD
+        tristate "CM3629 proximity and light sensor"
+        help
+          Say Y here to enable the CM3629 Proximity Sensor
+          set or get threshold value from emmc.
+
+ config CM3629_PSENSORDEBUG
+        tristate "CM3629 proximity debug"
+         help
+           Say Y here to enable the CM3629 Proximity Debug
+           set or get threshold value from emmc.
+
+
+
+
+
+config SENSORS_ONLY_BMA250E
+	tristate "BMA250E acceleration sensor support"
+	depends on I2C=y
+	help
+	  BMA250E ONLY G-sensor Driver implemented by HTC.
+config AMP_RT5501
+	tristate "RT5501 Headphone Amplifier"
+	depends on I2C=y
+	help
+	  RT5501 HP AMP Driver
+
+config SND_AMP_TFA9887
+        tristate "TFA9887 amplifier"
+        depends on I2C=y
+        help
+          Say Y here to enable the TFA9887 amplifier driver
+
+config SND_AMP_TFA9887L
+        tristate "NXP TFA9887L Speaker AMP Driver"
+	depends on I2C=y
+        help
+         NXP TFA9887 LEFT Speaker AMP Driver implemented by HTC.
+
+config CIR_ALWAYS_READY
+    bool "BMA250 CIR Always Ready"
+    default n
+    help
+    Enable CIR Always Ready
+
+config TPS65200
+	tristate "TPS62500 battery charger IC"
+
+config INPUT_YAS_MAGNETOMETER
+    tristate "YAS Geomagnetic Sensor"
+    depends on I2C
+
+endmenu

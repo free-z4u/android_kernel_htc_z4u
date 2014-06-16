@@ -82,6 +82,11 @@ extern struct dentry *mount_fs(struct file_system_type *,
 extern struct super_block *user_get_super(dev_t);
 
 /*
+ * 2012-12-22 Add flag to indicate emergency_remount
+ */
+extern atomic_t vfs_emergency_remount;
+
+/*
  * open.c
  */
 struct nameidata;

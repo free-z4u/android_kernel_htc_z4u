@@ -20,9 +20,33 @@
 #include <linux/mmc/host.h>
 #include "queue.h"
 
-#define MMC_QUEUE_BOUNCESZ	65536
+#define MMC_QUEUE_BOUNCESZ	(128UL << 10)
+#define SD_QUEUE_BOUNCESZ	65536
 
 #define MMC_QUEUE_SUSPENDED	(1 << 0)
+
+#ifdef CONFIG_MMC_BLOCK_BOUNCE
+static char * sd_bounce_buffer_cur = NULL;
+static char * sd_bounce_buffer_prev = NULL;
+#endif
+
+void sd_buffer_pre_alloc(void)
+{
+#ifdef CONFIG_MMC_BLOCK_BOUNCE
+	if(!sd_bounce_buffer_cur)
+	{
+		sd_bounce_buffer_cur = kmalloc(SD_QUEUE_BOUNCESZ, GFP_KERNEL);
+		if(!sd_bounce_buffer_cur)
+			pr_warning("[SD][ERROR] mmc1: unable to allocate bounce cur buffer\n");
+	}
+	if(!sd_bounce_buffer_prev)
+	{
+		sd_bounce_buffer_prev = kmalloc(SD_QUEUE_BOUNCESZ, GFP_KERNEL);
+		if(!sd_bounce_buffer_prev)
+			pr_warning("[SD][ERROR] mmc1: unable to allocate bounce prev buffer\n");
+	}
+#endif
+}
 
 /*
  * Prepare a MMC request. This just filters out odd stuff.
@@ -51,13 +75,55 @@ static int mmc_queue_thread(void *d)
 {
 	struct mmc_queue *mq = d;
 	struct request_queue *q = mq->queue;
-
+	struct request *req;
 	current->flags |= PF_MEMALLOC;
 
 	down(&mq->thread_sem);
 	do {
-		struct request *req = NULL;
 		struct mmc_queue_req *tmp;
+		req = NULL;	/* Must be set to NULL at each iteration */
+
+		spin_lock_irq(q->queue_lock);
+		set_current_state(TASK_INTERRUPTIBLE);
+		req = blk_fetch_request(q);
+		mq->mqrq_cur->req = req;
+		spin_unlock_irq(q->queue_lock);
+
+		if (req || mq->mqrq_prev->req) {
+			set_current_state(TASK_RUNNING);
+			mq->issue_fn(mq, req);
+		} else {
+			if (kthread_should_stop()) {
+				set_current_state(TASK_RUNNING);
+				break;
+			}
+			up(&mq->thread_sem);
+			schedule();
+			down(&mq->thread_sem);
+		}
+
+		/* Current request becomes previous request and vice versa. */
+		mq->mqrq_prev->brq.mrq.data = NULL;
+		mq->mqrq_prev->req = NULL;
+		tmp = mq->mqrq_prev;
+		mq->mqrq_prev = mq->mqrq_cur;
+		mq->mqrq_cur = tmp;
+	} while (1);
+	up(&mq->thread_sem);
+
+	return 0;
+}
+static int sd_queue_thread(void *d)
+{
+	struct mmc_queue *mq = d;
+	struct request_queue *q = mq->queue;
+	struct request *req;
+	current->flags |= PF_MEMALLOC;
+
+	down(&mq->thread_sem);
+	do {
+		struct mmc_queue_req *tmp;
+		req = NULL;	/* Must be set to NULL at each iteration */
 
 		spin_lock_irq(q->queue_lock);
 		set_current_state(TASK_INTERRUPTIBLE);
@@ -96,7 +162,7 @@ static int mmc_queue_thread(void *d)
  * on any queue on this host, and attempt to issue it.  This may
  * not be the queue we were asked to process.
  */
-static void mmc_request(struct request_queue *q)
+static void mmc_request_fn(struct request_queue *q)
 {
 	struct mmc_queue *mq = q->queuedata;
 	struct request *req;
@@ -171,7 +237,7 @@ int mmc_init_queue(struct mmc_queue *mq, struct mmc_card *card,
 		limit = *mmc_dev(host)->dma_mask;
 
 	mq->card = card;
-	mq->queue = blk_init_queue(mmc_request, lock);
+	mq->queue = blk_init_queue(mmc_request_fn, lock);
 	if (!mq->queue)
 		return -ENOMEM;
 
@@ -190,29 +256,44 @@ int mmc_init_queue(struct mmc_queue *mq, struct mmc_card *card,
 	if (host->max_segs == 1) {
 		unsigned int bouncesz;
 
-		bouncesz = MMC_QUEUE_BOUNCESZ;
+		if(mmc_card_sd(card)) {
+			bouncesz = SD_QUEUE_BOUNCESZ;
 
-		if (bouncesz > host->max_req_size)
-			bouncesz = host->max_req_size;
-		if (bouncesz > host->max_seg_size)
-			bouncesz = host->max_seg_size;
-		if (bouncesz > (host->max_blk_count * 512))
-			bouncesz = host->max_blk_count * 512;
+			if (bouncesz > host->max_req_size)
+				bouncesz = host->max_req_size;
+			if (bouncesz > host->max_seg_size)
+				bouncesz = host->max_seg_size;
+			if (bouncesz > (host->max_blk_count * 512))
+				bouncesz = host->max_blk_count * 512;
 
-		if (bouncesz > 512) {
-			mqrq_cur->bounce_buf = kmalloc(bouncesz, GFP_KERNEL);
-			if (!mqrq_cur->bounce_buf) {
-				pr_warning("%s: unable to "
-					"allocate bounce cur buffer\n",
-					mmc_card_name(card));
-			}
-			mqrq_prev->bounce_buf = kmalloc(bouncesz, GFP_KERNEL);
-			if (!mqrq_prev->bounce_buf) {
-				pr_warning("%s: unable to "
-					"allocate bounce prev buffer\n",
-					mmc_card_name(card));
-				kfree(mqrq_cur->bounce_buf);
-				mqrq_cur->bounce_buf = NULL;
+			sd_buffer_pre_alloc();
+			mqrq_cur->bounce_buf = (char *)sd_bounce_buffer_cur;
+			mqrq_prev->bounce_buf = (char *)sd_bounce_buffer_prev;
+		} else {
+			bouncesz = MMC_QUEUE_BOUNCESZ;
+
+			if (bouncesz > host->max_req_size)
+				bouncesz = host->max_req_size;
+			if (bouncesz > host->max_seg_size)
+				bouncesz = host->max_seg_size;
+			if (bouncesz > (host->max_blk_count * 512))
+				bouncesz = host->max_blk_count * 512;
+
+			if (bouncesz > 512) {
+				mqrq_cur->bounce_buf = kmalloc(bouncesz, GFP_KERNEL);
+				if (!mqrq_cur->bounce_buf) {
+					pr_warning("%s: unable to "
+						"allocate bounce cur buffer\n",
+						mmc_card_name(card));
+				}
+				mqrq_prev->bounce_buf = kmalloc(bouncesz, GFP_KERNEL);
+				if (!mqrq_prev->bounce_buf) {
+					pr_warning("%s: unable to "
+						"allocate bounce prev buffer\n",
+						mmc_card_name(card));
+					kfree(mqrq_cur->bounce_buf);
+					mqrq_cur->bounce_buf = NULL;
+				}
 			}
 		}
 
@@ -262,6 +343,9 @@ int mmc_init_queue(struct mmc_queue *mq, struct mmc_card *card,
 
 	sema_init(&mq->thread_sem, 1);
 
+	if(mmc_card_sd(card))
+		mq->thread = kthread_run(sd_queue_thread, mq, "sd-qd");
+	else
 	mq->thread = kthread_run(mmc_queue_thread, mq, "mmcqd/%d%s",
 		host->index, subname ? subname : "");
 
@@ -280,14 +364,16 @@ int mmc_init_queue(struct mmc_queue *mq, struct mmc_card *card,
  cleanup_queue:
 	kfree(mqrq_cur->sg);
 	mqrq_cur->sg = NULL;
-	kfree(mqrq_cur->bounce_buf);
+	if(!mmc_card_sd(card)) {
+		kfree(mqrq_cur->bounce_buf);
+	}
 	mqrq_cur->bounce_buf = NULL;
-
 	kfree(mqrq_prev->sg);
 	mqrq_prev->sg = NULL;
-	kfree(mqrq_prev->bounce_buf);
+	if(!mmc_card_sd(card)) {
+		kfree(mqrq_prev->bounce_buf);
+	}
 	mqrq_prev->bounce_buf = NULL;
-
 	blk_cleanup_queue(mq->queue);
 	return ret;
 }
@@ -317,7 +403,9 @@ void mmc_cleanup_queue(struct mmc_queue *mq)
 	kfree(mqrq_cur->sg);
 	mqrq_cur->sg = NULL;
 
-	kfree(mqrq_cur->bounce_buf);
+	if(!mmc_card_sd(mq->card)) {
+		kfree(mqrq_cur->bounce_buf);
+	}
 	mqrq_cur->bounce_buf = NULL;
 
 	kfree(mqrq_prev->bounce_sg);
@@ -326,7 +414,9 @@ void mmc_cleanup_queue(struct mmc_queue *mq)
 	kfree(mqrq_prev->sg);
 	mqrq_prev->sg = NULL;
 
-	kfree(mqrq_prev->bounce_buf);
+	if(!mmc_card_sd(mq->card)) {
+		kfree(mqrq_prev->bounce_buf);
+	}
 	mqrq_prev->bounce_buf = NULL;
 
 	mq->card = NULL;

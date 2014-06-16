@@ -719,7 +719,12 @@ static inline __must_check int sk_add_backlog(struct sock *sk, struct sk_buff *s
 
 static inline int sk_backlog_rcv(struct sock *sk, struct sk_buff *skb)
 {
-	return sk->sk_backlog_rcv(sk, skb);
+	if(sk->sk_backlog_rcv == NULL){
+		printk("sk->sk_backlog_rcv is null at func: %s\n",__func__);
+		return -1;
+	}else{	
+		return sk->sk_backlog_rcv(sk, skb);
+	}
 }
 
 static inline void sock_rps_record_flow(const struct sock *sk)

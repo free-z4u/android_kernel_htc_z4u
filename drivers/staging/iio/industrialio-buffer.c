@@ -14,12 +14,13 @@
  * - Alternative access techniques?
  */
 #include <linux/kernel.h>
-#include <linux/export.h>
+//#include <linux/export.h>
 #include <linux/device.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/slab.h>
 #include <linux/poll.h>
+#include <linux/module.h>
 
 #include "iio.h"
 #include "iio_core.h"
@@ -56,10 +57,13 @@ unsigned int iio_buffer_poll(struct file *filp,
 {
 	struct iio_dev *indio_dev = filp->private_data;
 	struct iio_buffer *rb = indio_dev->buffer;
+        if (rb->stufftoread)
+                return POLLIN | POLLRDNORM;
 
 	poll_wait(filp, &rb->pollq, wait);
-	if (rb->stufftoread)
-		return POLLIN | POLLRDNORM;
+        if (rb->stufftoread)
+                return POLLIN | POLLRDNORM;
+
 	/* need a way of knowing if there may be enough data... */
 	return 0;
 }

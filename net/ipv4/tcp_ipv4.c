@@ -1938,7 +1938,14 @@ static int tcp_v4_init_sock(struct sock *sk)
 
 void tcp_v4_destroy_sock(struct sock *sk)
 {
-	struct tcp_sock *tp = tcp_sk(sk);
+	struct tcp_sock *tp = NULL;
+	
+	if ((!sk) || (IS_ERR(sk))) {
+		printk("[NET] sk is NULL in %s\n", __func__);
+		return;
+	}
+	
+	tp = tcp_sk(sk);
 
 	tcp_clear_xmit_timers(sk);
 
@@ -1952,7 +1959,7 @@ void tcp_v4_destroy_sock(struct sock *sk)
 
 #ifdef CONFIG_TCP_MD5SIG
 	/* Clean up the MD5 key list, if any */
-	if (tp->md5sig_info) {
+	if ((tp->md5sig_info) && (!IS_ERR(tp->md5sig_info))) {
 		tcp_clear_md5_list(sk);
 		kfree_rcu(tp->md5sig_info, rcu);
 		tp->md5sig_info = NULL;
@@ -1974,7 +1981,7 @@ void tcp_v4_destroy_sock(struct sock *sk)
 	/*
 	 * If sendmsg cached page exists, toss it.
 	 */
-	if (sk->sk_sndmsg_page) {
+	if ((sk->sk_sndmsg_page) && (!IS_ERR(sk->sk_sndmsg_page))) {
 		__free_page(sk->sk_sndmsg_page);
 		sk->sk_sndmsg_page = NULL;
 	}

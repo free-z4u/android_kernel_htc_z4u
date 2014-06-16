@@ -36,6 +36,7 @@
 
 #include <linux/usb/ch9.h>
 #include <linux/usb/gadget.h>
+#include <linux/switch.h>
 
 /*
  * USB function drivers should return USB_GADGET_DELAYED_STATUS if they
@@ -158,6 +159,20 @@ int usb_function_activate(struct usb_function *);
 
 int usb_interface_id(struct usb_configuration *, struct usb_function *);
 
+/**
+ * ep_choose - select descriptor endpoint at current device speed
+ * @g: gadget, connected and running at some speed
+ * @hs: descriptor to use for high speed operation
+ * @fs: descriptor to use for full or low speed operation
+ */
+static inline struct usb_endpoint_descriptor *
+ep_choose(struct usb_gadget *g, struct usb_endpoint_descriptor *hs,
+		struct usb_endpoint_descriptor *fs)
+{
+	if (gadget_is_dualspeed(g) && g->speed == USB_SPEED_HIGH)
+		return hs;
+	return fs;
+}
 int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
 			struct usb_ep *_ep);
 
@@ -241,6 +256,9 @@ struct usb_configuration {
 int usb_add_config(struct usb_composite_dev *,
 		struct usb_configuration *,
 		int (*)(struct usb_configuration *));
+
+int usb_remove_config(struct usb_composite_dev *,
+		struct usb_configuration *);
 
 /**
  * struct usb_composite_driver - groups configurations into a gadget
@@ -362,6 +380,13 @@ struct usb_composite_dev {
 
 	/* protects deactivations and delayed_status counts*/
 	spinlock_t			lock;
+	/* switch indicating connected/disconnected state */
+	struct switch_dev               sw_connected;
+	/* switch indicating current configuration */
+	struct switch_dev               sw_config;
+	/* switch indicating Connect_to_PC App only */
+	struct switch_dev               sw_connect2pc;
+	struct delayed_work request_reset;
 };
 
 extern int usb_string_id(struct usb_composite_dev *c);

@@ -9,6 +9,7 @@
 enum alarmtimer_type {
 	ALARM_REALTIME,
 	ALARM_BOOTTIME,
+	ALARM_POWEROFF,
 
 	ALARM_NUMTYPE,
 };
@@ -49,6 +50,11 @@ int alarm_cancel(struct alarm *alarm);
 
 u64 alarm_forward(struct alarm *alarm, ktime_t now, ktime_t interval);
 
+int alarm_set_rtc_alarm(struct timespec new_time);
+
+int set_offmode_alarm(void);
+
+
 /*
  * A alarmtimer is active, when it is enqueued into timerqueue or the
  * callback function is running.
@@ -75,5 +81,8 @@ static inline int alarmtimer_callback_running(struct alarm *timer)
 	return timer->state & ALARMTIMER_STATE_CALLBACK;
 }
 
+
+/* Provide way to access the rtc device being used by alarmtimers */
+struct rtc_device *alarmtimer_get_rtcdev(void);
 
 #endif

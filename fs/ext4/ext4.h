@@ -1140,8 +1140,7 @@ struct ext4_sb_info {
 	unsigned long s_desc_per_block;	/* Number of group descriptors per block */
 	ext4_group_t s_groups_count;	/* Number of groups in the fs */
 	ext4_group_t s_blockfile_groups;/* Groups acceptable for non-extent files */
-	unsigned long s_overhead_last;  /* Last calculated overhead */
-	unsigned long s_blocks_last;    /* Last seen block count */
+	unsigned long s_overhead;  /* # of fs overhead clusters */
 	unsigned int s_cluster_ratio;	/* Number of blocks per cluster */
 	unsigned int s_cluster_bits;	/* log2 of s_cluster_ratio */
 	loff_t s_bitmap_maxbytes;	/* max bytes for bitmap files */
@@ -1266,6 +1265,12 @@ struct ext4_sb_info {
 
 	/* record the last minlen when FITRIM is called. */
 	atomic_t s_last_trim_minblks;
+
+#ifdef CONFIG_EXT4_E2FSCK_RECOVER
+	/* workqueue for rebooting oem-22 to run e2fsck */
+	struct work_struct reboot_work;
+	struct workqueue_struct *recover_wq;
+#endif
 };
 
 static inline struct ext4_sb_info *EXT4_SB(struct super_block *sb)
@@ -1783,7 +1788,7 @@ struct mmpd_data {
 # define NORET_AND	noreturn,
 
 /* bitmap.c */
-extern unsigned int ext4_count_free(struct buffer_head *, unsigned);
+extern unsigned int ext4_count_free(char *bitmap, unsigned numchars);
 
 /* balloc.c */
 extern unsigned int ext4_block_group(struct super_block *sb,
@@ -1950,6 +1955,7 @@ extern int ext4_group_extend(struct super_block *sb,
 extern int ext4_resize_fs(struct super_block *sb, ext4_fsblk_t n_blocks_count);
 
 /* super.c */
+extern int ext4_calculate_overhead(struct super_block *sb);
 extern void *ext4_kvmalloc(size_t size, gfp_t flags);
 extern void *ext4_kvzalloc(size_t size, gfp_t flags);
 extern void ext4_kvfree(void *ptr);
@@ -2298,6 +2304,10 @@ extern int ext4_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
 extern int ext4_move_extents(struct file *o_filp, struct file *d_filp,
 			     __u64 start_orig, __u64 start_donor,
 			     __u64 len, __u64 *moved_len);
+
+#ifdef CONFIG_EXT4_E2FSCK_RECOVER
+extern void ext4_e2fsck(struct super_block *sb);
+#endif
 
 /* page-io.c */
 extern int __init ext4_init_pageio(void);

@@ -47,6 +47,8 @@
 #include <linux/user_namespace.h>
 
 #include <linux/kmsg_dump.h>
+#include <linux/alarmtimer.h>
+
 /* Move somewhere else to avoid recompiling? */
 #include <generated/utsrelease.h>
 
@@ -409,6 +411,9 @@ void kernel_power_off(void)
 	if (pm_power_off_prepare)
 		pm_power_off_prepare();
 	disable_nonboot_cpus();
+#ifdef CONFIG_HTC_OFFMODE_ALARM
+    set_offmode_alarm();
+#endif
 	syscore_shutdown();
 	printk(KERN_EMERG "Power down.\n");
 	kmsg_dump(KMSG_DUMP_POWEROFF);

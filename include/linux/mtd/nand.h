@@ -507,6 +507,10 @@ struct nand_chip {
 	int (*write_page)(struct mtd_info *mtd, struct nand_chip *chip,
 			const uint8_t *buf, int page, int cached, int raw);
 
+#ifdef CONFIG_MTD_NAND_SC8810
+	void		(*nfc_hardware_config)(struct mtd_info *mtd, struct nand_chip *this, u8 id[8]);
+	char  		flashname[100];
+#endif
 	int chip_delay;
 	unsigned int options;
 	unsigned int bbt_options;

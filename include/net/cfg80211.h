@@ -366,6 +366,57 @@ struct cfg80211_crypto_settings {
 	bool control_port_no_encrypt;
 };
 
+/* HTC_WIFI_START */
+#ifdef CONFIG_BCMDHD_FW_PATH 
+/**
+ * struct beacon_parameters - beacon parameters
+ *
+ * Used to configure the beacon for an interface.
+ *
+ * @head: head portion of beacon (before TIM IE)
+ *     or %NULL if not changed
+ * @tail: tail portion of beacon (after TIM IE)
+ *     or %NULL if not changed
+ * @interval: beacon interval or zero if not changed
+ * @dtim_period: DTIM period or zero if not changed
+ * @head_len: length of @head
+ * @tail_len: length of @tail
+ * @ssid: SSID to be used in the BSS (note: may be %NULL if not provided from
+ *	user space)
+ * @ssid_len: length of @ssid
+ * @hidden_ssid: whether to hide the SSID in Beacon/Probe Response frames
+ * @crypto: crypto settings
+ * @privacy: the BSS uses privacy
+ * @auth_type: Authentication type (algorithm)
+ * @beacon_ies: extra information element(s) to add into Beacon frames or %NULL
+ * @beacon_ies_len: length of beacon_ies in octets
+ * @proberesp_ies: extra information element(s) to add into Probe Response
+ *	frames or %NULL
+ * @proberesp_ies_len: length of proberesp_ies in octets
+ * @assocresp_ies: extra information element(s) to add into (Re)Association
+ * Response frames or %NULL
+ * @assocresp_ies_len: length of assocresp_ies in octets
+ */
+struct beacon_parameters {
+	u8 *head, *tail;
+	int interval, dtim_period;
+	int head_len, tail_len;
+	const u8 *ssid;
+	size_t ssid_len;
+	enum nl80211_hidden_ssid hidden_ssid;
+	struct cfg80211_crypto_settings crypto;
+	bool privacy;
+	enum nl80211_auth_type auth_type;
+	const u8 *beacon_ies;
+	size_t beacon_ies_len;
+	const u8 *proberesp_ies;
+	size_t proberesp_ies_len;
+	const u8 *assocresp_ies;
+	size_t assocresp_ies_len;
+};
+#endif
+/* HTC_WIFI_END */
+
 /**
  * struct cfg80211_beacon_data - beacon data
  * @head: head portion of beacon (before TIM IE)
@@ -912,7 +963,9 @@ struct cfg80211_ssid {
  * @aborted: (internal) scan request was notified as aborted
  * @no_cck: used to send probe requests at non CCK rate in 2GHz band
  */
+#define SCAN_REQUEST_MAGIC	0xdeadbeef  //broadcom: check request magic word is OK
 struct cfg80211_scan_request {
+	int magic;  //broadcom: check request magic word is OK
 	struct cfg80211_ssid *ssids;
 	int n_ssids;
 	u32 n_channels;
@@ -1534,6 +1587,16 @@ struct cfg80211_ops {
 	int	(*set_default_mgmt_key)(struct wiphy *wiphy,
 					struct net_device *netdev,
 					u8 key_index);
+
+/* HTC_WIFI_START */
+#ifdef CONFIG_BCMDHD_FW_PATH 
+	int	(*add_beacon)(struct wiphy *wiphy, struct net_device *dev,
+			      struct beacon_parameters *info);
+	int	(*set_beacon)(struct wiphy *wiphy, struct net_device *dev,
+			      struct beacon_parameters *info);
+	int	(*del_beacon)(struct wiphy *wiphy, struct net_device *dev);
+#endif
+/* HTC_WIFI_END */
 
 	int	(*start_ap)(struct wiphy *wiphy, struct net_device *dev,
 			    struct cfg80211_ap_settings *settings);

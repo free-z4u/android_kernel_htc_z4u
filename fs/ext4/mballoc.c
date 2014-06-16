@@ -1079,6 +1079,10 @@ ext4_mb_load_buddy(struct super_block *sb, ext4_group_t group,
 
 	blocks_per_page = PAGE_CACHE_SIZE / sb->s_blocksize;
 	grp = ext4_get_group_info(sb, group);
+	if (grp == NULL) {
+		pr_info("%s: Retry: Device get a NULL pointer from sb group info\n", __func__);
+		grp = ext4_get_group_info(sb, group);
+	}
 
 	e4b->bd_blkbits = sb->s_blocksize_bits;
 	e4b->bd_info = grp;
@@ -1086,6 +1090,13 @@ ext4_mb_load_buddy(struct super_block *sb, ext4_group_t group,
 	e4b->bd_group = group;
 	e4b->bd_buddy_page = NULL;
 	e4b->bd_bitmap_page = NULL;
+
+	if (grp == NULL) {
+		pr_info("%s: This should not happen.\n", __func__);
+		page = NULL;
+		ret = -EIO;
+		goto err;
+	}
 
 	if (unlikely(EXT4_MB_GRP_NEED_INIT(grp))) {
 		/*

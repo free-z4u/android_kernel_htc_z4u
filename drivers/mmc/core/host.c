@@ -29,6 +29,14 @@
 
 #define cls_dev_to_mmc_host(d)	container_of(d, struct mmc_host, class_dev)
 
+#ifdef CONFIG_MMC_PERF_PROFILING
+#define MMC_STATS_INFO_INTERVAL 3000 /* 3 secs */
+#else
+#define MMC_STATS_INFO_INTERVAL 5000 /* 5 secs */
+#endif
+int g_perf_enable = false;
+struct mmc_host *g_host = NULL;
+static void mmc_stats_timer_hdlr(unsigned long data);
 static void mmc_host_classdev_release(struct device *dev)
 {
 	struct mmc_host *host = cls_dev_to_mmc_host(dev);
@@ -329,11 +337,19 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
 
 	spin_lock_init(&host->lock);
 	init_waitqueue_head(&host->wq);
+	wake_lock_init(&host->detect_wake_lock, WAKE_LOCK_SUSPEND,
+		kasprintf(GFP_KERNEL, "%s_detect", mmc_hostname(host)));
 	INIT_DELAYED_WORK(&host->detect, mmc_rescan);
+	INIT_DELAYED_WORK(&host->remove, mmc_remove_sd_card);
 #ifdef CONFIG_PM
 	host->pm_notify.notifier_call = mmc_pm_notify;
 #endif
-
+	if (0 == host->index)
+	{
+		g_host = host;
+		setup_timer(&host->stats_timer, mmc_stats_timer_hdlr, (unsigned long)host);
+		mod_timer(&host->stats_timer, (jiffies + msecs_to_jiffies(MMC_STATS_INFO_INTERVAL)));
+	}
 	/*
 	 * By default, hosts do not support SGIO or large requests.
 	 * They have to set these according to their abilities.
@@ -353,6 +369,200 @@ free:
 }
 
 EXPORT_SYMBOL(mmc_alloc_host);
+
+
+static ssize_t
+show_perf(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	//struct mmc_host *host = dev_get_drvdata(dev);
+	int64_t rtime_drv, wtime_drv;
+	unsigned long rbytes_drv, wbytes_drv;
+
+	if (g_host) {
+		spin_lock(&g_host->lock);
+
+		rbytes_drv = g_host->perf.rbytes_drv;
+		wbytes_drv = g_host->perf.wbytes_drv;
+
+		rtime_drv = ktime_to_us(g_host->perf.rtime_drv);
+		wtime_drv = ktime_to_us(g_host->perf.wtime_drv);
+
+		spin_unlock(&g_host->lock);
+	}
+
+	return snprintf(buf, PAGE_SIZE, "Write performance at driver Level:"
+					"%lu bytes in %lld microseconds\n"
+					"Read performance at driver Level:"
+					"%lu bytes in %lld microseconds\n",
+					wbytes_drv, wtime_drv,
+					rbytes_drv, rtime_drv);
+}
+
+static ssize_t
+set_perf(struct device *dev, struct device_attribute *attr,
+		const char *buf, size_t count)
+{
+	int64_t value;
+	//struct mmc_host *host = dev_get_drvdata(dev);
+
+	sscanf(buf, "%lld", &value);
+	if (g_host) {
+		spin_lock(&g_host->lock);
+		if (!value) {
+			memset(&g_host->perf, 0, sizeof(g_host->perf));
+			g_host->perf_enable = false;
+		} else {
+			g_host->perf_enable = true;
+			//mod_timer(&host->stats_timer, (jiffies + msecs_to_jiffies(MMC_STATS_INFO_INTERVAL)));
+		}
+		spin_unlock(&g_host->lock);
+	}
+
+	return count;
+}
+
+static DEVICE_ATTR(perf, S_IRUGO | S_IWUSR,
+		show_perf, set_perf);
+
+#ifdef CONFIG_MMC_PERF_PROFILING
+void mmc_stats_timer_hdlr(unsigned long data)
+{
+	struct mmc_host *host = (struct mmc_host *)data;
+	unsigned long rtime, wtime;
+	unsigned long rbytes, wbytes, rcnt, wcnt;
+	unsigned long wperf = 0, rperf = 0;
+	unsigned long flags;
+
+
+	if (host && host->perf_enable) {
+		spin_lock_irqsave(&host->lock, flags);
+
+		rbytes = host->perf.rbytes_drv;
+		wbytes = host->perf.wbytes_drv;
+		rcnt = host->perf.rcount;
+		wcnt = host->perf.wcount;
+		rtime = (unsigned long)ktime_to_ms(host->perf.rtime_drv);
+		wtime = (unsigned long)ktime_to_ms(host->perf.wtime_drv);
+
+		host->perf.rbytes_drv = host->perf.wbytes_drv = 0;
+		host->perf.rcount = host->perf.wcount = 0;
+		host->perf.rtime_drv = ktime_set(0, 0);
+		host->perf.wtime_drv = ktime_set(0, 0);
+
+		spin_unlock_irqrestore(&host->lock, flags);
+
+		if (wtime)
+			wperf = ((wbytes / 1024) * 1000) / wtime;
+		if (rtime)
+			rperf = ((rbytes / 1024) * 1000) / rtime;
+
+		/* print statistics if read/write time > 500ms */
+		if (!strcmp(mmc_hostname(host), "mmc0")) {
+			pr_info("%s Statistics: write %lu KB in %lu ms, perf %lu KB/s, rq %lu\n",
+				mmc_hostname(host), wbytes / 1024, wtime, wperf, wcnt);
+			pr_info("%s Statistics: read %lu KB in %lu ms, perf %lu KB/s, rq %lu\n",
+				mmc_hostname(host), rbytes / 1024, rtime, rperf, rcnt);
+		}
+
+	}
+
+	mod_timer(&host->stats_timer, (jiffies +
+		  msecs_to_jiffies(MMC_STATS_INFO_INTERVAL)));
+	return;
+}
+#else
+void mmc_stats_timer_hdlr(unsigned long data)
+{
+	struct mmc_host *host = (struct mmc_host *)data;
+	unsigned long rtime, wtime;
+	unsigned long rbytes, wbytes, rcnt, wcnt;
+	unsigned long wperf = 0, rperf = 0;
+	unsigned long flags;
+	if (!host || !host->perf_enable)
+		return;
+
+	spin_lock_irqsave(&host->lock, flags);
+
+	rbytes = host->perf.rbytes_drv;
+	wbytes = host->perf.wbytes_drv;
+	rcnt = host->perf.rcount;
+	wcnt = host->perf.wcount;
+	rtime = (unsigned long)ktime_to_ms(host->perf.rtime_drv);
+	wtime = (unsigned long)ktime_to_ms(host->perf.wtime_drv);
+
+	host->perf.rbytes_drv = host->perf.wbytes_drv = 0;
+	host->perf.rcount = host->perf.wcount = 0;
+	host->perf.rtime_drv = ktime_set(0, 0);
+	host->perf.wtime_drv = ktime_set(0, 0);
+
+	spin_unlock_irqrestore(&host->lock, flags);
+
+	if (wtime)
+		wperf = ((wbytes / 1024) * 1000) / wtime;
+	if (rtime)
+		rperf = ((rbytes / 1024) * 1000) / rtime;
+
+	/* print statistics if read/write time > 500ms */
+	if (!strcmp(mmc_hostname(host), "mmc0") && wperf && (wtime > 500))
+		pr_info("%s Statistics: write %lu KB in %lu ms, perf %lu KB/s, rq %lu\n",
+			mmc_hostname(host), wbytes / 1024, wtime, wperf, wcnt);
+	if (!strcmp(mmc_hostname(host), "mmc0") && rperf && (rtime > 500))
+		pr_info("%s Statistics: read %lu KB in %lu ms, perf %lu KB/s, rq %lu\n",
+			mmc_hostname(host), rbytes / 1024, rtime, rperf, rcnt);
+
+	mod_timer(&host->stats_timer, (jiffies +
+		  msecs_to_jiffies(MMC_STATS_INFO_INTERVAL)));
+	return;
+}
+
+
+
+#endif
+
+/*
+static ssize_t
+show_burst(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	struct mmc_host *host = dev_get_drvdata(dev);
+	if (!host)
+		return 0;
+	return sprintf(buf, "%d", host->burst_mode);
+}
+
+static ssize_t
+set_burst(struct device *dev, struct device_attribute *attr,
+		const char *buf, size_t count)
+{
+	struct mmc_host *host = dev_get_drvdata(dev);
+	char *envp[3] = {"SWITCH_NAME=camera_burst",0, 0};
+	if (!host || !host->card || !host->card->mmcblk_dev)
+		return count;
+	host->burst_mode = (buf[0] == '0') ? 0 : 1;
+	pr_info("%s: %d\n", __func__, host->burst_mode);
+	if (!host->burst_mode) {
+		envp[1] = "SWITCH_STATE=0";
+	} else {
+		envp[1] = "SWITCH_STATE=1";
+	}
+
+	kobject_uevent_env(&host->card->mmcblk_dev->kobj, KOBJ_CHANGE, envp);
+	return count;
+}
+
+static DEVICE_ATTR(burst, S_IRUGO | S_IWUSR | S_IWGRP,
+		show_burst, set_burst);
+
+*/
+static struct attribute *dev_attrs[] = {
+	&dev_attr_perf.attr,
+	//&dev_attr_burst.attr,
+	NULL,
+};
+static struct attribute_group dev_attr_grp = {
+	.attrs = dev_attrs,
+};
+
+
 
 /**
  *	mmc_add_host - initialise host hardware
@@ -379,9 +589,14 @@ int mmc_add_host(struct mmc_host *host)
 	mmc_add_host_debugfs(host);
 #endif
 	mmc_host_clk_sysfs_init(host);
+	err = sysfs_create_group(&host->parent->kobj, &dev_attr_grp);
+	if (err)
+		pr_err("%s: failed to create sysfs group with err %d\n",
+							 __func__, err);
 
 	mmc_start_host(host);
-	register_pm_notifier(&host->pm_notify);
+	if (!(host->pm_flags & MMC_PM_IGNORE_PM_NOTIFY))
+		register_pm_notifier(&host->pm_notify);
 
 	return 0;
 }
@@ -398,13 +613,15 @@ EXPORT_SYMBOL(mmc_add_host);
  */
 void mmc_remove_host(struct mmc_host *host)
 {
-	unregister_pm_notifier(&host->pm_notify);
+	if (!(host->pm_flags & MMC_PM_IGNORE_PM_NOTIFY))
+		unregister_pm_notifier(&host->pm_notify);
+
 	mmc_stop_host(host);
 
 #ifdef CONFIG_DEBUG_FS
 	mmc_remove_host_debugfs(host);
 #endif
-
+	sysfs_remove_group(&host->parent->kobj, &dev_attr_grp);
 	device_del(&host->class_dev);
 
 	led_trigger_unregister_simple(host->led);
@@ -425,6 +642,7 @@ void mmc_free_host(struct mmc_host *host)
 	spin_lock(&mmc_host_lock);
 	idr_remove(&mmc_host_idr, host->index);
 	spin_unlock(&mmc_host_lock);
+	wake_lock_destroy(&host->detect_wake_lock);
 
 	put_device(&host->class_dev);
 }

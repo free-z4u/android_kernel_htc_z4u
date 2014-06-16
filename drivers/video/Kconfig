@@ -23,6 +23,8 @@ source "drivers/gpu/drm/Kconfig"
 
 source "drivers/gpu/stub/Kconfig"
 
+source "drivers/gpu/ion/Kconfig"
+
 config VGASTATE
        tristate
        default n
@@ -160,6 +162,11 @@ config FB_SYS_IMAGEBLIT
 	  Include the sys_imageblit function for generic software image
 	  blitting. This is used by drivers that don't provide their own
 	  (accelerated) version and the framebuffer is in system RAM.
+
+config USB_PROJECTOR_ENABLE
+	bool "Support HTC autobot mode(car mode)"
+	depends on FB
+	default n
 
 menuconfig FB_FOREIGN_ENDIAN
 	bool "Framebuffer foreign endianness support"
@@ -2410,6 +2417,10 @@ config FB_PUV3_UNIGFX
 	help
 	  Choose this option if you want to use the Unigfx device as a
 	  framebuffer device. Without the support of PCI & AGP.
+
+source "drivers/video/sc8810/Kconfig"
+source "drivers/video/sc8825/Kconfig"
+source "drivers/video/sc8830/Kconfig"
 
 source "drivers/video/omap/Kconfig"
 source "drivers/video/omap2/Kconfig"

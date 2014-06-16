@@ -451,6 +451,12 @@ config TOUCHSCREEN_TNETV107X
 	  To compile this driver as a module, choose M here: the
 	  module will be called tnetv107x-ts.
 
+config TOUCHSCREEN_SYNAPTICS_I2C_RMI
+	tristate "Synaptics i2c touchscreen"
+	depends on I2C
+	help
+	  This enables support for Synaptics RMI over I2C based touchscreens.
+
 config TOUCHSCREEN_TOUCHRIGHT
 	tristate "Touchright serial touchscreen"
 	select SERIO
@@ -845,4 +851,124 @@ config TOUCHSCREEN_TPS6507X
 	  To compile this driver as a module, choose M here: the
 	  module will be called tps6507x_ts.
 
+config TOUCHSCREEN_PIXCIR
+        tristate "PIXCIR touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a PIXCIR based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called pixcir_i2c_ts.c.
+
+config TOUCHSCREEN_PIXCIR_HVGA_TEST
+        tristate "PIXCIR touchscreen driver"
+        depends on TOUCHSCREEN_PIXCIR
+        help
+          Say Y here if you have a PIXCIR based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called pixcir_i2c_ts.c.
+
+config TOUCHSCREEN_FT5X0X
+        tristate "FT5X0X touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a FT5X0X based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called ft5x0x_ts_v1.c.
+
+config TOUCHSCREEN_ZINITIX
+        tristate "ZINITIX touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a ZINITIX based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called zinitix_touch.c.
+
+config TOUCHSCREEN_QT602240
+        tristate "QT602240 touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a QT602240 based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called qt602240_ts.c.
+
+config TOUCHSCREEN_FT5306
+        tristate "FT5306 touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a FT5306 based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called ft5306_ts.c.
+config TOUCHSCREEN_SYNAPTICS_3K
+	tristate "Synaptics 3k serious i2c touchscreen"
+	depends on I2C
+	help
+	  This enables support for Synaptics RMI4 over I2C based touchscreens.
+
+config TOUCHSCREEN_SC8810
+       tristate "SPRD SC8810 touchscreen driver"
+       depends on ARCH_SC8810 && MACH_OPENPHONE_SC6820
+       help
+         Say Y here if you have a sprd touchscreen.
+
+         If unsure, say N.
+
+         To compile this driver as a module, choose M here: the
+         module will be called tp_sprd.
+
+config TOUCHSCREEN_ZINITIX_BT404
+        tristate "ZINITIX_BT404 touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a ZINITIX_BT404 based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called zinitix_touch_bt404.c.
+
+config TOUCHSCREEN_TMA140
+        tristate "CYPRESS touchscreen driver"
+        depends on I2C
+        help
+          Say Y here if you have a CYPRESS based touchscreen
+          controller.
+
+          If unsure, say N.
+
+          To compile this driver as a module, choose M here: the
+          module will be called synaptics_i2c_rmi_tma140_cori.c.
+
+config TOUCHSCREEN_MMS134S_TS
+	bool "MELFAS MMS-134 touchscreen driver"
+	depends on I2C
+	default n
+	help
+	  Say Y here if you have a MELFAS MMS-1XX series touchscreen.
+
+  	  If unsure, say N.          
 endif

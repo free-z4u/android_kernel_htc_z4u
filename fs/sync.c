@@ -15,11 +15,23 @@
 #include <linux/pagemap.h>
 #include <linux/quotaops.h>
 #include <linux/backing-dev.h>
+#include <linux/statfs.h>
 #include "internal.h"
 
 #define VALID_FLAGS (SYNC_FILE_RANGE_WAIT_BEFORE|SYNC_FILE_RANGE_WRITE| \
 			SYNC_FILE_RANGE_WAIT_AFTER)
 
+#ifdef CONFIG_ASYNC_FSYNC
+#define FLAG_ASYNC_FSYNC	0x1
+static DEFINE_MUTEX(afsync_lock);
+static LIST_HEAD(afsync_list);
+static struct workqueue_struct *fsync_workqueue = NULL;
+struct fsync_work {
+	struct work_struct work;
+	char pathname[256];
+	struct list_head list;
+};
+#endif
 /*
  * Do the filesystem syncing work. For simple filesystems
  * writeback_inodes_sb(sb) just dirties buffers with inodes so we have to
@@ -70,7 +82,11 @@ int sync_filesystem(struct super_block *sb)
 	if (sb->s_flags & MS_RDONLY)
 		return 0;
 
-	ret = __sync_filesystem(sb, 0);
+	if (atomic_read(&vfs_emergency_remount)) {
+		pr_info("%s: force sync fs in wait mode\n", __func__);
+		ret = __sync_filesystem(sb, 1);
+	} else
+		ret = __sync_filesystem(sb, 0);
 	if (ret < 0)
 		return ret;
 	return __sync_filesystem(sb, 1);
@@ -184,15 +200,141 @@ int vfs_fsync(struct file *file, int datasync)
 }
 EXPORT_SYMBOL(vfs_fsync);
 
+
+#ifdef CONFIG_MACH_Z4TD
+	#define LOW_STORAGE_THRESHOLD	204800 /* = 800M  BlockSize=4096 Bytes */
+#elif defined(CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG) || defined(CONFIG_MACH_CP5VEDTU) || defined(CONFIG_MACH_CP5VEDWG)
+	#define LOW_STORAGE_THRESHOLD	786432 /* = 3G  BlockSize=4096 Bytes */
+#endif
+
+#ifdef CONFIG_ASYNC_FSYNC
+extern int emmc_perf_degr(void);
+
+/* return 1: can async fsync, 0: otherwise */
+int async_fsync(struct file *file, int fd)
+{
+	struct inode *inode = file->f_mapping->host;
+	struct super_block *sb = inode->i_sb;
+	struct kstatfs st;
+	if ((sb->fsync_flags & FLAG_ASYNC_FSYNC) == 0)
+		return 0;
+
+	if (!emmc_perf_degr())
+		return 0;
+
+	if (fd_statfs(fd, &st))
+		return 0;
+
+	if (st.f_bfree > LOW_STORAGE_THRESHOLD)
+		return 0;
+
+	return 1;
+}
+
+static int do_async_fsync(char *pathname)
+{
+	struct file *file;
+	int ret;
+	file = filp_open(pathname, O_RDWR, 0);
+	if (IS_ERR(file)) {
+		pr_debug("%s: can't open %s\n", __func__, pathname);
+		return -EBADF;
+	}
+	ret = vfs_fsync(file, 0);
+
+	filp_close(file, NULL);
+	return ret;
+}
+
+static void do_afsync_work(struct work_struct *work)
+{
+	struct fsync_work *fwork =
+		container_of(work, struct fsync_work, work);
+	int ret = -EBADF;
+	pr_debug("afsync: %s\n", fwork->pathname);
+	mutex_lock(&afsync_lock);
+	list_del(&fwork->list);
+	mutex_unlock(&afsync_lock);
+	ret = do_async_fsync(fwork->pathname);
+	if (ret != 0 && ret != -EBADF)
+		pr_info("afsync return %d\n", ret);
+	else
+		pr_debug("afsync: %s done\n", fwork->pathname);
+	kfree(fwork);
+}
+#endif
+
 static int do_fsync(unsigned int fd, int datasync)
 {
 	struct file *file;
 	int ret = -EBADF;
+#ifdef CONFIG_ASYNC_FSYNC
+	struct fsync_work *fwork, *tmp;
+	/*struct inode *inode;*/
+#endif
 
 	file = fget(fd);
 	if (file) {
+		ktime_t fsync_t, fsync_diff;
+		char pathname[256], *path;
+		path = d_path(&(file->f_path), pathname, sizeof(pathname));
+		if (IS_ERR(path))
+			path = "(unknown)";
+#ifdef CONFIG_ASYNC_FSYNC
+		else if (async_fsync(file, fd)) {
+			if (!fsync_workqueue)
+				fsync_workqueue = create_singlethread_workqueue("fsync");
+			if (!fsync_workqueue)
+				goto no_async;
+
+			if (IS_ERR(path))
+				goto no_async;
+
+			mutex_lock(&afsync_lock);
+			list_for_each_entry_safe(fwork, tmp, &afsync_list, list) {
+				if (!strcmp(fwork->pathname, path)) {
+					if (list_empty(&fwork->work.entry)) {
+						pr_debug("fsync(%s): work(%s) not in workqueue\n",
+								current->comm, path);
+						list_del_init(&fwork->list);
+						break;
+					}
+					/* already has work to do fsync for this file */
+					mutex_unlock(&afsync_lock);
+					fput(file);
+					return 0;
+				}
+			}
+			mutex_unlock(&afsync_lock);
+
+			fwork = kmalloc(sizeof(*fwork), GFP_KERNEL);
+			if (fwork) {
+				strncpy(fwork->pathname, path, sizeof(fwork->pathname) - 1);
+				/*
+				inode = file->f_path.dentry->d_inode;
+				pr_debug("fsync(%s): %s, fsize %llu Bytes\n", current->comm,
+					fwork->pathname, inode->i_size);
+				*/
+				INIT_WORK(&fwork->work, do_afsync_work);
+				mutex_lock(&afsync_lock);
+				list_add_tail(&fwork->list, &afsync_list);
+				mutex_unlock(&afsync_lock);
+				queue_work(fsync_workqueue, &fwork->work);
+				fput(file);
+				return 0;
+			}
+		}
+no_async:
+#endif
+		fsync_t = ktime_get();
 		ret = vfs_fsync(file, datasync);
 		fput(file);
+		fsync_diff = ktime_sub(ktime_get(), fsync_t);
+		if (ktime_to_ms(fsync_diff) >= 5000) {
+			pr_info("VFS: %s pid:%d(%s)(parent:%d/%s) takes %lld ms to fsync %s.\n", __func__,
+				current->pid, current->comm, current->parent->pid, current->parent->comm,
+				ktime_to_ms(fsync_diff), path);
+		}
 	}
 	return ret;
 }

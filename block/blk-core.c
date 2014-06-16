@@ -824,8 +824,11 @@ retry:
 				ioc_set_batching(q, ioc);
 				blk_set_queue_full(q, is_sync);
 			} else {
-				if (may_queue != ELV_MQUEUE_MUST
-						&& !ioc_batching(q, ioc)) {
+#if defined(CONFIG_ZIMMER)
+				if (may_queue != ELV_MQUEUE_MUST && !ioc_batching(q, ioc) && (!(bio->bi_rw & REQ_SWAPIN_DMPG))) {
+#else
+				if (may_queue != ELV_MQUEUE_MUST && !ioc_batching(q, ioc)) {
+#endif
 					/*
 					 * The queue is full and the allocating
 					 * process is not a "batcher", and not
@@ -843,8 +846,12 @@ retry:
 	 * limit of requests, otherwise we could have thousands of requests
 	 * allocated with any setting of ->nr_requests
 	 */
-	if (rl->count[is_sync] >= (3 * q->nr_requests / 2))
-		goto out;
+#if defined(CONFIG_ZIMMER)
+	if ((rl->count[is_sync] >= (3 * q->nr_requests / 2)) && (!(bio->bi_rw & REQ_SWAPIN_DMPG)))
+#else
+	if ((rl->count[is_sync] >= (3 * q->nr_requests / 2)))
+#endif
+        goto out;
 
 	rl->count[is_sync]++;
 	rl->starved[is_sync] = 0;
@@ -1306,6 +1313,11 @@ void init_request_from_bio(struct request *req, struct bio *bio)
 	if (bio->bi_rw & REQ_RAHEAD)
 		req->cmd_flags |= REQ_FAILFAST_MASK;
 
+#if defined(CONFIG_ZIMMER)
+	if (bio->bi_rw & REQ_SWAPIN_DMPG)
+		req->cmd_flags |= (REQ_SWAPIN_DMPG | REQ_NOMERGE);
+#endif
+
 	req->errors = 0;
 	req->__sector = bio->bi_sector;
 	req->ioprio = bio_prio(bio);
@@ -1326,8 +1338,11 @@ void blk_queue_bio(struct request_queue *q, struct bio *bio)
 	 * ISA dma in theory)
 	 */
 	blk_queue_bounce(q, &bio);
-
+#if defined(CONFIG_ZIMMER)
+	if (bio->bi_rw & (REQ_FLUSH | REQ_FUA) || bio->bi_rw & REQ_SWAPIN_DMPG) {
+#else
 	if (bio->bi_rw & (REQ_FLUSH | REQ_FUA)) {
+#endif
 		spin_lock_irq(q->queue_lock);
 		where = ELEVATOR_INSERT_FLUSH;
 		goto get_rq;

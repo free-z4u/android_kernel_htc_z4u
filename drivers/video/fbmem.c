@@ -894,10 +894,24 @@ fb_pan_display(struct fb_info *info, struct fb_var_screeninfo *var)
 				 (var->xoffset % fix->xpanstep)))
 		err = -EINVAL;
 
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+	ktime_t start_time, end_time;
+	s64 delta_time;
+	start_time = ktime_get();
+#endif
+
 	if (err || !info->fbops->fb_pan_display ||
 	    var->yoffset > info->var.yres_virtual - yres ||
 	    var->xoffset > info->var.xres_virtual - info->var.xres)
 		return -EINVAL;
+
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+	end_time = ktime_get();
+	delta_time = ktime_to_ms(ktime_sub(end_time, start_time));
+	if (delta_time > 30)
+		printk(KERN_DEBUG "[DISP] %s() start time = %lld, end time = %lld, delta time = %lld\n",
+			__func__, ktime_to_us(start_time), ktime_to_us(end_time),delta_time);
+#endif
 
 	if ((err = info->fbops->fb_pan_display(var, info)))
 		return err;
@@ -938,6 +952,12 @@ fb_set_var(struct fb_info *info, struct fb_var_screeninfo *var)
 {
 	int flags = info->flags;
 	int ret = 0;
+
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+	ktime_t start_time, end_time;
+	s64 delta_time;
+	start_time = ktime_get();
+#endif
 
 	if (var->activate & FB_ACTIVATE_INV_MODE) {
 		struct fb_videomode mode1, mode2;
@@ -1039,6 +1059,14 @@ fb_set_var(struct fb_info *info, struct fb_var_screeninfo *var)
 		}
 	}
 
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+	end_time = ktime_get();
+	delta_time = ktime_to_ms(ktime_sub(end_time, start_time));
+	if (delta_time > 35)
+		printk(KERN_DEBUG "[DISP] %s() start time = %lld, end time = %lld, delta time = %lld\n",
+			__func__, ktime_to_us(start_time), ktime_to_us(end_time),delta_time);
+#endif
+
  done:
 	return ret;
 }
@@ -1064,6 +1092,39 @@ fb_blank(struct fb_info *info, int blank)
 
  	return ret;
 }
+#ifdef CONFIG_USB_PROJECTOR_ENABLE
+static struct msmfb_usb_projector_info usb_pjt_info = {0, 0, 0, 0, 0};
+static uint32_t frame_kaddr[3], frame_vaddr[3];
+char *get_fb_addr(void)
+{
+	uint32_t vaddr = 0;
+	int i = 0;
+	if (!usb_pjt_info.latest_offset) {
+		return 0;
+	}
+	usb_pjt_info.usb_offset = usb_pjt_info.latest_offset;
+	for (i = 0; i < 3; i++) {
+		if (frame_kaddr[i] == usb_pjt_info.usb_offset)
+			break;
+		else if (frame_kaddr[i] != 0)
+			continue;
+		else if (frame_kaddr[i] == 0) {
+			frame_kaddr[i] = usb_pjt_info.usb_offset;
+			frame_vaddr[i] = ioremap(usb_pjt_info.usb_offset, usb_pjt_info.width * usb_pjt_info.height * 2);
+			break;
+		}
+	}
+	//vaddr = ioremap(usb_pjt_info.usb_offset, usb_pjt_info.width * usb_pjt_info.height * 2);
+
+	printk("[AUTOBOT] %s() width=%d, height=%d,usb_offset=0x%x, kaddr=0x%x, vaddr=0x%x, i=%d\n", \
+			__func__,usb_pjt_info.width, usb_pjt_info.height, \
+			usb_pjt_info.usb_offset,frame_kaddr[i], frame_vaddr[i],i);
+	return frame_vaddr[i];
+}
+
+EXPORT_SYMBOL(get_fb_addr);
+
+#endif	//USB_PROJECTOR_ENABLE
 
 static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 			unsigned long arg)
@@ -1077,7 +1138,10 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 	struct fb_event event;
 	void __user *argp = (void __user *)arg;
 	long ret = 0;
-
+#ifdef CONFIG_USB_PROJECTOR_ENABLE
+	static int ll_index = 0;
+	struct msmfb_usb_projector_info tmp_info;
+#endif //USB_PROJECTOR_ENABLE
 	switch (cmd) {
 	case FBIOGET_VSCREENINFO:
 		if (!lock_fb_info(info))
@@ -1090,6 +1154,13 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 	case FBIOPUT_VSCREENINFO:
 		if (copy_from_user(&var, argp, sizeof(var)))
 			return -EFAULT;
+
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+		ktime_t start_time, end_time;
+		s64 delta_time;
+		start_time = ktime_get();
+#endif
+
 		if (!lock_fb_info(info))
 			return -ENODEV;
 		console_lock();
@@ -1098,6 +1169,15 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		info->flags &= ~FBINFO_MISC_USEREVENT;
 		console_unlock();
 		unlock_fb_info(info);
+
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+		end_time = ktime_get();
+		delta_time = ktime_to_ms(ktime_sub(end_time, start_time));
+		if (delta_time > 40)
+		printk(KERN_DEBUG "[DISP] %s() start time = %lld, end time = %lld, delta time = %lld\n",
+			__func__, ktime_to_us(start_time), ktime_to_us(end_time),delta_time);
+#endif
+
 		if (!ret && copy_to_user(argp, &var, sizeof(var)))
 			ret = -EFAULT;
 		break;
@@ -1182,6 +1262,70 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		console_unlock();
 		unlock_fb_info(info);
 		break;
+#ifdef CONFIG_USB_PROJECTOR_ENABLE
+	case MSMFB_GET_USB_PROJECTOR_INFO:
+			ret = copy_to_user((void *)arg, &usb_pjt_info, sizeof(usb_pjt_info));
+			if (ret)
+				return ret;
+			printk("[AUTOBOT]%s() cmd = MSMFB_GET_USB_PROJECTOR_INFO, usb_offset=0x%x, latest_offset=0x%x\n",
+				__func__,  usb_pjt_info.usb_offset, usb_pjt_info.latest_offset);
+			break;
+	case MSMFB_SET_USB_PROJECTOR_INFO:
+			ret = copy_from_user(&usb_pjt_info, (void *)arg, sizeof(usb_pjt_info));
+			if (ret)
+				return ret;
+
+			//&usb_pjt_info = &tmp_info;
+			printk("[AUTOBOT]%s() MSMFB_SET_USB_PROJECTOR_INFO latest_offset=0x%x, src_offset=0x%x \n",
+				__func__, usb_pjt_info.latest_offset, usb_pjt_info.src_offset);
+			/*dump raw data to file*/
+			#if 0
+			if(ll_index < 50)
+			{
+				mm_segment_t oldfs;
+				struct file *fp;
+				char path[50] = {0};
+			/*dump dst buffer*/
+				uint32_t dst_addr = ioremap(usb_pjt_info.latest_offset, 480*800*2);
+				uint32_t src_addr = ioremap(usb_pjt_info.src_offset, 480*800*4);
+
+				snprintf(path, sizeof(path), "/data/htclog/dump_dstRGB565_%04d.raw", ll_index);
+				oldfs = get_fs();   /* save previous value */
+				set_fs(KERNEL_DS);  /* use kernel limit, system calls can be invoked */
+				fp=filp_open(path , O_RDWR|O_CREAT|O_TRUNC, 0666);
+				if (!fp) {
+					printk("%s() can't create %s\n", __func__, path);
+					set_fs(oldfs);     /* restore before returning to user space */
+					break;
+				}
+
+				/* usb_pjt_info.latest_offset is virtual address in kernel space.*/
+				fp->f_op->write(fp, (char *)dst_addr, 480*800*2, &fp->f_pos);
+				filp_close(fp, NULL);
+				set_fs(oldfs);     /* restore before returning to user space */
+
+			/*dump src buffer*/
+				memset(path, 0, sizeof(path));
+				snprintf(path, sizeof(path), "/data/htclog/dump_srcRGBA8888_%04d.raw", ll_index++);
+				oldfs = get_fs();   /* save previous value */
+				set_fs(KERNEL_DS);  /* use kernel limit, system calls can be invoked */
+				fp=filp_open(path , O_RDWR|O_CREAT|O_TRUNC, 0666);
+				if (!fp) {
+					printk("%s() can't create %s\n", __func__, path);
+					set_fs(oldfs);     /* restore before returning to user space */
+					break;
+				}
+
+				/* usb_pjt_info.latest_offset is virtual address in kernel space.*/
+				fp->f_op->write(fp, (char *)src_addr, 480*800*4, &fp->f_pos);
+				filp_close(fp, NULL);
+				set_fs(oldfs);     /* restore before returning to user space */
+			}
+
+			#endif
+
+			break;
+#endif //USB_PROJECTOR_ENABLE
 	default:
 		if (!lock_fb_info(info))
 			return -ENODEV;

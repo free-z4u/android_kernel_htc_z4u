@@ -44,6 +44,13 @@ enum thermal_trip_type {
 	THERMAL_TRIP_CRITICAL,
 };
 
+typedef enum{
+	THERMAL_TABLE_0,
+	THERMAL_TABLE_1,
+	THERMAL_TABLE_2,
+	THERMAL_TABLE_NULL,
+}thermal_table_type;
+
 struct thermal_zone_device_ops {
 	int (*bind) (struct thermal_zone_device *,
 		     struct thermal_cooling_device *);
@@ -66,7 +73,7 @@ struct thermal_zone_device_ops {
 struct thermal_cooling_device_ops {
 	int (*get_max_state) (struct thermal_cooling_device *, unsigned long *);
 	int (*get_cur_state) (struct thermal_cooling_device *, unsigned long *);
-	int (*set_cur_state) (struct thermal_cooling_device *, unsigned long);
+	int (*set_cur_state) (struct thermal_cooling_device *, unsigned long,thermal_table_type);
 };
 
 #define THERMAL_TRIPS_NONE -1

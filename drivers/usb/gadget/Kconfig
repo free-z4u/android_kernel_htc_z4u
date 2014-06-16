@@ -80,6 +80,12 @@ config USB_GADGET_DEBUG_FS
 	   Enable these files by choosing "Y" here.  If in doubt, or
 	   to conserve kernel memory, say "N".
 
+config USB_FUNCTION_PERFLOCK
+	boolean "Lock CPU frequency at higher level when the speicifc USB function is enabled"
+	depends on USB_GADGET && PERFLOCK_HTC
+	help
+	  Some USB function require higher cpu performance. Hold cpu freqnency when USB
+		is connected and specific USB function is enabled.
 config USB_GADGET_VBUS_DRAW
 	int "Maximum VBUS Power usage (2-500 mA)"
 	range 2 500
@@ -494,6 +500,23 @@ config USB_CI13XXX_MSM
 	  dynamically linked module called "ci13xxx_msm" and force all
 	  gadget drivers to also be dynamically linked.
 
+config USB_GADGET_SPRD_DWC
+	boolean "SPREADTRUM USB2.0 Controller"
+	help
+	   Spreadtrum's usb controller is an integrated high speed
+	   USB 2.0 device controller(with dwc core).
+
+	   Say "y" to link the driver statically, or "m" to build a
+	   dynamically linked module called "dwc_otg" and force all
+	   gadget drivers to also be dynamically linked.
+
+config USB_SPRD_DWC
+	tristate
+	depends on USB_GADGET_SPRD_DWC
+	default USB_GADGET
+	select USB_GADGET_SELECTED
+	select USB_GADGET_DUALSPEED
+
 #
 # LAST -- dummy/emulated controller
 #
@@ -535,6 +558,11 @@ config USB_GADGET_DUALSPEED
 config USB_GADGET_SUPERSPEED
 	bool
 	depends on USB_GADGET_DUALSPEED
+	depends on USB_GADGET
+	default n
+	help
+	  Means that gadget drivers should include extra descriptors
+	  and code to handle dual-speed controllers.
 
 #
 # USB Gadget Drivers
@@ -846,6 +874,15 @@ config USB_G_PRINTER
 	  For more information, see Documentation/usb/gadget_printer.txt
 	  which includes sample code for accessing the device file.
 
+config USB_G_ANDROID
+	boolean "Android Composite Gadget"
+	help
+	  The Android Composite Gadget supports multiple USB
+	  functions: adb, acm, mass storage, mtp, accessory
+	  and rndis.
+	  Each function can be configured and enabled/disabled
+	  dynamically from userspace through a sysfs interface.
+
 config USB_CDC_COMPOSITE
 	tristate "CDC Composite Device (Ethernet and ACM)"
 	depends on NET
@@ -976,5 +1013,18 @@ config USB_G_WEBCAM
 	  dynamically linked module called "g_webcam".
 
 endchoice
+
+config USB_CORE_IP_293A
+	boolean "usb core ip version (synophsys)"
+        depends on USB_GADGET_SPRD_DWC
+	
+	help
+	   the new ip version 293a, should write 0 to softdiscon bit.
+
+config SENSE_4_PLUS
+        bool "SENSE 4 PLUS"
+        default y
+        help
+          Support for SENSE 4 PLUS.
 
 endif # USB_GADGET

@@ -644,6 +644,10 @@ ppp_async_send(struct ppp_channel *chan, struct sk_buff *skb)
 	return 1;
 }
 
+#ifdef CONFIG_VIA_MODEM
+int ppp_flag = 0;
+EXPORT_SYMBOL(ppp_flag);
+#endif
 /*
  * Push as much data as possible out to the tty.
  */
@@ -666,6 +670,9 @@ ppp_async_push(struct asyncppp *ap)
 	if (test_and_set_bit(XMIT_BUSY, &ap->xmit_flags))
 		return 0;
 	spin_lock_bh(&ap->xmit_lock);
+#ifdef CONFIG_VIA_MODEM
+	ppp_flag = 1;
+#endif
 	for (;;) {
 		if (test_and_clear_bit(XMIT_WAKEUP, &ap->xmit_flags))
 			tty_stuffed = 0;
@@ -706,6 +713,9 @@ ppp_async_push(struct asyncppp *ap)
 		if (test_and_set_bit(XMIT_BUSY, &ap->xmit_flags))
 			break;
 	}
+#ifdef CONFIG_VIA_MODEM
+	ppp_flag = 0;
+#endif
 	spin_unlock_bh(&ap->xmit_lock);
 	return done;
 
@@ -718,6 +728,9 @@ flush:
 		done = 1;
 	}
 	ap->optr = ap->olim;
+#ifdef CONFIG_VIA_MODEM
+	ppp_flag = 0;
+#endif
 	spin_unlock_bh(&ap->xmit_lock);
 	return done;
 }

@@ -29,6 +29,9 @@
 #include <linux/of_platform.h>
 #include <linux/of_gpio.h>
 #include <linux/spinlock.h>
+#include <mach/board.h>
+
+#define PB_INT                  EIC_KEY_POWER
 
 struct gpio_button_data {
 	const struct gpio_keys_button *button;
@@ -338,6 +341,7 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
 		input_event(input, type, button->code, !!state);
 	}
 	input_sync(input);
+	printk(KERN_INFO "[EIC_KEY] key:%d, status:%d\n", button->code, !!state); /* HTC_KER_ADD, PoChien : show key logs */
 }
 
 static void gpio_keys_gpio_work_func(struct work_struct *work)
@@ -358,8 +362,21 @@ static void gpio_keys_gpio_timer(unsigned long _data)
 static irqreturn_t gpio_keys_gpio_isr(int irq, void *dev_id)
 {
 	struct gpio_button_data *bdata = dev_id;
+	const struct gpio_keys_button *button = bdata->button;
+	unsigned long value = 0;
 
 	BUG_ON(irq != bdata->irq);
+
+	if (PB_INT == button->gpio) {
+		value = !(gpio_get_value(button->gpio));
+		if (value) {
+			/* Release : low level */
+			irq_set_irq_type(irq, IRQF_TRIGGER_HIGH);
+		} else {
+			/* Press : high level */
+			irq_set_irq_type(irq, IRQF_TRIGGER_LOW);
+		}
+	}
 
 	if (bdata->timer_debounce)
 		mod_timer(&bdata->timer,
@@ -473,7 +490,13 @@ static int __devinit gpio_keys_setup_key(struct platform_device *pdev,
 			    gpio_keys_gpio_timer, (unsigned long)bdata);
 
 		isr = gpio_keys_gpio_isr;
-		irqflags = IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING;
+
+		if (PB_INT == button->gpio) {
+			irqflags =  IRQF_TRIGGER_HIGH | IRQF_NO_SUSPEND;
+		} else {
+			irqflags = IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING;
+		}
+
 
 	} else {
 		if (!button->irq) {

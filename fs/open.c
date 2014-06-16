@@ -872,6 +872,9 @@ void fd_install(unsigned int fd, struct file *file)
 	fdt = files_fdtable(files);
 	BUG_ON(fdt->fd[fd] != NULL);
 	rcu_assign_pointer(fdt->fd[fd], file);
+	file->record_pid = current->pid;
+	strncpy(file->record_comm, current->comm, 15);
+	file->record_comm[15] = '\0';
 	spin_unlock(&files->file_lock);
 }
 
@@ -1043,7 +1046,8 @@ int filp_close(struct file *filp, fl_owner_t id)
 	int retval = 0;
 
 	if (!file_count(filp)) {
-		printk(KERN_ERR "VFS: Close: file count is 0\n");
+		printk(KERN_ERR "VFS: %s: ERROR! file count is 0. PID: %d, Task: %.*s\n",
+			__func__, current->pid, TASK_COMM_LEN, current->comm);
 		return 0;
 	}
 

@@ -1,0 +1,20 @@
+if FB
+config FB_SC8825
+	boolean "SC8825 frame buffer support "
+	depends on FB && ARCH_SC8825
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	help
+          Frame buffer driver for sc8825 based boards.
+
+config FB_LCD_NT35512_MIPI
+	boolean "support NT35512 mipi panel"
+	depends on FB_SC8825
+	default n
+
+config FB_LCD_NT35517_MIPI
+	boolean "support NT35517 mipi panel"
+	depends on FB_SC8825
+	default n
+endif

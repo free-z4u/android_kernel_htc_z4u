@@ -1,0 +1,8 @@
+config VIA_MODEM
+	bool "VIA Modem IPC driver"
+	depends on MMC
+	default n
+
+config CBP_SIM_HOTPLUG
+	bool "VIA Modem SIM HOTPLUG"
+	default n

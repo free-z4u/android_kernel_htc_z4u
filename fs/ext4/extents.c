@@ -1966,7 +1966,11 @@ ext4_ext_put_in_cache(struct inode *inode, ext4_lblk_t block,
 			__u32 len, ext4_fsblk_t start)
 {
 	struct ext4_ext_cache *cex;
-	BUG_ON(len == 0);
+	WARN_ON(len == 0);
+	if (len == 0) {
+		EXT4_ERROR_INODE(inode, "extent.ee_len = 0");
+		return;
+	}
 	spin_lock(&EXT4_I(inode)->i_block_reservation_lock);
 	trace_ext4_ext_put_in_cache(inode, block, len, start);
 	cex = &EXT4_I(inode)->i_cached_extent;
@@ -2503,10 +2507,10 @@ static int ext4_ext_remove_space(struct inode *inode, ext4_lblk_t start,
 {
 	struct super_block *sb = inode->i_sb;
 	int depth = ext_depth(inode);
-	struct ext4_ext_path *path;
+	struct ext4_ext_path *path = NULL;
 	ext4_fsblk_t partial_cluster = 0;
 	handle_t *handle;
-	int i, err;
+	int i = 0, err;
 
 	ext_debug("truncate since %u to %u\n", start, end);
 
@@ -2539,8 +2543,12 @@ again:
 		}
 		depth = ext_depth(inode);
 		ex = path[depth].p_ext;
-		if (!ex)
+		if (!ex) {
+			ext4_ext_drop_refs(path);
+			kfree(path);
+			path = NULL;
 			goto cont;
+		}
 
 		ee_block = le32_to_cpu(ex->ee_block);
 
@@ -2570,8 +2578,6 @@ again:
 			if (err < 0)
 				goto out;
 		}
-		ext4_ext_drop_refs(path);
-		kfree(path);
 	}
 cont:
 
@@ -2580,19 +2586,28 @@ cont:
 	 * after i_size and walking into the tree depth-wise.
 	 */
 	depth = ext_depth(inode);
-	path = kzalloc(sizeof(struct ext4_ext_path) * (depth + 1), GFP_NOFS);
-	if (path == NULL) {
-		ext4_journal_stop(handle);
-		return -ENOMEM;
-	}
-	path[0].p_depth = depth;
-	path[0].p_hdr = ext_inode_hdr(inode);
+	if (path) {
+		int k = i = depth;
+		while (--k > 0)
+			path[k].p_block =
+				le16_to_cpu(path[k].p_hdr->eh_entries)+1;
+	} else {
+		path = kzalloc(sizeof(struct ext4_ext_path) * (depth + 1),
+			       GFP_NOFS);
+		if (path == NULL) {
+			ext4_journal_stop(handle);
+			return -ENOMEM;
+		}
+		path[0].p_depth = depth;
+		path[0].p_hdr = ext_inode_hdr(inode);
+		i = 0;
 
-	if (ext4_ext_check(inode, path[0].p_hdr, depth)) {
-		err = -EIO;
-		goto out;
+		if (ext4_ext_check(inode, path[0].p_hdr, depth)) {
+			err = -EIO;
+			goto out;
+		}
 	}
-	i = err = 0;
+	err = 0;
 
 	while (i >= 0 && err == 0) {
 		if (i == depth) {
@@ -2706,8 +2721,10 @@ cont:
 out:
 	ext4_ext_drop_refs(path);
 	kfree(path);
-	if (err == -EAGAIN)
+	if (err == -EAGAIN) {
+		path = NULL;
 		goto again;
+	}
 	ext4_journal_stop(handle);
 
 	return err;

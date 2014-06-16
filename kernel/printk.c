@@ -41,12 +41,12 @@
 #include <linux/cpu.h>
 #include <linux/notifier.h>
 #include <linux/rculist.h>
+#include <mach/board_htc.h>
 
 #include <asm/uaccess.h>
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/printk.h>
-
 /*
  * Architectures can override it:
  */
@@ -55,6 +55,10 @@ void asmlinkage __attribute__((weak)) early_printk(const char *fmt, ...)
 }
 
 #define __LOG_BUF_LEN	(1 << CONFIG_LOG_BUF_SHIFT)
+
+#ifdef        CONFIG_DEBUG_LL
+extern void printascii(char *);
+#endif
 
 /* printk's without a loglevel use this.. */
 #define DEFAULT_MESSAGE_LOGLEVEL CONFIG_DEFAULT_MESSAGE_LOGLEVEL
@@ -292,6 +296,53 @@ static inline void boot_delay_msec(void)
 {
 }
 #endif
+
+/*
+ * Return the number of unread characters in the log buffer.
+ */
+static int log_buf_get_len(void)
+{
+	return logged_chars;
+}
+
+/*
+ * Clears the ring-buffer
+ */
+void log_buf_clear(void)
+{
+	logged_chars = 0;
+}
+
+/*
+ * Copy a range of characters from the log buffer.
+ */
+int log_buf_copy(char *dest, int idx, int len)
+{
+	int ret, max;
+	bool took_lock = false;
+
+	if (!oops_in_progress) {
+		raw_spin_lock_irq(&logbuf_lock);
+		took_lock = true;
+	}
+
+	max = log_buf_get_len();
+	if (idx < 0 || idx >= max) {
+		ret = -1;
+	} else {
+		if (len > max - idx)
+			len = max - idx;
+		ret = len;
+		idx += (log_end - max);
+		while (len-- > 0)
+			dest[len] = LOG_BUF(idx + len);
+	}
+
+	if (took_lock)
+		raw_spin_unlock_irq(&logbuf_lock);
+
+	return ret;
+}
 
 #ifdef CONFIG_SECURITY_DMESG_RESTRICT
 int dmesg_restrict = 1;
@@ -884,6 +935,10 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 	printed_len += vscnprintf(printk_buf + printed_len,
 				  sizeof(printk_buf) - printed_len, fmt, args);
 
+#ifdef	CONFIG_DEBUG_LL
+	printascii(printk_buf);
+#endif
+
 	p = printk_buf;
 
 	/* Read log level and handle special printk prefix */
@@ -937,9 +992,10 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 
 				t = cpu_clock(printk_cpu);
 				nanosec_rem = do_div(t, 1000000000);
-				tlen = sprintf(tbuf, "[%5lu.%06lu] ",
+				tlen = sprintf(tbuf, "[%5lu.%06lu:%1d] ",
 						(unsigned long) t,
-						nanosec_rem / 1000);
+						nanosec_rem / 1000,
+						printk_cpu);
 
 				for (tp = tbuf; tp < tbuf + tlen; tp++)
 					emit_log_char(*tp);
@@ -1024,6 +1080,10 @@ static int __init console_setup(char *str)
 	char *s, *options, *brl_options = NULL;
 	int idx;
 
+	if ((htc_get_config(HTC_DBG_FLAG_SUPERMAN) & SUPERMAN_FLAG_DBG_UART)
+			!= SUPERMAN_FLAG_DBG_UART)
+		return 1;
+
 #ifdef CONFIG_A11Y_BRAILLE_CONSOLE
 	if (!memcmp(str, "brl,", 4)) {
 		brl_options = "";
@@ -1106,7 +1166,7 @@ int update_console_cmdline(char *name, int idx, char *name_new, int idx_new, cha
 	return -1;
 }
 
-bool console_suspend_enabled = 1;
+bool console_suspend_enabled = 0;
 EXPORT_SYMBOL(console_suspend_enabled);
 
 static int __init console_suspend_disable(char *str)
@@ -1161,7 +1221,6 @@ static int __cpuinit console_cpu_notify(struct notifier_block *self,
 	switch (action) {
 	case CPU_ONLINE:
 	case CPU_DEAD:
-	case CPU_DYING:
 	case CPU_DOWN_FAILED:
 	case CPU_UP_CANCELED:
 		console_lock();

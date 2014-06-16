@@ -44,6 +44,7 @@
 #include <linux/backing-dev.h>
 #include <linux/bitops.h>
 #include <linux/ratelimit.h>
+#include <linux/delay.h>
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/jbd2.h>
@@ -994,6 +995,8 @@ static journal_t * journal_init_common (void)
 	journal->j_commit_interval = (HZ * JBD2_DEFAULT_MAX_COMMIT_AGE);
 	journal->j_min_batch_time = 0;
 	journal->j_max_batch_time = 15000; /* 15ms */
+	/* workaround for journal issue during emergency remount. */
+	journal->commit_callback_done = 0;
 
 	/* The journal is marked for error until we succeed with recovery! */
 	journal->j_flags = JBD2_ABORT;
@@ -1340,7 +1343,7 @@ static void jbd2_mark_journal_empty(journal_t *journal)
  * Update a journal's errno.  Write updated superblock to disk waiting for IO
  * to complete.
  */
-static void jbd2_journal_update_sb_errno(journal_t *journal)
+void jbd2_journal_update_sb_errno(journal_t *journal)
 {
 	journal_superblock_t *sb = journal->j_superblock;
 
@@ -1352,6 +1355,7 @@ static void jbd2_journal_update_sb_errno(journal_t *journal)
 
 	jbd2_write_superblock(journal, WRITE_SYNC);
 }
+EXPORT_SYMBOL(jbd2_journal_update_sb_errno);
 
 /*
  * Read the superblock for a given journal, performing initial
@@ -1737,6 +1741,11 @@ int jbd2_journal_flush(journal_t *journal)
 	spin_lock(&journal->j_list_lock);
 	while (!err && journal->j_checkpoint_transactions != NULL) {
 		spin_unlock(&journal->j_list_lock);
+		if (journal->commit_callback_done) {
+			msleep(1);
+			spin_lock(&journal->j_list_lock);
+			continue;
+		}
 		mutex_lock(&journal->j_checkpoint_mutex);
 		err = jbd2_log_do_checkpoint(journal);
 		mutex_unlock(&journal->j_checkpoint_mutex);

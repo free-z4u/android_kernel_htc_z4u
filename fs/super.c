@@ -35,6 +35,10 @@
 #include <linux/fsnotify.h>
 #include "internal.h"
 
+/*
+ * 2012-12-22 Add flag to indicate emergency_remount
+ */
+atomic_t vfs_emergency_remount;
 
 LIST_HEAD(super_blocks);
 DEFINE_SPINLOCK(sb_lock);
@@ -791,6 +795,7 @@ static void do_emergency_remount(struct work_struct *work)
 {
 	struct super_block *sb, *p = NULL;
 
+	atomic_set(&vfs_emergency_remount, 1);
 	spin_lock(&sb_lock);
 	list_for_each_entry(sb, &super_blocks, s_list) {
 		if (hlist_unhashed(&sb->s_instances))
@@ -814,6 +819,7 @@ static void do_emergency_remount(struct work_struct *work)
 	if (p)
 		__put_super(p);
 	spin_unlock(&sb_lock);
+	atomic_set(&vfs_emergency_remount, 0);
 	kfree(work);
 	printk("Emergency Remount complete\n");
 }

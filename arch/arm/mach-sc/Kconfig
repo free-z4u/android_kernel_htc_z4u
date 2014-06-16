@@ -1,0 +1,349 @@
+if ARCH_SC
+
+comment "Spreadtrum SoC Type"
+
+choice
+	prompt "Spreadtrum SoC Type"
+
+config  ARCH_SC8825
+	bool "sc8825 series(tiger)"
+	select CPU_V7
+	select HAVE_SMP
+	select ARM_GIC
+	select HAVE_SCHED_CLOCK
+	select LOCAL_TIMERS if SMP
+	select VFP
+	select VFPv3
+	select NEON
+	select GENERIC_TIME
+	select CLKSRC_MMIO
+	select ARCH_HAS_CPUFREQ
+	select NEED_MACH_IO_H
+
+config  ARCH_SCX35
+	bool "sc8830 series(shark)"
+	select CPU_V7
+	select HAVE_SMP
+	select ARM_GIC
+	select HAVE_SCHED_CLOCK
+	select LOCAL_TIMERS if SMP
+	select VFP
+	select VFPv3
+	select NEON
+	select GENERIC_TIME
+	select CLKSRC_MMIO
+	select ARCH_HAS_CPUFREQ
+	select NEED_MACH_IO_H
+
+config PERFLOCK_HTC
+	depends on CPU_FREQ
+	depends on ARCH_SCX35
+	default n
+	bool "HTC Performance Lock"
+
+config PERFLOCK_BOOT_LOCK
+	depends on PERFLOCK_HTC
+	depends on ARCH_SCX35
+	default n
+	bool "Boot Time Performance Lock"
+
+
+config PERFLOCK_SCREEN_POLICY
+	depends on PERFLOCK_HTC
+	depends on ARCH_SCX35
+	default n
+	bool "Change Cpufreq Policy while Screen ON/OFF"
+
+config PERFLOCK_SCREEN_ON_MIN
+	depends on PERFLOCK_SCREEN_POLICY
+	int "Minimum speed while screen on"
+
+config PERFLOCK_SCREEN_ON_MAX
+	depends on PERFLOCK_SCREEN_POLICY
+	int "Maximum speed while screen on"
+
+config PERFLOCK_SCREEN_OFF_MIN
+	depends on PERFLOCK_SCREEN_POLICY
+	int "Minimum speed while screen off"
+
+config PERFLOCK_SCREEN_OFF_MAX
+	depends on PERFLOCK_SCREEN_POLICY
+	int "Maximum speed while screen off"
+
+config  ARCH_DOLPHIN
+	bool "sc8830 series(dolphin)"
+	select CPU_V7
+	select HAVE_SMP
+	select ARM_GIC
+	select HAVE_SCHED_CLOCK
+	select LOCAL_TIMERS if SMP
+	select VFP
+	select VFPv3
+	select NEON
+	select GENERIC_TIME
+	select CLKSRC_MMIO
+	select ARCH_HAS_CPUFREQ
+	select NEED_MACH_IO_H
+
+endchoice
+
+menu "HTC Superman Box"
+
+config HTC_DBG_LAST_IO
+	bool "Save address of last IO operation"
+	depends on (ARCH_SC8825 || ARCH_SCX35)
+	default n
+	help
+	  hello, sweet girls, i love u ~
+	  Responsible for catching all the bug bus accesses.
+	  Call me superman hero, Oh lala, Oh yeye... LOL...
+
+config HTC_DBG_UNCACHE_FTRACE
+	bool "Enable uncached ftrace by default"
+	default n
+	select GENERIC_ALLOCATOR
+	select KALLSYMS
+	select FTRACE
+	select FUNCTION_TRACER
+	help
+	  OK, I should say i am really powerfull.
+	  Responsible for event or tracer, save info into uncached buffer
+	  Come on baby, let u know everything... LOL...
+endmenu
+
+menu "Spreadtrum Board Type"
+
+config MACH_SP8825EA
+	bool "sp8825ea Phone Board"
+	depends on ARCH_SC
+	depends on ARCH_SC8825
+	default y
+	help
+	  sp8825 EB board based on SC8825 serial.
+
+config MACH_SP8825EA_TIGER_EVM
+	bool "sp8825ea Phone Board-htc-evm"
+	depends on ARCH_SC
+	depends on ARCH_SC8825
+	default y
+	help
+	  SP8825 EA tiger evm based on SC8825.
+
+config MACH_SPX35FPGA
+	bool "sp8830 FPGA Board"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  SPX35 fpga board based on SC8830 serial.
+
+config MACH_SPX35EA
+	bool "sp8830EA Phone Board"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  SPX35EA  board based on SC8830 serial.
+
+config MACH_Z4DTG
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  Z4DTG board based on SC8830 serial.
+
+config MACH_Z4TD
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  Z4TD board based on SC8830 serial.
+
+config MACH_CP5DTU
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  CP5DTU board based on SC8830 serial.
+
+config MACH_CP5DUG
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  CP5DUG board based on SC8830 serial.
+
+config MACH_CP5DWG
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  CP5DWG board based on SC8830 serial.
+
+config MACH_CP5VEDTU
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  CP5VEDTU board based on SC8830 serial.
+
+config MACH_CP5VEDWG
+	bool "sp8830 phone"
+	depends on ARCH_SC
+	depends on ARCH_SCX35
+	default n
+	help
+	  CP5VEDWG board based on SC8830 serial.
+endmenu
+
+config SPRD_ION_SIZE
+        int "size for ion"
+        range 1 64
+        default 1
+	depends on ION
+
+config SPRD_ION_OVERLAY_SIZE
+        int "size for ion overlay"
+        range 1 64
+        default 1
+	depends on ION
+
+config SC_VIBRATOR
+        bool "vibrator for SC serials"
+        select ANDROID_TIMED_OUTPUT
+        default n
+
+config FIX_V7TAGRAM_BUG
+        bool "fix arm-v7 scu tag ram bug"
+        default n
+	depends on ARCH_SCX35
+
+config SPRD_CPU_DYNAMIC_HOTPLUG
+	bool "cpu dynamic hotplug with DVFS"
+	default n
+	depends on HOTPLUG_CPU
+	depends on ARCH_SCX35
+
+config SPRD_DCDC_DEBUG
+	tristate "Enable dcdc debug module"
+	default n
+	help
+	  This option select dcdc debug module.
+
+config SPRD_MODEM
+       bool "instance of SPRD modem"
+       default n
+
+config AP_CTRL_RF
+       bool "rf pin ctrl"
+       default n
+       depends on SPRD_MODEM
+
+config AP_CTRL_ANT
+       bool "ant switch ctrl"
+       default n
+       depends on SPRD_MODEM
+
+config SPRD_SIM_SWITCH
+       bool "cp0 and cp1 sim switch"
+       default n
+       depends on SPRD_MODEM
+
+config VIA_SIM_SWITCH
+       bool "cp0 and via sim switch"
+       default n
+       depends on VIA_MODEM
+
+config MODEM_SILENT_RESET
+       bool "cp0 and cp1 silent reset"
+       default n
+       depends on SPRD_MODEM
+
+config SIPC_TD
+       bool "SIPC instance of TD modem"
+       select SIPC
+       default n
+       depends on SPRD_MODEM
+
+config SIPC_WCDMA
+       bool "SIPC instance of WCDMA modem"
+       select SIPC
+       default n
+       depends on SPRD_MODEM
+
+config SIPC_DEBUG
+       bool "SIPC debug instance of two modem"
+       select SIPC
+       default n
+       depends on SPRD_MODEM
+
+config SIPC_WCN
+       bool "SIPC instance of Wireless Connection"
+       select SIPC
+       default n
+
+config BUS_MONITOR
+        bool "scxx35 AHB and DMC bus monitors"
+        default n
+	depends on ARCH_SCX35
+
+config BUS_MONITOR_DEBUG
+        bool "debug scxx35 AHB and DMC bus monitors"
+        default n
+	depends on BUS_MONITOR
+
+config HTC_HEADSET_MGR
+	tristate "HTC headset manager driver"
+	default n
+	help
+	  Provides support of HTC headset manager.
+
+config HTC_HEADSET_GPIO
+	tristate "HTC GPIO headset detection driver"
+	depends on HTC_HEADSET_MGR
+	default n
+	help
+	  Provides support of HTC GPIO headset detection.
+
+config HTC_HEADSET_PMIC
+        tristate "HTC PMIC headset detection driver"
+        depends on HTC_HEADSET_MGR
+        default n
+        help
+          Provides support of HTC PMIC headset detection.
+
+config HTC_HEADSET_ONE_WIRE
+	tristate "HTC 1-wire headset detection driver"
+	depends on HTC_HEADSET_MGR
+	default n
+	help
+	  Provides support of HTC 1-wire headset detection.
+
+config SPRD_SEND_SIGNAL_DEBUG
+	bool "SPRD send_signal debug support"
+	help
+	  This option enables kernel debug log and dump_stack
+	  if any processes send signal to assinged processes.
+
+config HTC_BATTCHG
+		bool "htc battery driver"
+		default n
+
+config HTC_ONMODE_CHARGING
+		bool "On Mode Charging Icon Support"
+		default n
+		help
+		support on mode charing icon
+
+config SUPPORT_DQ_BATTERY
+		bool "Support DQ battery."
+		default n
+		help
+			Support DQ battery
+endif

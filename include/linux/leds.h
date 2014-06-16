@@ -26,13 +26,23 @@ enum led_brightness {
 	LED_OFF		= 0,
 	LED_HALF	= 127,
 	LED_FULL	= 255,
+	LED_CAMERA  = 254,//HTC_CAM Disable SW timer and use timer of ISP_FW
+
+#if defined (CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+
+	LED_CAMERA_MIN	= 193,
+#else
+	LED_CAMERA_MIN	= 201,
+#endif
 };
+
 
 struct led_classdev {
 	const char		*name;
 	int			 brightness;
 	int			 max_brightness;
 	int			 flags;
+	int			 camera_backlight;
 
 	/* Lower 16 bits reflect status */
 #define LED_SUSPENDED		(1 << 0)

@@ -737,6 +737,7 @@ static inline int usb_gadget_vbus_disconnect(struct usb_gadget *gadget)
  */
 static inline int usb_gadget_connect(struct usb_gadget *gadget)
 {
+	printk("usb_gadget_connect\n");
 	if (!gadget->ops->pullup)
 		return -EOPNOTSUPP;
 	return gadget->ops->pullup(gadget, 1);
@@ -759,6 +760,7 @@ static inline int usb_gadget_connect(struct usb_gadget *gadget)
  */
 static inline int usb_gadget_disconnect(struct usb_gadget *gadget)
 {
+	printk("usb_gadget_disconnect\n");
 	if (!gadget->ops->pullup)
 		return -EOPNOTSUPP;
 	return gadget->ops->pullup(gadget, 0);
@@ -839,6 +841,7 @@ struct usb_gadget_driver {
 	int			(*setup)(struct usb_gadget *,
 					const struct usb_ctrlrequest *);
 	void			(*disconnect)(struct usb_gadget *);
+	void	(*mute_disconnect)(struct usb_gadget *);
 	void			(*suspend)(struct usb_gadget *);
 	void			(*resume)(struct usb_gadget *);
 
@@ -939,6 +942,12 @@ int usb_gadget_config_buf(const struct usb_config_descriptor *config,
 struct usb_descriptor_header **usb_copy_descriptors(
 		struct usb_descriptor_header **);
 
+/* return copy of endpoint descriptor given original descriptor set */
+struct usb_endpoint_descriptor *usb_find_endpoint(
+	struct usb_descriptor_header **src,
+	struct usb_descriptor_header **copy,
+	struct usb_endpoint_descriptor *match);
+
 /**
  * usb_free_descriptors - free descriptors returned by usb_copy_descriptors()
  * @v: vector of descriptors
@@ -965,10 +974,8 @@ extern void usb_gadget_unmap_request(struct usb_gadget *gadget,
 extern struct usb_ep *usb_ep_autoconfig(struct usb_gadget *,
 			struct usb_endpoint_descriptor *);
 
-
-extern struct usb_ep *usb_ep_autoconfig_ss(struct usb_gadget *,
-			struct usb_endpoint_descriptor *,
-			struct usb_ss_ep_comp_descriptor *);
+extern struct usb_ep *usb_ep_autoconfig_bulk_doublebuffer(struct usb_gadget *,
+			struct usb_endpoint_descriptor *);
 
 extern void usb_ep_autoconfig_reset(struct usb_gadget *);
 

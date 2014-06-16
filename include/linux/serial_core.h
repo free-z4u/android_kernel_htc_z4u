@@ -213,6 +213,9 @@
 /* Energy Micro efm32 SoC */
 #define PORT_EFMUART   100
 
+/* SPRD UARTs */
+#define PORT_SPRD 99
+
 #ifdef __KERNEL__
 
 #include <linux/compiler.h>
@@ -252,6 +255,7 @@ struct uart_ops {
 	void		(*pm)(struct uart_port *, unsigned int state,
 			      unsigned int oldstate);
 	int		(*set_wake)(struct uart_port *, unsigned int state);
+	void		(*wake_peer)(struct uart_port *);
 
 	/*
 	 * Return a string describing the type of the port

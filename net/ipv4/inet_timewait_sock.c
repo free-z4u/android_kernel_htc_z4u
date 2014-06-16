@@ -131,6 +131,9 @@ void __inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
 	struct inet_ehash_bucket *ehead = inet_ehash_bucket(hashinfo, sk->sk_hash);
 	spinlock_t *lock = inet_ehash_lockp(hashinfo, sk->sk_hash);
 	struct inet_bind_hashbucket *bhead;
+	
+	if ((!sk) || (IS_ERR(sk)))
+		return;
 	/* Step 1: Put TW into bind hash. Original socket stays there too.
 	   Note, that any socket with inet->num != 0 MUST be bound in
 	   binding cache, even if it is closed.

@@ -175,6 +175,9 @@ static struct sysrq_key_op sysrq_show_timers_op = {
 
 static void sysrq_handle_mountro(int key)
 {
+	printk(KERN_INFO "Process %s (PID:%d) called %s\n",current->comm, task_pid_nr(current), __func__);
+	WARN_ON(1);
+
 	emergency_remount();
 }
 static struct sysrq_key_op sysrq_mountro_op = {

@@ -2439,6 +2439,11 @@ int ip_route_input_common(struct sk_buff *skb, __be32 daddr, __be32 saddr,
 	struct net *net;
 	int res;
 
+	if ((!skb) || (IS_ERR(skb))) {
+		printk("[NET] skb is NULL in %s\n", __func__);
+		return -EINVAL;
+	}
+
 	net = dev_net(dev);
 
 	rcu_read_lock();
@@ -2793,7 +2798,16 @@ static struct rtable *ip_route_output_slow(struct net *net, struct flowi4 *fl4)
 		fl4->saddr = FIB_RES_PREFSRC(net, res);
 
 	dev_out = FIB_RES_DEV(res);
-	fl4->flowi4_oif = dev_out->ifindex;
+//#ifdef CONFIG_HTC_NETWORK_MODIFY
+	// ** remove original code
+	//fl4->flowi4_oif = dev_out->ifindex;
+	// ** add protection for dev_out
+	if((!dev_out) || IS_ERR(dev_out)) {
+		goto out;
+	} else {
+		fl4->flowi4_oif = dev_out->ifindex;
+	}
+//#endif
 
 
 make_route:
@@ -2814,8 +2828,20 @@ out:
 
 struct rtable *__ip_route_output_key(struct net *net, struct flowi4 *flp4)
 {
-	struct rtable *rth;
+	struct rtable *rth = NULL;
 	unsigned int hash;
+
+//#ifdef CONFIG_HTC_NETWORK_MODIFY
+	if (IS_ERR(net) || (!net)) {
+		printk("[NET] net is NULL in %s\n", __func__);
+		return NULL;
+	}
+
+	if (IS_ERR(flp4) || (!flp4)) {
+		printk("[NET] flp4 is NULL in %s\n", __func__);
+		return NULL;
+	}
+//#endif
 
 	if (!rt_caching(net))
 		goto slow_output;
@@ -2825,6 +2851,11 @@ struct rtable *__ip_route_output_key(struct net *net, struct flowi4 *flp4)
 	rcu_read_lock_bh();
 	for (rth = rcu_dereference_bh(rt_hash_table[hash].chain); rth;
 		rth = rcu_dereference_bh(rth->dst.rt_next)) {
+		if ((!rth) || (IS_ERR(rth))) {
+			printk("[NET] rth is NULL in %s\n", __func__);
+			rcu_read_unlock_bh();
+			return NULL;
+		}
 		if (rth->rt_key_dst == flp4->daddr &&
 		    rth->rt_key_src == flp4->saddr &&
 		    rt_is_output_route(rth) &&
@@ -2939,7 +2970,7 @@ struct rtable *ip_route_output_flow(struct net *net, struct flowi4 *flp4,
 {
 	struct rtable *rt = __ip_route_output_key(net, flp4);
 
-	if (IS_ERR(rt))
+	if ((IS_ERR(rt)) || (!rt))
 		return rt;
 
 	if (flp4->flowi4_proto)

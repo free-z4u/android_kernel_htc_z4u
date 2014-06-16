@@ -1212,6 +1212,8 @@ static int __dev_close_many(struct list_head *head)
 {
 	struct net_device *dev;
 
+	printk(KERN_INFO "[network] %s(), line = %d\n", __func__, __LINE__);
+
 	ASSERT_RTNL();
 	might_sleep();
 
@@ -1234,6 +1236,9 @@ static int __dev_close_many(struct list_head *head)
 	list_for_each_entry(dev, head, unreg_list) {
 		const struct net_device_ops *ops = dev->netdev_ops;
 
+		printk(KERN_INFO "[network] %s(), line = %d, dev->unreg_list.next = %p, dev->unreg_list.prev = %p\n",
+			__func__, __LINE__, dev->unreg_list.next, dev->unreg_list.prev);
+
 		/*
 		 *	Call the device specific close. This cannot fail.
 		 *	Only if device is UP
@@ -1243,6 +1248,8 @@ static int __dev_close_many(struct list_head *head)
 		 */
 		if (ops->ndo_stop)
 			ops->ndo_stop(dev);
+		printk(KERN_INFO "[network] %s(), line = %d, dev->unreg_list.next = %p, dev->unreg_list.prev = %p\n",
+			__func__, __LINE__, dev->unreg_list.next, dev->unreg_list.prev);
 
 		dev->flags &= ~IFF_UP;
 		net_dmaengine_put();
@@ -1256,6 +1263,7 @@ static int __dev_close(struct net_device *dev)
 	int retval;
 	LIST_HEAD(single);
 
+	printk(KERN_INFO "[network] %s(), line = %d, close dev_name = %s, &single = %p\n", __func__, __LINE__, dev->name, &single);
 	list_add(&dev->unreg_list, &single);
 	retval = __dev_close_many(&single);
 	list_del(&single);
@@ -1266,6 +1274,8 @@ static int dev_close_many(struct list_head *head)
 {
 	struct net_device *dev, *tmp;
 	LIST_HEAD(tmp_list);
+
+	printk(KERN_INFO "[network] %s(), line = %d\n", __func__, __LINE__);
 
 	list_for_each_entry_safe(dev, tmp, head, unreg_list)
 		if (!(dev->flags & IFF_UP))
@@ -1296,6 +1306,8 @@ int dev_close(struct net_device *dev)
 {
 	if (dev->flags & IFF_UP) {
 		LIST_HEAD(single);
+
+		printk(KERN_INFO "[network] %s(), line = %d, close dev_name = %s, &single = %p\n", __func__, __LINE__, dev->name, &single);
 
 		list_add(&dev->unreg_list, &single);
 		dev_close_many(&single);
@@ -2558,7 +2570,8 @@ recursion_alert:
 	rc = -ENETDOWN;
 	rcu_read_unlock_bh();
 
-	kfree_skb(skb);
+	if ((!IS_ERR(skb)) && (skb))
+		kfree_skb(skb);
 	return rc;
 out:
 	rcu_read_unlock_bh();
@@ -5236,6 +5249,8 @@ static void rollback_registered(struct net_device *dev)
 {
 	LIST_HEAD(single);
 
+	printk(KERN_INFO "[network] %s(), line = %d, close dev_name = %s, &single = %p\n", __func__, __LINE__, dev->name, &single);
+
 	list_add(&dev->unreg_list, &single);
 	rollback_registered_many(&single);
 	list_del(&single);
@@ -6022,6 +6037,8 @@ EXPORT_SYMBOL(synchronize_net);
 void unregister_netdevice_queue(struct net_device *dev, struct list_head *head)
 {
 	ASSERT_RTNL();
+
+	printk(KERN_INFO "[network] %s(), line = %d, dev_name = %s\n", __func__, __LINE__, dev->name);
 
 	if (head) {
 		list_move_tail(&dev->unreg_list, head);

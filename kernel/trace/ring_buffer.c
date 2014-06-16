@@ -23,6 +23,17 @@
 #include <asm/local.h>
 #include "trace.h"
 
+#ifdef CONFIG_HTC_DBG_UNCACHE_FTRACE
+#undef __get_free_page
+#undef free_page
+
+extern unsigned long ft__get_free_page(unsigned int ignored);
+extern void ft_free_page(unsigned long page);
+
+#define __get_free_page ft__get_free_page
+#define free_page ft_free_page
+#endif
+
 /*
  * The ring buffer header is special. We must manually up keep it.
  */

@@ -1019,6 +1019,8 @@ struct file {
 #ifdef CONFIG_DEBUG_WRITECOUNT
 	unsigned long f_mnt_write_state;
 #endif
+	int record_pid;
+	char record_comm[16];
 };
 
 struct file_handle {
@@ -1507,6 +1509,11 @@ struct super_block {
 
 	/* Being remounted read-only */
 	int s_readonly_remount;
+
+#ifdef CONFIG_ASYNC_FSYNC
+	#define FLAG_ASYNC_FSYNC	0x1
+	unsigned int fsync_flags;
+#endif
 };
 
 /* superblock cache pruning functions */

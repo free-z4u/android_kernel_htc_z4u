@@ -7,6 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+#include <linux/module.h>
 #include <linux/moduleparam.h>
 #include <linux/export.h>
 #include <linux/debugfs.h>
@@ -15,6 +16,11 @@
 #include <linux/slab.h>
 #include <linux/stat.h>
 #include <linux/fault-inject.h>
+#include <linux/io.h>
+#include <mach/pinmap.h>
+#include <linux/init.h>
+#include <mach/hardware.h>
+#include <linux/uaccess.h>
 
 #include <linux/mmc/card.h>
 #include <linux/mmc/host.h>
@@ -126,9 +132,6 @@ static int mmc_ios_show(struct seq_file *s, void *data)
 	case MMC_TIMING_SD_HS:
 		str = "sd high-speed";
 		break;
-	case MMC_TIMING_UHS_SDR50:
-		str = "sd uhs SDR50";
-		break;
 	case MMC_TIMING_UHS_SDR104:
 		str = "sd uhs SDR104";
 		break;
@@ -186,6 +189,170 @@ static int mmc_clock_opt_set(void *data, u64 val)
 DEFINE_SIMPLE_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
 	"%llu\n");
 
+/* returns the minimum number of bytes needed to represent
+ * a particular given value */
+#if 0
+static int min_bytes_needed(unsigned long val)
+{
+	int c = 0;
+	int i;
+
+	for (i = (sizeof val * 8) - 1; i >= 0; --i, ++c)
+		if (val & (1UL << i))
+			break;
+	c = (sizeof val * 8) - c;
+	if (!c || (c % 8))
+		c = (c + 8) / 8;
+	else
+		c /= 8;
+	return c;
+}
+#endif
+
+/* fill buf which is 'len' bytes with a formatted
+ * string of the form 'reg: value\n' */
+static int format_register_str(struct mmc_host *host,
+			       unsigned int reg, char *buf, size_t len)
+{
+	int wordsize = 14;
+	int regsize = 32;
+	unsigned int ret;
+	char tmpbuf[len + 1];
+	char regbuf[regsize + 1];
+
+	/* since tmpbuf is allocated on the stack, warn the callers if they
+	 * try to abuse this function */
+	WARN_ON(len > 63);
+
+	/* +2 for ': ' and + 1 for '\n' */
+	if (wordsize + regsize + 2 + 1 != len)
+		return -EINVAL;
+
+//	ret = snd_soc_read(codec, reg);
+	ret = __raw_readl(reg + CTL_PIN_BASE); //gpio reg
+	if (ret < 0) {
+		memset(regbuf, 'X', regsize);
+		regbuf[regsize] = '\0';
+	} else {
+		snprintf(regbuf, regsize + 1, "%.*x", regsize, ret);
+	}
+
+	/* prepare the buffer */
+	snprintf(tmpbuf, len + 1, "%.*x: %s\n", wordsize, reg, regbuf);
+	/* copy it back to the caller without the '\0' */
+	memcpy(buf, tmpbuf, len);
+
+	return 0;
+}
+
+/* codec register dump */
+static ssize_t sdgpio_reg_show(struct mmc_host *host, char *buf,
+				  size_t count, loff_t pos)
+{
+	int i, step = 4;
+	int wordsize, regsize;
+	int len;
+	size_t total = 0;
+	loff_t p = 0;
+
+	wordsize = 7 * 2;
+	regsize = 16 * 2;
+
+//	len = wordsize + regsize + 2 + 1;
+	len = 49;
+
+	for (i = 0x1E0; i < 7; i += step) {
+		/* only support larger than PAGE_SIZE bytes debugfs
+		 * entries for the default case */
+		if (p >= pos) {
+			if (total + len >= count - 1)
+				break;
+			format_register_str(host, i, buf + total, len);
+			total += len;
+		}
+		p += len;
+	}
+
+	total = min(total, count - 1);
+
+	return total;
+}
+
+static ssize_t sdgpio_reg_read_file(struct file *file, char __user *user_buf,
+				   size_t count, loff_t *ppos)
+{
+	ssize_t ret;
+	struct mmc_host *host = file->private_data;
+	char *buf;
+
+	if (*ppos < 0 || !count)
+		return -EINVAL;
+
+	printk("[SD] %s --%d--\n", __func__, count);
+	buf = kmalloc(count, GFP_KERNEL);
+	if (!buf)
+		return -ENOMEM;
+
+	printk("[SD] --2\n");
+	ret = sdgpio_reg_show(host, buf, count, *ppos);
+	printk("[SD] --3: %s, %d\n", buf, ret);
+
+	snprintf(buf, 20, "helloworld\n");
+
+	if (ret >= 0) {
+		if (copy_to_user(user_buf, buf, 20)) {
+			kfree(buf);
+			return -EFAULT;
+		}
+		*ppos += ret;
+	}
+
+	kfree(buf);
+	return ret;
+}
+
+static ssize_t sdgpio_reg_write_file(struct file *file,
+		const char __user *user_buf, size_t count, loff_t *ppos)
+{
+	char buf[64];
+	size_t buf_size;
+	char *start = buf;
+	unsigned long reg, value;
+
+//	printk("[SD] %s --1\n", __func__);
+	buf_size = min(count, (sizeof(buf)-1));
+	if (copy_from_user(buf, user_buf, buf_size))
+		return -EFAULT;
+	buf[buf_size] = 0;
+
+//	printk("[SD] %s --2\n", __func__);
+	while (*start == ' ')
+		start++;
+	reg = simple_strtoul(start, &start, 16);
+	while (*start == ' ')
+		start++;
+	if (strict_strtoul(start, 16, &value))
+		return -EINVAL;
+
+//	printk("[SD] %s --3\n", __func__);
+	/* Userspace has been fiddling around behind the kernel's back */
+	add_taint(TAINT_USER);
+
+	printk("read_reg 0x%08lx : 0x%08x\n", reg, __raw_readl(reg + CTL_PIN_BASE - 0x402A0000));
+	__raw_writel(value, reg + CTL_PIN_BASE - 0x402A0000);
+	printk("write_reg 0x%08lx : 0x%08lx\n", reg, value);
+	printk("read_reg 0x%08lx : 0x%08x\n", reg, __raw_readl(reg + CTL_PIN_BASE - 0x402A0000));
+
+	return buf_size;
+}
+
+static const struct file_operations sdgpio_reg_fops = {
+	.open = simple_open,
+	.read = sdgpio_reg_read_file,
+	.write = sdgpio_reg_write_file,
+	.llseek = default_llseek,
+};
+
 void mmc_add_host_debugfs(struct mmc_host *host)
 {
 	struct dentry *root;
@@ -208,6 +375,11 @@ void mmc_add_host_debugfs(struct mmc_host *host)
 			&mmc_clock_fops))
 		goto err_node;
 
+	if (host->index == 0) {
+		if (!debugfs_create_file("sdgpio_reg", S_IRUSR | S_IWUSR, root, host,
+				&sdgpio_reg_fops))
+			goto err_node;
+	}
 #ifdef CONFIG_MMC_CLKGATE
 	if (!debugfs_create_u32("clk_delay", (S_IRUSR | S_IWUSR),
 				root, &host->clk_delay))

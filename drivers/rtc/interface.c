@@ -355,6 +355,10 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
 
 	return err;
 }
+int rtc_set_alarm_directly(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+{
+	return  __rtc_set_alarm(rtc, alarm);
+ }
 
 int rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
 {

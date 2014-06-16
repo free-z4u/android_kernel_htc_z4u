@@ -21,6 +21,7 @@
 #include <linux/typecheck.h>
 #include <linux/printk.h>
 #include <linux/dynamic_debug.h>
+#include <linux/bug.h>
 #include <asm/byteorder.h>
 
 #define USHRT_MAX	((u16)(~0U))
@@ -704,6 +705,9 @@ static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
 #endif
 
 extern int do_sysinfo(struct sysinfo *info);
+
+/* To identify board information in panic logs, set this */
+extern char *mach_panic_string;
 
 #endif /* __KERNEL__ */
 

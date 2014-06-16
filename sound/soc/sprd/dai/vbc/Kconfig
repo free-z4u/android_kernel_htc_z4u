@@ -1,0 +1,29 @@
+config SND_SPRD_SOC_VBC
+	tristate # "VBC"
+	help
+	 use this for vbc likely sc8810/sc8825
+	 
+config SND_SPRD_SOC_VBC_R2P0
+	tristate # "VBC_R2P0"
+	help
+	depends on !SND_SPRD_SOC_VBC
+	 this is sprd vbc v2 likely the SC8830/Shark project.
+
+config SPRD_VBC_INTERLEAVED
+	bool "VBC Support Interleaved"
+	default y
+	help
+	 say Y then the VBC will support interleaved use the DMA.
+
+config SPRD_VBC_LR_INVERT
+	bool "VBC Support buffer0 and buffer1 invert"
+	default n
+	depends on SND_SOC_DOLPHIN
+	help
+	 say Y then the VBC will support invert the LR channel.
+
+config SPRD_VBC_SRC_OPEN
+	bool "VBC ADC/ADC23 SRC open"
+	default n
+	help
+	  say Y then the VBC will open adc SRC for FM  function.

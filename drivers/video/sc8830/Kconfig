@@ -1,0 +1,57 @@
+if FB
+config FB_SCX35
+	boolean "SC8830 frame buffer support "
+	depends on FB && ARCH_SCX35
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	help
+          Frame buffer driver for sc8830 based boards.
+
+config FB_LCD_NT35512_MIPI
+	boolean "support NT35512 mipi panel"
+	depends on FB_SCX35
+	default n
+
+config FB_LCD_NT35517_MIPI
+	boolean "support NT35517 mipi panel"
+	depends on FB_SCX35
+	default n
+
+config FB_LCD_RESERVE_MEM
+        boolean "support FB reserve mem"
+        depends on FB_SCX35
+        default y
+
+config FB_LCD_OVERLAY_SUPPORT
+	boolean "support lcd overlay"
+	depends on FB_SC8825 || FB_SCX35
+	default n
+
+config FB_VSYNC_SUPPORT
+	boolean "support wait for vsync io"
+	depends on FB_SC8825 || FB_SCX35
+	default n
+
+config FB_ESD_SUPPORT
+	boolean "support esd check"
+	depends on FB_SC8825 || FB_SCX35
+	default n
+
+config FB_DYNAMIC_CLK_SUPPORT
+	boolean "support close clk dynamically"
+	depends on FB_SC8825 || FB_SCX35
+	default n
+
+config FB_DYNAMIC_FPS_SUPPORT
+	boolean "support change fps dynamically"
+	depends on FB_SC8825 || FB_SCX35
+	default n
+
+config FB_CABC_LEVEL_CONTROL
+	bool "CABC LEVEL CONTROL"
+	depends on FB_SC8825 || FB_SCX35
+	default n
+	help
+	  Use attribute to switch CABC level.
+endif

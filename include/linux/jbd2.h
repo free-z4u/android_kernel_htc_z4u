@@ -939,6 +939,9 @@ struct journal_s
 	 * superblock pointer here
 	 */
 	void *j_private;
+
+	/* workaround for journal issue during emergency remount. */
+	unsigned int		commit_callback_done;
 };
 
 /*
@@ -1091,6 +1094,7 @@ extern int	   jbd2_journal_destroy    (journal_t *);
 extern int	   jbd2_journal_recover    (journal_t *journal);
 extern int	   jbd2_journal_wipe       (journal_t *, int);
 extern int	   jbd2_journal_skip_recovery	(journal_t *);
+extern void	   jbd2_journal_update_sb_errno(journal_t *);
 extern void	   jbd2_journal_update_sb_log_tail	(journal_t *, tid_t,
 				unsigned long, int);
 extern void	   __jbd2_journal_abort_hard	(journal_t *);
@@ -1267,7 +1271,8 @@ static inline int jbd_space_needed(journal_t *journal)
 #define BJ_Types	7
 
 extern int jbd_blocks_per_page(struct inode *inode);
-
+/* workaround for journal issue during emergency remount. */
+extern atomic_t vfs_emergency_remount;
 #ifdef __KERNEL__
 
 #define buffer_trace_init(bh)	do {} while (0)

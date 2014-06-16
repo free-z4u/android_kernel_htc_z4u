@@ -36,6 +36,7 @@
 #include <linux/reboot.h>
 #include <net/netlink.h>
 #include <net/genetlink.h>
+#include <linux/delay.h>
 
 MODULE_AUTHOR("Zhang Rui");
 MODULE_DESCRIPTION("Generic thermal management sysfs support");
@@ -51,6 +52,12 @@ struct thermal_cooling_device_instance {
 	struct device_attribute attr;
 	struct list_head node;
 };
+struct thermal_table{
+    //unsigned int index;
+    unsigned int low_threshold;
+    unsigned int high_threshold;
+} ;
+extern struct thermal_table shark_thermal_table[];
 
 static DEFINE_IDR(thermal_tz_idr);
 static DEFINE_IDR(thermal_cdev_idr);
@@ -59,6 +66,7 @@ static DEFINE_MUTEX(thermal_idr_lock);
 static LIST_HEAD(thermal_tz_list);
 static LIST_HEAD(thermal_cdev_list);
 static DEFINE_MUTEX(thermal_list_lock);
+int sprd_thm_thermal_table_interrupt_registry(unsigned int curr_level);
 
 static int get_idr(struct idr *idr, struct mutex *lock, int *id)
 {
@@ -366,7 +374,7 @@ thermal_cooling_device_cur_state_store(struct device *dev,
 	if ((long)state < 0)
 		return -EINVAL;
 
-	result = cdev->ops->set_cur_state(cdev, state);
+	result = cdev->ops->set_cur_state(cdev, state,THERMAL_TABLE_NULL);
 	if (result)
 		return result;
 	return count;
@@ -697,7 +705,7 @@ static void thermal_zone_device_passive(struct thermal_zone_device *tz,
 				cdev->ops->get_cur_state(cdev, &state);
 				cdev->ops->get_max_state(cdev, &max_state);
 				if (state++ < max_state)
-					cdev->ops->set_cur_state(cdev, state);
+					cdev->ops->set_cur_state(cdev, state,THERMAL_TABLE_NULL);
 			}
 		} else if (trend < 0) { /* Cooling off? */
 			list_for_each_entry(instance, &tz->cooling_devices,
@@ -708,7 +716,7 @@ static void thermal_zone_device_passive(struct thermal_zone_device *tz,
 				cdev->ops->get_cur_state(cdev, &state);
 				cdev->ops->get_max_state(cdev, &max_state);
 				if (state > 0)
-					cdev->ops->set_cur_state(cdev, --state);
+					cdev->ops->set_cur_state(cdev, --state,THERMAL_TABLE_NULL);
 			}
 		}
 		return;
@@ -728,7 +736,7 @@ static void thermal_zone_device_passive(struct thermal_zone_device *tz,
 		cdev->ops->get_cur_state(cdev, &state);
 		cdev->ops->get_max_state(cdev, &max_state);
 		if (state > 0)
-			cdev->ops->set_cur_state(cdev, --state);
+			cdev->ops->set_cur_state(cdev, --state,THERMAL_TABLE_NULL);
 		if (state == 0)
 			tz->passive = false;
 	}
@@ -803,6 +811,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
 		goto remove_symbol_link;
 
 	mutex_lock(&tz->lock);
+
 	list_for_each_entry(pos, &tz->cooling_devices, node)
 	    if (pos->tz == tz && pos->trip == trip && pos->cdev == cdev) {
 		result = -EEXIST;
@@ -941,6 +950,7 @@ thermal_cooling_device_register(char *type, void *devdata,
 		goto unregister;
 
 	mutex_lock(&thermal_list_lock);
+
 	list_add(&cdev->node, &thermal_cdev_list);
 	list_for_each_entry(pos, &thermal_tz_list, node) {
 		if (!pos->ops->bind)
@@ -1010,27 +1020,43 @@ EXPORT_SYMBOL(thermal_cooling_device_unregister);
  * thermal_zone_device_update - force an update of a thermal zone's state
  * @ttz:	the thermal zone to update
  */
+	typedef enum{
+		AP_LEVEL_NOT_CONTROL,
+		AP_LEVEL_1G_4CORE,
+		AP_LEVEL_1G_3CORE,
+		AP_LEVEL_768M_2CORE,
+		AP_LEVEL_600M_1CORE,
+		AP_LEVEL_MAX,
+	}thermal_state_type;
+
+#define THERMAL_SOLUTION_D
 
 void thermal_zone_device_update(struct thermal_zone_device *tz)
 {
 	int count, ret = 0;
-	long temp, trip_temp;
+	unsigned long temp, trip_temp;
 	enum thermal_trip_type trip_type;
 	struct thermal_cooling_device_instance *instance;
 	struct thermal_cooling_device *cdev;
 
 	mutex_lock(&tz->lock);
-
 	if (tz->ops->get_temp(tz, &temp)) {
 		/* get_temp failed - retry it later */
 		pr_warn("failed to read out thermal zone %d\n", tz->id);
 		goto leave;
 	}
 
+
 	for (count = 0; count < tz->trips; count++) {
 		tz->ops->get_trip_type(tz, count, &trip_type);
 		tz->ops->get_trip_temp(tz, count, &trip_temp);
+		//pr_info("update type: %x,temp:%ld,trip_temp:%ld\n", trip_type,temp,trip_temp);
 
+		if(temp <= 108)
+			trip_type = THERMAL_TRIP_ACTIVE;
+		pr_info("versionG update type: %x,temp:%ld,trip_temp:%ld\n", trip_type,temp,trip_temp);
+		break;
+	}
 		switch (trip_type) {
 		case THERMAL_TRIP_CRITICAL:
 			if (temp >= trip_temp) {
@@ -1038,9 +1064,14 @@ void thermal_zone_device_update(struct thermal_zone_device *tz)
 					ret = tz->ops->notify(tz, count,
 							      trip_type);
 				if (!ret) {
-					pr_emerg("Critical temperature reached (%ld C), shutting down\n",
-						 temp/1000);
-					orderly_poweroff(true);
+					//modify by Hansonlu
+					//orderly_poweroff(true);
+					//pr_emerg("Critical temperature reached (%ld C), shutting down\n", temp/1000);
+					pr_emerg("Critical temperature reached (%ld C), shutting down\n", temp);
+					msleep(10000);
+					emergency_sync();
+					kernel_power_off();
+					//end
 				}
 			}
 			break;
@@ -1050,17 +1081,98 @@ void thermal_zone_device_update(struct thermal_zone_device *tz)
 					tz->ops->notify(tz, count, trip_type);
 			break;
 		case THERMAL_TRIP_ACTIVE:
+		//pr_info("test1: %x,temp:%ld,trip_temp:%ld\n", trip_type,temp,shark_thermal_table[3].low_threshold);
+
 			list_for_each_entry(instance, &tz->cooling_devices,
 					    node) {
 				if (instance->trip != count)
-					continue;
-
+				{
+					   //pr_info("instant: %x,count:%d,trip_temp:%d\n", instance->trip,count,shark_thermal_table[3].low_threshold);
+					   continue;
+				}
 				cdev = instance->cdev;
 
-				if (temp >= trip_temp)
-					cdev->ops->set_cur_state(cdev, 1);
-				else
-					cdev->ops->set_cur_state(cdev, 0);
+			#if 0//ndef THERMAL_SOLUTION_D
+				if((temp>85)&&(temp<110))
+				{
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_600M_1CORE);
+					sprd_thm_thermal_table_interrupt_registry(2);
+				}
+				else if((temp>75)&&(temp<=85))
+				{
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_768M_2CORE);
+					if(temp >= 80)
+					{
+						sprd_thm_thermal_table_interrupt_registry(2);
+					}
+				}
+				else if((temp>58)&&(temp<=75))
+				{
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_1G_3CORE);
+					if(temp >= 60)  //should 62 interrupt.but may temp deviation,
+					{
+						sprd_thm_thermal_table_interrupt_registry(1);
+					}
+				}
+				#ifndef CONFIG_MACH_Z4TD
+				else if((temp>50)&&(temp<=58))  //80 is the triggle for level1
+				{
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_1G_4CORE);
+					//need to run operation according to different temperature
+					//if(temp == 58)
+					{
+						sprd_thm_thermal_table_interrupt_registry(0);
+					}
+				}
+				else  if(temp<=50)
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_NOT_CONTROL);
+				#else
+				  else  if(temp<=58)
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_NOT_CONTROL);
+				#endif
+			#else
+				pr_info("test: %d,temp:%ld,trip_temp:%d\n", trip_type,temp,shark_thermal_table[3].low_threshold);
+
+				if((temp>shark_thermal_table[3].low_threshold)&&(temp<110))
+				{
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_600M_1CORE,THERMAL_TABLE_2);
+					//sprd_thm_thermal_table_interrupt_registry(2);
+				}
+				else if((temp>shark_thermal_table[2].low_threshold)&&(temp<=shark_thermal_table[3].low_threshold))
+				{
+					//cdev->ops->set_cur_state(cdev, AP_LEVEL_768M_2CORE,THERMAL_TABLE_2);
+					if(temp >= shark_thermal_table[2].high_threshold-2)
+					{
+						cdev->ops->set_cur_state(cdev, AP_LEVEL_768M_2CORE,THERMAL_TABLE_2);
+					}
+					else cdev->ops->set_cur_state(cdev, AP_LEVEL_768M_2CORE,THERMAL_TABLE_NULL);
+				}
+				else if((temp>shark_thermal_table[1].low_threshold)&&(temp<=shark_thermal_table[2].low_threshold))
+				{
+					if(temp >= shark_thermal_table[1].high_threshold-2)  //should 62 interrupt.but may temp deviation,
+					{
+						cdev->ops->set_cur_state(cdev, AP_LEVEL_1G_3CORE,THERMAL_TABLE_1);
+					}
+					else cdev->ops->set_cur_state(cdev, AP_LEVEL_1G_3CORE,THERMAL_TABLE_NULL);
+				}
+				#ifndef CONFIG_MACH_Z4TD
+				else if((temp>shark_thermal_table[0].low_threshold)&&(temp<=shark_thermal_table[1].low_threshold))  //80 is the triggle for level1
+				{
+					//need to run operation according to different temperature
+					if(temp >= shark_thermal_table[1].low_threshold -2)
+					{
+						cdev->ops->set_cur_state(cdev, AP_LEVEL_1G_4CORE,THERMAL_TABLE_0);
+					}
+					else cdev->ops->set_cur_state(cdev, AP_LEVEL_1G_4CORE,THERMAL_TABLE_NULL);
+				}
+				else  if(temp<=shark_thermal_table[0].low_threshold)
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_NOT_CONTROL,THERMAL_TABLE_NULL);
+				#else
+				  else  if(temp<=shark_thermal_table[1].low_threshold)
+					cdev->ops->set_cur_state(cdev, AP_LEVEL_NOT_CONTROL,THERMAL_TABLE_NULL);
+				#endif
+			#endif
+
 			}
 			break;
 		case THERMAL_TRIP_PASSIVE:
@@ -1068,7 +1180,6 @@ void thermal_zone_device_update(struct thermal_zone_device *tz)
 				thermal_zone_device_passive(tz, temp,
 							    trip_temp, count);
 			break;
-		}
 	}
 
 	if (tz->forced_passive)
@@ -1201,6 +1312,7 @@ struct thermal_zone_device *thermal_zone_device_register(char *type,
 		goto unregister;
 
 	mutex_lock(&thermal_list_lock);
+
 	list_add_tail(&tz->node, &thermal_tz_list);
 	if (ops->bind)
 		list_for_each_entry(pos, &thermal_cdev_list, node) {

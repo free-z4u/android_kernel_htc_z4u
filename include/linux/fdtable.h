@@ -80,6 +80,10 @@ struct files_struct {
 	struct file __rcu * fd_array[NR_OPEN_DEFAULT];
 };
 
+#ifdef CONFIG_DEBUG_FDLEAK
+extern void fd_num_check(struct files_struct *files, unsigned int fd);
+#endif
+
 #define rcu_dereference_check_fdtable(files, fdtfd) \
 	(rcu_dereference_check((fdtfd), \
 			       lockdep_is_held(&(files)->file_lock) || \

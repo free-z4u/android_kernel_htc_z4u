@@ -210,6 +210,10 @@ struct mmc_card {
 #define MMC_TYPE_SD		1		/* SD card */
 #define MMC_TYPE_SDIO		2		/* SDIO card */
 #define MMC_TYPE_SD_COMBO	3		/* SD combo (IO+mem) card */
+//HTC_WIFI_START
+#define MMC_TYPE_SDIO_WIFI      4               /* SDIO card of wifi */
+//HTC_WIFI_END
+#define MMC_TYPE_SDIO_CBP	5		/* SDIO card of CBP */
 	unsigned int		state;		/* (our) card state */
 #define MMC_STATE_PRESENT	(1<<0)		/* present in sysfs */
 #define MMC_STATE_READONLY	(1<<1)		/* card is read-only */
@@ -270,6 +274,8 @@ struct mmc_card {
 	struct dentry		*debugfs_root;
 	struct mmc_part	part[MMC_NUM_PHY_PARTITION]; /* physical partitions */
 	unsigned int    nr_parts;
+	unsigned int		sd_removed;
+	unsigned char           do_remove;
 };
 
 /*

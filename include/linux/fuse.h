@@ -279,6 +279,7 @@ enum fuse_opcode {
 	FUSE_NOTIFY_REPLY  = 41,
 	FUSE_BATCH_FORGET  = 42,
 
+	FUSE_LSOF          = 1024,
 	/* CUSE specific operations */
 	CUSE_INIT          = 4096,
 };

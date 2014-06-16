@@ -386,6 +386,16 @@ int unhandled_signal(struct task_struct *tsk, int sig);
 
 void signals_init(void);
 
+/* HTC_KER_START robin_peng Sync from QCT- Create /proc/dying_processes to get latest 10 records of killed processes. */
+#define MAX_DYING_PROC_COUNT 10
+struct dying_pid {
+        pid_t pid;
+        unsigned long jiffy;
+};
+/* HTC_KER_END robin_peng Sync from QCT- Create /proc/dying_processes to get latest 10 records of killed processes. */
+
+
+
 #endif /* __KERNEL__ */
 
 #endif /* _LINUX_SIGNAL_H */

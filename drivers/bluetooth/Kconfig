@@ -70,6 +70,16 @@ config BT_HCIUART_ATH3K
 
 	  Say Y here to compile support for HCI UART ATH3K protocol.
 
+config BT_HCIUART_RTKH5
+	bool "Realtek H5 protocol support"
+	depends on BT_HCIUART
+	help
+	  Realtek H5 is serial protocol for communication
+	  between Realtek Bluetooth device and host. This protocol is required for
+	  Realtek uart h5 bluetooth controller
+
+	  Say Y here to compile support for Realtek HCI H5 protocol.
+
 config BT_HCIUART_LL
 	bool "HCILL protocol support"
 	depends on BT_HCIUART
@@ -229,4 +239,15 @@ config BT_WILINK
 
 	  Say Y here to compile support for Texas Instrument's WiLink7 driver
 	  into the kernel or say M to compile it as module.
+
+config BT_BCM4330
+	tristate "Broadcomm BCM4330 LPM driver"
+	help
+	  This enables the Bluetooth driver for Broadcomm's BT/FM/WLAN
+	  combo devices. This makes use of shared transport line discipline
+	  core driver to communicate with the BT core of the combo chip.
+
+	  Say Y here to compile support for Broadcomm's BCM4330 LPM driver
+	  into the kernel or say M to compile it as module.
+
 endmenu

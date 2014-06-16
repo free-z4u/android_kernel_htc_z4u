@@ -28,6 +28,10 @@
 #include <linux/rcupdate.h>
 #include "input-compat.h"
 
+#if defined(CONFIG_SPRD_DEBUG)
+#include <mach/sprd_debug.h>
+#endif
+
 MODULE_AUTHOR("Vojtech Pavlik <vojtech@suse.cz>");
 MODULE_DESCRIPTION("Input core");
 MODULE_LICENSE("GPL");
@@ -245,6 +249,10 @@ static void input_handle_event(struct input_dev *dev,
 
 			if (value != 2) {
 				__change_bit(code, dev->key);
+#if defined(CONFIG_SPRD_DEBUG)
+				if(code != BTN_TOUCH)
+					sprd_debug_check_crash_key(code ,value);
+#endif
 				if (value)
 					input_start_autorepeat(dev, code);
 				else
@@ -253,6 +261,14 @@ static void input_handle_event(struct input_dev *dev,
 
 			disposition = INPUT_PASS_TO_HANDLERS;
 		}
+#if defined(CONFIG_SPRD_DEBUG)
+		else {
+			if(code != BTN_TOUCH && value == 0) {
+				//printk("%s no info : 0x%lx code :%u\n", __func__, *dev->key, code);
+				sprd_debug_check_crash_key(code ,value);
+			}
+		}
+#endif
 		break;
 
 	case EV_SW:
@@ -1570,6 +1586,8 @@ void input_reset_device(struct input_dev *dev)
 	if (dev->users) {
 		input_dev_toggle(dev, true);
 
+/* Remove this because conflict with hTC quickboot	*/
+#if 0
 		/*
 		 * Keys that have been pressed at suspend time are unlikely
 		 * to be still pressed when we resume.
@@ -1577,6 +1595,7 @@ void input_reset_device(struct input_dev *dev)
 		spin_lock_irq(&dev->event_lock);
 		input_dev_release_keys(dev);
 		spin_unlock_irq(&dev->event_lock);
+#endif
 	}
 
 	mutex_unlock(&dev->mutex);
@@ -2095,13 +2114,18 @@ static int input_open_file(struct inode *inode, struct file *file)
 	struct input_handler *handler;
 	const struct file_operations *old_fops, *new_fops = NULL;
 	int err;
+	int handler_num = 0;
 
 	err = mutex_lock_interruptible(&input_mutex);
 	if (err)
 		return err;
 
+	/*modify by wei.w_xie*/
+	handler_num = iminor(inode) >> 5;
+	if ((handler_num > 8) || (handler_num < 0))
+		return -ENODEV;
 	/* No load-on-demand here? */
-	handler = input_table[iminor(inode) >> 5];
+	handler = input_table[handler_num];
 	if (handler)
 		new_fops = fops_get(handler->fops);
 

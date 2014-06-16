@@ -142,6 +142,27 @@ config BACKLIGHT_CLASS_DEVICE
 
 if BACKLIGHT_CLASS_DEVICE
 
+config BACKLIGHT_SC8810
+	tristate "SC8810 Backlight Driver"
+	depends on ARCH_SC8810
+	help
+	  Say Y to enable the backlight driver on SC8810 boards.
+
+config BACKLIGHT_Z788BL
+	tristate "Z788BL Backlight Driver"
+	help
+	  Say Y to enable the backlight driver.
+
+config BACKLIGHT_SGM3727
+	tristate "SGM3727 Backlight Driver"
+	help
+	  Say Y to enable the SGM3727 backlight driver.
+
+config BACKLIGHT_SPRD_PWM
+	tristate "SPRD PWM Backlight Driver"
+	help
+	  Say Y to enable the SPRD PWM backlight driver.
+
 config BACKLIGHT_ATMEL_LCDC
 	bool "Atmel LCDC Contrast-as-Backlight control"
 	depends on FB_ATMEL
@@ -360,6 +381,13 @@ config BACKLIGHT_PANDORA
 	help
 	  If you have a Pandora console, say Y to enable the
 	  backlight driver.
+
+config BACKLIGHT_KTD253B
+	tristate "Backlight driver for KTD253B"
+	depends on BACKLIGHT_CLASS_DEVICE
+	help
+	  If you have a backlight driven by a KTD253B, say Y here to
+	  enable its driver.
 
 endif # BACKLIGHT_CLASS_DEVICE
 

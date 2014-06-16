@@ -1,0 +1,10 @@
+
+config SPRD_ASC 
+	bool "AP SYNC SPRD MODEM DRIVER"
+	default n
+	depends on SPRD_MODEM
+
+config SIM_SWITCH
+	bool "SIM SWITCH SUPPORT"
+	default n
+	depends on SPRD_MODEM

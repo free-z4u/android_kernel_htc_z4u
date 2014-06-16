@@ -41,6 +41,13 @@
 /* CONTROL REQUEST SUPPORT */
 
 /*
+ *	HTC requests, for the bRequest field of a SETUP packet.
+ */
+#define USB_REQ_HTC_FUNCTION		0x01
+
+#define USB_WVAL_ADB				0x01
+
+/*
  * USB directions
  *
  * This bit flag is used in endpoint descriptors' bEndpointAddress field.
@@ -152,6 +159,12 @@
 
 #define USB_ENDPOINT_HALT		0	/* IN/OUT will STALL */
 
+#ifdef CONFIG_USB_OTG
+/* OTG 2.0 spec 6.2 and 6.3 sections */
+#define OTG_STATUS_SELECTOR            0xF000
+#define THOST_REQ_POLL                 1500    /* 1000 - 2000 msec */
+#define HOST_REQUEST_FLAG              0
+#endif
 /* Bit array elements as returned by the USB_REQ_GET_STATUS request. */
 #define USB_DEV_STAT_U1_ENABLED		2	/* transition into U1 state */
 #define USB_DEV_STAT_U2_ENABLED		3	/* transition into U2 state */
@@ -651,8 +664,10 @@ struct usb_qualifier_descriptor {
 struct usb_otg_descriptor {
 	__u8  bLength;
 	__u8  bDescriptorType;
-
-	__u8  bmAttributes;	/* support for HNP, SRP, etc */
+#ifdef CONFIG_USB_OTG
+	__u8  bmAttributes;     /* support for HNP, SRP, ADP etc */
+	__le16 bcdOTG;
+#endif
 } __attribute__ ((packed));
 
 /* from usb_otg_descriptor.bmAttributes */

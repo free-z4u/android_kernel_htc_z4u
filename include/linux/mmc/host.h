@@ -14,6 +14,7 @@
 #include <linux/sched.h>
 #include <linux/device.h>
 #include <linux/fault-inject.h>
+#include <linux/wakelock.h>
 
 #include <linux/mmc/core.h>
 #include <linux/mmc/pm.h>
@@ -53,8 +54,8 @@ struct mmc_ios {
 #define MMC_TIMING_MMC_HS	1
 #define MMC_TIMING_SD_HS	2
 #define MMC_TIMING_UHS_SDR12	MMC_TIMING_LEGACY
-#define MMC_TIMING_UHS_SDR25	MMC_TIMING_SD_HS
-#define MMC_TIMING_UHS_SDR50	3
+#define MMC_TIMING_UHS_SDR25	MMC_TIMING_LEGACY
+#define MMC_TIMING_UHS_SDR50	MMC_TIMING_MMC_HS
 #define MMC_TIMING_UHS_SDR104	4
 #define MMC_TIMING_UHS_DDR50	5
 #define MMC_TIMING_MMC_HS200	6
@@ -122,6 +123,7 @@ struct mmc_host_ops {
 	void	(*set_ios)(struct mmc_host *host, struct mmc_ios *ios);
 	int	(*get_ro)(struct mmc_host *host);
 	int	(*get_cd)(struct mmc_host *host);
+	int	(*auto_suspend)(struct mmc_host *host);
 
 	void	(*enable_sdio_irq)(struct mmc_host *host, int enable);
 
@@ -143,6 +145,7 @@ struct device;
 struct mmc_async_req {
 	/* active mmc request */
 	struct mmc_request	*mrq;
+	ktime_t rq_stime;
 	/*
 	 * Check error status of completed mmc request.
 	 * Returns 0 if success otherwise non zero.
@@ -196,7 +199,7 @@ struct mmc_host {
 #define MMC_CAP_SPI		(1 << 4)	/* Talks only SPI protocols */
 #define MMC_CAP_NEEDS_POLL	(1 << 5)	/* Needs polling for card-detection */
 #define MMC_CAP_8_BIT_DATA	(1 << 6)	/* Can the host do 8 bit transfers */
-
+#define MMC_CAP_DISABLE		(1 << 7)	/* Can the host be disabled */
 #define MMC_CAP_NONREMOVABLE	(1 << 8)	/* Nonremovable e.g. eMMC */
 #define MMC_CAP_WAIT_WHILE_BUSY	(1 << 9)	/* Waits while card is busy */
 #define MMC_CAP_ERASE		(1 << 10)	/* Allow erase/trim commands */
@@ -238,6 +241,7 @@ struct mmc_host {
 #define MMC_CAP2_BROKEN_VOLTAGE	(1 << 7)	/* Use the broken voltage */
 #define MMC_CAP2_DETECT_ON_ERR	(1 << 8)	/* On I/O err check card removal */
 #define MMC_CAP2_HC_ERASE_SZ	(1 << 9)	/* High-capacity erase size */
+#define MMC_CAP2_SANITIZE	(1 << 15)		/* Support Sanitize */
 
 	mmc_pm_flag_t		pm_caps;	/* supported pm features */
 	unsigned int        power_notify_type;
@@ -268,6 +272,7 @@ struct mmc_host {
 
 	/* private data */
 	spinlock_t		lock;		/* lock for claim and bus ops */
+	unsigned long		rq_time;	/* maximum time for each request */
 
 	struct mmc_ios		ios;		/* current io bus settings */
 	u32			ocr;		/* the current OCR setting */
@@ -280,20 +285,34 @@ struct mmc_host {
 	unsigned int		removed:1;	/* host is being removed */
 #endif
 
+	/* Only used with MMC_CAP_DISABLE */
+	int			enabled;	/* host is enabled */
 	int			rescan_disable;	/* disable card detection */
+	int			nesting_cnt;    /* "enable" nesting count */
+	int			en_dis_recurs;  /* detect recursion */
+	unsigned int		disable_delay;  /* disable delay in msecs */
+	struct delayed_work	disable;        /* disabling work */
 
 	struct mmc_card		*card;		/* device attached to this host */
 
 	wait_queue_head_t	wq;
 	struct task_struct	*claimer;	/* task that has host claimed */
+	struct task_struct	*suspend_task;
 	int			claim_cnt;	/* "claim" nesting count */
 
 	struct delayed_work	detect;
+	struct delayed_work	remove;
+	struct wake_lock	detect_wake_lock;
 	int			detect_change;	/* card detect flag */
 	struct mmc_hotplug	hotplug;
 
 	const struct mmc_bus_ops *bus_ops;	/* current bus driver */
 	unsigned int		bus_refs;	/* reference counter */
+
+	unsigned int		bus_resume_flags;
+#define MMC_BUSRESUME_MANUAL_RESUME	(1 << 0)
+#define MMC_BUSRESUME_NEEDS_RESUME	(1 << 1)
+#define MMC_BUSRESUME_FAILS_RESUME	(1 << 2)
 
 	unsigned int		sdio_irqs;
 	struct task_struct	*sdio_irq_thread;
@@ -320,6 +339,29 @@ struct mmc_host {
 
 	unsigned int		actual_clock;	/* Actual HC clock rate */
 
+#ifdef CONFIG_MMC_EMBEDDED_SDIO
+	struct {
+		struct sdio_cis			*cis;
+		struct sdio_cccr		*cccr;
+		struct sdio_embedded_func	*funcs;
+		int				num_funcs;
+	} embedded_sdio_data;
+#endif
+#ifdef CONFIG_MMC_PERF_PROFILING
+	struct {
+
+		unsigned long rbytes_drv;  /* Rd bytes MMC Host  */
+		unsigned long wbytes_drv;  /* Wr bytes MMC Host  */
+		unsigned long rcount;	/* Rd req count */
+		unsigned long wcount;	/* Wr req count */
+		ktime_t rtime_drv;	   /* Rd time  MMC Host  */
+		ktime_t wtime_drv;	   /* Wr time  MMC Host  */
+		ktime_t start;
+	} perf;
+	struct timer_list stats_timer;
+	bool perf_enable;
+#endif
+	bool eject;
 	unsigned long		private[0] ____cacheline_aligned;
 };
 
@@ -327,6 +369,14 @@ extern struct mmc_host *mmc_alloc_host(int extra, struct device *);
 extern int mmc_add_host(struct mmc_host *);
 extern void mmc_remove_host(struct mmc_host *);
 extern void mmc_free_host(struct mmc_host *);
+
+#ifdef CONFIG_MMC_EMBEDDED_SDIO
+extern void mmc_set_embedded_sdio_data(struct mmc_host *host,
+				       struct sdio_cis *cis,
+				       struct sdio_cccr *cccr,
+				       struct sdio_embedded_func *funcs,
+				       int num_funcs);
+#endif
 
 static inline void *mmc_priv(struct mmc_host *host)
 {
@@ -338,9 +388,33 @@ static inline void *mmc_priv(struct mmc_host *host)
 #define mmc_dev(x)	((x)->parent)
 #define mmc_classdev(x)	(&(x)->class_dev)
 #define mmc_hostname(x)	(dev_name(&(x)->class_dev))
+#define mmc_bus_needs_resume(host) ((host)->bus_resume_flags & MMC_BUSRESUME_NEEDS_RESUME)
+#define mmc_bus_manual_resume(host) ((host)->bus_resume_flags & MMC_BUSRESUME_MANUAL_RESUME)
+
+#define mmc_bus_fails_resume(host)  \
+	((host)->bus_resume_flags & MMC_BUSRESUME_FAILS_RESUME)
+
+static inline void mmc_set_bus_resume_policy(struct mmc_host *host, int manual)
+{
+	if (manual)
+		host->bus_resume_flags |= MMC_BUSRESUME_MANUAL_RESUME;
+	else
+		host->bus_resume_flags &= ~MMC_BUSRESUME_MANUAL_RESUME;
+}
+static inline void mmc_init_bus_resume_flags(struct mmc_host *host)
+{
+	host->bus_resume_flags = 0;
+}
+
+extern int mmc_resume_bus(struct mmc_host *host);
+extern void mmc_power_off(struct mmc_host *host);
+extern void mmc_power_up(struct mmc_host *host);
+extern void sdhci_bus_scan(void);
+extern int sdhci_device_attach(int);
 
 extern int mmc_suspend_host(struct mmc_host *);
 extern int mmc_resume_host(struct mmc_host *);
+extern int mmc_auto_suspend(struct mmc_host *);
 
 extern int mmc_power_save_host(struct mmc_host *host);
 extern int mmc_power_restore_host(struct mmc_host *host);

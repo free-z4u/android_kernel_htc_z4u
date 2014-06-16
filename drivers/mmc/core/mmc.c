@@ -42,6 +42,14 @@ static const unsigned int tacc_mant[] = {
 	35,	40,	45,	50,	55,	60,	70,	80,
 };
 
+#if defined(CONFIG_ARCH_SC8825)
+static const unsigned int sprd_hs_max_dtr = 104000000;
+#elif defined(CONFIG_ARCH_SCX35)
+static const unsigned int sprd_hs_max_dtr = 128000000;
+#else
+static const unsigned int sprd_hs_max_dtr = 200000000;
+#endif
+
 #define UNSTUFF_BITS(resp,start,size)					\
 	({								\
 		const int __size = size;				\
@@ -55,6 +63,13 @@ static const unsigned int tacc_mant[] = {
 			__res |= resp[__off-1] << ((32 - __shft) % 32);	\
 		__res & __mask;						\
 	})
+
+static unsigned int perf_degr;
+/* performance degradation */
+int emmc_perf_degr(void)
+{
+	return perf_degr;
+}
 
 /*
  * Given the decoded CSD structure, decode the raw CID to our CID structure.
@@ -171,6 +186,23 @@ static int mmc_decode_csd(struct mmc_card *card)
 		csd->erase_size <<= csd->write_blkbits - 9;
 	}
 
+	printk(KERN_INFO "CSD.structure 0x%x\n",csd->structure);
+	printk(KERN_INFO "CSD.mmca_vsn 0x%x\n",csd->mmca_vsn);
+	printk(KERN_INFO "CSD.cmdclass 0x%x\n",csd->cmdclass);
+	printk(KERN_INFO "CSD.tacc_clks 0x%x\n",csd->tacc_clks);
+	printk(KERN_INFO "CSD.tacc_ns 0x%x\n",csd->tacc_ns);
+	printk(KERN_INFO "CSD.c_size uninitialize\n",csd->c_size);
+	printk(KERN_INFO "CSD.r2w_factor 0x%x\n",csd->r2w_factor);
+	printk(KERN_INFO "CSD.max_dtr 0x%xHz\n",csd->max_dtr);
+	printk(KERN_INFO "CSD.erase_size 0x%x sectors\n",csd->erase_size);		/* In sectors */
+	printk(KERN_INFO "CSD.read_blkbits 0x%x\n",csd->read_blkbits);
+	printk(KERN_INFO "CSD.write_blkbits 0x%x\n",csd->write_blkbits);
+	printk(KERN_INFO "CSD.capacity 0x%x sectors\n",csd->capacity);
+
+	printk(KERN_INFO "CSD.read_partial 0x%x\n",csd->read_partial);
+	printk(KERN_INFO "CSD.read_misalign 0x%x\n",csd->read_misalign);
+	printk(KERN_INFO "CSD.write_partial 0x%x\n",csd->write_partial);
+	printk(KERN_INFO "CSD.write_misalign 0x%x\n",csd->write_misalign);
 	return 0;
 }
 
@@ -230,8 +262,12 @@ static int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd)
 			err = 0;
 		}
 	} else
+	{
+#if defined(CONFIG_MACH_SPX35FPGA) || defined(CONFIG_MACH_Z4DTG) || defined(CONFIG_MACH_Z4TD) || defined(CONFIG_MACH_CP5DTU) || defined(CONFIG_MACH_CP5DUG) || defined(CONFIG_MACH_CP5DWG)
+		ext_csd[EXT_CSD_CARD_TYPE] &= 0xCF;
+#endif
 		*new_ext_csd = ext_csd;
-
+	}
 	return err;
 }
 
@@ -283,6 +319,7 @@ static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
 		/* Cards with density > 2GiB are sector addressed */
 		if (card->ext_csd.sectors > (2u * 1024 * 1024 * 1024) / 512)
 			mmc_card_set_blockaddr(card);
+		card->ext_csd.sectors -=  ext_csd[EXT_CSD_BOOT_MULT] * 512;
 	}
 	card->ext_csd.raw_card_type = ext_csd[EXT_CSD_CARD_TYPE];
 	switch (ext_csd[EXT_CSD_CARD_TYPE] & EXT_CSD_CARD_TYPE_MASK) {
@@ -290,21 +327,21 @@ static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
 	case EXT_CSD_CARD_TYPE_SDR_ALL_DDR_1_8V:
 	case EXT_CSD_CARD_TYPE_SDR_ALL_DDR_1_2V:
 	case EXT_CSD_CARD_TYPE_SDR_ALL_DDR_52:
-		card->ext_csd.hs_max_dtr = 200000000;
+		card->ext_csd.hs_max_dtr = sprd_hs_max_dtr;
 		card->ext_csd.card_type = EXT_CSD_CARD_TYPE_SDR_200;
 		break;
 	case EXT_CSD_CARD_TYPE_SDR_1_2V_ALL:
 	case EXT_CSD_CARD_TYPE_SDR_1_2V_DDR_1_8V:
 	case EXT_CSD_CARD_TYPE_SDR_1_2V_DDR_1_2V:
 	case EXT_CSD_CARD_TYPE_SDR_1_2V_DDR_52:
-		card->ext_csd.hs_max_dtr = 200000000;
+		card->ext_csd.hs_max_dtr = sprd_hs_max_dtr;
 		card->ext_csd.card_type = EXT_CSD_CARD_TYPE_SDR_1_2V;
 		break;
 	case EXT_CSD_CARD_TYPE_SDR_1_8V_ALL:
 	case EXT_CSD_CARD_TYPE_SDR_1_8V_DDR_1_8V:
 	case EXT_CSD_CARD_TYPE_SDR_1_8V_DDR_1_2V:
 	case EXT_CSD_CARD_TYPE_SDR_1_8V_DDR_52:
-		card->ext_csd.hs_max_dtr = 200000000;
+		card->ext_csd.hs_max_dtr = sprd_hs_max_dtr;
 		card->ext_csd.card_type = EXT_CSD_CARD_TYPE_SDR_1_8V;
 		break;
 	case EXT_CSD_CARD_TYPE_DDR_52 | EXT_CSD_CARD_TYPE_52 |
@@ -534,6 +571,58 @@ static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
 			card->ext_csd.data_tag_unit_size = 0;
 		}
 	}
+
+
+
+	printk(KERN_INFO "Ext_CSD.rev 0x%x\n",					card->ext_csd.rev);
+	printk(KERN_INFO "Ext_CSD.erase_group_def 0x%x\n",		card->ext_csd.erase_group_def);
+	printk(KERN_INFO "Ext_CSD.sec_feature_support 0x%x\n",	card->ext_csd.sec_feature_support);
+	printk(KERN_INFO "Ext_CSD.rel_sectors 0x%x\n",			card->ext_csd.rel_sectors);
+	printk(KERN_INFO "Ext_CSD.rel_param 0x%x\n",			card->ext_csd.rel_param);
+	printk(KERN_INFO "Ext_CSD.part_config 0x%x\n",			card->ext_csd.part_config);
+	printk(KERN_INFO "Ext_CSD.cache_ctrl 0x%x\n",			card->ext_csd.cache_ctrl);
+	printk(KERN_INFO "Ext_CSD.rst_n_function 0x%x\n",		card->ext_csd.rst_n_function);
+	printk(KERN_INFO "Ext_CSD.part_time 0x%x\n",			card->ext_csd.part_time);		/* Units: ms */
+	printk(KERN_INFO "Ext_CSD.sa_timeout 0x%x\n",			card->ext_csd.sa_timeout);		/* Units: 100ns */
+	printk(KERN_INFO "Ext_CSD.generic_cmd6_time 0x%x\n",	card->ext_csd.generic_cmd6_time);	/* Units: 10ms */
+	printk(KERN_INFO "Ext_CSD.power_off_longtime 0x%x\n",	card->ext_csd.power_off_longtime);     /* Units: ms */
+	printk(KERN_INFO "Ext_CSD.hs_max_dtr 0x%x\n",			card->ext_csd.hs_max_dtr);
+	printk(KERN_INFO "Ext_CSD.sectors 0x%x\n",				card->ext_csd.sectors);
+	printk(KERN_INFO "Ext_CSD.card_type 0x%x\n",			card->ext_csd.card_type);
+	printk(KERN_INFO "Ext_CSD.hc_erase_size 0x%x\n",		card->ext_csd.hc_erase_size);		/* In sectors */
+	printk(KERN_INFO "Ext_CSD.hc_erase_timeout 0x%x\n",		card->ext_csd.hc_erase_timeout);	/* In milliseconds */
+	printk(KERN_INFO "Ext_CSD.sec_trim_mult 0x%x\n",			card->ext_csd.sec_trim_mult);	/* Secure trim multiplier  */
+	printk(KERN_INFO "Ext_CSD.sec_erase_mult 0x%x\n",		card->ext_csd.sec_erase_mult);	/* Secure erase multiplier */
+	printk(KERN_INFO "Ext_CSD.trim_timeout 0x%x\n",			card->ext_csd.trim_timeout);		/* In milliseconds */
+	printk(KERN_INFO "Ext_CSD.enhanced_area_en 0x%x\n",	card->ext_csd.enhanced_area_en);	/* enable bit */
+	printk(KERN_INFO "Ext_CSD.enhanced_area_offset 0x%x\n",	card->ext_csd.enhanced_area_offset);	/* Units: Byte */
+	printk(KERN_INFO "Ext_CSD.enhanced_area_size 0x%x\n",	card->ext_csd.enhanced_area_size);	/* Units: KB */
+	printk(KERN_INFO "Ext_CSD.cache_size 0x%x\n",			card->ext_csd.cache_size);		/* Units: KB */
+	printk(KERN_INFO "Ext_CSD.hpi_en 0x%x\n",				card->ext_csd.hpi_en);			/* HPI enablebit */
+	printk(KERN_INFO "Ext_CSD.hpi 0x%x\n",					card->ext_csd.hpi);			/* HPI support bit */
+	printk(KERN_INFO "Ext_CSD.hpi_cmd 0x%x\n",				card->ext_csd.hpi_cmd);		/* cmd used as HPI */
+	printk(KERN_INFO "Ext_CSD.data_sector_size 0x%x\n",		card->ext_csd.data_sector_size);       /* 512 bytes or 4KB */
+	printk(KERN_INFO "Ext_CSD.data_tag_unit_size 0x%x\n",	card->ext_csd.data_tag_unit_size);     /* DATA TAG UNIT size */
+	printk(KERN_INFO "Ext_CSD.boot_ro_lock 0x%x\n",			card->ext_csd.boot_ro_lock);		/* ro lock support */
+	printk(KERN_INFO "Ext_CSD.boot_ro_lockable 0x%x\n",		card->ext_csd.boot_ro_lockable);
+	printk(KERN_INFO "Ext_CSD.raw_partition_support 0x%x\n",	card->ext_csd.raw_partition_support);	/* 160 */
+	printk(KERN_INFO "Ext_CSD.raw_erased_mem_count 0x%x\n",	card->ext_csd.raw_erased_mem_count);	/* 181 */
+	printk(KERN_INFO "Ext_CSD.raw_ext_csd_structure 0x%x\n",	card->ext_csd.raw_ext_csd_structure);	/* 194 */
+	printk(KERN_INFO "Ext_CSD.raw_card_type 0x%x\n",		card->ext_csd.raw_card_type);		/* 196 */
+	printk(KERN_INFO "Ext_CSD.out_of_int_time 0x%x\n",		card->ext_csd.out_of_int_time);	/* 198 */
+	printk(KERN_INFO "Ext_CSD.raw_s_a_timeout 0x%x\n",		card->ext_csd.raw_s_a_timeout);		/* 217 */
+	printk(KERN_INFO "Ext_CSD.raw_hc_erase_gap_size 0x%x\n",	card->ext_csd.raw_hc_erase_gap_size);	/* 221 */
+	printk(KERN_INFO "Ext_CSD.raw_erase_timeout_mult 0x%x\n",	card->ext_csd.raw_erase_timeout_mult);	/* 223 */
+	printk(KERN_INFO "Ext_CSD.raw_hc_erase_grp_size 0x%x\n",	card->ext_csd.raw_hc_erase_grp_size);	/* 224 */
+	printk(KERN_INFO "Ext_CSD.raw_sec_trim_mult 0x%x\n",		card->ext_csd.raw_sec_trim_mult);	/* 229 */
+	printk(KERN_INFO "Ext_CSD.raw_sec_erase_mult 0x%x\n",	card->ext_csd.raw_sec_erase_mult);	/* 230 */
+	printk(KERN_INFO "Ext_CSD.raw_sec_feature_support 0x%x\n",	card->ext_csd.raw_sec_feature_support);/* 231 */
+	printk(KERN_INFO "Ext_CSD.raw_trim_mult 0x%x\n",		card->ext_csd.raw_trim_mult);		/* 232 */
+	printk(KERN_INFO "Ext_CSD.raw_sectors 0 0x%x\n",		card->ext_csd.raw_sectors[0]);		/* 212 - 4 bytes */
+	printk(KERN_INFO "Ext_CSD.raw_sectors 1 0x%x\n",		card->ext_csd.raw_sectors[1]);		/* 212 - 4 bytes */
+	printk(KERN_INFO "Ext_CSD.raw_sectors 2 0x%x\n",		card->ext_csd.raw_sectors[2]);		/* 212 - 4 bytes */
+	printk(KERN_INFO "Ext_CSD.raw_sectors 3 0x%x\n",		card->ext_csd.raw_sectors[3]);		/* 212 - 4 bytes */
+	printk(KERN_INFO "Ext_CSD.rev 0x%x\n",					card->ext_csd.feature_support);
 
 out:
 	return err;
@@ -811,7 +900,19 @@ static int mmc_select_hs200(struct mmc_card *card)
 err:
 	return err;
 }
+static int  disable_exception_event_ctrl(struct mmc_card *card)
+{
+#define EXT_CSD_EXCEPTION_EVENTS_CTRL		56      /* 56:57 */
+		int err = 0;
+		int timeout = 0;
+		int enable = 0;
 
+		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+					EXT_CSD_EXCEPTION_EVENTS_CTRL, enable, timeout);
+
+
+		return err;
+}
 /*
  * Handle the detection and initialisation of a card.
  *
@@ -826,10 +927,13 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	u32 cid[4];
 	unsigned int max_dtr;
 	u32 rocr;
+	u32 ext_csd_bits;
+	u32 bus_width;
 	u8 *ext_csd = NULL;
 
 	BUG_ON(!host);
 	WARN_ON(!host->claimed);
+	printk("mmc_init_card enter\n");
 
 	/* Set correct bus mode for MMC before attempting init */
 	if (!mmc_host_is_spi(host))
@@ -873,6 +977,7 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 
 	if (oldcard) {
 		if (memcmp(cid, oldcard->raw_cid, sizeof(cid)) != 0) {
+			printk("memcmp cid = %p,oldcard->raw_cid = %p\n",cid,oldcard->raw_cid);
 			err = -ENOENT;
 			goto err;
 		}
@@ -1002,6 +1107,7 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	 * If the host supports the power_off_notify capability then
 	 * set the notification byte in the ext_csd register of device
 	 */
+	printk("****%s,  host->caps2:0x%x, card->ext_csd.rev:%d ****\n", __func__, host->caps2, card->ext_csd.rev);
 	if ((host->caps2 & MMC_CAP2_POWEROFF_NOTIFY) &&
 	    (card->ext_csd.rev >= 6)) {
 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
@@ -1018,6 +1124,7 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 		if (!err)
 			card->poweroff_notify_state = MMC_POWERED_ON;
 	}
+	printk("****%s,	card->poweroff_notify_state:%d ****\n", __func__, card->poweroff_notify_state);
 
 	/*
 	 * Activate high speed (if supported)
@@ -1026,11 +1133,17 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 		err = 0;
 		if (card->ext_csd.hs_max_dtr > 52000000 &&
 		    host->caps2 & MMC_CAP2_HS200)
+		{
+			printk("****%s,	call  mmc_select_hs200****\n", __func__ );
 			err = mmc_select_hs200(card);
+		}
 		else if	(host->caps & MMC_CAP_MMC_HIGHSPEED)
+		{
+			printk("****%s,	call  mmc_switch****\n", __func__ );
 			err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 					 EXT_CSD_HS_TIMING, 1,
 					 card->ext_csd.generic_cmd6_time);
+		}
 
 		if (err && err != -EBADMSG)
 			goto free_card;
@@ -1042,10 +1155,12 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 		} else {
 			if (card->ext_csd.hs_max_dtr > 52000000 &&
 			    host->caps2 & MMC_CAP2_HS200) {
+				printk("****%s,	call  mmc_select_hs200, mmc_set_timing****\n", __func__ );
 				mmc_card_set_hs200(card);
 				mmc_set_timing(card->host,
 					       MMC_TIMING_MMC_HS200);
 			} else {
+				printk("****%s,	call  mmc_card_set_highspeed, mmc_set_timing****\n", __func__ );
 				mmc_card_set_highspeed(card);
 				mmc_set_timing(card->host, MMC_TIMING_MMC_HS);
 			}
@@ -1058,9 +1173,15 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	max_dtr = (unsigned int)-1;
 
 	if (mmc_card_highspeed(card) || mmc_card_hs200(card)) {
+		printk("****%s,  mmc_card_highspeed(card) :%d****\n", __func__ , mmc_card_highspeed(card) );
+		printk("****%s,   mmc_card_hs200(card) :%d****\n", __func__ , mmc_card_hs200(card) );
 		if (max_dtr > card->ext_csd.hs_max_dtr)
+		{
+			printk("****%s,	max_dtr >  card->ext_csd.hs_max_dtr****\n", __func__ );
 			max_dtr = card->ext_csd.hs_max_dtr;
+		}
 	} else if (max_dtr > card->csd.max_dtr) {
+		printk("****%s,  max_dtr > card->csd.max_dtr****\n", __func__ );
 		max_dtr = card->csd.max_dtr;
 	}
 
@@ -1080,14 +1201,20 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 			     MMC_CAP_UHS_DDR50))
 				== (MMC_CAP_1_2V_DDR | MMC_CAP_UHS_DDR50)))
 				ddr = MMC_1_2V_DDR_MODE;
+
+		if(ddr ==  MMC_1_2V_DDR_MODE)
+			printk("****%s, ddr = MMC_1_2V_DDR_MODE\n ", __func__  );
+		if(ddr ==  MMC_1_8V_DDR_MODE)
+			printk("****%s, ddr = MMC_1_8V_DDR_MODE\n ", __func__ );
+
 	}
 
 	/*
 	 * Indicate HS200 SDR mode (if supported).
 	 */
 	if (mmc_card_hs200(card)) {
-		u32 ext_csd_bits;
-		u32 bus_width = card->host->ios.bus_width;
+		printk("****%s, mmc_card_hs200(card):%d ****\n", __func__, mmc_card_hs200(card));
+		bus_width = card->host->ios.bus_width;
 
 		/*
 		 * For devices supporting HS200 mode, the bus width has
@@ -1102,6 +1229,10 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 		 */
 		if ((host->caps2 & MMC_CAP2_HS200) &&
 		    card->host->ops->execute_tuning) {
+			printk("****%s, host->caps2:0x%x ****\n", __func__, host->caps2);
+			printk("****%s, host->caps2 & MMC_CAP2_HS200 ****\n", __func__);
+			if(card->host->ops->execute_tuning)
+				printk("****%s, card->host->ops->execute_tuning:%pf ****\n", __func__, card->host->ops->execute_tuning);
 			mmc_host_clk_hold(card->host);
 			err = card->host->ops->execute_tuning(card->host,
 				MMC_SEND_TUNING_BLOCK_HS200);
@@ -1148,6 +1279,8 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 			bus_width = bus_widths[idx];
 			if (bus_width == MMC_BUS_WIDTH_1)
 				ddr = 0; /* no DDR for 1-bit width */
+
+			printk("****%s, call  mmc_select_powerclass,  idx:%d ****\n", __func__, idx);
 			err = mmc_select_powerclass(card, ext_csd_bits[idx][0],
 						    ext_csd);
 			if (err)
@@ -1213,11 +1346,14 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 			 * WARNING: eMMC rules are NOT the same as SD DDR
 			 */
 			if (ddr == MMC_1_2V_DDR_MODE) {
+				printk("****%s, ddr == MMC_1_2V_DDR_MODE ****\n", __func__ );
 				err = mmc_set_signal_voltage(host,
 					MMC_SIGNAL_VOLTAGE_120, 0);
 				if (err)
 					goto err;
 			}
+
+			printk("****%s, call mmc_card_set_ddr_mode ****\n", __func__ );
 			mmc_card_set_ddr_mode(card);
 			mmc_set_timing(card->host, MMC_TIMING_UHS_DDR50);
 			mmc_set_bus_width(card->host, bus_width);
@@ -1245,8 +1381,10 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	 * If cache size is higher than 0, this indicates
 	 * the existence of cache and it can be turned on.
 	 */
+	printk("****%s, host->caps2:0x%x ****\n", __func__, host->caps2);
 	if ((host->caps2 & MMC_CAP2_CACHE_CTRL) &&
 			card->ext_csd.cache_size > 0) {
+		printk("****%s, card->ext_csd.cache_size > 0 ****\n", __func__);
 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 				EXT_CSD_CACHE_CTRL, 1,
 				card->ext_csd.generic_cmd6_time);
@@ -1267,10 +1405,14 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 		}
 	}
 
+	perf_degr = 1;
+	disable_exception_event_ctrl(card);
 	if (!oldcard)
 		host->card = card;
 
 	mmc_free_ext_csd(ext_csd);
+
+	printk("mmc_init_card success\n");
 	return 0;
 
 free_card:
@@ -1279,6 +1421,7 @@ free_card:
 err:
 	mmc_free_ext_csd(ext_csd);
 
+	printk("mmc_sd_init_card err\n");
 	return err;
 }
 
@@ -1291,7 +1434,10 @@ static void mmc_remove(struct mmc_host *host)
 	BUG_ON(!host->card);
 
 	mmc_remove_card(host->card);
+
+	mmc_claim_host(host);
 	host->card = NULL;
+	mmc_release_host(host);
 }
 
 /*
@@ -1381,7 +1527,6 @@ static int mmc_resume(struct mmc_host *host)
 static int mmc_power_restore(struct mmc_host *host)
 {
 	int ret;
-
 	host->card->state &= ~(MMC_STATE_HIGHSPEED | MMC_STATE_HIGHSPEED_200);
 	mmc_card_clr_sleep(host->card);
 	mmc_claim_host(host);

@@ -238,7 +238,11 @@ int tracing_is_enabled(void)
  */
 #define TRACE_BUF_SIZE_DEFAULT	1441792UL /* 16384 * 88 (sizeof(entry)) */
 
+#ifdef COFNIG_HTC_DBG_UNCACHE_FTRACE
+static unsigned long		trace_buf_size = 3 * 1024 * 1024;
+#else
 static unsigned long		trace_buf_size = TRACE_BUF_SIZE_DEFAULT;
+#endif
 
 /* trace_types holds a link list of available tracers. */
 static struct tracer		*trace_types __read_mostly;
@@ -3782,7 +3786,7 @@ tracing_mark_write(struct file *filp, const char __user *ubuf,
 	 * ring buffer.
 	 */
 	BUILD_BUG_ON(TRACE_BUF_SIZE >= PAGE_SIZE);
-
+	page2 = NULL;
 	/* check if we cross pages */
 	if ((addr & PAGE_MASK) != ((addr + cnt) & PAGE_MASK))
 		nr_pages = 2;

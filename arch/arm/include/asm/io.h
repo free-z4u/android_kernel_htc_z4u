@@ -47,6 +47,22 @@ extern void __raw_readsb(const void __iomem *addr, void *data, int bytelen);
 extern void __raw_readsw(const void __iomem *addr, void *data, int wordlen);
 extern void __raw_readsl(const void __iomem *addr, void *data, int longlen);
 
+#ifdef CONFIG_HTC_DBG_LAST_IO
+#include <mach/htc-last-io.h>
+#define __raw_writeb_r(v,a)	(__chk_io_ptr(a), *(volatile unsigned char __force  *)(__mem_io_w(v, a)) = (v))
+#define __raw_writew_r(v,a)	(__chk_io_ptr(a), *(volatile unsigned short __force *)(__mem_io_w(v, a)) = (v))
+#define __raw_writel_r(v,a)	(__chk_io_ptr(a), *(volatile unsigned int __force   *)(__mem_io_w(v, a)) = (v))
+#define __raw_writeb(v,a)	({ volatile unsigned char  __v = __raw_writeb_r(v,a); __io_done(a); __v; })
+#define __raw_writew(v,a)	({ volatile unsigned short __v = __raw_writew_r(v,a); __io_done(a); __v; })
+#define __raw_writel(v,a)	({ volatile unsigned int   __v = __raw_writel_r(v,a); __io_done(a); __v; })
+
+#define __raw_readb_r(a)	(__chk_io_ptr(a), *(volatile unsigned char __force  *)(__mem_io_r(a)))
+#define __raw_readw_r(a)	(__chk_io_ptr(a), *(volatile unsigned short __force *)(__mem_io_r(a)))
+#define __raw_readl_r(a)	(__chk_io_ptr(a), *(volatile unsigned int __force   *)(__mem_io_r(a)))
+#define __raw_readb(a)		({ volatile unsigned char  __v = __raw_readb_r(a); __io_done(a); __v; })
+#define __raw_readw(a)		({ volatile unsigned short __v = __raw_readw_r(a); __io_done(a); __v; })
+#define __raw_readl(a)		({ volatile unsigned int   __v = __raw_readl_r(a); __io_done(a); __v; })
+#else
 #define __raw_writeb(v,a)	(__chk_io_ptr(a), *(volatile unsigned char __force  *)(a) = (v))
 #define __raw_writew(v,a)	(__chk_io_ptr(a), *(volatile unsigned short __force *)(a) = (v))
 #define __raw_writel(v,a)	(__chk_io_ptr(a), *(volatile unsigned int __force   *)(a) = (v))
@@ -54,6 +70,7 @@ extern void __raw_readsl(const void __iomem *addr, void *data, int longlen);
 #define __raw_readb(a)		(__chk_io_ptr(a), *(volatile unsigned char __force  *)(a))
 #define __raw_readw(a)		(__chk_io_ptr(a), *(volatile unsigned short __force *)(a))
 #define __raw_readl(a)		(__chk_io_ptr(a), *(volatile unsigned int __force   *)(a))
+#endif /* DBG_LAST_IO */
 
 /*
  * Architecture ioremap implementation.

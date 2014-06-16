@@ -744,6 +744,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires,
 		if (likely(base->running_timer != timer)) {
 			/* See the comment in lock_timer_base() */
 			timer_set_base(timer, NULL);
+			dsb();
 			spin_unlock(&base->lock);
 			base = new_base;
 			spin_lock(&base->lock);
@@ -1159,7 +1160,7 @@ static inline void __run_timers(struct tvec_base *base)
 			cascade(base, &base->tv5, INDEX(3));
 		++base->timer_jiffies;
 		list_replace_init(base->tv1.vec + index, &work_list);
-		while (!list_empty(head)) {
+		while (!list_empty_careful(head)) {
 			void (*fn)(unsigned long);
 			unsigned long data;
 
@@ -1167,14 +1168,22 @@ static inline void __run_timers(struct tvec_base *base)
 			fn = timer->function;
 			data = timer->data;
 
-			timer_stats_account_timer(timer);
+			if ( fn == NULL || tbase_get_base(timer->base) != tbase_get_base(base) ) {
+				printk("%s: Skip wrong timer(0x%x) base(0x%x) timer->base(0x%x) fn(0x%x) head(0x%x) next(0x%x) prev(0x%x)\n", __func__,
+					(unsigned int)timer, (unsigned int)base, (unsigned int)(timer->base),
+					(unsigned int)fn, (unsigned int)head, (unsigned int)head->next, (unsigned int)head->prev);
+				detach_timer(timer, 1);
+			}
+			else {
+				timer_stats_account_timer(timer);
 
-			base->running_timer = timer;
-			detach_timer(timer, 1);
+				base->running_timer = timer;
+				detach_timer(timer, 1);
 
-			spin_unlock_irq(&base->lock);
-			call_timer_fn(timer, fn, data);
-			spin_lock_irq(&base->lock);
+				spin_unlock_irq(&base->lock);
+				call_timer_fn(timer, fn, data);
+				spin_lock_irq(&base->lock);
+			}
 		}
 	}
 	base->running_timer = NULL;
@@ -1647,6 +1656,7 @@ static int __cpuinit init_timers_cpu(int cpu)
 	int j;
 	struct tvec_base *base;
 	static char __cpuinitdata tvec_base_done[NR_CPUS];
+	unsigned long flags;
 
 	if (!tvec_base_done[cpu]) {
 		static char boot_done;
@@ -1678,12 +1688,13 @@ static int __cpuinit init_timers_cpu(int cpu)
 			boot_done = 1;
 			base = &boot_tvec_bases;
 		}
+		spin_lock_init(&base->lock);
 		tvec_base_done[cpu] = 1;
 	} else {
 		base = per_cpu(tvec_bases, cpu);
 	}
 
-	spin_lock_init(&base->lock);
+	spin_lock_irqsave(&base->lock, flags);
 
 	for (j = 0; j < TVN_SIZE; j++) {
 		INIT_LIST_HEAD(base->tv5.vec + j);
@@ -1696,6 +1707,9 @@ static int __cpuinit init_timers_cpu(int cpu)
 
 	base->timer_jiffies = jiffies;
 	base->next_timer = base->timer_jiffies;
+
+	spin_unlock_irqrestore(&base->lock, flags);
+
 	return 0;
 }
 
@@ -1818,6 +1832,64 @@ unsigned long msleep_interruptible(unsigned int msecs)
 }
 
 EXPORT_SYMBOL(msleep_interruptible);
+
+static void do_nsleep(unsigned int msecs, struct hrtimer_sleeper *sleeper,
+	int sigs)
+{
+	enum hrtimer_mode mode = HRTIMER_MODE_REL;
+	int state = sigs ? TASK_INTERRUPTIBLE : TASK_UNINTERRUPTIBLE;
+
+	/*
+	 * This is really just a reworked and simplified version
+	 * of do_nanosleep().
+	 */
+	hrtimer_init(&sleeper->timer, CLOCK_MONOTONIC, mode);
+	sleeper->timer.node.expires = ktime_set(msecs / 1000,
+					    (msecs % 1000) * NSEC_PER_MSEC);
+	hrtimer_init_sleeper(sleeper, current);
+
+	do {
+		set_current_state(state);
+		hrtimer_start(&sleeper->timer, sleeper->timer.node.expires, mode);
+		if (sleeper->task)
+			schedule();
+		hrtimer_cancel(&sleeper->timer);
+		mode = HRTIMER_MODE_ABS;
+	} while (sleeper->task && !(sigs && signal_pending(current)));
+}
+
+/**
+ * msleep - sleep safely even with waitqueue interruptions
+ * @msecs: Time in milliseconds to sleep for
+ */
+void hr_msleep(unsigned int msecs)
+{
+	struct hrtimer_sleeper sleeper;
+
+	do_nsleep(msecs, &sleeper, 0);
+}
+
+EXPORT_SYMBOL(hr_msleep);
+
+/**
+ * msleep_interruptible - sleep waiting for signals
+ * @msecs: Time in milliseconds to sleep for
+ */
+unsigned long hr_msleep_interruptible(unsigned int msecs)
+{
+	struct hrtimer_sleeper sleeper;
+	ktime_t left;
+
+	do_nsleep(msecs, &sleeper, 1);
+
+	if (!sleeper.task)
+		return 0;
+	left = ktime_sub(sleeper.timer.node.expires,
+			 sleeper.timer.base->get_time());
+	return max(((long) ktime_to_ns(left))/(long)NSEC_PER_MSEC, 1L);
+}
+
+EXPORT_SYMBOL(hr_msleep_interruptible);
 
 static int __sched do_usleep_range(unsigned long min, unsigned long max)
 {

@@ -471,7 +471,7 @@ static void close_files(struct files_struct * files)
 	rcu_read_unlock();
 	for (;;) {
 		unsigned long set;
-		i = j * __NFDBITS;
+		i = j * BITS_PER_LONG;
 		if (i >= fdt->max_fds)
 			break;
 		set = fdt->open_fds[j++];
@@ -917,6 +917,14 @@ void do_exit(long code)
 	 * mm_release()->clear_child_tid() from writing to a user-controlled
 	 * kernel address.
 	 */
+	if (strstr(current->group_leader->comm, "system_server")){
+		printk(KERN_INFO "[EXIT:%s](code:0x%lx) pid:%d(%s)(group:%d/%s)\n"
+				, __func__
+				, code
+				, current->pid, current->comm
+				, current->group_leader->pid, current->group_leader->comm
+				);
+	}
 	set_fs(USER_DS);
 
 	ptrace_event(PTRACE_EVENT_EXIT, code);

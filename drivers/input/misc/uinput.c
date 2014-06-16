@@ -180,6 +180,8 @@ static int uinput_dev_upload_effect(struct input_dev *dev, struct ff_effect *eff
 			effect->u.periodic.waveform == FF_CUSTOM)
 		return -EINVAL;
 
+	/*added by wei.w_xie*/
+	request.retval= 0;
 	request.id = -1;
 	init_completion(&request.done);
 	request.code = UI_FF_UPLOAD;
@@ -204,6 +206,8 @@ static int uinput_dev_erase_effect(struct input_dev *dev, int effect_id)
 	if (!test_bit(EV_FF, dev->evbit))
 		return -ENOSYS;
 
+	/*added by wei.w_xie*/
+	request.retval = 0;
 	request.id = -1;
 	init_completion(&request.done);
 	request.code = UI_FF_ERASE;

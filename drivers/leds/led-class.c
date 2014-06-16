@@ -63,6 +63,14 @@ static ssize_t led_brightness_store(struct device *dev,
 	return ret;
 }
 
+static ssize_t camera_minimum_backlight_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	struct led_classdev *led_cdev = dev_get_drvdata(dev);
+
+	return sprintf(buf, "BL_CAM_MIN=%u\n", led_cdev->camera_backlight);
+}
+
 static ssize_t led_max_brightness_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -71,11 +79,58 @@ static ssize_t led_max_brightness_show(struct device *dev,
 	return sprintf(buf, "%u\n", led_cdev->max_brightness);
 }
 
+#ifdef CONFIG_FB_CABC_LEVEL_CONTROL
+extern unsigned long cabc_level_ctl_status;
+extern unsigned long cabc_level_ctl_status_old;
+
+static int cabc_level_ctl_switch(int level)
+{
+	if (level == cabc_level_ctl_status)
+		return 1;
+
+	cabc_level_ctl_status = level;
+	printk("[DISP] %s: change cabc level %d\n", __func__, level);
+
+	return 0;
+}
+
+static ssize_t cabc_level_ctl_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	int i = 0;
+
+	i += scnprintf(buf + i, PAGE_SIZE - 1, "%lu\n", cabc_level_ctl_status);
+	return i;
+}
+
+static ssize_t cabc_level_ctl_store(struct device *dev, struct device_attribute *attr,
+	const char *buf, size_t count)
+{
+	int rc;
+	unsigned long res;
+
+	rc = strict_strtoul(buf, 10, &res);
+	if (rc) {
+		printk(KERN_ERR "invalid parameter, %s %d\n", buf, rc);
+		count = -EINVAL;
+		goto err_out;
+	}
+	if (cabc_level_ctl_switch(res))
+		count = -EIO;
+
+err_out:
+	return count;
+}
+#endif
+
 static struct device_attribute led_class_attrs[] = {
 	__ATTR(brightness, 0644, led_brightness_show, led_brightness_store),
 	__ATTR(max_brightness, 0444, led_max_brightness_show, NULL),
+	__ATTR(backlight_info, 0444, camera_minimum_backlight_show, NULL),
 #ifdef CONFIG_LEDS_TRIGGERS
 	__ATTR(trigger, 0644, led_trigger_show, led_trigger_store),
+#endif
+#ifdef CONFIG_FB_CABC_LEVEL_CONTROL
+	__ATTR(cabc_level_ctl, 0644, cabc_level_ctl_show, cabc_level_ctl_store),
 #endif
 	__ATTR_NULL,
 };
@@ -184,6 +239,9 @@ int led_classdev_register(struct device *parent, struct led_classdev *led_cdev)
 #ifdef CONFIG_LEDS_TRIGGERS
 	led_trigger_set_default(led_cdev);
 #endif
+
+	if (!led_cdev->camera_backlight)
+		led_cdev->camera_backlight = LED_CAMERA_MIN;
 
 	printk(KERN_DEBUG "Registered led device: %s\n",
 			led_cdev->name);

@@ -220,7 +220,7 @@ static inline int vfat_is_used_badchars(const wchar_t *s, int len)
 			return -EINVAL;
 
 	if (s[i - 1] == ' ') /* last character cannot be space */
-		return -EINVAL;
+		return -FAT_CHARSET_ERROR;
 
 	return 0;
 }
@@ -610,8 +610,13 @@ static int vfat_build_slots(struct inode *dir, const unsigned char *name,
 		goto out_free;
 
 	err = vfat_is_used_badchars(uname, ulen);
-	if (err)
-		goto out_free;
+	if (err) {
+		if (err == -FAT_CHARSET_ERROR) {
+			pr_info("%s vfs_mkdir %s workaround\n", __func__, name);
+			uname[len - 1] = '\0';
+		} else
+			goto out_free;
+	}
 
 	err = vfat_create_shortname(dir, sbi->nls_disk, uname, ulen,
 				    msdos_name, &lcase);

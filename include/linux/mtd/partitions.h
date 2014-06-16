@@ -78,6 +78,7 @@ struct mtd_part_parser {
 
 extern int register_mtd_parser(struct mtd_part_parser *parser);
 extern int deregister_mtd_parser(struct mtd_part_parser *parser);
+extern struct flash_platform_data sc_nand_data;
 
 int mtd_is_partition(struct mtd_info *mtd);
 int mtd_add_partition(struct mtd_info *master, char *name,

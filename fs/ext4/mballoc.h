@@ -220,3 +220,8 @@ static inline ext4_fsblk_t ext4_grp_offs_to_block(struct super_block *sb,
 		(fex->fe_start << EXT4_SB(sb)->s_cluster_bits);
 }
 #endif
+
+/*
+ * 2012-12-22 Add flag to indicate emergency_remount
+ */
+extern atomic_t vfs_emergency_remount;

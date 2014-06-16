@@ -1100,7 +1100,12 @@ static unsigned int sock_poll(struct file *file, poll_table *wait)
 	 *      We can't return errors to poll, so it's either yes or no.
 	 */
 	sock = file->private_data;
-	return sock->ops->poll(file, sock, wait);
+	if(sock->ops == NULL) {
+		printk(KERN_ERR "[NET]sock_poll: sock->ops is NULL\n");
+		return -EFAULT;
+	} else {
+		return sock->ops->poll(file, sock, wait);
+	}
 }
 
 static int sock_mmap(struct file *file, struct vm_area_struct *vma)

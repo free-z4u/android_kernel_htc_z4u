@@ -279,6 +279,17 @@ config INPUT_ATI_REMOTE2
 	  To compile this driver as a module, choose M here: the module will be
 	  called ati_remote2.
 
+config INPUT_KEYCHORD
+	tristate "Key chord input driver support"
+	help
+	  Say Y here if you want to enable the key chord driver
+	  accessible at /dev/keychord.  This driver can be used
+	  for receiving notifications when client specified key
+	  combinations are pressed.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called keychord.
+
 config INPUT_KEYSPAN_REMOTE
 	tristate "Keyspan DMR USB remote control (EXPERIMENTAL)"
 	depends on EXPERIMENTAL
@@ -406,6 +417,11 @@ config INPUT_SGI_BTNS
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called sgi_btns.
+
+config INPUT_GPIO
+	tristate "GPIO driver support"
+	help
+	  Say Y here if you want to support gpio based keys, wheels etc...
 
 config HP_SDC_RTC
 	tristate "HP SDC Real Time Clock"
@@ -553,6 +569,16 @@ config INPUT_ADXL34X_SPI
 	  To compile this driver as a module, choose M here: the
 	  module will be called adxl34x-spi.
 
+config INPUT_LIS3DH_I2C
+	tristate "ST lid3dh 3-Axid accelerometer device with I2C bus"
+	depends on I2C
+	default n
+	help
+	  Say Y here if you have a lis3dh device on the board and use I2C
+	  communication, else say N.
+
+	  To compile this driver as a module, choose M here.
+
 config INPUT_CMA3000
 	tristate "VTI CMA3000 Tri-axis accelerometer"
 	help
@@ -577,6 +603,16 @@ config INPUT_CMA3000_I2C
 	  To compile this driver as a module, choose M here: the
 	  module will be called cma3000_d0x_i2c.
 
+config INPUT_AL3006_I2C
+	tristate "AL3006 LITEON proximity and light sensor device with I2C bus"
+	depends on I2C
+	default n
+	help
+	  Say Y here if you have a al3006 device on the board and use I2C
+	  communication, else say N.
+
+	  To compile this driver as a module, choose M here.
+
 config INPUT_XEN_KBDDEV_FRONTEND
 	tristate "Xen virtual keyboard and mouse support"
 	depends on XEN
@@ -590,4 +626,42 @@ config INPUT_XEN_KBDDEV_FRONTEND
 	  To compile this driver as a module, choose M here: the
 	  module will be called xen-kbdfront.
 
+config INPUT_SPRD_HEADSET
+	tristate "SPRD platform builtin headset & button detect driver"
+	default y
+	help
+	  Say Y here if you are using SPRD platform.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called headset.
+
+config INPUT_TMD2771_I2C
+        tristate "TMD2771 proximity and light sensor device with I2C bus"
+        depends on I2C
+        default n
+        help
+          Say Y here if you have a TMD2771 device on the board and use I2C
+          communication, else say N.
+
+          To compile this driver as a module, choose M here.
+
+config INPUT_EWTSA_I2C
+	tristate "EWTSA gyroscope sensor device with I2C bus"
+	depends on I2C
+	default n
+	help
+	  Say Y here if you have a ewtsa device on the board and use I2C
+	  communication, else say N.
+
+	  To compile this driver as a module, choose M here.
+
+config INPUT_LTR558_I2C
+	tristate "LTR558 proximity and light sensor device with I2C bus"
+	depends on I2C
+	default n
+	help
+	  Say Y here if you have a LTR558 device on the board and use I2C
+	  communication, else say N.
+
+	  To compile this driver as a module, choose M here.
 endif

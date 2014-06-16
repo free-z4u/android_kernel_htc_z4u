@@ -143,6 +143,28 @@ struct tag_memclk {
 	__u32 fmemclk;
 };
 
+#define ATAG_ALS	0x5441001b
+struct tag_als_kadc {
+	__u32 kadc;
+};
+#define ATAG_PS		0x5441001c
+struct tag_ps_kparam {
+	__u32 low;
+	__u32 high;
+};
+#define ATAG_GS		0x5441001d
+struct tag_gs_kval {
+	__u32 kval;
+};
+#define ATAG_GRYO_GSENSOR	0x54410020
+struct tag_gyro_cal {
+	unsigned char cal[37];
+};
+
+struct tag_rfsku {
+	unsigned char  rf[128];
+};
+
 struct tag {
 	struct tag_header hdr;
 	union {
@@ -155,6 +177,10 @@ struct tag {
 		struct tag_revision	revision;
 		struct tag_videolfb	videolfb;
 		struct tag_cmdline	cmdline;
+		struct tag_als_kadc	als_kadc;
+		struct tag_ps_kparam	ps_kparam;
+		struct tag_gs_kval	gs_kval;
+		struct tag_gyro_cal	gyro_cal;
 
 		/*
 		 * Acorn specific
@@ -165,6 +191,8 @@ struct tag {
 		 * DC21285 specific
 		 */
 		struct tag_memclk	memclk;
+		/*For cbp*/
+		struct tag_rfsku rfsku;
 	} u;
 };
 

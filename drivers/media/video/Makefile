@@ -97,6 +97,13 @@ obj-$(CONFIG_SOC_CAMERA_OV9740)		+= ov9740.o
 obj-$(CONFIG_SOC_CAMERA_RJ54N1)		+= rj54n1cb0c.o
 obj-$(CONFIG_SOC_CAMERA_TW9910)		+= tw9910.o
 
+obj-$(CONFIG_VIDEO_DCAM_SPRD)		+= sprd_dcam/
+obj-$(CONFIG_VIDEO_DCAM_SPRD)		+= sprd_scale/
+obj-$(CONFIG_VIDEO_DCAM_SPRD)		+= sprd_rotation/
+obj-$(CONFIG_VIDEO_GSP_SPRD)		+= sprd_gsp/
+obj-$(CONFIG_VIDEO_DCAM_SPRD)		+= sprd_sensor/
+obj-$(CONFIG_VIDEO_DCAM_SPRD)		+= sprd_isp/
+obj-$(CONFIG_VIDEO_DCAM_SPRD)>->---+= sprd_dma_copy/
 # And now the v4l2 drivers:
 
 obj-$(CONFIG_VIDEO_BT848) += bt8xx/
@@ -206,6 +213,7 @@ obj-$(CONFIG_VIDEO_SAA7164)     += saa7164/
 obj-$(CONFIG_VIDEO_IR_I2C)  += ir-kbd-i2c.o
 
 obj-y	+= davinci/
+obj-y	+= rawchip/
 
 obj-$(CONFIG_ARCH_OMAP)	+= omap/
 
