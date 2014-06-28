@@ -16,6 +16,7 @@
 
 #include <linux/types.h>
 
+/* Orient */
 #define MXT_NORMAL		0x0
 #define MXT_DIAGONAL		0x1
 #define MXT_HORIZONTAL_FLIP	0x2
@@ -44,6 +45,7 @@ struct mxt_config_info {
 	const char *fw_name;
 };
 
+/* The platform data for the Atmel maXTouch touchscreen driver */
 struct mxt_platform_data {
 	const struct mxt_config_info *config_array;
 	size_t config_array_size;
@@ -75,4 +77,4 @@ struct mxt_platform_data {
 	int (*power_on) (bool);
 };
 
-#endif 
+#endif /* __LINUX_ATMEL_MXT_TS_H */

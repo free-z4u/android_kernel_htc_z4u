@@ -179,6 +179,14 @@ static inline s64 timekeeping_get_ns_raw(void)
 	return clocksource_cyc2ns(cycle_delta, clock->mult, clock->shift);
 }
 
+static void update_rt_offset(void)
+{
+       struct timespec tmp, *wtm = &timekeeper.wall_to_monotonic;
+
+       set_normalized_timespec(&tmp, -wtm->tv_sec, -wtm->tv_nsec);
+       timekeeper.offs_real = timespec_to_ktime(tmp);
+}
+
 /* must hold write on timekeeper.lock */
 static void timekeeping_update(bool clearntp)
 {
