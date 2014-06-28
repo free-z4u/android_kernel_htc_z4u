@@ -291,19 +291,19 @@ struct proc_dir_entry *ts27010_uart_proc_stat_alloc(void)
 }
 #endif
 
-inline void ts27010_uart_proc_free(struct proc_dir_entry *proc_entry,
+void ts27010_uart_proc_free(struct proc_dir_entry *proc_entry,
 	const char *name)
 {
 	remove_proc_entry(name, NULL);
 	proc_entry = NULL;
 }
-#endif 
-#endif 
+#endif
+#endif
 
 
 #ifdef TS27010_UART_RETRAN
 struct sequence_number_t {
-	struct mutex m_lock; 
+	struct mutex m_lock;
 	u8 m_sn;
 };
 
@@ -355,7 +355,7 @@ inline void ts27010_sequence_number_inc(struct sequence_number_t *seq_no)
 }
 
 struct ts27010_timer_para_t {
-	spinlock_t m_locker; 
+	spinlock_t m_locker;
 	struct work_struct m_send_work;
 	u8 m_cur_index[SLIDE_WINDOWS_SIZE_AP];
 };
@@ -419,10 +419,10 @@ inline void ts27010_sched_retran(struct ts27010_timer_para_t *timer_para)
 }
 
 struct ts27010_retran_info_t {
-	struct timer_list m_tl; 
-	u8 m_data[TS0710MUX_SEND_BUF_SIZE]; 
-	u16 m_length; 
-	
+	struct timer_list m_tl;
+	u8 m_data[TS0710MUX_SEND_BUF_SIZE];
+	u16 m_length;
+
 	u8 m_counter;
 	u8 m_sn;
 };
@@ -475,8 +475,8 @@ inline u8 ts27010_get_retran_sn(struct ts27010_retran_info_t *retran_info)
 }
 
 struct ts27010_slide_window_t {
-	struct mutex m_lock; 
-	
+	struct mutex m_lock;
+
 	wait_queue_head_t m_retran_wait;
 	struct ts27010_retran_info_t m_retran_info[SLIDE_WINDOWS_SIZE_AP];
 	u8 m_head, m_tail;
@@ -569,7 +569,7 @@ inline u8 ts27010_slidewindow_is_idx_in(
 			return 1;
 		}
 	} else {
-		
+
 		mux_print(MSG_DEBUG,
 			"index not in window, index = %d, head = tail = %d\n",
 			index, slide_window->m_head);
@@ -711,7 +711,7 @@ u8 ts27010_slidewindo_store(struct ts27010_slide_window_t *slide_window,
 		}
 	}
 
-	
+
 	short_pkt = (struct short_frame *)(data + ADDRESS_OFFSET);
 	ts27010_sequence_number_lock(g_ap_send_sn);
 	short_pkt->h.sn = ts27010_sequence_number_get(g_ap_send_sn);
@@ -731,13 +731,13 @@ u8 ts27010_slidewindo_store(struct ts27010_slide_window_t *slide_window,
 			(SHORT_CRC_CHECK + data_len));
 	}
 
-	
-	
+
+
 	retran_info = &slide_window->m_retran_info[slide_window->m_head];
 	memcpy(retran_info->m_data, data, len);
 	retran_info->m_length = len;
 	retran_info->m_sn = short_pkt->h.sn;
-	
+
 	index = slide_window->m_head;
 	slide_window->m_head = (slide_window->m_head + 1)
 		% SLIDE_WINDOWS_SIZE_AP;
@@ -756,7 +756,7 @@ EXIT:
 u8 ts27010_slidewindow_is_sn_in(
 	struct ts27010_slide_window_t *slide_window, u8 sn)
 {
-	u8 number = sn & INDIFFERENT_SN; 
+	u8 number = sn & INDIFFERENT_SN;
 	struct ts27010_retran_info_t *retran_info;
 	u8 index;
 	FUNC_ENTER();
@@ -781,7 +781,7 @@ u8 ts27010_slidewindow_is_sn_in(
 
 		index = (index + 1) % SLIDE_WINDOWS_SIZE_AP;
 	}
-	
+
 	retran_info = ts27010_slidewindow_peek(slide_window, index - 1);
 	if (((number - ts27010_get_retran_sn(retran_info)) == 1)
 		|| ((ts27010_get_retran_sn(retran_info) - number)
@@ -820,18 +820,18 @@ void ts27010_clear_retran_counter(struct ts27010_slide_window_t *slide_window,
 	for (j = slide_window->m_tail; j != index; ) {
 		ts27010_clean_retran_count(
 			ts27010_slidewindow_peek(slide_window, j));
-		
+
 		timer_para->m_cur_index[j] = 0;
 		j = (j + 1) % SLIDE_WINDOWS_SIZE_AP;
 	}
 	if (include) {
 		ts27010_clean_retran_count(
 			ts27010_slidewindow_peek(slide_window, index));
-		
+
 		timer_para->m_cur_index[index] = 0;
 	}
 	FUNC_EXIT();
 }
-#endif 
+#endif
 
 

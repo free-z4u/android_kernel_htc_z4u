@@ -211,7 +211,7 @@ static irqreturn_t msm_csic_irq(int irq_num, void *data)
         }
     }
     irq_last = irq;
-    ptl_last = ptl;    
+    ptl_last = ptl;
 
 	msm_io_w(irq, csic_dev->base + MIPI_INTERRUPT_STATUS);
 

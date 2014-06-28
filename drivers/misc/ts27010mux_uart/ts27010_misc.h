@@ -47,7 +47,7 @@ struct proc_dir_entry *ts27010_uart_proc_alloc(void);
 #ifdef PROC_DEBUG_MUX_STAT
 struct proc_dir_entry *ts27010_uart_proc_stat_alloc(void);
 #endif
-inline void ts27010_uart_proc_free(
+void ts27010_uart_proc_free(
 	struct proc_dir_entry *seq_no, const char *name);
 #endif
 
@@ -124,7 +124,7 @@ inline struct ts27010_retran_info_t *ts27010_slidewindow_peek(
 inline int ts27010_slidewindow_consume(
 	struct ts27010_slide_window_t *sldwin, u8 count);
 
-#endif 
+#endif
 
 #ifdef MUX_UART_LOGGER
 struct ts27010_mux_logger;
@@ -134,4 +134,4 @@ int ts27010_mux_uart_logger_logdata(
 void ts27010_free_mux_logger(struct ts27010_mux_logger *mux_logger);
 #endif
 
-#endif 
+#endif
