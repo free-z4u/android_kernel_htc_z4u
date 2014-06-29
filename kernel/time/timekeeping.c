@@ -71,10 +71,10 @@ struct timekeeper {
 	/* The raw monotonic time for the CLOCK_MONOTONIC_RAW posix clock. */
 	struct timespec raw_time;
 
-
+	/* Offset clock monotonic -> clock realtime */
 	ktime_t offs_real;
 
-
+	/* Offset clock monotonic -> clock boottime */
 	ktime_t offs_boot;
 
 	/* Seqlock for all timekeeper values */
@@ -181,10 +181,10 @@ static inline s64 timekeeping_get_ns_raw(void)
 
 static void update_rt_offset(void)
 {
-       struct timespec tmp, *wtm = &timekeeper.wall_to_monotonic;
+	struct timespec tmp, *wtm = &timekeeper.wall_to_monotonic;
 
-       set_normalized_timespec(&tmp, -wtm->tv_sec, -wtm->tv_nsec);
-       timekeeper.offs_real = timespec_to_ktime(tmp);
+	set_normalized_timespec(&tmp, -wtm->tv_sec, -wtm->tv_nsec);
+	timekeeper.offs_real = timespec_to_ktime(tmp);
 }
 
 /* must hold write on timekeeper.lock */
@@ -631,6 +631,12 @@ void __init timekeeping_init(void)
 /* time in seconds when suspend began */
 static struct timespec timekeeping_suspend_time;
 
+static void update_sleep_time(struct timespec t)
+{
+	timekeeper.total_sleep_time = t;
+	timekeeper.offs_boot = timespec_to_ktime(t);
+}
+
 /**
  * __timekeeping_inject_sleeptime - Internal function to add sleep interval
  * @delta: pointer to a timespec delta value
@@ -649,9 +655,7 @@ static void __timekeeping_inject_sleeptime(struct timespec *delta)
 	timekeeper.xtime = timespec_add(timekeeper.xtime, *delta);
 	timekeeper.wall_to_monotonic =
 			timespec_sub(timekeeper.wall_to_monotonic, *delta);
-	timekeeper.total_sleep_time = timespec_add(
-					timekeeper.total_sleep_time, *delta);
-	timekeeper.offs_boot = timespec_to_ktime(timekeeper.total_sleep_time);
+	update_sleep_time(timespec_add(timekeeper.total_sleep_time, *delta));
 }
 
 
@@ -1272,6 +1276,14 @@ void get_xtime_and_monotonic_and_sleep_offset(struct timespec *xtim,
 }
 
 #ifdef CONFIG_HIGH_RES_TIMERS
+/**
+ * ktime_get_update_offsets - hrtimer helper
+ * @offs_real:	pointer to storage for monotonic -> realtime offset
+ * @offs_boot:	pointer to storage for monotonic -> boottime offset
+ *
+ * Returns current monotonic time and updates the offsets
+ * Called from hrtimer_interupt() or retrigger_next_event()
+ */
 ktime_t ktime_get_update_offsets(ktime_t *offs_real, ktime_t *offs_boot)
 {
 	ktime_t now;
@@ -1284,7 +1296,7 @@ ktime_t ktime_get_update_offsets(ktime_t *offs_real, ktime_t *offs_boot)
 		secs = timekeeper.xtime.tv_sec;
 		nsecs = timekeeper.xtime.tv_nsec;
 		nsecs += timekeeping_get_ns();
-
+		/* If arch requires, add in gettimeoffset() */
 		nsecs += arch_gettimeoffset();
 
 		*offs_real = timekeeper.offs_real;
