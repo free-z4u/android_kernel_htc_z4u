@@ -46,6 +46,7 @@ static unsigned int dying_pid_buf_idx;
 /*
  * SLAB caches for signal bits.
  */
+
 static struct kmem_cache *sigqueue_cachep;
 
 int print_fatal_signals __read_mostly;

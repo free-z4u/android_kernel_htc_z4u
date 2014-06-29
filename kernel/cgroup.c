@@ -398,6 +398,9 @@ static void free_css_set_rcu(struct rcu_head *obj)
 
 static int use_task_css_set_links __read_mostly;
 
+/*
+ * refcounted get/put for css_set objects
+ */
 static inline void get_css_set(struct css_set *cg)
 {
 	atomic_inc(&cg->refcount);
@@ -1923,6 +1926,10 @@ int cgroup_attach_task(struct cgroup *cgrp, struct task_struct *tsk)
 	
 	put_css_set(cg);
 
+	/*
+	 * wake up rmdir() waiter. the rmdir should fail since the cgroup
+	 * is no longer empty.
+	 */
 	cgroup_wakeup_rmdir_waiter(cgrp);
 out:
 	if (retval) {
