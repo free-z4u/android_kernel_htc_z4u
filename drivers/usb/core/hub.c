@@ -55,7 +55,7 @@ int HostTest;
 EXPORT_SYMBOL(HostTest);
 #endif
 
-
+/* if we are in debug mode, always announce new devices */
 #ifdef DEBUG
 #ifndef CONFIG_USB_ANNOUNCE_NEW_DEVICES
 #define CONFIG_USB_ANNOUNCE_NEW_DEVICES
