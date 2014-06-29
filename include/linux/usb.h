@@ -808,6 +808,19 @@ static inline int usb_make_path(struct usb_device *dev, char *buf, size_t size)
 	.bInterfaceSubClass = (sc), \
 	.bInterfaceProtocol = (pr)
 
+/**
+ * USB_VENDOR_AND_INTERFACE_INFO - describe a specific usb vendor with a class of usb interfaces
+ * @vend: the 16 bit USB Vendor ID
+ * @cl: bInterfaceClass value
+ * @sc: bInterfaceSubClass value
+ * @pr: bInterfaceProtocol value
+ *
+ * This macro is used to create a struct usb_device_id that matches a
+ * specific vendor with a specific class of interfaces.
+ *
+ * This is especially useful when explicitly matching devices that have
+ * vendor specific bDeviceClass values, but standards-compliant interfaces.
+ */
 #define USB_VENDOR_AND_INTERFACE_INFO(vend, cl, sc, pr) \
 	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO \
 		| USB_DEVICE_ID_MATCH_VENDOR, \
@@ -823,7 +836,6 @@ static inline int usb_make_path(struct usb_device *dev, char *buf, size_t size)
 #define USB_INTERFACE_CLASS_INFO(icl) \
 	.match_flags = USB_DEVICE_ID_MATCH_INT_CLASS, \
 	.bInterfaceClass = (icl) \
-
 
 /* ----------------------------------------------------------------------- */
 
