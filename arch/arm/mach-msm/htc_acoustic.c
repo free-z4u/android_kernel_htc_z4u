@@ -30,6 +30,10 @@
 #include <linux/i2c/cpld.h>
 #endif
 
+#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z3DUG) || defined(CONFIG_MACH_Z3DCG)
+#include <linux/gpio.h>
+#endif 
+
 #include <mach/msm_smd.h>
 #include <mach/msm_rpcrouter.h>
 #include <mach/msm_iomap.h>
@@ -72,6 +76,10 @@
 #if defined(CONFIG_MACH_CP3DUG)
 #define ACOUSTIC_GET_PCBID		_IOW(ACOUSTIC_IOCTL_MAGIC, 56, unsigned)
 #endif
+
+#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z3DUG) || defined(CONFIG_MACH_Z3DCG)
+#define ACOUSTIC_ENABLE_TPA2081    _IOW(ACOUSTIC_IOCTL_MAGIC, 70, int)
+#endif 
 
 #define HTCRPOG 0x30100002
 #define HTCVERS 0
@@ -671,6 +679,23 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 		pr_aud_info("ACOUSTIC_GET_PCBID: %d, return %d\n", htc_pcbid, rc);
 		break;
 #endif
+#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z3DUG) || defined(CONFIG_MACH_Z3DCG)
+	case ACOUSTIC_ENABLE_TPA2081:
+		{
+            #define Z4_Z3_GPIO_AUD_SPK_EN (12)
+			int enable = 0;
+			if (copy_from_user(&enable, (void *)arg, sizeof(int))) {
+				pr_aud_err("%s: ACOUSTIC_ENABLE_TPA2081 error !!!\n", __func__);
+				rc = -EFAULT;
+			}
+			else {
+				rc = 0;
+				gpio_set_value(Z4_Z3_GPIO_AUD_SPK_EN, enable);
+				pr_aud_info("%s: ACOUSTIC_ENABLE_TPA2081 - %s , gpio=%d\n", __func__, (enable)? "enable" : "disable", Z4_Z3_GPIO_AUD_SPK_EN);
+			}
+		}
+		break;
+#endif 
 	default:
 		rc = -EINVAL;
 	}

@@ -216,7 +216,6 @@ enum {
 	HEADSET_REG_1WIRE_DEINIT,
 	HEADSET_REG_1WIRE_REPORT_TYPE,
 	HEADSET_REG_PMIC_SET_BTN_IRQ_MODE,
-	HEADSET_REG_1WIRE_OPEN,
 	HEADSET_REG_HS_INSERT,
 };
 
@@ -303,7 +302,6 @@ struct hs_notifier_func {
 #if defined (CONFIG_HTC_HEADSET_PMIC_EDGE_BTN)
 	void (*hs_pmic_set_btn_irq_mode)(int);
 #endif
-	int (*hs_1wire_open)(void);
 	int (*hs_insert)(int);
 };
 

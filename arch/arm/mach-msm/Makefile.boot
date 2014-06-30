@@ -53,6 +53,15 @@ initrd_phys-$(CONFIG_MACH_DUMMY)	:= 0x04B00000
 params_phys-$(CONFIG_MACH_DUMMY)	:= 0x03B00100
 initrd_phys-$(CONFIG_MACH_DUMMY)	:= 0x04B00000
 
+   zreladdr-$(CONFIG_MACH_DUMMY)	:= 0x03B08000
+params_phys-$(CONFIG_MACH_DUMMY)	:= 0x03B00100
+initrd_phys-$(CONFIG_MACH_DUMMY)	:= 0x04B00000
+
+   zreladdr-$(CONFIG_MACH_Z4U)          := 0x03B08000
+params_phys-$(CONFIG_MACH_Z4U)          := 0x03B00100
+initrd_phys-$(CONFIG_MACH_Z4U)          := 0x04B00000
+
+
 # MSM7x30
    zreladdr-$(CONFIG_ARCH_MSM7X30)	:= 0x00208000
 params_phys-$(CONFIG_ARCH_MSM7X30)	:= 0x00200100

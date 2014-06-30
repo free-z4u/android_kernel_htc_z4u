@@ -36,7 +36,6 @@
 #endif
 int Block_IN_VFE_RESET = 0;  
 
-
 #define MSM_MAX_CAMERA_SENSORS 5
 
 #ifdef CONFIG_MSM_CAMERA_DEBUG
@@ -67,17 +66,13 @@ static void dump_info(void)
 {
 	Yushan_Debug_Reg_Dump(REG_DUMP_TX_FRAME_COUNT);
 	Yushan_Debug_Reg_Dump(REG_DUMP_RX_FRAME_COUNT);
-#ifdef CONFIG_S5K3H2YX
 	s5k3h2yx_check_frame_count();
-#endif
 
 	msleep(200);		
 
 	Yushan_Debug_Reg_Dump(REG_DUMP_TX_FRAME_COUNT);
 	Yushan_Debug_Reg_Dump(REG_DUMP_RX_FRAME_COUNT);
-#ifdef CONFIG_S5K3H2YX
 	s5k3h2yx_check_frame_count();
-#endif
 
 }
 #endif
@@ -298,8 +293,6 @@ static void msm_cam_stop_hardware(struct msm_cam_v4l2_device *pcam)
 		pmctl->mctl_release = NULL;
 	}
 }
-
-
 static int msm_server_control(struct msm_cam_server_dev *server_dev,
 				struct msm_ctrl_cmd *out)
 {
@@ -374,7 +367,6 @@ wait_event:
 		!list_empty_careful(&queue->list),
 		msecs_to_jiffies(out->timeout_ms));
 	D("Waiting is over for config status\n");
-
 	if (list_empty_careful(&queue->list)) {
 		if (!rc)
 			rc = -ETIMEDOUT;
@@ -387,6 +379,7 @@ wait_event:
 		else if (rc < 0) {
 			if (++server_dev->server_evt_id == 0)
 				server_dev->server_evt_id++;
+
 			pr_err("%s: wait_event error %d\n", __func__, rc);
 
 			

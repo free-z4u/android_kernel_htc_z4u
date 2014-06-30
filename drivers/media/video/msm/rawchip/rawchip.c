@@ -139,13 +139,14 @@ int rawchip_init_yushan(void)
 		rawchip_init_data.y_odd_inc = data.y_odd_inc;
 		rawchip_init_data.binning_rawchip = data.binning_rawchip;
 
+
 		pr_info("[CAM] rawchip init spi_clk=%d ext_clk=%d lane_cnt=%d bitrate=%d %d %d %d %d\n",
 			rawchip_init_data.spi_clk, rawchip_init_data.ext_clk,
 			rawchip_init_data.lane_cnt, rawchip_init_data.bitrate,
 			rawchip_init_data.width, rawchip_init_data.height,
 			rawchip_init_data.blk_pixels, rawchip_init_data.blk_lines);
 		if (rawchipCtrl->rawchip_init) {
-		#if ((defined CONFIG_I2C_CPLD) && ((defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_CP3DUG) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY)))
+		#if ((defined CONFIG_I2C_CPLD) && ((defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_CP3DUG) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_Z4U)))
 			
 			rc = cpld_gpio_write(pdata->rawchip_reset, 0);
 			if(rc < 0){
@@ -172,6 +173,7 @@ int rawchip_init_yushan(void)
 		#endif
 			
 		}
+		rawchip_init_data.use_rawchip = data.use_rawchip;
 		for (retry_times = 0; retry_times < 5; retry_times++) {
 			if ((rc = Yushan_sensor_open_init(rawchip_init_data)) == 0)
 				break;
@@ -652,7 +654,7 @@ int rawchip_power_up(const struct msm_camera_rawchip_info *pdata)
 	}
 	mdelay(1); 
 
-#if ((defined CONFIG_I2C_CPLD) && ((defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_CP3DUG) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY)))
+#if ((defined CONFIG_I2C_CPLD) && ((defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_CP3DUG) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_Z4U)))
 	pr_info("[CAM]%s rawchip reset High", __func__);
 	rc = cpld_gpio_write(pdata->rawchip_reset, 1);
 	if(rc < 0){
@@ -699,7 +701,7 @@ int rawchip_power_down(const struct msm_camera_rawchip_info *pdata)
 	int rc = 0;
 	CDBG("%s\n", __func__);
 
-#if ((defined CONFIG_I2C_CPLD) && ((defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_CP3DUG) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY)))
+#if ((defined CONFIG_I2C_CPLD) && ((defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_CP3DUG) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_DUMMY) || (defined CONFIG_MACH_Z4U)))
 	pr_info("[CAM]%s rawchip reset Low", __func__);
 	rc = cpld_gpio_write(pdata->rawchip_reset, 0);
 	if(rc < 0){
@@ -1059,6 +1061,7 @@ static int rawchip_driver_probe(struct platform_device *pdev)
 		pr_err("%s: failed to register spi driver\n", __func__);
 		return rc;
 	}
+	msm_rawchip_attr_node();
 
 	return rc;
 }

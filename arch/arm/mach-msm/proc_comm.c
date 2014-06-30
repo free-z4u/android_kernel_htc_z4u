@@ -75,6 +75,7 @@ static inline void notify_other_proc_comm(void)
 #define BACKUP_CLK_ENABLE	0xf806c
 #endif
 
+
 static DEFINE_SPINLOCK(proc_comm_lock);
 static int msm_proc_comm_disable;
 
@@ -228,6 +229,17 @@ int msm_proc_comm(unsigned cmd, unsigned *data1, unsigned *data2)
 		return 0;
 	}
 #endif
+
+        
+        if(cmd == PCOM_FINAL_EFS_SYNC)
+        {
+                printk(KERN_INFO "[HTC][EFS] update efs  magic number:%x\n", (data1 ? *data1 : 0));
+                writel_relaxed(data1 ? *data1 : 0, base + APP_EFS_MAGIC);
+                return 0;
+        }
+        
+
+
 	spin_lock_irqsave(&proc_comm_lock, flags);
 
 	if (msm_proc_comm_disable) {

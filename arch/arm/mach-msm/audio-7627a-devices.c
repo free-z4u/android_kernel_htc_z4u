@@ -161,6 +161,7 @@ struct platform_device msm_device_adspdec = {
 	},
 };
 
+#if !defined(CONFIG_MACH_DUMMY)
 #define SNDDEV_CAP_NONE 0x0
 #define SNDDEV_CAP_RX 0x1 
 #define SNDDEV_CAP_TX 0x2 
@@ -218,3 +219,5 @@ struct platform_device msm_device_cad = {
 		.platform_data = &msm_device_cad_endpoints
 	},
 };
+#endif 
+

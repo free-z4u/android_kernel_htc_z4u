@@ -2484,7 +2484,11 @@ static int htc_battery_core_probe(struct platform_device *pdev)
 			break;
 		BATT_LOG("%s: init rpc failed! rc = %ld, retry:%d",
 			       __func__, PTR_ERR(endpoint), i+1);
+#if (defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U))
+		msleep(100);
+#else
 		msleep(10);
+#endif
 	}
 	if (i >= 10) {
 		BATT_ERR("%s: init rpc failed! rc = %ld, retry:%d",
@@ -2664,7 +2668,7 @@ int batt_notifier_call_chain(unsigned long val, void *v)
 }
 
 #if (defined(CONFIG_BATTERY_DS2746) || defined(CONFIG_BATTERY_MAX17050))
-#if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_MAGNIDS) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
+#if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_MAGNIDS) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U))
 int get_batt_id(void)
 {
 	if (smem_batt_info) {

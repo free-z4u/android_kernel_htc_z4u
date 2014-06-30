@@ -676,6 +676,16 @@ config MACH_CP3DUG
 	help
 	  Support for the Cp3dug.
 
+config MACH_Z4U
+        depends on ARCH_MSM8625
+        depends on !MSM_STACKED_MEMORY
+        default n
+        select FB_MSM_MIPI_VIDEO_ONLY
+        bool "Z4U"
+        help
+          Support for the Z4u.
+
+
 config MACH_MSM7X30_SURF
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY

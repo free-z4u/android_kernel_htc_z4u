@@ -23,7 +23,7 @@
 
 #if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) \
     || defined(CONFIG_MACH_CP3DUG) ||  defined(CONFIG_MACH_DUMMY) \
-    || defined(CONFIG_MACH_DUMMY))
+    || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U))
 #else
 #define QCA_ORIGINAL
 #endif
