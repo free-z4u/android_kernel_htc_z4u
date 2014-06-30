@@ -324,7 +324,9 @@ int android_switch_function(unsigned func)
 		return 0;
 	}
 
-	usb_gadget_disconnect(dev->cdev->gadget);
+	if (dev->cdev && dev->cdev->gadget && dev->cdev->gadget->speed != USB_SPEED_UNKNOWN) {
+		usb_gadget_disconnect(dev->cdev->gadget);
+	}
 	usb_remove_config(dev->cdev, &android_config_driver);
 
 	INIT_LIST_HEAD(&dev->enabled_functions);
@@ -457,12 +459,13 @@ int android_switch_function(unsigned func)
 
 	usb_add_config(dev->cdev, &android_config_driver, android_bind_config);
 
-	
-	usb_gadget_request_reset(dev->cdev->gadget);
-
-	mdelay(100);
-	usb_gadget_connect(dev->cdev->gadget);
-	dev->enabled = true;
+	if (dev->cdev && dev->cdev->gadget && dev->cdev->gadget->speed != USB_SPEED_UNKNOWN) {
+		
+		usb_gadget_request_reset(dev->cdev->gadget);
+		mdelay(100);
+		usb_gadget_connect(dev->cdev->gadget);
+		dev->enabled = true;
+	}
 
 	mutex_unlock(&function_bind_sem);
 	return 0;

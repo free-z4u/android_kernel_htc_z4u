@@ -27,6 +27,8 @@ static struct kobject *thermal_kobj;
 static struct kobject *apps_kobj;
 static struct kobject *pnpmgr_kobj;
 static struct kobject *adaptive_policy_kobj;
+static struct kobject *sysinfo_kobj;
+static struct kobject *battery_kobj;
 
 #define define_string_show(_name, str_buf)				\
 static ssize_t _name##_show						\
@@ -72,6 +74,7 @@ static ssize_t _name##_store					\
 static char activity_buf[MAX_BUF];
 static char media_mode_buf[MAX_BUF];
 static char audio_mode_buf[MAX_BUF];
+static int app_timeout_expired;
 
 static void null_cb(const char *attr) {
 	do { } while (0);
@@ -137,6 +140,22 @@ power_attr(thermal_g0);
 define_int_show(thermal_batt, thermal_batt_value);
 define_int_store(thermal_batt, thermal_batt_value, null_cb);
 power_attr(thermal_batt);
+
+static unsigned int info_gpu_max_clk = 400000000;
+void set_gpu_clk(unsigned int value)
+{
+        info_gpu_max_clk = value;
+}
+
+ssize_t
+gpu_max_clk_show(struct kobject *kobj, struct kobj_attribute *attr,
+                char *buf)
+{
+       int ret = 0;
+        ret = sprintf(buf, "%u", info_gpu_max_clk);
+        return ret;
+}
+power_ro_attr(gpu_max_clk);
 
 define_int_show(pause_dt, data_throttling_value);
 define_int_store(pause_dt, data_throttling_value, null_cb);
@@ -245,6 +264,28 @@ cpu_hotplug_store(struct kobject *kobj, struct kobj_attribute *attr,
 power_attr(cpu_hotplug);
 #endif
 
+static int charging_enabled_value;
+
+define_int_show(charging_enabled, charging_enabled_value);
+ssize_t
+charging_enabled_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	return 0;
+}
+power_attr(charging_enabled);
+
+int pnpmgr_battery_charging_enabled(int charging_enabled)
+{
+	pr_debug("%s: result = %d\n", __func__, charging_enabled);
+	if (charging_enabled_value != charging_enabled) {
+		charging_enabled_value = charging_enabled;
+		sysfs_notify(battery_kobj, NULL, "charging_enabled");
+	}
+
+	return 0;
+}
+
 static struct attribute *cpufreq_g[] = {
 #ifdef CONFIG_PERFLOCK
 	&perflock_scaling_max_attr.attr,
@@ -290,10 +331,51 @@ static struct attribute *thermal_g[] = {
 	NULL,
 };
 
+static struct timer_list app_timer;
+static ssize_t
+app_timeout_show(struct kobject *kobj, struct kobj_attribute *attr,
+		char *buf)
+{
+	return sprintf(buf, "%d", app_timeout_expired);
+}
+static ssize_t
+app_timeout_store(struct kobject *kobj, struct kobj_attribute *attr,
+		const char *buf, size_t n)
+{
+	int val;
+	if (sscanf(buf, "%d", &val) > 0) {
+		if (val == 0) {
+			del_timer_sync(&app_timer);
+			app_timeout_expired = 0;
+			sysfs_notify(apps_kobj, NULL, "app_timeout");
+		}
+		else {
+			del_timer_sync(&app_timer);
+			app_timer.expires = jiffies + HZ * val;
+			app_timer.data = 0;
+			add_timer(&app_timer);
+		}
+		return n;
+	}
+	return -EINVAL;
+}
+power_attr(app_timeout);
+
 static struct attribute *apps_g[] = {
 	&activity_trigger_attr.attr,
 	&media_mode_attr.attr,
 	&audio_mode_attr.attr,
+	&app_timeout_attr.attr,
+	NULL,
+};
+
+static struct attribute *sysinfo_g[] = {
+       &gpu_max_clk_attr.attr,
+       NULL,
+};
+
+static struct attribute *battery_g[] = {
+	&charging_enabled_attr.attr,
 	NULL,
 };
 
@@ -311,6 +393,14 @@ static struct attribute_group thermal_attr_group = {
 
 static struct attribute_group apps_attr_group = {
 	.attrs = apps_g,
+};
+
+static struct attribute_group sysinfo_attr_group = {
+       .attrs = sysinfo_g,
+};
+
+static struct attribute_group battery_attr_group = {
+	.attrs = battery_g,
 };
 
 #ifdef CONFIG_HOTPLUG_CPU
@@ -382,9 +472,18 @@ static struct attribute_group adaptive_attr_group = {
 	.attrs = adaptive_attr,
 };
 
+static void app_timeout_handler(unsigned long data)
+{
+	app_timeout_expired = 1;
+	sysfs_notify(apps_kobj, NULL, "app_timeout");
+}
+
 static int __init pnpmgr_init(void)
 {
 	int ret;
+
+	init_timer(&app_timer);
+	app_timer.function = app_timeout_handler;
 
 	pnpmgr_kobj = kobject_create_and_add("pnpmgr", power_kobj);
 
@@ -397,9 +496,11 @@ static int __init pnpmgr_init(void)
 	hotplug_kobj = kobject_create_and_add("hotplug", pnpmgr_kobj);
 	thermal_kobj = kobject_create_and_add("thermal", pnpmgr_kobj);
 	apps_kobj = kobject_create_and_add("apps", pnpmgr_kobj);
+	sysinfo_kobj = kobject_create_and_add("sysinfo", pnpmgr_kobj);
+	battery_kobj = kobject_create_and_add("battery", pnpmgr_kobj);
 	adaptive_policy_kobj = kobject_create_and_add("adaptive_policy", power_kobj);
 
-	if (!cpufreq_kobj || !hotplug_kobj || !thermal_kobj || !apps_kobj || !adaptive_policy_kobj) {
+	if (!cpufreq_kobj || !hotplug_kobj || !thermal_kobj || !apps_kobj || !sysinfo_kobj || !battery_kobj || !adaptive_policy_kobj) {
 		pr_err("%s: Can not allocate enough memory.\n", __func__);
 		return -ENOMEM;
 	}
@@ -408,6 +509,8 @@ static int __init pnpmgr_init(void)
 	ret |= sysfs_create_group(hotplug_kobj, &hotplug_attr_group);
 	ret |= sysfs_create_group(thermal_kobj, &thermal_attr_group);
 	ret |= sysfs_create_group(apps_kobj, &apps_attr_group);
+	ret |= sysfs_create_group(sysinfo_kobj, &sysinfo_attr_group);
+	ret |= sysfs_create_group(battery_kobj, &battery_attr_group);
 	ret |= sysfs_create_group(adaptive_policy_kobj, &adaptive_attr_group);
 
 	if (ret) {
@@ -428,6 +531,8 @@ static void  __exit pnpmgr_exit(void)
 	sysfs_remove_group(hotplug_kobj, &hotplug_attr_group);
 	sysfs_remove_group(thermal_kobj, &thermal_attr_group);
 	sysfs_remove_group(apps_kobj, &apps_attr_group);
+	sysfs_remove_group(sysinfo_kobj, &sysinfo_attr_group);
+	sysfs_remove_group(battery_kobj, &battery_attr_group);
 	sysfs_remove_group(adaptive_policy_kobj, &adaptive_attr_group);
 #ifdef CONFIG_HOTPLUG_CPU
 	unregister_hotcpu_notifier(&cpu_hotplug_notifier);

@@ -14,7 +14,6 @@
 #include <linux/delay.h>
 
 #define MMC_CMD_RETRIES        3
-#define MMC_CMD_RETRIES_MAX	6
 
 struct mmc_bus_ops {
 	int (*awake)(struct mmc_host *);

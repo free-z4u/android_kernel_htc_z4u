@@ -52,7 +52,7 @@ void msm7k_fiq_handler(void)
 	unwind_backtrace(&ctx_regs, current);
 
 	if (fiq_counter == 1 && (cpu_is_msm8625() || cpu_is_msm8625q())) {
-		cpumask_copy(&fiq_cpu_mask, cpu_online_mask);
+		cpumask_copy(&fiq_cpu_mask, cpu_possible_mask);
 		cpu_clear(this_cpu, fiq_cpu_mask);
 		gic_raise_secure_softirq(&fiq_cpu_mask, GIC_SECURE_SOFT_IRQ);
 	}

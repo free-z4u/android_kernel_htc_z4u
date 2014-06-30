@@ -552,7 +552,11 @@ static int __init smd_tty_init(void)
 			int legacy_ds = 0;
 
 			legacy_ds |= cpu_is_msm7x01() || cpu_is_msm7x25();
-			legacy_ds |= cpu_is_msm7x27() || cpu_is_msm7x30() || cpu_is_msm8625() ||cpu_is_msm8625q();
+#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_DUMMY)
+			legacy_ds |= cpu_is_msm7x27() || cpu_is_msm7x30() || cpu_is_msm8625() || cpu_is_msm8625q();
+#else
+			legacy_ds |= cpu_is_msm7x27() || cpu_is_msm7x30() || cpu_is_msm8625();
+#endif
 			legacy_ds |= cpu_is_qsd8x50() || cpu_is_msm8x55();
 			legacy_ds |= cpu_is_msm8x60() &&
 					(socinfo_get_platform_subtype() == 0x0);

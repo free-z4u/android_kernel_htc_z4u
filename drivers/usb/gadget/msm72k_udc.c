@@ -50,6 +50,9 @@ FIXME
 #include <linux/uaccess.h>
 #include <linux/wakelock.h>
 #include <linux/usb/htc_info.h>
+#include <linux/fs.h>
+#include <linux/string.h>
+#include <asm/uaccess.h>
 
 static const char driver_name[] = "msm72k_udc";
 
@@ -327,7 +330,41 @@ static int usb_get_max_power(struct usb_info *ui)
 
 static void ulpi_init(struct usb_info *ui)
 {
+	struct file *fp;
+	mm_segment_t fs;
+	unsigned long addr, val;
+	const char *delim = ",";
+	const char *nextline = "\n";
+	const char *colon = ":";
+	char *buf, *stmp, *valtmp, *result;
+	int ret;
+
 	int *seq = ui->pdata->phy_init_seq;
+
+	fp = filp_open("/data/usb_phy.txt", O_RDONLY,0);
+
+	if(!IS_ERR(fp)){
+		buf = kmalloc(256, GFP_KERNEL);
+		fs = get_fs();
+		set_fs(get_ds());
+		fp->f_op->read(fp,buf,255,&fp->f_pos);
+		set_fs(fs);
+		
+		for (stmp = strsep(&buf, nextline) ; stmp != NULL ; stmp = strsep(&buf, nextline)) {
+			for (valtmp = strsep(&stmp, delim) ; stmp != NULL ; valtmp = strsep(&stmp, delim)){
+				result = strsep(&valtmp, colon);
+				ret = strict_strtoul(result, 16, &addr);
+				result = strsep(&valtmp, colon);
+				ret = strict_strtoul(result, 16, &val);
+				USBH_INFO("ulpi: file write  0x%02x to 0x%02x", (int)val, (int)addr);
+				otg_io_write(ui->xceiv, (int)val, (int)addr);
+			}
+		}
+		kfree(buf);
+		filp_close(fp, NULL);
+		return;
+	}
+
 
 	if (!seq)
 		return;

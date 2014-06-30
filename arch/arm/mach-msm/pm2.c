@@ -528,9 +528,7 @@ static void msm_pm_configure_top_csr(void)
 
 	
 	msm_spm_reinit();
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x12;
-#endif
 	for_each_possible_cpu(cpu) {
 		
 		if (!cpu)
@@ -564,9 +562,7 @@ static void msm_pm_configure_top_csr(void)
 		__raw_writel(0x0, base_ptr);
 		mb();
 	}
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x13;
-#endif
 }
 
 static void msm_pm_config_hw_after_power_up(void)
@@ -806,13 +802,11 @@ static int msm_pm_power_collapse
 	int val;
 	int modem_early_exit = 0;
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x1;
 	
 	*(uint32_t *)(virt_start_ptr + 0x34) = 0x1;
 
 	*(uint32_t *)(virt_start_ptr + 0x38) = (1 << from_idle);
-#endif
 	MSM_PM_DPRINTK(MSM_PM_DEBUG_SUSPEND|MSM_PM_DEBUG_POWER_COLLAPSE,
 		KERN_INFO, "%s(): idle %d, delay %u, limit %u\n", __func__,
 		(int)from_idle, sleep_delay, sleep_limit);
@@ -849,9 +843,7 @@ static int msm_pm_power_collapse
 
 	msm_sirc_enter_sleep();
 	msm_gpio_enter_sleep(from_idle);
-#if defined(CONFIG_MACH_DUMMY) 	
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x2;
-#endif
 	msm_pm_smem_data->sleep_time = sleep_delay;
 	msm_pm_smem_data->resources_used = sleep_limit;
 
@@ -892,9 +884,7 @@ static int msm_pm_power_collapse
 			__func__);
 		goto power_collapse_early_exit;
 	}
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x3;
-#endif
 	
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): PWRC RSA");
@@ -930,9 +920,7 @@ static int msm_pm_power_collapse
 
 	msm_pm_boot_config_before_pc(smp_processor_id(),
 			virt_to_phys(msm_pm_collapse_exit));
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x4;
-#endif
 
 #ifdef CONFIG_VFP
 	if (from_idle)
@@ -946,18 +934,14 @@ static int msm_pm_power_collapse
 		apps_power_collapse = 1;
 #endif
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x5;
-#endif
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] suspend end\n");
 	msm_pm_irq_extns->read_active_irq();
 
 	collapsed = msm_pm_collapse();
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0xE;
-#endif
 
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
 		int cpu;
@@ -987,9 +971,7 @@ static int msm_pm_power_collapse
 				modem_early_exit = 1;
 		}
 	}
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0xF;
-#endif
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] resume start\n");
 #ifdef CONFIG_CACHE_L2X0
@@ -999,9 +981,7 @@ static int msm_pm_power_collapse
 		apps_power_collapse = 0;
 #endif
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x10;
-#endif
 
 	msm_pm_boot_config_after_pc(smp_processor_id());
 
@@ -1022,9 +1002,7 @@ static int msm_pm_power_collapse
                mb();
         }
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x11;
-#endif
 
 	MSM_PM_DPRINTK(MSM_PM_DEBUG_SUSPEND | MSM_PM_DEBUG_POWER_COLLAPSE,
 		KERN_INFO,
@@ -1044,9 +1022,7 @@ static int msm_pm_power_collapse
 
 	msm_pm_config_hw_after_power_up();
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x14;
-#endif
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): post power up");
 
@@ -1077,9 +1053,7 @@ static int msm_pm_power_collapse
 	
 	if (collapsed && !modem_early_exit) {
 		
-#if defined(CONFIG_MACH_DUMMY) 
 		*(uint32_t *)(virt_start_ptr + 0x30) = 0x15;
-#endif
 	} else {
 		goto power_collapse_early_exit;
 	}
@@ -1117,16 +1091,12 @@ static int msm_pm_power_collapse
 		goto power_collapse_restore_gpio_bail;
 	}
 
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x16;
-#endif
 	
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): WFPI RUN");
 	MSM_PM_DEBUG_PRINT_SLEEP_INFO(from_idle);
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x17;
-#endif
 	msm_pm_irq_extns->exit_sleep2(msm_pm_smem_data->irq_mask,
 		msm_pm_smem_data->wakeup_reason,
 		msm_pm_smem_data->pending_irqs);
@@ -1135,9 +1105,7 @@ static int msm_pm_power_collapse
 		msm_pm_smem_data->pending_irqs);
 	msm_gpio_exit_sleep();
 	msm_sirc_exit_sleep();
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x18;
-#endif
 	smsm_change_state(SMSM_APPS_DEM,
 		DEM_SLAVE_SMSM_WFPI, DEM_SLAVE_SMSM_RUN);
 
@@ -1145,9 +1113,7 @@ static int msm_pm_power_collapse
 	MSM_PM_DEBUG_PRINT_SLEEP_INFO(from_idle);
 
 	smd_sleep_exit();
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x19;
-#endif
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
 		ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_CLOCK_GATING,
 									false);
@@ -1156,16 +1122,12 @@ static int msm_pm_power_collapse
 
 	if (msm_cpr_ops)
 		msm_cpr_ops->cpr_resume();
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x20;
 	*(uint32_t *)(virt_start_ptr + 0x34) = 0x0;
-#endif
 	return 0;
 
 power_collapse_early_exit:
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x21;
-#endif
 	
 
 	smsm_change_state(SMSM_APPS_DEM,
@@ -1200,9 +1162,7 @@ power_collapse_early_exit:
 	ret = -EAGAIN;
 
 power_collapse_restore_gpio_bail:
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x22;
-#endif
 	msm_gpio_exit_sleep();
 	msm_sirc_exit_sleep();
 
@@ -1213,17 +1173,13 @@ power_collapse_restore_gpio_bail:
 		DEM_SLAVE_SMSM_RUN);
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): RUN");
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x23;
-#endif
 	if (collapsed)
 		smd_sleep_exit();
 
 	if (msm_cpr_ops)
 		msm_cpr_ops->cpr_resume();
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x24;
-#endif
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
 		ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_CLOCK_GATING,
 									false);
@@ -1231,10 +1187,8 @@ power_collapse_restore_gpio_bail:
 	}
 
 power_collapse_bail:
-#if defined(CONFIG_MACH_DUMMY) 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x25;
 	*(uint32_t *)(virt_start_ptr + 0x34) = 0x0;
-#endif
 	return ret;
 }
 
@@ -1249,7 +1203,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		KERN_INFO, "%s()\n", __func__);
 
 	cpu = smp_processor_id();
-#if defined(CONFIG_MACH_DUMMY) 
 	switch (cpu) {
 	case 0:
 		
@@ -1285,7 +1238,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 			*(uint32_t *)(virt_start_ptr + 0x2C) = 0x2;
 		break;
 	}
-#endif
 	ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_POWER_COLLAPSE, false);
 	WARN_ON(ret);
 
@@ -1304,7 +1256,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		l2cc_suspend();
 #endif
 
-#if defined(CONFIG_MACH_DUMMY) 
 	switch (cpu) {
 	case 0:
 		*(uint32_t *)(virt_start_ptr + 0x10) = 0x2;
@@ -1319,12 +1270,10 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		*(uint32_t *)(virt_start_ptr + 0x1C) = 0x2;
 		break;
 	}
-#endif
 
 	msm_pm_irq_extns->read_active_irq();
 	collapsed = msm_pm_collapse();
 
-#if defined(CONFIG_MACH_DUMMY) 
 	switch (cpu) {
 	case 0:
 		*(uint32_t *)(virt_start_ptr + 0x10) = 0xB;
@@ -1339,7 +1288,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		*(uint32_t *)(virt_start_ptr + 0x1C) = 0xB;
 		break;
 	}
-#endif
 
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] resume start\n");
@@ -1365,7 +1313,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 	ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_CLOCK_GATING, false);
 	WARN_ON(ret);
 
-#if defined(CONFIG_MACH_DUMMY) 
 	switch (cpu) {
 	case 0:
 		*(uint32_t *)(virt_start_ptr + 0x10) = 0xC;
@@ -1384,7 +1331,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		*(uint32_t *)(virt_start_ptr + 0x2C) = 0x0;
 		break;
 	}
-#endif
 	return !collapsed;
 }
 

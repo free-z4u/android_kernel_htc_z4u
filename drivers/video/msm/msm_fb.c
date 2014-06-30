@@ -1339,8 +1339,10 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 					if (panel_type == PANEL_ID_PROTOU_LG
 						|| panel_type == PANEL_ID_PROTODCG_LG
 						|| panel_type == PANEL_ID_URANUS_LG_NOVATEK
-						|| panel_type == PANEL_ID_URANUS_JDI_NOVATEK) {
-						MIPI_OUTP(MIPI_DSI_BASE + 0xA8, 0x10000000);
+						|| panel_type == PANEL_ID_URANUS_JDI_NOVATEK
+						|| panel_type == PANEL_ID_LUPUS_JDI_NT
+						|| panel_type == PANEL_ID_LUPUS_AUO_NT
+						|| panel_type == PANEL_ID_LUPUS_AUO_NT_C2) {
 						hr_msleep(10);
 						pdata->on(mfd->pdev);
 						hr_msleep(10);

@@ -55,6 +55,7 @@
 #define POWER_COLLAPSE_KHZ 19200
 
 #define MAX_WAIT_FOR_IRQ_KHZ 128000
+#define SHUTDOWN_FREQ_KHZ 700800
 
 struct regulator *ext_vreg_handle;
 
@@ -68,6 +69,12 @@ enum {
 	ACPU_PLL_4,
 	ACPU_PLL_TCXO,
 	ACPU_PLL_END,
+};
+
+enum {
+	STATE_NORMAL		= 0,
+	STATE_SHUTDOWN_PREPARE,
+	STATE_SHUTDOWN_DONE,
 };
 
 struct acpu_clk_src {
@@ -103,6 +110,7 @@ struct clock_state {
 	struct clk			*ebi1_clk;
 	struct regulator		*vreg_cpu;
 	bool				probe_success;
+	int				restart_config_done;
 };
 
 struct clkctl_acpu_speed {
@@ -301,6 +309,16 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 	if (reason == SETRATE_CPUFREQ)
 		mutex_lock(&drv_state.lock);
 
+	if ((drv_state.restart_config_done == STATE_SHUTDOWN_DONE) ||
+			(drv_state.restart_config_done ==
+			 STATE_SHUTDOWN_PREPARE && rate != SHUTDOWN_FREQ_KHZ)) {
+		pr_err("Frequency set to %d for shutdown, cannot reconfigure to %lu\n",
+				SHUTDOWN_FREQ_KHZ, rate);
+		rc = -EINVAL;
+		goto out;
+	}
+
+
 	strt_s = cur_s = drv_state.current_speed;
 
 	WARN_ONCE(cur_s == NULL, "%s: not initialized\n", __func__);
@@ -479,12 +497,29 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 		pr_debug("Decreased Vdd to %duV\n", tgt_s->vdd);
 	}
 
+	if (drv_state.restart_config_done == STATE_SHUTDOWN_PREPARE)
+		drv_state.restart_config_done = STATE_SHUTDOWN_DONE;
+
 	pr_debug("ACPU speed change complete\n");
 out:
 	if (reason == SETRATE_CPUFREQ)
 		mutex_unlock(&drv_state.lock);
 
 	return rc;
+}
+
+static void acpuclk_8625q_restart_config(struct platform_device *pdev)
+{
+	int rc;
+
+	drv_state.restart_config_done = STATE_SHUTDOWN_PREPARE;
+	rc = acpuclk_8625q_set_rate(0, SHUTDOWN_FREQ_KHZ, SETRATE_CPUFREQ);
+	if (rc) {
+		pr_err("Unable to set frequency to %dKhz\n", SHUTDOWN_FREQ_KHZ);
+		return;
+	}
+	pr_info("%s: Current ACPU frequency %ld\n", __func__,
+			acpuclk_get_rate(0));
 }
 
 static int __devinit acpuclk_hw_init(void)
@@ -846,12 +881,14 @@ static int __devinit acpuclk_8625q_probe(struct platform_device *pdev)
 	}
 
 	drv_state.probe_success = true;
+	drv_state.restart_config_done = STATE_NORMAL;
 
 	return 0;
 }
 
 static struct platform_driver acpuclk_8625q_driver = {
 	.probe = acpuclk_8625q_probe,
+	.shutdown = acpuclk_8625q_restart_config,
 	.driver = {
 		.name = "acpuclock-8625q",
 		.owner = THIS_MODULE,

@@ -319,6 +319,8 @@ struct audio_mvs_info_type {
 
 	struct wake_lock suspend_lock;
 	struct pm_qos_request pm_qos_req;
+
+	struct completion complete;
 };
 
 static struct audio_mvs_info_type audio_mvs_info;
@@ -1214,8 +1216,8 @@ static int audio_mvs_thread(void *data)
 		kfree(rpc_hdr);
 		rpc_hdr = NULL;
 	}
-
 	MM_DBG("MVS thread stopped\n");
+	complete_and_exit(&audio->complete, 0);
 
 	return 0;
 }
@@ -1339,6 +1341,7 @@ static int audio_mvs_release(struct inode *inode, struct file *file)
 		audio_mvs_stop(audio);
 	audio->state = AUDIO_MVS_CLOSED;
 	msm_rpc_read_wakeup(audio->rpc_endpt);
+	wait_for_completion(&audio->complete);
 	msm_rpc_close(audio->rpc_endpt);
 	audio->task = NULL;
 	audio_mvs_free_buf(audio);
@@ -1438,8 +1441,8 @@ static ssize_t audio_mvs_write(struct file *file,
 		if (audio->state == AUDIO_MVS_STARTED) {
 			if (count <= sizeof(struct msm_audio_mvs_frame)) {
 				if (!list_empty(&audio->free_in_queue)) {
-				buf_node =
-					list_first_entry(&audio->free_in_queue,
+					buf_node = list_first_entry(
+						&audio->free_in_queue,
 						struct audio_mvs_buf_node,
 						list);
 					list_del(&buf_node->list);
@@ -1694,6 +1697,8 @@ static int __init audio_mvs_init(void)
 	INIT_LIST_HEAD(&audio_mvs_info.free_in_queue);
 	INIT_LIST_HEAD(&audio_mvs_info.out_queue);
 	INIT_LIST_HEAD(&audio_mvs_info.free_out_queue);
+
+	init_completion(&audio_mvs_info.complete);
 
 	wake_lock_init(&audio_mvs_info.suspend_lock,
 		       WAKE_LOCK_SUSPEND,

@@ -16,4 +16,6 @@ struct pn544_i2c_platform_data {
 	int (*get_ven_gpio)(void); 
 	int (*set_firm_gpio)(int); 
 	int (*get_firm_gpio)(void); 
+	void (*gpio_deinit) (void);
+	int (*check_nfc_exist)(void);
 };

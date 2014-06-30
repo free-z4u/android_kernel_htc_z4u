@@ -53,6 +53,13 @@ struct gserial {
 	void (*notify_modem)(void *gser, u8 portno, int ctrl_bits);
 };
 
+struct gsmd_Info{
+	unsigned count;
+	struct work_struct gsmd_setup_wq;
+
+}the_gsmd_Info;
+
+
 struct usb_request *gs_alloc_req(struct usb_ep *ep, unsigned len, gfp_t flags);
 void gs_free_req(struct usb_ep *, struct usb_request *req);
 

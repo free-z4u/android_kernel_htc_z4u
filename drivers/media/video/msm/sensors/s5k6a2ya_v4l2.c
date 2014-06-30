@@ -109,11 +109,48 @@ static struct msm_camera_i2c_reg_conf s5k6a2ya_snap_settings[] = {
 	{0x0223, 0x6F},
 };
 static struct msm_camera_i2c_reg_conf s5k6a2ya_reserved_settings[] = {
+	
+	{0x0340, 0x06}, 
+	{0x0341, 0x46}, 
+	{0x0342, 0x06}, 
+	{0x0343, 0x7E}, 
+
+	
+	{0x0344, 0x00}, 
+	{0x0345, 0x00}, 
+	{0x0346, 0x00}, 
+	{0x0347, 0x00}, 
+	{0x0348, 0x05}, 
+	{0x0349, 0xBF}, 
+	{0x034A, 0x04}, 
+	{0x034B, 0x4F}, 
+
+	
+	{0x034C, 0x05}, 
+	{0x034D, 0xC0}, 
+	{0x034E, 0x04}, 
+	{0x034F, 0x50}, 
+
+	
+	{0x0381, 0x01}, 
+	{0x0383, 0x01}, 
+	{0x0385, 0x01}, 
+	{0x0387, 0x01}, 
+
+	
+	{0x0204, 0x00}, 
+	{0x0205, 0x20}, 
+
+	
+	{0x0220, 0x01}, 
+	{0x0221, 0xF4},
+	{0x0222, 0x02}, 
+	{0x0223, 0x6F},
 };
 static struct msm_camera_i2c_reg_conf s5k6a2ya_video_24fps_settings[] = {
 	
 	{0x0340, 0x06}, 
-	{0x0341, 0x12}, 
+	{0x0341, 0x46}, 
 	{0x0342, 0x06}, 
 	{0x0343, 0x7E}, 
 
@@ -219,6 +256,10 @@ static struct msm_camera_i2c_conf_array s5k6a2ya_confs[] = {
 	ARRAY_SIZE(s5k6a2ya_snap_settings), 0, MSM_CAMERA_I2C_BYTE_DATA},
 	{&s5k6a2ya_prev_settings[0],
 	ARRAY_SIZE(s5k6a2ya_prev_settings), 0, MSM_CAMERA_I2C_BYTE_DATA},
+	{&s5k6a2ya_reserved_settings[0],
+	ARRAY_SIZE(s5k6a2ya_reserved_settings), 0, MSM_CAMERA_I2C_BYTE_DATA},
+	{&s5k6a2ya_reserved_settings[0],
+	ARRAY_SIZE(s5k6a2ya_reserved_settings), 0, MSM_CAMERA_I2C_BYTE_DATA},
 	{&s5k6a2ya_reserved_settings[0],
 	ARRAY_SIZE(s5k6a2ya_reserved_settings), 0, MSM_CAMERA_I2C_BYTE_DATA},
 	{&s5k6a2ya_reserved_settings[0],
@@ -391,7 +432,45 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
-		.frame_length_lines = 0x0612,
+		.frame_length_lines = 0x0646,
+		.vt_pixel_clk = 62000000,
+		.op_pixel_clk = 62000000,
+		.binning_factor = 1,
+		
+		.x_addr_start = 0,
+		.y_addr_start = 0,
+		.x_addr_end = 0x5BF,
+		.y_addr_end = 0x44F,
+		.x_even_inc = 1,
+		.x_odd_inc = 1,
+		.y_even_inc = 1,
+		.y_odd_inc = 1,
+		.binning_rawchip = 0x11,
+	},
+	{	
+		.x_output = 0x5C0,
+		.y_output = 0x450,
+		.line_length_pclk = 0x067E,
+		.frame_length_lines = 0x0646,
+		.vt_pixel_clk = 62000000,
+		.op_pixel_clk = 62000000,
+		.binning_factor = 1,
+		
+		.x_addr_start = 0,
+		.y_addr_start = 0,
+		.x_addr_end = 0x5BF,
+		.y_addr_end = 0x44F,
+		.x_even_inc = 1,
+		.x_odd_inc = 1,
+		.y_even_inc = 1,
+		.y_odd_inc = 1,
+		.binning_rawchip = 0x11,
+	},
+	{	
+		.x_output = 0x5C0,
+		.y_output = 0x450,
+		.line_length_pclk = 0x067E,
+		.frame_length_lines = 0x0646,
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,

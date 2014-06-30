@@ -191,7 +191,7 @@ int max17050_i2c_init(void)
 	max17050_i2c = kzalloc(sizeof(*max17050_i2c), GFP_KERNEL);
 
 	if (i2c2 == NULL || max17050_i2c == NULL){
-		printk("[%s] fail (0x%x, 0x%x).\n",
+		printk(KERN_ERR "[%s] fail (0x%x, 0x%x).\n",
 			__func__,
 			(int) i2c2,
 			(int) max17050_i2c);
@@ -1349,7 +1349,7 @@ int max17050_get_batt_level(struct battery_type *battery)
 
        rc = max17050_i2c_read(MAX17050_FG_RepSOC, (u8 *)&battery->capacity_raw_hex, 2);
        if (unlikely(rc < 0))
-               printk("%s: Failed to read MAX17050_FG_RepSOC: 0x%x", __func__, rc);
+               printk(KERN_ERR "%s: Failed to read MAX17050_FG_RepSOC: 0x%x", __func__, rc);
 
        battery->capacity_raw = level = (battery->capacity_raw_hex * 10) / 256; 
 

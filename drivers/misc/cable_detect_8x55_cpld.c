@@ -86,6 +86,7 @@ struct cable_detect_info {
 	void (*usb_dpdn_switch)(int);
 	struct usb_id_mpp_config_data *mpp_data;
 	void (*config_usb_id_gpios)(bool enable);
+	void (*config_batid_usbid_sel_gpios)(bool enable);
 	void (*mhl_1v2_power)(bool enable);
 	int (*is_wireless_charger)(void);
 	u8 cable_redetect;
@@ -292,7 +293,13 @@ static int cable_detect_get_type(struct cable_detect_info *pInfo)
 		stable_count = 0;
 
 	if (value == 0 || pInfo->cable_redetect) {
+
+
+		if (pInfo->config_batid_usbid_sel_gpios)
+			pInfo->config_batid_usbid_sel_gpios(1);
 		adc_value = cable_detect_get_adc();
+		if (pInfo->config_batid_usbid_sel_gpios)
+			pInfo->config_batid_usbid_sel_gpios(0);
 
 		CABLE_INFO("accessory adc = %lld\n", adc_value);
 
@@ -585,8 +592,12 @@ static int mhl_detect(struct cable_detect_info *pInfo)
 		return type;
 	}
 
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(1);
 
 	adc_value = cable_detect_get_adc();
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(0);
 
 	CABLE_INFO("[2nd] accessory adc = %lld\n", adc_value);
 
@@ -612,10 +623,15 @@ static int mhl_detect(struct cable_detect_info *pInfo)
 
 static int get_usb_id_adc(char *buffer, struct kernel_param *kp)
 {
+	struct cable_detect_info *pInfo = &the_cable_info;
 	unsigned length = 0;
 	int adc;
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(1);
 
 	adc = cable_detect_get_adc();
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(0);
 
 	length += sprintf(buffer, "%d\n", adc);
 
@@ -896,9 +912,14 @@ static DEVICE_ATTR(vbus, S_IRUGO | S_IWUSR, vbus_status_show, NULL);
 static ssize_t adc_status_show(struct device *dev,
 	struct device_attribute *attr, char *buf)
 {
+	struct cable_detect_info *pInfo = &the_cable_info;
 	int adc;
-
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(1);
 	adc = cable_detect_get_adc();
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(0);
+
 	CABLE_INFO("%s: 8x25 ADC = %d\n", __func__, adc);
 	return sprintf(buf, "%d\n", adc);
 }
@@ -997,6 +1018,7 @@ static int cable_detect_probe(struct platform_device *pdev)
 		pInfo->mhl_reset_gpio = pdata->mhl_reset_gpio;
 		pInfo->mpp_data = &pdata->mpp_data;
 		pInfo->config_usb_id_gpios = pdata->config_usb_id_gpios;
+		pInfo->config_batid_usbid_sel_gpios = pdata->config_batid_usbid_sel_gpios;
 		pInfo->mhl_version_ctrl_flag = pdata->mhl_version_ctrl_flag;
 		pInfo->mhl_1v2_power = pdata->mhl_1v2_power;
 		pInfo->get_adc_cb = pdata->get_adc_cb;
@@ -1074,8 +1096,9 @@ static int cable_detect_probe(struct platform_device *pdev)
 			CABLE_ERR("failed to register usb_vbus\n");
 		}
 	}
-
 	CABLE_INFO("8x25 USB_ID ADC = %lld\n", cable_detect_get_adc());
+	if (pInfo->config_batid_usbid_sel_gpios)
+		pInfo->config_batid_usbid_sel_gpios(0);
 
 	usb_id_detect_init(pInfo);
 #endif

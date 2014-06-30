@@ -75,3 +75,4 @@ obj-$(CONFIG_CABLE_DETECT_8X55) += cable_detect_8x55.o
 obj-$(CONFIG_CABLE_DETECT_8X55_CPLD) += cable_detect_8x55_cpld.o
 obj-$(CONFIG_MOT_FEAT_TS27010MUX_UART)	+= ts27010mux_uart/
 obj-y += state_helper.o
+obj-y += time_helper.o

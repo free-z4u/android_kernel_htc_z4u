@@ -146,6 +146,7 @@ struct msm_hsusb_platform_data {
 	
 	void (*usb_uart_switch)(int);
 	void (*config_usb_id_gpios)(bool enable);
+	void (*config_batid_usbid_sel_gpios)(bool enable);
 	void (*usb_hub_enable)(bool);
 	void (*serial_debug_gpios)(int);
 	int (*china_ac_detect)(void);

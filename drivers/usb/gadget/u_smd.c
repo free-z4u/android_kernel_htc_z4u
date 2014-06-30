@@ -921,31 +921,22 @@ static void gsmd_debugfs_init(void)
 static void gsmd_debugfs_init(void) {}
 #endif
 
-int gsmd_setup(struct usb_gadget *g, unsigned count)
+void gsmd_setup_work(struct work_struct *data)
 {
+	struct gsmd_Info *gsmdInfo = container_of(data,
+		struct gsmd_Info, gsmd_setup_wq);
+
 	struct usb_cdc_line_coding	coding;
+	unsigned count;
 	int ret;
 	int i;
-
-	pr_debug("%s: g:%p count: %d\n", __func__, g, count);
-
-	if (!count || count > SMD_N_PORTS) {
-		pr_err("%s: Invalid num of ports count:%d gadget:%p\n",
-				__func__, count, g);
-		return -EINVAL;
-	}
 
 	coding.dwDTERate = cpu_to_le32(9600);
 	coding.bCharFormat = 8;
 	coding.bParityType = USB_CDC_NO_PARITY;
 	coding.bDataBits = USB_CDC_1_STOP_BITS;
 
-	gsmd_wq = create_singlethread_workqueue("k_gsmd");
-	if (!gsmd_wq) {
-		pr_err("%s: Unable to create workqueue gsmd_wq\n",
-				__func__);
-		return -ENOMEM;
-	}
+	count = gsmdInfo->count;
 
 	for (i = 0; i < count; i++) {
 		mutex_init(&smd_ports[i].lock);
@@ -957,17 +948,33 @@ int gsmd_setup(struct usb_gadget *g, unsigned count)
 			goto free_smd_ports;
 		}
 	}
-
-	gsmd_debugfs_init();
-
-	return 0;
+	return;
 free_smd_ports:
 	for (i = 0; i < n_smd_ports; i++)
 		gsmd_port_free(i);
+}
 
-	destroy_workqueue(gsmd_wq);
+int gsmd_setup(struct usb_gadget *g, unsigned count)
+{
+	struct gsmd_Info *gsmdInfo =&the_gsmd_Info;
 
-	return ret;
+	pr_debug("%s: g:%p count: %d\n", __func__, g, count);
+	gsmdInfo->count = count;
+	if (!count || count > SMD_N_PORTS) {
+		pr_err("%s: Invalid num of ports count:%d gadget:%p\n",
+				__func__, count, g);
+		return -EINVAL;
+	}
+	INIT_WORK(&gsmdInfo->gsmd_setup_wq, gsmd_setup_work);
+	gsmd_wq = create_singlethread_workqueue("k_gsmd");
+	if (!gsmd_wq) {
+		pr_err("%s: Unable to create workqueue gsmd_wq\n",
+				__func__);
+		return -ENOMEM;
+	}
+	queue_work(gsmd_wq, &gsmdInfo->gsmd_setup_wq);
+	gsmd_debugfs_init();
+	return 0;
 }
 
 void gsmd_cleanup(struct usb_gadget *g, unsigned count)

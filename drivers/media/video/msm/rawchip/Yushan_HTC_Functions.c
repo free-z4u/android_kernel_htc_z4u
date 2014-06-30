@@ -667,91 +667,96 @@ int Yushan_sensor_open_init(struct rawchip_sensor_init_data data)
 	
 
 
-#ifdef RAWCHIP_LECCI_BYPASS_MODE
-	
-	Yushan_DXO_Lecci_Bypass();
-#endif
-#ifdef RAWCHIP_DTFILTER_BYPASS_MODE
-	
-	Yushan_DXO_DTFilter_Bypass();
-#endif
+      if (data.use_rawchip == RAWCHIP_DXO_BYPASS) {
+      
+       Yushan_DXO_Lecci_Bypass();
 
-#ifdef RAWCHIP_NORMAL_MODE
-	CDBG("[CAM] Yushan_common_init Yushan_Init_Dxo\n");
-	
-	bStatus = Yushan_Init_Dxo(&sDxoStruct, bBypassDxoUpload);
-	CDBG("[CAM] Yushan_common_init Yushan_Init_Dxo=%d\n", bStatus);
-	if (bStatus == SUCCESS) {
-		CDBG("[CAM] DXO Upload and Init Done\n");
-	} else {
-		pr_err("[CAM] DXO Upload and Init FAILED\n");
-		return -1;
-	}
-	CDBG("[CAM] Yushan_common_init Yushan_Get_Version_Information\n");
+       }
 
-	bStatus = Yushan_Get_Version_Information(&sYushanVersionInfo) ;
-#if 1 
-	CDBG("Yushan_common_init Yushan_Get_Version_Information=%d\n", bStatus);
+	if (data.use_rawchip == RAWCHIP_MIPI_BYPASS) {
+       
+       Yushan_DXO_DTFilter_Bypass();
+       }
 
-	CDBG("API Version : %d.%d \n", sYushanVersionInfo.bApiMajorVersion, sYushanVersionInfo.bApiMinorVersion);
-	CDBG("DxO Pdp Version : %x \n", sYushanVersionInfo.udwPdpVersion);
-	CDBG("DxO Dpp Version : %x \n", sYushanVersionInfo.udwDppVersion);
-	CDBG("DxO Dop Version : %x \n", sYushanVersionInfo.udwDopVersion);
-	CDBG("DxO Pdp Calibration Version : %x \n", sYushanVersionInfo.udwPdpCalibrationVersion);
-	CDBG("DxO Dpp Calibration Version : %x \n", sYushanVersionInfo.udwDppCalibrationVersion);
-	CDBG("DxO Dop Calibration Version : %x \n", sYushanVersionInfo.udwDopCalibrationVersion);
-#endif
+      if (data.use_rawchip == RAWCHIP_ENABLE) {
+      CDBG("[CAM] Yushan_common_init Yushan_Init_Dxo\n");
+       
+       bStatus = Yushan_Init_Dxo(&sDxoStruct, bBypassDxoUpload);
+       CDBG("[CAM] Yushan_common_init Yushan_Init_Dxo=%d\n", bStatus);
+       if (bStatus == 1) {
+       CDBG("[CAM] DXO Upload and Init Done\n");
+       } else {
+       pr_err("[CAM] DXO Upload and Init FAILED\n");
+       
+       }
+       CDBG("[CAM] Yushan_common_init Yushan_Get_Version_Information\n");
 
-#if 0
-	
-	if (bTestPatternMode == 1) {
-		
-		Yushan_PatternGenerator(&sInitStruct, bPatternReq, bDxoBypassForTestPattern);
-		
-		return 0;
-	}
+       bStatus = Yushan_Get_Version_Information(&sYushanVersionInfo) ;
+       
+       #if 1 
+       CDBG("Yushan_common_init Yushan_Get_Version_Information=%d\n", bStatus);
+
+
+
+      CDBG("API Version : %d.%d \n", sYushanVersionInfo.bApiMajorVersion, sYushanVersionIn`fo.bApiMinorVersion);
+      CDBG("DxO Pdp Version : %x \n", sYushanVersionInfo.udwPdpVersion);
+      CDBG("DxO Dpp Version : %x \n", sYushanVersionInfo.udwDppVersion);
+      CDBG("DxO Dop Version : %x \n", sYushanVersionInfo.udwDopVersion);
+      CDBG("DxO Pdp Calibration Version : %x \n", sYushanVersionInfo.udwPdpCalibrationVersion);
+      CDBG("DxO Dpp Calibration Version : %x \n", sYushanVersionInfo.udwDppCalibrationVersion);
+      CDBG("DxO Dop Calibration Version : %x \n", sYushanVersionInfo.udwDopCalibrationVersion);
 #endif
 
+      #if 0
+     
+      if (bTestPatternMode == 1) {
 	
-	Yushan_Update_ImageChar(&sImageChar_context);
-	Yushan_Update_SensorParameters(&sGainsExpTime);
-	Yushan_Update_DxoDpp_TuningParameters(&sDxoDppTuning);
-	Yushan_Update_DxoDop_TuningParameters(&sDxoDopTuning);
-	Yushan_Update_DxoPdp_TuningParameters(&sDxoPdpTuning);
-	bStatus = Yushan_Update_Commit(bPdpMode, bDppMode, bDopMode);
-	CDBG("[CAM] Yushan_common_init Yushan_Update_Commit=%d\n", bStatus);
-
+	Yushan_PatternGenerator(&sInitStruct, bPatternReq, bDxoBypassForTestPattern);
 	
-	
-	bStatus &= Yushan_WaitForInterruptEvent(EVENT_PDP_EOF_EXECCMD, TIME_100MS);
-	if (!bStatus)
-	{
-		pr_err("[CAM] EVENT_PDP_EOF_EXECCMD fail\n");
-		return -1;
-	}
-
-	bStatus &= Yushan_WaitForInterruptEvent2(EVENT_DOP7_EOF_EXECCMD, TIME_100MS);
-	if (!bStatus)
-	{
-		pr_err("[CAM] EVENT_DOP7_EOF_EXECCMD fail\n");
-		return -1;
-	}
-
-	bStatus &= Yushan_WaitForInterruptEvent(EVENT_DPP_EOF_EXECCMD, TIME_100MS);
-	if (!bStatus)
-	{
-		pr_err("[CAM] EVENT_DPP_EOF_EXECCMD fail\n");
-		return -1;
-	}
-
-	if (bStatus == 1)
-		CDBG("[CAM] DXO Commit Done\n");
-	else {
-		pr_err("[CAM] DXO Commit FAILED\n");
-		
-	}
-
+	return 0;
+}
 #endif
+       Yushan_Update_ImageChar(&sImageChar_context);
+     Yushan_Update_SensorParameters(&sGainsExpTime);
+       Yushan_Update_DxoDpp_TuningParameters(&sDxoDppTuning);
+       Yushan_Update_DxoDop_TuningParameters(&sDxoDopTuning);
+       Yushan_Update_DxoPdp_TuningParameters(&sDxoPdpTuning);
+       bStatus = Yushan_Update_Commit(bPdpMode, bDppMode, bDopMode);
+       CDBG("[CAM] Yushan_common_init Yushan_Update_Commit=%d\n", bStatus);
+
+      
+       
+       bStatus &= Yushan_WaitForInterruptEvent(EVENT_PDP_EOF_EXECCMD, TIME_10MS);
+       if (!bStatus)
+       {
+       pr_err("[CAM] EVENT_PDP_EOF_EXECCMD fail\n");
+       return -1;
+       }
+
+      bStatus &= Yushan_WaitForInterruptEvent2(EVENT_DOP7_EOF_EXECCMD, TIME_10MS);
+       if (!bStatus)
+       {
+       pr_err("[CAM] EVENT_DOP7_EOF_EXECCMD fail\n");
+       return -1;
+       }
+       bStatus &= Yushan_WaitForInterruptEvent(EVENT_DPP_EOF_EXECCMD, TIME_10MS);
+      if (!bStatus)
+       {
+       pr_err("[CAM] EVENT_DPP_EOF_EXECCMD fail\n");
+       return -1;
+      }
+   if (bStatus == 1)
+       CDBG("[CAM] DXO Commit Done\n");
+    else {
+       pr_err("[CAM] DXO Commit FAILED\n");
+       
+     }
+    }
+
+
+
+
+
 #if 0
 	
 	bSpiData = 0;

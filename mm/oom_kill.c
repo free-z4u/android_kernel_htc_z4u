@@ -46,6 +46,12 @@ static DEFINE_SPINLOCK(zone_scan_lock);
 
 extern void show_meminfo(void);
 
+
+#ifdef CONFIG_DEBUG_HTC_OOM
+extern void wake_up_kmemeleak(void);
+#endif
+
+
 void compare_swap_oom_score_adj(int old_val, int new_val)
 {
 	struct sighand_struct *sighand = current->sighand;
@@ -302,6 +308,7 @@ static void dump_header(struct task_struct *p, gfp_t gfp_mask, int order,
 	show_mem(SHOW_MEM_FILTER_NODES);
 	if (sysctl_oom_dump_tasks)
 		dump_tasks(memcg, nodemask);
+
 }
 
 #define K(x) ((x) << (PAGE_SHIFT-10))
@@ -493,6 +500,7 @@ static void clear_system_oom(void)
 	spin_unlock(&zone_scan_lock);
 }
 
+
 void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 		int order, nodemask_t *nodemask, bool force_kill)
 {
@@ -520,6 +528,7 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 	check_panic_on_oom(constraint, gfp_mask, order, mpol_mask);
 
 	read_lock(&tasklist_lock);
+
 	if (sysctl_oom_kill_allocating_task &&
 	    !oom_unkillable_task(current, NULL, nodemask) &&
 	    current->mm) {
@@ -544,6 +553,13 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 	}
 out:
 	read_unlock(&tasklist_lock);
+
+        
+#ifdef CONFIG_DEBUG_HTC_OOM
+        wake_up_kmemeleak();
+#endif
+        
+
 
 	if (killed && !test_thread_flag(TIF_MEMDIE))
 		schedule_timeout_uninterruptible(1);

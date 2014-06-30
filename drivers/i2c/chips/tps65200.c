@@ -69,6 +69,7 @@ static struct delayed_work auto_check_ovp;
 #ifdef CONFIG_CPLD
 static struct delayed_work register_cpld;
 #endif
+static struct delayed_work check_alarm_delay_work;
 
 static struct alarm tps65200_check_alarm;
 static struct work_struct check_alarm_work;
@@ -102,10 +103,17 @@ static void tps65200_set_check_alarm(void)
 {
 	ktime_t interval;
 	ktime_t next_alarm;
+	static bool is_delta_ready = false;
 
-	interval = ktime_set(TPS65200_CHECK_INTERVAL, 0);
-	next_alarm = ktime_add(alarm_get_elapsed_realtime(), interval);
-	alarm_start_range(&tps65200_check_alarm, next_alarm, next_alarm);
+	if (is_delta_ready || alarm_delta_is_ready()) {
+		interval = ktime_set(TPS65200_CHECK_INTERVAL, 0);
+		next_alarm = ktime_add(alarm_get_elapsed_realtime(), interval);
+		alarm_start_range(&tps65200_check_alarm, next_alarm, next_alarm);
+		is_delta_ready = true;
+	} else {
+		schedule_delayed_work(&check_alarm_delay_work,msecs_to_jiffies(TPS65200_CHECK_INTERVAL * 1000));
+		pr_tps_info("%s: use delayed work since rtc alarm delta is not ready\n", __func__);
+	}
 }
 
 
@@ -374,6 +382,7 @@ int tps_set_charger_ctrl(u32 ctl)
 #endif 
 
 		
+		cancel_delayed_work_sync(&check_alarm_delay_work);
 		alarm_cancel(&tps65200_check_alarm);
 		break;
 	case POWER_SUPPLY_ENABLE_SLOW_CHARGE:
@@ -611,6 +620,15 @@ int tps_set_charger_ctrl(u32 ctl)
 	return result;
 }
 EXPORT_SYMBOL(tps_set_charger_ctrl);
+
+static inline int is_tps_boost_mode_enabled(void)
+{
+	u8 regh = 0;
+
+	tps65200_i2c_read_byte(&regh, 0x06);
+
+	return (regh & 0x1C) == 0x0C ? 1 : 0;
+}
 
 #if 0
 static int tps65200_detect(struct i2c_client *client, int kind,
@@ -851,6 +869,8 @@ static int tps65200_probe(struct i2c_client *client,
 	}
 
 	
+	INIT_DELAYED_WORK(&check_alarm_delay_work, check_alarm_work_func);
+
 	INIT_WORK(&check_alarm_work, check_alarm_work_func);
 	alarm_init(&tps65200_check_alarm,
 			ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP,
@@ -1001,7 +1021,10 @@ static void tps65200_shutdown(struct i2c_client *client)
 	pr_tps_info("TPS65200 shutdown\n");
 	tps65200_i2c_read_byte(&regh, 0x00);
 	
-	regh &= 0xDF;
+	if (is_tps_boost_mode_enabled())
+		regh &= 0xDE;
+	else
+		regh &= 0xDF;
 	tps65200_i2c_write_byte(regh, 0x00);
 }
 

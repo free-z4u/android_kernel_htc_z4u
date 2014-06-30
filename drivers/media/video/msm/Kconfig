@@ -200,6 +200,20 @@ config S5K3H2YX_ACT
         ---help---
           s5k3h2yx lens actuator driver for S5K3H2YX.
 
+config IMX175
+        bool "Sensor imx175 (Sony 8M)"
+        depends on MSM_CAMERA
+        default n
+        ---help---
+          Sony 8M with Autofocus
+
+config TI201_ACT
+        bool "Actuator TI201"
+        depends on MSM_CAMERA && IMX175
+          default n
+          ---help---
+            TI Actuator for IMX175
+
 config S5K6A2YA
 	bool "Sensor s5k6a2ya (Samsung 1.6M)"
 	depends on MSM_CAMERA

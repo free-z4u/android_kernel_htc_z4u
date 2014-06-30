@@ -111,6 +111,7 @@ struct poweralg_config_type
 	BOOL debug_disable_hw_timer;
 	BOOL debug_always_predict;
 	INT32 full_level;                  
+	INT32 smooth_chg_full_delay_min;
 };
 
 struct battery_parameter {

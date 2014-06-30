@@ -146,11 +146,12 @@ static void onewire_init_work_func(struct work_struct *work)
 			HS_LOG("No private data");
 		else {
 			HS_LOG("Private data exist");
+			closeFile(fp);
+			return;
 		}
-		closeFile(fp);
-		return;
 	} else
 		HS_LOG("%s, openFile is NULL pointer\n", __func__);
+	closeFile(fp);
 }
 
 static void onewire_closefile_work_func(struct work_struct *work)
@@ -185,11 +186,13 @@ static int hs_1wire_query(int type)
 	return 0; 
 }
 
-static int hs_1wire_open(void)
+static int hs_1wire_read_key(void)
 {
-	int ret;
+	char key_code[10];
+	int read_count, retry, i, ret;
+
 	ret = cancel_delayed_work_sync(&onewire_closefile_work);
-	HS_LOG("[1-wire]hs_1wire_open");
+	HS_LOG("[1-wire]hs_1wire_read_key");
 	if (!ret) {
 		HS_LOG("Cancel fileclose_work failed, ret = %d", ret);
 		fp = openFile(hi->pdata.onewire_tty_dev,O_CREAT|O_RDWR|O_NONBLOCK,0666);
@@ -197,17 +200,6 @@ static int hs_1wire_open(void)
 	queue_delayed_work(onewire_wq, &onewire_closefile_work, msecs_to_jiffies(2000));
 	if (!fp)
 		return -1;
-	return 0;
-}
-
-static int hs_1wire_read_key(void)
-{
-	char key_code[10];
-	int read_count, retry, i;
-
-	if (hs_1wire_open()!=0)
-		return -1;
-	HS_LOG("[1-wire]hs_1wire_read_key");
 	for (retry = 0; retry < 3;retry++) {
 		read_count = readFile(fp, key_code, 10);
 		HS_LOG("[1wire]key read_count = %d", read_count);
@@ -345,13 +337,10 @@ static void hs_1wire_register(void)
 		notifier.func = hs_1wire_deinit;
 		headset_notifier_register(&notifier);
 
-		notifier.id = HEADSET_REG_1WIRE_OPEN;
-		notifier.func = hs_1wire_open;
-		headset_notifier_register(&notifier);
-
 		notifier.id = HEADSET_REG_1WIRE_REPORT_TYPE;
 		notifier.func = hs_1wire_report_type;
 		headset_notifier_register(&notifier);
+
 }
 
 void one_wire_gpio_tx(int enable)

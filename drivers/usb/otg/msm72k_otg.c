@@ -1410,6 +1410,7 @@ void msm_otg_set_id_state(int id)
 		USBH_INFO("Set ID\n");
 	} else {
 		clear_bit(ID, &dev->inputs);
+		clear_bit(B_SESS_VLD, &dev->inputs);
 		USBH_INFO("Clear ID\n");
 	}
 	spin_lock_irqsave(&dev->lock, flags);

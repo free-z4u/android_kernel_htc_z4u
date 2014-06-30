@@ -39,6 +39,11 @@
 #include <mach/msm_smd.h>
 #include <mach/peripheral-loader.h>
 
+#include <mach/board_htc.h>
+
+#define MODULE_NAME "[RMNET] "
+static int ril_debug_flag = 0;
+
 static int msm_rmnet_debug_mask;
 module_param_named(debug_enable, msm_rmnet_debug_mask,
 			int, S_IRUGO | S_IWUSR | S_IWGRP);
@@ -48,9 +53,10 @@ module_param_named(debug_enable, msm_rmnet_debug_mask,
 #define DEBUG_MASK_LVL2 (1U << 2)
 
 #define DBG(m, x...) do {			\
-		if (msm_rmnet_debug_mask & m)   \
-			pr_info(x);		\
+		if ((msm_rmnet_debug_mask & m)   || ril_debug_flag) \
+			pr_info(MODULE_NAME x);		\
 } while (0)
+
 #define DBG0(x...) DBG(DEBUG_MASK_LVL0, x)
 #define DBG1(x...) DBG(DEBUG_MASK_LVL1, x)
 #define DBG2(x...) DBG(DEBUG_MASK_LVL2, x)
@@ -96,6 +102,150 @@ struct rmnet_private
 	void *pil;
 	struct mutex pil_lock;
 };
+
+#define TX_DT_TP_L0_INTERVAL 5000
+#define TX_DT_TP_L1_INTERVAL 200
+#define TX_DT_TP_L2_INTERVAL 200
+#define TX_DT_TP_L1_TIME 30000
+#define TX_DT_TP_MIN_SIZE (10*1024)
+#define TX_DT_TP_L1_SIZE (40*1024)
+static struct timer_list	tx_throttle_timer;
+static bool enable_trottle = false;
+static unsigned long current_tx_bytes = 0;
+static unsigned long previous_tx_bytes = 0;
+static unsigned int tx_throttle_counter = 0;
+static unsigned int tx_throttle_level = 0;
+static unsigned long tx_throttle_limited_size = 2048;
+
+static void rmnet_tx_dt (unsigned long param)
+{
+	struct net_device		*dev = (struct net_device *) param;
+	struct rmnet_private		*unet = netdev_priv(dev);
+	unsigned long		tp;
+
+	switch (tx_throttle_level) {
+	case 0:
+		tp = ((unet->stats.tx_bytes-previous_tx_bytes)/TX_DT_TP_L0_INTERVAL)*1000;
+
+		DBG2("previous tx bytes: %lu, current tx bytes: %lu, tp: %lu\n", previous_tx_bytes, (unet->stats.tx_bytes), tp);
+
+		current_tx_bytes = 0;
+		previous_tx_bytes = unet->stats.tx_bytes;
+
+		if ( tp < TX_DT_TP_MIN_SIZE ) {
+			DBG0("current tp less than: %d, not enable DT\n", TX_DT_TP_MIN_SIZE);
+			tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L0_INTERVAL);
+		}
+		else if ( tp < TX_DT_TP_L1_SIZE )
+		{
+			DBG0("enable DT, migrate to level 2\n");
+			tx_throttle_limited_size = TX_DT_TP_MIN_SIZE/(1000/TX_DT_TP_L2_INTERVAL);
+			enable_trottle = true;
+			tx_throttle_level = 2;
+			tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L2_INTERVAL);
+		}
+		else
+		{
+			DBG0("enable DT, migrate to level 1\n");
+			tx_throttle_limited_size = (tp/2)/(1000/TX_DT_TP_L1_INTERVAL);
+			enable_trottle = true;
+			tx_throttle_level = 1;
+			tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L1_INTERVAL);
+		}
+		add_timer(&tx_throttle_timer);
+		break;
+	case 1:
+		tp = ((unet->stats.tx_bytes-previous_tx_bytes)/TX_DT_TP_L1_INTERVAL)*1000;
+
+		DBG2("previous tx bytes: %lu, current tx bytes: %lu, tp: %lu\n", previous_tx_bytes, (unet->stats.tx_bytes), tp);
+
+		current_tx_bytes = 0;
+		previous_tx_bytes = unet->stats.tx_bytes;
+		netif_wake_queue (dev);
+
+		tx_throttle_counter++;
+		if ( tx_throttle_counter > (TX_DT_TP_L1_TIME/TX_DT_TP_L1_INTERVAL) ) {
+			DBG0("tx_throttle_counter: %d reach time: %d, migrate to level 2\n", tx_throttle_counter,TX_DT_TP_L1_INTERVAL);
+			tx_throttle_level = 2;
+			tx_throttle_limited_size = TX_DT_TP_MIN_SIZE/(1000/TX_DT_TP_L2_INTERVAL);
+			tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L2_INTERVAL);
+		}
+		else
+		{
+			tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L1_INTERVAL);
+		}
+		add_timer(&tx_throttle_timer);
+		break;
+	case 2:
+		tp = ((unet->stats.tx_bytes-previous_tx_bytes)/TX_DT_TP_L2_INTERVAL)*1000;
+
+		DBG2("previous tx bytes: %lu, current tx bytes: %lu, tp: %lu\n", previous_tx_bytes, (unet->stats.tx_bytes), tp);
+
+		current_tx_bytes = 0;
+		previous_tx_bytes = unet->stats.tx_bytes;
+		netif_wake_queue(dev);
+
+		tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L2_INTERVAL);
+		add_timer(&tx_throttle_timer);
+		break;
+	default:
+		DBG0("Invalid level.\n");
+	}
+}
+
+static ssize_t rmnet_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	DBG0("%s\n",__func__);
+
+	return sprintf(buf, "enable=%d, level=%d\n", enable_trottle, tx_throttle_level);
+}
+
+static ssize_t rmnet_store(struct device *dev, struct device_attribute *attr, const char * buf, size_t count)
+{
+	int value;
+	struct net_device	*ndev = to_net_dev(dev);
+	struct rmnet_private		*unet = netdev_priv(ndev);
+	static int previous_value = 0;
+
+	if (sscanf(buf, "%d", &value) != 1)
+		return -EINVAL;
+
+	if (value == previous_value)
+		return count;
+	else
+		previous_value = value;
+
+	DBG0("%s enable=%d\n", __func__, value);
+
+	switch (value) {
+	case 0:
+		
+		del_timer_sync (&tx_throttle_timer);
+		tx_throttle_level = 0;
+		tx_throttle_counter = 0;
+		enable_trottle = false;
+		netif_wake_queue(ndev);
+		break;
+	case 1:
+		
+		tx_throttle_level = 0;
+		tx_throttle_counter = 0;
+		current_tx_bytes = 0;
+		previous_tx_bytes = unet->stats.tx_bytes;
+		init_timer(&tx_throttle_timer);
+		tx_throttle_timer.function = rmnet_tx_dt;
+		tx_throttle_timer.data = (unsigned long) ndev;
+		tx_throttle_timer.expires = jiffies + msecs_to_jiffies(TX_DT_TP_L0_INTERVAL);
+		add_timer(&tx_throttle_timer);
+		break;
+	default:
+		DBG0("Invalid parameter.\n");
+	}
+
+	return count;
+}
+
+static DEVICE_ATTR(throttle, S_IRUSR | S_IWUSR, rmnet_show, rmnet_store);
 
 static uint msm_rmnet_modem_wait;
 module_param_named(modem_wait, msm_rmnet_modem_wait,
@@ -561,6 +711,17 @@ static int rmnet_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	_rmnet_xmit(skb, dev);
 
+	
+	if ( enable_trottle == true )
+	{
+		current_tx_bytes += skb->len;
+		if (current_tx_bytes > tx_throttle_limited_size) {
+			netif_stop_queue(dev);
+			DBG0("%s: stopping queue, current_tx_bytes=%lu, throttle enable\n",    __func__, current_tx_bytes);
+		}
+	}
+	
+
 	return 0;
 }
 
@@ -748,6 +909,11 @@ static int __init rmnet_init(void)
 	struct rmnet_private *p;
 	unsigned n;
 
+	
+	if (get_kernel_flag() & KERNEL_FLAG_RIL_DBG_RMNET)
+		ril_debug_flag = 1;
+	
+
 	pr_info("%s: SMD devices[%d]\n", __func__, RMNET_DEVICE_COUNT);
 
 #ifdef CONFIG_MSM_RMNET_DEBUG
@@ -798,6 +964,10 @@ static int __init rmnet_init(void)
 			return ret;
 		}
 
+		
+		if (device_create_file(d, &dev_attr_throttle))
+			continue;
+		
 
 #ifdef CONFIG_MSM_RMNET_DEBUG
 		if (device_create_file(d, &dev_attr_timeout))

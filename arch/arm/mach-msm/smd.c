@@ -1390,6 +1390,11 @@ static int smd_stream_write(smd_channel_t *ch, const void *_data, int len,
 	if (orig_len - len)
 		ch->notify_other_cpu();
 
+	
+	if((get_kernel_flag() & KERNEL_FLAG_SMD_CH2_DEBUG) && (ch->n == 2))
+		printk("[SMD] %s: %d-%d -> ch%d\n", __func__, orig_len, len, ch->n);
+	
+
 	return orig_len - len;
 }
 
@@ -1441,6 +1446,11 @@ static int smd_stream_read(smd_channel_t *ch, void *data, int len, int user_buf)
 	if (r > 0)
 		if (!read_intr_blocked(ch))
 			ch->notify_other_cpu();
+
+	
+	if((get_kernel_flag() & KERNEL_FLAG_SMD_CH2_DEBUG) && (ch->n == 2))
+		printk("[SMD] %s: %d <- ch%d\n", __func__, len, ch->n);
+	
 
 	return r;
 }

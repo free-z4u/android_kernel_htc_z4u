@@ -590,9 +590,11 @@ cancel_readonly:
 
 extern void htc_rmt_storage_force_sync(void);
 
+char devlog_part[64] = {0,};
 static void do_emergency_remount(struct work_struct *work)
 {
 	struct super_block *sb, *p = NULL;
+	char b[BDEVNAME_SIZE];
 
         printk("%s ++\n", __func__);
 #if 0
@@ -602,6 +604,8 @@ static void do_emergency_remount(struct work_struct *work)
 	
 #endif
 	atomic_set(&vfs_emergency_remount, 1);
+	
+	umount2("/devlog", MNT_DETACH);
 	spin_lock(&sb_lock);
 	list_for_each_entry(sb, &super_blocks, s_list) {
 		if (hlist_unhashed(&sb->s_instances))
@@ -611,7 +615,9 @@ static void do_emergency_remount(struct work_struct *work)
 		down_write(&sb->s_umount);
 		if (sb->s_root && sb->s_bdev && (sb->s_flags & MS_BORN) &&
 		    !(sb->s_flags & MS_RDONLY)) {
-			do_remount_sb(sb, MS_RDONLY, NULL, 1);
+			
+			if (strcmp(bdevname(sb->s_bdev, b), devlog_part))
+				do_remount_sb(sb, MS_RDONLY, NULL, 1);
 		}
 		up_write(&sb->s_umount);
 		spin_lock(&sb_lock);

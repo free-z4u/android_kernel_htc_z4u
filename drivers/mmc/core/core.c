@@ -338,11 +338,8 @@ static void mmc_wait_for_req_done(struct mmc_host *host,
 		    mmc_card_removed(host->card))
 			break;
 
-		if(cmd->retries > MMC_CMD_RETRIES_MAX) {
-			   pr_err("%s: req failed (CMD%u): %d, (retries): %d, retrying...\n",
-					mmc_hostname(host), cmd->opcode, cmd->retries, cmd->error);
-			   cmd->retries = MMC_CMD_RETRIES;
-		}
+		pr_debug("%s: req failed (CMD%u): %d, retrying...\n",
+			 mmc_hostname(host), cmd->opcode, cmd->error);
 		cmd->retries--;
 		cmd->error = 0;
 		host->ops->request(host, mrq);

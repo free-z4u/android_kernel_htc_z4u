@@ -41,6 +41,8 @@
 #include <mach/msm_iomap.h>
 #include <linux/io.h>
 
+#include <mach/proc_comm.h>
+
 static int rmt_storage_client_debug_mask = 1;
 #if defined(pr_debug)
 #undef pr_debug
@@ -874,6 +876,15 @@ static int rmt_storage_event_alloc_rmt_buf_cb(
 	return (int)shrd_mem->start;
 }
 
+char* rmts_req_proc[] = {
+	" ",
+	"RMT_STORAGE_OPEN_CB_TYPE_PROC",
+	"RMT_STORAGE_WRITE_IOVEC_CB_TYPE_PROC",
+	"RMT_STORAGE_EVENT_CB_TYPE_PROC",
+	"RMT_STORAGE_READ_IOVEC_CB_TYPE_PROC",
+	"RMT_STORAGE_ALLOC_RMT_BUF_CB_TYPE_PROC",
+};
+
 static int handle_rmt_storage_call(struct msm_rpc_client *client,
 				struct rpc_request_hdr *req,
 				struct msm_rpc_xdr *xdr)
@@ -890,6 +901,11 @@ static int handle_rmt_storage_call(struct msm_rpc_client *client,
 		goto out;
 	}
 	event_args = &kevent->event;
+
+	if((req->procedure >= RMT_STORAGE_OPEN_CB_TYPE_PROC) && (req->procedure <= RMT_STORAGE_ALLOC_RMT_BUF_CB_TYPE_PROC))
+		printk("[RMT] %s: req->procedure is %s\n", __func__, rmts_req_proc[req->procedure]);
+	else
+		printk("[RMT] %s: req->procedure is %d\n", __func__, req->procedure);
 
 	switch (req->procedure) {
 	case RMT_STORAGE_OPEN_CB_TYPE_PROC:
@@ -1000,7 +1016,7 @@ static long rmt_storage_ioctl(struct file *fp, unsigned int cmd,
 	switch (cmd) {
 
 	case RMT_STORAGE_SHRD_MEM_PARAM:
-		pr_debug("%s: get shared memory parameters ioctl\n", __func__);
+		pr_debug("%s: get shared memory parameters ioctl, cmd=%d\n", __func__, cmd);
 		if (copy_from_user(&usr_shrd_mem, (void __user *)arg,
 				sizeof(struct rmt_shrd_mem_param))) {
 			pr_err("%s: copy from user failed\n\n", __func__);
@@ -1024,7 +1040,7 @@ static long rmt_storage_ioctl(struct file *fp, unsigned int cmd,
 		break;
 
 	case RMT_STORAGE_WAIT_FOR_REQ:
-		pr_info("%s: wait for request ioctl\n", __func__);
+		pr_info("%s: wait for request ioctl, cmd=%d\n", __func__, cmd);
 		if (atomic_read(&rmc->total_events) == 0) {
 			ret = wait_event_interruptible(rmc->event_q,
 				atomic_read(&rmc->total_events) != 0);
@@ -1046,7 +1062,7 @@ static long rmt_storage_ioctl(struct file *fp, unsigned int cmd,
 		break;
 
 	case RMT_STORAGE_SEND_STATUS:
-		pr_info("%s: send status ioctl\n", __func__);
+		pr_info("%s: send status ioctl, cmd=%d\n", __func__, cmd);
 		if (copy_from_user(&status, (void __user *)arg,
 				sizeof(struct rmt_storage_send_sts))) {
 			pr_err("%s: copy from user failed\n\n", __func__);
@@ -1161,6 +1177,7 @@ static int rmt_storage_force_sync(struct msm_rpc_client *client)
 	rc = msm_rpc_client_req2(client,
 			RMT_STORAGE_FORCE_SYNC_PROC, NULL, NULL,
 			rmt_storage_receive_sync_arg, &args, -1);
+	printk("[RMT] %s: requested procedure RMT_STORAGE_FORCE_SYNC_PROC\n", __func__);
 	if (rc) {
 		pr_err("%s: force sync RPC req failed: %d\n", __func__, rc);
 		return rc;
@@ -1209,6 +1226,7 @@ static int rmt_storage_get_sync_status(struct msm_rpc_client *client)
 			RMT_STORAGE_GET_SYNC_STATUS_PROC,
 			rmt_storage_send_sync_sts_arg, &send_args,
 			rmt_storage_receive_sync_sts_arg, &recv_args, -1);
+	printk("[RMT] %s: requested procedure RMT_STORAGE_GET_SYNC_STATUS_PROC\n", __func__);
 	if (rc) {
 		pr_err("%s: sync status RPC req failed: %d\n", __func__, rc);
 		return rc;
@@ -1470,11 +1488,14 @@ show_sync_sts(struct device *dev, struct device_attribute *attr, char *buf)
 
 #define MAX_GET_SYNC_STATUS_TRIES 200
 #define RMT_SLEEP_INTERVAL_MS 20
+#define MAX_WAIT_TIME 5
 
 static int rmt_storage_reboot_call(
 	struct notifier_block *this, unsigned long code, void *cmd)
 {
 	int ret, count = 0;
+	int i = 0;
+	int timeout = MAX_WAIT_TIME;
 
 	spin_lock(&rmc->lock);
 	if (!rmc->open_excl) {
@@ -1488,8 +1509,23 @@ static int rmt_storage_reboot_call(
 	case SYS_RESTART:
 	case SYS_HALT:
 	case SYS_POWER_OFF:
-		msleep(1500);
+                msleep(1500);
+                
+		timeout = timeout - 1.5;
+#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
 		
+		for(i=0; i<timeout*2; i++)
+		{
+			if(readl_relaxed(MSM_SHARED_RAM_BASE + APP_EFS_MAGIC) == HTC_FINAL_EFS_SYNC_MAGIC){ 
+				printk(KERN_INFO "[HTC][EFS] NV items is updated in 1.5+0.5*%ds.\n", i);
+				break;
+			}
+			msleep(500);
+		}
+#endif
+		if(i >= timeout*2)
+			printk(KERN_INFO "[HTC][EFS] waiting for NV items update, timeout.\n");
+
 		pr_info("%s ++\n", __func__);
 		pr_info("%s: Force RMT storage final sync...\n", __func__);
 		ret = rmt_storage_force_sync(rmt_srv->rpc_client);
@@ -1509,26 +1545,27 @@ static int rmt_storage_reboot_call(
 		else
 			pr_err("%s: RMT storage sync failed.\n", __func__);
 
-		count = 0;
-		while (count < MAX_GET_SYNC_STATUS_TRIES) {
-			if (atomic_read(&rmc->wcount) == 0) {
-				break;
-			} else {
-				count++;
-				msleep(RMT_SLEEP_INTERVAL_MS);
-			}
-		}
-		if (atomic_read(&rmc->wcount))
-			pr_err("%s: Efs_sync still incomplete, waiting:%dms\n",
+                count = 0;
+                while (count < MAX_GET_SYNC_STATUS_TRIES) {
+                       if (atomic_read(&rmc->wcount) == 0) {
+                               break;
+                       } else {
+                               count++;
+                               msleep(RMT_SLEEP_INTERVAL_MS);
+                       }
+                }
+						
+                if (atomic_read(&rmc->wcount))
+                        pr_err("%s: Efs_sync still incomplete, waiting:%dms\n", 
 						__func__, RMT_SLEEP_INTERVAL_MS*count);
 		else
 			pr_info("%s: Efs_sync completed, waiting:%dms\n",
 						__func__, RMT_SLEEP_INTERVAL_MS*count);
-
-		pr_info("%s: Un register RMT storage client.\n", __func__);
-		msm_rpc_unregister_client(rmt_srv->rpc_client);
-		pr_info("%s --\n", __func__);
-		break;
+		
+                pr_info("%s: Un register RMT storage client.\n", __func__);
+                msm_rpc_unregister_client(rmt_srv->rpc_client);
+                pr_info("%s --\n", __func__);
+                break;
 
 	default:
 		break;

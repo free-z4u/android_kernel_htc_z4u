@@ -180,6 +180,19 @@ static struct sysrq_key_op sysrq_mountro_op = {
 	.enable_mask	= SYSRQ_ENABLE_REMOUNT,
 };
 
+#include <mach/proc_comm.h>
+static void sysrq_handle_cfun_zero(int key)
+{
+	unsigned int magic = 0;
+	msm_proc_comm(PCOM_FINAL_EFS_SYNC, (unsigned*)&magic, NULL);
+}
+
+static struct sysrq_key_op sysrq_cfun_zero_op = {
+        .handler        = sysrq_handle_cfun_zero,
+        .help_msg       = "cfun=0 trigger",
+        .action_msg     = "cfun=0 had beeing triggered",
+};
+
 #ifdef CONFIG_LOCKDEP
 static void sysrq_handle_showlocks(int key)
 {
@@ -408,7 +421,7 @@ static struct sysrq_key_op *sysrq_key_table[36] = {
 	&sysrq_moom_op,			
 	
 	NULL,				
-	NULL,				
+	&sysrq_cfun_zero_op,		
 	&sysrq_kill_op,			
 #ifdef CONFIG_BLOCK
 	&sysrq_thaw_op,			

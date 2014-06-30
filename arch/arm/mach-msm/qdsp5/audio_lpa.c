@@ -198,7 +198,6 @@ struct audio {
 	unsigned queue_id;
 
 	unsigned long volume;
-	unsigned long curr_vol_idx;
 
 	uint16_t dec_id;
 
@@ -428,7 +427,8 @@ static void audio_dsp_event(void *private, unsigned id, uint16_t *msg)
 			auddec_dsp_config(audio, 1);
 			audio->out_needed = 0;
 			audio->running = 1;
-			audpp_set_volume_and_pan(audio->dec_id, audio->volume,
+			
+			audpp_set_volume_and_pan(audio->dec_id, 0, 
 					0);
 		} else if (msg[0] == AUDPP_MSG_ENA_DIS) {
 			MM_DBG("CFG_MSG DISABLE\n");
@@ -958,207 +958,41 @@ static int audio_stop_event(struct audio *audio)
 	return 0;
 }
 
-unsigned long dsp_lpa_vol_table[] = {
-	0,
-	26,
-	27,
-	29,
-	31,
-	33,
-	35,
-	37,
-	39,
-	41,
-	43,
-	46,
-	49,
-	52,
-	55,
-	58,
-	61,
-	65,
-	69,
-	73,
-	77,
-	82,
-	87,
-	92,
-	96,
-	103,
-	109,
-	116,
-	123,
-	130,
-	138,
-	146,
-	154,
-	151,
-	163,
-	173,
-	183,
-	194,
-	206,
-	218,
-	231,
-	238,
-	245,
-	259,
-	274,
-	291,
-	308,
-	326,
-	332,
-	345,
-	366,
-	388,
-	411,
-	437,
-	461,
-	488,
-	517,
-	547,
-	580,
-	609,
-	614,
-	651,
-	689,
-	730,
-	773,
-	802,
-	819,
-	868,
-	919,
-	974,
-	1031,
-	1056,
-	1092,
-	1157,
-	1226,
-	1298,
-	1375,
-	1389,
-	1457,
-	1543,
-	1635,
-	1731,
-	1828,
-	1834,
-	1943,
-	2058,
-	2180,
-	2309,
-	2376,
-	2406,
-	2446,
-	2517,
-	2591,
-	2666,
-	2744,
-	2824,
-	2907,
-	2991,
-	3079,
-	3167,
-	3261,
-	3356,
-	3454,
-	3555,
-	3659,
-	3766,
-	3876,
-	3989,
-	4106,
-	4168,
-	4226,
-	4349,
-	4476,
-	4607,
-	4741,
-	4880,
-	5022,
-	5169,
-	5320,
-	5475,
-	5635,
-	5799,
-	5811,
-	5969,
-	6143,
-	6322,
-	6507,
-	6697,
-	6893,
-	7094,
-	7301,
-	7514,
-	7734,
-	7960,
-	8192
-};
-
-static unsigned int getVolIndex (unsigned long volume)
+static int audio_vol_ramping(struct audio *audio, bool inc)
 {
-	unsigned int idx;
-	unsigned int vol_idx = 0;
-
-	if (volume == 0)
-		return 0;
-
-	for (idx = 0; idx < (sizeof(dsp_lpa_vol_table)/sizeof(unsigned long)); idx++) {
-		if (volume <= dsp_lpa_vol_table[idx]) {
-			vol_idx = idx;
-			break;
-		}
-	}
-
-	if (idx >= sizeof(dsp_lpa_vol_table)/sizeof(unsigned long))
-		vol_idx = sizeof(dsp_lpa_vol_table)/sizeof(unsigned long) - 1;
-
-	return vol_idx;
-}
-
-static int audio_vol_ramping(struct audio *audio, unsigned int inc)
-{
-	unsigned int new_vol_idx = 0;
-	unsigned int curr_vol_idx = 0;
-	int iterations = 0;
-	unsigned int idx = 0;
-	int offset = 0;
+	unsigned short volume = audio->volume;
 	unsigned long flags = 0;
+	int ramp_count = 1;
 
-	if (inc == 0xffff) {
-		curr_vol_idx = audio->curr_vol_idx;
-		new_vol_idx = getVolIndex(audio->volume);
-		
-		audio->curr_vol_idx = new_vol_idx;
-	} else if (inc == 1) { 
-		curr_vol_idx = 0;
-		new_vol_idx = audio->curr_vol_idx;
-	} else if (inc == 0) { 
-		curr_vol_idx = audio->curr_vol_idx;
-		new_vol_idx = 0;
-	}
+	MM_DBG("audio_vol_ramping(): audio_vol_ramping(%ld)\n", audio->volume);
 
-	iterations = (new_vol_idx > curr_vol_idx)?(new_vol_idx - curr_vol_idx):(curr_vol_idx - new_vol_idx);
-	offset = (new_vol_idx > curr_vol_idx)? 1 : -1;
-
-	if (iterations == 0)
-		return 0;
-	MM_INFO("audio_vol_ramping: curr_vol_idx %d(%ld), new_vol_idx %d(%ld) [%d]\n", curr_vol_idx, dsp_lpa_vol_table[curr_vol_idx], new_vol_idx, dsp_lpa_vol_table[new_vol_idx], iterations);
-
-	for (idx = 0; idx < iterations; idx++) {
-		curr_vol_idx += offset;
-		if (audio->running) {
-			
+	if (inc) {
+		volume = 0;
+		while (volume < audio->volume) {
+			volume = (audio->volume * (10 * ramp_count)) / 100;
 			spin_lock_irqsave(&audio->dsp_lock, flags);
-			audpp_set_volume_and_pan(audio->dec_id,
-				dsp_lpa_vol_table[curr_vol_idx], 0);
+			if (audio->running)
+				audpp_set_volume_and_pan(audio->dec_id, volume, 0);
 			spin_unlock_irqrestore(&audio->dsp_lock, flags);
-		}
-		usleep(20);
-	}
-	MM_INFO("audio_vol_ramping: complete\n");
+			MM_DBG("Setting ramping volume to %d\n", volume);
 
+			ramp_count++;
+			msleep(5);
+		}
+	} else {
+		while (volume > 0) {
+			volume = (audio->volume * (100 - 10 * ramp_count)) / 100;
+			spin_lock_irqsave(&audio->dsp_lock, flags);
+			if (audio->running)
+				audpp_set_volume_and_pan(audio->dec_id, volume, 0);
+			spin_unlock_irqrestore(&audio->dsp_lock, flags);
+			MM_DBG("Setting ramping volume to %d\n", volume);
+
+			ramp_count++;
+			msleep(5);
+		}
+		msleep(20);
+	}
 	return 0;
 }
 
@@ -1188,19 +1022,18 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	}
 	if (cmd == AUDIO_SET_VOLUME) {
 		unsigned long flags;
-
 		spin_lock_irqsave(&audio->dsp_lock, flags);
+
 		audio->volume = MSM_VOLUME_STEP * arg;
 		audio->volume /= MSM_VOLUME_FACTOR;
 
 		if (audio->volume > MSM_MAX_VOLUME)
 			audio->volume = MSM_MAX_VOLUME;
+
+		if (audio->running)
+			audpp_set_volume_and_pan(audio->dec_id,
+			audio->volume, 0);
 		spin_unlock_irqrestore(&audio->dsp_lock, flags);
-
-		
-
-		audio_vol_ramping(audio, 0xffff);
-
 		return 0;
 	}
 	if (cmd == AUDIO_GET_EVENT) {
@@ -1237,7 +1070,7 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			else
 				rc = 0;
 		}
-		audio_vol_ramping(audio, 1); 
+		audio->want_ramping = 1; 
 		get_current_time_ns(&audio->prev_time);
 		break;
 	case AUDIO_STOP:
@@ -1337,10 +1170,10 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		audio->prev_time = curr_time_ns;
 		MM_DBG("AUDIO_PAUSE %ld\n", arg);
 		if ((int)arg == 1 && !skip_ramping) 
-			audio_vol_ramping(audio, 0);
+			audio_vol_ramping(audio, false);
 		rc = audpp_pause(audio->dec_id, (int) arg);
 		if ((int)arg == 0 && !skip_ramping) 
-			audio_vol_ramping(audio, 1);
+			audio_vol_ramping(audio, true);
 		else if ((int)arg == 0 && skip_ramping) {
 			unsigned long flags;
 			spin_lock_irqsave(&audio->dsp_lock, flags);
@@ -1376,12 +1209,12 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			rc = -EBUSY;
 		else
 			rc = audlpa_aio_buf_add(audio, 1, (void __user *) arg);
+
 		
 		if (audio->want_ramping == 1) {
 			audio->want_ramping = 0;
-			audio_vol_ramping(audio, 1);
-		}
-		else if (audio->want_ramping == 2) {
+			audio_vol_ramping(audio, true);
+		} else if(audio->want_ramping == 2) {
 			unsigned long flags;
 			spin_lock_irqsave(&audio->dsp_lock, flags);
 			if (audio->running)
@@ -1739,7 +1572,6 @@ static int audio_open(struct inode *inode, struct file *file)
 	audio->out_channel_mode = AUDPP_CMD_PCM_INTF_STEREO_V;
 	audio->out_bits = AUDPP_CMD_WAV_PCM_WIDTH_16;
 	audio->volume = 0x2000;
-	audio->curr_vol_idx = sizeof(dsp_lpa_vol_table)/sizeof(unsigned long) - 1;
 	audio->want_ramping = 0;
 	audpcm_async_flush(audio);
 

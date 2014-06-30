@@ -83,6 +83,7 @@ static struct wake_lock alarm_rtc_wake_lock;
 static struct platform_device *alarm_platform_dev;
 struct alarm_queue alarms[ANDROID_ALARM_TYPE_COUNT];
 static bool suspended;
+static bool is_late_init_delta_changed = false;
 
 #ifdef CONFIG_HTC_OFFMODE_ALARM
 int htc_is_offalarm_enabled(void);
@@ -307,11 +308,7 @@ alarm_update_timedelta(struct timespec tmp_time, struct timespec new_time)
 
 int alarm_delta_is_ready(void)
 {
-	if (ktime_equal(ktime_set(0, 0), alarms[ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP].delta) &&
-		ktime_equal(ktime_set(0, 0), alarms[ANDROID_ALARM_ELAPSED_REALTIME].delta))
-		return 0;
-	else
-		return 1;
+	return is_late_init_delta_changed;
 }
 
 ktime_t alarm_get_elapsed_realtime(void)
@@ -601,6 +598,7 @@ static int __init alarm_late_init(void)
 			timespec_to_ktime(timespec_sub(tmp_time, system_time));
 
 	spin_unlock_irqrestore(&alarm_slock, flags);
+	is_late_init_delta_changed = true;
 	return 0;
 }
 

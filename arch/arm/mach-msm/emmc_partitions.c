@@ -74,6 +74,7 @@ int emmc_partition_read_proc(char *page, char **start, off_t off,
 	return p - page;
 }
 
+extern char devlog_part[64];
 static int __init parse_tag_msm_partition(const struct tag *tag)
 {
 	struct mtd_partition *ptn = msm_nand_partitions;
@@ -102,6 +103,10 @@ static int __init parse_tag_msm_partition(const struct tag *tag)
 #ifdef CONFIG_MMC_MUST_PREVENT_WP_VIOLATION
 		if (!strncmp(ptn->name, "system", 6))
 			mmc_blk_set_wp_prevention_partno((int) ptn->offset);
+		else if (!strncmp(ptn->name, "devlog", 6)) {
+			sprintf(devlog_part, "mmcblk0p%d", (int) ptn->offset);
+			pr_info("mmc: devlog partition %s\n", devlog_part);
+		}
 #endif	
 
 		name += 16;

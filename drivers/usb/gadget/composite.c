@@ -1187,7 +1187,7 @@ static void composite_disconnect(struct usb_gadget *gadget)
 	if (composite->disconnect)
 		composite->disconnect(cdev);
 	if (cdev->delayed_status != 0) {
-		WARNING(cdev, "%s: delayed_status is not 0 in disconnect status\n", __func__);
+		WARN(cdev, "%s: delayed_status is not 0 in disconnect status\n", __func__);
 		cdev->delayed_status = 0;
 	}
 	spin_unlock_irqrestore(&cdev->lock, flags);

@@ -537,6 +537,10 @@ struct posix_acl;
 #define IOP_LOOKUP	0x0002
 #define IOP_NOFOLLOW	0x0004
 
+#ifdef CONFIG_FUSE_SD
+#define AID_SDCARD_RW 1015
+#endif
+
 struct inode {
 	umode_t			i_mode;
 	unsigned short		i_opflags;

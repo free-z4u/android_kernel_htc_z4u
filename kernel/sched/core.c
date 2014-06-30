@@ -3820,9 +3820,6 @@ static void migrate_tasks(unsigned int dead_cpu)
 
 	rq->stop = NULL;
 
-	
-	unthrottle_offline_cfs_rqs(rq);
-
 	for ( ; ; ) {
 		if (rq->nr_running == 1)
 			break;
@@ -5385,6 +5382,7 @@ int in_sched_functions(unsigned long addr)
 
 #ifdef CONFIG_CGROUP_SCHED
 struct task_group root_task_group;
+LIST_HEAD(task_groups);
 #endif
 
 DECLARE_PER_CPU(cpumask_var_t, load_balance_tmpmask);

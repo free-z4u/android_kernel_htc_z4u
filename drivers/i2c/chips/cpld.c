@@ -423,15 +423,23 @@ static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
         if (ret < 0) {
                 pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
                         __func__, GPIO_CPLD_CLK, ret);
-		goto gpio_rq_fail;
+		
         }
 
-	if(htc_get_board_revision() == BOARD_EVM)
-		gpio_direction_output(GPIO_CPLD_CLK,   0); 
+	if(htc_get_board_revision() == BOARD_EVM) {
+		#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
+			gpio_direction_output(GPIO_CPLD_CLK,   0); 
+		#else
+			gpio_direction_output(GPIO_CPLD_CLK,   1); 
+		#endif
+	}
 	else
 		gpio_direction_output(GPIO_CPLD_CLK,   1); 
-	gpio_free(GPIO_CPLD_CLK);
-#if 1
+
+	printk(KERN_INFO "[I2C CPLD] CPLD_CLK(%d):%d\n", GPIO_CPLD_CLK, gpio_get_value(GPIO_CPLD_CLK));
+
+	if(!ret) gpio_free(GPIO_CPLD_CLK);
+
         
         
         ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD_I2C_SCL");
@@ -443,9 +451,7 @@ static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
         if(!gpio_direction_input(GPIO_CPLD_I2C_SDA))
                 printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SDA);
         if(!ret) gpio_free(GPIO_CPLD_I2C_SDA);
-#endif
 
-gpio_rq_fail:
 	return 0;
 }
 
@@ -457,15 +463,20 @@ static int cpld_resume(struct i2c_client *client)
         if (ret < 0) {
                 pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
                         		__func__, GPIO_CPLD_CLK, ret);
-		goto gpio_rq_fail;
+		
         }
 	
-	if(htc_get_board_revision() == BOARD_EVM)
-		gpio_direction_output(GPIO_CPLD_CLK,   1); 
+	if(htc_get_board_revision() == BOARD_EVM) {
+		#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
+			gpio_direction_output(GPIO_CPLD_CLK,   1); 
+		#else
+			gpio_direction_output(GPIO_CPLD_CLK,   0); 
+		#endif
+	}
 	else
 		gpio_direction_output(GPIO_CPLD_CLK,   0); 
 
-	gpio_free(GPIO_CPLD_CLK);
+	if(!ret) gpio_free(GPIO_CPLD_CLK);
 
 #if 1
         
@@ -486,7 +497,6 @@ static int cpld_resume(struct i2c_client *client)
 	cpld_irq_unmask(CPLD_IRQ_VOL_DW);
 	
 
-gpio_rq_fail:
 #if 0
         cpld_gpio_write(CPLD_EXT_GPIO_LCD_RST, 1);
         cpld_gpio_write(CPLD_EXT_GPIO_AUD_SPK_RCV_SEL, 1);
