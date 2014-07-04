@@ -948,7 +948,10 @@ static struct miscdevice rt5501_device = {
 
 int rt5501_probe(struct i2c_client *client, const struct i2c_device_id *id)
 {
-	int ret = 0,ret2 = 0,retrycnt = 0;
+	int ret = 0;
+#if defined(CONFIG_CPLD) && (defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
+	int ret2 = 0,retrycnt = 0;
+#endif
 	MFG_MODE = board_mfg_mode();
 	pdata = client->dev.platform_data;
 
