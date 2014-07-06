@@ -989,6 +989,10 @@ int __hrtimer_start_range_ns(struct hrtimer *timer, ktime_t tim,
 	if (leftmost && new_base->cpu_base == &__get_cpu_var(hrtimer_bases)
 		&& hrtimer_enqueue_reprogram(timer, new_base)) {
 		if (wakeup) {
+			/*
+			 * We need to drop cpu_base->lock to avoid a
+			 * lock ordering issue vs. rq->lock.
+			 */
 			raw_spin_unlock(&new_base->cpu_base->lock);
 			raise_softirq_irqoff(HRTIMER_SOFTIRQ);
 			local_irq_restore(flags);
