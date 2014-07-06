@@ -1926,7 +1926,6 @@ void tcp_close(struct sock *sk, long timeout)
 		return;
 	}
 
-
 	lock_sock(sk);
 	sk->sk_shutdown = SHUTDOWN_MASK;
 
