@@ -1081,9 +1081,6 @@ restart_loop:
 				commit_transaction;
 		}
 	}
-	
-	if (atomic_read(&vfs_emergency_remount))
-		journal->commit_callback_done = 1;
 	spin_unlock(&journal->j_list_lock);
 
 	if (journal->j_commit_callback)
@@ -1094,10 +1091,6 @@ restart_loop:
 		  journal->j_commit_sequence, journal->j_tail_sequence);
 	if (to_free)
 		jbd2_journal_free_transaction(commit_transaction);
-
-	
-	if (atomic_read(&vfs_emergency_remount))
-		journal->commit_callback_done = 0;
 
 	wake_up(&journal->j_wait_done_commit);
 }
