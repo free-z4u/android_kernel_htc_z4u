@@ -331,10 +331,15 @@ struct usb_bus {
 	u8 otg_port;			/* 0, or number of OTG/HNP port */
 	unsigned is_b_host:1;		/* true during some HNP roleswitches */
 	unsigned b_hnp_enable:1;	/* OTG: did A-Host enable HNP? */
-	unsigned hnp_support:1;
-	unsigned quick_hnp:1;
-	unsigned otg_vbus_off:1;
-	struct delayed_work hnp_polling;
+	unsigned hnp_support:1;		/* OTG: HNP is supported on OTG port */
+	unsigned quick_hnp:1;		/* OTG: Indiacates if hnp is required
+					   irrespective of host_request flag
+					 */
+	unsigned otg_vbus_off:1;	/* OTG: OTG test device feature bit that
+					 * tells A-device to turn off VBUS after
+					 * B-device is disconnected.
+					 */
+	struct delayed_work hnp_polling;/* OTG: HNP polling work */
 	unsigned sg_tablesize;		/* 0 or largest number of sg list entries */
 
 	int devnum_next;		/* Next open device number in
@@ -514,10 +519,10 @@ struct usb_device {
 #endif
 
 #if defined(CONFIG_USB_PEHCI_HCD) || defined(CONFIG_USB_PEHCI_HCD_MODULE)
+	/*otg add ons */
+	u8 otgdevice;				/*device is otg type */
 
-	u8 otgdevice;
-
-
+	/*otg states from otg driver, suspend, enumerate, disconnect */
 	u8 otgstate;
 	void *otgpriv;
 	void (*otg_notif) (void *otg_priv,
