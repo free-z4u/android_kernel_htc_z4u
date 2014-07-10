@@ -506,7 +506,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 	mmput(mm);
 
 	if (!(!strcmp("/system/bin/reboot", path) && cmd == LINUX_REBOOT_CMD_RESTART2)) {
-		
+		/* We only trust the superuser with rebooting the system. */
 		if (!capable(CAP_SYS_BOOT))
 			return -EPERM;
 	}
