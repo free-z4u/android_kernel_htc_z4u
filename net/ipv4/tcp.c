@@ -1919,11 +1919,6 @@ void tcp_close(struct sock *sk, long timeout)
 	int data_was_unread = 0;
 	int state;
 
-	if (IS_ERR(sk) || (!sk)) {
-		printk("[NET] sk is NULL in %s\n", __func__);
-		return;
-	}
-
 	lock_sock(sk);
 	sk->sk_shutdown = SHUTDOWN_MASK;
 
@@ -1944,11 +1939,7 @@ void tcp_close(struct sock *sk, long timeout)
 		u32 len = TCP_SKB_CB(skb)->end_seq - TCP_SKB_CB(skb)->seq -
 			  tcp_hdr(skb)->fin;
 		data_was_unread += len;
-		if(IS_ERR(skb) || (!skb)) {
-			printk(KERN_ERR "[NET] skb is NULL in %s!\n", __func__);
-		}else {
 		__kfree_skb(skb);
-		}
 	}
 
 	sk_mem_reclaim(sk);

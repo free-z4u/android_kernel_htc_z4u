@@ -2581,8 +2581,7 @@ recursion_alert:
 	rc = -ENETDOWN;
 	rcu_read_unlock_bh();
 
-	if ((!IS_ERR(skb)) && (skb))
-		kfree_skb(skb);
+	kfree_skb(skb);
 	return rc;
 out:
 	rcu_read_unlock_bh();

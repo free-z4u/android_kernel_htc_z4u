@@ -280,7 +280,7 @@ struct inet_frag_queue *inet_frag_find(struct netns_frags *nf,
 			read_unlock(&f->lock);
 			return q;
 		}
-		depth++; 
+		depth++;
 	}
 	read_unlock(&f->lock);
 
