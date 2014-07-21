@@ -27,15 +27,11 @@ struct ncp6335d_platform_data {
 	bool sleep_enable;
 };
 
-#if 0
 #ifdef CONFIG_REGULATOR_ONSEMI_NCP6335D
-int ncp6335d_restart_config(void);
+void ncp6335d_restart_config(void);
 #else
-static inline int ncp6335d_restart_config(void)
+static inline void ncp6335d_restart_config(void)
 {
-	return 0;
 }
 #endif
-#endif
-
 #endif
