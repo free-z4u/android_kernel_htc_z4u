@@ -41,7 +41,7 @@ static void msm_pm_restart(char str, const char *cmd)
 	ncp6335d_restart_config();
 #endif
 
-
+	
 	local_irq_disable();
 	local_fiq_disable();
 

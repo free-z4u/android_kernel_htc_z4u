@@ -66,8 +66,6 @@
 #include <linux/regulator/onsemi-ncp6335d.h>
 
 
-void __iomem *virt_start_ptr;
-
 enum {
 	MSM_PM_DEBUG_SUSPEND = BIT(0),
 	MSM_PM_DEBUG_POWER_COLLAPSE = BIT(1),
@@ -78,7 +76,6 @@ enum {
 	MSM_PM_DEBUG_IDLE = BIT(6),
 	MSM_PM_DEBUG_WAKEUP_REASON = BIT(8),
 	MSM_PM_DEBUG_HOTPLUG = BIT(7),
-	MSM_PM_DEBUG_SUSPEND_CLOCK = BIT(10),
 	MSM_PM_DEBUG_IDLE_CLOCK = BIT(11),
 };
 
@@ -99,7 +96,7 @@ module_param_array_named(offalarm_snooze, offalarm_snooze, uint, &offalarm_snooz
 #endif
 
 static int msm_pm_debug_mask;
-static int msm_pm_debug_mask = MSM_PM_DEBUG_SUSPEND_CLOCK | MSM_PM_DEBUG_WAKEUP_REASON | MSM_PM_DEBUG_HOTPLUG;
+static int msm_pm_debug_mask = MSM_PM_DEBUG_CLOCK | MSM_PM_DEBUG_WAKEUP_REASON | MSM_PM_DEBUG_HOTPLUG;
 module_param_named(
 	debug_mask, msm_pm_debug_mask, int, S_IRUGO | S_IWUSR | S_IWGRP
 );
@@ -315,7 +312,7 @@ static ssize_t msm_pm_mode_attr_store(struct kobject *kobj,
 	return ret ? ret : count;
 }
 
- 
+
 static int __init msm_pm_mode_sysfs_add_cpu(
 	unsigned int cpu, struct kobject *modes_kobj)
 {
@@ -515,9 +512,9 @@ static void msm_pm_config_hw_before_power_down(void)
 static void msm_pm_configure_top_csr(void)
 {
 	uint32_t bit_pos[][6] = {
-		
+
 		{17, 15, 13, 16, 14, 17},
-		
+
 		{22, 20, 18, 21, 19, 22},
 	};
 	uint32_t mpa5_cfg_ctl[2] = {0x30, 0x48};
@@ -526,11 +523,11 @@ static void msm_pm_configure_top_csr(void)
 	unsigned int cpu;
 	int i;
 
-	
+
 	msm_spm_reinit();
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x12;
+
 	for_each_possible_cpu(cpu) {
-		
+
 		if (!cpu)
 			continue;
 
@@ -538,7 +535,7 @@ static void msm_pm_configure_top_csr(void)
 		if (!base_ptr)
 			return;
 
-		
+
 		__raw_writel(0x3, base_ptr);
 		mb();
 
@@ -551,7 +548,7 @@ static void msm_pm_configure_top_csr(void)
 			mb();
 		}
 
-		
+
 		value = __raw_readl(MSM_CFG_CTL_BASE +
 						mpa5_cfg_ctl[cpu/2]);
 		value &= ~BIT(bit_pos[cpu%2][i]);
@@ -562,7 +559,6 @@ static void msm_pm_configure_top_csr(void)
 		__raw_writel(0x0, base_ptr);
 		mb();
 	}
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x13;
 }
 
 static void msm_pm_config_hw_after_power_up(void)
@@ -802,11 +798,6 @@ static int msm_pm_power_collapse
 	int val;
 	int modem_early_exit = 0;
 
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x1;
-	
-	*(uint32_t *)(virt_start_ptr + 0x34) = 0x1;
-
-	*(uint32_t *)(virt_start_ptr + 0x38) = (1 << from_idle);
 	MSM_PM_DPRINTK(MSM_PM_DEBUG_SUSPEND|MSM_PM_DEBUG_POWER_COLLAPSE,
 		KERN_INFO, "%s(): idle %d, delay %u, limit %u\n", __func__,
 		(int)from_idle, sleep_delay, sleep_limit);
@@ -821,36 +812,43 @@ static int msm_pm_power_collapse
 
 	memset(msm_pm_smem_data, 0, sizeof(*msm_pm_smem_data));
 
-	if (msm_cpr_ops && msm_cpr_ops->cpr_suspend()) {
-		ret = -EAGAIN;
-		goto power_collapse_bail;
-	}
-
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
-		
+
 		ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_POWER_COLLAPSE,
 									false);
 		WARN_ON(ret);
 	}
 
+	if (msm_cpr_ops)
+		msm_cpr_ops->cpr_suspend();
+
 	msm_pm_irq_extns->enter_sleep1(true, from_idle,
 						&msm_pm_smem_data->irq_mask);
 
-	if (((!from_idle) && (MSM_PM_DEBUG_SUSPEND_CLOCK & msm_pm_debug_mask)) ||
+	if (((!from_idle) && (MSM_PM_DEBUG_CLOCK & msm_pm_debug_mask)) ||
 			((from_idle) && (MSM_PM_DEBUG_IDLE_CLOCK & msm_pm_debug_mask))) {
 			clock_debug_print_enabled();
 	}
 
-	msm_sirc_enter_sleep();
-	msm_gpio_enter_sleep(from_idle);
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x2;
 	msm_pm_smem_data->sleep_time = sleep_delay;
 	msm_pm_smem_data->resources_used = sleep_limit;
 
-	
+	saved_acpuclk_rate = acpuclk_power_collapse();
+
+	if (!from_idle)
+		MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
+			"%s(): change clock rate (old rate = %lu)\n", __func__,
+			saved_acpuclk_rate);
+
+	if (saved_acpuclk_rate == 0) {
+		ret = -EAGAIN;
+		goto acpu_set_clock_fail;
+	}
+
+	msm_sirc_enter_sleep();
+	msm_gpio_enter_sleep(from_idle);
 
 
-	
 
 	if (from_idle)
 		smsm_change_state(SMSM_APPS_DEM, DEM_SLAVE_SMSM_RUN,
@@ -884,8 +882,8 @@ static int msm_pm_power_collapse
 			__func__);
 		goto power_collapse_early_exit;
 	}
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x3;
-	
+
+
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): PWRC RSA");
 
@@ -902,17 +900,7 @@ static int msm_pm_power_collapse
 	msm_pm_config_hw_before_power_down();
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): pre power down");
 
-	saved_acpuclk_rate = acpuclk_power_collapse();
-	MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
-		"%s(): change clock rate (old rate = %lu)\n", __func__,
-		saved_acpuclk_rate);
 
-	if (saved_acpuclk_rate == 0) {
-		msm_pm_config_hw_after_power_up();
-		goto power_collapse_early_exit;
-	}
-
-	
 	if (cpu_is_msm8625q()) {
 		msm8x25q_ahb.sel = readl_relaxed(A11S_CLK_SEL_ADDR);
 		msm8x25q_ahb.cntl = readl_relaxed(A11S_CLK_CNTL_ADDR);
@@ -920,7 +908,6 @@ static int msm_pm_power_collapse
 
 	msm_pm_boot_config_before_pc(smp_processor_id(),
 			virt_to_phys(msm_pm_collapse_exit));
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x4;
 
 #ifdef CONFIG_VFP
 	if (from_idle)
@@ -933,27 +920,23 @@ static int msm_pm_power_collapse
 	else
 		apps_power_collapse = 1;
 #endif
-
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x5;
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] suspend end\n");
 	msm_pm_irq_extns->read_active_irq();
-
 	collapsed = msm_pm_collapse();
-
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0xE;
 
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
 		int cpu;
 		val = __raw_readl(MSM_CFG_CTL_BASE + 0x38);
-		
-		if (cpu_is_msm8625q()) {			
+
+		if (cpu_is_msm8625q()) {
 			if (val != 0x000F0002) {
 				for_each_possible_cpu(cpu) {
 					if (!cpu)
 						continue;
 					per_cpu(power_collapsed, cpu) = 1;
 				}
+				power_collapsed = 1;
 				 __raw_writel(0x000F0002,
 						 (MSM_CFG_CTL_BASE + 0x38));
 			} else
@@ -965,23 +948,21 @@ static int msm_pm_power_collapse
 						continue;
 					per_cpu(power_collapsed, cpu) = 1;
 				}
+				power_collapsed = 1;
 				 __raw_writel(0x00030002,
 						 (MSM_CFG_CTL_BASE + 0x38));
 			} else
 				modem_early_exit = 1;
 		}
 	}
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0xF;
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] resume start\n");
 #ifdef CONFIG_CACHE_L2X0
-	if (!cpu_is_msm8625() && !cpu_is_msm8625q())		
+	if (!cpu_is_msm8625() && !cpu_is_msm8625q())
 		l2cc_resume();
 	else
 		apps_power_collapse = 0;
 #endif
-
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x10;
 
 	msm_pm_boot_config_after_pc(smp_processor_id());
 
@@ -995,35 +976,22 @@ static int msm_pm_power_collapse
 	}
 
 
-        
+
         if (cpu_is_msm8625q()) {
                writel_relaxed(msm8x25q_ahb.sel, A11S_CLK_SEL_ADDR);
                writel_relaxed(msm8x25q_ahb.cntl, A11S_CLK_CNTL_ADDR);
                mb();
         }
 
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x11;
-
 	MSM_PM_DPRINTK(MSM_PM_DEBUG_SUSPEND | MSM_PM_DEBUG_POWER_COLLAPSE,
 		KERN_INFO,
 		"%s(): msm_pm_collapse returned %d\n", __func__, collapsed);
-
-	MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
-		"%s(): restore clock rate to %lu\n", __func__,
-		saved_acpuclk_rate);
-	if (acpuclk_set_rate(smp_processor_id(), saved_acpuclk_rate,
-			SETRATE_PC) < 0)
-		printk(KERN_ERR "%s(): failed to restore clock rate(%lu)\n",
-			__func__, saved_acpuclk_rate);
 
 	msm_pm_irq_extns->exit_sleep1(msm_pm_smem_data->irq_mask,
 		msm_pm_smem_data->wakeup_reason,
 		msm_pm_smem_data->pending_irqs);
 
 	msm_pm_config_hw_after_power_up();
-
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x14;
-
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): post power up");
 
 	memset(state_grps, 0, sizeof(state_grps));
@@ -1050,15 +1018,14 @@ static int msm_pm_power_collapse
 		goto power_collapse_early_exit;
 	}
 
-	
+
 	if (collapsed && !modem_early_exit) {
-		
-		*(uint32_t *)(virt_start_ptr + 0x30) = 0x15;
+
 	} else {
 		goto power_collapse_early_exit;
 	}
 
-	
+
 
 	smsm_change_state(SMSM_APPS_DEM,
 		DEM_SLAVE_SMSM_PWRC | DEM_SLAVE_SMSM_PWRC_SUSPEND,
@@ -1077,8 +1044,8 @@ static int msm_pm_power_collapse
 	if (ret < 0) {
 		printk(KERN_EMERG "[K] %s(): power collapse WFPI "
 			"timed out waiting for Modem's response\n", __func__);
-		
-		
+
+
 	}
 
 	if (ret == 1) {
@@ -1091,12 +1058,21 @@ static int msm_pm_power_collapse
 		goto power_collapse_restore_gpio_bail;
 	}
 
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x16;
-	
+	if (!from_idle)
+		MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
+			"%s(): restore clock rate to %lu\n", __func__,
+			saved_acpuclk_rate);
+
+	if (acpuclk_set_rate(smp_processor_id(), saved_acpuclk_rate,
+			SETRATE_PC) < 0)
+		printk(KERN_ERR "%s(): failed to restore clock rate(%lu)\n",
+			__func__, saved_acpuclk_rate);
+
+
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): WFPI RUN");
 	MSM_PM_DEBUG_PRINT_SLEEP_INFO(from_idle);
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x17;
+
 	msm_pm_irq_extns->exit_sleep2(msm_pm_smem_data->irq_mask,
 		msm_pm_smem_data->wakeup_reason,
 		msm_pm_smem_data->pending_irqs);
@@ -1105,7 +1081,7 @@ static int msm_pm_power_collapse
 		msm_pm_smem_data->pending_irqs);
 	msm_gpio_exit_sleep();
 	msm_sirc_exit_sleep();
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x18;
+
 	smsm_change_state(SMSM_APPS_DEM,
 		DEM_SLAVE_SMSM_WFPI, DEM_SLAVE_SMSM_RUN);
 
@@ -1113,7 +1089,7 @@ static int msm_pm_power_collapse
 	MSM_PM_DEBUG_PRINT_SLEEP_INFO(from_idle);
 
 	smd_sleep_exit();
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x19;
+
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
 		ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_CLOCK_GATING,
 									false);
@@ -1122,13 +1098,11 @@ static int msm_pm_power_collapse
 
 	if (msm_cpr_ops)
 		msm_cpr_ops->cpr_resume();
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x20;
-	*(uint32_t *)(virt_start_ptr + 0x34) = 0x0;
+
 	return 0;
 
 power_collapse_early_exit:
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x21;
-	
+
 
 	smsm_change_state(SMSM_APPS_DEM,
 		DEM_SLAVE_SMSM_PWRC | DEM_SLAVE_SMSM_PWRC_SUSPEND,
@@ -1157,38 +1131,44 @@ power_collapse_early_exit:
 			__func__);
 	}
 
-	
+
 
 	ret = -EAGAIN;
 
 power_collapse_restore_gpio_bail:
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x22;
 	msm_gpio_exit_sleep();
 	msm_sirc_exit_sleep();
 
-	
+
 	smsm_change_state(SMSM_APPS_DEM,
 		DEM_SLAVE_SMSM_PWRC | DEM_SLAVE_SMSM_PWRC_SUSPEND |
 		DEM_SLAVE_SMSM_PWRC_EARLY_EXIT | DEM_SLAVE_SMSM_WFPI,
 		DEM_SLAVE_SMSM_RUN);
 
 	MSM_PM_DEBUG_PRINT_STATE("msm_pm_power_collapse(): RUN");
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x23;
+
+	MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
+		"%s(): restore clock rate to %lu\n", __func__,
+		saved_acpuclk_rate);
+	if (acpuclk_set_rate(smp_processor_id(), saved_acpuclk_rate,
+			SETRATE_PC) < 0)
+		printk(KERN_ERR "%s(): failed to restore clock rate(%lu)\n",
+			__func__, saved_acpuclk_rate);
+
 	if (collapsed)
 		smd_sleep_exit();
 
-	if (msm_cpr_ops)
+acpu_set_clock_fail:
+	if (msm_cpr_ops && from_idle)
 		msm_cpr_ops->cpr_resume();
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x24;
+
+power_collapse_bail:
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
 		ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_CLOCK_GATING,
 									false);
 		WARN_ON(ret);
 	}
 
-power_collapse_bail:
-	*(uint32_t *)(virt_start_ptr + 0x30) = 0x25;
-	*(uint32_t *)(virt_start_ptr + 0x34) = 0x0;
 	return ret;
 }
 
@@ -1197,47 +1177,10 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 	int collapsed = 0;
 	int ret;
 	void *entry;
-	int cpu;
 
 	MSM_PM_DPRINTK(MSM_PM_DEBUG_SUSPEND|MSM_PM_DEBUG_POWER_COLLAPSE,
 		KERN_INFO, "%s()\n", __func__);
 
-	cpu = smp_processor_id();
-	switch (cpu) {
-	case 0:
-		
-		*(uint32_t *)(virt_start_ptr + 0x10) = 0x1;
-
-		*(uint32_t *)(virt_start_ptr + 0x20) = 0x1;
-		break;
-	case 1:
-		*(uint32_t *)(virt_start_ptr + 0x14) = 0x1;
-
-		if (from_idle)
-			*(uint32_t *)(virt_start_ptr + 0x24) = 0x1;
-		else
-			
-			*(uint32_t *)(virt_start_ptr + 0x24) = 0x2;
-		break;
-	case 2:
-		*(uint32_t *)(virt_start_ptr + 0x18) = 0x1;
-
-		if (from_idle)
-			*(uint32_t *)(virt_start_ptr + 0x28) = 0x1;
-		else
-			
-			*(uint32_t *)(virt_start_ptr + 0x28) = 0x2;
-		break;
-	case 3:
-		*(uint32_t *)(virt_start_ptr + 0x1C) = 0x1;
-
-		if (from_idle)
-			*(uint32_t *)(virt_start_ptr + 0x2C) = 0x1;
-		else
-			
-			*(uint32_t *)(virt_start_ptr + 0x2C) = 0x2;
-		break;
-	}
 	ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_POWER_COLLAPSE, false);
 	WARN_ON(ret);
 
@@ -1256,38 +1199,8 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		l2cc_suspend();
 #endif
 
-	switch (cpu) {
-	case 0:
-		*(uint32_t *)(virt_start_ptr + 0x10) = 0x2;
-		break;
-	case 1:
-		*(uint32_t *)(virt_start_ptr + 0x14) = 0x2;
-		break;
-	case 2:
-		*(uint32_t *)(virt_start_ptr + 0x18) = 0x2;
-		break;
-	case 3:
-		*(uint32_t *)(virt_start_ptr + 0x1C) = 0x2;
-		break;
-	}
-
 	msm_pm_irq_extns->read_active_irq();
 	collapsed = msm_pm_collapse();
-
-	switch (cpu) {
-	case 0:
-		*(uint32_t *)(virt_start_ptr + 0x10) = 0xB;
-		break;
-	case 1:
-		*(uint32_t *)(virt_start_ptr + 0x14) = 0xB;
-		break;
-	case 2:
-		*(uint32_t *)(virt_start_ptr + 0x18) = 0xB;
-		break;
-	case 3:
-		*(uint32_t *)(virt_start_ptr + 0x1C) = 0xB;
-		break;
-	}
 
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] resume start\n");
@@ -1313,24 +1226,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 	ret = msm_spm_set_low_power_mode(MSM_SPM_MODE_CLOCK_GATING, false);
 	WARN_ON(ret);
 
-	switch (cpu) {
-	case 0:
-		*(uint32_t *)(virt_start_ptr + 0x10) = 0xC;
-		*(uint32_t *)(virt_start_ptr + 0x20) = 0x0;
-		break;
-	case 1:
-		*(uint32_t *)(virt_start_ptr + 0x14) = 0xC;
-		*(uint32_t *)(virt_start_ptr + 0x24) = 0x0;
-		break;
-	case 2:
-		*(uint32_t *)(virt_start_ptr + 0x18) = 0xC;
-		*(uint32_t *)(virt_start_ptr + 0x28) = 0x0;
-		break;
-	case 3:
-		*(uint32_t *)(virt_start_ptr + 0x1C) = 0xC;
-		*(uint32_t *)(virt_start_ptr + 0x2C) = 0x0;
-		break;
-	}
 	return !collapsed;
 }
 
@@ -1338,52 +1233,37 @@ static int msm_pm_swfi(bool from_idle, bool ramp_acpu)
 {
 	unsigned long saved_acpuclk_rate = 0;
 
-	*(uint32_t *)(virt_start_ptr + 0x40) = 0x1;
-
 	if (ramp_acpu) {
-		*(uint32_t *)(virt_start_ptr + 0x40) = 0x2;
 		saved_acpuclk_rate = acpuclk_wait_for_irq();
-		*(uint32_t *)(virt_start_ptr + 0x40) = 0x3;
+
 		if (!from_idle)
 			MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
 				"%s(): change clock rate (old rate = %lu)\n", __func__,
 				saved_acpuclk_rate);
 
-		if (!saved_acpuclk_rate) {
-			*(uint32_t *)(virt_start_ptr + 0x40) = 0x4;
+		if (!saved_acpuclk_rate)
 			return -EIO;
-		}
 	}
 
-	*(uint32_t *)(virt_start_ptr + 0x40) = 0x5;
 	if (!cpu_is_msm8625() && !cpu_is_msm8625q())
 		msm_pm_config_hw_before_swfi();
 
-	*(uint32_t *)(virt_start_ptr + 0x40) = 0x6;
 	msm_pm_irq_extns->read_active_irq();
-	*(uint32_t *)(virt_start_ptr + 0x40) = 0x7;
 	msm_arch_idle();
 
-	*(uint32_t *)(virt_start_ptr + 0x40) = 0x8;
 	if (ramp_acpu) {
-		*(uint32_t *)(virt_start_ptr + 0x40) = 0x9;
 		if (!from_idle)
 			MSM_PM_DPRINTK(MSM_PM_DEBUG_CLOCK, KERN_INFO,
 				"%s(): restore clock rate to %lu\n", __func__,
 				saved_acpuclk_rate);
 
-		*(uint32_t *)(virt_start_ptr + 0x40) = 0xA;
-
 		if (acpuclk_set_rate(smp_processor_id(), saved_acpuclk_rate,
-				SETRATE_SWFI) < 0) {
-			*(uint32_t *)(virt_start_ptr + 0x40) = 0xB;
+				SETRATE_SWFI) < 0)
 			printk(KERN_ERR
 				"[K] %s(): failed to restore clock rate(%lu)\n",
 				__func__, saved_acpuclk_rate);
-		}
 	}
 
-	*(uint32_t *)(virt_start_ptr + 0x40) = 0xC;
 	return 0;
 }
 
@@ -1433,7 +1313,7 @@ void arch_idle(void)
 
 	cpu = smp_processor_id();
 	latency_qos = pm_qos_request(PM_QOS_CPU_DMA_LATENCY);
-	
+
 	timer_expiration = ktime_to_ns(tick_nohz_get_sleep_length());
 
 	t1 = ktime_to_ns(ktime_get());
@@ -1500,7 +1380,7 @@ void arch_idle(void)
 		sleep_delay = (uint32_t) msm_pm_convert_and_cap_time(
 			next_timer_exp, MSM_PM_SLEEP_TICK_LIMIT);
 
-		if (sleep_delay == 0) 
+		if (sleep_delay == 0)
 			sleep_delay = 1;
 
 		if (!allow[MSM_PM_SLEEP_MODE_POWER_COLLAPSE])
@@ -1561,7 +1441,7 @@ static int msm_pm_enter(suspend_state_t state)
 	int64_t period = 0;
 	int64_t time = 0;
 
-	
+
 	if (smp_processor_id()) {
 		__WARN();
 		goto suspend_exit;
@@ -1631,16 +1511,16 @@ static int msm_pm_enter(suspend_state_t state)
 	} else if (allow[MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE]) {
 		ret = msm_pm_power_collapse_standalone(false);
 	} else if (allow[MSM_PM_SLEEP_MODE_RAMP_DOWN_AND_WAIT_FOR_INTERRUPT]) {
-		printk(KERN_INFO "[K][R] suspend end in WFI\n");
+		printk(KERN_INFO "[K][R] suspend end\n");
 		ret = msm_pm_swfi(false, true);
-		printk(KERN_INFO "[K][R] resume start in WFI\n");
+		printk(KERN_INFO "[K][R] resume start\n");
 		if (ret)
 			while (!msm_pm_irq_extns->irq_pending())
 				udelay(1);
 	} else if (allow[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT]) {
-		printk(KERN_INFO "[K][R] suspend end in SMFI\n");
+		printk(KERN_INFO "[K][R] suspend end\n");
 		msm_pm_swfi(false, false);
-		printk(KERN_INFO "[K][R] resume start in SMFI\n");
+		printk(KERN_INFO "[K][R] resume start\n");
 	}
 
 suspend_exit:
@@ -1709,7 +1589,7 @@ void msm_pm_cpu_enter_lowpower(unsigned int cpu)
 static uint32_t restart_reason = 0x776655AA;
 
 #ifdef CONFIG_HTC_OFFMODE_ALARM
-static int msm_wakeup_after;    
+static int msm_wakeup_after;
 
 static int set_offmode_alarm(void)
 {
@@ -1722,9 +1602,9 @@ static int set_offmode_alarm(void)
         for (i = 0; i < offalarm_size; i++) {
                 if (offalarm[i] > rtc_now.tv_sec) {
                         next_alarm_interval = offalarm[i] - rtc_now.tv_sec;
-                        if (next_alarm_interval > 604800)       
+                        if (next_alarm_interval > 604800)
                                 continue;
-                        next_alarm_interval = next_alarm_interval * 1000;  
+                        next_alarm_interval = next_alarm_interval * 1000;
                         if (msm_wakeup_after == 0)
                                 msm_wakeup_after = next_alarm_interval;
                         else if (next_alarm_interval < msm_wakeup_after)
@@ -1734,7 +1614,7 @@ static int set_offmode_alarm(void)
 		for (i = 0; i < offalarm_snooze_size; i++) {
                 if (offalarm_snooze[i] > rtc_now.tv_sec) {
                         next_alarm_interval = offalarm_snooze[i] - rtc_now.tv_sec;
-                        if (next_alarm_interval > 604800)       
+                        if (next_alarm_interval > 604800)
                                 continue;
                         next_alarm_interval = next_alarm_interval * 1000;
                         if (msm_wakeup_after == 0)
@@ -1753,9 +1633,6 @@ static void msm_pm_power_off(void)
 	msm_rpcrouter_close();
 #endif
 
-	
-	local_irq_disable();
-
 #ifdef CONFIG_HTC_OFFMODE_ALARM
         set_offmode_alarm();
         printk(KERN_INFO "[K] msm_pm_power_off:wakeup after %d\r\n", msm_wakeup_after);
@@ -1768,7 +1645,7 @@ static void msm_pm_power_off(void)
 		;
 }
 #if 1
-#define APPCPU_PREPARE_RESTART		0xFC2D0 
+#define APPCPU_PREPARE_RESTART		0xFC2D0
 #define HTC_APPS_CPU_RESTART_MAGIC	0xAB030426
 void msm_pm_indicate_restart(int restart)
 {
@@ -1784,65 +1661,34 @@ void msm_pm_indicate_restart(int restart)
 
 static void msm_pm_restart(char str, const char *cmd)
 {
-#if 0
-	int rc;
-#endif
-	int ret = -1;
-	uint32_t data1 = 0x0;
-	int retry_times = 0;
-	int wait_amss_reboot_secs = 5;
-#if 0
 	if (console_trylock()) {
 		console_unlock();
 	}else{
 		printk(KERN_EMERG "[K] msm_restart: Console was locked, can't flush console\n");
 	}
-#endif
-	
-	local_irq_disable();	
 
-        setup_mm_for_reboot();
-
-__retry_msm_proc_comm__:
-	pr_info("[K] %s: restart_reason 0x%x, cmd %s\n", __func__, restart_reason, (cmd) ? cmd : "NULL");
-
-	
-
-	data1 = restart_reason;
-
-	if (restart_reason == RESTART_REASON_RIL_FATAL)
-		ret = msm_proc_comm(PCOM_RESET_CHIP_IMM, &data1, 0);
-	else
-		ret = msm_proc_comm(PCOM_RESET_CHIP, &data1, 0);
-
-	
-	if ( (ret != 0 || data1 != restart_reason) && (retry_times < 10) ) {
-		printk(KERN_INFO "[K] @@@@@@@@@@@  msm_proc_comm Failed! ret:0x%x data1:0x%x\r\n", ret, data1);
-		printk(KERN_INFO "[K] @@@@@@@@@@@  msm_proc_comm Retry %d after %d secs ...\r\n", ++retry_times, wait_amss_reboot_secs);
-		mdelay(wait_amss_reboot_secs*1000);
-		goto __retry_msm_proc_comm__;
-	}
-
-	printk(KERN_INFO "[K] @@@@@@@@@@@  msm_proc_comm end ret:0x%x data1:0x%x\r\n", ret, data1);
-
-#if 0
-	printk(KERN_INFO "[K] @@@@@@@@@@@ ncp6335d_restart_config ...\r\n");
+#ifdef CONFIG_REGULATOR_ONSEMI_NCP6335D
 	ncp6335d_restart_config();
 #endif
 
-#if 0
-	printk(KERN_INFO "[K] @@@@@@@@@@@ wait for %d secs...\r\n", wait_amss_reboot_secs);
+	pr_info("[K] %s: restart_reason 0x%x, cmd %s\n", __func__, restart_reason, (cmd) ? cmd : "NULL");
 
-	mdelay(wait_amss_reboot_secs*1000);
+
+	if (restart_reason == RESTART_REASON_RIL_FATAL)
+		msm_proc_comm(PCOM_RESET_CHIP_IMM, &restart_reason, 0);
+	else
+		msm_proc_comm(PCOM_RESET_CHIP, &restart_reason, 0);
+
+	printk(KERN_INFO "[K] @@@@@@@@@@@  msm_proc_comm end\r\n");
 
 #if defined(CONFIG_MSM_RMT_STORAGE_SERVER) || defined(CONFIG_MSM_RMT_STORAGE_CLIENT)
 	printk(KERN_INFO "[K] from %s\r\n", __func__);
 	wait_rmt_final_call_back(10);
 	printk(KERN_INFO "[K] back %s\r\n", __func__);
-	
+
 	mdelay(2000);
 #else
-	
+
 	mdelay(10000);
 #endif
 
@@ -1850,14 +1696,12 @@ __retry_msm_proc_comm__:
 	msm_pm_flush_console();
 	printk(KERN_INFO "[K] @@@@@@@@@@@  rise PS_hold start\r\n");
 
-	
+
 	if (msm_hw_reset_hook) {
 		printk(KERN_INFO "[K] %s : Do HW_RESET by APP not by RADIO\r\n", __func__);
 		msm_hw_reset_hook();
 	}
-#endif
 
-	printk(KERN_INFO "[K] @@@@@@@@@@@ wait forever\r\n");
 	for (;;)
 		;
 }
@@ -1891,16 +1735,16 @@ static void __init boot_lock_nohalt(void)
 {
 	int nohalt_timeout = 0;
 
-	
+
 	switch (board_mfg_mode()) {
-	case 0: 
-	case 1: 
-	case 2: 
+	case 0:
+	case 1:
+	case 2:
 		nohalt_timeout = BOOT_LOCK_TIMEOUT_NORMAL;
 		break;
-	case 3: 
-	case 4: 
-	case 5: 
+	case 3:
+	case 4:
+	case 5:
 	default:
 		nohalt_timeout = BOOT_LOCK_TIMEOUT_SHORT;
 		break;
@@ -1937,7 +1781,7 @@ static int __init msm_pm_init(void)
 
 	exit_phys = virt_to_phys(msm_pm_collapse_exit);
 
-	
+
 	pc_pgd = pgd_alloc(&init_mm);
 	if (!pc_pgd)
 		return -ENOMEM;
@@ -2002,8 +1846,6 @@ static int __init msm_pm_init(void)
 
 		l2x0_base_addr = MSM_L2CC_BASE;
 	}
-
-	idle_v7_start_ptr = virt_start_ptr;
 
 #ifdef CONFIG_MSM_MEMORY_LOW_POWER_MODE
 	msm_pm_smem_data->wakeup_reason = 1;

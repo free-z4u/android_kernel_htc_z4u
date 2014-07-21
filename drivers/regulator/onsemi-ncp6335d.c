@@ -103,17 +103,17 @@ void ncp6335d_restart_config(void)
 
 	printk(KERN_INFO "[reboot] %s+\n", __func__);
 
-	if(ncp6335d)
+	if(ncp6335d)	
 		cur_vol = ncp6335d_get_voltage(ncp6335d->regulator);
-
-
+	
+	
 	printk(KERN_INFO "[reboot] cur vol:(%d) NCP6335D_DEF_VTG_UV:(%d)\n",
 							cur_vol, NCP6335D_DEF_VTG_UV);
 
 	if(cur_vol >= NCP6335D_DEF_VTG_UV){
-		dev_err(ncp6335d->dev, "cur vol:(%d) is bigger than NCP6335D_DEF_VTG_UV:(%d), return.\n",
+		dev_err(ncp6335d->dev, "cur vol:(%d) is bigger than NCP6335D_DEF_VTG_UV:(%d), return.\n", 
 							cur_vol, NCP6335D_DEF_VTG_UV);
-
+	
 	}else{
 		set_val = DIV_ROUND_UP(NCP6335D_DEF_VTG_UV - NCP6335D_MIN_VOLTAGE_UV,
 							NCP6335D_STEP_VOLTAGE_UV);
@@ -208,7 +208,7 @@ static int ncp6335d_get_voltage(struct regulator_dev *rdev)
 #if 0
 	#define CP3_MIN_UV 950000
 #else
-
+	
 	#define CP3_MIN_UV 1000000
 #endif
 
@@ -246,11 +246,11 @@ static int ncp6335d_set_voltage(struct regulator_dev *rdev,
 	}
 __retry__:
 #if 0
-
+	
 	set_val = (set_val < 0x38?0x38:set_val);
 #else
-
-
+	
+	
 	set_val = (set_val < 0x40?0x40:set_val);
 #endif
 	temp = dd->vsel_ctrl_val & ~NCP6335D_VOUT_SEL_MASK;
@@ -301,7 +301,7 @@ static int ncp6335d_set_mode(struct regulator_dev *rdev,
 	int rc;
 	struct ncp6335d_info *dd = rdev_get_drvdata(rdev);
 
-
+	
 	if (mode != REGULATOR_MODE_FAST && mode != REGULATOR_MODE_NORMAL) {
 		dev_err(dd->dev, "Mode %d not supported\n", mode);
 		return -EINVAL;
@@ -382,7 +382,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 		return -EINVAL;
 	}
 
-
+	
 	rc = regmap_read(dd->regmap, dd->vsel_reg, &val);
 	if (rc) {
 		dev_err(dd->dev, "Unable to get volatge rc(%d)", rc);
@@ -392,7 +392,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 	dd->curr_voltage = ((val & NCP6335D_VOUT_SEL_MASK) *
 			NCP6335D_STEP_VOLTAGE_UV) + NCP6335D_MIN_VOLTAGE_UV;
 
-
+	
 	rc = regmap_update_bits(dd->regmap, REG_NCP6335D_PGOOD,
 					NCP6335D_PGOOD_DISCHG,
 					(pdata->discharge_enable ?
@@ -402,7 +402,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 		return -EINVAL;
 	}
 
-
+	
 	if (pdata->slew_rate_ns < NCP6335D_MIN_SLEW_NS ||
 			pdata->slew_rate_ns > NCP6335D_MAX_SLEW_NS) {
 		dev_err(dd->dev, "Invalid slew rate %d\n", pdata->slew_rate_ns);
@@ -429,7 +429,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 					rc);
 	}
 
-
+	
 	rc = regmap_update_bits(dd->regmap, REG_NCP6335D_COMMAND,
 				NCP6335D_SLEEP_MODE, pdata->sleep_enable ?
 						NCP6335D_SLEEP_MODE : 0);
