@@ -525,6 +525,7 @@ static void ipi_cpu_stop(unsigned int cpu)
 static cpumask_t backtrace_mask;
 static DEFINE_RAW_SPINLOCK(backtrace_lock);
 
+/* "in progress" flag of arch_trigger_all_cpu_backtrace */
 static unsigned long backtrace_flag;
 
 void smp_send_all_cpu_backtrace(void)
@@ -533,6 +534,10 @@ void smp_send_all_cpu_backtrace(void)
 	int i;
 
 	if (test_and_set_bit(0, &backtrace_flag))
+		/*
+		 * If there is already a trigger_all_cpu_backtrace() in progress
+		 * (backtrace_flag == 1), don't output double cpu dump infos.
+		 */
 		return;
 
 	cpumask_copy(&backtrace_mask, cpu_online_mask);
@@ -544,7 +549,7 @@ void smp_send_all_cpu_backtrace(void)
 	pr_info("\nsending IPI to all other CPUs:\n");
 	smp_cross_call(&backtrace_mask, IPI_CPU_BACKTRACE);
 
-	
+	/* Wait for up to 10 seconds for all other CPUs to do the backtrace */
 	for (i = 0; i < 10 * 1000; i++) {
 		if (cpumask_empty(&backtrace_mask))
 			break;
@@ -555,6 +560,9 @@ void smp_send_all_cpu_backtrace(void)
 	smp_mb__after_clear_bit();
 }
 
+/*
+ * ipi_cpu_backtrace - handle IPI from smp_send_all_cpu_backtrace()
+ */
 static void ipi_cpu_backtrace(unsigned int cpu, struct pt_regs *regs)
 {
 	if (cpu_isset(cpu, backtrace_mask)) {
@@ -584,7 +592,7 @@ void handle_IPI(int ipinr, struct pt_regs *regs)
 
 	switch (ipinr) {
 	case IPI_CPU_START:
-		
+		/* Wake up from WFI/WFE using SGI */
 		break;
 	case IPI_TIMER:
 		irq_enter();

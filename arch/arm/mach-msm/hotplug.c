@@ -98,6 +98,10 @@ void platform_cpu_die(unsigned int cpu)
 	platform_do_lowpower(cpu);
 
 	pr_debug("CPU%u: %s: normal wakeup\n", cpu, __func__);
+	/*
+	 * bring this CPU back into the world of cache
+	 * coherency, and then restore interrupts
+	 */
 	cpu_leave_lowpower();
 }
 
