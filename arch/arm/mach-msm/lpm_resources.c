@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -18,14 +18,14 @@
 #include <linux/platform_device.h>
 #include <linux/of.h>
 #include <linux/cpu.h>
+#include <mach/mpm.h>
 #include <linux/notifier.h>
 #include <linux/hrtimer.h>
 #include <linux/tick.h>
-#include <mach/mpm.h>
-#include <mach/rpm-smd.h>
 #include "spm.h"
 #include "lpm_resources.h"
 #include "rpm-notifier.h"
+#include <mach/rpm-smd.h>
 #include "idle.h"
 
 /*Debug Definitions*/
@@ -46,7 +46,7 @@ module_param_named(
 static bool msm_lpm_get_rpm_notif = true;
 
 /*Macros*/
-#define VDD_DIG_ACTIVE		(5)
+#define VDD_DIG_ACTIVE		(950000)
 #define VDD_MEM_ACTIVE		(1050000)
 #define MAX_RS_NAME		(16)
 #define MAX_RS_SIZE		(4)
@@ -243,7 +243,6 @@ static int msm_lpm_send_sleep_data(struct msm_rpm_request *handle,
 					uint32_t key, uint8_t *value)
 {
 	int ret = 0;
-	int msg_id;
 
 	if (!handle)
 		return ret;
@@ -256,18 +255,10 @@ static int msm_lpm_send_sleep_data(struct msm_rpm_request *handle,
 		return ret;
 	}
 
-	msg_id = msm_rpm_send_request_noirq(handle);
-	if (!msg_id) {
+	ret = msm_rpm_send_request_noirq(handle);
+	if (ret < 0) {
 		pr_err("%s: Error sending RPM request key %u, handle 0x%x\n",
 				__func__, key, (unsigned int)handle);
-		ret = -EIO;
-		return ret;
-	}
-
-	ret = msm_rpm_wait_for_ack_noirq(msg_id);
-	if (ret < 0) {
-		pr_err("%s: Couldn't get ACK from RPM for Msg %d Error %d",
-				__func__, msg_id, ret);
 		return ret;
 	}
 	if (msm_lpm_debug_mask & MSM_LPMRS_DEBUG_RPM)
@@ -619,10 +610,12 @@ static void msm_lpm_notify_pxo(struct msm_rpm_notifier_data
 	msm_lpm_notify_common(rpm_notifier_cb, rs);
 }
 
-static inline bool msm_lpm_use_mpm(struct msm_rpmrs_limits *limits)
+/* MPM
+static bool msm_lpm_use_mpm(struct msm_rpmrs_limits *limits)
 {
-	return (limits->pxo == MSM_LPM_PXO_OFF);
-}
+	return ((limits->pxo == MSM_LPM_PXO_OFF) ||
+		(limits->vdd_dig_lower_bound <= VDD_DIG_RET_HIGH));
+}*/
 
 /* LPM levels interface */
 bool msm_lpm_level_beyond_limit(struct msm_rpmrs_limits *limits)
@@ -645,7 +638,7 @@ bool msm_lpm_level_beyond_limit(struct msm_rpmrs_limits *limits)
 	return beyond_limit;
 }
 
-int msm_lpmrs_enter_sleep(uint32_t sclk_count, struct msm_rpmrs_limits *limits,
+int msm_lpmrs_enter_sleep(struct msm_rpmrs_limits *limits,
 				bool from_idle, bool notify_rpm)
 {
 	int ret = 0;
@@ -666,20 +659,19 @@ int msm_lpmrs_enter_sleep(uint32_t sclk_count, struct msm_rpmrs_limits *limits,
 	}
 	msm_lpm_get_rpm_notif = true;
 
+	/* MPM Enter sleep
 	if (msm_lpm_use_mpm(limits))
-		msm_mpm_enter_sleep(sclk_count, from_idle);
+		msm_mpm_enter_sleep(from_idle);*/
 
 	return ret;
 }
 
-void msm_lpmrs_exit_sleep(struct msm_rpmrs_limits *limits,
-		bool from_idle, bool notify_rpm, bool collapsed)
+void msm_lpmrs_exit_sleep(uint32_t sclk_count, struct msm_rpmrs_limits *limits,
+		bool from_idle, bool notify_rpm)
 {
 	/* MPM exit sleep
 	if (msm_lpm_use_mpm(limits))
 		msm_mpm_exit_sleep(from_idle);*/
-
-	msm_spm_l2_set_low_power_mode(MSM_SPM_MODE_DISABLED, notify_rpm);
 }
 
 static int msm_lpm_cpu_callback(struct notifier_block *cpu_nb,

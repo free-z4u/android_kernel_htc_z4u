@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -43,8 +43,6 @@ static struct gss_8064_data {
 
 static int crash_shutdown;
 
-static struct subsys_device *gss_8064_dev;
-
 #define MAX_SSR_REASON_LEN 81U
 
 static void log_gss_sfr(void)
@@ -74,7 +72,7 @@ static void log_gss_sfr(void)
 static void restart_gss(void)
 {
 	log_gss_sfr();
-	subsystem_restart_dev(gss_8064_dev);
+	subsystem_restart("gss");
 }
 
 static void smsm_state_cb(void *data, uint32_t old_state, uint32_t new_state)
@@ -93,7 +91,7 @@ static void smsm_state_cb(void *data, uint32_t old_state, uint32_t new_state)
 
 #define Q6_FW_WDOG_ENABLE		0x08882024
 #define Q6_SW_WDOG_ENABLE		0x08982024
-static int gss_shutdown(const struct subsys_desc *desc)
+static int gss_shutdown(const struct subsys_data *subsys)
 {
 	pil_force_shutdown("gss");
 	disable_irq_nosync(GSS_A5_WDOG_EXPIRED);
@@ -101,14 +99,14 @@ static int gss_shutdown(const struct subsys_desc *desc)
 	return 0;
 }
 
-static int gss_powerup(const struct subsys_desc *desc)
+static int gss_powerup(const struct subsys_data *subsys)
 {
 	pil_force_boot("gss");
 	enable_irq(GSS_A5_WDOG_EXPIRED);
 	return 0;
 }
 
-void gss_crash_shutdown(const struct subsys_desc *desc)
+void gss_crash_shutdown(const struct subsys_data *subsys)
 {
 	crash_shutdown = 1;
 	smsm_reset_modem(SMSM_RESET);
@@ -124,7 +122,7 @@ static struct ramdump_segment smem_segments[] = {
 };
 
 static int gss_ramdump(int enable,
-				const struct subsys_desc *crashed_subsys)
+				const struct subsys_data *crashed_subsys)
 {
 	int ret = 0;
 
@@ -159,7 +157,7 @@ static irqreturn_t gss_wdog_bite_irq(int irq, void *dev_id)
 	return IRQ_HANDLED;
 }
 
-static struct subsys_desc gss_8064 = {
+static struct subsys_data gss_8064 = {
 	.name = "gss",
 	.shutdown = gss_shutdown,
 	.powerup = gss_powerup,
@@ -169,10 +167,7 @@ static struct subsys_desc gss_8064 = {
 
 static int gss_subsystem_restart_init(void)
 {
-	gss_8064_dev = subsys_register(&gss_8064);
-	if (IS_ERR(gss_8064_dev))
-		return PTR_ERR(gss_8064_dev);
-	return 0;
+	return ssr_register_subsystem(&gss_8064);
 }
 
 static int gss_open(struct inode *inode, struct file *filep)

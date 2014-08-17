@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -499,6 +499,7 @@ static int mipi_dsi_panel_power(int on)
 
 static struct mipi_dsi_platform_data mipi_dsi_pdata = {
 	.dsi_power_save = mipi_dsi_panel_power,
+	.dlane_swap = 0x0,
 };
 
 static bool lvds_power_on;
@@ -617,17 +618,14 @@ static int lvds_panel_power(int on)
 
 static int lvds_pixel_remap(void)
 {
-	u32 ver = socinfo_get_version();
-
 	if (machine_is_apq8064_cdp() ||
 	    machine_is_apq8064_liquid()) {
+		u32 ver = socinfo_get_version();
 		if ((SOCINFO_VERSION_MAJOR(ver) == 1) &&
 		    (SOCINFO_VERSION_MINOR(ver) == 0))
 			return LVDS_PIXEL_MAP_PATTERN_1;
 	} else if (machine_is_mpq8064_dtv()) {
-		if ((SOCINFO_VERSION_MAJOR(ver) == 1) &&
-		    (SOCINFO_VERSION_MINOR(ver) == 0))
-			return LVDS_PIXEL_MAP_PATTERN_2;
+		return LVDS_PIXEL_MAP_PATTERN_2;
 	}
 	return 0;
 }

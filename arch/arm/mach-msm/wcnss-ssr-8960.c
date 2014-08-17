@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -19,7 +19,6 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/wcnss_wlan.h>
-#include <linux/err.h>
 #include <mach/irqs.h>
 #include <mach/scm.h>
 #include <mach/subsystem_restart.h>
@@ -38,7 +37,6 @@ static void *riva_ramdump_dev;
 static int riva_crash;
 static int ss_restart_inprogress;
 static int enable_riva_ssr;
-static struct subsys_device *riva_8960_dev;
 
 static void smsm_state_cb_hdlr(void *data, uint32_t old_state,
 					uint32_t new_state)
@@ -85,7 +83,7 @@ static void smsm_state_cb_hdlr(void *data, uint32_t old_state,
 	}
 
 	ss_restart_inprogress = true;
-	subsystem_restart_dev(riva_8960_dev);
+	subsystem_restart("riva");
 }
 
 static irqreturn_t riva_wdog_bite_irq_hdlr(int irq, void *dev_id)
@@ -102,7 +100,7 @@ static irqreturn_t riva_wdog_bite_irq_hdlr(int irq, void *dev_id)
 		panic(MODULE_NAME ": Watchdog bite received from Riva");
 
 	ss_restart_inprogress = true;
-	subsystem_restart_dev(riva_8960_dev);
+	subsystem_restart("riva");
 
 	return IRQ_HANDLED;
 }
@@ -128,17 +126,16 @@ static void riva_post_bootup(struct work_struct *work)
 }
 
 /* Subsystem handlers */
-static int riva_shutdown(const struct subsys_desc *subsys)
+static int riva_shutdown(const struct subsys_data *subsys)
 {
 	pil_force_shutdown("wcnss");
 	flush_delayed_work(&cancel_vote_work);
-	wcnss_flush_delayed_boot_votes();
 	disable_irq_nosync(RIVA_APSS_WDOG_BITE_RESET_RDY_IRQ);
 
 	return 0;
 }
 
-static int riva_powerup(const struct subsys_desc *subsys)
+static int riva_powerup(const struct subsys_data *subsys)
 {
 	struct platform_device *pdev = wcnss_get_platform_device();
 	struct wcnss_wlan_config *pwlanconfig = wcnss_get_wlan_config();
@@ -165,7 +162,7 @@ static int riva_powerup(const struct subsys_desc *subsys)
 static struct ramdump_segment riva_segments[] = {{0x8f200000,
 						0x8f700000 - 0x8f200000} };
 
-static int riva_ramdump(int enable, const struct subsys_desc *subsys)
+static int riva_ramdump(int enable, const struct subsys_data *subsys)
 {
 	pr_debug("%s: enable[%d]\n", MODULE_NAME, enable);
 	if (enable)
@@ -177,19 +174,14 @@ static int riva_ramdump(int enable, const struct subsys_desc *subsys)
 }
 
 /* Riva crash handler */
-static void riva_crash_shutdown(const struct subsys_desc *subsys)
+static void riva_crash_shutdown(const struct subsys_data *subsys)
 {
 	pr_err("%s: crash shutdown : %d\n", MODULE_NAME, riva_crash);
-	if (riva_crash != true) {
+	if (riva_crash != true)
 		smsm_riva_reset();
-		/* give sufficient time for wcnss to finish it's error
-		 * fatal routine */
-		msleep(3000);
-	}
-
 }
 
-static struct subsys_desc riva_8960 = {
+static struct subsys_data riva_8960 = {
 	.name = "riva",
 	.shutdown = riva_shutdown,
 	.powerup = riva_powerup,
@@ -216,10 +208,7 @@ module_param_call(enable_riva_ssr, enable_riva_ssr_set, param_get_int,
 
 static int __init riva_restart_init(void)
 {
-	riva_8960_dev = subsys_register(&riva_8960);
-	if (IS_ERR(riva_8960_dev))
-		return PTR_ERR(riva_8960_dev);
-	return 0;
+	return ssr_register_subsystem(&riva_8960);
 }
 
 static int __init riva_ssr_module_init(void)
@@ -264,7 +253,6 @@ out:
 
 static void __exit riva_ssr_module_exit(void)
 {
-	subsys_unregister(riva_8960_dev);
 	free_irq(RIVA_APSS_WDOG_BITE_RESET_RDY_IRQ, NULL);
 }
 

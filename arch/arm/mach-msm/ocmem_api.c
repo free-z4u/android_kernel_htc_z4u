@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -13,8 +13,10 @@
 #include <linux/slab.h>
 #include <mach/ocmem_priv.h>
 
-static DEFINE_MUTEX(ocmem_eviction_lock);
-static DECLARE_BITMAP(evicted, OCMEM_CLIENT_MAX);
+static inline int check_id(int id)
+{
+	return (id < OCMEM_CLIENT_MAX && id >= OCMEM_GRAPHICS);
+}
 
 static struct ocmem_handle *generate_handle(void)
 {
@@ -59,24 +61,6 @@ static int __ocmem_free(int id, struct ocmem_buf *buf)
 	return 0;
 }
 
-static int __ocmem_shrink(int id, struct ocmem_buf *buf, unsigned long len)
-{
-	int ret = 0;
-	struct ocmem_handle *handle = buffer_to_handle(buf);
-
-	if (!handle)
-		return -EINVAL;
-
-	mutex_lock(&handle->handle_mutex);
-	ret = process_shrink(id, handle, len);
-	mutex_unlock(&handle->handle_mutex);
-
-	if (ret)
-		return -EINVAL;
-
-	return 0;
-}
-
 static struct ocmem_buf *__ocmem_allocate_range(int id, unsigned long min,
 		unsigned long max, unsigned long step, bool block, bool wait)
 {
@@ -110,12 +94,6 @@ struct ocmem_buf *ocmem_allocate(int client_id, unsigned long size)
 		return NULL;
 	}
 
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return NULL;
-	}
-
 	if (size < OCMEM_MIN_ALLOC) {
 		pr_err("ocmem: requested size %lx must be at least %x\n",
 				size, OCMEM_MIN_ALLOC);
@@ -142,12 +120,6 @@ struct ocmem_buf *ocmem_allocate_nowait(int client_id, unsigned long size)
 		return NULL;
 	}
 
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return NULL;
-	}
-
 	if (size < OCMEM_MIN_ALLOC) {
 		pr_err("ocmem: requested size %lx must be at least %x\n",
 				size, OCMEM_MIN_ALLOC);
@@ -171,12 +143,6 @@ struct ocmem_buf *ocmem_allocate_range(int client_id, unsigned long min,
 
 	if (!check_id(client_id)) {
 		pr_err("ocmem: Invalid client id: %d\n", client_id);
-		return NULL;
-	}
-
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
 		return NULL;
 	}
 
@@ -220,12 +186,6 @@ struct ocmem_buf *ocmem_allocate_nb(int client_id, unsigned long size)
 		return NULL;
 	}
 
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return NULL;
-	}
-
 	if (size < OCMEM_MIN_ALLOC) {
 		pr_err("ocmem: requested size %lx must be at least %x\n",
 				size, OCMEM_MIN_ALLOC);
@@ -250,34 +210,12 @@ int ocmem_free(int client_id, struct ocmem_buf *buffer)
 		return -EINVAL;
 	}
 
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return -EINVAL;
-	}
-
 	if (!buffer) {
 		pr_err("ocmem: Invalid buffer\n");
 		return -EINVAL;
 	}
 
 	return __ocmem_free(client_id, buffer);
-}
-
-int ocmem_shrink(int client_id, struct ocmem_buf *buffer, unsigned long len)
-{
-	if (!buffer)
-		return -EINVAL;
-	if (len >= buffer->len)
-		return -EINVAL;
-
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client id: %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return -EINVAL;
-	}
-
-	return __ocmem_shrink(client_id, buffer, len);
 }
 
 int pre_validate_chunk_list(struct ocmem_map_list *list)
@@ -298,12 +236,8 @@ int pre_validate_chunk_list(struct ocmem_map_list *list)
 
 	for (i = 0; i < list->num_chunks; i++) {
 		if (!chunks[i].ddr_paddr ||
-			chunks[i].size < MIN_CHUNK_SIZE ||
-			!IS_ALIGNED(chunks[i].size, MIN_CHUNK_SIZE)) {
-			pr_err("Invalid ocmem chunk at index %d (p: %lx, size %lx)\n",
-					i, chunks[i].ddr_paddr, chunks[i].size);
+			chunks[i].size < MIN_CHUNK_SIZE)
 			return -EINVAL;
-		}
 	}
 	return 0;
 }
@@ -319,12 +253,6 @@ int ocmem_map(int client_id, struct ocmem_buf *buffer,
 		return -EINVAL;
 	}
 
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client id: %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return -EINVAL;
-	}
-
 	/* Asynchronous API requires notifier registration */
 	if (!check_notifier(client_id)) {
 		pr_err("ocmem: No notifier registered for client %d\n",
@@ -337,7 +265,7 @@ int ocmem_map(int client_id, struct ocmem_buf *buffer,
 		return -EINVAL;
 	}
 
-	if (pre_validate_chunk_list(list) != 0)
+	if (!pre_validate_chunk_list(list))
 		return -EINVAL;
 
 	handle = buffer_to_handle(buffer);
@@ -363,12 +291,6 @@ int ocmem_unmap(int client_id, struct ocmem_buf *buffer,
 		return -EINVAL;
 	}
 
-	if (!zone_active(client_id)) {
-		pr_err("ocmem: Client id: %s (id: %d) not allowed to use OCMEM\n",
-					get_name(client_id), client_id);
-		return -EINVAL;
-	}
-
 	/* Asynchronous API requires notifier registration */
 	if (!check_notifier(client_id)) {
 		pr_err("ocmem: No notifier registered for client %d\n",
@@ -381,10 +303,14 @@ int ocmem_unmap(int client_id, struct ocmem_buf *buffer,
 		return -EINVAL;
 	}
 
-	if (pre_validate_chunk_list(list) != 0)
+	if (!pre_validate_chunk_list(list))
 		return -EINVAL;
 
 	handle = buffer_to_handle(buffer);
+
+	if (!handle)
+		return -EINVAL;
+
 	mutex_lock(&handle->handle_mutex);
 	ret = process_xfer(client_id, handle, list, TO_DDR);
 	mutex_unlock(&handle->handle_mutex);
@@ -398,72 +324,4 @@ unsigned long get_max_quota(int client_id)
 		return 0x0;
 	}
 	return process_quota(client_id);
-}
-
-/* Synchronous eviction/restore calls */
-/* Only a single eviction or restoration is allowed */
-/* Evictions/Restorations cannot be concurrent with other maps */
-int ocmem_evict(int client_id)
-{
-	int ret = 0;
-
-	if (!check_id(client_id)) {
-		pr_err("ocmem: Invalid client id: %d\n", client_id);
-		return -EINVAL;
-	}
-
-	mutex_lock(&ocmem_eviction_lock);
-	if (test_bit(client_id, evicted)) {
-		pr_err("ocmem: Previous eviction was not restored by %d\n",
-			client_id);
-		mutex_unlock(&ocmem_eviction_lock);
-		return -EINVAL;
-	}
-
-	ret = process_evict(client_id);
-	if (ret == 0)
-		set_bit(client_id, evicted);
-
-	mutex_unlock(&ocmem_eviction_lock);
-	return ret;
-}
-
-int ocmem_restore(int client_id)
-{
-	int ret = 0;
-
-	if (!check_id(client_id)) {
-		pr_err("ocmem: Invalid client id: %d\n", client_id);
-		return -EINVAL;
-	}
-
-	mutex_lock(&ocmem_eviction_lock);
-	if (!test_bit(client_id, evicted)) {
-		pr_err("ocmem: No previous eviction by %d\n", client_id);
-		mutex_unlock(&ocmem_eviction_lock);
-		return -EINVAL;
-	}
-	ret = process_restore(client_id);
-	clear_bit(client_id, evicted);
-	mutex_unlock(&ocmem_eviction_lock);
-	return ret;
-}
-
-/* Wrappers until power control is transitioned to clients */
-enum ocmem_power_state ocmem_get_power_state(int client_id,
-						struct ocmem_buf *buffer)
-{
-	return 0;
-}
-
-int ocmem_set_power_state(int client_id, struct ocmem_buf *buffer,
-					enum ocmem_power_state new_state)
-{
-	return 0;
-}
-
-struct ocmem_vectors *ocmem_get_vectors(int client_id,
-				struct ocmem_buf *buffer)
-{
-	return NULL;
 }

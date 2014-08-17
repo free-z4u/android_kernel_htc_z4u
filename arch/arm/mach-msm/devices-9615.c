@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -70,15 +70,6 @@ static struct msm_watchdog_pdata msm_watchdog_pdata = {
 	.bark_time = 11000,
 	.has_secure = false,
 	.use_kernel_fiq = true,
-	.base = MSM_TMR_BASE + WDT0_OFFSET,
-};
-
-static struct resource msm_watchdog_resources[] = {
-	{
-		.start	= WDT0_ACCSCSSNBARK_INT,
-		.end	= WDT0_ACCSCSSNBARK_INT,
-		.flags	= IORESOURCE_IRQ,
-	},
 };
 
 struct platform_device msm9615_device_watchdog = {
@@ -87,8 +78,6 @@ struct platform_device msm9615_device_watchdog = {
 	.dev = {
 		.platform_data = &msm_watchdog_pdata,
 	},
-	.num_resources	= ARRAY_SIZE(msm_watchdog_resources),
-	.resource	= msm_watchdog_resources,
 };
 
 static struct resource msm_dmov_resource[] = {
@@ -856,19 +845,19 @@ static struct resource resources_sdc1[] = {
 	},
 #ifdef CONFIG_MMC_MSM_SPS_SUPPORT
 	{
-		.name   = "dml_mem",
+		.name   = "sdcc_dml_addr",
 		.start  = MSM_SDC1_DML_BASE,
 		.end    = MSM_SDC1_BAM_BASE - 1,
 		.flags  = IORESOURCE_MEM,
 	},
 	{
-		.name   = "bam_mem",
+		.name   = "sdcc_bam_addr",
 		.start  = MSM_SDC1_BAM_BASE,
 		.end    = MSM_SDC1_BAM_BASE + (2 * SZ_4K) - 1,
 		.flags  = IORESOURCE_MEM,
 	},
 	{
-		.name   = "bam_irq",
+		.name   = "sdcc_bam_irq",
 		.start  = SDC1_BAM_IRQ,
 		.end    = SDC1_BAM_IRQ,
 		.flags  = IORESOURCE_IRQ,
@@ -891,19 +880,19 @@ static struct resource resources_sdc2[] = {
 	},
 #ifdef CONFIG_MMC_MSM_SPS_SUPPORT
 	{
-		.name   = "dml_mem",
+		.name   = "sdcc_dml_addr",
 		.start  = MSM_SDC2_DML_BASE,
 		.end    = MSM_SDC2_BAM_BASE - 1,
 		.flags  = IORESOURCE_MEM,
 	},
 	{
-		.name   = "bam_mem",
+		.name   = "sdcc_bam_addr",
 		.start  = MSM_SDC2_BAM_BASE,
 		.end    = MSM_SDC2_BAM_BASE + (2 * SZ_4K) - 1,
 		.flags  = IORESOURCE_MEM,
 	},
 	{
-		.name   = "bam_irq",
+		.name   = "sdcc_bam_irq",
 		.start  = SDC2_BAM_IRQ,
 		.end    = SDC2_BAM_IRQ,
 		.flags  = IORESOURCE_IRQ,
@@ -1383,10 +1372,6 @@ struct platform_device msm_android_usb_hsic_device = {
 	},
 };
 
-struct platform_device msm_gpio_device = {
-	.name = "msmgpio",
-	.id = -1,
-};
 
 void __init msm9615_device_init(void)
 {
@@ -1397,6 +1382,7 @@ void __init msm9615_device_init(void)
 		msm_rpmrs_levels[0].latency_us;
 	msm_android_usb_hsic_pdata.swfi_latency =
 		msm_rpmrs_levels[0].latency_us;
+
 }
 
 #define MSM_SHARED_RAM_PHYS 0x40000000

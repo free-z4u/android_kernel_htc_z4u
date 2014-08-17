@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -123,7 +123,7 @@ struct msm_bus_inode_info {
 struct msm_bus_node_hw_info {
 	bool dirty;
 	unsigned int hw_id;
-	uint64_t bw;
+	unsigned long bw;
 };
 
 struct msm_bus_hw_algorithm {
@@ -144,6 +144,8 @@ struct msm_bus_hw_algorithm {
 		*fab_pdata, void *hw_data, void **cdata);
 	int (*port_unhalt)(uint32_t haltid, uint8_t mport);
 	int (*port_halt)(uint32_t haltid, uint8_t mport);
+	int (*clear_arb_data)(struct msm_bus_fabric_registration
+		*fab_pdata, void **cdata);
 };
 
 struct msm_bus_fabric_device {
@@ -202,8 +204,6 @@ struct msm_bus_client {
 	int curr;
 };
 
-int msm_bus_remote_hw_commit(struct msm_bus_fabric_registration
-	*fab_pdata, void *hw_data, void **cdata);
 int msm_bus_fabric_device_register(struct msm_bus_fabric_device *fabric);
 void msm_bus_fabric_device_unregister(struct msm_bus_fabric_device *fabric);
 struct msm_bus_fabric_device *msm_bus_get_fabric_device(int fabid);

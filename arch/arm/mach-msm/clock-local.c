@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -355,7 +355,7 @@ u32 __branch_disable_reg(const struct branch *b, const char *name)
 {
 	u32 reg_val;
 
-	reg_val = b->ctl_reg ? readl_relaxed(b->ctl_reg) : 0;
+	reg_val = readl_relaxed(b->ctl_reg);
 	if (b->en_mask) {
 		reg_val &= ~(b->en_mask);
 		writel_relaxed(reg_val, b->ctl_reg);
@@ -563,8 +563,11 @@ enum handoff branch_handoff(struct branch *b, struct clk *c)
 {
 	if (!branch_in_hwcg_mode(b)) {
 		b->hwcg_mask = 0;
-		if (b->ctl_reg && readl_relaxed(b->ctl_reg) & b->en_mask)
+		c->flags &= ~CLKFLAG_HWCG;
+		if (readl_relaxed(b->ctl_reg) & b->en_mask)
 			return HANDOFF_ENABLED_CLK;
+	} else {
+		c->flags |= CLKFLAG_HWCG;
 	}
 	return HANDOFF_DISABLED_CLK;
 }

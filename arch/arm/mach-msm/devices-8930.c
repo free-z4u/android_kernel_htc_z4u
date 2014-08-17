@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -416,7 +416,7 @@ static struct fs_driver_data ijpeg_fs_data = {
 	.bus_port0 = MSM_BUS_MASTER_JPEG_ENC,
 };
 
-static struct fs_driver_data mdp_fs_data_8930 = {
+static struct fs_driver_data mdp_fs_data = {
 	.clks = (struct fs_clk_data[]){
 		{ .name = "core_clk" },
 		{ .name = "iface_clk" },
@@ -425,21 +425,6 @@ static struct fs_driver_data mdp_fs_data_8930 = {
 		{ .name = "lut_clk" },
 		{ .name = "tv_src_clk" },
 		{ .name = "tv_clk" },
-		{ .name = "reset1_clk" },
-		{ 0 }
-	},
-	.bus_port0 = MSM_BUS_MASTER_MDP_PORT0,
-	.bus_port1 = MSM_BUS_MASTER_MDP_PORT1,
-};
-
-static struct fs_driver_data mdp_fs_data_8627 = {
-	.clks = (struct fs_clk_data[]){
-		{ .name = "core_clk" },
-		{ .name = "iface_clk" },
-		{ .name = "bus_clk" },
-		{ .name = "vsync_clk" },
-		{ .name = "lut_clk" },
-		{ .name = "reset1_clk" },
 		{ 0 }
 	},
 	.bus_port0 = MSM_BUS_MASTER_MDP_PORT0,
@@ -488,7 +473,7 @@ static struct fs_driver_data vpe_fs_data = {
 };
 
 struct platform_device *msm8930_footswitch[] __initdata = {
-	FS_8X60(FS_MDP,    "vdd",	"mdp.0",	&mdp_fs_data_8930),
+	FS_8X60(FS_MDP,    "vdd",	"mdp.0",	&mdp_fs_data),
 	FS_8X60(FS_ROT,    "vdd",	"msm_rotator.0", &rot_fs_data),
 	FS_8X60(FS_IJPEG,  "vdd",	"msm_gemini.0", &ijpeg_fs_data),
 	FS_8X60(FS_VFE,    "vdd",	"msm_vfe.0",	&vfe_fs_data),
@@ -497,17 +482,6 @@ struct platform_device *msm8930_footswitch[] __initdata = {
 	FS_8X60(FS_VED,    "vdd",	"msm_vidc.0",	&ved_fs_data),
 };
 unsigned msm8930_num_footswitch __initdata = ARRAY_SIZE(msm8930_footswitch);
-
-struct platform_device *msm8627_footswitch[] __initdata = {
-	FS_8X60(FS_MDP,    "vdd",	"mdp.0",	&mdp_fs_data_8627),
-	FS_8X60(FS_ROT,    "vdd",	"msm_rotator.0", &rot_fs_data),
-	FS_8X60(FS_IJPEG,  "vdd",	"msm_gemini.0", &ijpeg_fs_data),
-	FS_8X60(FS_VFE,    "vdd",	"msm_vfe.0",	&vfe_fs_data),
-	FS_8X60(FS_VPE,    "vdd",	"msm_vpe.0",	&vpe_fs_data),
-	FS_8X60(FS_GFX3D,  "vdd",	"kgsl-3d0.0",	&gfx3d_fs_data),
-	FS_8X60(FS_VED,    "vdd",	"msm_vidc.0",	&ved_fs_data),
-};
-unsigned msm8627_num_footswitch __initdata = ARRAY_SIZE(msm8627_footswitch);
 
 /* MSM Video core device */
 #ifdef CONFIG_MSM_BUS_SCALING
@@ -693,58 +667,6 @@ static struct msm_bus_vectors vidc_vdec_1080p_vectors[] = {
 		.ib  = 10000000,
 	},
 };
-static struct msm_bus_vectors vidc_venc_1080p_turbo_vectors[] = {
-	{
-		.src = MSM_BUS_MASTER_HD_CODEC_PORT0,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 222298112,
-		.ib  = 3522000000U,
-	},
-	{
-		.src = MSM_BUS_MASTER_HD_CODEC_PORT1,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 330301440,
-		.ib  = 3522000000U,
-	},
-	{
-		.src = MSM_BUS_MASTER_AMPSS_M0,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 2500000,
-		.ib  = 700000000,
-	},
-	{
-		.src = MSM_BUS_MASTER_AMPSS_M0,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 2500000,
-		.ib  = 10000000,
-	},
-};
-static struct msm_bus_vectors vidc_vdec_1080p_turbo_vectors[] = {
-	{
-		.src = MSM_BUS_MASTER_HD_CODEC_PORT0,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 222298112,
-		.ib  = 3522000000U,
-	},
-	{
-		.src = MSM_BUS_MASTER_HD_CODEC_PORT1,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 330301440,
-		.ib  = 3522000000U,
-	},
-	{
-		.src = MSM_BUS_MASTER_AMPSS_M0,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 2500000,
-		.ib  = 700000000,
-	},
-	{
-		.src = MSM_BUS_MASTER_AMPSS_M0,
-		.dst = MSM_BUS_SLAVE_EBI_CH0,
-		.ab  = 2500000,
-		.ib  = 10000000,
-	},
-};
 
 static struct msm_bus_paths vidc_bus_client_config[] = {
 	{
@@ -774,14 +696,6 @@ static struct msm_bus_paths vidc_bus_client_config[] = {
 	{
 		ARRAY_SIZE(vidc_vdec_1080p_vectors),
 		vidc_vdec_1080p_vectors,
-	},
-	{
-		ARRAY_SIZE(vidc_venc_1080p_turbo_vectors),
-		vidc_vdec_1080p_turbo_vectors,
-	},
-	{
-		ARRAY_SIZE(vidc_vdec_1080p_turbo_vectors),
-		vidc_vdec_1080p_turbo_vectors,
 	},
 };
 

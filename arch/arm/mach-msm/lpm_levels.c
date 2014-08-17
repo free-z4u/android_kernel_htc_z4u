@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -20,7 +20,6 @@
 #include <mach/mpm.h>
 #include "lpm_resources.h"
 #include "pm.h"
-#include "rpm-notifier.h"
 
 static struct msm_rpmrs_level *msm_lpm_levels;
 static int msm_lpm_level_count;
@@ -41,25 +40,17 @@ int msm_lpm_enter_sleep(uint32_t sclk_count, void *limits,
 		bool from_idle, bool notify_rpm)
 {
 	int ret = 0;
-	struct msm_rpmrs_limits *l = (struct msm_rpmrs_limits *)limits;
 
-	ret = msm_rpm_enter_sleep();
-	if (ret) {
-		pr_warn("%s(): RPM failed to enter sleep err:%d\n",
-				__func__, ret);
-		goto bail;
-	}
-	ret = msm_lpmrs_enter_sleep(sclk_count, l, from_idle, notify_rpm);
-bail:
+	ret = msm_lpmrs_enter_sleep((struct msm_rpmrs_limits *)limits,
+					from_idle, notify_rpm);
 	return ret;
 }
 
 static void msm_lpm_exit_sleep(void *limits, bool from_idle,
 		bool notify_rpm, bool collapsed)
 {
-	msm_rpm_exit_sleep();
-	msm_lpmrs_exit_sleep((struct msm_rpmrs_limits *)limits,
-				from_idle, notify_rpm, collapsed);
+	/* TODO */
+	return;
 }
 
 void msm_lpm_show_resources(void)

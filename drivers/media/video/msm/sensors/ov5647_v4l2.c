@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -159,7 +159,7 @@ static struct msm_camera_i2c_reg_conf ov5647_video_90fps_settings[] = {
 
 static struct msm_camera_i2c_reg_conf ov5647_zsl_settings[] = {
 	{0x3035, 0x21},
-	{0x3036, 0x2f},
+	{0x3036, 0x4f},
 	{0x3821, 0x06},
 	{0x3820, 0x00},
 	{0x3612, 0x0b},
@@ -306,11 +306,11 @@ static struct msm_camera_i2c_reg_conf ov5647_recommend_settings[] = {
 	{0x583c, 0x24},
 	{0x583d, 0xce},
 	/* manual AWB,manual AE,close Lenc,open WBC*/
-	{0x3503, 0x03}, /*manual AE*/
-	{0x3501, 0x10},
-	{0x3502, 0x80},
+	{0x3503, 0x07}, /*manual AE*/
+	{0x3501, 0x00},
+	{0x3502, 0x10},
 	{0x350a, 0x00},
-	{0x350b, 0x7f},
+	{0x350b, 0x00},
 	{0x5001, 0x01}, /*manual AWB*/
 	{0x5180, 0x08},
 	{0x5186, 0x04},
@@ -572,7 +572,8 @@ static int32_t ov5647_write_prev_exp_gain(struct msm_sensor_ctrl_t *s_ctrl,
 	s_ctrl->func_tbl->sensor_group_hold_on(s_ctrl);
 
 	/* adjust frame rate */
-	if (line > (fl_lines - offset))
+	if ((s_ctrl->curr_res < MSM_SENSOR_RES_2) &&
+		(line > (fl_lines - offset)))
 		fl_lines = line + offset;
 
 	msm_camera_i2c_write(s_ctrl->sensor_i2c_client,
@@ -643,8 +644,6 @@ int32_t ov5647_sensor_i2c_probe(struct i2c_client *client,
 	}
 
 	s_ctrl = client->dev.platform_data;
-	if (s_ctrl->sensordata->pmic_gpio_enable)
-		lcd_camera_power_onoff(0);
 
 	return rc;
 }
@@ -715,11 +714,6 @@ int32_t ov5647_sensor_power_up(struct msm_sensor_ctrl_t *s_ctrl)
 	info = s_ctrl->sensordata;
 	gpio_direction_output(info->sensor_pwd, 1);
 	gpio_direction_output(info->sensor_reset, 0);
-	usleep_range(10000, 11000);
-	if (info->pmic_gpio_enable) {
-		info->pmic_gpio_enable = 0;
-		lcd_camera_power_onoff(1);
-	}
 	usleep_range(10000, 11000);
 	rc = msm_sensor_power_up(s_ctrl);
 	if (rc < 0) {
@@ -815,6 +809,7 @@ static struct msm_sensor_fn_t ov5647_func_tbl = {
 	.sensor_config = msm_sensor_config,
 	.sensor_power_up = ov5647_sensor_power_up,
 	.sensor_power_down = ov5647_sensor_power_down,
+	.sensor_get_csi_params = msm_sensor_get_csi_params,
 };
 
 static struct msm_sensor_reg_t ov5647_regs = {

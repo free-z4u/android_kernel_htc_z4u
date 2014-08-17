@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -127,7 +127,6 @@ static struct pm8xxx_gpio_init pm8921_gpios[] __initdata = {
 	/* TABLA CODEC RESET */
 	PM8921_GPIO_OUTPUT(34, 1, MED),
 	PM8921_GPIO_OUTPUT(13, 0, HIGH),               /* PCIE_CLK_PWR_EN */
-	PM8921_GPIO_INPUT(12, PM_GPIO_PULL_UP_30),     /* PCIE_WAKE_N */
 };
 
 static struct pm8xxx_gpio_init pm8921_mtp_kp_gpios[] __initdata = {
@@ -139,12 +138,6 @@ static struct pm8xxx_gpio_init pm8921_cdp_kp_gpios[] __initdata = {
 	PM8921_GPIO_INPUT(27, PM_GPIO_PULL_UP_30),
 	PM8921_GPIO_INPUT(42, PM_GPIO_PULL_UP_30),
 	PM8921_GPIO_INPUT(17, PM_GPIO_PULL_UP_1P5),	/* SD_WP */
-};
-
-static struct pm8xxx_gpio_init pm8921_mpq_gpios[] __initdata = {
-	PM8921_GPIO_INIT(27, PM_GPIO_DIR_IN, PM_GPIO_OUT_BUF_CMOS, 0,
-			PM_GPIO_PULL_NO, PM_GPIO_VIN_VPH, PM_GPIO_STRENGTH_NO,
-			PM_GPIO_FUNC_NORMAL, 0, 0),
 };
 
 /* Initial PM8XXX MPP configurations */
@@ -185,18 +178,6 @@ void __init apq8064_pm8xxx_gpio_mpp_init(void)
 		for (i = 0; i < ARRAY_SIZE(pm8921_mtp_kp_gpios); i++) {
 			rc = pm8xxx_gpio_config(pm8921_mtp_kp_gpios[i].gpio,
 						&pm8921_mtp_kp_gpios[i].config);
-			if (rc) {
-				pr_err("%s: pm8xxx_gpio_config: rc=%d\n",
-					__func__, rc);
-				break;
-			}
-		}
-
-	if (machine_is_mpq8064_cdp() || machine_is_mpq8064_hrd()
-					|| machine_is_mpq8064_dtv())
-		for (i = 0; i < ARRAY_SIZE(pm8921_mpq_gpios); i++) {
-			rc = pm8xxx_gpio_config(pm8921_mpq_gpios[i].gpio,
-						&pm8921_mpq_gpios[i].config);
 			if (rc) {
 				pr_err("%s: pm8xxx_gpio_config: rc=%d\n",
 					__func__, rc);
@@ -360,7 +341,6 @@ static int apq8064_pm8921_therm_mitigation[] = {
 };
 
 #define MAX_VOLTAGE_MV          4200
-#define CHG_TERM_MA		100
 static struct pm8921_charger_platform_data
 apq8064_pm8921_chg_pdata __devinitdata = {
 	.safety_time		= 180,
@@ -369,7 +349,7 @@ apq8064_pm8921_chg_pdata __devinitdata = {
 	.min_voltage		= 3200,
 	.uvd_thresh_voltage	= 4050,
 	.resume_voltage_delta	= 100,
-	.term_current		= CHG_TERM_MA,
+	.term_current		= 100,
 	.cool_temp		= 10,
 	.warm_temp		= 40,
 	.temp_check_period	= 1,
@@ -390,14 +370,11 @@ apq8064_pm8xxx_ccadc_pdata = {
 
 static struct pm8921_bms_platform_data
 apq8064_pm8921_bms_pdata __devinitdata = {
-	.battery_type			= BATT_UNKNOWN,
-	.r_sense			= 10,
-	.v_cutoff			= 3400,
-	.max_voltage_uv			= MAX_VOLTAGE_MV * 1000,
-	.rconn_mohm			= 18,
-	.shutdown_soc_valid_limit	= 20,
-	.adjust_soc_low_threshold	= 25,
-	.chg_term_ua			= CHG_TERM_MA * 1000,
+	.battery_type	= BATT_UNKNOWN,
+	.r_sense		= 10,
+	.i_test			= 2500,
+	.v_failure		= 3000,
+	.max_voltage_uv		= MAX_VOLTAGE_MV * 1000,
 };
 
 static struct pm8921_platform_data
@@ -462,7 +439,10 @@ void __init apq8064_init_pmic(void)
 	apq8064_pm8921_platform_data.num_regulators =
 					msm8064_pm8921_regulator_pdata_len;
 
-	if (machine_is_apq8064_mtp()) {
+	if (machine_is_apq8064_rumi3()) {
+		apq8064_pm8921_irq_pdata.devirq = 0;
+		apq8064_pm8821_irq_pdata.devirq = 0;
+	} else if (machine_is_apq8064_mtp()) {
 		apq8064_pm8921_bms_pdata.battery_type = BATT_PALLADIUM;
 	} else if (machine_is_apq8064_liquid()) {
 		apq8064_pm8921_bms_pdata.battery_type = BATT_DESAY;
