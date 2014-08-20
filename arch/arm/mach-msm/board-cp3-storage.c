@@ -58,8 +58,10 @@ struct sdcc_gpio {
  * require higher value since it should handle bad signal quality due
  * to size of T-flash adapters.
  */
-static struct msm_gpio sdc1_cfg_data[] = {
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
+#if (defined(CONFIG_MACH_PROTOU)\
+	|| defined(CONFIG_MACH_PROTODCG)\
+	|| defined(CONFIG_MACH_PROTODUG))
+static struct msm_gpio sdc1_cfg_data_protou[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
 								"sdc1_dat_3"},
 	{GPIO_CFG(52, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
@@ -72,8 +74,12 @@ static struct msm_gpio sdc1_cfg_data[] = {
 								"sdc1_cmd"},
 	{GPIO_CFG(56, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
 								"sdc1_clk"},
+};
 #endif
-#if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_Z4U)
+
+#if (defined(CONFIG_MACH_CP3DUG)\
+	|| defined(CONFIG_MACH_Z4U))
+static struct msm_gpio sdc1_cfg_data_z4u_cp3dug[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 								"sdc1_dat_3"},
 	{GPIO_CFG(52, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
@@ -86,8 +92,11 @@ static struct msm_gpio sdc1_cfg_data[] = {
 								"sdc1_cmd"},
 	{GPIO_CFG(56, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
 								"sdc1_clk"},
+};
 #endif
+
 #if defined(CONFIG_MACH_CP3DCG)
+static struct msm_gpio sdc1_cfg_data_cp3dcg[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA),
 								"sdc1_dat_3"},
 	{GPIO_CFG(52, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA),
@@ -100,17 +109,15 @@ static struct msm_gpio sdc1_cfg_data[] = {
 								"sdc1_cmd"},
 	{GPIO_CFG(56, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
 								"sdc1_clk"},
-#endif
 };
+#endif
 
-static struct msm_gpio sdc1_sleep_cfg_data[] = {
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
+#if (defined(CONFIG_MACH_PROTOU)\
+	|| defined(CONFIG_MACH_PROTODCG)\
+	|| defined(CONFIG_MACH_PROTODUG))
+static struct msm_gpio sdc1_sleep_cfg_data_protou[] = {
 	{GPIO_CFG(51, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 								"sdc1_dat_3"},
-#else
-	{GPIO_CFG(51, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
-								"sdc1_dat_3"},
-#endif
 	{GPIO_CFG(52, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 								"sdc1_dat_2"},
 	{GPIO_CFG(53, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
@@ -122,6 +129,26 @@ static struct msm_gpio sdc1_sleep_cfg_data[] = {
 	{GPIO_CFG(56, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 								"sdc1_clk"},
 };
+#endif
+
+#if (defined(CONFIG_MACH_CP3DUG)\
+	|| defined(CONFIG_MACH_CP3DCG)\
+	|| defined(CONFIG_MACH_Z4U))
+static struct msm_gpio sdc1_sleep_cfg_data_cp3[] = {
+	{GPIO_CFG(51, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
+								"sdc1_dat_3"},
+	{GPIO_CFG(52, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
+								"sdc1_dat_2"},
+	{GPIO_CFG(53, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
+								"sdc1_dat_1"},
+	{GPIO_CFG(54, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
+								"sdc1_dat_0"},
+	{GPIO_CFG(55, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
+								"sdc1_cmd"},
+	{GPIO_CFG(56, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
+								"sdc1_clk"},
+};
+#endif
 
 static struct msm_gpio sdc2_cfg_data[] = {
 	{GPIO_CFG(62, 2, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_8MA),
@@ -152,8 +179,11 @@ static struct msm_gpio sdc2_sleep_cfg_data[] = {
 	{GPIO_CFG(67, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),
 								"sdc2_dat_0"},
 };
-static struct msm_gpio sdc3_cfg_data[] = {
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
+
+#if (defined(CONFIG_MACH_PROTOU)\
+	|| defined(CONFIG_MACH_PROTODCG)\
+	|| defined(CONFIG_MACH_PROTODUG))
+static struct msm_gpio sdc3_cfg_data_protou[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
 								"sdc3_clk"},
 	{GPIO_CFG(89, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
@@ -166,7 +196,12 @@ static struct msm_gpio sdc3_cfg_data[] = {
 								"sdc3_dat_1"},
 	{GPIO_CFG(93, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
 								"sdc3_dat_0"},
-#else
+};
+#endif
+
+#if (defined(CONFIG_MACH_CP3DUG)\
+	|| defined(CONFIG_MACH_CP3DCG))
+static struct msm_gpio sdc3_cfg_data_cp3[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
 								"sdc3_clk"},
 	{GPIO_CFG(89, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
@@ -179,9 +214,7 @@ static struct msm_gpio sdc3_cfg_data[] = {
 								"sdc3_dat_1"},
 	{GPIO_CFG(93, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 								"sdc3_dat_0"},
-#endif
 #ifdef CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT
-#if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DCG)
 	{GPIO_CFG(19, 3, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
 								"sdc3_dat_7"},
 	{GPIO_CFG(20, 3, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
@@ -191,7 +224,24 @@ static struct msm_gpio sdc3_cfg_data[] = {
 	{GPIO_CFG(108, 3, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
 								"sdc3_dat_4"},
 #endif
+};
+#endif
+
 #if defined(CONFIG_MACH_Z4U)
+static struct msm_gpio sdc3_cfg_data_z4u[] = {
+	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
+								"sdc3_clk"},
+	{GPIO_CFG(89, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+								"sdc3_cmd"},
+	{GPIO_CFG(90, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+								"sdc3_dat_3"},
+	{GPIO_CFG(91, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+								"sdc3_dat_2"},
+	{GPIO_CFG(92, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+								"sdc3_dat_1"},
+	{GPIO_CFG(93, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+								"sdc3_dat_0"},
+#ifdef CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT
 	{GPIO_CFG(19, 3, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 								"sdc3_dat_7"},
 	{GPIO_CFG(20, 3, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
@@ -201,8 +251,8 @@ static struct msm_gpio sdc3_cfg_data[] = {
 	{GPIO_CFG(108, 3, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 								"sdc3_dat_4"},
 #endif
-#endif
 };
+#endif
 
 static struct msm_gpio sdc4_cfg_data[] = {
 	{GPIO_CFG(19, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA),
@@ -219,11 +269,14 @@ static struct msm_gpio sdc4_cfg_data[] = {
 								"sdc4_clk"},
 };
 
-static struct sdcc_gpio sdcc_cfg_data[] = {
+#if (defined(CONFIG_MACH_PROTOU)\
+	|| defined(CONFIG_MACH_PROTODCG)\
+	|| defined(CONFIG_MACH_PROTODUG))
+static struct sdcc_gpio sdcc_cfg_data_protou[] = {
 	{
-		.cfg_data = sdc1_cfg_data,
-		.size = ARRAY_SIZE(sdc1_cfg_data),
-		.sleep_cfg_data = sdc1_sleep_cfg_data,
+		.cfg_data = sdc1_cfg_data_protou,
+		.size = ARRAY_SIZE(sdc1_cfg_data_protou),
+		.sleep_cfg_data = sdc1_sleep_cfg_data_protou,
 	},
 	{
 		.cfg_data = sdc2_cfg_data,
@@ -231,42 +284,102 @@ static struct sdcc_gpio sdcc_cfg_data[] = {
 		.sleep_cfg_data = sdc2_sleep_cfg_data,
 	},
 	{
-		.cfg_data = sdc3_cfg_data,
-		.size = ARRAY_SIZE(sdc3_cfg_data),
+		.cfg_data = sdc3_cfg_data_protou,
+		.size = ARRAY_SIZE(sdc3_cfg_data_protou),
 	},
 	{
 		.cfg_data = sdc4_cfg_data,
 		.size = ARRAY_SIZE(sdc4_cfg_data),
 	},
 };
+#endif
+
+#if defined(CONFIG_MACH_CP3DCG)
+static struct sdcc_gpio sdcc_cfg_data_cp3dcg[] = {
+	{
+		.cfg_data = sdc1_cfg_data_cp3dcg,
+		.size = ARRAY_SIZE(sdc1_cfg_data_cp3dcg),
+		.sleep_cfg_data = sdc1_sleep_cfg_data_cp3,
+	},
+	{
+		.cfg_data = sdc2_cfg_data,
+		.size = ARRAY_SIZE(sdc2_cfg_data),
+		.sleep_cfg_data = sdc2_sleep_cfg_data,
+	},
+	{
+		.cfg_data = sdc3_cfg_data_cp3,
+		.size = ARRAY_SIZE(sdc3_cfg_data_cp3),
+	},
+	{
+		.cfg_data = sdc4_cfg_data,
+		.size = ARRAY_SIZE(sdc4_cfg_data),
+	},
+};
+#endif
 
 #if defined(CONFIG_MACH_CP3DUG)
-static int gpio_sdc1_hw_det = 94;
+static struct sdcc_gpio sdcc_cfg_data_cp3dug[] = {
+	{
+		.cfg_data = sdc1_cfg_data_z4u_cp3dug,
+		.size = ARRAY_SIZE(sdc1_cfg_data_z4u_cp3dug),
+		.sleep_cfg_data = sdc1_sleep_cfg_data_cp3,
+	},
+	{
+		.cfg_data = sdc2_cfg_data,
+		.size = ARRAY_SIZE(sdc2_cfg_data),
+		.sleep_cfg_data = sdc2_sleep_cfg_data,
+	},
+	{
+		.cfg_data = sdc3_cfg_data_cp3,
+		.size = ARRAY_SIZE(sdc3_cfg_data_cp3),
+	},
+	{
+		.cfg_data = sdc4_cfg_data,
+		.size = ARRAY_SIZE(sdc4_cfg_data),
+	},
+};
 #endif
+
 #if defined(CONFIG_MACH_Z4U)
-static int gpio_sdc1_hw_det = 27;
+static struct sdcc_gpio sdcc_cfg_data_z4u[] = {
+	{
+		.cfg_data = sdc1_cfg_data_z4u_cp3dug,
+		.size = ARRAY_SIZE(sdc1_cfg_data_z4u_cp3dug),
+		.sleep_cfg_data = sdc1_sleep_cfg_data_cp3,
+	},
+	{
+		.cfg_data = sdc2_cfg_data,
+		.size = ARRAY_SIZE(sdc2_cfg_data),
+		.sleep_cfg_data = sdc2_sleep_cfg_data,
+	},
+	{
+		.cfg_data = sdc3_cfg_data_z4u,
+		.size = ARRAY_SIZE(sdc3_cfg_data_z4u),
+	},
+	{
+		.cfg_data = sdc4_cfg_data,
+		.size = ARRAY_SIZE(sdc4_cfg_data),
+	},
+};
 #endif
-#if defined(CONFIG_MACH_CP3DCG)
-static int gpio_sdc1_hw_det = 86;
-#endif
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
-static int gpio_sdc1_hw_det = 38;
-#endif
+
+static int gpio_sdc1_hw_det = 85;
 static void gpio_sdc1_config(void)
 {
 	if (machine_is_msm7627a_qrd1() || machine_is_msm7627a_evb()
 					|| machine_is_msm8625_evb()
 					|| machine_is_msm7627a_qrd3()
 					|| machine_is_msm8625_qrd7())
-#if defined(CONFIG_MACH_CP3DCG)
+		gpio_sdc1_hw_det = 42;
+	else if (machine_is_cp3dcg() || machine_is_cp3dtg())
 		gpio_sdc1_hw_det = 86;
-#endif
-#if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_Z4U)
+	else if (machine_is_cp3dug() || machine_is_cp3u())
 		gpio_sdc1_hw_det = 94;
-#endif
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
+	else if (machine_is_z4u())
+		gpio_sdc1_hw_det = 27;
+	else if (machine_is_protou() || machine_is_protodcg() 
+					|| machine_is_protodug())
 		gpio_sdc1_hw_det = 38;
-#endif
 }
 
 static struct regulator *sdcc_vreg_data[MAX_SDCC_CONTROLLER];
@@ -275,7 +388,25 @@ static int msm_sdcc_setup_gpio(int dev_id, unsigned int enable)
 	int rc = 0;
 	struct sdcc_gpio *curr;
 
-	curr = &sdcc_cfg_data[dev_id - 1];
+#if defined(CONFIG_MACH_Z4U)
+	if (machine_is_z4u())
+		curr = &sdcc_cfg_data_z4u[dev_id - 1];
+#endif
+#if defined(CONFIG_MACH_CP3DUG)
+	else if (machine_is_cp3dug())
+		curr = &sdcc_cfg_data_cp3dug[dev_id - 1];
+#endif
+#if defined(CONFIG_MACH_CP3DCG)
+	else if (machine_is_cp3dcg())
+		curr = &sdcc_cfg_data_cp3dcg[dev_id - 1];
+#endif
+#if (defined(CONFIG_MACH_PROTOU)\
+	|| defined(CONFIG_MACH_PROTODCG)\
+	|| defined(CONFIG_MACH_PROTODUG))
+	else if (machine_is_protou() || machine_is_protodug() 
+					|| machine_is_protodcg())
+		curr = &sdcc_cfg_data_protou[dev_id - 1];
+#endif
 	if (!(test_bit(dev_id, &gpio_sts)^enable))
 		return rc;
 
@@ -358,22 +489,22 @@ out:
 static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 {
 	int status;
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
-	status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
-				GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
-				GPIO_CFG_ENABLE);
-	if (status)
-		pr_err("%s:Failed to configure tlmm for GPIO %d\n", __func__,
-				gpio_sdc1_hw_det);
-#endif
-#if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DCG)
-	status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
-				GPIO_CFG_PULL_UP, GPIO_CFG_6MA),
-				GPIO_CFG_ENABLE);
-	if (status)
-		pr_err("%s:Failed to configure tlmm for GPIO %d\n", __func__,
-				gpio_sdc1_hw_det);
-#endif
+	if (machine_is_protou() || machine_is_protodcg() 
+				|| machine_is_protodug()) {
+		status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
+					GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+					GPIO_CFG_ENABLE);
+		if (status)
+			pr_err("%s:Failed to configure tlmm for GPIO %d\n", __func__,
+					gpio_sdc1_hw_det);
+	} else 	if (machine_is_cp3dug() || machine_is_cp3dcg()) {
+		status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
+					GPIO_CFG_PULL_UP, GPIO_CFG_6MA),
+					GPIO_CFG_ENABLE);
+		if (status)
+			pr_err("%s:Failed to configure tlmm for GPIO %d\n", __func__,
+					gpio_sdc1_hw_det);
+	}
 
 	status = gpio_request(gpio_sdc1_hw_det, "SD_HW_Detect");
 	if (status) {
@@ -417,6 +548,7 @@ static struct mmc_platform_data sdc1_plat_data = {
 
 
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
+
 #if (defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_MAGNIDS) \
     || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_PROTOU))
 static struct embedded_sdio_data bcm4330_wifi_emb_data = {
@@ -525,8 +657,9 @@ static struct mmc_platform_data sdc3_plat_data = {
 
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
+
 #if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
-static struct mmc_platform_data sdc4_plat_data = {
+static struct mmc_platform_data sdc4_plat_data_protou = {
 	.ocr_mask	= MMC_VDD_28_29,
 	.translate_vdd	= msm_sdcc_setup_power,
 	.mmc_bus_width	= MMC_CAP_4_BIT_DATA,
@@ -534,9 +667,10 @@ static struct mmc_platform_data sdc4_plat_data = {
 	.msmsdcc_fmid	= 24576000,
 	.msmsdcc_fmax	= 49152000,
 };
-#else
+#endif
+
 static unsigned int msm7627a_sprdslot_type = MMC_TYPE_SDIO_SPRD;
-static struct mmc_platform_data sdc4_plat_data = {
+static struct mmc_platform_data sdc4_plat_data_cp3 = {
 	.ocr_mask       = MMC_VDD_165_195,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
 	.msmsdcc_fmin   = 144000,
@@ -545,7 +679,6 @@ static struct mmc_platform_data sdc4_plat_data = {
 	.slot_type	= &msm7627a_sprdslot_type,
 	.nonremovable	= 0,
 };
-#endif
 #endif
 
 static int __init mmc_regulator_init(int sdcc_no, const char *supply, int uV)
@@ -581,26 +714,14 @@ out:
 	sdcc_vreg_data[sdcc_no] = NULL;
 	return rc;
 }
-#ifdef QCT_original
+
 void __init cp3_init_mmc(void)
 {
 	/* eMMC slot */
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
-
-	/* There is no eMMC on SDC3 for QRD3 based devices */
-	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
-		if (mmc_regulator_init(3, "emmc", 3000000))
-			return;
-		/*
-		 * On 7x25A FFA data CRC errors are seen, which are
-		 * probably due to the proximity of SIM card and eMMC.
-		 * Hence, reducing the clock to 24.7Mhz from 49Mhz.
-		 */
-		if (machine_is_msm7625a_ffa())
-			sdc3_plat_data.msmsdcc_fmax =
-				sdc3_plat_data.msmsdcc_fmid;
-		msm_add_sdcc(3, &sdc3_plat_data);
-	}
+	if (mmc_regulator_init(3, "emmc", 3000000))
+		return;
+	msm_add_sdcc(3, &sdc3_plat_data);
 #endif
 	/* Micro-SD slot */
 #ifdef CONFIG_MMC_MSM_SDC1_SUPPORT
@@ -614,9 +735,23 @@ void __init cp3_init_mmc(void)
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
 	if (mmc_regulator_init(2, "smps3", 1800000))
 		return;
-	msm_add_sdcc(2, &sdc2_plat_data);
+
+
+#if (defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_MAGNIDS) \
+    || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_PROTOU))
+	if (machine_is_protodcg() || machine_is_magnids() || machine_is_protodug() || machine_is_protou())
+		msm_add_sdcc(2, &bcm4330_wifi_data); 
 #endif
-	/* Not Used */
+#if (defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) \
+    || defined(CONFIG_MACH_CP3DUG) \
+    || defined(CONFIG_MACH_CP3U) \
+    || defined(CONFIG_MACH_Z4U))
+	if (machine_is_cp3dtg() || machine_is_cp3dcg() 
+			|| machine_is_cp3dug() || machine_is_cp3u() 
+			|| machine_is_z4u())
+		msm_add_sdcc(2, &sdc2_plat_data);  
+#endif
+#endif
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
 	/* There is no SDC4 for QRD3/7 based devices */
@@ -627,54 +762,4 @@ void __init cp3_init_mmc(void)
 	}
 #endif
 }
-#else
-void __init cp3_init_mmc(void)
-{
-	printk(KERN_ERR "%s: HTC 0\n", __func__);
-	
-#ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
-
-	if (mmc_regulator_init(3, "emmc", 3000000))
-		return;
-	msm_add_sdcc(3, &sdc3_plat_data);
-#endif
-	printk(KERN_ERR "%s: HTC 1\n", __func__);
-	
-#ifdef CONFIG_MMC_MSM_SDC1_SUPPORT
-	gpio_sdc1_config();
-	if (mmc_regulator_init(1, "mmc", 2850000))
-		return;
-	sdc1_plat_data.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
-	msm_add_sdcc(1, &sdc1_plat_data);
-#endif
-	
-#ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
-	if (mmc_regulator_init(2, "smps3", 1800000))
-		return;
-
-#if (defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_MAGNIDS) \
-    || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_PROTOU))
-	msm_add_sdcc(2, &bcm4330_wifi_data); 
-#endif
-#if (defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) \
-    || defined(CONFIG_MACH_CP3DUG) \
-    || defined(CONFIG_MACH_CP3U) \
-    || defined(CONFIG_MACH_Z4U))
-	msm_add_sdcc(2, &sdc2_plat_data);  
-#endif
-#endif
-	
-#if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
-		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
-	
-	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
-		if (mmc_regulator_init(4, "smps3", 1800000))
-			return;
-		msm_add_sdcc(4, &sdc4_plat_data);
-	}
-	printk(KERN_ERR "%s: HTC 2\n", __func__);
-#endif
-}
-#endif
-
 #endif
