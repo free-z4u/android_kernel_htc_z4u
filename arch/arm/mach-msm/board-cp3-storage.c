@@ -12,6 +12,7 @@
  */
 
 #include <linux/kernel.h>
+#include <linux/regulator/consumer.h>
 #include <linux/init.h>
 #include <linux/platform_device.h>
 #include <linux/delay.h>
@@ -25,7 +26,6 @@
 #include <asm/io.h>
 #include <asm/mach-types.h>
 #include <asm/mach/mmc.h>
-#include <linux/regulator/consumer.h>
 #include <mach/gpio.h>
 #include <asm/gpio.h>
 #include <mach/gpiomux.h>
