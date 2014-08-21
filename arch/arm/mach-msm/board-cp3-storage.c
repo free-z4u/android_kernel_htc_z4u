@@ -13,29 +13,14 @@
 
 #include <linux/kernel.h>
 #include <linux/regulator/consumer.h>
-#include <linux/init.h>
-#include <linux/platform_device.h>
-#include <linux/delay.h>
-#include <linux/mmc/host.h>
-#include <linux/mmc/sdio_ids.h>
-#include <linux/err.h>
-#include <linux/debugfs.h>
 #include <linux/gpio.h>
-#include <linux/irq.h>
-#include <asm/gpio.h>
-#include <asm/io.h>
 #include <asm/mach-types.h>
 #include <asm/mach/mmc.h>
-#include <mach/gpio.h>
-#include <asm/gpio.h>
 #include <mach/gpiomux.h>
 #include <mach/board.h>
 #include "devices.h"
 #include "pm.h"
 #include "board-msm7627a.h"
-#include <linux/mmc/card.h>
-
-extern int msm_add_sdcc(unsigned int controller, struct mmc_platform_data *plat);
 
 #if (defined(CONFIG_MMC_MSM_SDC1_SUPPORT)\
 	|| defined(CONFIG_MMC_MSM_SDC2_SUPPORT)\
@@ -749,9 +734,10 @@ void __init cp3_init_mmc(void)
 	if (machine_is_cp3dtg() || machine_is_cp3dcg() 
 			|| machine_is_cp3dug() || machine_is_cp3u() 
 			|| machine_is_z4u())
-		msm_add_sdcc(2, &sdc2_plat_data);  
+		msm_add_sdcc(2, &sdc2_plat_data);
 #endif
 #endif
+	/* Not Used */
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
 	/* There is no SDC4 for QRD3/7 based devices */
