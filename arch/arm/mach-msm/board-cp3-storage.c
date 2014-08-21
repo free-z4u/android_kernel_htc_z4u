@@ -43,9 +43,8 @@ struct sdcc_gpio {
  * require higher value since it should handle bad signal quality due
  * to size of T-flash adapters.
  */
-#if (defined(CONFIG_MACH_PROTOU)\
-	|| defined(CONFIG_MACH_PROTODCG)\
-	|| defined(CONFIG_MACH_PROTODUG))
+ 
+/* protou, protodcg, protodug */
 static struct msm_gpio sdc1_cfg_data_protou[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
 								"sdc1_dat_3"},
@@ -60,10 +59,8 @@ static struct msm_gpio sdc1_cfg_data_protou[] = {
 	{GPIO_CFG(56, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
 								"sdc1_clk"},
 };
-#endif
 
-#if (defined(CONFIG_MACH_CP3DUG)\
-	|| defined(CONFIG_MACH_Z4U))
+/* cp3dug, z4u */
 static struct msm_gpio sdc1_cfg_data_z4u_cp3dug[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 								"sdc1_dat_3"},
@@ -78,9 +75,8 @@ static struct msm_gpio sdc1_cfg_data_z4u_cp3dug[] = {
 	{GPIO_CFG(56, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
 								"sdc1_clk"},
 };
-#endif
 
-#if defined(CONFIG_MACH_CP3DCG)
+/* cp3dcg */
 static struct msm_gpio sdc1_cfg_data_cp3dcg[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA),
 								"sdc1_dat_3"},
@@ -95,11 +91,8 @@ static struct msm_gpio sdc1_cfg_data_cp3dcg[] = {
 	{GPIO_CFG(56, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
 								"sdc1_clk"},
 };
-#endif
 
-#if (defined(CONFIG_MACH_PROTOU)\
-	|| defined(CONFIG_MACH_PROTODCG)\
-	|| defined(CONFIG_MACH_PROTODUG))
+/* protou, protodcg, protodug */
 static struct msm_gpio sdc1_sleep_cfg_data_protou[] = {
 	{GPIO_CFG(51, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 								"sdc1_dat_3"},
@@ -114,11 +107,8 @@ static struct msm_gpio sdc1_sleep_cfg_data_protou[] = {
 	{GPIO_CFG(56, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 								"sdc1_clk"},
 };
-#endif
 
-#if (defined(CONFIG_MACH_CP3DUG)\
-	|| defined(CONFIG_MACH_CP3DCG)\
-	|| defined(CONFIG_MACH_Z4U))
+/* cp3dug, cp3dcg, z4u */
 static struct msm_gpio sdc1_sleep_cfg_data_cp3[] = {
 	{GPIO_CFG(51, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 								"sdc1_dat_3"},
@@ -133,7 +123,6 @@ static struct msm_gpio sdc1_sleep_cfg_data_cp3[] = {
 	{GPIO_CFG(56, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 								"sdc1_clk"},
 };
-#endif
 
 static struct msm_gpio sdc2_cfg_data[] = {
 	{GPIO_CFG(62, 2, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_8MA),
@@ -165,9 +154,7 @@ static struct msm_gpio sdc2_sleep_cfg_data[] = {
 								"sdc2_dat_0"},
 };
 
-#if (defined(CONFIG_MACH_PROTOU)\
-	|| defined(CONFIG_MACH_PROTODCG)\
-	|| defined(CONFIG_MACH_PROTODUG))
+/* protou, protodcg, protodug */
 static struct msm_gpio sdc3_cfg_data_protou[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
 								"sdc3_clk"},
@@ -182,10 +169,8 @@ static struct msm_gpio sdc3_cfg_data_protou[] = {
 	{GPIO_CFG(93, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_12MA),
 								"sdc3_dat_0"},
 };
-#endif
 
-#if (defined(CONFIG_MACH_CP3DUG)\
-	|| defined(CONFIG_MACH_CP3DCG))
+/* cp3dug, cp3dcg */
 static struct msm_gpio sdc3_cfg_data_cp3[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
 								"sdc3_clk"},
@@ -210,9 +195,8 @@ static struct msm_gpio sdc3_cfg_data_cp3[] = {
 								"sdc3_dat_4"},
 #endif
 };
-#endif
 
-#if defined(CONFIG_MACH_Z4U)
+/* z4u */
 static struct msm_gpio sdc3_cfg_data_z4u[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
 								"sdc3_clk"},
@@ -237,7 +221,6 @@ static struct msm_gpio sdc3_cfg_data_z4u[] = {
 								"sdc3_dat_4"},
 #endif
 };
-#endif
 
 static struct msm_gpio sdc4_cfg_data[] = {
 	{GPIO_CFG(19, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA),
@@ -254,9 +237,7 @@ static struct msm_gpio sdc4_cfg_data[] = {
 								"sdc4_clk"},
 };
 
-#if (defined(CONFIG_MACH_PROTOU)\
-	|| defined(CONFIG_MACH_PROTODCG)\
-	|| defined(CONFIG_MACH_PROTODUG))
+/* protou, protodcg, protodug */
 static struct sdcc_gpio sdcc_cfg_data_protou[] = {
 	{
 		.cfg_data = sdc1_cfg_data_protou,
@@ -277,9 +258,8 @@ static struct sdcc_gpio sdcc_cfg_data_protou[] = {
 		.size = ARRAY_SIZE(sdc4_cfg_data),
 	},
 };
-#endif
 
-#if defined(CONFIG_MACH_CP3DCG)
+/* cp3dcg */
 static struct sdcc_gpio sdcc_cfg_data_cp3dcg[] = {
 	{
 		.cfg_data = sdc1_cfg_data_cp3dcg,
@@ -300,9 +280,8 @@ static struct sdcc_gpio sdcc_cfg_data_cp3dcg[] = {
 		.size = ARRAY_SIZE(sdc4_cfg_data),
 	},
 };
-#endif
 
-#if defined(CONFIG_MACH_CP3DUG)
+/* cp3dug */
 static struct sdcc_gpio sdcc_cfg_data_cp3dug[] = {
 	{
 		.cfg_data = sdc1_cfg_data_z4u_cp3dug,
@@ -323,9 +302,8 @@ static struct sdcc_gpio sdcc_cfg_data_cp3dug[] = {
 		.size = ARRAY_SIZE(sdc4_cfg_data),
 	},
 };
-#endif
 
-#if defined(CONFIG_MACH_Z4U)
+/* z4u */
 static struct sdcc_gpio sdcc_cfg_data_z4u[] = {
 	{
 		.cfg_data = sdc1_cfg_data_z4u_cp3dug,
@@ -346,7 +324,6 @@ static struct sdcc_gpio sdcc_cfg_data_z4u[] = {
 		.size = ARRAY_SIZE(sdc4_cfg_data),
 	},
 };
-#endif
 
 static int gpio_sdc1_hw_det = 85;
 static void gpio_sdc1_config(void)
@@ -373,25 +350,15 @@ static int msm_sdcc_setup_gpio(int dev_id, unsigned int enable)
 	int rc = 0;
 	struct sdcc_gpio *curr;
 
-#if defined(CONFIG_MACH_Z4U)
 	if (machine_is_z4u())
 		curr = &sdcc_cfg_data_z4u[dev_id - 1];
-#endif
-#if defined(CONFIG_MACH_CP3DUG)
 	else if (machine_is_cp3dug())
 		curr = &sdcc_cfg_data_cp3dug[dev_id - 1];
-#endif
-#if defined(CONFIG_MACH_CP3DCG)
 	else if (machine_is_cp3dcg())
 		curr = &sdcc_cfg_data_cp3dcg[dev_id - 1];
-#endif
-#if (defined(CONFIG_MACH_PROTOU)\
-	|| defined(CONFIG_MACH_PROTODCG)\
-	|| defined(CONFIG_MACH_PROTODUG))
 	else if (machine_is_protou() || machine_is_protodug() 
 					|| machine_is_protodcg())
 		curr = &sdcc_cfg_data_protou[dev_id - 1];
-#endif
 	if (!(test_bit(dev_id, &gpio_sts)^enable))
 		return rc;
 
@@ -534,8 +501,7 @@ static struct mmc_platform_data sdc1_plat_data = {
 
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
 
-#if (defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_MAGNIDS) \
-    || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_PROTOU))
+/* protodcg, magnids, protodug, protou */
 static struct embedded_sdio_data bcm4330_wifi_emb_data = {
 	.cccr	= {
 		.sdio_vsn	= 2,
@@ -592,12 +558,8 @@ int bcm4330_wifi_set_carddetect(int val)
                 printk(KERN_WARNING "%s: Nobody to notify\n", __func__);
         return 0;
 }
-#endif
 
-#if (defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) \
-    || defined(CONFIG_MACH_CP3DUG) \
-    || defined(CONFIG_MACH_CP3U) \
-    || defined(CONFIG_MACH_Z4U))
+/* cp3dtg, cp3dcg, cp3dug, cp3u, z4u */
 static unsigned int atheros_wifislot_type = MMC_TYPE_SDIO_WIFI;
 static struct mmc_platform_data sdc2_plat_data = {
 	/*
@@ -618,7 +580,6 @@ static struct mmc_platform_data sdc2_plat_data = {
 	.dummy52_required = 1,
 #endif
 };
-#endif
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
@@ -643,7 +604,7 @@ static struct mmc_platform_data sdc3_plat_data = {
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
 
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_PROTODUG)
+/* protou, protodcg, protodug */
 static struct mmc_platform_data sdc4_plat_data_protou = {
 	.ocr_mask	= MMC_VDD_28_29,
 	.translate_vdd	= msm_sdcc_setup_power,
@@ -652,7 +613,6 @@ static struct mmc_platform_data sdc4_plat_data_protou = {
 	.msmsdcc_fmid	= 24576000,
 	.msmsdcc_fmax	= 49152000,
 };
-#endif
 
 static unsigned int msm7627a_sprdslot_type = MMC_TYPE_SDIO_SPRD;
 static struct mmc_platform_data sdc4_plat_data_cp3 = {
@@ -722,20 +682,13 @@ void __init cp3_init_mmc(void)
 		return;
 
 
-#if (defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_MAGNIDS) \
-    || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_PROTOU))
-	if (machine_is_protodcg() || machine_is_magnids() || machine_is_protodug() || machine_is_protou())
+	if (machine_is_protodcg() || machine_is_magnids()
+			|| machine_is_protodug() || machine_is_protou())
 		msm_add_sdcc(2, &bcm4330_wifi_data); 
-#endif
-#if (defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) \
-    || defined(CONFIG_MACH_CP3DUG) \
-    || defined(CONFIG_MACH_CP3U) \
-    || defined(CONFIG_MACH_Z4U))
 	if (machine_is_cp3dtg() || machine_is_cp3dcg() 
 			|| machine_is_cp3dug() || machine_is_cp3u() 
 			|| machine_is_z4u())
 		msm_add_sdcc(2, &sdc2_plat_data);
-#endif
 #endif
 	/* Not Used */
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
