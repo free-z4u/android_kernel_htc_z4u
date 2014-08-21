@@ -26,13 +26,7 @@
 
 static char *keycaps = "--qwerty";
 #undef MODULE_PARAM_PREFIX
-#if defined(CONFIG_MACH_CP3DCG)
-#define MODULE_PARAM_PREFIX "board_cp3dcg."
-#elif defined(CONFIG_MACH_CP3DUG)
-#define MODULE_PARAM_PREFIX "board_cp3dug."
-#elif defined(CONFIG_MACH_Z4U)
-#define MODULE_PARAM_PREFIX "board_z4u."
-#endif
+#define MODULE_PARAM_PREFIX "board-msm7627a."
 
 module_param_named(keycaps, keycaps, charp, 0);
 
