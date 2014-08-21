@@ -16,7 +16,7 @@
 #include "board-msm7627a.h"
 #include <linux/i2c/cpld.h>
 
-void __init cp3_init_mmc(void);
+void __init msm7627a_init_mmc(void);
 
 #define MSM_RAM_CONSOLE_BASE    0x03A00000 /* MSM_HTC_RAM_CONSOLE_PHYS must be the same */
 #define MSM_RAM_CONSOLE_SIZE    MSM_HTC_RAM_CONSOLE_SIZE
