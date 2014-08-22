@@ -839,7 +839,16 @@ void __init msm7627a_init_mmc(void)
 	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
 		if (mmc_regulator_init(4, "smps3", 1800000))
 			return;
-		msm_add_sdcc(4, &sdc4_plat_data);
+		if (machine_is_protodcg() || machine_is_magnids() || 
+				machine_is_protodug() || machine_is_protou())
+			msm_add_sdcc(4, &sdc4_plat_data_protou);
+		else if (machine_is_cp3dtg() || machine_is_cp3dcg() || 
+					machine_is_cp3dug() || 
+					machine_is_cp3u() || 
+					machine_is_z4u())
+			msm_add_sdcc(4, &sdc4_plat_data_cp3);
+		else
+			msm_add_sdcc(4, &sdc4_plat_data);
 	}
 #endif
 }
