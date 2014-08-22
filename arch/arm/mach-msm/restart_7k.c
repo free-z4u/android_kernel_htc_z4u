@@ -17,7 +17,6 @@
 #include <linux/init.h>
 #include <linux/reboot.h>
 #include <linux/pm.h>
-#include <linux/regulator/onsemi-ncp6335d.h>
 #include <asm/system_misc.h>
 #include <mach/proc_comm.h>
 
@@ -27,6 +26,7 @@ static uint32_t restart_reason = 0x776655AA;
 
 static void msm_pm_power_off(void)
 {
+	/* Disable interrupts */
 	local_irq_disable();
 	msm_proc_comm(PCOM_POWER_DOWN, 0, 0);
 	for (;;)
@@ -37,14 +37,17 @@ static void msm_pm_restart(char str, const char *cmd)
 {
 	pr_debug("The reset reason is %x\n", restart_reason);
 
-#ifdef CONFIG_REGULATOR_ONSEMI_NCP6335D
-	ncp6335d_restart_config();
-#endif
-
-	
+	/* Disable interrupts */
 	local_irq_disable();
 	local_fiq_disable();
 
+	/*
+	 * Take out a flat memory mapping  and will
+	 * insert a 1:1 mapping in place of
+	 * the user-mode pages to ensure predictable results
+	 * This function takes care of flushing the caches
+	 * and flushing the TLB.
+	 */
 	setup_mm_for_reboot();
 
 	msm_proc_comm(PCOM_RESET_CHIP, &restart_reason, 0);

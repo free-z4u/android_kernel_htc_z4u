@@ -29,9 +29,5 @@ struct ncp6335d_platform_data {
 
 #ifdef CONFIG_REGULATOR_ONSEMI_NCP6335D
 void ncp6335d_restart_config(void);
-#else
-static inline void ncp6335d_restart_config(void)
-{
-}
 #endif
 #endif
