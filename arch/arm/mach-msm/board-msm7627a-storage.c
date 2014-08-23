@@ -455,10 +455,6 @@ static int msm_sdcc_setup_vreg(int dev_id, unsigned int enable)
 		return PTR_ERR(curr);
 
 	if (enable) {
-		if (dev_id == 1) {
-			mdelay(5);
-			pr_info("%s: mmc1 Enabling SD slot power\n", __func__);
-		}
 		set_bit(dev_id, &vreg_sts);
 
 		rc = regulator_enable(curr);
@@ -466,10 +462,6 @@ static int msm_sdcc_setup_vreg(int dev_id, unsigned int enable)
 			pr_err("%s: could not enable regulator: %d\n",
 						__func__, rc);
 	} else {
-		if (dev_id == 1) {
-			mdelay(5);
-			pr_info("%s: mmc1 Disabling SD slot power\n", __func__);
-		}
 		clear_bit(dev_id, &vreg_sts);
 
 		rc = regulator_disable(curr);
@@ -496,8 +488,7 @@ out:
 	return rc;
 }
 
-#if defined(CONFIG_MMC_MSM_SDC1_SUPPORT) \
-	&& defined(CONFIG_MMC_MSM_CARD_HW_DETECTION)
+#ifdef CONFIG_MMC_MSM_SDC1_SUPPORT
 static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 {
 	int status;
@@ -709,27 +700,6 @@ static struct mmc_platform_data sdc4_plat_data = {
 	.msmsdcc_fmid   = 24576000,
 	.msmsdcc_fmax   = 49152000,
 };
-
-/* protou, protodcg, protodug */
-static struct mmc_platform_data sdc4_plat_data_protou = {
-	.ocr_mask	= MMC_VDD_28_29,
-	.translate_vdd	= msm_sdcc_setup_power,
-	.mmc_bus_width	= MMC_CAP_4_BIT_DATA,
-	.msmsdcc_fmin	= 144000,
-	.msmsdcc_fmid	= 24576000,
-	.msmsdcc_fmax	= 49152000,
-};
-
-static unsigned int msm7627a_sprdslot_type = MMC_TYPE_SDIO_SPRD;
-static struct mmc_platform_data sdc4_plat_data_cp3 = {
-	.ocr_mask       = MMC_VDD_165_195,
-	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
-	.msmsdcc_fmin   = 144000,
-	.msmsdcc_fmid   = 25000000,
-	.msmsdcc_fmax   = 50000000,
-	.slot_type	= &msm7627a_sprdslot_type,
-	.nonremovable	= 0,
-};
 #endif
 
 static int __init mmc_regulator_init(int sdcc_no, const char *supply, int uV)
@@ -836,19 +806,15 @@ void __init msm7627a_init_mmc(void)
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
 	/* There is no SDC4 for QRD3/7 based devices */
-	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
+	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7() ||
+			machine_is_protodcg() || machine_is_magnids() || 
+			machine_is_protodug() || machine_is_protou() ||
+			machine_is_cp3dtg() || machine_is_cp3dcg() || 
+			machine_is_cp3dug() || machine_is_cp3u() || 
+			machine_is_z4u())) {
 		if (mmc_regulator_init(4, "smps3", 1800000))
 			return;
-		if (machine_is_protodcg() || machine_is_magnids() || 
-				machine_is_protodug() || machine_is_protou())
-			msm_add_sdcc(4, &sdc4_plat_data_protou);
-		else if (machine_is_cp3dtg() || machine_is_cp3dcg() || 
-					machine_is_cp3dug() || 
-					machine_is_cp3u() || 
-					machine_is_z4u())
-			msm_add_sdcc(4, &sdc4_plat_data_cp3);
-		else
-			msm_add_sdcc(4, &sdc4_plat_data);
+		msm_add_sdcc(4, &sdc4_plat_data);
 	}
 #endif
 }

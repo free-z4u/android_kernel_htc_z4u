@@ -77,6 +77,6 @@
 
 void __init cp3dug_camera_init(void);
 
-int __init cp3dug_init_panel(void);
+int __init cp3dcg_init_panel(void);
 
 #endif
