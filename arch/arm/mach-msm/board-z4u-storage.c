@@ -12,30 +12,15 @@
  */
 
 #include <linux/kernel.h>
-#include <linux/init.h>
-#include <linux/platform_device.h>
-#include <linux/delay.h>
-#include <linux/mmc/host.h>
-#include <linux/mmc/sdio_ids.h>
-#include <linux/err.h>
-#include <linux/debugfs.h>
+#include <linux/regulator/consumer.h>
 #include <linux/gpio.h>
-#include <linux/irq.h>
-#include <asm/gpio.h>
-#include <asm/io.h>
 #include <asm/mach-types.h>
 #include <asm/mach/mmc.h>
-#include <linux/regulator/consumer.h>
-#include <mach/gpio.h>
-#include <asm/gpio.h>
 #include <mach/gpiomux.h>
 #include <mach/board.h>
 #include "devices.h"
 #include "pm.h"
 #include "board-msm7627a.h"
-#include <linux/mmc/card.h>
-
-extern int msm_add_sdcc(unsigned int controller, struct mmc_platform_data *plat);
 
 #if (defined(CONFIG_MMC_MSM_SDC1_SUPPORT)\
 	|| defined(CONFIG_MMC_MSM_SDC2_SUPPORT)\
@@ -185,7 +170,7 @@ static void gpio_sdc1_config(void)
 					|| machine_is_msm8625_evb()
 					|| machine_is_msm7627a_qrd3()
 					|| machine_is_msm8625_qrd7())
-		gpio_sdc1_hw_det = 94;
+		gpio_sdc1_hw_det = 42;
 }
 
 static struct regulator *sdcc_vreg_data[MAX_SDCC_CONTROLLER];
@@ -231,10 +216,6 @@ static int msm_sdcc_setup_vreg(int dev_id, unsigned int enable)
 		return PTR_ERR(curr);
 
 	if (enable) {
-		if (dev_id == 1) {
-			mdelay(5);
-			pr_info("%s: mmc1 Enabling SD slot power\n", __func__);
-		}
 		set_bit(dev_id, &vreg_sts);
 
 		rc = regulator_enable(curr);
@@ -242,10 +223,6 @@ static int msm_sdcc_setup_vreg(int dev_id, unsigned int enable)
 			pr_err("%s: could not enable regulator: %d\n",
 						__func__, rc);
 	} else {
-		if (dev_id == 1) {
-			mdelay(5);
-			pr_info("%s: mmc1 Disabling SD slot power\n", __func__);
-		}
 		clear_bit(dev_id, &vreg_sts);
 
 		rc = regulator_disable(curr);
@@ -289,10 +266,11 @@ static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 					machine_is_msm7627a_evb() ||
 					machine_is_msm8625_evb()  ||
 					machine_is_msm7627a_qrd3() ||
+					machine_is_z4u() ||
 					machine_is_msm8625_qrd7())
 				status = !gpio_get_value(gpio_sdc1_hw_det);
 			else
-				status = !gpio_get_value(gpio_sdc1_hw_det);
+				status = gpio_get_value(gpio_sdc1_hw_det);
 		}
 		gpio_free(gpio_sdc1_hw_det);
 	}
@@ -317,7 +295,6 @@ static struct mmc_platform_data sdc1_plat_data = {
 #endif
 };
 #endif
-
 
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
 static unsigned int atheros_wifislot_type = MMC_TYPE_SDIO_WIFI;
@@ -411,40 +388,54 @@ out:
 
 void __init msm7627a_init_mmc(void)
 {
-	printk(KERN_ERR "%s: HTC 0\n", __func__);
-	
+	/* eMMC slot */
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
 
-	if (mmc_regulator_init(3, "emmc", 3000000))
-		return;
-	msm_add_sdcc(3, &sdc3_plat_data);
+	/* There is no eMMC on SDC3 for QRD3 based devices */
+	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
+		if (mmc_regulator_init(3, "emmc", 3000000))
+			return;
+		/*
+		 * On 7x25A FFA data CRC errors are seen, which are
+		 * probably due to the proximity of SIM card and eMMC.
+		 * Hence, reducing the clock to 24.7Mhz from 49Mhz.
+		 */
+		if (machine_is_msm7625a_ffa())
+			sdc3_plat_data.msmsdcc_fmax =
+				sdc3_plat_data.msmsdcc_fmid;
+		msm_add_sdcc(3, &sdc3_plat_data);
+	}
 #endif
-	printk(KERN_ERR "%s: HTC 1\n", __func__);
-	
+	/* Micro-SD slot */
 #ifdef CONFIG_MMC_MSM_SDC1_SUPPORT
 	gpio_sdc1_config();
 	if (mmc_regulator_init(1, "mmc", 2850000))
 		return;
-	sdc1_plat_data.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
+	/* 8x25 EVT do not use hw detector */
+	if (!((machine_is_msm8625_evt() || machine_is_qrd_skud_prime() ||
+				machine_is_msm8625q_evbd() || machine_is_msm8625q_skud())))
+		sdc1_plat_data.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
+	if (machine_is_msm8625_evt() || machine_is_qrd_skud_prime() ||
+				machine_is_msm8625q_evbd() || machine_is_msm8625q_skud())
+		sdc1_plat_data.status = NULL;
+
 	msm_add_sdcc(1, &sdc1_plat_data);
 #endif
-	
+	/* SDIO WLAN slot */
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
 	if (mmc_regulator_init(2, "smps3", 1800000))
 		return;
-
-	msm_add_sdcc(2, &sdc2_plat_data);  
+	msm_add_sdcc(2, &sdc2_plat_data);
 #endif
-	
+	/* Not Used */
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
-	
+	/* There is no SDC4 for QRD3/7 based devices */
 	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
 		if (mmc_regulator_init(4, "smps3", 1800000))
 			return;
 		msm_add_sdcc(4, &sdc4_plat_data);
 	}
-	printk(KERN_ERR "%s: HTC 2\n", __func__);
 #endif
 }
 #endif
