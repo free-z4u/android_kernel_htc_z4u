@@ -43,7 +43,7 @@ struct sdcc_gpio {
  * require higher value since it should handle bad signal quality due
  * to size of T-flash adapters.
  */
-static struct msm_gpio sdc1_cfg_data[] = {
+static struct msm_gpio sdc1_cfg_data_z4u[] = {
 	{GPIO_CFG(51, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 								"sdc1_dat_3"},
 	{GPIO_CFG(52, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
@@ -58,7 +58,7 @@ static struct msm_gpio sdc1_cfg_data[] = {
 								"sdc1_clk"},
 };
 
-static struct msm_gpio sdc1_sleep_cfg_data[] = {
+static struct msm_gpio sdc1_sleep_cfg_data_z4u[] = {
 	{GPIO_CFG(51, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 								"sdc1_dat_3"},
 	{GPIO_CFG(52, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
@@ -102,7 +102,7 @@ static struct msm_gpio sdc2_sleep_cfg_data[] = {
 	{GPIO_CFG(67, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),
 								"sdc2_dat_0"},
 };
-static struct msm_gpio sdc3_cfg_data[] = {
+static struct msm_gpio sdc3_cfg_data_z4u[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_12MA),
 								"sdc3_clk"},
 	{GPIO_CFG(89, 1, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
@@ -142,11 +142,11 @@ static struct msm_gpio sdc4_cfg_data[] = {
 								"sdc4_clk"},
 };
 
-static struct sdcc_gpio sdcc_cfg_data[] = {
+static struct sdcc_gpio sdcc_cfg_data_z4u[] = {
 	{
-		.cfg_data = sdc1_cfg_data,
-		.size = ARRAY_SIZE(sdc1_cfg_data),
-		.sleep_cfg_data = sdc1_sleep_cfg_data,
+		.cfg_data = sdc1_cfg_data_z4u,
+		.size = ARRAY_SIZE(sdc1_cfg_data_z4u),
+		.sleep_cfg_data = sdc1_sleep_cfg_data_z4u,
 	},
 	{
 		.cfg_data = sdc2_cfg_data,
@@ -154,8 +154,8 @@ static struct sdcc_gpio sdcc_cfg_data[] = {
 		.sleep_cfg_data = sdc2_sleep_cfg_data,
 	},
 	{
-		.cfg_data = sdc3_cfg_data,
-		.size = ARRAY_SIZE(sdc3_cfg_data),
+		.cfg_data = sdc3_cfg_data_z4u,
+		.size = ARRAY_SIZE(sdc3_cfg_data_z4u),
 	},
 	{
 		.cfg_data = sdc4_cfg_data,
@@ -163,7 +163,7 @@ static struct sdcc_gpio sdcc_cfg_data[] = {
 	},
 };
 
-static int gpio_sdc1_hw_det = 27;
+static int gpio_sdc1_hw_det = 85;
 static void gpio_sdc1_config(void)
 {
 	if (machine_is_msm7627a_qrd1() || machine_is_msm7627a_evb()
@@ -171,6 +171,8 @@ static void gpio_sdc1_config(void)
 					|| machine_is_msm7627a_qrd3()
 					|| machine_is_msm8625_qrd7())
 		gpio_sdc1_hw_det = 42;
+	else if (machine_is_z4u())
+		gpio_sdc1_hw_det = 27;
 }
 
 static struct regulator *sdcc_vreg_data[MAX_SDCC_CONTROLLER];
@@ -179,7 +181,7 @@ static int msm_sdcc_setup_gpio(int dev_id, unsigned int enable)
 	int rc = 0;
 	struct sdcc_gpio *curr;
 
-	curr = &sdcc_cfg_data[dev_id - 1];
+	curr = &sdcc_cfg_data_z4u[dev_id - 1];
 	if (!(test_bit(dev_id, &gpio_sts)^enable))
 		return rc;
 
@@ -254,7 +256,15 @@ out:
 static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 {
 	int status;
-
+	
+	if (!machine_is_z4u()) {
+	status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
+				GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
+				GPIO_CFG_ENABLE);
+	if (status)
+		pr_err("%s:Failed to configure tlmm for GPIO %d\n", __func__,
+				gpio_sdc1_hw_det);
+	}
 	status = gpio_request(gpio_sdc1_hw_det, "SD_HW_Detect");
 	if (status) {
 		pr_err("%s:Failed to request GPIO %d\n", __func__,
@@ -279,15 +289,15 @@ static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC1_SUPPORT
-static unsigned int msm7627a_sdslot_type = MMC_TYPE_SD;
-static struct mmc_platform_data sdc1_plat_data = {
+static unsigned int msm7627a_sdslot_type_z4u = MMC_TYPE_SD;
+static struct mmc_platform_data sdc1_plat_data_z4u = {
 	.ocr_mask       = MMC_VDD_28_29,
 	.translate_vdd  = msm_sdcc_setup_power,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
 	.msmsdcc_fmin   = 144000,
 	.msmsdcc_fmid   = 25000000,
 	.msmsdcc_fmax   = 50000000,
-	.slot_type      = &msm7627a_sdslot_type,
+	.slot_type      = &msm7627a_sdslot_type_z4u,
 	.mmc_dma_ch    = 10,
 #ifdef CONFIG_MMC_MSM_CARD_HW_DETECTION
 	.status      = msm7627a_sdcc_slot_status,
@@ -297,8 +307,8 @@ static struct mmc_platform_data sdc1_plat_data = {
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
-static unsigned int atheros_wifislot_type = MMC_TYPE_SDIO_WIFI;
-static struct mmc_platform_data sdc2_plat_data = {
+static unsigned int atheros_wifislot_type_z4u = MMC_TYPE_SDIO_WIFI;
+static struct mmc_platform_data sdc2_plat_data_z4u = {
 	/*
 	 * SDC2 supports only 1.8V, claim for 2.85V range is just
 	 * for allowing buggy cards who advertise 2.8V even though
@@ -306,7 +316,7 @@ static struct mmc_platform_data sdc2_plat_data = {
 	 */
 	.ocr_mask       = MMC_VDD_28_29 | MMC_VDD_165_195,
 	
-	.slot_type	= &atheros_wifislot_type,
+	.slot_type	= &atheros_wifislot_type_z4u,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
 	.sdiowakeup_irq = MSM_GPIO_TO_INT(66),
 	.msmsdcc_fmin   = 144000,
@@ -320,8 +330,8 @@ static struct mmc_platform_data sdc2_plat_data = {
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
-static unsigned int msm7627a_emmcslot_type = MMC_TYPE_MMC;
-static struct mmc_platform_data sdc3_plat_data = {
+static unsigned int msm7627a_emmcslot_type_z4u = MMC_TYPE_MMC;
+static struct mmc_platform_data sdc3_plat_data_z4u = {
 	.ocr_mask       = MMC_VDD_28_29,
 	
 #ifdef CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT
@@ -334,20 +344,20 @@ static struct mmc_platform_data sdc3_plat_data = {
 	.msmsdcc_fmax   = 50000000,
 	.nonremovable   = 1,
 	.mmc_dma_ch    = 7,
-	.slot_type      = &msm7627a_emmcslot_type,
+	.slot_type      = &msm7627a_emmcslot_type_z4u,
 };
 #endif
 
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
-static unsigned int msm7627a_sprdslot_type = MMC_TYPE_SDIO_SPRD;
-static struct mmc_platform_data sdc4_plat_data = {
+static unsigned int msm7627a_sprdslot_type_z4u = MMC_TYPE_SDIO_SPRD;
+static struct mmc_platform_data sdc4_plat_data_z4u = {
 	.ocr_mask       = MMC_VDD_165_195,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
 	.msmsdcc_fmin   = 144000,
 	.msmsdcc_fmid   = 25000000,
 	.msmsdcc_fmax   = 50000000,
-	.slot_type	= &msm7627a_sprdslot_type,
+	.slot_type	= &msm7627a_sprdslot_type_z4u,
 	.nonremovable	= 0,
 };
 #endif
@@ -401,9 +411,9 @@ void __init msm7627a_init_mmc(void)
 		 * Hence, reducing the clock to 24.7Mhz from 49Mhz.
 		 */
 		if (machine_is_msm7625a_ffa())
-			sdc3_plat_data.msmsdcc_fmax =
-				sdc3_plat_data.msmsdcc_fmid;
-		msm_add_sdcc(3, &sdc3_plat_data);
+			sdc3_plat_data_z4u.msmsdcc_fmax =
+				sdc3_plat_data_z4u.msmsdcc_fmid;
+		msm_add_sdcc(3, &sdc3_plat_data_z4u);
 	}
 #endif
 	/* Micro-SD slot */
@@ -414,18 +424,18 @@ void __init msm7627a_init_mmc(void)
 	/* 8x25 EVT do not use hw detector */
 	if (!((machine_is_msm8625_evt() || machine_is_qrd_skud_prime() ||
 				machine_is_msm8625q_evbd() || machine_is_msm8625q_skud())))
-		sdc1_plat_data.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
+		sdc1_plat_data_z4u.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
 	if (machine_is_msm8625_evt() || machine_is_qrd_skud_prime() ||
 				machine_is_msm8625q_evbd() || machine_is_msm8625q_skud())
-		sdc1_plat_data.status = NULL;
+		sdc1_plat_data_z4u.status = NULL;
 
-	msm_add_sdcc(1, &sdc1_plat_data);
+	msm_add_sdcc(1, &sdc1_plat_data_z4u);
 #endif
 	/* SDIO WLAN slot */
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
 	if (mmc_regulator_init(2, "smps3", 1800000))
 		return;
-	msm_add_sdcc(2, &sdc2_plat_data);
+	msm_add_sdcc(2, &sdc2_plat_data_z4u);
 #endif
 	/* Not Used */
 #if (defined(CONFIG_MMC_MSM_SDC4_SUPPORT)\
@@ -434,7 +444,7 @@ void __init msm7627a_init_mmc(void)
 	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7())) {
 		if (mmc_regulator_init(4, "smps3", 1800000))
 			return;
-		msm_add_sdcc(4, &sdc4_plat_data);
+		msm_add_sdcc(4, &sdc4_plat_data_z4u);
 	}
 #endif
 }
