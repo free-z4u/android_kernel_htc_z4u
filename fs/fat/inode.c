@@ -1430,7 +1430,7 @@ int fat_fill_super(struct super_block *sb, void *data, int silent, int isvfat,
 		bsx = (struct fat_boot_bsx *)(bh->b_data + FAT16_BSX_OFFSET);
 	}
 
-	
+	/* interpret volume ID as a little endian 32 bit integer */
 	sbi->vol_id = (((u32)bsx->vol_id[0]) | ((u32)bsx->vol_id[1] << 8) |
 		((u32)bsx->vol_id[2] << 16) | ((u32)bsx->vol_id[3] << 24));
 
