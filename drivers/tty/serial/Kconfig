@@ -1417,3 +1417,11 @@ config SERIAL_EFM32_UART_CONSOLE
 	select SERIAL_CORE_CONSOLE
 
 endmenu
+
+config GPS_1530
+	bool "ENABLE GPS 1530 UART"
+	default n
+
+config GPS_1530_LNA_POWER
+	bool "GPS 2.7V LNA POWER"
+	default n

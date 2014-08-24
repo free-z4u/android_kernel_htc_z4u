@@ -379,3 +379,10 @@ config OV7695_RAW
 	default n
 	---help---
 	  Omni Vision BAYER Sensor for QRD Devices
+
+config DEBUG_FRAME_COUNT
+	bool "Enable debug frame count"
+	depends on MSM_CAMERA
+	default y
+	---help---
+	  Show debug information
