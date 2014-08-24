@@ -335,7 +335,7 @@ EXPORT_SYMBOL(gen_pool_alloc_aligned);
  */
 unsigned long gen_pool_alloc(struct gen_pool *pool, size_t size)
 {
-	gen_pool_alloc_aligned(pool, size, 0);
+	return gen_pool_alloc_aligned(pool, size, 0);
 }
 EXPORT_SYMBOL(gen_pool_alloc);
 
