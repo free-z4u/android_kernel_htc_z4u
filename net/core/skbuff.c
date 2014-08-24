@@ -1332,7 +1332,7 @@ EXPORT_SYMBOL(___pskb_trim);
  * when it is necessary.
  * 1. It may fail due to malloc failure.
  * 2. It may change skb pointers.
- *
+ * 
  * It is pretty complicated. Luckily, it is called only in exceptional cases.
  */
 unsigned char *__pskb_pull_tail(struct sk_buff *skb, int delta)
