@@ -335,45 +335,7 @@ EXPORT_SYMBOL(gen_pool_alloc_aligned);
  */
 unsigned long gen_pool_alloc(struct gen_pool *pool, size_t size)
 {
-	struct gen_pool_chunk *chunk;
-	unsigned long addr = 0;
-	int order = pool->min_alloc_order;
-	int nbits, start_bit = 0, end_bit, remain;
-
-#ifndef CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG
-	BUG_ON(in_nmi());
-#endif
-
-	if (size == 0)
-		return 0;
-
-	nbits = (size + (1UL << order) - 1) >> order;
-	rcu_read_lock();
-	list_for_each_entry_rcu(chunk, &pool->chunks, next_chunk) {
-		if (size > atomic_read(&chunk->avail))
-			continue;
-
-		end_bit = (chunk->end_addr - chunk->start_addr) >> order;
-retry:
-		start_bit = bitmap_find_next_zero_area(chunk->bits, end_bit,
-						       start_bit, nbits, 0);
-		if (start_bit >= end_bit)
-			continue;
-		remain = bitmap_set_ll(chunk->bits, start_bit, nbits);
-		if (remain) {
-			remain = bitmap_clear_ll(chunk->bits, start_bit,
-						 nbits - remain);
-			BUG_ON(remain);
-			goto retry;
-		}
-
-		addr = chunk->start_addr + ((unsigned long)start_bit << order);
-		size = nbits << order;
-		atomic_sub(size, &chunk->avail);
-		break;
-	}
-	rcu_read_unlock();
-	return addr;
+	gen_pool_alloc_aligned(pool, size, 0);
 }
 EXPORT_SYMBOL(gen_pool_alloc);
 
