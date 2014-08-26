@@ -16,6 +16,7 @@
 #ifndef _LINUX_JBD2_H
 #define _LINUX_JBD2_H
 
+/* Allow this file to be included directly into e2fsprogs */
 #ifndef __KERNEL__
 #include "jfs_compat.h"
 #define JBD2_DEBUG
@@ -34,11 +35,26 @@
 
 #define journal_oom_retry 1
 
+/*
+ * Define JBD2_PARANIOD_IOFAIL to cause a kernel BUG() if ext4 finds
+ * certain classes of error which can occur due to failed IOs.  Under
+ * normal use we want ext4 to continue after such errors, because
+ * hardware _can_ fail, but for debugging purposes when running tests on
+ * known-good hardware we may want to trap these errors.
+ */
 #undef JBD2_PARANOID_IOFAIL
 
+/*
+ * The default maximum commit age, in seconds.
+ */
 #define JBD2_DEFAULT_MAX_COMMIT_AGE 5
 
 #ifdef CONFIG_JBD2_DEBUG
+/*
+ * Define JBD2_EXPENSIVE_CHECKING to enable more expensive internal
+ * consistency checks.  By default we don't do this unless
+ * CONFIG_JBD2_DEBUG is on.
+ */
 #define JBD2_EXPENSIVE_CHECKING
 extern u8 jbd2_journal_enable_debug;
 
@@ -51,7 +67,7 @@ extern u8 jbd2_journal_enable_debug;
 		}							\
 	} while (0)
 #else
-#define jbd_debug(f, a...)	
+#define jbd_debug(f, a...)	/**/
 #endif
 
 extern void *jbd2_alloc(size_t size, gfp_t flags);
@@ -769,7 +785,6 @@ static inline int jbd_space_needed(journal_t *journal)
 #define BJ_Types	7
 
 extern int jbd_blocks_per_page(struct inode *inode);
-extern atomic_t vfs_emergency_remount;
 #ifdef __KERNEL__
 
 #define buffer_trace_init(bh)	do {} while (0)
