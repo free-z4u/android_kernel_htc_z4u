@@ -2033,7 +2033,7 @@ __wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
 		WL_ERR(("Scanning being aborted\n"));
 		return -EAGAIN;
 	}
-	if (is_scan_request_valid(request) && request->n_ssids > WL_SCAN_PARAMS_SSID_MAX) {
+	if (request && request->n_ssids > WL_SCAN_PARAMS_SSID_MAX) {
 		WL_ERR(("request null or n_ssids > WL_SCAN_PARAMS_SSID_MAX\n"));
 		return -EOPNOTSUPP;
 	}
@@ -2047,8 +2047,7 @@ __wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
 	
 	mod_timer(&wl->scan_timeout, jiffies + WL_SCAN_TIMER_INTERVAL_MS * HZ / 1000);
 	iscan_req = false;
-	
-	if (is_scan_request_valid(request)) {		
+	if (request) {		/* scan bss */
 		ssids = request->ssids;
 		if (wl->iscan_on && (!ssids || !ssids->ssid_len || request->n_ssids != 1)) {
 			iscan_req = true;
@@ -2131,7 +2130,7 @@ __wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
 		if (wl->p2p_supported) {
 			if (p2p_on(wl) && p2p_scan(wl)) {
 #ifdef HTC_KlocWork
-				if (is_scan_request_valid(request)) {
+				if (request) {
 #endif
 					
 					if(request->ie != NULL){
@@ -2876,7 +2875,7 @@ wl_cfg80211_connect(struct wiphy *wiphy, struct net_device *dev,
 
 #if (defined(BCM4334_CHIP) || !defined(ESCAN_RESULT_PATCH))
 	
-	if (is_scan_request_valid(wl->scan_request)) {
+	if (wl->scan_request) {
 		wl_notify_escan_complete(wl, dev, true, true);
 	}
 	else WL_ERR(("is_scan_request_valid: 0 (1)\n"));
@@ -3175,7 +3174,7 @@ wl_cfg80211_disconnect(struct wiphy *wiphy, struct net_device *dev,
 #if (defined(BCM4334_CHIP) || !defined(ESCAN_RESULT_PATCH))
 		
 		
-		if (is_scan_request_valid(wl->scan_request)) {
+		if (wl->scan_request) {
 			wl_notify_escan_complete(wl, dev, true, true);
 		}
 		else WL_ERR(("is_scan_request_valid: 0 (2)\n"));

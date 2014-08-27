@@ -722,9 +722,6 @@ wl_get_netinfo_by_netdev(struct wl_priv *wl, struct net_device *ndev)
 #define for_each_ndev(wl, iter, next) \
 	list_for_each_entry_safe(iter, next, &wl->net_list, list)
 
-#define is_scan_request_valid(request) \
-	((request != NULL) && (((struct cfg80211_scan_request *)request)->magic == SCAN_REQUEST_MAGIC))
-
 #define is_wps_conn(_sme) \
 	((wl_cfgp2p_find_wpsie((u8 *)_sme->ie, _sme->ie_len) != NULL) && \
 	 (!_sme->crypto.n_ciphers_pairwise) && \
