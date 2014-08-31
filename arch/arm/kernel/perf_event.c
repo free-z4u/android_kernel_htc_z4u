@@ -112,7 +112,12 @@ armpmu_map_cache_event(unsigned (*cache_map)
 static int
 armpmu_map_event(const unsigned (*event_map)[PERF_COUNT_HW_MAX], u64 config)
 {
-	int mapping = (*event_map)[config];
+	int mapping;
+
+	if (config >= PERF_COUNT_HW_MAX)
+		return -ENOENT;
+
+	mapping = (*event_map)[config];
 	return mapping == HW_OP_UNSUPPORTED ? -ENOENT : mapping;
 }
 
@@ -337,7 +342,13 @@ validate_event(struct pmu_hw_events *hw_events,
 	struct hw_perf_event fake_event = event->hw;
 	struct pmu *leader_pmu = event->group_leader->pmu;
 
-	if (event->pmu != leader_pmu || event->state <= PERF_EVENT_STATE_OFF)
+	if (is_software_event(event))
+		return 1;
+
+	if (event->pmu != leader_pmu || event->state < PERF_EVENT_STATE_OFF)
+		return 1;
+
+	if (event->state == PERF_EVENT_STATE_OFF && !event->attr.enable_on_exec)
 		return 1;
 
 	return armpmu->get_event_idx(hw_events, &fake_event) >= 0;
@@ -611,7 +622,7 @@ static void armpmu_disable(struct pmu *pmu)
 	armpmu->stop();
 }
 
-static void __init armpmu_init(struct arm_pmu *armpmu)
+static void armpmu_init(struct arm_pmu *armpmu)
 {
 	atomic_set(&armpmu->active_events, 0);
 	mutex_init(&armpmu->reserve_mutex);
@@ -626,7 +637,7 @@ static void __init armpmu_init(struct arm_pmu *armpmu)
 	armpmu->pmu.read = armpmu_read;
 }
 
-int __init armpmu_register(struct arm_pmu *armpmu, char *name, int type)
+int armpmu_register(struct arm_pmu *armpmu, char *name, int type)
 {
 	armpmu_init(armpmu);
 	return perf_pmu_register(&armpmu->pmu, name, type);
@@ -933,6 +944,7 @@ perf_callchain_user(struct perf_callchain_entry *entry, struct pt_regs *regs)
 	struct frame_tail __user *tail;
 
 
+	perf_callchain_store(entry, regs->ARM_pc);
 	tail = (struct frame_tail __user *)regs->ARM_fp - 1;
 
 	while ((entry->nr < PERF_MAX_STACK_DEPTH) &&

@@ -44,10 +44,6 @@ int sysctl_oom_kill_allocating_task;
 int sysctl_oom_dump_tasks = 1;
 static DEFINE_SPINLOCK(zone_scan_lock);
 
-#ifdef CONFIG_DEBUG_HTC_OOM
-extern void wake_up_kmemeleak(void);
-#endif
-
 /*
  * compare_swap_oom_score_adj() - compare and swap current's oom_score_adj
  * @old_val: old oom_score_adj for compare
@@ -760,12 +756,6 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 	}
 out:
 	read_unlock(&tasklist_lock);
-
-        
-#ifdef CONFIG_DEBUG_HTC_OOM
-        wake_up_kmemeleak();
-#endif
-        
 
 	/*
 	 * Give "p" a good chance of killing itself before we
