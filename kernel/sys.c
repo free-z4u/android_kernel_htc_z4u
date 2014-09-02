@@ -359,13 +359,8 @@ void set_ps_hold_en(void)
 
 #endif
 
-extern void msm_pm_indicate_restart(int restart); 
-
 void kernel_restart_prepare(char *cmd)
 {
-	msm_pm_indicate_restart(1); 
-
-	
 #if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3U) || defined(CONFIG_MACH_Z4DUG) || defined(CONFIG_MACH_Z4DCG) || defined(CONFIG_MACH_Z4U)
 	set_ps_hold_en();
 #endif
@@ -430,8 +425,6 @@ EXPORT_SYMBOL_GPL(kernel_restart);
 
 static void kernel_shutdown_prepare(enum system_states state)
 {
-	msm_pm_indicate_restart(1); 
-
 #if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3U) || defined(CONFIG_MACH_Z4DUG) || defined(CONFIG_MACH_Z4DCG) || defined(CONFIG_MACH_Z4U)
         
         set_ps_hold_en();
