@@ -922,7 +922,6 @@ static int msm_pm_power_collapse
 #endif
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] suspend end\n");
-	msm_pm_irq_extns->read_active_irq();
 	collapsed = msm_pm_collapse();
 
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
@@ -1199,7 +1198,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		l2cc_suspend();
 #endif
 
-	msm_pm_irq_extns->read_active_irq();
 	collapsed = msm_pm_collapse();
 
 	if (!from_idle)
@@ -1248,7 +1246,6 @@ static int msm_pm_swfi(bool from_idle, bool ramp_acpu)
 	if (!cpu_is_msm8625() && !cpu_is_msm8625q())
 		msm_pm_config_hw_before_swfi();
 
-	msm_pm_irq_extns->read_active_irq();
 	msm_arch_idle();
 
 	if (ramp_acpu) {

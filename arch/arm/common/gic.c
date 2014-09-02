@@ -1211,19 +1211,6 @@ void msm_gic_restore(void)
 	gic_cpu_restore(0);
 }
 
-void read_active_irq(void)
-{
-       unsigned int ret;
-       int x;
-       struct gic_chip_data *gic = &gic_data[0];
-       void __iomem *dist_base = gic_data_dist_base(gic);
-       
-       ret = readl_relaxed(dist_base + GIC_DIST_ACTIVE_BIT);
-       for (x = 1; x < 8; x++) {
-                       ret =  readl_relaxed(dist_base + GIC_DIST_ACTIVE_BIT + (x * 4));
-          }
-}
-
 /*
  * Configure the GIC after we come out of power collapse.
  * This function will configure some of the GIC registers so as to prepare the

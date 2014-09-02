@@ -41,7 +41,6 @@ struct msm_pm_irq_calls {
 							uint32_t pending_irqs);
 	void (*exit_sleep3)(uint32_t irq_mask, uint32_t wakeup_reason,
 							uint32_t pending_irqs);
-	void (*read_active_irq)(void);
 };
 
 enum msm_pm_sleep_mode {

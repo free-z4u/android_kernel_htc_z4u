@@ -1065,7 +1065,6 @@ static int msm_pm_power_collapse
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x5;
 	if (!from_idle)
 		printk(KERN_INFO "[K][R] suspend end\n");
-	msm_pm_irq_extns->read_active_irq();
 
 	collapsed = msm_pm_collapse();
 
@@ -1458,7 +1457,6 @@ static int __ref msm_pm_power_collapse_standalone(bool from_idle)
 		break;
 	}
 
-	msm_pm_irq_extns->read_active_irq();
 	collapsed = msm_pm_collapse();
 
 	switch (cpu) {
@@ -1555,7 +1553,6 @@ static int msm_pm_swfi(bool from_idle, bool ramp_acpu)
 		msm_pm_config_hw_before_swfi();
 
 	*(uint32_t *)(virt_start_ptr + 0x40) = 0x6;
-	msm_pm_irq_extns->read_active_irq();
 	*(uint32_t *)(virt_start_ptr + 0x40) = 0x7;
 	msm_arch_idle();
 

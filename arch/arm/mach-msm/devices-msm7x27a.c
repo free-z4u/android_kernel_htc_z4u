@@ -565,7 +565,6 @@ static struct msm_pm_irq_calls msm8625_pm_irq_calls = {
 	.exit_sleep1 = msm_gic_irq_exit_sleep1,
 	.exit_sleep2 = msm_gic_irq_exit_sleep2,
 	.exit_sleep3 = msm_gic_irq_exit_sleep3,
-	.read_active_irq = read_active_irq,
 };
 
 void msm_clk_dump_debug_info(void)
@@ -2087,8 +2086,6 @@ static void __init msm_cpr_init(void)
 		msm_cpr_mode_data.nom_Vmax,
 		msm_cpr_mode_data.turbo_Vmax);
 
-	msm_cpr_clk_enable();
-
 	if (cpu_is_msm8625())
 		platform_device_register(&msm8625_vp_device);
 
@@ -2201,8 +2198,11 @@ static int __init msm_gpio_config_gps(void)
 	unsigned int gps_gpio = 7;
 	int ret = 0;
 
-	if (!machine_is_msm8625_evb())
+	if (!machine_is_msm8625_evb() && !machine_is_msm8625q_evbd())
 		return ret;
+
+	if (machine_is_msm8625q_evbd())
+		gps_gpio = 49;
 
 	ret = gpio_tlmm_config(GPIO_CFG(gps_gpio, 0, GPIO_CFG_OUTPUT,
 			GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
