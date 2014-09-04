@@ -116,6 +116,9 @@ static int pmic8xxx_kp_write_u8(struct pmic8xxx_kp *kp,
 	int rc;
 
 	rc = pm8xxx_writeb(kp->dev->parent, reg, data);
+	if (rc < 0)
+		dev_warn(kp->dev, "Error writing pmic8xxx: %X - ret %X\n",
+				reg, rc);
 	return rc;
 }
 
@@ -125,6 +128,10 @@ static int pmic8xxx_kp_read(struct pmic8xxx_kp *kp,
 	int rc;
 
 	rc = pm8xxx_read_buf(kp->dev->parent, reg, data, num_bytes);
+	if (rc < 0)
+		dev_warn(kp->dev, "Error reading pmic8xxx: %X - ret %X\n",
+				reg, rc);
+
 	return rc;
 }
 
@@ -134,6 +141,9 @@ static int pmic8xxx_kp_read_u8(struct pmic8xxx_kp *kp,
 	int rc;
 
 	rc = pmic8xxx_kp_read(kp, data, reg, 1);
+	if (rc < 0)
+		dev_warn(kp->dev, "Error reading pmic8xxx: %X - ret %X\n",
+				reg, rc);
 	return rc;
 }
 
@@ -463,7 +473,7 @@ static int  __devinit pmic8xxx_kp_config_gpio(int gpio_start, int num_gpios,
 					__func__, gpio_start + i, rc);
 			return rc;
 		}
-	 }
+	}
 
 	return 0;
 }
