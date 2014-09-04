@@ -336,7 +336,6 @@ static dma_addr_t dmabounce_map_page(struct device *dev, struct page *page,
 
 	return map_single(dev, page_address(page) + offset, size, dir);
 }
-EXPORT_SYMBOL(dmabounce_map_pag);
 
 /*
  * see if a mapped address was really a "safe" buffer and if so, copy
@@ -360,7 +359,6 @@ static void dmabounce_unmap_page(struct device *dev, dma_addr_t dma_addr, size_t
 
 	unmap_single(dev, buf, size, dir);
 }
-EXPORT_SYMBOL(dmabounce_unmap_page);
 
 static int __dmabounce_sync_for_cpu(struct device *dev, dma_addr_t addr,
 		size_t sz, enum dma_data_direction dir)
@@ -392,7 +390,6 @@ static int __dmabounce_sync_for_cpu(struct device *dev, dma_addr_t addr,
 	}
 	return 0;
 }
-EXPORT_SYMBOL(__dmabounce_sync_for_cpu);
 
 static void dmabounce_sync_for_cpu(struct device *dev,
 		dma_addr_t handle, size_t size, enum dma_data_direction dir)
@@ -433,7 +430,6 @@ static int __dmabounce_sync_for_device(struct device *dev, dma_addr_t addr,
 	}
 	return 0;
 }
-EXPORT_SYMBOL(__dmabounce_sync_for_device);
 
 static void dmabounce_sync_for_device(struct device *dev,
 		dma_addr_t handle, size_t size, enum dma_data_direction dir)
