@@ -381,9 +381,6 @@ static void skb_clone_fraglist(struct sk_buff *skb)
 
 static void skb_release_data(struct sk_buff *skb)
 {
-	if ((!skb) || (IS_ERR(skb)))
-		return;
-		
 	if (!skb->cloned ||
 	    !atomic_sub_return(skb->nohdr ? (1 << SKB_DATAREF_SHIFT) + 1 : 1,
 			       &skb_shinfo(skb)->dataref)) {
@@ -492,10 +489,8 @@ static void skb_release_all(struct sk_buff *skb)
 
 void __kfree_skb(struct sk_buff *skb)
 {
-	if ((skb) && (!IS_ERR(skb))) {
-		skb_release_all(skb);
-		kfree_skbmem(skb);
-	}
+	skb_release_all(skb);
+	kfree_skbmem(skb);
 }
 EXPORT_SYMBOL(__kfree_skb);
 
@@ -738,6 +733,7 @@ int skb_copy_ubufs(struct sk_buff *skb, gfp_t gfp_mask)
 	skb_shinfo(skb)->tx_flags &= ~SKBTX_DEV_ZEROCOPY;
 	return 0;
 }
+EXPORT_SYMBOL_GPL(skb_copy_ubufs);
 
 /**
  *	skb_clone	-	duplicate an sk_buff
@@ -825,7 +821,7 @@ static void copy_skb_header(struct sk_buff *new, const struct sk_buff *old)
 struct sk_buff *skb_copy(const struct sk_buff *skb, gfp_t gfp_mask)
 {
 	int headerlen = skb_headroom(skb);
-	unsigned int size = (skb_end_pointer(skb) - skb->head) + skb->data_len;
+	unsigned int size = skb_end_offset(skb) + skb->data_len;
 	struct sk_buff *n = alloc_skb(size, gfp_mask);
 
 	if (!n)
@@ -926,7 +922,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
 {
 	int i;
 	u8 *data;
-	int size = nhead + (skb_end_pointer(skb) - skb->head) + ntail;
+	int size = nhead + skb_end_offset(skb) + ntail;
 	long off;
 	bool fastpath;
 
@@ -1336,7 +1332,7 @@ EXPORT_SYMBOL(___pskb_trim);
  * when it is necessary.
  * 1. It may fail due to malloc failure.
  * 2. It may change skb pointers.
- * 
+ *
  * It is pretty complicated. Luckily, it is called only in exceptional cases.
  */
 unsigned char *__pskb_pull_tail(struct sk_buff *skb, int delta)
@@ -2046,11 +2042,6 @@ struct sk_buff *skb_dequeue(struct sk_buff_head *list)
 	unsigned long flags;
 	struct sk_buff *result;
 
-	if ((!list) || (IS_ERR(list))) {
-		printk("[NET] list is NULL in %s\n", __func__);
-		return NULL;
-	}
-	
 	spin_lock_irqsave(&list->lock, flags);
 	result = __skb_dequeue(list);
 	spin_unlock_irqrestore(&list->lock, flags);
@@ -2730,14 +2721,13 @@ struct sk_buff *skb_segment(struct sk_buff *skb, netdev_features_t features)
 			if (unlikely(!nskb))
 				goto err;
 
-			hsize = skb_end_pointer(nskb) - nskb->head;
+			hsize = skb_end_offset(nskb);
 			if (skb_cow_head(nskb, doffset + headroom)) {
 				kfree_skb(nskb);
 				goto err;
 			}
 
-			nskb->truesize += skb_end_pointer(nskb) - nskb->head -
-					  hsize;
+			nskb->truesize += skb_end_offset(nskb) - hsize;
 			skb_release_head_state(nskb);
 			__skb_push(nskb, doffset);
 		} else {
@@ -2758,7 +2748,6 @@ struct sk_buff *skb_segment(struct sk_buff *skb, netdev_features_t features)
 		tail = nskb;
 
 		__copy_skb_header(nskb, skb);
-		nskb->mac_len = skb->mac_len;
 
 		/* nskb and skb might have different headroom */
 		if (nskb->ip_summed == CHECKSUM_PARTIAL)
@@ -2768,6 +2757,7 @@ struct sk_buff *skb_segment(struct sk_buff *skb, netdev_features_t features)
 		skb_set_network_header(nskb, skb->mac_len);
 		nskb->transport_header = (nskb->network_header +
 					  skb_network_header_len(skb));
+		skb_reset_mac_len(nskb);
 		skb_copy_from_linear_data(skb, nskb->data, doffset);
 
 		if (fskb != skb_shinfo(skb)->frag_list)
@@ -2787,6 +2777,9 @@ struct sk_buff *skb_segment(struct sk_buff *skb, netdev_features_t features)
 						 skb_put(nskb, hsize), hsize);
 
 		while (pos < offset + len && i < nfrags) {
+			if (unlikely(skb_orphan_frags(skb, GFP_ATOMIC)))
+				goto err;
+
 			*frag = skb_shinfo(skb)->frags[i];
 			__skb_frag_ref(frag);
 			size = skb_frag_size(frag);
@@ -3292,3 +3285,28 @@ void __skb_warn_lro_forwarding(const struct sk_buff *skb)
 			   " while LRO is enabled\n", skb->dev->name);
 }
 EXPORT_SYMBOL(__skb_warn_lro_forwarding);
+
+/**
+ * skb_gso_transport_seglen - Return length of individual segments of a gso packet
+ *
+ * @skb: GSO skb
+ *
+ * skb_gso_transport_seglen is used to determine the real size of the
+ * individual segments, including Layer4 headers (TCP/UDP).
+ *
+ * The MAC/L2 or network (IP, IPv6) headers are not accounted for.
+ */
+unsigned int skb_gso_transport_seglen(const struct sk_buff *skb)
+{
+	const struct skb_shared_info *shinfo = skb_shinfo(skb);
+
+	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6)))
+		return tcp_hdrlen(skb) + shinfo->gso_size;
+
+	/* UFO sets gso_size to the size of the fragmentation
+	 * payload, i.e. the size of the L4 (UDP) header is already
+	 * accounted for.
+	 */
+	return shinfo->gso_size;
+}
+EXPORT_SYMBOL_GPL(skb_gso_transport_seglen);
