@@ -542,7 +542,7 @@ static int __devinit pmic8xxx_kp_probe(struct platform_device *pdev)
 		.output_buffer	= PM_GPIO_OUT_BUF_OPEN_DRAIN,
 		.output_value	= 0,
 		.pull		= PM_GPIO_PULL_NO,
-		.vin_sel	= PM_GPIO_VIN_S3,
+		.vin_sel	= PM_GPIO_VIN_S4,
 		.out_strength	= PM_GPIO_STRENGTH_LOW,
 		.function	= PM_GPIO_FUNC_1,
 		.inv_int_pol	= 1,
@@ -551,7 +551,7 @@ static int __devinit pmic8xxx_kp_probe(struct platform_device *pdev)
 	struct pm_gpio kypd_sns = {
 		.direction	= PM_GPIO_DIR_IN,
 		.pull		= PM_GPIO_PULL_UP_31P5,
-		.vin_sel	= PM_GPIO_VIN_S3,
+		.vin_sel	= PM_GPIO_VIN_S4,
 		.out_strength	= PM_GPIO_STRENGTH_NO,
 		.function	= PM_GPIO_FUNC_NORMAL,
 		.inv_int_pol	= 1,
