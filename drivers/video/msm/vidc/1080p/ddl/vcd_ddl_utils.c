@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -112,10 +112,10 @@ void *ddl_pmem_alloc(struct ddl_buf_addr *addr, size_t sz, u32 alignment)
 					&iova,
 					&buffer_size,
 					UNCACHED, 0);
-			if (ret) {
+			if (ret || !iova) {
 				DDL_MSG_ERROR(
-				"%s():DDL ION ion map iommu failed\n",
-				 __func__);
+				"%s():DDL ION ion map iommu failed, ret = %d iova = 0x%lx\n",
+					__func__, ret, iova);
 				goto unmap_ion_alloc;
 			}
 			addr->alloced_phys_addr = (phys_addr_t) iova;

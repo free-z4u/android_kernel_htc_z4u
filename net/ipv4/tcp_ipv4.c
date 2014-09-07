@@ -1937,7 +1937,7 @@ static int tcp_v4_init_sock(struct sock *sk)
 
 void tcp_v4_destroy_sock(struct sock *sk)
 {
- 	struct tcp_sock *tp = tcp_sk(sk);
+	struct tcp_sock *tp = tcp_sk(sk);
 
 	tcp_clear_xmit_timers(sk);
 
@@ -1990,6 +1990,9 @@ void tcp_v4_destroy_sock(struct sock *sk)
 }
 EXPORT_SYMBOL(tcp_v4_destroy_sock);
 
+/*
+ * tcp_v4_nuke_addr - destroy all sockets on the given local address
+ */
 void tcp_v4_nuke_addr(__u32 saddr)
 {
 	unsigned int bucket;

@@ -2821,7 +2821,7 @@ out:
 
 struct rtable *__ip_route_output_key(struct net *net, struct flowi4 *flp4)
 {
-	struct rtable *rth = NULL;
+	struct rtable *rth;
 	unsigned int hash;
 
 	if (!rt_caching(net))
@@ -3141,11 +3141,6 @@ static int inet_rtm_getroute(struct sk_buff *in_skb, struct nlmsghdr* nlh, void 
 
 	if (err)
 		goto errout_free;
-
-#ifdef CONFIG_HTC_NETWORK_MODIFY
-	if (IS_ERR(rt) || (!rt))
-		printk(KERN_ERR "[NET] rt is NULL in %s!\n", __func__);
-#endif
 
 	skb_dst_set(skb, &rt->dst);
 	if (rtm->rtm_flags & RTM_F_NOTIFY)

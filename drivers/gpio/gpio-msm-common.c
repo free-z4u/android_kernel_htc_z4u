@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -31,11 +31,21 @@
 #include <mach/mpm.h>
 #include "gpio-msm-common.h"
 
+#ifdef CONFIG_GPIO_MSM_V3
+enum msm_tlmm_register {
+	SDC4_HDRV_PULL_CTL = 0x0, /* NOT USED */
+	SDC3_HDRV_PULL_CTL = 0x0, /* NOT USED */
+	SDC2_HDRV_PULL_CTL = 0x2048,
+	SDC1_HDRV_PULL_CTL = 0x2044,
+};
+#else
 enum msm_tlmm_register {
 	SDC4_HDRV_PULL_CTL = 0x20a0,
 	SDC3_HDRV_PULL_CTL = 0x20a4,
+	SDC2_HDRV_PULL_CTL = 0x0, /* NOT USED */
 	SDC1_HDRV_PULL_CTL = 0x20a0,
 };
+#endif
 
 struct tlmm_field_cfg {
 	enum msm_tlmm_register reg;
@@ -49,17 +59,24 @@ static const struct tlmm_field_cfg tlmm_hdrv_cfgs[] = {
 	{SDC3_HDRV_PULL_CTL, 6}, /* TLMM_HDRV_SDC3_CLK  */
 	{SDC3_HDRV_PULL_CTL, 3}, /* TLMM_HDRV_SDC3_CMD  */
 	{SDC3_HDRV_PULL_CTL, 0}, /* TLMM_HDRV_SDC3_DATA */
+	{SDC2_HDRV_PULL_CTL, 6}, /* TLMM_HDRV_SDC2_CLK  */
+	{SDC2_HDRV_PULL_CTL, 3}, /* TLMM_HDRV_SDC2_CMD  */
+	{SDC2_HDRV_PULL_CTL, 0}, /* TLMM_HDRV_SDC2_DATA */
 	{SDC1_HDRV_PULL_CTL, 6}, /* TLMM_HDRV_SDC1_CLK  */
 	{SDC1_HDRV_PULL_CTL, 3}, /* TLMM_HDRV_SDC1_CMD  */
 	{SDC1_HDRV_PULL_CTL, 0}, /* TLMM_HDRV_SDC1_DATA */
 };
 
 static const struct tlmm_field_cfg tlmm_pull_cfgs[] = {
+	{SDC4_HDRV_PULL_CTL, 14}, /* TLMM_PULL_SDC4_CLK */
 	{SDC4_HDRV_PULL_CTL, 11}, /* TLMM_PULL_SDC4_CMD  */
 	{SDC4_HDRV_PULL_CTL, 9},  /* TLMM_PULL_SDC4_DATA */
 	{SDC3_HDRV_PULL_CTL, 14}, /* TLMM_PULL_SDC3_CLK  */
 	{SDC3_HDRV_PULL_CTL, 11}, /* TLMM_PULL_SDC3_CMD  */
 	{SDC3_HDRV_PULL_CTL, 9},  /* TLMM_PULL_SDC3_DATA */
+	{SDC2_HDRV_PULL_CTL, 14}, /* TLMM_PULL_SDC2_CLK  */
+	{SDC2_HDRV_PULL_CTL, 11}, /* TLMM_PULL_SDC2_CMD  */
+	{SDC2_HDRV_PULL_CTL, 9},  /* TLMM_PULL_SDC2_DATA */
 	{SDC1_HDRV_PULL_CTL, 13}, /* TLMM_PULL_SDC1_CLK  */
 	{SDC1_HDRV_PULL_CTL, 11}, /* TLMM_PULL_SDC1_CMD  */
 	{SDC1_HDRV_PULL_CTL, 9},  /* TLMM_PULL_SDC1_DATA */
@@ -100,7 +117,7 @@ struct msm_gpio_dev {
 	DECLARE_BITMAP(enabled_irqs, NR_MSM_GPIOS);
 	DECLARE_BITMAP(wake_irqs, NR_MSM_GPIOS);
 	DECLARE_BITMAP(dual_edge_irqs, NR_MSM_GPIOS);
-	struct irq_domain domain;
+	struct irq_domain *domain;
 };
 
 static DEFINE_SPINLOCK(tlmm_lock);
@@ -152,15 +169,14 @@ static int msm_gpio_direction_output(struct gpio_chip *chip,
 static int msm_gpio_to_irq(struct gpio_chip *chip, unsigned offset)
 {
 	struct msm_gpio_dev *g_dev = to_msm_gpio_dev(chip);
-	struct irq_domain *domain = &g_dev->domain;
-	return domain->irq_base + (offset - chip->base);
+	struct irq_domain *domain = g_dev->domain;
+	return irq_linear_revmap(domain, offset);
 }
 
 static inline int msm_irq_to_gpio(struct gpio_chip *chip, unsigned irq)
 {
-	struct msm_gpio_dev *g_dev = to_msm_gpio_dev(chip);
-	struct irq_domain *domain = &g_dev->domain;
-	return irq - domain->irq_base;
+	struct irq_data *irq_data = irq_get_irq_data(irq);
+	return irq_data->hwirq;
 }
 #else
 static int msm_gpio_to_irq(struct gpio_chip *chip, unsigned offset)
@@ -283,6 +299,7 @@ static void msm_gpio_irq_unmask(struct irq_data *d)
 
 	spin_lock_irqsave(&tlmm_lock, irq_flags);
 	__set_bit(gpio, msm_gpio.enabled_irqs);
+	__msm_gpio_set_intr_status(gpio);
 	__msm_gpio_set_intr_cfg_enable(gpio, 1);
 	mb();
 	spin_unlock_irqrestore(&tlmm_lock, irq_flags);
@@ -391,9 +408,13 @@ static struct irq_chip msm_gpio_irq_chip = {
  */
 static struct lock_class_key msm_gpio_lock_class;
 
+/* TODO: This should be a real platform_driver */
 static int __devinit msm_gpio_probe(void)
 {
-	int i, irq, ret;
+	int ret;
+#ifndef CONFIG_OF
+	int irq, i;
+#endif
 
 	spin_lock_init(&tlmm_lock);
 	bitmap_zero(msm_gpio.enabled_irqs, NR_MSM_GPIOS);
@@ -403,6 +424,7 @@ static int __devinit msm_gpio_probe(void)
 	if (ret < 0)
 		return ret;
 
+#ifndef CONFIG_OF
 	for (i = 0; i < msm_gpio.gpio_chip.ngpio; ++i) {
 		irq = msm_gpio_to_irq(&msm_gpio.gpio_chip, i);
 		irq_set_lockdep_class(irq, &msm_gpio_lock_class);
@@ -410,7 +432,7 @@ static int __devinit msm_gpio_probe(void)
 					 handle_level_irq);
 		set_irq_flags(irq, IRQF_VALID);
 	}
-
+#endif
 	ret = request_irq(TLMM_MSM_SUMMARY_IRQ, msm_summary_irq_handler,
 			IRQF_TRIGGER_HIGH, "msmgpio", NULL);
 	if (ret) {
@@ -573,12 +595,12 @@ int msm_gpio_install_direct_irq(unsigned gpio, unsigned irq,
 EXPORT_SYMBOL(msm_gpio_install_direct_irq);
 
 #ifdef CONFIG_OF
-static int msm_gpio_domain_dt_translate(struct irq_domain *d,
-					struct device_node *controller,
-					const u32 *intspec,
-					unsigned int intsize,
-					unsigned long *out_hwirq,
-					unsigned int *out_type)
+static int msm_gpio_irq_domain_xlate(struct irq_domain *d,
+				     struct device_node *controller,
+				     const u32 *intspec,
+				     unsigned int intsize,
+				     unsigned long *out_hwirq,
+				     unsigned int *out_type)
 {
 	if (d->of_node != controller)
 		return -EINVAL;
@@ -593,31 +615,31 @@ static int msm_gpio_domain_dt_translate(struct irq_domain *d,
 	return 0;
 }
 
+static int msm_gpio_irq_domain_map(struct irq_domain *d, unsigned int irq,
+				   irq_hw_number_t hwirq)
+{
+	irq_set_lockdep_class(irq, &msm_gpio_lock_class);
+	irq_set_chip_and_handler(irq, &msm_gpio_irq_chip,
+			handle_level_irq);
+	set_irq_flags(irq, IRQF_VALID);
+
+	return 0;
+}
+
 static struct irq_domain_ops msm_gpio_irq_domain_ops = {
-	.dt_translate = msm_gpio_domain_dt_translate,
+	.xlate = msm_gpio_irq_domain_xlate,
+	.map = msm_gpio_irq_domain_map,
 };
 
 int __init msm_gpio_of_init(struct device_node *node,
 			    struct device_node *parent)
 {
-	struct irq_domain *domain = &msm_gpio.domain;
-	int start;
-
-	start = irq_domain_find_free_range(0, NR_MSM_GPIOS);
-	domain->irq_base = irq_alloc_descs(start, 0, NR_MSM_GPIOS,
-							numa_node_id());
-	if (IS_ERR_VALUE(domain->irq_base)) {
-		WARN(1, "Cannot allocate irq_descs @ IRQ%d\n", start);
-		return domain->irq_base;
+	msm_gpio.domain = irq_domain_add_linear(node, NR_MSM_GPIOS,
+			&msm_gpio_irq_domain_ops, &msm_gpio);
+	if (!msm_gpio.domain) {
+		WARN(1, "Cannot allocate irq_domain\n");
+		return -ENOMEM;
 	}
-
-	domain->nr_irq = NR_MSM_GPIOS;
-	domain->of_node = of_node_get(node);
-	domain->priv = &msm_gpio;
-	domain->ops = &msm_gpio_irq_domain_ops;
-	irq_domain_add(domain);
-	msm_gpio.gpio_chip.of_node = of_node_get(node);
-	pr_debug("%s: irq_base = %u\n", __func__, domain->irq_base);
 
 	return 0;
 }

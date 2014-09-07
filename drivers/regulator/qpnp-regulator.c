@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -28,8 +28,6 @@
 #include <linux/regulator/driver.h>
 #include <linux/regulator/of_regulator.h>
 #include <linux/regulator/qpnp-regulator.h>
-
-#include <mach/qpnp.h>
 
 /* Debug Flag Definitions */
 enum {
@@ -1189,7 +1187,7 @@ static int qpnp_regulator_get_dt_config(struct spmi_device *spmi,
 	pdata->init_data.constraints.input_uV
 		= pdata->init_data.constraints.max_uV;
 
-	res = qpnp_get_resource(spmi, 0, IORESOURCE_MEM, 0);
+	res = spmi_get_resource(spmi, NULL, IORESOURCE_MEM, 0);
 	if (!res) {
 		dev_err(&spmi->dev, "%s: node is missing base address\n",
 			__func__);

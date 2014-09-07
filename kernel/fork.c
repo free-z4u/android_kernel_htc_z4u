@@ -158,6 +158,7 @@ struct kmem_cache *vm_area_cachep;
 /* SLAB cache for mm_struct structures (tsk->mm) */
 static struct kmem_cache *mm_cachep;
 
+/* Notifier list called when a task struct is freed */
 static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
 
 static void account_kernel_stack(struct thread_info *ti, int account)
@@ -1287,8 +1288,6 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 
 #ifdef CONFIG_DEBUG_MUTEXES
 	p->blocked_on = NULL; /* not blocked yet */
-	p->blocked_by = NULL;
-	p->blocked_since = 0;
 #endif
 #ifdef CONFIG_CGROUP_MEM_RES_CTLR
 	p->memcg_batch.do_batch = 0;
@@ -1623,7 +1622,6 @@ long do_fork(unsigned long clone_flags,
 		struct completion vfork;
 
 		trace_sched_process_fork(current, p);
-		atomic_notifier_call_chain(&task_fork_notifier, 0, p);
 
 		nr = task_pid_vnr(p);
 

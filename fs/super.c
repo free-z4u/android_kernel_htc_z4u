@@ -34,9 +34,7 @@
 #include <linux/cleancache.h>
 #include <linux/fsnotify.h>
 #include "internal.h"
-#include <linux/delay.h>
 
-atomic_t vfs_emergency_remount;
 
 LIST_HEAD(super_blocks);
 DEFINE_SPINLOCK(sb_lock);
@@ -784,24 +782,10 @@ cancel_readonly:
 	return retval;
 }
 
-extern void htc_rmt_storage_force_sync(void);
-
-char devlog_part[64] = {0,};
 static void do_emergency_remount(struct work_struct *work)
 {
 	struct super_block *sb, *p = NULL;
-	char b[BDEVNAME_SIZE];
 
-        printk("%s ++\n", __func__);
-#if 0
-	if (!atomic_read(&emmc_reboot)){
-                htc_rmt_storage_force_sync();
-	}
-	
-#endif
-	atomic_set(&vfs_emergency_remount, 1);
-	
-	umount2("/devlog", MNT_DETACH);
 	spin_lock(&sb_lock);
 	list_for_each_entry(sb, &super_blocks, s_list) {
 		if (hlist_unhashed(&sb->s_instances))
@@ -814,9 +798,7 @@ static void do_emergency_remount(struct work_struct *work)
 			/*
 			 * What lock protects sb->s_flags??
 			 */
-			if (strcmp(bdevname(sb->s_bdev, b), devlog_part))
-
-				do_remount_sb(sb, MS_RDONLY, NULL, 1);
+			do_remount_sb(sb, MS_RDONLY, NULL, 1);
 		}
 		up_write(&sb->s_umount);
 		spin_lock(&sb_lock);
@@ -828,23 +810,12 @@ static void do_emergency_remount(struct work_struct *work)
 		__put_super(p);
 	spin_unlock(&sb_lock);
 	kfree(work);
-
-	atomic_set(&vfs_emergency_remount, 0);
-
 	printk("Emergency Remount complete\n");
-	printk("%s --\n", __func__);
 }
 
 void emergency_remount(void)
 {
 	struct work_struct *work;
-
-	printk(KERN_INFO "Process %s (PID:%d) called %s\n",current->comm, task_pid_nr(current), __func__);
-	if(current->parent)
-		printk(KERN_INFO "Process Parent %s (PPID:%d) called %s\n",current->parent->comm, task_pid_nr(current->parent), __func__);
-	if(current->real_parent)
-		printk(KERN_INFO "Process Real Parent %s (Real PID:%d) called %s\n",current->real_parent->comm, task_pid_nr(current->real_parent), __func__);
-	dump_stack();
 
 	work = kmalloc(sizeof(*work), GFP_ATOMIC);
 	if (work) {

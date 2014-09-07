@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -422,12 +422,11 @@ static int msm8930_btsco_rate_get(struct snd_kcontrol *kcontrol,
 static int msm8930_btsco_rate_put(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
 {
-
 	switch (ucontrol->value.integer.value[0]) {
-	case 8000:
+	case 0:
 		msm8930_btsco_rate = BTSCO_RATE_8KHZ;
 		break;
-	case 16000:
+	case 1:
 		msm8930_btsco_rate = BTSCO_RATE_16KHZ;
 		break;
 	default:
@@ -878,7 +877,7 @@ static struct snd_soc_dai_link msm8930_dai[] = {
 		.name = "MSM8930 Media2",
 		.stream_name = "MultiMedia2",
 		.cpu_dai_name	= "MultiMedia2",
-		.platform_name  = "msm-multi-ch-pcm-dsp",
+		.platform_name  = "msm-pcm-dsp",
 		.dynamic = 1,
 		.codec_dai_name = "snd-soc-dummy-dai",
 		.codec_name = "snd-soc-dummy",

@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -14,13 +14,12 @@
 #define __MACH_STM_H
 
 enum {
-	OST_ENTITY_NONE			= 0x00,
-	OST_ENTITY_FTRACE_EVENTS	= 0x01,
-	OST_ENTITY_TRACE_PRINTK		= 0x02,
-	OST_ENTITY_TRACE_MARKER		= 0x04,
-	OST_ENTITY_DEV_NODE		= 0x08,
-	OST_ENTITY_PRINTK		= 0x10,
-	OST_ENTITY_ALL			= 0x1F,
+	OST_ENTITY_NONE			= 0x0,
+	OST_ENTITY_FTRACE_EVENTS	= 0x1,
+	OST_ENTITY_TRACE_PRINTK		= 0x2,
+	OST_ENTITY_TRACE_MARKER		= 0x4,
+	OST_ENTITY_DEV_NODE		= 0x8,
+	OST_ENTITY_ALL			= 0xF,
 };
 
 enum {

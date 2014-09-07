@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -46,6 +46,8 @@ struct rmnet_ctrl_dev {
 
 	unsigned		is_opened;
 
+	bool			is_connected;
+
 	/*input control lines (DSR, CTS, CD, RI)*/
 	unsigned int		cbits_tolocal;
 
@@ -71,7 +73,7 @@ struct rmnet_ctrl_dev {
 
 extern struct rmnet_ctrl_dev *ctrl_dev[];
 
-extern int rmnet_usb_ctrl_start(struct rmnet_ctrl_dev *);
+extern int rmnet_usb_ctrl_start_rx(struct rmnet_ctrl_dev *);
 extern int rmnet_usb_ctrl_stop_rx(struct rmnet_ctrl_dev *);
 extern int rmnet_usb_ctrl_init(void);
 extern void rmnet_usb_ctrl_exit(void);

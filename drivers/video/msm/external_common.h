@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -111,6 +111,8 @@
 #define HDMI_VFRMT_1440x480i240_16_9	HDMI_VFRMT_720x480i240_16_9
 #define HDMI_VFRMT_MAX			59
 #define HDMI_VFRMT_FORCE_32BIT		0x7FFFFFFF
+
+extern int ext_resolution;
 
 struct hdmi_disp_mode_timing_type {
 	uint32	video_format;

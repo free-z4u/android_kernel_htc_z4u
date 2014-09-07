@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1821,7 +1821,7 @@ u32 vid_enc_set_recon_buffers(struct video_client_ctx *client_ctx,
 			control->client_data = (void *) mapped_buffer;
 			control->dev_addr = (u8 *)mapped_buffer->iova[0];
 	} else {
-		client_ctx->recon_buffer_ion_handle[i] = ion_import_fd(
+		client_ctx->recon_buffer_ion_handle[i] = ion_import_dma_buf(
 				client_ctx->user_ion_client, control->pmem_fd);
 		if (IS_ERR_OR_NULL(client_ctx->recon_buffer_ion_handle[i])) {
 			ERR("%s(): get_ION_handle failed\n", __func__);
@@ -1844,7 +1844,8 @@ u32 vid_enc_set_recon_buffers(struct video_client_ctx *client_ctx,
 				 __func__);
 			goto import_ion_error;
 		}
-		if (res_trk_check_for_sec_session()) {
+		if (res_trk_check_for_sec_session() ||
+		   (res_trk_get_core_type() == (u32)VCD_CORE_720P)) {
 			rc = ion_phys(client_ctx->user_ion_client,
 				client_ctx->recon_buffer_ion_handle[i],
 				&phy_addr, &ion_len);
@@ -1867,9 +1868,10 @@ u32 vid_enc_set_recon_buffers(struct video_client_ctx *client_ctx,
 					(unsigned long *)&iova,
 					(unsigned long *)&buffer_size,
 					UNCACHED, 0);
-			if (rc) {
-				ERR("%s():ION map iommu addr fail\n",
-					 __func__);
+			if (rc || !iova) {
+				ERR(
+				"%s():ION map iommu addr fail, rc = %d, iova = 0x%lx\n",
+					__func__, rc, iova);
 				goto map_ion_error;
 			}
 			control->physical_addr =  (u8 *) iova;
@@ -1945,7 +1947,8 @@ u32 vid_enc_free_recon_buffers(struct video_client_ctx *client_ctx,
 		if (client_ctx->recon_buffer_ion_handle[i]) {
 			ion_unmap_kernel(client_ctx->user_ion_client,
 				client_ctx->recon_buffer_ion_handle[i]);
-			if (!res_trk_check_for_sec_session()) {
+			if (!res_trk_check_for_sec_session() &&
+			   (res_trk_get_core_type() != (u32)VCD_CORE_720P)) {
 				ion_unmap_iommu(client_ctx->user_ion_client,
 				client_ctx->recon_buffer_ion_handle[i],
 				VIDEO_DOMAIN,

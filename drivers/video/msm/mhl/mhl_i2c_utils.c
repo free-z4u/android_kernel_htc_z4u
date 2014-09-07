@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -14,8 +14,6 @@
 
 #include "mhl_i2c_utils.h"
 #include "mhl_8334.h"
-
-#define DEBUG
 
 uint8_t slave_addrs[MAX_PAGES] = {
 	DEV_PAGE_TPI_0    ,
@@ -60,7 +58,7 @@ int mhl_i2c_reg_read(uint8_t slave_addr_index, uint8_t reg_offset)
 		pr_err("I2C READ FAILED=[%d]\n", ret);
 		return -EACCES;
 	}
-	pr_err("Buffer is [%x]\n", buffer);
+	pr_debug("Buffer is [%x]\n", buffer);
 	return buffer;
 }
 

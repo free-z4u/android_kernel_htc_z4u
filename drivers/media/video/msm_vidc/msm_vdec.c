@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -197,6 +197,14 @@ static const struct msm_vidc_format vdec_formats[] = {
 		.name = "H263",
 		.description = "H263 compressed format",
 		.fourcc = V4L2_PIX_FMT_H263,
+		.num_planes = 1,
+		.get_frame_size = get_frame_size_compressed,
+		.type = OUTPUT_PORT,
+	},
+	{
+		.name = "VC1",
+		.description = "VC-1 compressed format",
+		.fourcc = V4L2_PIX_FMT_VC1_ANNEX_G,
 		.num_planes = 1,
 		.get_frame_size = get_frame_size_compressed,
 		.type = OUTPUT_PORT,

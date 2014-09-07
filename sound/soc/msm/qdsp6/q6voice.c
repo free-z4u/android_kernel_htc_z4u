@@ -1,4 +1,4 @@
-/*  Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/*  Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -2445,9 +2445,6 @@ static int voice_destroy_vocproc(struct voice_data *v)
 	/* send stop voice cmd */
 	voice_send_stop_voice_cmd(v);
 
-	/* Clear mute setting */
-	v->dev_tx.mute = common.default_mute_val;
-
 	/* detach VOCPROC and wait for response from mvm */
 	mvm_d_vocproc_cmd.hdr.hdr_field = APR_HDR_FIELD(APR_MSG_TYPE_SEQ_CMD,
 						APR_HDR_LEN(APR_HDR_SIZE),
@@ -3210,9 +3207,7 @@ int voc_set_tx_mute(uint16_t session_id, uint32_t dir, uint32_t mute)
 
 	v->dev_tx.mute = mute;
 
-	if ((v->voc_state == VOC_RUN) ||
-	    (v->voc_state == VOC_CHANGE) ||
-	    (v->voc_state == VOC_STANDBY))
+	if (v->voc_state == VOC_RUN)
 		ret = voice_send_mute_cmd(v);
 
 	mutex_unlock(&v->lock);
@@ -3418,9 +3413,7 @@ int voc_set_rx_vol_index(uint16_t session_id, uint32_t dir, uint32_t vol_idx)
 
 	v->dev_rx.volume = vol_idx;
 
-	if ((v->voc_state == VOC_RUN) ||
-	    (v->voc_state == VOC_CHANGE) ||
-	    (v->voc_state == VOC_STANDBY))
+	if (v->voc_state == VOC_RUN)
 		ret = voice_send_vol_index_cmd(v);
 
 	mutex_unlock(&v->lock);
@@ -3609,15 +3602,6 @@ int voc_start_voice_call(uint16_t session_id)
 			pr_err("setup voice failed\n");
 			goto fail;
 		}
-
-		ret = voice_send_vol_index_cmd(v);
-		if (ret < 0)
-			pr_err("voice volume failed\n");
-
-		ret = voice_send_mute_cmd(v);
-		if (ret < 0)
-			pr_err("voice mute failed\n");
-
 		ret = voice_send_start_voice_cmd(v);
 		if (ret < 0) {
 			pr_err("start voice failed\n");
@@ -4122,7 +4106,7 @@ static int __init voice_init(void)
 	voice_allocate_shared_memory();
 
 	/* set default value */
-	common.default_mute_val = 0;  /* default is un-mute */
+	common.default_mute_val = 1;  /* default is mute */
 	common.default_vol_val = 0;
 	common.default_sample_val = 8000;
 

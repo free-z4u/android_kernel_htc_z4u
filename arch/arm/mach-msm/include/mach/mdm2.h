@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -31,8 +31,6 @@ struct mdm_platform_data {
 	struct mdm_vddmin_resource *vddmin_resource;
 	struct platform_device *peripheral_platform_device;
 	const unsigned int ramdump_timeout_ms;
-	int image_upgrade_supported;
-	struct gpiomux_setting *mdm2ap_status_gpio_run_cfg;
 };
 
 #endif

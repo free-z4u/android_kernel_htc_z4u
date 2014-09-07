@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -35,5 +35,14 @@
 #define BM(lsb, msb)		((BIT(msb) - BIT(lsb)) + BIT(msb))
 #define BMVAL(val, lsb, msb)	((val & BM(lsb, msb)) >> lsb)
 #define BVAL(val, n)		((val & BIT(n)) >> n)
+
+int etb_enable(void);
+void etb_disable(void);
+void etb_dump(void);
+void tpiu_disable(void);
+int funnel_enable(uint8_t id, uint32_t port_mask);
+void funnel_disable(uint8_t id, uint32_t port_mask);
+
+struct kobject *qdss_get_modulekobj(void);
 
 #endif

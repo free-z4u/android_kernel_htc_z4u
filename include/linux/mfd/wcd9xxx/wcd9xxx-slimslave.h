@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -99,4 +99,7 @@ int wcd9xxx_close_slim_sch_tx(struct wcd9xxx *wcd9xxx, unsigned int *ch_num,
 int wcd9xxx_get_channel(struct wcd9xxx *wcd9xxx,
 			unsigned int *rx_ch,
 			unsigned int *tx_ch);
+int wcd9xxx_get_slave_port(unsigned int ch_num);
+int wcd9xxx_disconnect_port(struct wcd9xxx *wcd9xxx, unsigned int *ch_num,
+				unsigned int tot_ch, unsigned int rx_tx);
 #endif /* __WCD9310_SLIMSLAVE_H_ */

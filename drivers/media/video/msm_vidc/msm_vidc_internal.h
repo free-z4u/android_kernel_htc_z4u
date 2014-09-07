@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -73,11 +73,6 @@ enum instance_state {
 	MSM_VIDC_CLOSE,
 	MSM_VIDC_CLOSE_DONE,
 	MSM_VIDC_CORE_UNINIT,
-};
-
-enum vidc_resposes_id {
-	MSM_VIDC_DECODER_FLUSH_DONE = 0x11,
-	MSM_VIDC_DECODER_EVENT_CHANGE,
 };
 
 struct buf_info {

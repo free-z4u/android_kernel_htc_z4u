@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -541,6 +541,12 @@ static u32 vcd_set_property_cmn
 			}
 			break;
 		}
+	case VCD_I_SET_TURBO_CLK:
+	{
+		if (cctxt->sched_clnt_hdl)
+			rc = vcd_set_perf_turbo_level(cctxt);
+		break;
+	}
 	case VCD_I_INTRA_PERIOD:
 		{
 			struct vcd_property_i_period *iperiod =

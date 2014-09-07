@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -63,10 +63,6 @@ static const DECLARE_TLV_DB_LINEAR(lpa_rx_vol_gain, 0,
 
 static int msm_route_multimedia2_vol_control;
 static const DECLARE_TLV_DB_LINEAR(multimedia2_rx_vol_gain, 0,
-			INT_RX_VOL_MAX_STEPS);
-
-static int msm_route_multimedia5_vol_control;
-static const DECLARE_TLV_DB_LINEAR(multimedia5_rx_vol_gain, 0,
 			INT_RX_VOL_MAX_STEPS);
 
 static int msm_route_compressed_vol_control;
@@ -797,25 +793,6 @@ static int msm_routing_set_multimedia2_vol_mixer(struct snd_kcontrol *kcontrol,
 
 	if (!multi_ch_pcm_set_volume(ucontrol->value.integer.value[0]))
 		msm_route_multimedia2_vol_control =
-			ucontrol->value.integer.value[0];
-
-	return 0;
-}
-
-static int msm_routing_get_multimedia5_vol_mixer(struct snd_kcontrol *kcontrol,
-				struct snd_ctl_elem_value *ucontrol)
-{
-
-	ucontrol->value.integer.value[0] = msm_route_multimedia5_vol_control;
-	return 0;
-}
-
-static int msm_routing_set_multimedia5_vol_mixer(struct snd_kcontrol *kcontrol,
-				struct snd_ctl_elem_value *ucontrol)
-{
-
-	if (!multi_ch_pcm_set_volume(ucontrol->value.integer.value[0]))
-		msm_route_multimedia5_vol_control =
 			ucontrol->value.integer.value[0];
 
 	return 0;
@@ -1760,12 +1737,6 @@ static const struct snd_kcontrol_new multimedia2_vol_mixer_controls[] = {
 	msm_routing_set_multimedia2_vol_mixer, multimedia2_rx_vol_gain),
 };
 
-static const struct snd_kcontrol_new multimedia5_vol_mixer_controls[] = {
-	SOC_SINGLE_EXT_TLV("HIFI3 RX Volume", SND_SOC_NOPM, 0,
-	INT_RX_VOL_GAIN, 0, msm_routing_get_multimedia5_vol_mixer,
-	msm_routing_set_multimedia5_vol_mixer, multimedia5_rx_vol_gain),
-};
-
 static const struct snd_kcontrol_new compressed_vol_mixer_controls[] = {
 	SOC_SINGLE_EXT_TLV("COMPRESSED RX Volume", SND_SOC_NOPM, 0,
 	INT_RX_VOL_GAIN, 0, msm_routing_get_compressed_vol_mixer,
@@ -2678,10 +2649,6 @@ static int msm_routing_probe(struct snd_soc_platform *platform)
 	snd_soc_add_platform_controls(platform,
 				multimedia2_vol_mixer_controls,
 			ARRAY_SIZE(multimedia2_vol_mixer_controls));
-
-	snd_soc_add_platform_controls(platform,
-				multimedia5_vol_mixer_controls,
-			ARRAY_SIZE(multimedia5_vol_mixer_controls));
 
 	snd_soc_add_platform_controls(platform,
 				compressed_vol_mixer_controls,

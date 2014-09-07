@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -39,6 +39,8 @@
 
 /* "Clear" value for the connection parameter struct */
 #define SPSRM_CLEAR     0xcccccccc
+
+extern u32 d_type;
 
 #ifdef CONFIG_DEBUG_FS
 extern u8 debugfs_record_enabled;

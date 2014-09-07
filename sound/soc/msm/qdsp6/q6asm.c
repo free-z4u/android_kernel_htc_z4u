@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -1276,8 +1276,7 @@ fail_cmd:
 	return -EINVAL;
 }
 
-int q6asm_open_read_compressed(struct audio_client *ac,
-			 uint32_t frames_per_buffer, uint32_t meta_data_mode)
+int q6asm_open_read_compressed(struct audio_client *ac, uint32_t format)
 {
 	int rc = 0x00;
 	struct asm_stream_cmd_open_read_compressed open;
@@ -1293,8 +1292,8 @@ int q6asm_open_read_compressed(struct audio_client *ac,
 	q6asm_add_hdr(ac, &open.hdr, sizeof(open), TRUE);
 	open.hdr.opcode = ASM_STREAM_CMD_OPEN_READ_COMPRESSED;
 	/* hardcoded as following*/
-	open.frame_per_buf = frames_per_buffer;
-	open.uMode = meta_data_mode;
+	open.frame_per_buf = 1;
+	open.uMode = 0;
 
 	rc = apr_send_pkt(ac->apr, (uint32_t *) &open);
 	if (rc < 0) {
@@ -3249,40 +3248,6 @@ int q6asm_async_read(struct audio_client *ac,
 	/* Pass physical address as token for AIO scheme */
 	read.hdr.token = param->paddr;
 	read.hdr.opcode = ASM_DATA_CMD_READ;
-	read.buf_add = param->paddr;
-	read.buf_size = param->len;
-	read.uid = param->uid;
-
-	pr_debug("%s: session[%d] bufadd[0x%x]len[0x%x]", __func__, ac->session,
-		read.buf_add, read.buf_size);
-
-	rc = apr_send_pkt(ac->apr, (uint32_t *) &read);
-	if (rc < 0) {
-		pr_debug("[%s] read op[0x%x]rc[%d]\n", __func__,
-			read.hdr.opcode, rc);
-		goto fail_cmd;
-	}
-	return 0;
-fail_cmd:
-	return -EINVAL;
-}
-
-int q6asm_async_read_compressed(struct audio_client *ac,
-					  struct audio_aio_read_param *param)
-{
-	int rc = 0;
-	struct asm_stream_cmd_read read;
-
-	if (!ac || ac->apr == NULL) {
-		pr_err("%s: APR handle NULL\n", __func__);
-		return -EINVAL;
-	}
-
-	q6asm_add_hdr_async(ac, &read.hdr, sizeof(read), FALSE);
-
-	/* Pass physical address as token for AIO scheme */
-	read.hdr.token = param->paddr;
-	read.hdr.opcode = ASM_DATA_CMD_READ_COMPRESSED;
 	read.buf_add = param->paddr;
 	read.buf_size = param->len;
 	read.uid = param->uid;

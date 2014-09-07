@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -64,6 +64,7 @@
 #define DDL_VIDC_1080P_48MHZ_TIMEOUT_VALUE	(0xCB8)
 #define DDL_VIDC_1080P_133MHZ_TIMEOUT_VALUE	(0x2355)
 #define DDL_VIDC_1080P_200MHZ_TIMEOUT_VALUE	(0x3500)
+#define DDL_VIDC_1080P_MAX_TIMEOUT_MULTIPLIER  (4)
 
 #define DDL_CONTEXT_MEMORY (1024 * 15 * (VCD_MAX_NO_CLIENT + 1))
 

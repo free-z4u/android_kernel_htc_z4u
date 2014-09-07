@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -13,7 +13,6 @@
 #include <linux/delay.h>
 #include <linux/clk.h>
 #include <linux/io.h>
-#include <linux/module.h>
 #include <mach/clk.h>
 #include <mach/board.h>
 #include <mach/camera.h>
@@ -150,6 +149,8 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 	csicbase = csic_dev->base;
 	csic_params = cfg_params->parms;
 
+	if(csicbase == NULL)
+		return rc;
 	/* Enable error correction for DATA lane. Applies to all data lanes */
 	msm_camera_io_w(0x4, csicbase + MIPI_PHY_CONTROL);
 

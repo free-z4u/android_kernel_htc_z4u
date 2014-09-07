@@ -1,6 +1,6 @@
 /* drivers/tty/smux_private.h
  *
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -32,6 +32,10 @@
 
 /* Maximum number of packets in retry queue */
 #define SMUX_RX_RETRY_MAX_PKTS 32
+#define SMUX_RX_WM_HIGH        16
+#define SMUX_RX_WM_LOW          4
+#define SMUX_TX_WM_LOW          2
+#define SMUX_TX_WM_HIGH         4
 
 struct tty_struct;
 

@@ -270,12 +270,6 @@ void put_pages_list(struct list_head *pages)
 	while (!list_empty(pages)) {
 		struct page *victim;
 
-		if (pages->prev == NULL || pages->prev == LIST_POISON2) {
-			
-			WARN_ON(1);
-			break;
-		}
-
 		victim = list_entry(pages->prev, struct page, lru);
 		list_del(&victim->lru);
 		page_cache_release(victim);

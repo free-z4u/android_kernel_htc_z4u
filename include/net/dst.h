@@ -309,11 +309,6 @@ static inline void skb_dst_copy(struct sk_buff *nskb, const struct sk_buff *oskb
  */
 static inline void skb_dst_force(struct sk_buff *skb)
 {
-	if ((!skb) || (IS_ERR(skb))) {
-		printk("[NET] skb is NULL in %s\n", __func__);
-		return;
-	}
-	
 	if (skb_dst_is_noref(skb)) {
 		WARN_ON(!rcu_read_lock_held());
 		skb->_skb_refdst &= ~SKB_DST_NOREF;

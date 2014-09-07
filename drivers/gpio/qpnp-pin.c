@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -39,17 +39,17 @@
 
 /* gpio peripheral type and subtype values */
 #define Q_GPIO_TYPE			0x10
-#define Q_GPIO_SUBTYPE_GPIO_4CH		0x1
-#define Q_GPIO_SUBTYPE_GPIOC_4CH	0x5
-#define Q_GPIO_SUBTYPE_GPIO_8CH		0x9
-#define Q_GPIO_SUBTYPE_GPIOC_8CH	0xD
+#define Q_GPIO_SUBTYPE_GPIO_4CH		0x0
+#define Q_GPIO_SUBTYPE_GPIOC_4CH	0x2
+#define Q_GPIO_SUBTYPE_GPIO_8CH		0x4
+#define Q_GPIO_SUBTYPE_GPIOC_8CH	0x6
 
 /* mpp peripheral type and subtype values */
 #define Q_MPP_TYPE			0x11
-#define Q_MPP_SUBTYPE_4CH_NO_ANA_OUT	0x3
-#define Q_MPP_SUBTYPE_4CH_NO_SINK	0x5
-#define Q_MPP_SUBTYPE_4CH_FULL_FUNC	0x7
-#define Q_MPP_SUBTYPE_8CH_FULL_FUNC	0xF
+#define Q_MPP_SUBTYPE_4CH_NO_ANA_OUT	0x1
+#define Q_MPP_SUBTYPE_4CH_NO_SINK	0x2
+#define Q_MPP_SUBTYPE_4CH_FULL_FUNC	0x3
+#define Q_MPP_SUBTYPE_8CH_FULL_FUNC	0x7
 
 /* control register base address offsets */
 #define Q_REG_MODE_CTL			0x40
@@ -129,8 +129,7 @@ enum qpnp_pin_param_type {
 #define Q_NUM_PARAMS			Q_PIN_CFG_INVALID
 
 /* param error checking */
-#define QPNP_PIN_GPIO_MODE_INVALID	3
-#define QPNP_PIN_MPP_MODE_INVALID	7
+#define QPNP_PIN_MODE_INVALID		3
 #define QPNP_PIN_INVERT_INVALID		2
 #define QPNP_PIN_OUT_BUF_INVALID	3
 #define QPNP_PIN_VIN_4CH_INVALID	5
@@ -226,12 +225,8 @@ static int qpnp_pin_check_config(enum qpnp_pin_param_type idx,
 {
 	switch (idx) {
 	case Q_PIN_CFG_MODE:
-		if (q_spec->type == Q_GPIO_TYPE &&
-		    val >= QPNP_PIN_GPIO_MODE_INVALID)
-				return -EINVAL;
-		else if (q_spec->type == Q_MPP_TYPE &&
-			 val >= QPNP_PIN_MPP_MODE_INVALID)
-				return -EINVAL;
+		if (val >= QPNP_PIN_MODE_INVALID)
+			return -EINVAL;
 		break;
 	case Q_PIN_CFG_OUTPUT_TYPE:
 		if (q_spec->type != Q_GPIO_TYPE)
@@ -332,40 +327,29 @@ static int qpnp_pin_check_constraints(struct qpnp_pin_spec *q_spec,
 	name = (q_spec->type == Q_GPIO_TYPE) ? "gpio" : "mpp";
 
 	if (Q_CHK_INVALID(Q_PIN_CFG_MODE, q_spec, param->mode))
-		pr_err("invalid direction value %d for %s %d\n",
-						param->mode, name, pin);
+		pr_err("invalid direction for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_INVERT, q_spec, param->invert))
-		pr_err("invalid invert polarity value %d for %s %d\n",
-						param->invert,  name, pin);
+		pr_err("invalid invert polarity for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_SELECT, q_spec, param->select))
-		pr_err("invalid source select value %d for %s %d\n",
-						param->select, name, pin);
+		pr_err("invalid source select for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_OUT_STRENGTH,
 						q_spec, param->out_strength))
-		pr_err("invalid out strength value %d for %s %d\n",
-					param->out_strength,  name, pin);
+		pr_err("invalid out strength for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_OUTPUT_TYPE,
 						 q_spec, param->output_type))
-		pr_err("invalid out type value %d for %s %d\n",
-					param->output_type,  name, pin);
+		pr_err("invalid out type for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_VIN_SEL, q_spec, param->vin_sel))
-		pr_err("invalid vin select %d value for %s %d\n",
-						param->vin_sel, name, pin);
+		pr_err("invalid vin select value for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_PULL, q_spec, param->pull))
-		pr_err("invalid pull value %d for pin %s %d\n",
-						param->pull,  name, pin);
+		pr_err("invalid pull value for pin %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_MASTER_EN, q_spec, param->master_en))
-		pr_err("invalid master_en value %d for %s %d\n",
-						param->master_en, name, pin);
+		pr_err("invalid master_en value for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_AOUT_REF, q_spec, param->aout_ref))
-		pr_err("invalid aout_reg value %d for %s %d\n",
-						param->aout_ref, name, pin);
+		pr_err("invalid aout_reg value for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_AIN_ROUTE, q_spec, param->ain_route))
-		pr_err("invalid ain_route value %d for %s %d\n",
-						param->ain_route, name, pin);
+		pr_err("invalid ain_route value for %s %d\n", name, pin);
 	else if (Q_CHK_INVALID(Q_PIN_CFG_CS_OUT, q_spec, param->cs_out))
-		pr_err("invalid cs_out value %d for %s %d\n",
-						param->cs_out, name, pin);
+		pr_err("invalid cs_out value for %s %d\n", name, pin);
 	else
 		return 0;
 
@@ -548,7 +532,7 @@ static int _qpnp_pin_config(struct qpnp_pin_chip *q_chip,
 	return 0;
 
 gpio_cfg:
-	dev_err(dev, "%s: unable to set default config for pmic pin %d\n",
+	dev_err(dev, "%s: unable to set default config for pmic gpio %d\n",
 						__func__, q_spec->pmic_pin);
 
 	return rc;
@@ -704,7 +688,7 @@ static int qpnp_pin_set_mode(struct qpnp_pin_chip *q_chip,
 	if (!q_chip || !q_spec)
 		return -EINVAL;
 
-	if (qpnp_pin_check_config(Q_PIN_CFG_MODE, q_spec, mode)) {
+	if (mode >= QPNP_PIN_MODE_INVALID) {
 		pr_err("invalid mode specification %d\n", mode);
 		return -EINVAL;
 	}

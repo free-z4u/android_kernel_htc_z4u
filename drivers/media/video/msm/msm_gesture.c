@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -11,12 +11,12 @@
  */
 
 #include <linux/module.h>
+#include <mach/camera.h>
 #include <media/v4l2-subdev.h>
+#include "msm.h"
 #include <media/msm_camera.h>
 #include <media/msm_gestures.h>
 #include <media/v4l2-ctrls.h>
-#include <mach/camera.h>
-#include "msm.h"
 
 #ifdef CONFIG_MSM_CAMERA_DEBUG
 #define D(fmt, args...) pr_debug("msm_gesture: " fmt, ##args)

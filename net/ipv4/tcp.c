@@ -3377,6 +3377,11 @@ static int tcp_is_local6(struct net *net, struct in6_addr *addr) {
 }
 #endif
 
+/*
+ * tcp_nuke_addr - destroy all sockets on the given local address
+ * if local address is the unspecified address (0.0.0.0 or ::), destroy all
+ * sockets with local addresses that are not configured.
+ */
 int tcp_nuke_addr(struct net *net, struct sockaddr *addr)
 {
 	int family = addr->sa_family;
