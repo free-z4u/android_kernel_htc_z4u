@@ -558,7 +558,7 @@ static struct mmc_platform_data sdc1_plat_data = {
 };
 
 static unsigned int msm7627a_sdslot_type_htc = MMC_TYPE_SD;
-static struct mmc_platform_data sdc1_plat_data_z4u = {
+static struct mmc_platform_data sdc1_plat_data_htc = {
 	.ocr_mask       = MMC_VDD_28_29,
 	.translate_vdd  = msm_sdcc_setup_power,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
@@ -788,7 +788,7 @@ void __init msm7627a_init_mmc(void)
 			machine_is_cp3dtg() || machine_is_cp3dcg() || 
 			machine_is_cp3dug() || machine_is_cp3u() || 
 			machine_is_z4u())
-				sdc1_plat_data_z4u.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
+				sdc1_plat_data_htc.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
 			else
 				sdc1_plat_data.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
 	}
@@ -802,7 +802,7 @@ void __init msm7627a_init_mmc(void)
 			machine_is_cp3dtg() || machine_is_cp3dcg() || 
 			machine_is_cp3dug() || machine_is_cp3u() || 
 			machine_is_z4u())
-		msm_add_sdcc(1, &sdc1_plat_data_z4u);
+		msm_add_sdcc(1, &sdc1_plat_data_htc);
 	else
 		msm_add_sdcc(1, &sdc1_plat_data);
 #endif
