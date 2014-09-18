@@ -143,7 +143,6 @@ static inline void msm_pm_add_stat(enum msm_pm_time_stats_id id, int64_t t) {}
 
 void msm_pm_set_cpr_ops(struct msm_pm_cpr_ops *ops);
 extern void __iomem *virt_start_ptr;
-extern int board_mfg_mode(void);
 extern char *board_get_mfg_sleep_gpio_table(void);
 extern void gpio_set_diag_gpio_table(unsigned long *dwMFG_gpio_table);
 

@@ -122,9 +122,7 @@ ifndef CONFIG_ARCH_MSM8X60
 ifndef CONFIG_ARCH_APQ8064
 ifndef CONFIG_ARCH_MSM8974
 ifndef CONFIG_ARCH_MSM9625
-ifndef CONFIG_ARCH_MSM7X27A
 	obj-y += nand_partitions.o
-endif
 endif
 endif
 endif
