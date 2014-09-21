@@ -762,31 +762,19 @@ static struct platform_device msm8625q_i2c_gpio = {
 
 #ifdef CONFIG_I2C_CPLD
 static struct msm_gpio msm8625q_i2c_cpld_config[] = {
-	
-	
-	
-	
-
-	
-#if 0
-	
-        { GPIO_CFG(4, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),   "CPLD_CLK"},
-#endif
 	{ GPIO_CFG(39, 0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),   "CPLD_INT"},
 	{ GPIO_CFG(49, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),  "CPLD_RST"},
-        { GPIO_CFG(116, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), "CPLD_I2C_EN"},
-	
-
+    { GPIO_CFG(116, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), "CPLD_I2C_EN"},
 };
 
 static struct i2c_gpio_platform_data msm8625q_i2c_cpld_pdata = {
 	.scl_pin = 33,
 	.sda_pin = 82,
 	
-        .udelay = 1,
-        .timeout = 100,
-        .sda_is_open_drain = 1,
-        .scl_is_open_drain = 1,
+	.udelay = 1,
+	.timeout = 100,
+	.sda_is_open_drain = 1,
+	.scl_is_open_drain = 1,
 };
 
 static struct platform_device msm8625q_i2c_cpld = {
@@ -1055,10 +1043,6 @@ void usb_phy_id_gpio_setting(void)
 
 void cp3_add_usb_devices(void)
 {
-#if 0
-FIXME
-	printk(KERN_INFO "%s rev: %d\n", __func__, system_rev);
-#endif
 	usb_phy_id_gpio_setting();
 	android_usb_pdata.products[0].product_id =
 		android_usb_pdata.product_id;
@@ -1275,15 +1259,6 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 			*chg_allowed = TRUE;
 			*hchg_allowed = TRUE;
 			break;
-#if 0 
-		case PSTAT_SLOW:	/* 4.2V Charge Full, 4.15V recharge */
-			if (4200 < vbat_mv)
-				*chg_allowed = FALSE;
-			else if (vbat_mv <= 4150)
-				*chg_allowed = TRUE;
-			*hchg_allowed = TRUE;
-			break;
-#endif
 		case PSTAT_LIMITED:	/* 4.1V Charge Full, 3.8V recharge */
 			if (PSTAT_LIMITED != old_pState)
 				*chg_allowed = TRUE;
@@ -2066,12 +2041,6 @@ static struct platform_device *qrd7627a_devices[] __initdata = {
 	&msm_kgsl_3d0,
 };
 
-#if 0
-static struct platform_device *qrd3_devices[] __initdata = {
-	&msm_device_nand,
-};
-#endif
-
 static struct platform_device *msm8625_evb_devices[] __initdata = {
 	&ram_console_device,
 	&msm8625_device_dmov,
@@ -2474,7 +2443,6 @@ EXPORT_SYMBOL(ar600x_wlan_power);
 
 static int __init msm_qrd_init_ar6000pm(void)
 {
-	msm_wlan_ar6000_pm_device.dev.platform_data = &ar600x_wlan_power;
 	return platform_device_register(&msm_wlan_ar6000_pm_device);
 }
 
@@ -2499,20 +2467,11 @@ static void __init add_platform_devices(void)
 	) {
 		platform_add_devices(msm8625_evb_devices,
 				ARRAY_SIZE(msm8625_evb_devices));
-#if 0
-		platform_add_devices(qrd3_devices,
-				ARRAY_SIZE(qrd3_devices));
-#endif
 	} else {
 		platform_add_devices(qrd7627a_devices,
 				ARRAY_SIZE(qrd7627a_devices));
 	}
 
-#if 0
-	if (machine_is_msm7627a_qrd3() || machine_is_msm7627a_evb())
-		platform_add_devices(qrd3_devices,
-				ARRAY_SIZE(qrd3_devices));
-#endif
 	platform_add_devices(common_devices,
 			ARRAY_SIZE(common_devices));
 }
@@ -2765,15 +2724,6 @@ static void __init msm_z4u_init(void)
 	)
 		i2c_register_board_info(2, i2c2_info,
 				ARRAY_SIZE(i2c2_info));
-
-#if 0
-#if defined(CONFIG_I2C_CPLD)
-        i2c_register_board_info(3,
-				i2c_cpld_devices,
-                             	ARRAY_SIZE(i2c_cpld_devices));
-#endif
-#endif
-
 
 #if defined(CONFIG_BT) && defined(CONFIG_MARIMBA_CORE)
 	bt_export_bd_address();

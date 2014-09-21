@@ -843,10 +843,6 @@ void __init mem_init(void)
 
 void free_initmem(void)
 {
-#if 0
-	unsigned long reclaimed_initmem;  
-#endif
-
 #ifdef CONFIG_HAVE_TCM
 	extern char __tcm_start, __tcm_end;
 
@@ -856,21 +852,6 @@ void free_initmem(void)
 				    "TCM link");
 #endif
 
-	
-#if 0
-
-	poison_init_mem(__init_begin, __init_end - __init_begin);
-	if (!machine_is_integrator() && !machine_is_cintegrator()) {
-		reclaimed_initmem = free_area(__phys_to_pfn(__pa(__init_begin)),
-					    __phys_to_pfn(__pa(__init_end)),
-					    "init");
-		totalram_pages += reclaimed_initmem;
-#ifdef CONFIG_FIX_MOVABLE_ZONE
-		total_unmovable_pages += reclaimed_initmem;
-#endif
-	}
-#endif
-	
 	return;
 }
 
