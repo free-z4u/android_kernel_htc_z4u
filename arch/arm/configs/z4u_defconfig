@@ -3025,6 +3025,7 @@ CONFIG_IOMMU_SUPPORT=y
 # CONFIG_PM_DEVFREQ is not set
 # CONFIG_MOBICORE_SUPPORT is not set
 # CONFIG_MSM_QDSS is not set
+CONFIG_WLAN_AR6000=m
 
 #
 # File systems

@@ -2470,6 +2470,8 @@ static void __init msm7627a_init_regulators(void)
 				__func__, rc);
 }
 
+EXPORT_SYMBOL(ar600x_wlan_power);
+
 static int __init msm_qrd_init_ar6000pm(void)
 {
 	msm_wlan_ar6000_pm_device.dev.platform_data = &ar600x_wlan_power;
