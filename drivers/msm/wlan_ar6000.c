@@ -5,27 +5,29 @@
 #include "../../arch/arm/mach-msm/devices-msm7x2xa.h"
 
 static int msm_wlan_ar6000_pm_device_suspend(struct platform_device *pdev, pm_message_t state) {
-	printk("%s: %s\n", __func__, pdev->name);
-	return 0;
+    printk("%s: %s\n", __func__, pdev->name);
+    return 0;
 }
 
 static int msm_wlan_ar6000_pm_device_resume(struct platform_device *pdev) {
-	printk("%s: %s\n", __func__, pdev->name);
-	return 0;
+    printk("%s: %s\n", __func__, pdev->name);
+    return 0;
 }
 
 static int msm_wlan_ar6000_pm_device_remove(struct platform_device *pdev) {
-	printk("%s: %s\n", __func__, pdev->name);
-	return 0;
+    printk("%s: %s\n", __func__, pdev->name);
+    ar600x_wlan_power(0);
+    return 0;
 }
 
 static int msm_wlan_ar6000_pm_device_probe(struct platform_device *pdev) {
-	printk("%s: %s\n", __func__, pdev->name);
-	return 0;
+    printk("%s: %s\n", __func__, pdev->name);
+    ar600x_wlan_power(1);
+    return 0;
 }
 
 static void msm_wlan_ar6000_pm_device_shutdown(struct platform_device *pdev) {
-	printk("%s: %s\n", __func__, pdev->name);
+    printk("%s: %s\n", __func__, pdev->name);
 }
 
 static struct platform_driver wlan_ar6000_driver = {
@@ -43,13 +45,11 @@ static int __init create_module(void)
     if (platform_driver_register(&wlan_ar6000_driver)) {
 	printk("failed register driver for ar6k");
     };
-    ar600x_wlan_power(1);
     return 0;
 }
 
 static void __exit destroy_module(void)
 {
-    ar600x_wlan_power(0);
     printk(KERN_DEBUG "wlan ar6000 driver!\n");
     platform_driver_unregister(&wlan_ar6000_driver);
 }

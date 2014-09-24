@@ -10,12 +10,71 @@
 #include <asm/io.h>
 #include <linux/skbuff.h>
 #include <linux/wifi_tiwlan.h>
-
+#include <mach/TCA6418_ioextender.h>
+#include <linux/module.h>
 #include "board-magnids-wifi.h"
 
-int magnids_wifi_power(int on);
-int magnids_wifi_reset(int on);
-int magnids_wifi_set_carddetect(int on);
+static uint32_t wifi_on_gpio_table[] = {
+	GPIO_CFG(64, 2, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA), /* DAT3 */
+	GPIO_CFG(65, 2, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA), /* DAT2 */
+	GPIO_CFG(66, 2, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA), /* DAT1 */
+	GPIO_CFG(67, 2, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA), /* DAT0 */
+	GPIO_CFG(63, 2, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_10MA), /* CMD */
+	GPIO_CFG(62, 2, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_8MA), /* CLK */
+	GPIO_CFG(29, 0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_4MA), /* WLAN IRQ */
+};
+
+static uint32_t wifi_off_gpio_table[] = {
+	GPIO_CFG(64, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), /* DAT3 */
+	GPIO_CFG(65, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), /* DAT2 */
+	GPIO_CFG(66, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), /* DAT1 */
+	GPIO_CFG(67, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), /* DAT0 */
+	GPIO_CFG(63, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), /* CMD */
+	GPIO_CFG(62, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA), /* CLK */
+	GPIO_CFG(29, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_4MA), /* WLAN IRQ */
+};
+
+static void config_gpio_table(uint32_t *table, int len)
+{
+		int n, rc;
+		for (n = 0; n < len; n++) {
+				rc = gpio_tlmm_config(table[n], GPIO_CFG_ENABLE);
+				if (rc) {
+						pr_err("%s: gpio_tlmm_config(%#x)=%d\n",
+								__func__, table[n], rc);
+						break;
+				}
+		}
+}
+
+int magnids_wifi_power(int on)
+{
+	printk(KERN_INFO "[WLAN][Magni-IOEXT]%s: %d\n", __func__, on);
+
+	if (on)
+		config_gpio_table(wifi_on_gpio_table,
+				ARRAY_SIZE(wifi_on_gpio_table));
+	else
+		config_gpio_table(wifi_off_gpio_table,
+				ARRAY_SIZE(wifi_off_gpio_table));
+
+
+	/* magnids_wifi_bt_sleep_clk_ctl(on, ID_WIFI); */
+	ioext_gpio_set_value(8, on); /* WIFI_SHUTDOWN */
+	mdelay(120);
+	return 0;
+}
+EXPORT_SYMBOL(magnids_wifi_power);
+
+int bcm4330_wifi_set_carddetect(int val);
+EXPORT_SYMBOL(bcm4330_wifi_set_carddetect);
+
+int magnids_wifi_reset(int on)
+{
+	printk(KERN_INFO "%s: do nothing\n", __func__);
+	return 0;
+}
+
 int magnids_wifi_get_mac_addr(unsigned char *buf);
 
 #define PREALLOC_WLAN_NUMBER_OF_SECTIONS	4
@@ -90,7 +149,7 @@ static struct resource magnids_wifi_resources[] = {
 static struct wifi_platform_data magnids_wifi_control = {
 	.set_power      = magnids_wifi_power,
 	.set_reset      = magnids_wifi_reset,
-	.set_carddetect = magnids_wifi_set_carddetect,
+	.set_carddetect = bcm4330_wifi_set_carddetect,
 	.mem_prealloc   = magnids_wifi_mem_prealloc,
 	.get_mac_addr	= magnids_wifi_get_mac_addr,
 	//.dot11n_enable  = 1,

@@ -138,6 +138,8 @@ static struct msm_gpio sdc1_sleep_cfg_data_cp3_z4u[] = {
 								"sdc1_clk"},
 };
 
+/*----------WIFI----------*/
+
 static struct msm_gpio sdc2_cfg_data[] = {
 	{GPIO_CFG(62, 2, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_8MA),
 								"sdc2_clk"},
@@ -167,6 +169,9 @@ static struct msm_gpio sdc2_sleep_cfg_data[] = {
 	{GPIO_CFG(67, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),
 								"sdc2_dat_0"},
 };
+
+/*----------WIFI END----------*/
+
 static struct msm_gpio sdc3_cfg_data[] = {
 	{GPIO_CFG(88, 1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_8MA),
 								"sdc3_clk"},
@@ -383,6 +388,28 @@ static struct sdcc_gpio sdcc_cfg_data_z4u[] = {
 	},
 };
 
+/* magnids*/
+static struct sdcc_gpio sdcc_cfg_data_magnids[] = {
+	{
+		.cfg_data = sdc1_cfg_data_protou,
+		.size = ARRAY_SIZE(sdc1_cfg_data_protou),
+		.sleep_cfg_data = sdc1_sleep_cfg_data_protou,
+	},
+	{
+		.cfg_data = sdc2_cfg_data,
+		.size = ARRAY_SIZE(sdc2_cfg_data),
+		.sleep_cfg_data = sdc2_sleep_cfg_data,
+	},
+	{
+		.cfg_data = sdc3_cfg_data,
+		.size = ARRAY_SIZE(sdc3_cfg_data),
+	},
+	{
+		.cfg_data = sdc4_cfg_data,
+		.size = ARRAY_SIZE(sdc4_cfg_data),
+	},
+};
+
 static int gpio_sdc1_hw_det = 85;
 static void gpio_sdc1_config(void)
 {
@@ -398,7 +425,7 @@ static void gpio_sdc1_config(void)
 	else if (machine_is_z4u())
 		gpio_sdc1_hw_det = 27;
 	else if (machine_is_protou() || machine_is_protodcg() 
-					|| machine_is_protodug())
+					|| machine_is_protodug() || machine_is_magnids())
 		gpio_sdc1_hw_det = 38;
 }
 
@@ -417,6 +444,8 @@ static int msm_sdcc_setup_gpio(int dev_id, unsigned int enable)
 	else if (machine_is_protou() || machine_is_protodug() 
 					|| machine_is_protodcg())
 		curr = &sdcc_cfg_data_protou[dev_id - 1];
+	else if (machine_is_magnids())
+		curr = &sdcc_cfg_data_magnids[dev_id - 1];
 	else
 		curr = &sdcc_cfg_data[dev_id - 1];
 	if (!(test_bit(dev_id, &gpio_sts)^enable))
@@ -493,7 +522,7 @@ static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 {
 	int status;
 	if (machine_is_protou() || machine_is_protodcg() 
-				|| machine_is_protodug()) {
+				|| machine_is_protodug() || machine_is_magnids()) {
 		status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
 					GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
 					GPIO_CFG_ENABLE);
@@ -536,7 +565,8 @@ static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 					machine_is_cp3dcg() || 
 					machine_is_cp3dug() || 
 					machine_is_cp3u() || 
-					machine_is_z4u())
+					machine_is_z4u() ||
+					machine_is_magnids())
 				status = !gpio_get_value(gpio_sdc1_hw_det);
 			else
 				status = gpio_get_value(gpio_sdc1_hw_det);
@@ -575,7 +605,10 @@ static struct mmc_platform_data sdc1_plat_data_htc = {
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
-/* protodcg, magnids, protodug, protou */
+/* protodcg, magnids, protodug, protou, magnids */
+/* BCM4329 returns wrong sdio_vsn(1) when we read cccr,
+ * we use predefined value (sdio_vsn=2) here to initial sdio driver well
+ */
 static struct embedded_sdio_data bcm4330_wifi_emb_data = {
 	.cccr	= {
 		.sdio_vsn	= 2,
@@ -601,7 +634,7 @@ bcm4330_wifi_status_register(void (*callback)(int card_present, void *dev_id),
 	return 0;
 }
 
-static int bcm4330_wifi_cd;	
+static int bcm4330_wifi_cd;	/* WiFi virtual 'card detect' status */
 
 static unsigned int bcm4330_wifi_status(struct device *dev)
 {
@@ -624,13 +657,13 @@ static struct mmc_platform_data bcm4330_wifi_data = {
 
 int bcm4330_wifi_set_carddetect(int val)
 {
-        printk(KERN_INFO "%s: %d\n", __func__, val);
-        bcm4330_wifi_cd = val;
-        if (wifi_status_cb)
-                wifi_status_cb(val, wifi_status_cb_devid);
-        else
-                printk(KERN_WARNING "%s: Nobody to notify\n", __func__);
-        return 0;
+	printk(KERN_INFO "%s: %d\n", __func__, val);
+	bcm4330_wifi_cd = val;
+	if (wifi_status_cb)
+		wifi_status_cb(val, wifi_status_cb_devid);
+	else
+		printk(KERN_WARNING "%s: Nobody to notify\n", __func__);
+	return 0;
 }
 
 static struct mmc_platform_data sdc2_plat_data = {
@@ -769,7 +802,7 @@ void __init msm7627a_init_mmc(void)
 		if (machine_is_msm7625a_ffa())
 			sdc3_plat_data.msmsdcc_fmax =
 				sdc3_plat_data.msmsdcc_fmid;
-		if (machine_is_z4u())
+		if (machine_is_z4u() || machine_is_magnids())
 			msm_add_sdcc(3, &sdc3_plat_data_z4u);
 		else
 			msm_add_sdcc(3, &sdc3_plat_data);
@@ -801,7 +834,7 @@ void __init msm7627a_init_mmc(void)
 			machine_is_protodug() || machine_is_protou() ||
 			machine_is_cp3dtg() || machine_is_cp3dcg() || 
 			machine_is_cp3dug() || machine_is_cp3u() || 
-			machine_is_z4u())
+			machine_is_z4u() || machine_is_magnids())
 		msm_add_sdcc(1, &sdc1_plat_data_htc);
 	else
 		msm_add_sdcc(1, &sdc1_plat_data);
@@ -812,7 +845,7 @@ void __init msm7627a_init_mmc(void)
 		return;
 	if (machine_is_protodcg() || machine_is_magnids() || 
 			machine_is_protodug() || machine_is_protou())
-		msm_add_sdcc(2, &bcm4330_wifi_data);
+		msm_add_sdcc(2, &bcm4330_wifi_data); /* BRCM WIFI */
 	else if (machine_is_cp3dtg() || machine_is_cp3dcg() || 
 					machine_is_cp3dug() || 
 					machine_is_cp3u() || 
