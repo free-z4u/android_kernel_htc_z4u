@@ -90,7 +90,7 @@
 #include <mach/htc_bdaddress.h>
 #endif
 #include "board-magnids.h"
-#include "board-magnids-wifi.h"
+#include "board-bcm4330-wifi.h"
 #include <mach/htc_util.h>
 #include <mach/TCA6418_ioextender.h>
 #define CPU_FOOT_PRINT (MSM_HTC_DEBUG_INFO_BASE + 0x0)
@@ -2262,7 +2262,7 @@ static void __init msm7x2x_init(void)
 			i2c_tps65200_devices, ARRAY_SIZE(i2c_tps65200_devices));
 
 	msm8625_init_keypad();
-	magnids_wifi_init();
+	bcm4330_wifi_init();
 	magnids_audio_init();
 	if (get_kernel_flag() & KERNEL_FLAG_PM_MONITOR) {
 		htc_monitor_init();
