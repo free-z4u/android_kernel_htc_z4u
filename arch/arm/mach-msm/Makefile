@@ -183,7 +183,9 @@ obj-$(CONFIG_MSM_IDLE_STATS) += pm-stats.o
 obj-$(CONFIG_MSM_PM2) += pm2.o
 obj-$(CONFIG_MSM_PM) += pm.o
 obj-$(CONFIG_MSM_NOPM) += no-pm.o
+ifdef CONFIG_HTC_PHONE
 obj-y += pwrtest.o
+endif
 
 obj-$(CONFIG_MSM_PCIE) += pcie.o pcie_irq.o
 
@@ -264,9 +266,18 @@ obj-$(CONFIG_ARCH_MSM7X27) += clock-pcom-lookup.o
 obj-$(CONFIG_MACH_MSM7X27_SURF) += board-msm7x27.o devices-msm7x27.o
 obj-$(CONFIG_MACH_MSM7X27_FFA) += board-msm7x27.o devices-msm7x27.o
 obj-$(CONFIG_ARCH_MSM7X27A) += clock-pcom-lookup.o devices-msm7x27a.o
+ifdef CONFIG_HTC_PHONE
 board-7627a-all-objs += board-msm7627a-storage.o board-msm7627a-bt.o
+else
+board-7627a-all-objs += board-msm7627a-storage.o board-msm7627a-bt.o board-msm7627a-camera.o
+endif
 board-7627a-all-objs += audio-7627a-devices.o
+ifdef CONFIG_HTC_PHONE
 board-7627a-all-objs += board-msm7627a-wlan.o
+obj-y += display/
+else
+board-7627a-all-objs += board-msm7627a-display.o board-msm7627a-wlan.o board-msm7627a-io.o
+endif
 obj-$(CONFIG_MACH_MSM7X27A_RUMI3) += board-msm7x27a.o board-7627a-all.o
 obj-$(CONFIG_MACH_MSM7X27A_SURF) += board-msm7x27a.o board-7627a-all.o
 obj-$(CONFIG_MACH_MSM7X27A_FFA) += board-msm7x27a.o board-7627a-all.o
@@ -436,7 +447,6 @@ obj-$(CONFIG_MSM_CACHE_DUMP) += msm_cache_dump.o
 
 obj-$(CONFIG_MSM_HSIC_SYSMON) += hsic_sysmon.o
 obj-$(CONFIG_MSM_HSIC_SYSMON_TEST) += hsic_sysmon_test.o
-obj-y += display/
 obj-$(CONFIG_MSM_RPM_SMD) += rpm-smd.o
 obj-$(CONFIG_MSM_CPR) += msm_cpr.o
 obj-$(CONFIG_MSM_VP_REGULATOR) += msm_vp.o
