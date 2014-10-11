@@ -593,6 +593,11 @@ static int __init smd_tty_init(void)
 
 			legacy_ds |= cpu_is_msm7x01() || cpu_is_msm7x25();
 #if defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3U) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z4DCG)
+			/* 
+			 * if disable this change z4u have booted to boot animation 
+			 * but reseted by some check in officaial firmware after 
+			 * several seconds
+			 */
 			legacy_ds |= cpu_is_msm7x27() || cpu_is_msm7x30() || cpu_is_msm8625() || cpu_is_msm8625q();
 #else
 			legacy_ds |= cpu_is_msm7x27() || cpu_is_msm7x30();
