@@ -471,7 +471,7 @@ static void dimming_update(unsigned long data)
 }
 
 static ssize_t msm_fb_xres(struct device *dev,
-			struct device_attribute *attr, char *buf)
+		struct device_attribute *attr, char *buf)
 {
 	ssize_t ret = strnlen(buf, PAGE_SIZE);
 	struct fb_info *fbi = dev_get_drvdata(dev);
@@ -491,7 +491,7 @@ static struct attribute_group xres_fs_attr_group = {
 };
 
 static ssize_t msm_fb_yres(struct device *dev,
-	struct device_attribute *attr, char *buf)
+		struct device_attribute *attr, char *buf)
 {
 	ssize_t ret = strnlen(buf, PAGE_SIZE);
 	struct fb_info *fbi = dev_get_drvdata(dev);
@@ -1120,7 +1120,7 @@ static void msmfb_early_suspend(struct early_suspend *h)
 	if (hdmi_prim_display &&
 		(mfd->panel_info.type == HDMI_PANEL ||
 		 mfd->panel_info.type == DTV_PANEL)) {
-		
+		/* Turn off the HPD circuitry */
 		if (pdata->power_ctrl) {
 			MSM_FB_INFO("%s: Turning off HPD circuitry\n",
 				__func__);
@@ -1454,6 +1454,8 @@ int calc_fb_offset(struct msm_fb_data_type *mfd, struct fb_info *fbi, int bpp)
 
 	if (fbi->var.yoffset < yres) {
 		offset = (fbi->var.xoffset * bpp);
+				/* iBuf->buf +=	fbi->var.xoffset * bpp + 0 *
+				yres * fbi->fix.line_length; */
 	} else if (fbi->var.yoffset >= yres && fbi->var.yoffset < 2 * yres) {
 		offset = (fbi->var.xoffset * bpp + yres *
 		fbi->fix.line_length + PAGE_SIZE - remainder);
