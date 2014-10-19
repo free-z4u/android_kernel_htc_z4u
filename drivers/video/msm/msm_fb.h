@@ -233,7 +233,7 @@ extern void htc_mdp_sem_down(struct task_struct *current_task, struct semaphore 
 extern void htc_mdp_sem_up(struct semaphore *mutex);
 
 #ifdef CONFIG_FB_MSM_LOGO
-#define INIT_IMAGE_FILE "/initlogo.rle"
+#define INIT_IMAGE_FILE "/msmlogo.rle"
 int load_565rle_image(char *filename, bool bf_supported);
 #endif
 
