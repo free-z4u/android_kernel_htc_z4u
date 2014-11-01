@@ -196,7 +196,8 @@ struct msm_fb_data_type {
 	u32 writeback_state;
 	bool writeback_active_cnt;
 	int cont_splash_done;
-
+	void *copy_splash_buf;
+	unsigned char *copy_splash_phys;
 	
 	struct workqueue_struct *dimming_wq;
 	struct work_struct dimming_work;
