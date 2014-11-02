@@ -23,7 +23,9 @@
 #include <linux/fb.h>
 #include <asm/system.h>
 #include <mach/hardware.h>
+#ifdef HTC_PHONE
 #include <mach/panel_id.h>
+#endif
 #include <mach/debug_display.h>
 #include "mdp.h"
 #include "msm_fb.h"
@@ -279,10 +281,13 @@ int mdp_dsi_video_on(struct platform_device *pdev)
 int mdp_dsi_video_off(struct platform_device *pdev)
 {
 	int ret = 0;
+#ifdef HTC_PHONE
 	int retry_cnt = 0;
 	struct msm_fb_data_type *mfd = (struct msm_fb_data_type *)platform_get_drvdata(pdev);
+#endif
 	PR_DISP_INFO("%s\n", __func__);
-
+	
+#ifdef HTC_PHONE
 	if (panel_type == PANEL_ID_PROTOU_LG || panel_type == PANEL_ID_PROTODCG_LG) {
 		if(!mfd) {
 			PR_DISP_ERR("mdp_dsi_video_off: mfd is NULL\n");
@@ -314,6 +319,7 @@ int mdp_dsi_video_off(struct platform_device *pdev)
 		PR_DISP_INFO("%s : mipi_lg_lcd_off retry_cnt = %d\n", __func__, retry_cnt);
 		hr_msleep(20);
 	}
+#endif
 
 	mdp_histogram_ctrl_all(FALSE);
 	/* MDP cmd block enable */

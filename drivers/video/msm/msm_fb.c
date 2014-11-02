@@ -41,7 +41,9 @@
 #include <linux/android_pmem.h>
 #include <linux/leds.h>
 #include <linux/pm_runtime.h>
+#ifdef HTC_PHONE
 #include <mach/panel_id.h>
+#endif
 #include <mach/debug_display.h>
 
 #define MSM_FB_C
@@ -702,15 +704,7 @@ static int msm_fb_probe(struct platform_device *pdev)
 		INIT_DELAYED_WORK(&htc_protou_esd_dw, htc_protou_esd_wq_routine);
 	}
 #endif
-
 	
-	if (board_mfg_mode() == 4) {
-		if (msm_fb_blank_sub(FB_BLANK_UNBLANK, mfd->fbi, mfd->op_enable)) {
-			printk(KERN_ERR "msm_fb_open: can't turn on display!\n");
-			return -1;
-		}
-	}
-
 	return 0;
 }
 
@@ -1211,20 +1205,18 @@ static void msmfb_onchg_resume(struct early_suspend *h)
 void htc_protou_esd_wq_routine(struct work_struct *work) {
 	int esd_test = 0;
 
-	if (board_mfg_mode() != 4) {
-		htc_mdp_sem_down(current, &htc_protou_mfd->dma->mutex);
-		esd_test = mipi_dsi_cmd_bta_sw_trigger_special();
-		htc_mdp_sem_up(&htc_protou_mfd->dma->mutex);
-		if (esd_test == 0) {
-			printk(KERN_ERR "[DISP] DriverIC didn't response!! Recover!!\n");
-			mutex_lock(&suspend_mutex);
-			msm_fb_suspend_sub(htc_protou_mfd);
-			mdelay(100);
-			msm_fb_resume_sub(htc_protou_mfd);
-			mutex_unlock(&suspend_mutex);
-		}
-		queue_delayed_work(htc_protou_esd_wq, &htc_protou_esd_dw, msecs_to_jiffies(5000));
+	htc_mdp_sem_down(current, &htc_protou_mfd->dma->mutex);
+	esd_test = mipi_dsi_cmd_bta_sw_trigger_special();
+	htc_mdp_sem_up(&htc_protou_mfd->dma->mutex);
+	if (esd_test == 0) {
+		printk(KERN_ERR "[DISP] DriverIC didn't response!! Recover!!\n");
+		mutex_lock(&suspend_mutex);
+		msm_fb_suspend_sub(htc_protou_mfd);
+		mdelay(100);
+		msm_fb_resume_sub(htc_protou_mfd);
+		mutex_unlock(&suspend_mutex);
 	}
+	queue_delayed_work(htc_protou_esd_wq, &htc_protou_esd_dw, msecs_to_jiffies(5000));
 }
 #endif
 
@@ -1352,7 +1344,7 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 						&htc_protou_esd_dw, msecs_to_jiffies(20000));
 #endif
 					memset(mfd->fbi->screen_base, 0x0, mfd->fbi->fix.smem_len);
-
+#ifdef HTC_PHONE
 					if (panel_type == PANEL_ID_PROTOU_LG
 						|| panel_type == PANEL_ID_PROTODCG_LG
 						|| panel_type == PANEL_ID_URANUS_LG_NOVATEK
@@ -1368,8 +1360,8 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 					} else if ((panel_type & MIPI_MODE_MASK) == MIPI_VIDEO_ONLY)
 					
 						MIPI_OUTP(MIPI_DSI_BASE + 0x0000, 0);
+#endif
 				}
-
 				
 				mdp_gamma_set();
 			} else if (mfd->first_init_lcd == LCD_INIT_LCDC) {
@@ -1900,6 +1892,7 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	mfd->sw_refreshing_enable = TRUE;
 	mfd->panel_power_on = FALSE;
 
+#ifdef HTC_PHONE
 	switch (panel_type & IF_MASK) {
 	case IF_MIPI:
 		mfd->first_init_lcd = LCD_INIT_MIPI;
@@ -1914,7 +1907,9 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 		mfd->first_init_lcd = 0;
 		break;
 	}
-
+#else
+	mfd->first_init_lcd = 0;
+#endif
 	mfd->pan_waiting = FALSE;
 	init_completion(&mfd->pan_comp);
 	init_completion(&mfd->refresher_comp);
@@ -1957,9 +1952,11 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 					0,
 					&(mfd->rotator_iova));
 
+#ifdef HTC_PHONE
 	if (((panel_type & MIPI_MODE_MASK) != MIPI_VIDEO_ONLY) && ((panel_type & IF_MASK) != IF_LCDC))
 		if (!bf_supported || mfd->index == 0)
 			memset(fbi->screen_base, 0x0, fix->smem_len);
+#endif
 
 	mfd->op_enable = TRUE;
 	mfd->panel_power_on = FALSE;
@@ -2330,8 +2327,10 @@ static int msm_fb_pan_display(struct fb_var_screeninfo *var,
 			mfd->request_display_on = 0;
 			bl_updated = 0;
 
-			if (((panel_type & MIPI_MODE_MASK) == MIPI_VIDEO_ONLY) && (board_mfg_mode() != 4))
+#ifdef HTC_PHONE
+			if (((panel_type & MIPI_MODE_MASK) == MIPI_VIDEO_ONLY))
 				mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+#endif
 		}
 
 		down(&mfd->sem);

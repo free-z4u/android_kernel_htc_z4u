@@ -117,4 +117,5 @@ int __init parse_tag_security(const struct tag *tags);
 unsigned int get_tamper_sf(void);
 int state_helper_register_notifier(void (*func)(void), const char *name);
 int board_build_flag(void);
+int board_mfg_mode(void);
 #endif

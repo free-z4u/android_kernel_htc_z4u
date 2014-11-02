@@ -35,8 +35,9 @@
 #include "mipi_dsi.h"
 #include "mdp.h"
 #include "mdp4.h"
-
+#ifdef HTC_PHONE
 #include <mach/panel_id.h>
+#endif
 
 u32 dsi_irq;
 u32 esc_byte_ratio;
@@ -105,9 +106,11 @@ static int mipi_dsi_off(struct platform_device *pdev)
 			mipi_dsi_set_tear_off(mfd);
 		}
 	}
-
+	
+#ifdef HTC_PHONE
 	if (panel_type != PANEL_ID_PROTOU_LG && panel_type != PANEL_ID_PROTODCG_LG)
 		ret = panel_next_off(pdev);
+#endif
 
 #ifdef CONFIG_MSM_BUS_SCALING
 	mdp_bus_scale_update_request(0);

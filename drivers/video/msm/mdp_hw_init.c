@@ -10,8 +10,6 @@
  * GNU General Public License for more details.
  *
  */
-
-#include <mach/panel_id.h>
 #include <mach/board.h>
 #include "mdp.h"
 
@@ -726,8 +724,4 @@ void mdp_hw_init(int cont_splash)
 #endif
 
 	wmb();
-	 if (((panel_type & MIPI_MODE_MASK) != MIPI_VIDEO_ONLY) || (board_mfg_mode() == 4)) {
-		/* MDP cmd block disable */
-		mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
-	 }
 }
