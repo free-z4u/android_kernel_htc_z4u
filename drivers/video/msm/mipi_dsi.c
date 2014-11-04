@@ -35,7 +35,7 @@
 #include "mipi_dsi.h"
 #include "mdp.h"
 #include "mdp4.h"
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 #include <mach/panel_id.h>
 #endif
 
@@ -107,7 +107,7 @@ static int mipi_dsi_off(struct platform_device *pdev)
 		}
 	}
 	
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 	if (panel_type != PANEL_ID_PROTOU_LG && panel_type != PANEL_ID_PROTODCG_LG)
 		ret = panel_next_off(pdev);
 #endif

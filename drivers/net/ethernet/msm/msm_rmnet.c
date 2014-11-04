@@ -39,7 +39,7 @@
 #include <mach/msm_smd.h>
 #include <mach/peripheral-loader.h>
 
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 #include <mach/board_htc.h>
 #endif
 
@@ -935,7 +935,7 @@ static int __init rmnet_init(void)
 	struct rmnet_private *p;
 	unsigned n;
 
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 	if (get_kernel_flag() & KERNEL_FLAG_RIL_DBG_RMNET)
 		ril_debug_flag = 1;
 #endif

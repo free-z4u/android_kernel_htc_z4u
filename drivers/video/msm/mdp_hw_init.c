@@ -10,6 +10,10 @@
  * GNU General Public License for more details.
  *
  */
+
+#ifdef CONFIG_HTC_PHONE
+#include <mach/panel_id.h>
+#endif
 #include <mach/board.h>
 #include "mdp.h"
 
@@ -724,4 +728,10 @@ void mdp_hw_init(int cont_splash)
 #endif
 
 	wmb();
+#ifdef CONFIG_HTC_PHONE
+    if (((panel_type & MIPI_MODE_MASK) != MIPI_VIDEO_ONLY)) {
+		/* MDP cmd block disable */
+		mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+	}
+#endif
 }

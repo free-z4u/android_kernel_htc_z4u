@@ -41,7 +41,7 @@
 #include <linux/android_pmem.h>
 #include <linux/leds.h>
 #include <linux/pm_runtime.h>
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 #include <mach/panel_id.h>
 #endif
 #include <mach/debug_display.h>
@@ -1344,7 +1344,7 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 						&htc_protou_esd_dw, msecs_to_jiffies(20000));
 #endif
 					memset(mfd->fbi->screen_base, 0x0, mfd->fbi->fix.smem_len);
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 					if (panel_type == PANEL_ID_PROTOU_LG
 						|| panel_type == PANEL_ID_PROTODCG_LG
 						|| panel_type == PANEL_ID_URANUS_LG_NOVATEK
@@ -1892,7 +1892,7 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	mfd->sw_refreshing_enable = TRUE;
 	mfd->panel_power_on = FALSE;
 
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 	switch (panel_type & IF_MASK) {
 	case IF_MIPI:
 		mfd->first_init_lcd = LCD_INIT_MIPI;
@@ -1952,7 +1952,7 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 					0,
 					&(mfd->rotator_iova));
 
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 	if (((panel_type & MIPI_MODE_MASK) != MIPI_VIDEO_ONLY) && ((panel_type & IF_MASK) != IF_LCDC))
 		if (!bf_supported || mfd->index == 0)
 			memset(fbi->screen_base, 0x0, fix->smem_len);
@@ -2327,7 +2327,7 @@ static int msm_fb_pan_display(struct fb_var_screeninfo *var,
 			mfd->request_display_on = 0;
 			bl_updated = 0;
 
-#ifdef HTC_PHONE
+#ifdef CONFIG_HTC_PHONE
 			if (((panel_type & MIPI_MODE_MASK) == MIPI_VIDEO_ONLY))
 				mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 #endif
