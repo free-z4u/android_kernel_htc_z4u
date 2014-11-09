@@ -1,7 +1,7 @@
 
 /* audio_lpa.c - low power audio driver
  *
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Based on the PCM decoder driver in arch/arm/mach-msm/qdsp5/audio_pcm.c
  *
@@ -58,6 +58,7 @@
 
 #include "audmgr.h"
 
+/* for queue ids - should be relative to module number*/
 #include "adsp.h"
 
 #define ADRV_STATUS_AIO_INTF 0x00000001
@@ -66,20 +67,23 @@
 #define ADRV_STATUS_FSYNC 0x00000008
 
 #define MSM_MAX_VOLUME 0x2000
+/* 17 added to avoid more deviation */
 #define MSM_VOLUME_STEP (MSM_MAX_VOLUME+17)
 #define MSM_VOLUME_FACTOR (10000)
 
+/* Size must be power of 2 */
 #define MAX_BUF 2
 #define BUFSZ (523200)
 
 #define AUDDEC_DEC_PCM 0
 
+/* Decoder status received from AUDPPTASK */
 #define  AUDPP_DEC_STATUS_SLEEP	0
 #define  AUDPP_DEC_STATUS_INIT  1
 #define  AUDPP_DEC_STATUS_CFG   2
 #define  AUDPP_DEC_STATUS_PLAY  3
 
-#define AUDPCM_EVENT_NUM 10 
+#define AUDPCM_EVENT_NUM 10 /* Default number of pre-allocated event packets */
 
 #define __CONTAINS(r, v, l) ({					\
 	typeof(r) __r = r;					\
@@ -117,7 +121,7 @@ struct audio;
 struct buffer {
 	void *data;
 	unsigned size;
-	unsigned used;		
+	unsigned used;		/* Input usage actual DSP produced PCM size  */
 	unsigned addr;
 };
 
@@ -158,8 +162,8 @@ struct audio {
 
 	uint8_t out_head;
 	uint8_t out_tail;
-	uint8_t out_needed; 
-	struct list_head out_queue; 
+	uint8_t out_needed; /* number of buffers the dsp is waiting for */
+	struct list_head out_queue; /* queue to retain output buffers */
 	atomic_t out_bytes;
 
 	struct mutex lock;
@@ -168,31 +172,31 @@ struct audio {
 
 	struct msm_adsp_module *audplay;
 
-	
+	/* configuration to use on next enable */
 	uint32_t out_sample_rate;
 	uint32_t out_channel_mode;
-	uint32_t out_bits; 
+	uint32_t out_bits; /* bits per sample */
 
 	struct audmgr audmgr;
 
-	
+	/* data allocated for various buffers */
 	char *data;
 	int32_t phys;
 	struct msm_mapped_buffer *map_v_write;
 
 	uint32_t drv_status;
-	int wflush; 
+	int wflush; /* Write flush */
 	int want_ramping;
 	s64 prev_time;
 	int opened;
 	int enabled;
 	int running;
-	int stopped; 
-	int teos; 
+	int stopped; /* set when stopped, cleared on flush */
+	int teos; /* valid only if tunnel mode & no data left for decoder */
 	int rmt_resource_released;
-	enum msm_aud_decoder_state dec_state; 
-	int reserved; 
-	char rsv_byte; 
+	enum msm_aud_decoder_state dec_state; /* Represents decoder state */
+	int reserved; /* A byte is being reserved */
+	char rsv_byte; /* Handle odd length user data */
 
 	const char *module_name;
 	unsigned queue_id;
@@ -276,12 +280,13 @@ static int rmt_get_resource(struct audio *audio)
 	return get_adsp_resource(client_idx, &cmd, sizeof(cmd));
 }
 
+/* must be called with audio->lock held */
 static int audio_enable(struct audio *audio)
 {
 	struct audmgr_config cfg;
 	int rc;
 
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 	if (audio->enabled)
 		return 0;
 
@@ -303,9 +308,10 @@ static int audio_enable(struct audio *audio)
 	cfg.snd_method = RPC_SND_METHOD_MIDI;
 
 	rc = audmgr_enable(&audio->audmgr, &cfg);
-	if (rc < 0)
+	if (rc < 0) {
+		msm_adsp_dump(audio->audplay);
 		return rc;
-
+	}
 	if (msm_adsp_enable(audio->audplay)) {
 		MM_ERR("msm_adsp_enable(audplay) failed\n");
 		audmgr_disable(&audio->audmgr);
@@ -323,10 +329,11 @@ static int audio_enable(struct audio *audio)
 	return 0;
 }
 
+/* must be called with audio->lock held */
 static int audio_disable(struct audio *audio)
 {
 	int rc = 0;
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 	if (audio->enabled) {
 		audio->enabled = 0;
 		audio->dec_state = MSM_AUD_DECODER_STATE_NONE;
@@ -344,7 +351,9 @@ static int audio_disable(struct audio *audio)
 		wake_up(&audio->write_wait);
 		msm_adsp_disable(audio->audplay);
 		audpp_disable(audio->dec_id, audio);
-		audmgr_disable(&audio->audmgr);
+		rc = audmgr_disable(&audio->audmgr);
+		if (rc < 0)
+			msm_adsp_dump(audio->audplay);
 		audio->out_needed = 0;
 		rmt_put_resource(audio);
 		audio->rmt_resource_released = 1;
@@ -352,6 +361,7 @@ static int audio_disable(struct audio *audio)
 	return rc;
 }
 
+/* ------------------- dsp --------------------- */
 static void audplay_dsp_event(void *data, unsigned id, size_t len,
 			      void (*getevent) (void *ptr, size_t len))
 {
@@ -394,7 +404,7 @@ static void audio_dsp_event(void *private, unsigned id, uint16_t *msg)
 						MSM_AUD_DECODER_STATE_FAILURE;
 					wake_up(&audio->wait);
 				} else if (reason == AUDPP_MSG_REASON_NONE) {
-					
+					/* decoder is in disable state */
 					audio->dec_state =
 						MSM_AUD_DECODER_STATE_CLOSE;
 					wake_up(&audio->wait);
@@ -509,7 +519,7 @@ static void audpcm_async_send_data(struct audio *audio, unsigned needed)
 	if (needed && !audio->wflush) {
 		audio->out_needed = 1;
 		if (audio->drv_status & ADRV_STATUS_OBUF_GIVEN) {
-			
+			/* pop one node out of queue */
 			union msm_audio_event_payload payload;
 			struct audpcm_buffer_node *used_buf;
 
@@ -547,10 +557,9 @@ static void audpcm_async_send_data(struct audio *audio, unsigned needed)
 				cmd.buf_ptr	= (unsigned) next_buf->paddr;
 				cmd.buf_size = next_buf->buf.data_len >> 1;
 				cmd.partition_number	= 0;
-				
+				/* complete writes to the input buffer */
 				wmb();
 				audplay_send_queue0(audio, &cmd, sizeof(cmd));
-				MM_DBG("send data done\n");
 				audio->out_needed = 0;
 				audio->drv_status |= ADRV_STATUS_OBUF_GIVEN;
 			}
@@ -559,6 +568,7 @@ static void audpcm_async_send_data(struct audio *audio, unsigned needed)
 	spin_unlock_irqrestore(&audio->dsp_lock, flags);
 }
 
+/* ------------------- device --------------------- */
 static void audpcm_async_flush(struct audio *audio)
 {
 	struct audpcm_buffer_node *buf_node;
@@ -567,7 +577,7 @@ static void audpcm_async_flush(struct audio *audio)
 	unsigned long flags;
 
 	spin_lock_irqsave(&audio->dsp_lock, flags);
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 	list_for_each_safe(ptr, next, &audio->out_queue) {
 		buf_node = list_entry(ptr, struct audpcm_buffer_node, list);
 		list_del(&buf_node->list);
@@ -575,18 +585,19 @@ static void audpcm_async_flush(struct audio *audio)
 		audpcm_post_event(audio, AUDIO_EVENT_WRITE_DONE,
 				payload);
 		kfree(buf_node);
-		MM_DBG("WRITE EVENT DONE posting done\n");
 	}
-	MM_DBG("audpcm_async_flush completed\n");
 	audio->drv_status &= ~ADRV_STATUS_OBUF_GIVEN;
 	audio->out_needed = 0;
 	atomic_set(&audio->out_bytes, 0);
 	spin_unlock_irqrestore(&audio->dsp_lock, flags);
-	MM_DBG("Exit\n"); 
 }
 static void audio_ioport_reset(struct audio *audio)
 {
 	if (audio->drv_status & ADRV_STATUS_AIO_INTF) {
+		/* If fsync is in progress, make sure
+		 * return value of fsync indicates
+		 * abort due to flush
+		 */
 		if (audio->drv_status & ADRV_STATUS_FSYNC) {
 			MM_DBG("fsync in progress\n");
 			wake_up(&audio->write_wait);
@@ -596,6 +607,10 @@ static void audio_ioport_reset(struct audio *audio)
 		} else
 			audpcm_async_flush(audio);
 	} else {
+		/* Make sure read/write thread are free from
+		 * sleep and knowing that system is not able
+		 * to process io request at the moment
+		 */
 		wake_up(&audio->write_wait);
 		mutex_lock(&audio->write_lock);
 		audpcm_async_flush(audio);
@@ -608,12 +623,9 @@ static int audpcm_events_pending(struct audio *audio)
 	unsigned long flags;
 	int empty;
 
-	MM_DBG("++\n");
 	spin_lock_irqsave(&audio->event_queue_lock, flags);
 	empty = !list_empty(&audio->event_queue);
 	spin_unlock_irqrestore(&audio->event_queue_lock, flags);
-	MM_DBG("--, empty %d, audio->event_abort %d\n",
-			empty, audio->event_abort);
 	return empty || audio->event_abort;
 }
 
@@ -692,7 +704,6 @@ static long audpcm_process_event_req(struct audio *audio, void __user *arg)
 		audlpa_ion_fixup(audio, drv_evt->payload.aio_buf.buf_addr,
 				  drv_evt->payload.aio_buf.buf_len, 0);
 		mutex_unlock(&audio->lock);
-		MM_DBG("returning AUDIO_EVENT_WRITE_DONE");
 	}
 	if (!rc && copy_to_user(arg, &usr_evt, sizeof(usr_evt)))
 		rc = -EFAULT;
@@ -714,8 +725,7 @@ static int audlpa_ion_check(struct audio *audio,
 				" (vaddr %p paddr %p len %ld)\n",
 				audio, vaddr, len,
 				region_elt->vaddr,
-				(void *)region_elt->paddr,
-				region_elt->len);
+				(void *)region_elt->paddr, region_elt->len);
 			return -EINVAL;
 		}
 	}
@@ -733,7 +743,7 @@ static int audlpa_ion_add(struct audio *audio,
 	struct ion_handle *handle;
 	unsigned long ionflag;
 
-	MM_DBG("\n"); 
+	MM_ERR("\n"); /* Macro prints the file name and function */
 	region = kmalloc(sizeof(*region), GFP_KERNEL);
 
 	if (!region) {
@@ -797,8 +807,6 @@ static int audlpa_ion_remove(struct audio *audio,
 	struct list_head *ptr, *next;
 	int rc = -EINVAL;
 
-	MM_DBG("info fd %d vaddr %p\n", info->fd, info->vaddr);
-
 	list_for_each_safe(ptr, next, &audio->ion_region_queue) {
 		region = list_entry(ptr, struct audlpa_ion_region, list);
 
@@ -831,11 +839,14 @@ static int audlpa_ion_lookup_vaddr(struct audio *audio, void *addr,
 	int match_count = 0;
 	*region = NULL;
 
-	
+	/* returns physical address or zero */
 	list_for_each_entry(region_elt, &audio->ion_region_queue, list) {
 		if (addr >= region_elt->vaddr &&
 		    addr < region_elt->vaddr + region_elt->len &&
 		    addr + len <= region_elt->vaddr + region_elt->len) {
+			/* offset since we could pass vaddr inside a registerd
+			 * ion buffer
+			 */
 
 			match_count++;
 			if (!*region)
@@ -882,6 +893,7 @@ static unsigned long audlpa_ion_fixup(struct audio *audio, void *addr,
 	return paddr;
 }
 
+/* audio -> lock must be held at this point */
 static int audlpa_aio_buf_add(struct audio *audio, unsigned dir,
 	void __user *arg)
 {
@@ -907,7 +919,7 @@ static int audlpa_aio_buf_add(struct audio *audio, unsigned dir,
 		audio, buf_node->buf.buf_addr,
 		buf_node->buf.buf_len, 1);
 	if (dir) {
-		
+		/* write */
 		if (!buf_node->paddr ||
 		    (buf_node->paddr & 0x1) ||
 		    (buf_node->buf.data_len & 0x1)) {
@@ -1044,7 +1056,6 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			mutex_unlock(&audio->get_event_lock);
 		} else
 			rc = -EBUSY;
-		MM_DBG("AUDIO_GET_EVENT Done, rc = %d\n", rc);
 		return rc;
 	}
 
@@ -1074,10 +1085,9 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		get_current_time_ns(&audio->prev_time);
 		break;
 	case AUDIO_STOP:
-		MM_DBG("AUDIO_STOP ++\n");
+		MM_DBG("AUDIO_STOP\n");
 		ioctl_stop_info.ioctl_stop_state = 0;
 		audio_stop_event(audio);
-		MM_DBG("AUDIO_STOP --\n");
 		break;
 	case AUDIO_FLUSH:
 		MM_DBG("AUDIO_FLUSH\n");
@@ -1234,22 +1244,26 @@ static long audio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		rc = -EINVAL;
 	}
 	mutex_unlock(&audio->lock);
-	MM_DBG("cmd = %d done, rc = %d\n", cmd, rc);
 	return rc;
 }
 
+/* Only useful in tunnel-mode */
 int audlpa_async_fsync(struct audio *audio)
 {
 	int rc = 0;
 
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 
-	
+	/* Blocking client sends more data */
 	mutex_lock(&audio->lock);
 	audio->drv_status |= ADRV_STATUS_FSYNC;
 	mutex_unlock(&audio->lock);
 
 	mutex_lock(&audio->write_lock);
+	/* pcm dmamiss message is sent continously
+	 * when decoder is starved so no race
+	 * condition concern
+	 */
 	audio->teos = 0;
 
 	rc = wait_event_interruptible(audio->write_wait,
@@ -1264,7 +1278,6 @@ int audlpa_async_fsync(struct audio *audio)
 	mutex_lock(&audio->lock);
 	audio->drv_status &= ~ADRV_STATUS_FSYNC;
 	mutex_unlock(&audio->lock);
-	MM_DBG("Done\n");
 
 	return rc;
 }
@@ -1274,7 +1287,7 @@ int audlpa_sync_fsync(struct audio *audio)
 	struct buffer *frame;
 	int rc = 0;
 
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 
 	mutex_lock(&audio->write_lock);
 
@@ -1311,6 +1324,10 @@ int audlpa_sync_fsync(struct audio *audio)
 		}
 	}
 
+	/* pcm dmamiss message is sent continously
+	 * when decoder is starved so no race
+	 * condition concern
+	 */
 	audio->teos = 0;
 
 	rc = wait_event_interruptible(audio->write_wait,
@@ -1371,7 +1388,6 @@ static int audio_release(struct inode *inode, struct file *file)
 	audio->event_abort = 1;
 	wake_up(&audio->event_wait);
 	audpcm_reset_event_queue(audio);
-	MM_DBG("pmem area = 0x%8x\n", (unsigned int)audio->data);
 	mutex_unlock(&audio->lock);
 #ifdef CONFIG_DEBUG_FS
 	if (audio->dentry)
@@ -1388,7 +1404,6 @@ static void audpcm_post_event(struct audio *audio, int type,
 	struct audpcm_event *e_node = NULL;
 	unsigned long flags;
 
-	MM_DBG("++\n");
 	spin_lock_irqsave(&audio->event_queue_lock, flags);
 
 	if (!list_empty(&audio->free_event_queue)) {
@@ -1410,7 +1425,6 @@ static void audpcm_post_event(struct audio *audio, int type,
 	list_add_tail(&e_node->list, &audio->event_queue);
 	spin_unlock_irqrestore(&audio->event_queue_lock, flags);
 	wake_up(&audio->event_wait);
-	MM_DBG("--\n");
 }
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
@@ -1420,7 +1434,7 @@ static void audpcm_suspend(struct early_suspend *h)
 		container_of(h, struct audpcm_suspend_ctl, node);
 	union msm_audio_event_payload payload;
 
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 	audpcm_post_event(ctl->audio, AUDIO_EVENT_SUSPEND, payload);
 }
 
@@ -1430,7 +1444,7 @@ static void audpcm_resume(struct early_suspend *h)
 		container_of(h, struct audpcm_suspend_ctl, node);
 	union msm_audio_event_payload payload;
 
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 	audpcm_post_event(ctl->audio, AUDIO_EVENT_RESUME, payload);
 }
 #endif
@@ -1465,6 +1479,10 @@ static ssize_t audpcm_debug_read(struct file *file, char __user *buf,
 	n += scnprintf(buffer + n, debug_bufmax - n,
 		"channel mode %d\n", audio->out_channel_mode);
 	mutex_unlock(&audio->lock);
+	/* Following variables are only useful for debugging when
+	 * when playback halts unexpectedly. Thus, no mutual exclusion
+	 * enforced
+	 */
 	n += scnprintf(buffer + n, debug_bufmax - n,
 				   "wflush %d\n", audio->wflush);
 	n += scnprintf(buffer + n, debug_bufmax - n,
@@ -1498,11 +1516,11 @@ static int audio_open(struct inode *inode, struct file *file)
 	struct audpcm_event *e_node = NULL;
 
 #ifdef CONFIG_DEBUG_FS
-	
+	/* 4 bytes represents decoder number, 1 byte for terminate string */
 	char name[sizeof "msm_lpa_" + 5];
 #endif
 
-	
+	/* Allocate audio instance, set to zero */
 	audio = kzalloc(sizeof(struct audio), GFP_KERNEL);
 	if (!audio) {
 		MM_ERR("no memory to allocate audio instance\n");
@@ -1511,7 +1529,7 @@ static int audio_open(struct inode *inode, struct file *file)
 	}
 	MM_DBG("audio instance 0x%08x created\n", (int)audio);
 
-	
+	/* Allocate the decoder */
 	dec_attrb = AUDDEC_DEC_PCM;
 	if (file->f_mode & FMODE_READ) {
 		MM_ERR("Non-Tunneled mode not supported\n");
@@ -1554,7 +1572,7 @@ static int audio_open(struct inode *inode, struct file *file)
 		goto err;
 	}
 
-	
+	/* Initialize all locks of audio instance */
 	mutex_init(&audio->lock);
 	mutex_init(&audio->write_lock);
 	mutex_init(&audio->get_event_lock);

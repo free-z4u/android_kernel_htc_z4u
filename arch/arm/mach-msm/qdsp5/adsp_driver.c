@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/qdsp5/adsp_driver.c
  *
  * Copyright (C) 2008 Google, Inc.
- * Copyright (c) 2009, 2012 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009, 2012 The Linux Foundation. All rights reserved.
  * Author: Iliyan Malchev <ibm@android.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -219,11 +219,14 @@ static int adsp_ion_lookup_vaddr(struct msm_adsp_module *module, void **addr,
 
 	*region = NULL;
 
-	
+	/* returns physical address or zero */
 	hlist_for_each_entry(region_elt, node, &module->ion_regions, list) {
 		if (vaddr >= region_elt->vaddr &&
 		    vaddr < region_elt->vaddr + region_elt->len &&
 		    vaddr + len <= region_elt->vaddr + region_elt->len) {
+			/* offset since we could pass vaddr inside a registerd
+			 * pmem buffer
+			 */
 
 			match_count++;
 			if (!*region)
@@ -232,7 +235,7 @@ static int adsp_ion_lookup_vaddr(struct msm_adsp_module *module, void **addr,
 	}
 
 	if (match_count > 1) {
-		MM_ERR("adsp: module %s: "
+		MM_ERR("module %s: "
 			"multiple hits for vaddr %p, len %ld\n",
 			module->name, vaddr, len);
 		hlist_for_each_entry(region_elt, node,
@@ -240,7 +243,7 @@ static int adsp_ion_lookup_vaddr(struct msm_adsp_module *module, void **addr,
 			if (vaddr >= region_elt->vaddr &&
 			    vaddr < region_elt->vaddr + region_elt->len &&
 			    vaddr + len <= region_elt->vaddr + region_elt->len)
-				MM_ERR("\t%p, %ld --> %p\n",
+				MM_ERR("%p, %ld --> %p\n",
 					region_elt->vaddr,
 					region_elt->len,
 					(void *)region_elt->paddr);
@@ -282,7 +285,7 @@ int adsp_ion_fixup_kvaddr(struct msm_adsp_module *module, void **addr,
 
 	ret = adsp_ion_lookup_vaddr(module, addr, len, &region);
 	if (ret) {
-		MM_ERR("adsp: not patching %s (paddr & kvaddr),"
+		MM_ERR("not patching %s (paddr & kvaddr),"
 			" lookup (%p, %ld) failed\n",
 			module->name, vaddr, len);
 		return ret;
@@ -306,7 +309,7 @@ int adsp_pmem_fixup(struct msm_adsp_module *module, void **addr,
 
 	ret = adsp_ion_lookup_vaddr(module, addr, len, &region);
 	if (ret) {
-		MM_ERR("adsp: not patching %s, lookup (%p, %ld) failed\n",
+		MM_ERR("not patching %s, lookup (%p, %ld) failed\n",
 			module->name, vaddr, len);
 		return ret;
 	}
@@ -319,12 +322,12 @@ static int adsp_verify_cmd(struct msm_adsp_module *module,
 			   unsigned int queue_id, void *cmd_data,
 			   size_t cmd_size)
 {
-	
+	/* call the per module verifier */
 	if (module->verify_cmd)
 		return module->verify_cmd(module, queue_id, cmd_data,
 					     cmd_size);
 	else
-		MM_INFO("adsp: no packet verifying function "
+		MM_INFO("no packet verifying function "
 				 "for task %s\n", module->name);
 	return 0;
 }
@@ -354,12 +357,11 @@ static long adsp_write_cmd(struct adsp_device *adev, void __user *arg)
 
 	mutex_lock(&adev->module->ion_regions_lock);
 	if (adsp_verify_cmd(adev->module, cmd.queue, cmd_data, cmd.len)) {
-		MM_ERR("module %s: verify failed.\n",
-			adev->module->name);
+		MM_ERR("module %s: verify failed.\n", adev->module->name);
 		rc = -EINVAL;
 		goto end;
 	}
-	
+	/* complete the writes to the buffer */
 	wmb();
 	rc = msm_adsp_write(adev->module, cmd.queue, cmd_data, cmd.len);
 end:
@@ -407,7 +409,7 @@ int adsp_pmem_paddr_fixup(struct msm_adsp_module *module, void **addr)
 
 	ret = adsp_ion_lookup_paddr(module, addr, &region);
 	if (ret) {
-		MM_ERR("adsp: not patching %s, paddr %p lookup failed\n",
+		MM_ERR("not patching %s, paddr %p lookup failed\n",
 			module->name, vaddr);
 		return ret;
 	}
@@ -419,7 +421,7 @@ int adsp_pmem_paddr_fixup(struct msm_adsp_module *module, void **addr)
 static int adsp_patch_event(struct msm_adsp_module *module,
 				struct adsp_event *event)
 {
-	
+	/* call the per-module msg verifier */
 	if (module->patch_event)
 		return module->patch_event(module, event);
 	return 0;
@@ -465,16 +467,16 @@ static long adsp_get_event(struct adsp_device *adev, void __user *arg)
 	if (!data)
 		return -EAGAIN;
 
-	
+	/* DSP messages are type 0; they may contain physical addresses */
 	if (data->type == 0)
 		adsp_patch_event(adev->module, data);
 
-	
+	/* map adsp_event --> adsp_event_t */
 	if (evt.len < data->size) {
 		rc = -ETOOSMALL;
 		goto end;
 	}
-	
+	/* order the reads to the buffer */
 	rmb();
 	if (data->msg_id != EVENT_MSG_ID) {
 		if (copy_to_user((void *)(evt.data), data->data.msg16,
@@ -490,7 +492,7 @@ static long adsp_get_event(struct adsp_device *adev, void __user *arg)
 		}
 	}
 
-	evt.type = data->type; 
+	evt.type = data->type; /* 0 --> from aDSP, 1 --> from ARM9 */
 	evt.msg_id = data->msg_id;
 	evt.flags = data->is16;
 	evt.len = data->size;
@@ -537,7 +539,7 @@ static long adsp_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		return msm_adsp_disable_event_rsp(adev->module);
 
 	case ADSP_IOCTL_DISABLE_ACK:
-		MM_ERR("adsp: ADSP_IOCTL_DISABLE_ACK is not implemented.\n");
+		MM_ERR("ADSP_IOCTL_DISABLE_ACK is not implemented\n");
 		break;
 
 	case ADSP_IOCTL_WRITE_COMMAND:
@@ -555,10 +557,8 @@ static long adsp_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 	case ADSP_IOCTL_REGISTER_PMEM: {
 		struct adsp_ion_info info;
-		if (copy_from_user(&info, (void *) arg, sizeof(info))){
-			MM_INFO("adsp: ADSP_IOCTL_REGISTER_PMEM copy from user failed\n");
+		if (copy_from_user(&info, (void *) arg, sizeof(info)))
 			return -EFAULT;
-                }
 		return adsp_ion_add(adev->module, &info);
 	}
 
@@ -582,9 +582,9 @@ static int adsp_release(struct inode *inode, struct file *filp)
 	struct msm_adsp_module *module = adev->module;
 	int rc = 0;
 
-	MM_INFO("adsp: release '%s'\n", adev->name);
+	MM_INFO("release '%s'\n", adev->name);
 
-	
+	/* clear module before putting it to avoid race with open() */
 	adev->module = NULL;
 
 	rc = adsp_ion_del(module);
@@ -601,13 +601,13 @@ static void adsp_event(void *driver_data, unsigned id, size_t len,
 	unsigned long flags;
 
 	if (len > ADSP_EVENT_MAX_SIZE) {
-		MM_ERR("adsp_event: event too large (%d bytes)\n", len);
+		MM_ERR("event too large (%d bytes)\n", len);
 		return;
 	}
 
 	event = kmalloc(sizeof(*event), GFP_ATOMIC);
 	if (!event) {
-		MM_ERR("adsp_event: cannot allocate buffer\n");
+		MM_ERR("cannot allocate buffer\n");
 		return;
 	}
 
@@ -649,13 +649,13 @@ static int adsp_open(struct inode *inode, struct file *filp)
 	if (!adev)
 		return -ENODEV;
 
-	MM_INFO("adsp_open() name = '%s'\n", adev->name);
+	MM_INFO("open '%s'\n", adev->name);
 
 	rc = msm_adsp_get(adev->name, &adev->module, &adsp_ops, adev);
 	if (rc)
 		return rc;
 
-	MM_INFO("adsp_open() module '%s' adev %p\n", adev->name, adev);
+	MM_INFO("opened module '%s' adev %p\n", adev->name, adev);
 	filp->private_data = adev;
 	adev->abort = 0;
 	INIT_HLIST_HEAD(&adev->module->ion_regions);

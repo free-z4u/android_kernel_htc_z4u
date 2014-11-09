@@ -1,4 +1,4 @@
-/* Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -191,9 +191,9 @@ static ssize_t dsp_debug_write(struct file *file, const char __user *buf,
 {
 	int len;
 
-	if (count == 0) 
+	if (count < 0)
 		return 0;
-	len = count > (MAX_LEN - HDR_LEN - 1) ? (MAX_LEN - HDR_LEN - 1) : count; 
+	len = count > (MAX_LEN - 1) ? (MAX_LEN - 1) : count;
 	if (copy_from_user(l_buf + HDR_LEN, buf, len)) {
 		MM_ERR("Unable to copy data from user space\n");
 		return -EFAULT;
@@ -229,7 +229,7 @@ static int __init dsp_init(void)
 	return misc_register(&dsp_misc);
 #else
 	return 0;
-#endif 
+#endif /* CONFIG_DEBUG_FS */
 }
 
 device_initcall(dsp_init);
