@@ -2101,10 +2101,12 @@ static void __init msm7x27a_pm_init(void)
 	msm_pm_register_irqs();
 }
 
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 static void magnids_reset(void)
 {
 	gpio_set_value(MAGNIDS_GPIO_PS_HOLD, 0);
 }
+#endif
 
 unsigned int *cpu_foot_print = CPU_FOOT_PRINT;
 
@@ -2116,9 +2118,9 @@ static void __init msm7x2x_init(void)
 	struct proc_dir_entry *entry = NULL;
 	int rc = 0;
 	struct kobject *properties_kobj;
-
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 	msm_hw_reset_hook = magnids_reset;
-
+#endif
 	msm7x2x_misc_init();
 
 #ifdef CONFIG_PERFLOCK

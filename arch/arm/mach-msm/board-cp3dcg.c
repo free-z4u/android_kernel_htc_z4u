@@ -2992,18 +2992,21 @@ static void __init msm_pm_init(void)
 	}
 }
 
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 static void cp3_reset(void)
 {
 	gpio_set_value(CP3DCG_GPIO_PS_HOLD, 0);
 }
+#endif
 
 static void __init msm_cp3dcg_init(void)
 {
 #ifdef CONFIG_MMC_MSM
 	struct proc_dir_entry *entry = NULL;
 #endif
-
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 	msm_hw_reset_hook = cp3_reset;
+#endif
 	gpio_set_value(CP3DCG_GPIO_PS_HOLD, 1);
 
 	msm7x2x_misc_init();

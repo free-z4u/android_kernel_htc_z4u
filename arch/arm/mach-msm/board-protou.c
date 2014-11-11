@@ -2273,18 +2273,22 @@ static void __init msm7x27a_pm_init(void)
 	msm_pm_register_irqs();
 }
 
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 static void proto_reset(void)
 {
 	gpio_set_value(PROTOU_GPIO_PS_HOLD, 0);
 }
+#endif
+
 static void __init msm7x2x_init(void)
 {
 	struct proc_dir_entry *entry = NULL;
 	int rc = 0;
 	struct kobject *properties_kobj;
 	int status;
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 	msm_hw_reset_hook = proto_reset;
-
+#endif
 	msm7x2x_misc_init();
 
 	/* Initialize regulators first so that other devices can use them */
