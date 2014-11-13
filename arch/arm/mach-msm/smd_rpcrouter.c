@@ -15,6 +15,10 @@
  *
  */
 
+/* TODO: handle cases where smd_write() will tempfail due to full fifo */
+/* TODO: thread priority? schedule a work to bump it? */
+/* TODO: maybe make server_list_lock a mutex */
+/* TODO: pool fragments to avoid kmalloc/kfree churn */
 
 #include <linux/slab.h>
 #include <linux/module.h>
@@ -49,7 +53,9 @@
 #include "smd_rpc_sym.h"
 #include "smd_private.h"
 
+#ifdef CONFIG_HTC_PHONE
 #include <mach/board_htc.h>
+#endif
 
 enum {
 	SMEM_LOG = 1U << 0,
@@ -70,55 +76,55 @@ static int smd_rpcrouter_debug_mask;
 module_param_named(debug_mask, smd_rpcrouter_debug_mask,
 		   int, S_IRUGO | S_IWUSR | S_IWGRP);
 
-#define DIAG(x...) printk(KERN_ERR "[RPC] ERROR " x)
+#define DIAG(x...) printk(KERN_ERR "[RR] ERROR " x)
 
 #if defined(CONFIG_MSM_ONCRPCROUTER_DEBUG)
 #define D(x...) do { \
 if (smd_rpcrouter_debug_mask & RTR_DBG) \
-	printk(KERN_ERR "[RPC][DBG]"x); \
+	printk(KERN_ERR x); \
 } while (0)
 
 #define RR(x...) do { \
 if (smd_rpcrouter_debug_mask & R2R_MSG) \
-	printk(KERN_ERR "[RPC][RR] "x); \
+	printk(KERN_ERR "[RR] "x); \
 } while (0)
 
 #define RAW(x...) do { \
 if (smd_rpcrouter_debug_mask & R2R_RAW) \
-	printk(KERN_ERR "[RPC][RAW] "x); \
+	printk(KERN_ERR "[RAW] "x); \
 } while (0)
 
 #define RAW_HDR(x...) do { \
 if (smd_rpcrouter_debug_mask & R2R_RAW_HDR) \
-	printk(KERN_ERR "[RPC][HDR] "x); \
+	printk(KERN_ERR "[HDR] "x); \
 } while (0)
 
 #define RAW_PMR(x...) do { \
 if (smd_rpcrouter_debug_mask & RAW_PMR) \
-	printk(KERN_ERR "[RPC][PMR] "x); \
+	printk(KERN_ERR "[PMR] "x); \
 } while (0)
 
 #define RAW_PMR_NOMASK(x...) do { \
-	printk(KERN_ERR "[RPC][PMR] "x); \
+	printk(KERN_ERR "[PMR] "x); \
 } while (0)
 
 #define RAW_PMW(x...) do { \
 if (smd_rpcrouter_debug_mask & RAW_PMW) \
-	printk(KERN_ERR "[RPC][PMW] "x); \
+	printk(KERN_ERR "[PMW] "x); \
 } while (0)
 
 #define RAW_PMW_NOMASK(x...) do { \
-	printk(KERN_ERR "[RPC][PMW] "x); \
+	printk(KERN_ERR "[PMW] "x); \
 } while (0)
 
 #define IO(x...) do { \
 if (smd_rpcrouter_debug_mask & RPC_MSG) \
-	printk(KERN_ERR "[RPC][MSG] "x); \
+	printk(KERN_ERR "[RPC] "x); \
 } while (0)
 
 #define NTFY(x...) do { \
 if (smd_rpcrouter_debug_mask & NTFY_MSG) \
-	printk(KERN_ERR "[RPC][NOTIFY] "x); \
+	printk(KERN_ERR "[NOTIFY] "x); \
 } while (0)
 #else
 #define D(x...) do { } while (0)
@@ -167,13 +173,14 @@ static DECLARE_WORK(work_create_rpcrouter_pdev, do_create_rpcrouter_pdev);
 #define RR_STATE_BODY    2
 #define RR_STATE_ERROR   3
 
+/* State for remote ep following restart */
 #define RESTART_QUOTA_ABORT  1
 
 struct rr_context {
 	struct rr_packet *pkt;
 	uint8_t *ptr;
-	uint32_t state; 
-	uint32_t count; 
+	uint32_t state; /* current assembly state */
+	uint32_t count; /* bytes needed in this state */
 };
 
 struct rr_context the_rr_context;
@@ -230,6 +237,17 @@ static struct notifier_block msm_rpc_reboot_notifier = {
 	.priority = 100
 };
 
+/*
+ * Search for transport (xprt) that matches the provided PID.
+ *
+ * Note: The calling function must ensure that the mutex
+ *       xprt_info_list_lock is locked when this function
+ *       is called.
+ *
+ * @remote_pid	Remote PID for the transport
+ *
+ * @returns Pointer to transport or NULL if not found
+ */
 static struct rpcrouter_xprt_info *rpcrouter_get_xprt_info(uint32_t remote_pid)
 {
 	struct rpcrouter_xprt_info *xprt_info;
@@ -267,7 +285,7 @@ static int rpcrouter_send_control_msg(struct rpcrouter_xprt_info *xprt_info,
 	hdr.dst_pid = xprt_info->remote_pid;
 	hdr.dst_cid = RPCROUTER_ROUTER_ADDRESS;
 
-	
+	/* TODO: what if channel is full? */
 
 	need = sizeof(hdr) + hdr.size;
 	spin_lock_irqsave(&xprt_info->lock, flags);
@@ -293,7 +311,7 @@ static void modem_reset_cleanup(struct rpcrouter_xprt_info *xprt_info)
 	unsigned long flags;
 
 	spin_lock_irqsave(&local_endpoints_lock, flags);
-	
+	/* remove all partial packets received */
 	list_for_each_entry(ept, &local_endpoints, list) {
 		RR("%s EPT DST PID %x, remote_pid:%d\n", __func__,
 			ept->dst_pid, xprt_info->remote_pid);
@@ -306,7 +324,7 @@ static void modem_reset_cleanup(struct rpcrouter_xprt_info *xprt_info)
 			ept->cb_restart_teardown(ept->client_data);
 		ept->do_setup_notif = 1;
 
-		
+		/* remove replies */
 		spin_lock(&ept->reply_q_lock);
 		list_for_each_entry_safe(reply, reply_tmp,
 					 &ept->reply_pend_q, list) {
@@ -321,7 +339,7 @@ static void modem_reset_cleanup(struct rpcrouter_xprt_info *xprt_info)
 		ept->reply_cnt = 0;
 		spin_unlock(&ept->reply_q_lock);
 
-		
+		/* Set restart state for local ep */
 		RR("EPT:0x%p, State %d  RESTART_PEND_NTFY_SVR "
 			"PROG:0x%08x VERS:0x%08x\n",
 			ept, ept->restart_state,
@@ -330,7 +348,7 @@ static void modem_reset_cleanup(struct rpcrouter_xprt_info *xprt_info)
 		spin_lock(&ept->restart_lock);
 		ept->restart_state = RESTART_PEND_NTFY_SVR;
 
-		
+		/* remove incomplete packets */
 		spin_lock(&ept->incomplete_lock);
 		list_for_each_entry_safe(pkt, tmp_pkt,
 					 &ept->incomplete, list) {
@@ -345,7 +363,7 @@ static void modem_reset_cleanup(struct rpcrouter_xprt_info *xprt_info)
 		}
 		spin_unlock(&ept->incomplete_lock);
 
-		
+		/* remove all completed packets waiting to be read */
 		spin_lock(&ept->read_q_lock);
 		list_for_each_entry_safe(pkt, tmp_pkt, &ept->read_q,
 					 list) {
@@ -366,7 +384,7 @@ static void modem_reset_cleanup(struct rpcrouter_xprt_info *xprt_info)
 
 	spin_unlock_irqrestore(&local_endpoints_lock, flags);
 
-    
+    /* Unblock endpoints waiting for quota ack*/
 	spin_lock_irqsave(&remote_endpoints_lock, flags);
 	list_for_each_entry(r_ept, &remote_endpoints, list) {
 		spin_lock(&r_ept->quota_lock);
@@ -386,7 +404,7 @@ static void modem_reset_startup(struct rpcrouter_xprt_info *xprt_info)
 
 	spin_lock_irqsave(&local_endpoints_lock, flags);
 
-	
+	/* notify all endpoints that we are coming back up */
 	list_for_each_entry(ept, &local_endpoints, list) {
 		RR("%s EPT DST PID %x, remote_pid:%d\n", __func__,
 			ept->dst_pid, xprt_info->remote_pid);
@@ -404,6 +422,14 @@ static void modem_reset_startup(struct rpcrouter_xprt_info *xprt_info)
 	spin_unlock_irqrestore(&local_endpoints_lock, flags);
 }
 
+/*
+ * Blocks and waits for endpoint if a reset is in progress.
+ *
+ * @returns
+ *    ENETRESET     Reset is in progress and a notification needed
+ *    ERESTARTSYS   Signal occurred
+ *    0             Reset is not in progress
+ */
 static int wait_for_restart_and_notify(struct msm_rpc_endpoint *ept)
 {
 	unsigned long flags;
@@ -580,8 +606,13 @@ struct msm_rpc_endpoint *msm_rpcrouter_create_local_endpoint(dev_t dev)
 
 	if ((dev != msm_rpcrouter_devno) && (dev != MKDEV(0, 0))) {
 		struct rr_server *srv;
+		/*
+		 * This is a userspace client which opened
+		 * a program/ver devicenode. Bind the client
+		 * to that destination
+		 */
 		srv = rpcrouter_lookup_server_by_dev(dev);
-		
+		/* TODO: bug? really? */
 		BUG_ON(!srv);
 
 		ept->dst_pid = srv->pid;
@@ -589,7 +620,7 @@ struct msm_rpc_endpoint *msm_rpcrouter_create_local_endpoint(dev_t dev)
 		ept->dst_prog = cpu_to_be32(srv->prog);
 		ept->dst_vers = cpu_to_be32(srv->vers);
 	} else {
-		
+		/* mark not connected */
 		ept->dst_pid = 0xffffffff;
 	}
 
@@ -621,6 +652,9 @@ int msm_rpcrouter_destroy_local_endpoint(struct msm_rpc_endpoint *ept)
 	unsigned long flags;
 	struct rpcrouter_xprt_info *xprt_info;
 
+	/* Endpoint with dst_pid = 0xffffffff corresponds to that of
+	** router port. So don't send a REMOVE CLIENT message while
+	** destroying it.*/
 	spin_lock_irqsave(&local_endpoints_lock, flags);
 	list_del(&ept->list);
 	spin_unlock_irqrestore(&local_endpoints_lock, flags);
@@ -641,7 +675,7 @@ int msm_rpcrouter_destroy_local_endpoint(struct msm_rpc_endpoint *ept)
 		mutex_unlock(&xprt_info_list_lock);
 	}
 
-	
+	/* Free replies */
 	spin_lock_irqsave(&ept->reply_q_lock, flags);
 	list_for_each_entry_safe(reply, reply_tmp, &ept->reply_pend_q, list) {
 		list_del(&reply->list);
@@ -770,10 +804,10 @@ static int process_control_msg(struct rpcrouter_xprt_info *xprt_info,
 
 		xprt_info->initialized = 1;
 
-		
+		/* Send list of servers one at a time */
 		ctl.cmd = RPCROUTER_CTRL_CMD_NEW_SERVER;
 
-		
+		/* TODO: long time to hold a spinlock... */
 		spin_lock_irqsave(&server_list_lock, flags);
 		list_for_each_entry(server, &server_list, list) {
 			if (server->pid != RPCROUTER_PID_LOCAL)
@@ -815,7 +849,7 @@ static int process_control_msg(struct rpcrouter_xprt_info *xprt_info,
 		break;
 
 	case RPCROUTER_CTRL_CMD_NEW_SERVER:
-#if 0
+#ifndef CONFIG_HTC_PHONE
 		if (msg->srv.vers == 0) {
 			pr_err(
 			"rpcrouter: Server create rejected, version = 0, "
@@ -823,6 +857,7 @@ static int process_control_msg(struct rpcrouter_xprt_info *xprt_info,
 			break;
 		}
 #endif
+
 		RR("o NEW_SERVER id=%d:%08x prog=%08x:%08x\n",
 		   msg->srv.pid, msg->srv.cid, msg->srv.prog, msg->srv.vers);
 
@@ -834,6 +869,11 @@ static int process_control_msg(struct rpcrouter_xprt_info *xprt_info,
 				msg->srv.prog, msg->srv.vers);
 			if (!server)
 				return -ENOMEM;
+			/*
+			 * XXX: Verify that its okay to add the
+			 * client to our remote client list
+			 * if we get a NEW_SERVER notification
+			 */
 			if (!rpcrouter_lookup_remote_endpoint(msg->srv.pid,
 							      msg->srv.cid)) {
 				rc = rpcrouter_create_remote_endpoint(
@@ -886,13 +926,13 @@ static int process_control_msg(struct rpcrouter_xprt_info *xprt_info,
 			kfree(r_ept);
 		}
 
-		
+		/* Notify local clients of this event */
 		printk(KERN_ERR "rpcrouter: LOCAL NOTIFICATION NOT IMP\n");
 		rc = -ENOSYS;
 
 		break;
 	case RPCROUTER_CTRL_CMD_PING:
-		
+		/* No action needed for ping messages received */
 		RR("o PING\n");
 		break;
 	default:
@@ -915,7 +955,7 @@ static void do_create_pdevs(struct work_struct *work)
 	unsigned long flags;
 	struct rr_server *server;
 
-	
+	/* TODO: race if destroyed while being registered */
 	spin_lock_irqsave(&server_list_lock, flags);
 	list_for_each_entry(server, &server_list, list) {
 		if (server->pid != RPCROUTER_PID_LOCAL) {
@@ -1042,7 +1082,7 @@ static void do_read_data(struct work_struct *work)
 		if (xprt_info->remote_pid == -1) {
 			xprt_info->remote_pid = hdr.src_pid;
 
-			
+			/* do restart notification */
 			modem_reset_startup(xprt_info);
 		}
 
@@ -1114,6 +1154,9 @@ static void do_read_data(struct work_struct *work)
 		goto done;
 	}
 
+	/* See if there is already a partial packet that matches our mid
+	 * and if so, append this fragment to that packet.
+	 */
 	mid = PACMARK_MID(pm);
 	spin_lock(&ept->incomplete_lock);
 	list_for_each_entry(pkt, &ept->incomplete, list) {
@@ -1133,6 +1176,10 @@ static void do_read_data(struct work_struct *work)
 	}
 	spin_unlock(&ept->incomplete_lock);
 	spin_unlock_irqrestore(&local_endpoints_lock, flags);
+	/* This mid is new -- create a packet for it, and put it on
+	 * the incomplete list if this fragment is not a last fragment,
+	 * otherwise put it on the read queue.
+	 */
 	pkt = rr_malloc(sizeof(struct rr_packet));
 	pkt->first = frag;
 	pkt->last = frag;
@@ -1188,7 +1235,7 @@ done:
 
 	}
 
-	
+	/* don't requeue if we should be shutting down */
 	if (!xprt_info->abort_data_read) {
 		queue_work(xprt_info->workqueue, &xprt_info->read_data);
 		return;
@@ -1263,7 +1310,7 @@ static int msm_rpc_write_pkt(
 
 	DEFINE_WAIT(__wait);
 
-	
+	/* Create routing header */
 	hdr->type = RPCROUTER_CTRL_CMD_DATA;
 	hdr->version = RPCROUTER_VERSION;
 	hdr->src_pid = ept->pid;
@@ -1352,6 +1399,8 @@ static int msm_rpc_write_pkt(
 		spin_unlock_irqrestore(&xprt_info->lock, flags);
 		msleep(250);
 
+		/* refresh xprt pointer to ensure that it hasn't
+		 * been deleted since our last retrieval */
 		mutex_lock(&xprt_info_list_lock);
 		xprt_info = rpcrouter_get_xprt_info(hdr->dst_pid);
 		if (!xprt_info) {
@@ -1369,7 +1418,7 @@ static int msm_rpc_write_pkt(
 		return -ENETRESET;
 	}
 
-	
+	/* TODO: deal with full fifo */
 	xprt_info->xprt->write(hdr, sizeof(*hdr), HEADER);
 	RAW_HDR("[w rr_h] "
 		    "ver=%i,type=%s,src_pid=%08x,src_cid=%08x,"
@@ -1525,16 +1574,16 @@ int msm_rpc_write(struct msm_rpc_endpoint *ept, void *buffer, int count)
 	uint32_t mid;
 	unsigned long flags;
 
-	
+	/* snoop the RPC packet and enforce permissions */
 
-	
+	/* has to have at least the xid and type fields */
 	if (count < (sizeof(uint32_t) * 2)) {
 		printk(KERN_ERR "rr_write: rejecting runt packet\n");
 		return -EINVAL;
 	}
 
 	if (rq->type == 0) {
-		
+		/* RPC CALL */
 		if (count < (sizeof(uint32_t) * 6)) {
 			printk(KERN_ERR
 			       "rr_write: rejecting runt call packet\n");
@@ -1561,7 +1610,7 @@ int msm_rpc_write(struct msm_rpc_endpoint *ept, void *buffer, int count)
 		   be32_to_cpu(rq->prog), be32_to_cpu(rq->vers),
 		   ept->dst_pid, ept->dst_cid, count);
 	} else {
-		
+		/* RPC REPLY */
 		reply = get_pend_reply(ept, rq->xid);
 		if (!reply) {
 			printk(KERN_ERR
@@ -1587,6 +1636,9 @@ int msm_rpc_write(struct msm_rpc_endpoint *ept, void *buffer, int count)
 	tx_cnt = count;
 	tx_buf = buffer;
 	mid = atomic_add_return(1, &pm_mid) & 0xFF;
+	/* The modem's router can only take 500 bytes of data. The
+	   first 8 bytes it uses on the modem side for addressing,
+	   the next 4 bytes are for the pacmark header. */
 	max_tx = RPCROUTER_MSGSIZE_MAX - 8 - sizeof(uint32_t);
 	IO("Writing %d bytes, max pkt size is %d\n",
 	   tx_cnt, max_tx);
@@ -1619,8 +1671,10 @@ int msm_rpc_write(struct msm_rpc_endpoint *ept, void *buffer, int count)
 	}
 
  write_release_lock:
-	
+	/* if reply, release wakelock after writing to the transport */
 	if (rq->type != 0) {
+		/* Upon failure, add reply tag to the pending list.
+		** Else add reply tag to the avail/free list. */
 		if (count < 0)
 			set_pend_reply(ept, reply);
 		else
@@ -1638,6 +1692,9 @@ int msm_rpc_write(struct msm_rpc_endpoint *ept, void *buffer, int count)
 }
 EXPORT_SYMBOL(msm_rpc_write);
 
+/*
+ * NOTE: It is the responsibility of the caller to kfree buffer
+ */
 int msm_rpc_read(struct msm_rpc_endpoint *ept, void **buffer,
 		 unsigned user_len, long timeout)
 {
@@ -1649,11 +1706,17 @@ int msm_rpc_read(struct msm_rpc_endpoint *ept, void **buffer,
 	if (rc <= 0)
 		return rc;
 
+	/* single-fragment messages conveniently can be
+	 * returned as-is (the buffer is at the front)
+	 */
 	if (frag->next == 0) {
 		*buffer = (void*) frag;
 		return rc;
 	}
 
+	/* multi-fragment messages, we have to do it the
+	 * hard way, which is rather disgusting right now
+	 */
 	buf = rr_malloc(rc);
 	*buffer = buf;
 
@@ -1713,11 +1776,15 @@ int msm_rpc_call_reply(struct msm_rpc_endpoint *ept, uint32_t proc,
 			rc = -EIO;
 			break;
 		}
-		
+		/* we should not get CALL packets -- ignore them */
 		if (reply->type == 0) {
 			kfree(reply);
 			continue;
 		}
+		/* If an earlier call timed out, we could get the (no
+		 * longer wanted) reply for it.	 Ignore replies that
+		 * we don't expect
+		 */
 		if (reply->xid != req->xid) {
 			kfree(reply);
 			continue;
@@ -1838,7 +1905,7 @@ int __msm_rpc_read(struct msm_rpc_endpoint *ept,
 	*frag_ret = pkt->first;
 	rq = (void*) pkt->first->data;
 	if ((rc >= (sizeof(uint32_t) * 3)) && (rq->type == 0)) {
-		
+		/* RPC CALL */
 		reply = get_avail_reply(ept);
 		if (!reply) {
 			rc = -ENOMEM;
@@ -1858,7 +1925,7 @@ int __msm_rpc_read(struct msm_rpc_endpoint *ept,
 
  read_release_lock:
 
-	
+	/* release read wakelock after taking reply wakelock */
 	spin_lock_irqsave(&ept->read_q_lock, flags);
 	if (list_empty(&ept->read_q)) {
 		D("%s: release read lock on ept %p\n", __func__, ept);
@@ -2002,6 +2069,7 @@ struct msm_rpc_endpoint *msm_rpc_connect(uint32_t prog,
 }
 EXPORT_SYMBOL(msm_rpc_connect);
 
+/* TODO: permission check? */
 int msm_rpc_register_server(struct msm_rpc_endpoint *ept,
 			    uint32_t prog, uint32_t vers)
 {
@@ -2049,6 +2117,7 @@ int msm_rpc_clear_netreset(struct msm_rpc_endpoint *ept)
 	return rc;
 }
 
+/* TODO: permission check -- disallow unreg of somebody else's server */
 int msm_rpc_unregister_server(struct msm_rpc_endpoint *ept,
 			      uint32_t prog, uint32_t vers)
 {
@@ -2318,25 +2387,30 @@ static void msm_rpcrouter_remove_xprt(struct rpcrouter_xprt *xprt)
 	if (xprt && xprt->priv) {
 		xprt_info = xprt->priv;
 
-		
+		/* abort rr_read thread */
 		xprt_info->abort_data_read = 1;
 		wake_up(&xprt_info->read_wait);
 
-		
+		/* remove xprt from available xprts */
 		mutex_lock(&xprt_info_list_lock);
 		spin_lock_irqsave(&xprt_info->lock, flags);
 		list_del(&xprt_info->list);
 
+		/* unlock the spinlock last to avoid a race
+		 * condition with rpcrouter_get_xprt_info
+		 * in msm_rpc_write_pkt in which the
+		 * xprt is returned from rpcrouter_get_xprt_info
+		 * and then deleted here. */
 		mutex_unlock(&xprt_info_list_lock);
 		spin_unlock_irqrestore(&xprt_info->lock, flags);
 
-		
+		/* cleanup workqueues and wakelocks */
 		flush_workqueue(xprt_info->workqueue);
 		destroy_workqueue(xprt_info->workqueue);
 		wake_lock_destroy(&xprt_info->wakelock);
 
 
-		
+		/* free memory */
 		xprt->priv = 0;
 		kfree(xprt_info);
 	}
@@ -2377,6 +2451,9 @@ void msm_rpcrouter_xprt_notify(struct rpcrouter_xprt *xprt, unsigned event)
 	struct rpcrouter_xprt_work *xprt_work;
 	unsigned long flags;
 
+	/* Workqueue is created in init function which works for all existing
+	 * clients.  If this fails in the future, then it will need to be
+	 * created earlier. */
 	BUG_ON(!rpcrouter_workqueue);
 
 	switch (event) {
@@ -2405,6 +2482,8 @@ void msm_rpcrouter_xprt_notify(struct rpcrouter_xprt *xprt, unsigned event)
 	xprt_info = xprt->priv;
 	if (xprt_info) {
 		spin_lock_irqsave(&xprt_info->lock, flags);
+		/* Check read_avail even for OPEN event to handle missed
+		   DATA events while processing the OPEN event*/
 		if (xprt->read_avail() >= xprt_info->need_len)
 			wake_lock(&xprt_info->wakelock);
 		wake_up(&xprt_info->read_wait);
@@ -2450,6 +2529,7 @@ static __init int modem_restart_late_init(void)
 }
 late_initcall(modem_restart_late_init);
 
+#ifdef CONFIG_HTC_PHONE
 static int kernel_flag_boot_config(char *str)
 {
 	unsigned check_bit_start = 0x100;
@@ -2487,6 +2567,7 @@ static int kernel_flag_boot_config(char *str)
 	return 0;
 }
 early_param("kernelflag", kernel_flag_boot_config);
+#endif
 
 static int __init rpcrouter_init(void)
 {
@@ -2499,7 +2580,7 @@ static int __init rpcrouter_init(void)
 	if (ret)
 		pr_err("%s: Failed to register reboot notifier", __func__);
 
-	
+	/* Initialize what we need to start processing */
 	rpcrouter_workqueue =
 		create_singlethread_workqueue("rpcrouter");
 	if (!rpcrouter_workqueue) {
