@@ -324,7 +324,6 @@ static ssize_t syn_vkeys_show(struct kobject *kobj,
 {
 	char *virtual_keys = \
 	__stringify(EV_KEY) ":" __stringify(KEY_BACK) ":109:871:86:86" \
-    ":" __stringify(EV_KEY) ":" __stringify(KEY_MENU) ":246:871:86:86" \
 	":" __stringify(EV_KEY) ":" __stringify(KEY_HOME) ":383:871:86:86" \
 	"\n";
 	return snprintf(buf, strnlen(virtual_keys, MAX_VKEY_LEN), "%s",
