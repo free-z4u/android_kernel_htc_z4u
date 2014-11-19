@@ -294,6 +294,8 @@ void ath6kl_core_destroy(struct ath6kl *ar)
 }
 EXPORT_SYMBOL(ath6kl_core_destroy);
 
+#if !(defined(CONFIG_ATH6KL_SDIO) || defined(CONFIG_ATH6KL_USB))
 MODULE_AUTHOR("Qualcomm Atheros");
 MODULE_DESCRIPTION("Core module for AR600x SDIO and USB devices.");
 MODULE_LICENSE("Dual BSD/GPL");
+#endif

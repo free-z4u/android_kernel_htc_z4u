@@ -28,6 +28,7 @@
 #include "target.h"
 #include "debug.h"
 #include "cfg80211.h"
+#include "platform.h"
 
 struct ath6kl_sdio {
 	struct sdio_func *func;
@@ -1421,6 +1422,9 @@ static struct sdio_driver ath6kl_sdio_driver = {
 static int __init ath6kl_sdio_init(void)
 {
 	int ret;
+	ret = ar6k_platform_register();
+	if (ret)
+		ath6kl_err("platform registration failed: %d\n", ret);
 
 	ret = sdio_register_driver(&ath6kl_sdio_driver);
 	if (ret)
@@ -1432,6 +1436,7 @@ static int __init ath6kl_sdio_init(void)
 static void __exit ath6kl_sdio_exit(void)
 {
 	sdio_unregister_driver(&ath6kl_sdio_driver);
+	ar6k_platform_unregister();
 }
 
 module_init(ath6kl_sdio_init);

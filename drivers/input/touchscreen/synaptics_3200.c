@@ -333,7 +333,7 @@ static int i2c_syn_error_handler(struct synaptics_ts_data *ts, uint8_t reset, ch
 	if (reason && fun_name)
 		printk(KERN_ERR "[TP] TOUCH_ERR: I2C Error: %s:%s, reset = %d\n", fun_name, reason, reset);
 	else
-		printk(KERN_INFO "[TP] %s: rason and fun_name can't be null\n", __func__);
+		printk(KERN_INFO "[TP] %s: reason and fun_name can't be null\n", __func__);
 
 	if (reset) {
 		if (ts->power) {
@@ -2438,7 +2438,7 @@ static void synaptics_ts_button_func(struct synaptics_ts_data *ts)
 		get_address_base(ts, 0x1A, DATA_BASE), &data, 1);
 	if (data) {
 		if (data & 0x01) {
-			printk("[TP] back key pressed\n");
+			printk(KERN_INFO "[TP] back key pressed\n");
 			vk_press = 1;
 			if (ts->button) {
 				if (ts->button[0].index) {
@@ -2488,7 +2488,7 @@ static void synaptics_ts_button_func(struct synaptics_ts_data *ts)
 			}
 		}
 		else if (data & 0x02) {
-			printk("[TP] home key pressed\n");
+			printk(KERN_INFO "[TP] home key pressed\n");
 			vk_press = 1;
 			if (ts->button) {
 				if (ts->button[1].index) {
@@ -2538,7 +2538,7 @@ static void synaptics_ts_button_func(struct synaptics_ts_data *ts)
 			}
 		}
 	}else {
-		printk("[TP] virtual key released\n");
+		printk(KERN_INFO "[TP] virtual key released %x\n", data);
 		vk_press = 0;
 		if (ts->htc_event == SYN_AND_REPORT_TYPE_A) {
 			if (ts->support_htc_event) {
