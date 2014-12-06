@@ -150,8 +150,8 @@ struct sk_buff *ath6kl_buf_alloc(int size)
 	u16 reserved;
 
 	/* Add chacheline space at front and back of buffer */
-	reserved = (2 * L1_CACHE_BYTES) + ATH6KL_DATA_OFFSET +
-		   sizeof(struct htc_packet) + ATH6KL_HTC_ALIGN_BYTES;
+	reserved = roundup((2 * L1_CACHE_BYTES) + ATH6KL_DATA_OFFSET +
+		   sizeof(struct htc_packet) + ATH6KL_HTC_ALIGN_BYTES, 4);
 	skb = dev_alloc_skb(size + reserved);
 
 	if (skb)
@@ -309,7 +309,7 @@ static int ath6kl_init_service_ep(struct ath6kl *ar)
 	if (ath6kl_connectservice(ar, &connect, "WMI DATA BK"))
 		return -EIO;
 
-	/* connect to Video service, map this to to HI PRI */
+	/* connect to Video service, map this to HI PRI */
 	connect.svc_id = WMI_DATA_VI_SVC;
 	if (ath6kl_connectservice(ar, &connect, "WMI DATA VI"))
 		return -EIO;
@@ -440,9 +440,9 @@ static int ath6kl_target_config_wlan_params(struct ath6kl *ar, int idx)
 					      P2P_FLAG_MACADDR_REQ |
 					      P2P_FLAG_HMODEL_REQ);
 		if (ret) {
-			ath6kl_dbg(ATH6KL_DBG_TRC, "failed to request P2P "
-				   "capabilities (%d) - assuming P2P not "
-				   "supported\n", ret);
+			ath6kl_dbg(ATH6KL_DBG_TRC,
+				   "failed to request P2P capabilities (%d) - assuming P2P not supported\n",
+				   ret);
 			ar->p2p = false;
 		}
 	}
@@ -451,8 +451,9 @@ static int ath6kl_target_config_wlan_params(struct ath6kl *ar, int idx)
 		/* Enable Probe Request reporting for P2P */
 		ret = ath6kl_wmi_probe_report_req_cmd(ar->wmi, idx, true);
 		if (ret) {
-			ath6kl_dbg(ATH6KL_DBG_TRC, "failed to enable Probe "
-				   "Request reporting (%d)\n", ret);
+			ath6kl_dbg(ATH6KL_DBG_TRC,
+				   "failed to enable Probe Request reporting (%d)\n",
+				   ret);
 		}
 	}
 
@@ -485,10 +486,12 @@ int ath6kl_configure_target(struct ath6kl *ar)
 		fw_mode |= fw_iftype << (i * HI_OPTION_FW_MODE_BITS);
 
 	/*
-	 * By default, submodes :
+	 * Submodes when fw does not support dynamic interface
+	 * switching:
 	 *		vif[0] - AP/STA/IBSS
 	 *		vif[1] - "P2P dev"/"P2P GO"/"P2P Client"
 	 *		vif[2] - "P2P dev"/"P2P GO"/"P2P Client"
+	 * Otherwise, All the interface are initialized to p2p dev.
 	 */
 
 	for (i = 0; i < ar->max_norm_iface; i++)
@@ -859,7 +862,7 @@ static int ath6kl_fetch_fw_apin(struct ath6kl *ar, const char *name)
 	char filename[100];
 	const u8 *data;
 	int ret, ie_id, i, index, bit;
-	__le32 *val;
+	__le32 *val, *timestamp;
 
 	snprintf(filename, sizeof(filename), "%s/%s", ar->hw.fw.dir, name);
 
@@ -903,6 +906,23 @@ static int ath6kl_fetch_fw_apin(struct ath6kl *ar, const char *name)
 		}
 
 		switch (ie_id) {
+		case ATH6KL_FW_IE_FW_VERSION:
+			strlcpy(ar->wiphy->fw_version, data,
+				sizeof(ar->wiphy->fw_version));
+
+			ath6kl_dbg(ATH6KL_DBG_BOOT,
+				   "found fw version %s\n",
+				    ar->wiphy->fw_version);
+			break;
+		case ATH6KL_FW_IE_TIMESTAMP:
+			if (ie_len != sizeof(u32))
+				break;
+
+			timestamp = (__le32 *)data;
+
+			ath6kl_dbg(ATH6KL_DBG_BOOT, "found fw timestamp %d\n",
+				   le32_to_cpup(timestamp));
+			break;
 		case ATH6KL_FW_IE_OTP_IMAGE:
 			ath6kl_dbg(ATH6KL_DBG_BOOT, "found otp image ie (%zd B)\n",
 				   ie_len);
