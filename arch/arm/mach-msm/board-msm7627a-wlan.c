@@ -220,7 +220,7 @@ reg_disable:
 }
 
 #ifndef QCA_ORIGINAL
-int atheros_wifi_power(int on);  
+int atheros_wifi_power(int on);
 #endif
 
 static unsigned int msm_AR600X_setup_power(bool on)
@@ -320,7 +320,7 @@ static unsigned int msm_AR600X_setup_power(bool on)
 	}
 #endif
 
-	pr_info("WLAN power-up success\n");
+	pr_info("[WLAN] power-up success\n");
 	wlan_powered_up = true;
 	return 0;
 #ifdef QCA_ORIGINAL
