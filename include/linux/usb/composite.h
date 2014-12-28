@@ -145,6 +145,9 @@ struct usb_function {
 	int			(*get_status)(struct usb_function *);
 	int			(*func_suspend)(struct usb_function *,
 						u8 suspend_opt);
+#ifdef CONFIG_USB_G_LGE_MULTIPLE_CONFIGURATION
+	int			(*desc_change)(struct usb_function *, bool is_mac);
+#endif
 	/* private: */
 	/* internals */
 	struct list_head		list;
@@ -241,6 +244,9 @@ struct usb_configuration {
 int usb_add_config(struct usb_composite_dev *,
 		struct usb_configuration *,
 		int (*)(struct usb_configuration *));
+
+int usb_remove_config(struct usb_composite_dev *,
+		struct usb_configuration *);
 
 /**
  * struct usb_composite_driver - groups configurations into a gadget
@@ -362,6 +368,13 @@ struct usb_composite_dev {
 
 	/* protects deactivations and delayed_status counts*/
 	spinlock_t			lock;
+
+	/*
+	 * specify the mA units for the bMaxPower field in
+	 * the configuration descriptor. Should be 2mA for HS
+	 * and 8mA for SS.
+	 */
+	int vbus_draw_units;
 };
 
 extern int usb_string_id(struct usb_composite_dev *c);

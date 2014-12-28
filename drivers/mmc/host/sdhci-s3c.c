@@ -309,7 +309,7 @@ static void sdhci_cmu_set_clock(struct sdhci_host *host, unsigned int clock)
 	while (!((clk = sdhci_readw(host, SDHCI_CLOCK_CONTROL))
 		& SDHCI_CLOCK_INT_STABLE)) {
 		if (timeout == 0) {
-			printk(KERN_ERR "%s: Internal clock never "
+			pr_err("%s: Internal clock never "
 				"stabilised.\n", mmc_hostname(host->mmc));
 			return;
 		}
@@ -672,6 +672,7 @@ static int __devexit sdhci_s3c_remove(struct platform_device *pdev)
 }
 
 #ifdef CONFIG_PM_SLEEP
+
 static int sdhci_s3c_suspend(struct device *dev)
 {
 	struct sdhci_host *host = dev_get_drvdata(dev);
@@ -708,6 +709,13 @@ static const struct dev_pm_ops sdhci_s3c_pmops = {
 	SET_SYSTEM_SLEEP_PM_OPS(sdhci_s3c_suspend, sdhci_s3c_resume)
 	SET_RUNTIME_PM_OPS(sdhci_s3c_runtime_suspend, sdhci_s3c_runtime_resume,
 			   NULL)
+};
+
+#define SDHCI_S3C_PMOPS (&sdhci_s3c_pmops)
+
+static const struct dev_pm_ops sdhci_s3c_pmops = {
+	.suspend	= sdhci_s3c_suspend,
+	.resume		= sdhci_s3c_resume,
 };
 
 #define SDHCI_S3C_PMOPS (&sdhci_s3c_pmops)
