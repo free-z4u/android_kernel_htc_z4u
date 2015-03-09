@@ -74,6 +74,8 @@ struct ath6kl_sdio {
 #define CMD53_ARG_FIXED_ADDRESS 0
 #define CMD53_ARG_INCR_ADDRESS  1
 
+extern wait_queue_head_t init_wq;
+
 static inline struct ath6kl_sdio *ath6kl_sdio_priv(struct ath6kl *ar)
 {
 	return ar->hif_priv;
@@ -335,7 +337,7 @@ static int ath6kl_sdio_alloc_prep_scat_req(struct ath6kl_sdio *ar_sdio,
 {
 	struct hif_scatter_req *s_req;
 	struct bus_request *bus_req;
-	int i, scat_req_sz, scat_list_sz, sg_sz, buf_sz;
+	int i, scat_req_sz, scat_list_sz, sg_sz = 0, buf_sz;
 	u8 *virt_buf;
 
 	scat_list_sz = (n_scat_entry - 1) * sizeof(struct hif_scatter_item);
@@ -415,8 +417,9 @@ static int ath6kl_sdio_read_write_sync(struct ath6kl *ar, u32 addr, u8 *buf,
 			memcpy(tbuf, buf, len);
 
 		bounced = true;
-	} else
+	} else {
 		tbuf = buf;
+	}
 
 	ret = ath6kl_sdio_io(ar_sdio->func, request, addr, tbuf, len);
 	if ((request & HIF_READ) && bounced)
@@ -431,9 +434,9 @@ static int ath6kl_sdio_read_write_sync(struct ath6kl *ar, u32 addr, u8 *buf,
 static void __ath6kl_sdio_write_async(struct ath6kl_sdio *ar_sdio,
 				      struct bus_request *req)
 {
-	if (req->scat_req)
+	if (req->scat_req) {
 		ath6kl_sdio_scat_rw(ar_sdio, req);
-	else {
+	} else {
 		void *context;
 		int status;
 
@@ -552,7 +555,7 @@ static int ath6kl_sdio_write_async(struct ath6kl *ar, u32 address, u8 *buffer,
 
 	bus_req = ath6kl_sdio_alloc_busreq(ar_sdio);
 
-	if (!bus_req)
+	if (WARN_ON_ONCE(!bus_req))
 		return -ENOMEM;
 
 	bus_req->address = address;
@@ -664,9 +667,9 @@ static int ath6kl_sdio_async_rw_scatter(struct ath6kl *ar,
 		   "hif-scatter: total len: %d scatter entries: %d\n",
 		   scat_req->len, scat_req->scat_entries);
 
-	if (request & HIF_SYNCHRONOUS)
+	if (request & HIF_SYNCHRONOUS) {
 		status = ath6kl_sdio_scat_rw(ar_sdio, scat_req->busrequest);
-	else {
+	} else {
 		spin_lock_bh(&ar_sdio->wr_async_lock);
 		list_add_tail(&scat_req->busrequest->list, &ar_sdio->wr_asyncq);
 		spin_unlock_bh(&ar_sdio->wr_async_lock);
@@ -709,7 +712,7 @@ static int ath6kl_sdio_enable_scatter(struct ath6kl *ar)
 {
 	struct ath6kl_sdio *ar_sdio = ath6kl_sdio_priv(ar);
 	struct htc_target *target = ar->htc_target;
-	int ret;
+	int ret = 0;
 	bool virt_scat = false;
 
 	if (ar_sdio->scatter_enabled)
@@ -915,6 +918,9 @@ static int ath6kl_sdio_suspend(struct ath6kl *ar, struct cfg80211_wowlan *wow)
 	}
 
 cut_pwr:
+	if (func->card && func->card->host)
+		func->card->host->pm_flags &= ~MMC_PM_KEEP_POWER;
+
 	return ath6kl_cfg80211_suspend(ar, ATH6KL_CFG_SUSPEND_CUTPOWER, NULL);
 }
 
@@ -985,9 +991,8 @@ static int ath6kl_set_addrwin_reg(struct ath6kl *ar, u32 reg_addr, u32 addr)
 	}
 
 	if (status) {
-		ath6kl_err("%s: failed to write initial bytes of 0x%x "
-			   "to window reg: 0x%X\n", __func__,
-			   addr, reg_addr);
+		ath6kl_err("%s: failed to write initial bytes of 0x%x to window reg: 0x%X\n",
+					__func__, addr, reg_addr);
 		return status;
 	}
 
@@ -1076,8 +1081,8 @@ static int ath6kl_sdio_bmi_credits(struct ath6kl *ar)
 					 (u8 *)&ar->bmi.cmd_credits, 4,
 					 HIF_RD_SYNC_BYTE_INC);
 		if (ret) {
-			ath6kl_err("Unable to decrement the command credit "
-						"count register: %d\n", ret);
+			ath6kl_err("Unable to decrement the command credit count register: %d\n",
+						ret);
 			return ret;
 		}
 
@@ -1368,6 +1373,8 @@ static int ath6kl_sdio_probe(struct sdio_func *func,
 		goto err_core_alloc;
 	}
 
+	ath6kl_notify_init_done();
+
 	return ret;
 
 err_core_alloc:
@@ -1421,10 +1428,26 @@ static struct sdio_driver ath6kl_sdio_driver = {
 static int __init ath6kl_sdio_init(void)
 {
 	int ret;
+	ret = ath6kl_sdio_init_platform();
+	if (ret) {
+		ath6kl_err("platform registration failed: %d\n", ret);
+		return ret;
+	}
+
+	init_waitqueue_head(&init_wq);
 
 	ret = sdio_register_driver(&ath6kl_sdio_driver);
-	if (ret)
+	if (ret) {
 		ath6kl_err("sdio driver registration failed: %d\n", ret);
+		ath6kl_sdio_exit_platform();
+		return ret;
+	}
+
+	ret = ath6kl_wait_for_init_comp();
+	if (ret) {
+		sdio_unregister_driver(&ath6kl_sdio_driver);
+		ath6kl_sdio_exit_platform();
+	}
 
 	return ret;
 }
@@ -1432,6 +1455,7 @@ static int __init ath6kl_sdio_init(void)
 static void __exit ath6kl_sdio_exit(void)
 {
 	sdio_unregister_driver(&ath6kl_sdio_driver);
+	ath6kl_sdio_exit_platform();
 }
 
 module_init(ath6kl_sdio_init);

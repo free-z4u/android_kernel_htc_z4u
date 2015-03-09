@@ -25,12 +25,19 @@
 #include "hif-ops.h"
 #include "cfg80211.h"
 
-unsigned int debug_mask;
+unsigned int debug_mask = ATH6KL_DBG_TRC | ATH6KL_DBG_BOOT | ATH6KL_DBG_SUSPEND | ATH6KL_DBG_WLAN_CFG | ATH6KL_DBG_WLAN_TX | ATH6KL_DBG_WLAN_RX | ATH6KL_DBG_IRQ;
 static unsigned int suspend_mode;
 static unsigned int wow_mode;
 static unsigned int uart_debug;
 static unsigned int ath6kl_p2p;
 static unsigned int testmode;
+static unsigned int subtestmode = 0;
+static unsigned int ar6k_clock = 19200000;
+static unsigned short locally_administered_bit = 0;
+static unsigned int recovery_enable = 0;
+static unsigned int heart_beat_poll = 2000;
+static unsigned int load_balance = 1;
+static unsigned short reg_domain = 0;
 
 module_param(debug_mask, uint, 0644);
 module_param(suspend_mode, uint, 0644);
@@ -38,12 +45,33 @@ module_param(wow_mode, uint, 0644);
 module_param(uart_debug, uint, 0644);
 module_param(ath6kl_p2p, uint, 0644);
 module_param(testmode, uint, 0644);
+module_param(subtestmode, uint, 0644);
+module_param(ar6k_clock, uint, 0644);
+module_param(locally_administered_bit, ushort, 0644);
+module_param(recovery_enable, uint, 0644);
+module_param(heart_beat_poll, uint, 0644);
+module_param(load_balance, uint, 0644);
+module_param(reg_domain, ushort, 0644);
+
+MODULE_PARM_DESC(heart_beat_poll, "Enable fw error detection periodic" \
+		 "polling. This also specifies the polling interval in msecs");
+MODULE_PARM_DESC(recovery_enable, "Enable recovery from firmware error");
+MODULE_PARM_DESC(load_balance, "Enable driver load balance for each vif," \
+		"it is only useful for multi vif interface");
 
 int ath6kl_core_init(struct ath6kl *ar)
 {
 	struct ath6kl_bmi_target_info targ_info;
 	struct net_device *ndev;
 	int ret = 0, i;
+
+	ath6kl_dbg(ATH6KL_DBG_TRC, "subtestmode=%d", subtestmode);
+	ath6kl_dbg(ATH6KL_DBG_TRC, "ar6k_clock=%d", ar6k_clock);
+	ath6kl_dbg(ATH6KL_DBG_TRC, "locally_administered_bit=%d", locally_administered_bit);
+	ath6kl_dbg(ATH6KL_DBG_TRC, "recovery_enable=%d", recovery_enable);
+	ath6kl_dbg(ATH6KL_DBG_TRC, "heart_beat_poll=%d", heart_beat_poll);
+	ath6kl_dbg(ATH6KL_DBG_TRC, "load_balance=%d", load_balance);
+	ath6kl_dbg(ATH6KL_DBG_TRC, "reg_domain=%d", load_balance);
 
 	ar->ath6kl_wq = create_singlethread_workqueue("ath6kl");
 	if (!ar->ath6kl_wq)
@@ -294,6 +322,8 @@ void ath6kl_core_destroy(struct ath6kl *ar)
 }
 EXPORT_SYMBOL(ath6kl_core_destroy);
 
+#if !(defined(CONFIG_ATH6KL_SDIO) || defined(CONFIG_ATH6KL_USB))
 MODULE_AUTHOR("Qualcomm Atheros");
 MODULE_DESCRIPTION("Core module for AR600x SDIO and USB devices.");
 MODULE_LICENSE("Dual BSD/GPL");
+#endif

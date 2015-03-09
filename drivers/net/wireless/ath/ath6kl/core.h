@@ -826,4 +826,9 @@ int ath6kl_core_init(struct ath6kl *ar);
 void ath6kl_core_cleanup(struct ath6kl *ar);
 void ath6kl_core_destroy(struct ath6kl *ar);
 
+int ath6kl_sdio_init_platform(void);
+void ath6kl_sdio_exit_platform(void);
+int ath6kl_wait_for_init_comp(void);
+void ath6kl_notify_init_done(void);
+
 #endif /* CORE_H */
