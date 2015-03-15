@@ -186,6 +186,7 @@ static int chg_limit_active_mask;
 static int suspend_highfreq_check_reason;
 static int htc_batt_phone_call;
 static int is_phone_call_set;
+static unsigned int phone_call_stat;
 
 static int test_power_monitor;
 
@@ -1801,6 +1802,17 @@ static ssize_t htc_battery_set_audio_stat(struct device *dev,
 	return count;
 }
 
+static ssize_t htc_battery_phone_call_stat(struct device *dev,
+				struct device_attribute *attr,
+				char *buf)
+{
+	int i = 0;
+
+	i += scnprintf(buf + i, PAGE_SIZE - i, "%u\n", phone_call_stat);
+
+	return i;
+}
+
 static ssize_t htc_battery_set_phone_call(struct device *dev,
 				struct device_attribute *attr,
 				const char *buf, size_t count)
@@ -1820,6 +1832,9 @@ static ssize_t htc_battery_set_phone_call(struct device *dev,
 	} else {
 	  htc_batt_info.func_htc_batt_context_event_handler(EVENT_TALK_STOP);
 	}
+
+	phone_call_stat = phone_call;
+
 	BATT_LOG("set context phone_call=%lu\n", phone_call);
 	return count;
 }
@@ -1836,8 +1851,8 @@ static struct device_attribute htc_set_delta_attrs[] = {
 						htc_battery_charger_timer),
 	__ATTR(audio_stat, S_IWUSR | S_IWGRP | S_IRUSR, htc_battery_get_audio_stat,
 						htc_battery_set_audio_stat),
-	__ATTR(phone_call, S_IWUGO, NULL, htc_battery_set_phone_call),
-
+	__ATTR(phone_call, S_IWUSR | S_IWGRP, htc_battery_phone_call_stat,
+						htc_battery_set_phone_call),
 };
 
 static struct device_attribute htc_battery_rt_attrs[] = {
@@ -2221,7 +2236,7 @@ static int handle_battery_call(struct msm_rpc_server *server,
 		if (machine_is_incrediblec() && args->status == CHARGER_AC)
 			args->status = CHARGER_USB;
 #endif
-#if (defined(CONFIG_TPS65200) && (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_MAGNIDS)))
+#if (defined(CONFIG_TPS65200) && (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)))
 		tps65200_mask_interrupt_register(args->status);
 #endif
 		htc_cable_status_update(args->status);
@@ -2469,7 +2484,7 @@ static int htc_battery_core_probe(struct platform_device *pdev)
 			break;
 		BATT_LOG("%s: init rpc failed! rc = %ld, retry:%d",
 			       __func__, PTR_ERR(endpoint), i+1);
-#if (defined(CONFIG_MACH_Z4DUG) || defined(CONFIG_MACH_Z4DCG) || defined(CONFIG_MACH_Z4U))
+#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U))
 		
 		msleep(100);
 #else
@@ -2654,7 +2669,7 @@ int batt_notifier_call_chain(unsigned long val, void *v)
 }
 
 #if (defined(CONFIG_BATTERY_DS2746) || defined(CONFIG_BATTERY_MAX17050))
-#if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_MAGNIDS) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3U) || defined(CONFIG_MACH_Z4DUG) || defined(CONFIG_MACH_Z4DCG) || defined(CONFIG_MACH_Z4U))
+#if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U))
 int get_batt_id(void)
 {
 	if (smem_batt_info) {

@@ -235,7 +235,7 @@ int alarm_set_rtc(struct timespec new_time)
 
 	rtc_time_to_tm(new_time.tv_sec, &rtc_new_rtc_time);
 
-	pr_alarm(TSET, "set rtc %ld %ld - rtc %02d:%02d:%02d %02d/%02d/%04d\n",
+	pr_info("set rtc %ld %ld - rtc %02d:%02d:%02d %02d/%02d/%04d\n",
 		new_time.tv_sec, new_time.tv_nsec,
 		rtc_new_rtc_time.tm_hour, rtc_new_rtc_time.tm_min,
 		rtc_new_rtc_time.tm_sec, rtc_new_rtc_time.tm_mon + 1,

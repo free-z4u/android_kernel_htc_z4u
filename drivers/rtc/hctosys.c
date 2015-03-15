@@ -15,7 +15,7 @@
 #include <linux/init.h>
 
 
-#define HTC_RTC_SYNC_ENABLE 0
+#define HTC_RTC_SYNC_ENABLE 1
 
 #if HTC_RTC_SYNC_ENABLE
 static void htc_rtc_sync_work(struct work_struct *work);
@@ -56,18 +56,18 @@ static void htc_rtc_sync_work(struct work_struct *work)
 	do_gettimeofday(&utc_tv);
 	
 	printk(KERN_INFO "[TIME] %s: UTC.tv_sec:%ld, RTC.tv_sec:%ld\n", __func__, utc_tv.tv_sec, tv.tv_sec);
-
-	if(((utc_tv.tv_sec - tv.tv_sec) > 60)){
+	if(((utc_tv.tv_sec - tv.tv_sec) > 60) || ((tv.tv_sec - utc_tv.tv_sec) > 60)){
 		printk(KERN_INFO "[TIME] %s: go to sync time.\n", __func__);
 		
         	do_settimeofday(&tv);
+	
+        	dev_info(rtc->dev.parent,
+                	"HTC_RTC_SYNC: setting system clock to "
+                	"%d-%02d-%02d %02d:%02d:%02d UTC (%u)\n",
+                	tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+                	tm.tm_hour, tm.tm_min, tm.tm_sec,
+                	(unsigned int) tv.tv_sec);
 	}
-        dev_info(rtc->dev.parent,
-                "HTC_RTC_SYNC: setting system clock to "
-                "%d-%02d-%02d %02d:%02d:%02d UTC (%u)\n",
-                tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-                tm.tm_hour, tm.tm_min, tm.tm_sec,
-                (unsigned int) tv.tv_sec);
 
 err_invalid:
 err_read:
@@ -76,7 +76,7 @@ err_read:
 err_open:
 
         
-        schedule_delayed_work(&sync_work, 60 * HZ); 
+        schedule_delayed_work(&sync_work, 120 * HZ); 
 
 }
 #endif
@@ -94,6 +94,9 @@ int rtc_hctosys(void)
 #if HTC_RTC_SYNC_ENABLE
 	static int rtc_sync_enable = 0; 
 #endif
+
+	printk(KERN_INFO "[TIME] %s ++\n", __func__);
+
 	if (rtc == NULL) {
 		pr_err("%s: unable to open rtc device (%s)\n",
 			__FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
@@ -145,6 +148,8 @@ err_open:
 	}
 #endif
         
+
+	printk(KERN_INFO "[TIME] %s --\n", __func__);
 
 	return err;
 }

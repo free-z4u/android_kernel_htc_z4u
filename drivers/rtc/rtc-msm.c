@@ -24,6 +24,7 @@
 #include <linux/android_alarm.h>
 
 #include <linux/rtc.h>
+#include <linux/sched.h>
 #include <linux/rtc-msm.h>
 #include <linux/msm_rpcrouter.h>
 #include <mach/msm_rpcrouter.h>
@@ -318,9 +319,11 @@ msmrtc_timeremote_set_time(struct device *dev, struct rtc_time *tm)
 		task = pid_task( pid_struct, PIDTYPE_PID);
 	}
 
-	dev_dbg(dev, "%s: %.2u/%.2u/%.4u %.2u:%.2u:%.2u (%.2u) pid:%d %s\n",
+	dev_err(dev, "%s: %.2u/%.2u/%.4u %.2u:%.2u:%.2u (%.2u) pid:%d %s\n",
 	       __func__, tm->tm_mon, tm->tm_mday, tm->tm_year,
 	       tm->tm_hour, tm->tm_min, tm->tm_sec, tm->tm_wday, (int)pid, (task?task->comm:"(null)"));
+
+
 	WARN_ON(1);
 	rtc_args.proc = TIMEREMOTE_PROCEEDURE_SET_JULIAN;
 	rtc_args.tm = tm;
@@ -404,9 +407,10 @@ msmrtc_timeremote_set_time_secure(struct device *dev, struct rtc_time *tm)
 	if (tm->tm_year < 1970)
 		return -EINVAL;
 
+
 	dev_dbg(dev, "%s: %.2u/%.2u/%.4u %.2u:%.2u:%.2u (%.2u)\n",
-	       __func__, tm->tm_mon, tm->tm_mday, tm->tm_year,
-	       tm->tm_hour, tm->tm_min, tm->tm_sec, tm->tm_wday);
+		__func__, tm->tm_mon, tm->tm_mday, tm->tm_year,
+		tm->tm_hour, tm->tm_min, tm->tm_sec, tm->tm_wday);
 
 	rtc_args.proc = TIMEREMOTE_PROCEEDURE_SET_SECURE_JULIAN;
 	rtc_args.tm = tm;
@@ -721,6 +725,7 @@ msmrtc_suspend(struct platform_device *dev, pm_message_t state)
 	unsigned long now;
 	struct msm_rtc *rtc_pdata = platform_get_drvdata(dev);
 
+	pr_err("%s: Entring suspend state\n", __func__);
 	suspend_state.tick_at_suspend = msm_timer_get_sclk_time(NULL);
 	if (rtc_pdata->rtcalarm_time) {
 		rc = msmrtc_timeremote_read_time(&dev->dev, &tm);
@@ -753,6 +758,7 @@ msmrtc_resume(struct platform_device *dev)
 	unsigned long now;
 	struct msm_rtc *rtc_pdata = platform_get_drvdata(dev);
 
+	pr_err("%s: Exiting suspend state\n", __func__);
 	if (rtc_pdata->rtcalarm_time) {
 		rc = msmrtc_timeremote_read_time(&dev->dev, &tm);
 		if (rc) {

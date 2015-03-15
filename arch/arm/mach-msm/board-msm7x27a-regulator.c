@@ -224,15 +224,15 @@ static struct proccomm_regulator_info msm7x27a_pcom_vreg_info[] = {
 	PCOM_VREG_LDO(ldo14, 16, NULL, 3300000, 3300000, 0, -1, 0, 0, 0, 0, p),
 	PCOM_VREG_LDO(ldo15, 54, NULL, 1800000, 2850000, 0, -1, 0, 0, 0, 0, p),
 	PCOM_VREG_LDO(ldo16, 19, NULL, 1800000, 2850000, 0, -1, 0, 0, 0, 0, p),
-#if (defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) \
-    || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3U) \
-    || defined(CONFIG_MACH_Z4DUG) || defined(CONFIG_MACH_Z4DCG) || defined(CONFIG_MACH_Z4U))
+#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) \
+    || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) \
+    || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U))
 	PCOM_VREG_LDO(ldo17, 56, NULL, 3300000, 3300000, 0, -1, 0, 0, 0, 0, p),
 #else
 	PCOM_VREG_LDO(ldo17, 56, NULL, 2850000, 2850000, 0, -1, 0, 0, 0, 0, p),
 #endif
 	PCOM_VREG_LDO(ldo18, 11, NULL, 2700000, 2700000, 0, -1, 0, 0, 0, 0, p),
-#if defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODUG)
+#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
 	PCOM_VREG_LDO(ldo19, 57, NULL, 2850000, 2850000, 0, -1, 0, 0, 0, 0, p),
 #else
 	PCOM_VREG_LDO(ldo19, 57, NULL, 1800000, 1800000, 0, -1, 0, 0, 0, 0, p),

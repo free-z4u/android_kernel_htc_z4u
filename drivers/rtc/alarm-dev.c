@@ -165,6 +165,8 @@ from_old_alarm_set:
 		break;
 #endif
 	case ANDROID_ALARM_SET_RTC:
+		
+		printk("[TIME][ALARM] RTC set called  process %s\n", current->comm);
 		if (copy_from_user(&new_rtc_time, (void __user *)arg,
 		    sizeof(new_rtc_time))) {
 			rv = -EFAULT;

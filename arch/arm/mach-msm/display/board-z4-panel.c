@@ -28,10 +28,10 @@
 
 #include "../devices.h"
 
-#ifdef CONFIG_MACH_Z4DUG
+#ifdef CONFIG_MACH_DUMMY
 #include "../board-z4dug.h"
 #endif
-#ifdef CONFIG_MACH_Z4DCG
+#ifdef CONFIG_MACH_DUMMY
 #include "../board-z4dcg.h"
 #endif
 #ifdef CONFIG_MACH_Z4U

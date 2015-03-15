@@ -439,7 +439,7 @@ int __init board_mfg_mode_init(char *s)
 		mfg_mode = 7;
 	else if (!strcmp(s, "mfgkernel"))
 		mfg_mode = 8;
-#if (defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG))
+#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
 	else if (!strcmp(s, "radiorouter_sprd"))
 		mfg_mode = 9;
 	else if (!strcmp(s, "krouter1_sprd"))
@@ -535,7 +535,7 @@ unsigned int get_radio_flag(void)
 	return radio_flag;
 }
 
-#if (defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG))
+#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
 static unsigned int radio2_flag;
 int __init radio2_flag_init(char *s)
 {
