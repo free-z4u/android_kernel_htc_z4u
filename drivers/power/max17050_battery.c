@@ -103,6 +103,8 @@ static int batt_full_eoc_stop;
 #define HTC_EXT_CHG_SAFTY_TIMEOUT		(1<<2)
 #define HTC_EXT_CHG_FULL_EOC_STOP		(1<<3)
 
+static int g_is_smooth_cap_to_full = 0;
+
 
 
 #define MAX17050_STATUS_REG	0x01
@@ -551,21 +553,32 @@ static void update_next_charge_state(BOOL bFirstEntry)
 
 static void __update_capacity(BOOL bFirstEntry)
 {
+	int cap_01p;
+
 	if (poweralg.charge_state == CHARGE_STATE_PREDICTION ||
-		poweralg.charge_state == CHARGE_STATE_UNKNOWN){
+		poweralg.charge_state == CHARGE_STATE_UNKNOWN) {
 		if (bFirstEntry) {
 			
 			poweralg.capacity_01p = 550;
 			printk(DRIVER_ZONE "fake percentage (%d) during prediction.\n",
 				poweralg.capacity_01p);
 		}
-	}
-	else if (poweralg.charge_state == CHARGE_STATE_FULL_CHARGING ||
+	} else if (poweralg.charge_state == CHARGE_STATE_FULL_WAIT_STABLE) {
+		if (config.smooth_chg_full_delay_min && poweralg.last_capacity_01p > poweralg.capacity_01p) {
+			poweralg.capacity_01p = poweralg.last_capacity_01p;
+			g_is_smooth_cap_to_full = 1;
+		}
+	} else if (poweralg.charge_state == CHARGE_STATE_FULL_CHARGING ||
 		poweralg.charge_state == CHARGE_STATE_FULL_RECHARGING ||
-		poweralg.charge_state == CHARGE_STATE_FULL_PENDING){
-		poweralg.capacity_01p = 1000;
-	}
-	else if (!is_charging_avaiable()){
+		poweralg.charge_state == CHARGE_STATE_FULL_PENDING) {
+		if (config.smooth_chg_full_delay_min && CEILING(poweralg.last_capacity_01p, 10) < 99) {
+			poweralg.capacity_01p = poweralg.last_capacity_01p + 10;
+			if (poweralg.capacity_01p > 1000)
+				poweralg.capacity_01p = 1000;
+			g_is_smooth_cap_to_full = 1;
+		} else
+			poweralg.capacity_01p = 1000;
+	} else if (!is_charging_avaiable()){
 		if (poweralg.battery.voltage_mV < 3000){
 			printk(DRIVER_ZONE "To force shutdown due to vbatt:%d < 3v\n",
 				poweralg.battery.voltage_mV);
@@ -575,6 +588,13 @@ static void __update_capacity(BOOL bFirstEntry)
 			printk(DRIVER_ZONE "To decrease 6 percent every 1min: due to vbatt:%d < 3.1v\n",
 				poweralg.battery.voltage_mV);
 			poweralg.capacity_01p -= 60; 
+		} else if (config.smooth_chg_full_delay_min && g_is_smooth_cap_to_full) {
+			cap_01p = poweralg.capacity_01p;
+			poweralg.capacity_01p = poweralg.last_capacity_01p - 10;
+			if (poweralg.capacity_01p < cap_01p) {
+				poweralg.capacity_01p = cap_01p;
+				g_is_smooth_cap_to_full = 0;
+			}
 		}
 	}
 
@@ -582,6 +602,8 @@ static void __update_capacity(BOOL bFirstEntry)
 			poweralg.capacity_01p = 1000;
 	if (poweralg.capacity_01p < 0)
 			poweralg.capacity_01p = 0;
+
+	printk(DRIVER_ZONE "smooth capacity to full: %d\n", g_is_smooth_cap_to_full);
 }
 
 int get_state_check_interval_min_sec(void)
@@ -708,7 +730,8 @@ BOOL do_power_alg(BOOL is_event_triggered)
 
 		s_bFirstEntry = FALSE;
 		s_pre_time_ktime = now_time_ktime;
-	}
+	} else if (config.smooth_chg_full_delay_min && g_is_smooth_cap_to_full)
+		poweralg.capacity_01p = poweralg.last_capacity_01p;
 
 	if (config.debug_disable_shutdown){
 		if (poweralg.capacity_01p <= 0){

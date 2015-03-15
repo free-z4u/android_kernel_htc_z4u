@@ -1166,6 +1166,8 @@ static void z4u_poweralg_config_init(struct poweralg_config_type *config)
 	config->debug_disable_hw_timer = FALSE;
 	config->debug_always_predict = FALSE;
 	config->full_level = 0;
+
+	config->smooth_chg_full_delay_min = 1;
 }
 
 static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_01c, BOOL* chg_allowed, BOOL* hchg_allowed, BOOL* temp_fault)
