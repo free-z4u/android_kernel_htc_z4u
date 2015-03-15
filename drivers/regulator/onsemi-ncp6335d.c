@@ -276,6 +276,11 @@ __retry__:
 			retry++;
 			if (retry < 3) {
 				goto __retry__;
+			} else {
+				dev_err(dd->dev, "NCP: Unable to set volatge: %d (%d %d), read (%d)\n",
+							new_uV, min_uV, max_uV, dd->curr_voltage);
+				rc = -EINVAL;
+				goto err_set_vtg;
 			}
 		}
 #ifdef CONFIG_HTC_ACPU_DEBUG
