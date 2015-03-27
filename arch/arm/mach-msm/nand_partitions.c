@@ -4,7 +4,7 @@
  * bootloader.
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2008-2009,2011 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2008-2009,2011 The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -21,6 +21,7 @@
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/platform_device.h>
+#include <linux/module.h>
 
 #include <asm/mach/flash.h>
 #include <linux/io.h>
@@ -37,6 +38,10 @@
 #include "smd_private.h"
 #endif
 
+#ifdef CONFIG_MMC_MUST_PREVENT_WP_VIOLATION
+#include <linux/mmc/card.h>
+#endif
+
 /* configuration tags specific to msm */
 
 #define ATAG_MSM_PARTITION 0x4d534D70 /* MSMp */
@@ -48,7 +53,7 @@ struct msm_ptbl_entry {
 	__u32 flags;
 };
 
-#define MSM_MAX_PARTITIONS 18
+#define MSM_MAX_PARTITIONS 32
 
 static struct mtd_partition msm_nand_partitions[MSM_MAX_PARTITIONS];
 static char msm_nand_names[MSM_MAX_PARTITIONS * 16];
@@ -106,6 +111,7 @@ static int __init parse_tag_msm_partition(const struct tag *tag)
 	char *name = msm_nand_names;
 	struct msm_ptbl_entry *entry = (void *) &tag->u;
 	unsigned count, n;
+	unsigned have_kpanic = 0;
 
 	count = (tag->hdr.size - 2) /
 		(sizeof(struct msm_ptbl_entry) / sizeof(__u32));
@@ -117,6 +123,9 @@ static int __init parse_tag_msm_partition(const struct tag *tag)
 		memcpy(name, entry->name, 15);
 		name[15] = 0;
 
+		if (!strcmp(name, "kpanic"))
+			have_kpanic = 1;
+
 		ptn->name = name;
 		ptn->offset = entry->offset;
 		ptn->size = entry->size;
@@ -124,12 +133,57 @@ static int __init parse_tag_msm_partition(const struct tag *tag)
 		printk(KERN_INFO "Partition (from atag) %s "
 				"-- Offset:%llx Size:%llx\n",
 				ptn->name, ptn->offset, ptn->size);
+#ifdef CONFIG_MMC_MUST_PREVENT_WP_VIOLATION
+		if (!strncmp(ptn->name, "system", 6))
+			mmc_blk_set_wp_prevention_partno((int) ptn->offset);
+		else if (!strncmp(ptn->name, "devlog", 6)) {
+			char devlog_part[64];
+			sprintf(devlog_part, "mmcblk0p%d", (int) ptn->offset);
+			pr_info("mmc: devlog partition %s\n", devlog_part);
+		}
+#endif
 
 		name += 16;
 		entry++;
 		ptn++;
 	}
 
+#ifdef CONFIG_VIRTUAL_KPANIC_PARTITION
+	if (!have_kpanic) {
+		int i;
+		uint64_t kpanic_off = 0;
+
+		if (count == MSM_MAX_PARTITIONS) {
+			printk(KERN_ERR "[K] Cannot create virtual 'kpanic' partition\n");
+			goto out;
+		}
+
+		for (i = 0; i < count; i++) {
+			ptn = &msm_nand_partitions[i];
+			if (!strcmp(ptn->name, CONFIG_VIRTUAL_KPANIC_SRC)) {
+				ptn->size -= CONFIG_VIRTUAL_KPANIC_PSIZE;
+				kpanic_off = ptn->offset + ptn->size;
+				break;
+			}
+		}
+		if (i == count) {
+			printk(KERN_ERR "[K] Partition %s not found\n",
+			       CONFIG_VIRTUAL_KPANIC_SRC);
+			goto out;
+		}
+
+		ptn = &msm_nand_partitions[count];
+		ptn->name = "kpanic";
+		ptn->offset = kpanic_off;
+		ptn->size = CONFIG_VIRTUAL_KPANIC_PSIZE;
+
+		printk(KERN_INFO "[K] Virtual mtd partition '%s' created @%llx (%llu)\n",
+		       ptn->name, ptn->offset, ptn->size);
+
+		count++;
+	}
+out:
+#endif
 	msm_nand_data.nr_parts = count;
 	msm_nand_data.parts = msm_nand_partitions;
 
