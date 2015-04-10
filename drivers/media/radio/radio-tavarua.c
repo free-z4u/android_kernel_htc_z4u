@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -10,7 +10,11 @@
  * GNU General Public License for more details.
  *
  */
+/*
+ * Qualcomm Tavarua FM core driver
+ */
 
+/* driver definitions */
 #define DRIVER_AUTHOR "Qualcomm"
 #define DRIVER_NAME "radio-tavarua"
 #define DRIVER_CARD "Qualcomm FM Radio Transceiver"
@@ -18,15 +22,16 @@
 #define DRIVER_VERSION "1.0.0"
 
 #include <linux/version.h>
-#include <linux/init.h>         
-#include <linux/delay.h>        
-#include <linux/uaccess.h>      
-#include <linux/kfifo.h>        
+#include <linux/init.h>         /* Initdata                     */
+#include <linux/delay.h>        /* udelay                       */
+#include <linux/uaccess.h>      /* copy to/from user            */
+#include <linux/kfifo.h>        /* lock free circular buffer    */
 #include <linux/param.h>
 #include <linux/i2c.h>
 #include <linux/irq.h>
 #include <linux/interrupt.h>
 
+/* kernel includes */
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/version.h>
@@ -42,6 +47,9 @@
 #include <linux/platform_device.h>
 #include <linux/workqueue.h>
 #include <linux/slab.h>
+/*
+regional parameters for radio device
+*/
 struct region_params_t {
 	enum tavarua_region_t region;
 	unsigned int band_high;
@@ -58,71 +66,82 @@ struct srch_params_t {
 	int get_list;
 };
 
+/* Main radio device structure,
+acts as a shadow copy of the
+actual tavaura registers */
 struct tavarua_device {
 	struct video_device *videodev;
-	
+	/* driver management */
 	atomic_t users;
-	
+	/* top level driver data */
 	struct marimba *marimba;
 	struct device *dev;
-	
+	/* platform specific functionality */
 	struct marimba_fm_platform_data *pdata;
 	unsigned int chipID;
-	
+	/*RDS buffers + Radio event buffer*/
 	struct kfifo data_buf[TAVARUA_BUF_MAX];
-	
+	/* search paramters */
 	struct srch_params_t srch_params;
-	
+	/* keep track of pending xfrs */
 	int pending_xfrs[TAVARUA_XFR_MAX];
 	int xfr_bytes_left;
 	int xfr_in_progress;
-	
+	/* Transmit data */
 	enum tavarua_xfr_ctrl_t tx_mode;
-	
+	/* synchrnous xfr data */
 	unsigned char sync_xfr_regs[XFR_REG_NUM];
 	struct completion sync_xfr_start;
 	struct completion shutdown_done;
 	struct completion sync_req_done;
 	int tune_req;
-	
+	/* internal register status */
 	unsigned char registers[RADIO_REGISTERS];
-	
+	/* regional settings */
 	struct region_params_t region_params;
-	
+	/* power mode */
 	int lp_mode;
 	int handle_irq;
-	
+	/* global lock */
 	struct mutex lock;
-	
+	/* buffer locks*/
 	spinlock_t buf_lock[TAVARUA_BUF_MAX];
-	
+	/* work queue */
 	struct workqueue_struct *wqueue;
 	struct delayed_work work;
-	
+	/* wait queue for blocking event read */
 	wait_queue_head_t event_queue;
-	
+	/* wait queue for raw rds read */
 	wait_queue_head_t read_queue;
-	
+	/* PTY for FM Tx */
 	int pty;
-	
+	/* PI for FM TX */
 	int pi;
-	
+	/*PS repeatcount for PS Tx */
 	int ps_repeatcount;
 	int enable_optimized_srch_alg;
 	unsigned char spur_table_size;
 	struct fm_spur_data spur_data;
 };
 
+/**************************************************************************
+ * Module Parameters
+ **************************************************************************/
 
+/* Radio Nr */
 static int radio_nr = -1;
 module_param(radio_nr, int, 0);
 MODULE_PARM_DESC(radio_nr, "Radio Nr");
 static int wait_timeout = WAIT_TIMEOUT;
+/* Bahama's version*/
 static u8 bahama_version;
+/* RDS buffer blocks */
 static unsigned int rds_buf = 100;
 module_param(rds_buf, uint, 0);
 MODULE_PARM_DESC(rds_buf, "RDS buffer entries: *100*");
+/* static variables */
 static struct tavarua_device *private_data;
+/* forward declerations */
 static int tavarua_disable_interrupts(struct tavarua_device *radio);
 static int tavarua_setup_interrupts(struct tavarua_device *radio,
 					enum radio_state_t state);
@@ -134,6 +153,7 @@ static int update_spur_table(struct tavarua_device *radio);
 static int xfr_rdwr_data(struct tavarua_device *radio, int op, int size,
 	unsigned long offset, unsigned char *buf);
 
+/* work function */
 static void read_int_stat(struct work_struct *work);
 
 static int is_bahama(void)
@@ -170,16 +190,52 @@ static int set_fm_slave_id(struct tavarua_device *radio)
 	return 0;
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_isr
+=============================================================================*/
+/**
+  This function is called when GPIO is toggled. This functions queues the event
+  to interrupt queue, which is later handled by isr handling funcion.
+  i.e. INIT_DELAYED_WORK(&radio->work, read_int_stat);
+
+  @param irq: irq that is toggled.
+  @param dev_id: structure pointer passed by client.
+
+  @return IRQ_HANDLED.
+*/
 static irqreturn_t tavarua_isr(int irq, void *dev_id)
 {
 	struct tavarua_device *radio = dev_id;
-	
+	/* schedule a tasklet to handle host intr */
+  /* The call to queue_delayed_work ensures that a minimum delay (in jiffies)
+   * passes before the work is actually executed. The return value from the
+   * function is nonzero if the work_struct was actually added to queue
+   * (otherwise, it may have already been there and will not be added a second
+   * time).
+   */
 	queue_delayed_work(radio->wqueue, &radio->work,
 				msecs_to_jiffies(TAVARUA_DELAY));
 	return IRQ_HANDLED;
 }
 
+/**************************************************************************
+ * Interface to radio internal registers over top level marimba driver
+ *************************************************************************/
 
+/*=============================================================================
+FUNCTION:  tavarua_read_registers
+=============================================================================*/
+/**
+  This function is called to read a number of bytes from an I2C interface.
+  The bytes read are stored in internal register status (shadow copy).
+
+  @param radio: structure pointer passed by client.
+  @param offset: register offset.
+  @param len: num of bytes.
+
+  @return => 0 if successful.
+  @return < 0 if failure.
+*/
 static int tavarua_read_registers(struct tavarua_device *radio,
 				unsigned char offset, int len)
 {
@@ -205,6 +261,9 @@ static int tavarua_read_registers(struct tavarua_device *radio,
 	return retval;
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_write_register
+=============================================================================*/
 /**
   This function is called to write a byte over the I2C interface.
   The corresponding shadow copy is stored in internal register status.
@@ -239,6 +298,9 @@ static int tavarua_write_register(struct tavarua_device *radio,
 	return retval;
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_write_registers
+=============================================================================*/
 /**
   This function is called to write a number of bytes over the I2C interface.
   The corresponding shadow copy is stored in internal register status.
@@ -266,7 +328,7 @@ static int tavarua_write_registers(struct tavarua_device *radio,
 						radio->marimba->mod_id,
 						offset);
 	retval = marimba_write(radio->marimba, offset, buf, len);
-	if (retval > 0) { 
+	if (retval > 0) { /* if write successful, update internal state too */
 		for (i = 0; i < len; i++) {
 			if ((offset+i) < RADIO_REGISTERS) {
 				radio->registers[offset+i] = buf[i];
@@ -278,12 +340,37 @@ static int tavarua_write_registers(struct tavarua_device *radio,
 	return retval;
 }
 
+/*=============================================================================
+FUNCTION:  read_data_blocks
+=============================================================================*/
+/**
+  This function reads Raw RDS blocks from Core regs to driver
+  internal regs (shadow copy).
+
+  @param radio: structure pointer passed by client.
+  @param offset: register offset.
+
+  @return => 0 if successful.
+  @return < 0 if failure.
+*/
 static int read_data_blocks(struct tavarua_device *radio, unsigned char offset)
 {
-	
+	/* read all 3 RDS blocks */
 	return tavarua_read_registers(radio, offset, RDS_BLOCK*4);
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_rds_read
+=============================================================================*/
+/**
+  This is a rds processing function reads that reads Raw RDS blocks from Core
+  regs to driver internal regs (shadow copy). It then fills the V4L2 RDS buffer,
+  which is read by App using JNI interface.
+
+  @param radio: structure pointer passed by client.
+
+  @return None.
+*/
 static void tavarua_rds_read(struct tavarua_device *radio)
 {
 	struct kfifo *rds_buf = &radio->data_buf[TAVARUA_BUF_RAW_RDS];
@@ -292,24 +379,51 @@ static void tavarua_rds_read(struct tavarua_device *radio)
 
 	if (read_data_blocks(radio, RAW_RDS) < 0)
 		return;
-	 
+	 /* copy all four RDS blocks to internal buffer */
 	for (blocknum = 0; blocknum < RDS_BLOCKS_NUM; blocknum++) {
-		
+		/* Fill the V4L2 RDS buffer */
 		put_unaligned(cpu_to_le16(radio->registers[RAW_RDS +
 			blocknum*RDS_BLOCK]), (unsigned short *) tmp);
-		tmp[2] = blocknum;		
-		tmp[2] |= blocknum << 3;	
-		tmp[2] |= 0x40; 
+		tmp[2] = blocknum;		/* offset name */
+		tmp[2] |= blocknum << 3;	/* received offset */
+		tmp[2] |= 0x40; /* corrected error(s) */
 
-		
+		/* copy RDS block to internal buffer */
 		kfifo_in_locked(rds_buf, tmp, 3, &radio->buf_lock[TAVARUA_BUF_RAW_RDS]);
 	}
-	
+	/* wake up read queue */
 	if (kfifo_len(rds_buf))
 		wake_up_interruptible(&radio->read_queue);
 
 }
 
+/*=============================================================================
+FUNCTION:  request_read_xfr
+=============================================================================*/
+/**
+  This function sets the desired MODE in the XFRCTRL register and also sets the
+  CTRL field to read.
+  This is an asynchronous way of reading the XFR registers. Client would request
+  by setting the desired mode in the XFRCTRL register and then would initiate
+  the actual data register read by calling copy_from_xfr up on SOC signals
+  success.
+
+  NOTE:
+
+  The Data Transfer (XFR) registers are used to pass various data and
+  configuration parameters between the Core and host processor.
+
+  To read from the XFR registers, the host processor must set the desired MODE
+  in the XFRCTRL register and set the CTRL field to read. The Core will then
+  populate the XFRDAT0 - XFRDAT15 registers with the defined mode bytes. The
+  Core will set the TRANSFER interrupt status bit and interrupt the host if the
+  TRANSFERCTRL interrupt control bit is set. The host can then extract the XFR
+  mode bytes once it detects that the Core has updated the registers.
+
+  @param radio: structure pointer passed by client.
+
+  @return Always returns 0.
+*/
 static int request_read_xfr(struct tavarua_device *radio,
 				enum tavarua_xfr_ctrl_t mode){
 
@@ -318,6 +432,25 @@ static int request_read_xfr(struct tavarua_device *radio,
 	return 0;
 }
 
+/*=============================================================================
+FUNCTION:  copy_from_xfr
+=============================================================================*/
+/**
+  This function is used to read XFR mode bytes once it detects that the Core
+  has updated the registers. It also updates XFR regs to the appropriate
+  internal buffer n bytes.
+
+  NOTE:
+
+  This function should be used in conjuction with request_read_xfr. Refer
+  request_read_xfr for XFR mode transaction details.
+
+  @param radio: structure pointer passed by client.
+  @param buf_type: Index into RDS/Radio event buffer to use.
+  @param len: num of bytes.
+
+  @return Always returns 0.
+*/
 static int copy_from_xfr(struct tavarua_device *radio,
 		enum tavarua_buf_t buf_type, unsigned int n){
 
@@ -327,6 +460,9 @@ static int copy_from_xfr(struct tavarua_device *radio,
 	return 0;
 }
 
+/*=============================================================================
+FUNCTION:  write_to_xfr
+=============================================================================*/
 /**
   This function sets the desired MODE in the XFRCTRL register and it also sets
   the CTRL field and data to write.
@@ -358,10 +494,26 @@ static int write_to_xfr(struct tavarua_device *radio, unsigned char mode,
 {
 	char buffer[len+1];
 	memcpy(buffer+1, buf, len);
+	/* buffer[0] corresponds to XFRCTRL register
+	   set the CTRL bit to 1 for write mode
+	*/
 	buffer[0] = ((1<<7) | mode);
 	return tavarua_write_registers(radio, XFRCTRL, buffer, sizeof(buffer));
 }
 
+/*=============================================================================
+FUNCTION:  xfr_intf_own
+=============================================================================*/
+/**
+  This function is used to check if there is any pending XFR mode operation.
+  If yes, wait for it to complete, else update the flag to indicate XFR
+  operation is in progress
+
+  @param radio: structure pointer passed by client.
+
+  @return 0      on success.
+	-ETIME on timeout.
+*/
 static int xfr_intf_own(struct tavarua_device *radio)
 {
 
@@ -380,6 +532,19 @@ static int xfr_intf_own(struct tavarua_device *radio)
 	return 0;
 }
 
+/*=============================================================================
+FUNCTION:  sync_read_xfr
+=============================================================================*/
+/**
+  This function is used to do synchronous XFR read operation.
+
+  @param radio: structure pointer passed by client.
+  @param xfr_type: XFR mode to write in XFRCTRL register.
+  @param buf: buffer to be read from the core.
+
+  @return => 0 if successful.
+  @return < 0 if failure.
+*/
 static int sync_read_xfr(struct tavarua_device *radio,
 			enum tavarua_xfr_ctrl_t xfr_type, unsigned char *buf)
 {
@@ -390,6 +555,8 @@ static int sync_read_xfr(struct tavarua_device *radio,
 	retval = tavarua_write_register(radio, XFRCTRL, xfr_type);
 
 	if (retval >= 0) {
+		/* Wait for interrupt i.e. complete
+		(&radio->sync_req_done); call */
 		if (!wait_for_completion_timeout(&radio->sync_req_done,
 			msecs_to_jiffies(wait_timeout)) || (retval < 0)) {
 			retval = -ETIME;
@@ -403,6 +570,9 @@ static int sync_read_xfr(struct tavarua_device *radio,
 	return retval;
 }
 
+/*=============================================================================
+FUNCTION:  sync_write_xfr
+=============================================================================*/
 /**
   This function is used to do synchronous XFR write operation.
 
@@ -423,6 +593,8 @@ static int sync_write_xfr(struct tavarua_device *radio,
 	retval = write_to_xfr(radio, xfr_type, buf, XFR_REG_NUM);
 
 	if (retval >= 0) {
+		/* Wait for interrupt i.e. complete
+		(&radio->sync_req_done); call */
 		if (!wait_for_completion_timeout(&radio->sync_req_done,
 			msecs_to_jiffies(wait_timeout)) || (retval < 0)) {
 			FMDBG("Write xfr timeout");
@@ -435,6 +607,19 @@ static int sync_write_xfr(struct tavarua_device *radio,
 }
 
 
+/*=============================================================================
+FUNCTION:  start_pending_xfr
+=============================================================================*/
+/**
+  This function checks if their are any pending xfr interrupts and if
+  the interrupts are either RDS PS, RDS RT, RDS AF, SCANNEXT, SEARCH or SYNC
+  then initiates corresponding read operation. Preference is given to RAW RDS
+  data (SYNC) over processed data (PS, RT, AF, etc) from core.
+
+  @param radio: structure pointer passed by client.
+
+  @return None.
+*/
 static void start_pending_xfr(struct tavarua_device *radio)
 {
 	int i;
@@ -444,11 +629,11 @@ static void start_pending_xfr(struct tavarua_device *radio)
 			radio->xfr_in_progress = 1;
 			xfr = (enum tavarua_xfr_t)i;
 			switch (xfr) {
-			
+			/* priority given to synchronous xfrs */
 			case TAVARUA_XFR_SYNC:
 				complete(&radio->sync_xfr_start);
 				break;
-			
+			/* asynchrnous xfrs */
 			case TAVARUA_XFR_SRCH_LIST:
 				request_read_xfr(radio, RX_STATIONS_0);
 				break;
@@ -472,6 +657,23 @@ static void start_pending_xfr(struct tavarua_device *radio)
 	return;
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_q_event
+=============================================================================*/
+/**
+  This function is called to queue an event for user.
+
+  NOTE:
+  Applications call the VIDIOC_QBUF ioctl to enqueue an empty (capturing) or
+  filled (output) buffer in the driver's incoming queue.
+
+  Pleaes refer tavarua_probe where we register different ioctl's for FM.
+
+  @param radio: structure pointer passed by client.
+  @param event: event to be queued.
+
+  @return None.
+*/
 static void tavarua_q_event(struct tavarua_device *radio,
 				enum tavarua_evt_t event)
 {
@@ -483,6 +685,22 @@ static void tavarua_q_event(struct tavarua_device *radio,
 		wake_up_interruptible(&radio->event_queue);
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_start_xfr
+=============================================================================*/
+/**
+  This function is called to process interrupts which require multiple XFR
+  operations (RDS search, RDS PS, RDS RT, etc). if any XFR operation is
+  already in progress we store information about pending interrupt, which
+  will be processed in future when current pending operation is done.
+
+  @param radio: structure pointer passed by client.
+  @param pending_id: XFR operation (which requires multiple XFR operations in
+	steps) to start.
+  @param xfr_id: XFR mode to write in XFRCTRL register.
+
+  @return None.
+*/
 static void tavarua_start_xfr(struct tavarua_device *radio,
 		enum tavarua_xfr_t pending_id, enum tavarua_xfr_ctrl_t xfr_id)
 {
@@ -494,6 +712,25 @@ static void tavarua_start_xfr(struct tavarua_device *radio,
 		}
 }
 
+/*=============================================================================
+FUNCTION:  tavarua_handle_interrupts
+=============================================================================*/
+/**
+  This function processes the interrupts.
+
+  NOTE:
+  tavarua_q_event is used to queue events in App buffer. i.e. App calls the
+  VIDIOC_QBUF ioctl to enqueue an empty (capturing) buffer, which is filled
+  by tavarua_q_event call.
+
+  Any async event that requires multiple steps, i.e. search, RT, PS, etc is
+  handled one at a time. (We preserve other interrupts when processing one).
+  Sync interrupts are given priority.
+
+  @param radio: structure pointer passed by client.
+
+  @return None.
+*/
 static void tavarua_handle_interrupts(struct tavarua_device *radio)
 {
 	int i;
@@ -3307,6 +3544,23 @@ static int tavarua_resume(struct platform_device *pdev)
 	return 0;
 }
 
+/*==============================================================
+FUNCTION:  tavarua_set_audio_path
+==============================================================*/
+/**
+  This function will configure the audio path to and from the
+  FM core.
+
+  This interface is expected to be called from the multimedia
+  driver's thread.  This interface should only be called when
+  the FM hardware is enabled.  If the FM hardware is not
+  currently enabled, this interface will return an error.
+
+  @param digital_on: Digital audio from the FM core should be enabled/disbled.
+  @param analog_on: Analog audio from the FM core should be enabled/disbled.
+
+  @return On success 0 is returned, else error code.
+*/
 int tavarua_set_audio_path(int digital_on, int analog_on)
 {
 	struct tavarua_device *radio = private_data;
@@ -3314,7 +3568,7 @@ int tavarua_set_audio_path(int digital_on, int analog_on)
 	int retval = 0;
 	if (!radio)
 		return -ENOMEM;
-	
+	/* RX */
 	FMDBG("%s: digital: %d analog: %d\n", __func__, digital_on, analog_on);
 	if ((radio->pdata != NULL) && (radio->pdata->config_i2s_gpio != NULL)) {
 		if (digital_on) {
@@ -3344,6 +3598,18 @@ int tavarua_set_audio_path(int digital_on, int analog_on)
 		(rx_on ? 0 : 1),
 		AUDIOTX_OFFSET,
 		AUDIOTX_MASK);
+	/*
+
+	I2S Master/Slave configuration:
+	Setting the FM SoC as I2S Master/Slave
+		'false'		- FM SoC is I2S Slave
+		'true'		- FM SoC is I2S Master
+
+	We get this infomation from the respective target's board file :
+		MSM7x30         - FM SoC is I2S Slave
+		MSM8x60         - FM SoC is I2S Slave
+		MSM7x27A        - FM SoC is I2S Master
+	*/
 
 	if (!radio->pdata->is_fm_soc_i2s_master) {
 		FMDBG("FM SoC is I2S Slave\n");
@@ -3364,6 +3630,23 @@ int tavarua_set_audio_path(int digital_on, int analog_on)
 
 }
 
+/*==============================================================
+FUNCTION:  tavarua_probe
+==============================================================*/
+/**
+  Once called this functions initiates, allocates resources and registers video
+  tuner device with the v4l2 framework.
+
+  NOTE:
+  probe() should verify that the specified device hardware
+  actually exists; sometimes platform setup code can't be sure.  The probing
+  can use device resources, including clocks, and device platform_data.
+
+  @param pdev: platform device to be probed.
+
+  @return On success 0 is returned, else error code.
+	-ENOMEM in low memory cases
+*/
 static int  __init tavarua_probe(struct platform_device *pdev)
 {
 
@@ -3372,7 +3655,7 @@ static int  __init tavarua_probe(struct platform_device *pdev)
 	int retval;
 	int i;
 	FMDBG("%s: probe called\n", __func__);
-	
+	/* private data allocation */
 	radio = kzalloc(sizeof(struct tavarua_device), GFP_KERNEL);
 	if (!radio) {
 		retval = -ENOMEM;
@@ -3385,16 +3668,16 @@ static int  __init tavarua_probe(struct platform_device *pdev)
 	radio->dev = &pdev->dev;
 	platform_set_drvdata(pdev, radio);
 
-	
+	/* video device allocation */
 	radio->videodev = video_device_alloc();
 	if (!radio->videodev)
 		goto err_radio;
 
-	
+	/* initial configuration */
 	memcpy(radio->videodev, &tavarua_viddev_template,
 	  sizeof(tavarua_viddev_template));
 
-	
+	/*allocate internal buffers for decoded rds and event buffer*/
 	for (i = 0; i < TAVARUA_BUF_MAX; i++) {
 		int kfifo_alloc_rc=0;
 		spin_lock_init(&radio->buf_lock[i]);
@@ -3415,44 +3698,46 @@ static int  __init tavarua_probe(struct platform_device *pdev)
 			goto err_bufs;
 		}
 	}
-	
+	/* initializing the device count  */
 	atomic_set(&radio->users, 1);
 	radio->xfr_in_progress = 0;
 	radio->xfr_bytes_left = 0;
 	for (i = 0; i < TAVARUA_XFR_MAX; i++)
 		radio->pending_xfrs[i] = 0;
 
-	
+	/* init transmit data */
 	radio->tx_mode = TAVARUA_TX_RT;
-		
+		/* Init RT and PS Tx datas*/
 	radio->pty = 0;
 	radio->pi = 0;
 	radio->ps_repeatcount = 0;
-		
+		/* init search params */
 	radio->srch_params.srch_pty = 0;
 	radio->srch_params.srch_pi = 0;
 	radio->srch_params.preset_num = 0;
 	radio->srch_params.get_list = 0;
-	
+	/* radio initializes to low power mode */
 	radio->lp_mode = 1;
 	radio->handle_irq = 1;
-	
+	/* init lock */
 	mutex_init(&radio->lock);
-	
+	/* init completion flags */
 	init_completion(&radio->sync_xfr_start);
 	init_completion(&radio->sync_req_done);
 	radio->tune_req = 0;
-	
+	/* initialize wait queue for event read */
 	init_waitqueue_head(&radio->event_queue);
-	
+	/* initialize wait queue for raw rds read */
 	init_waitqueue_head(&radio->read_queue);
 
 	video_set_drvdata(radio->videodev, radio);
+    /*Start the worker thread for event handling and register read_int_stat
+	as worker function*/
 	radio->wqueue  = create_singlethread_workqueue("kfmradio");
 	if (!radio->wqueue)
 		return -ENOMEM;
 
-	
+	/* register video device */
 	if (video_register_device(radio->videodev, VFL_TYPE_RADIO, radio_nr)) {
 		printk(KERN_WARNING DRIVER_NAME
 				": Could not register video device\n");
@@ -3472,23 +3757,33 @@ err_initial:
 	return retval;
 }
 
+/*==============================================================
+FUNCTION:  tavarua_remove
+==============================================================*/
+/**
+  Removes the device.
+
+  @param pdev: platform device to be removed.
+
+  @return On success 0 is returned, else error code.
+*/
 static int __devexit tavarua_remove(struct platform_device *pdev)
 {
 	int i;
 	struct tavarua_device *radio = platform_get_drvdata(pdev);
 
-	
+	/* disable irq */
 	tavarua_disable_irq(radio);
 
 	destroy_workqueue(radio->wqueue);
 
 	video_unregister_device(radio->videodev);
 
-	
+	/* free internal buffers */
 	for (i = 0; i < TAVARUA_BUF_MAX; i++)
 		kfifo_free(&radio->data_buf[i]);
 
-	
+	/* free state struct */
 	kfree(radio);
 
 	platform_set_drvdata(pdev, NULL);
@@ -3496,6 +3791,12 @@ static int __devexit tavarua_remove(struct platform_device *pdev)
 	return 0;
 }
 
+/*
+ Platform drivers follow the standard driver model convention, where
+ discovery/enumeration is handled outside the drivers, and drivers
+ provide probe() and remove() methods.  They support power management
+ and shutdown notifications using the standard conventions.
+*/
 static struct platform_driver tavarua_driver = {
 	.driver = {
 		.owner  = THIS_MODULE,
@@ -3504,16 +3805,40 @@ static struct platform_driver tavarua_driver = {
 	.remove = __devexit_p(tavarua_remove),
 	.suspend = tavarua_suspend,
 	.resume = tavarua_resume,
-}; 
+}; /* platform device we're adding */
 
 
+/*************************************************************************
+ * Module Interface
+ ************************************************************************/
 
+/*==============================================================
+FUNCTION:  radio_module_init
+==============================================================*/
+/**
+  Module entry - add a platform-level device.
+
+  @return Returns zero if the driver registered and bound to a device, else
+  returns a negative error code when the driver not registered.
+*/
 static int __init radio_module_init(void)
 {
 	printk(KERN_INFO DRIVER_DESC ", Version " DRIVER_VERSION "\n");
 	return platform_driver_probe(&tavarua_driver, tavarua_probe);
 }
 
+/*==============================================================
+FUNCTION:  radio_module_exit
+==============================================================*/
+/**
+  Module exit - removes a platform-level device.
+
+  NOTE:
+  Note that this function will also release all memory- and port-based
+  resources owned by the device (dev->resource).
+
+  @return none.
+*/
 static void __exit radio_module_exit(void)
 {
   platform_driver_unregister(&tavarua_driver);

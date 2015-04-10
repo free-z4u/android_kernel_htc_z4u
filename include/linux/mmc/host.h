@@ -458,6 +458,7 @@ int mmc_card_can_sleep(struct mmc_host *host);
 int mmc_host_enable(struct mmc_host *host);
 int mmc_host_disable(struct mmc_host *host);
 int mmc_host_lazy_disable(struct mmc_host *host);
+
 int mmc_pm_notify(struct notifier_block *notify_block, unsigned long, void *);
 
 /* Module parameter */

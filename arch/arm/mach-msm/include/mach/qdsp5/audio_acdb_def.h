@@ -13,6 +13,7 @@
 #ifndef _MACH_QDSP5_V2_AUDIO_ACDB_DEF_H
 #define _MACH_QDSP5_V2_AUDIO_ACDB_DEF_H
 
+/* Define ACDB device ID */
 #define ACDB_ID_HANDSET_SPKR				1
 #define ACDB_ID_HANDSET_MIC				2
 #define ACDB_ID_HEADSET_MIC				3
@@ -50,4 +51,4 @@
 #define PSEUDO_ACDB_ID					0xFFFF
 
 int is_acdb_enabled(void);
-#endif 
+#endif /* _MACH_QDSP5_V2_AUDIO_ACDB_DEF_H */

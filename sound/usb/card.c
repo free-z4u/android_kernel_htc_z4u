@@ -48,6 +48,7 @@
 #include <linux/usb/audio.h>
 #include <linux/usb/audio-v2.h>
 #include <linux/module.h>
+
 #include <linux/switch.h>
 
 #include <sound/control.h>

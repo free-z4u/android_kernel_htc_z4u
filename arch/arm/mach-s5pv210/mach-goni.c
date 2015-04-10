@@ -233,6 +233,7 @@ static void __init goni_radio_init(void)
 	gpio_request_one(gpio, GPIOF_OUT_INIT_HIGH, "FM_RST");
 }
 
+/* TSP */
 static u8 read_chg(void)
 {
 	return gpio_get_value(S5PV210_GPJ0(5));

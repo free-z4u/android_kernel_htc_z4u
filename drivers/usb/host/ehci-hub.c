@@ -254,6 +254,8 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 		if (t1 & PORT_OWNER)
 			set_bit(port, &ehci->owned_ports);
 		else if ((t1 & PORT_PE) && !(t1 & PORT_SUSPEND)) {
+			/*clear RS bit before setting SUSP bit
+			* and wait for HCH to get set*/
 			if (ehci->susp_sof_bug)
 				ehci_halt(ehci);
 
@@ -307,9 +309,9 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 	if (ehci->bus_suspended)
 		udelay(150);
 
-	/* turn off now-idle HC */
+	/*if this bit is set, controller is already haled*/
 	if (!ehci->susp_sof_bug)
-		ehci_halt(ehci); 
+		ehci_halt(ehci); /* turn off now-idle HC */
 
 	ehci->rh_state = EHCI_RH_SUSPENDED;
 
@@ -378,10 +380,10 @@ static int ehci_bus_resume (struct usb_hcd *hcd)
 	ehci_writel(ehci, ehci->periodic_dma, &ehci->regs->frame_list);
 	ehci_writel(ehci, (u32) ehci->async->qh_dma, &ehci->regs->async_next);
 
-	/* restore CMD_RUN, framelist size, and irq threshold */
+	/*CMD_RUN will be set after, PORT_RESUME gets cleared*/
 	if (ehci->resume_sof_bug)
 		ehci->command &= ~CMD_RUN;
-	
+	/* restore CMD_RUN, framelist size, and irq threshold */
 	ehci_writel(ehci, ehci->command, &ehci->regs->command);
 	ehci->rh_state = EHCI_RH_RUNNING;
 
@@ -424,6 +426,8 @@ static int ehci_bus_resume (struct usb_hcd *hcd)
 	}
 
 	if (ehci->resume_sof_bug && resume_needed) {
+		/* root hub has only one port.
+		 * PORT_RESUME gets cleared automatically. */
 		handshake(ehci, &ehci->regs->port_status[0], PORT_RESUME, 0,
 				20000);
 		ehci_writel(ehci, ehci_readl(ehci,
@@ -574,7 +578,7 @@ ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
 	unsigned long	flags;
 	u32		ppcd = 0;
 
-	
+	/* if !USB_SUSPEND, root hub timers won't get shut down ... */
 	if (ehci->rh_state != EHCI_RH_RUNNING)
 		return 0;
 
@@ -675,6 +679,7 @@ ehci_hub_descriptor (
 	desc->wHubCharacteristics = cpu_to_le16(temp);
 }
 
+/*-------------------------------------------------------------------------*/
 #ifdef CONFIG_USB_EHCI_EHSET
 
 #define EHSET_TEST_SINGLE_STEP_SET_FEATURE 0x06
@@ -691,6 +696,12 @@ static int submit_single_step_set_feature(
 	int 		is_setup
 );
 
+/* Allocate a URB and initialize the various fields of it.
+ * This API is used by the single_step_set_feature test of
+ * EHSET where IN packet of the GetDescriptor request is
+ * sent after 15secs of the SETUP packet.
+ * Return NULL if failed.
+ */
 static struct urb *
 request_single_step_set_feature_urb(
 	struct usb_device 	*udev,
@@ -714,6 +725,10 @@ request_single_step_set_feature_urb(
 		return NULL;
 	}
 
+	/* Initialize the various URB fields as these are used
+	 * by the HCD driver to queue it and as well as
+	 * when completion happens.
+	 */
 	urb->ep = ep;
 	urb->dev = udev;
 	urb->setup_packet = (void *)dr;
@@ -751,7 +766,7 @@ static int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
 	struct usb_device_descriptor *buf;
 	DECLARE_COMPLETION_ONSTACK(done);
 
-	
+	/*Obtain udev of the rhub's child port */
 	udev = hcd->self.root_hub->children[port];
 	if (!udev) {
 		ehci_err(ehci, "No device attached to the RootHub\n");
@@ -767,7 +782,7 @@ static int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
 		return -ENOMEM;
 	}
 
-	
+	/* Fill Setup packet for GetDescriptor */
 	dr->bRequestType = USB_DIR_IN;
 	dr->bRequest = USB_REQ_GET_DESCRIPTOR;
 	dr->wValue = cpu_to_le16(USB_DT_DEVICE << 8);
@@ -777,7 +792,7 @@ static int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
 	if (!urb)
 		goto cleanup;
 
-	
+	/* Now complete just the SETUP stage */
 	retval = submit_single_step_set_feature(hcd, urb, 1);
 	if (retval)
 		goto out1;
@@ -788,8 +803,8 @@ static int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
 		goto out1;
 	}
 	msleep(15 * 1000);
-	
-	
+	/* Complete remaining DATA and status stages */
+	/* No need to free the URB, we can reuse the same */
 	urb->status = -EINPROGRESS;
 	usb_get_urb(urb);
 	atomic_inc(&urb->use_count);

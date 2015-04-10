@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -23,6 +23,9 @@
 #include <linux/miscdevice.h>
 #include <linux/genlock.h>
 
+/* Lock states - can either be unlocked, held as an exclusive write lock or a
+ * shared read lock
+ */
 
 #define _UNLOCKED 0
 #define _RDLOCK  GENLOCK_RDLOCK
@@ -31,23 +34,27 @@
 #define GENLOCK_LOG_ERR(fmt, args...) \
 pr_err("genlock: %s: " fmt, __func__, ##args)
 
+/* The genlock magic stored in the kernel private data is used to protect
+ * against the possibility of user space passing a valid fd to a
+ * non-genlock file for genlock_attach_lock()
+ */
 #define GENLOCK_MAGIC_OK  0xD2EAD10C
 #define GENLOCK_MAGIC_BAD 0xD2EADBAD
 
 struct genlock {
-	unsigned int magic;       
-	struct list_head active;  
-	spinlock_t lock;          
-	wait_queue_head_t queue;  
-	struct file *file;        
-	int state;                
+	unsigned int magic;       /* Magic for attach verification */
+	struct list_head active;  /* List of handles holding lock */
+	spinlock_t lock;          /* Spinlock to protect the lock internals */
+	wait_queue_head_t queue;  /* Holding pen for processes pending lock */
+	struct file *file;        /* File structure for exported lock */
+	int state;                /* Current state of the lock */
 	struct kref refcount;
 };
 
 struct genlock_handle {
-	struct genlock *lock;     
-	struct list_head entry;   
-	struct file *file;        
+	struct genlock *lock;     /* Lock currently attached to the handle */
+	struct list_head entry;   /* List node for attaching to a lock */
+	struct file *file;        /* File structure associated with handle */
 	int active;		  
 	struct genlock_info info;
 };

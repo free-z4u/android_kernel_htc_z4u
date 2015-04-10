@@ -15,6 +15,7 @@
  * either version 2 of that License or (at your option) any later version.
  */
 
+/* #define VERBOSE_DEBUG */
 
 #include <linux/kernel.h>
 #include <linux/sched.h>
@@ -30,6 +31,30 @@
 #include "u_serial.h"
 
 
+/*
+ * This component encapsulates the TTY layer glue needed to provide basic
+ * "serial port" functionality through the USB gadget stack.  Each such
+ * port is exposed through a /dev/ttyGS* node.
+ *
+ * After initialization (gserial_setup), these TTY port devices stay
+ * available until they are removed (gserial_cleanup).  Each one may be
+ * connected to a USB function (gserial_connect), or disconnected (with
+ * gserial_disconnect) when the USB host issues a config change event.
+ * Data can only flow when the port is connected to the host.
+ *
+ * A given TTY port can be made available in multiple configurations.
+ * For example, each one might expose a ttyGS0 node which provides a
+ * login application.  In one case that might use CDC ACM interface 0,
+ * while another configuration might use interface 3 for that.  The
+ * work to handle that (including descriptor management) is not part
+ * of this component.
+ *
+ * Configurations may expose more than one TTY port.  For example, if
+ * ttyGS0 provides login service, then ttyGS1 might provide dialer access
+ * for a telephone or fax link.  And ttyGS2 might be something that just
+ * needs a simple byte stream interface for some messaging protocol that
+ * is managed in userspace ... OBEX, PTP, and MTP have been mentioned.
+ */
 
 #define PREFIX	"ttyHSUSB"
 
@@ -1175,7 +1200,7 @@ int gserial_setup(struct usb_gadget *g, unsigned count)
 		goto fail;
 	}
 
-	
+	/* ... and sysfs class devices, so mdev/udev make /dev/ttyGS* */
 	for (i = 0; i < count; i++) {
 		struct device	*tty_dev;
 
@@ -1212,6 +1237,18 @@ static int gs_closed(struct gs_port *port)
 	return cond;
 }
 
+/**
+ * gserial_cleanup - remove TTY-over-USB driver and devices
+ * Context: may sleep
+ *
+ * This is called to free all resources allocated by @gserial_setup().
+ * Accordingly, it may need to wait until some open /dev/ files have
+ * closed.
+ *
+ * The caller must have issued @gserial_disconnect() for any ports
+ * that had previously been connected, so that there is never any
+ * I/O pending when it's called.
+ */
 void gserial_cleanup(void)
 {
 	unsigned	i;
@@ -1220,12 +1257,12 @@ void gserial_cleanup(void)
 	if (!gs_tty_driver)
 		return;
 
-	
+	/* start sysfs and /dev/ttyGS* node removal */
 	for (i = 0; i < n_ports; i++)
 		tty_unregister_device(gs_tty_driver, i);
 
 	for (i = 0; i < n_ports; i++) {
-		
+		/* prevent new opens */
 		mutex_lock(&ports[i].lock);
 		port = ports[i].port;
 		ports[i].port = NULL;
@@ -1233,7 +1270,7 @@ void gserial_cleanup(void)
 
 		cancel_work_sync(&port->push);
 
-		
+		/* wait for old opens to finish */
 		wait_event(port->close_wait, gs_closed(port));
 
 		WARN_ON(port->port_usb != NULL);
@@ -1280,10 +1317,10 @@ int gserial_connect(struct gserial *gser, u8 port_num)
 	if (!gs_tty_driver || port_num >= n_ports)
 		return -ENXIO;
 
-	
+	/* we "know" gserial_cleanup() hasn't been called */
 	port = ports[port_num].port;
 
-	
+	/* activate the endpoints */
 	status = usb_ep_enable(gser->in);
 	if (status < 0)
 		return status;
@@ -1294,15 +1331,21 @@ int gserial_connect(struct gserial *gser, u8 port_num)
 		goto fail_out;
 	gser->out->driver_data = port;
 
-	
+	/* then tell the tty glue that I/O can work */
 	spin_lock_irqsave(&port->port_lock, flags);
 	gser->ioport = port;
 	port->port_usb = gser;
 
+	/* REVISIT unclear how best to handle this state...
+	 * we don't really couple it with the Linux TTY.
+	 */
 	gser->port_line_coding = port->port_line_coding;
 
-	
+	/* REVISIT if waiting on "carrier detect", signal. */
 
+	/* if it's already open, start I/O ... and notify the serial
+	 * protocol about open/close status (connect/disconnect).
+	 */
 	if (port->open_count) {
 		pr_debug("gserial_connect: start ttyGS%d\n", port->port_num);
 		gs_start_io(port);
@@ -1323,6 +1366,17 @@ fail_out:
 	return status;
 }
 
+/**
+ * gserial_disconnect - notify TTY I/O glue that USB link is inactive
+ * @gser: the function, on which gserial_connect() was called
+ * Context: any (usually from irq)
+ *
+ * This is called to deactivate endpoints and let the TTY layer know
+ * that the connection went inactive ... not unlike "hangup".
+ *
+ * On return, the state is as if gserial_connect() had never been called;
+ * there is no active USB I/O on these endpoints.
+ */
 void gserial_disconnect(struct gserial *gser)
 {
 	struct gs_port	*port = gser->ioport;
@@ -1331,10 +1385,10 @@ void gserial_disconnect(struct gserial *gser)
 	if (!port)
 		return;
 
-	
+	/* tell the TTY glue not to do I/O here any more */
 	spin_lock_irqsave(&port->port_lock, flags);
 
-	
+	/* REVISIT as above: how best to track this? */
 	port->port_line_coding = gser->port_line_coding;
 
 	port->port_usb = NULL;
@@ -1346,14 +1400,14 @@ void gserial_disconnect(struct gserial *gser)
 	}
 	spin_unlock_irqrestore(&port->port_lock, flags);
 
-	
+	/* disable endpoints, aborting down any active I/O */
 	usb_ep_disable(gser->out);
 	gser->out->driver_data = NULL;
 
 	usb_ep_disable(gser->in);
 	gser->in->driver_data = NULL;
 
-	
+	/* finally, free any unused/unusable I/O buffers */
 	spin_lock_irqsave(&port->port_lock, flags);
 	if (port->open_count == 0 && !port->openclose)
 		gs_buf_free(&port->port_write_buf);

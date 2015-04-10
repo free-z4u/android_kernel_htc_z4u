@@ -13,6 +13,7 @@
  * (at your option) any later version.
  */
 
+/* #define VERBOSE_DEBUG */
 
 #include <linux/slab.h>
 #include <linux/kernel.h>
@@ -25,6 +26,46 @@
 #include "rndis.h"
 
 
+/*
+ * This function is an RNDIS Ethernet port -- a Microsoft protocol that's
+ * been promoted instead of the standard CDC Ethernet.  The published RNDIS
+ * spec is ambiguous, incomplete, and needlessly complex.  Variants such as
+ * ActiveSync have even worse status in terms of specification.
+ *
+ * In short:  it's a protocol controlled by (and for) Microsoft, not for an
+ * Open ecosystem or markets.  Linux supports it *only* because Microsoft
+ * doesn't support the CDC Ethernet standard.
+ *
+ * The RNDIS data transfer model is complex, with multiple Ethernet packets
+ * per USB message, and out of band data.  The control model is built around
+ * what's essentially an "RNDIS RPC" protocol.  It's all wrapped in a CDC ACM
+ * (modem, not Ethernet) veneer, with those ACM descriptors being entirely
+ * useless (they're ignored).  RNDIS expects to be the only function in its
+ * configuration, so it's no real help if you need composite devices; and
+ * it expects to be the first configuration too.
+ *
+ * There is a single technical advantage of RNDIS over CDC Ethernet, if you
+ * discount the fluff that its RPC can be made to deliver: it doesn't need
+ * a NOP altsetting for the data interface.  That lets it work on some of the
+ * "so smart it's stupid" hardware which takes over configuration changes
+ * from the software, and adds restrictions like "no altsettings".
+ *
+ * Unfortunately MSFT's RNDIS drivers are buggy.  They hang or oops, and
+ * have all sorts of contrary-to-specification oddities that can prevent
+ * them from working sanely.  Since bugfixes (or accurate specs, letting
+ * Linux work around those bugs) are unlikely to ever come from MSFT, you
+ * may want to avoid using RNDIS on purely operational grounds.
+ *
+ * Omissions from the RNDIS 1.0 specification include:
+ *
+ *   - Power management ... references data that's scattered around lots
+ *     of other documentation, which is incorrect/incomplete there too.
+ *
+ *   - There are various undocumented protocol requirements, like the need
+ *     to send garbage in some control-OUT messages.
+ *
+ *   - MS-Windows drivers sometimes emit undocumented requests.
+ */
 
 struct f_rndis {
 	struct gether			port;

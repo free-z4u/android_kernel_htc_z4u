@@ -103,6 +103,17 @@
 #define USB_REQ_LOOPBACK_DATA_READ	0x16
 #define USB_REQ_SET_INTERFACE_DS	0x17
 
+/* The Link Power Management (LPM) ECN defines USB_REQ_TEST_AND_SET command,
+ * used by hubs to put ports into a new L1 suspend state, except that it
+ * forgot to define its number ...
+ */
+
+/*
+ * USB feature flags are written using USB_REQ_{CLEAR,SET}_FEATURE, and
+ * are read as a bit array returned by USB_REQ_GET_STATUS.  (So there
+ * are at most sixteen features of each type.)  Hubs may also support a
+ * new USB_REQ_TEST_AND_SET_FEATURE to put ports into L1 suspend.
+ */
 #define USB_REQ_HTC_FUNCTION		0x01
 
 #define USB_WVAL_ADB				0x01

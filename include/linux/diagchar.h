@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -20,7 +20,6 @@
 #define DEINIT_TYPE			16
 #define USER_SPACE_LOG_TYPE		32
 #define DCI_DATA_TYPE			64
-
 #define USERMODE_DIAGFWD		2048
 #define USERMODE_DIAGFWD_LEGACY		64
 
@@ -679,6 +678,7 @@ static const uint32_t msg_bld_masks_22[] = {
 	MSG_LVL_HIGH
 };
 
+/* LOG CODES */
 
 #define LOG_0	0x0
 #define LOG_1	0x15A7

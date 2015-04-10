@@ -29,10 +29,11 @@
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 #include <linux/device.h>
-#include <linux/serial.h> 
+#include <linux/serial.h> /* for serial_state and serial_icounter_struct */
 #include <linux/serial_core.h>
 #include <linux/delay.h>
 #include <linux/mutex.h>
+
 #include <linux/gpio.h>
 
 #include <asm/irq.h>
@@ -2014,6 +2015,15 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
 	return ret;
 }
 
+/**
+ *	uart_remove_one_port - detach a driver defined port structure
+ *	@drv: pointer to the uart low level driver structure for this port
+ *	@uport: uart port structure for this port
+ *
+ *	This unhooks (and hangs up) the specified port structure from the
+ *	core driver.  No further calls will be made to the low-level code
+ *	for this port.
+ */
 int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
 {
 	struct uart_state *state = drv->state + uport->line;
@@ -2027,18 +2037,31 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
 
 	mutex_lock(&port_mutex);
 
+	/*
+	 * Mark the port "dead" - this prevents any opens from
+	 * succeeding while we shut down the port.
+	 */
 	mutex_lock(&port->mutex);
 	uport->flags |= UPF_DEAD;
 	mutex_unlock(&port->mutex);
 
+	/*
+	 * Remove the devices from the tty layer
+	 */
 	tty_unregister_device(drv->tty_driver, uport->line);
 
 	if (port->tty)
 		tty_vhangup(port->tty);
 
+	/*
+	 * Free the port IO and memory resources, if any.
+	 */
 	if (uport->type != PORT_UNKNOWN)
 		uport->ops->release_port(uport);
 
+	/*
+	 * Indicate that there isn't a port here anymore.
+	 */
 	uport->type = PORT_UNKNOWN;
 
 	state->uart_port = NULL;
@@ -2047,6 +2070,9 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
 	return 0;
 }
 
+/*
+ *	Are the two ports equivalent?
+ */
 int uart_match_port(struct uart_port *port1, struct uart_port *port2)
 {
 	if (port1->iotype != port2->iotype)
@@ -2068,6 +2094,11 @@ int uart_match_port(struct uart_port *port1, struct uart_port *port2)
 }
 EXPORT_SYMBOL(uart_match_port);
 
+/**
+ *	uart_handle_dcd_change - handle a change of carrier detect state
+ *	@uport: uart_port structure for the open port
+ *	@status: new carrier detect status, nonzero if active
+ */
 void uart_handle_dcd_change(struct uart_port *uport, unsigned int status)
 {
 	struct uart_state *state = uport->state;
@@ -2098,6 +2129,11 @@ void uart_handle_dcd_change(struct uart_port *uport, unsigned int status)
 }
 EXPORT_SYMBOL_GPL(uart_handle_dcd_change);
 
+/**
+ *	uart_handle_cts_change - handle a change of clear-to-send state
+ *	@uport: uart_port structure for the open port
+ *	@status: new clear to send status, nonzero if active
+ */
 void uart_handle_cts_change(struct uart_port *uport, unsigned int status)
 {
 	struct tty_port *port = &uport->state->port;
@@ -2122,6 +2158,18 @@ void uart_handle_cts_change(struct uart_port *uport, unsigned int status)
 }
 EXPORT_SYMBOL_GPL(uart_handle_cts_change);
 
+/**
+ * uart_insert_char - push a char to the uart layer
+ *
+ * User is responsible to call tty_flip_buffer_push when they are done with
+ * insertion.
+ *
+ * @port: corresponding port
+ * @status: state of the serial port RX buffer (LSR for 8250)
+ * @overrun: mask of overrun bits in @status
+ * @ch: character to push
+ * @flag: flag for the character (see TTY_NORMAL and friends)
+ */
 void uart_insert_char(struct uart_port *port, unsigned int status,
 		 unsigned int overrun, unsigned int ch, unsigned int flag)
 {
@@ -2130,6 +2178,10 @@ void uart_insert_char(struct uart_port *port, unsigned int status,
 	if ((status & port->ignore_status_mask & ~overrun) == 0)
 		tty_insert_flip_char(tty, ch, flag);
 
+	/*
+	 * Overrun is special.  Since it's reported immediately,
+	 * it doesn't affect the current character.
+	 */
 	if (status & ~port->ignore_status_mask & overrun)
 		tty_insert_flip_char(tty, 0, TTY_OVERRUN);
 }

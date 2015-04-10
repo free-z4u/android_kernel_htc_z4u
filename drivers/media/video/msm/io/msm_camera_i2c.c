@@ -1,4 +1,4 @@
-/* Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All Rights Reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -713,3 +713,4 @@ int32_t msm_camera_i2c_txdata_rumbas(struct msm_camera_i2c_client *dev_client, u
 	
 	return rc;
 }
+

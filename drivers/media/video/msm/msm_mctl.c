@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1786,6 +1786,7 @@ static int msm_mctl_v4l2_unsubscribe_event(struct v4l2_fh *fh,
 	return rc;
 }
 
+/* mctl node v4l2_ioctl_ops */
 static const struct v4l2_ioctl_ops g_msm_mctl_ioctl_ops = {
 	.vidioc_querycap = msm_mctl_v4l2_querycap,
 
@@ -1804,7 +1805,7 @@ static const struct v4l2_ioctl_ops g_msm_mctl_ioctl_ops = {
 	.vidioc_streamon = msm_mctl_v4l2_streamon,
 	.vidioc_streamoff = msm_mctl_v4l2_streamoff,
 
-	
+	/* format ioctls */
 	.vidioc_enum_fmt_vid_cap = msm_mctl_v4l2_enum_fmt_cap,
 	.vidioc_enum_fmt_vid_cap_mplane = msm_mctl_v4l2_enum_fmt_cap,
 	.vidioc_try_fmt_vid_cap = msm_mctl_v4l2_try_fmt_cap,
@@ -1817,11 +1818,11 @@ static const struct v4l2_ioctl_ops g_msm_mctl_ioctl_ops = {
 	.vidioc_g_jpegcomp = msm_mctl_v4l2_g_jpegcomp,
 	.vidioc_s_jpegcomp = msm_mctl_v4l2_s_jpegcomp,
 
-	
+	/* Stream type-dependent parameter ioctls */
 	.vidioc_g_parm =  msm_mctl_v4l2_g_parm,
 	.vidioc_s_parm =  msm_mctl_v4l2_s_parm,
 
-	
+	/* event subscribe/unsubscribe */
 	.vidioc_subscribe_event = msm_mctl_v4l2_subscribe_event,
 	.vidioc_unsubscribe_event = msm_mctl_v4l2_unsubscribe_event,
 };
@@ -1834,24 +1835,28 @@ int msm_setup_mctl_node(struct msm_cam_v4l2_device *pcam)
 
 	D("%s\n", __func__);
 
-	
+	/* first register the v4l2 device */
 	pcam->mctl_node.v4l2_dev.dev = &client->dev;
 	rc = v4l2_device_register(pcam->mctl_node.v4l2_dev.dev,
 				&pcam->mctl_node.v4l2_dev);
 	if (rc < 0)
 		return -EINVAL;
+	/*	else
+			pcam->v4l2_dev.notify = msm_cam_v4l2_subdev_notify; */
 
-	
+	/* now setup video device */
 	pvdev = video_device_alloc();
 	if (pvdev == NULL) {
 		pr_err("%s: video_device_alloc failed\n", __func__);
 		return rc;
 	}
 
-	
+	/* init video device's driver interface */
 	D("sensor name = %s, sizeof(pvdev->name)=%d\n",
 			pcam->sensor_sdev->name, sizeof(pvdev->name));
 
+	/* device info - strlcpy is safer than strncpy but
+	   only if architecture supports*/
 	strlcpy(pvdev->name, pcam->sensor_sdev->name,
 			sizeof(pvdev->name));
 
@@ -1861,7 +1866,7 @@ int msm_setup_mctl_node(struct msm_cam_v4l2_device *pcam)
 	pvdev->minor	  = -1;
 	pvdev->vfl_type   = 1;
 
-	
+	/* register v4l2 video device to kernel as /dev/videoXX */
 	D("%s video_register_device\n", __func__);
 	rc = video_register_device(pvdev,
 			VFL_TYPE_GRABBER,
@@ -1873,7 +1878,7 @@ int msm_setup_mctl_node(struct msm_cam_v4l2_device *pcam)
 	D("%s: video device registered as /dev/video%d\n",
 			__func__, pvdev->num);
 
-	
+	/* connect pcam and mctl video dev to each other */
 	pcam->mctl_node.pvdev	= pvdev;
 	video_set_drvdata(pcam->mctl_node.pvdev, pcam);
 

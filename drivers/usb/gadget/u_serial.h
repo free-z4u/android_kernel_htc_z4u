@@ -63,12 +63,15 @@ struct gsmd_Info{
 struct usb_request *gs_alloc_req(struct usb_ep *ep, unsigned len, gfp_t flags);
 void gs_free_req(struct usb_ep *, struct usb_request *req);
 
+/* port setup/teardown is handled by gadget driver */
 int gserial_setup(struct usb_gadget *g, unsigned n_ports);
 void gserial_cleanup(void);
 
+/* connect/disconnect is handled by individual functions */
 int gserial_connect(struct gserial *, u8 port_num);
 void gserial_disconnect(struct gserial *);
 
+/* sdio related functions */
 int gsdio_setup(struct usb_gadget *g, unsigned n_ports);
 int gsdio_connect(struct gserial *, u8 port_num);
 void gsdio_disconnect(struct gserial *, u8 portno);
@@ -77,8 +80,9 @@ int gsmd_setup(struct usb_gadget *g, unsigned n_ports);
 int gsmd_connect(struct gserial *, u8 port_num);
 void gsmd_disconnect(struct gserial *, u8 portno);
 
+/* functions are bound to configurations by a config or gadget driver */
 int acm_bind_config(struct usb_configuration *c, u8 port_num);
 int gser_bind_config(struct usb_configuration *c, u8 port_num);
 int obex_bind_config(struct usb_configuration *c, u8 port_num);
 
-#endif 
+#endif /* __U_SERIAL_H */

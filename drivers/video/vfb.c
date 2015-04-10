@@ -35,6 +35,12 @@
 static void *videomemory;
 static u_long videomemorysize = VIDEOMEMSIZE;
 module_param(videomemorysize, ulong, 0);
+
+/**********************************************************************
+ *
+ * Memory management
+ *
+ **********************************************************************/
 static char *mode_option __devinitdata;
 static int bpp __devinitdata = 8;
 

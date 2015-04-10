@@ -1,7 +1,7 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
    Copyright (C) 2010  Nokia Corporation
-   Copyright (c) 2011-2012 Code Aurora Forum.  All rights reserved.
+   Copyright (c) 2011-2012 The Linux Foundation.  All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License version 2 as
@@ -21,6 +21,7 @@
    SOFTWARE IS DISCLAIMED.
 */
 
+/* Bluetooth HCI Management interface */
 
 #include <linux/uaccess.h>
 #include <linux/interrupt.h>
@@ -2820,6 +2821,7 @@ int mgmt_read_local_oob_data_reply_complete(u16 index, u8 *hash, u8 *randomizer,
 	return err;
 }
 
+
 int mgmt_device_found(u16 index, bdaddr_t *bdaddr, u8 type, u8 le,
 			u8 *dev_class, s8 rssi, u8 eir_len, u8 *eir)
 {
@@ -2858,17 +2860,17 @@ int mgmt_device_found(u16 index, bdaddr_t *bdaddr, u8 type, u8 le,
 	hdev->disco_int_count++;
 
 	if (hdev->disco_int_count >= hdev->disco_int_phase) {
-		
+		/* Inquiry scan for General Discovery LAP */
 		struct hci_cp_inquiry cp = {{0x33, 0x8b, 0x9e}, 4, 0};
 		struct hci_cp_le_set_scan_enable le_cp = {0, 0};
 
 		hdev->disco_int_phase *= 2;
 		hdev->disco_int_count = 0;
 		if (hdev->disco_state == SCAN_LE) {
-			
+			/* cancel LE scan */
 			hci_send_cmd(hdev, HCI_OP_LE_SET_SCAN_ENABLE,
 					sizeof(le_cp), &le_cp);
-			
+			/* start BR scan */
 			cp.num_rsp = (u8) hdev->disco_int_phase;
 			hci_send_cmd(hdev, HCI_OP_INQUIRY,
 					sizeof(cp), &cp);

@@ -1,6 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (c) 2000-2001, 2010-2012 Code Aurora Forum.  All rights reserved.
+   Copyright (c) 2000-2001, 2010-2012 The Linux Foundation.  All rights reserved.
    Copyright (C) 2009-2010 Gustavo F. Padovan <gustavo@padovan.org>
    Copyright (C) 2010 Google Inc.
 
@@ -24,6 +24,7 @@
    SOFTWARE IS DISCLAIMED.
 */
 
+/* Bluetooth L2CAP core. */
 
 #include <linux/module.h>
 
@@ -93,6 +94,7 @@ static void l2cap_conn_del(struct hci_conn *hcon, int err, u8 is_process);
 static u16 l2cap_get_smallest_flushto(struct l2cap_chan_list *l);
 static void l2cap_set_acl_flushto(struct hci_conn *hcon, u16 flush_to);
 
+/* ---- L2CAP channels ---- */
 static struct sock *__l2cap_get_chan_by_dcid(struct l2cap_chan_list *l, u16 cid)
 {
 	struct sock *s;
@@ -103,6 +105,8 @@ static struct sock *__l2cap_get_chan_by_dcid(struct l2cap_chan_list *l, u16 cid)
 	return s;
 }
 
+/* Find channel with given DCID.
+ * Returns locked socket */
 static inline struct sock *l2cap_get_chan_by_dcid(struct l2cap_chan_list *l,
 						u16 cid)
 {
@@ -125,6 +129,8 @@ static struct sock *__l2cap_get_chan_by_scid(struct l2cap_chan_list *l, u16 cid)
 	return s;
 }
 
+/* Find channel with given SCID.
+ * Returns locked socket */
 static inline struct sock *l2cap_get_chan_by_scid(struct l2cap_chan_list *l, u16 cid)
 {
 	struct sock *s;
@@ -176,7 +182,7 @@ static int l2cap_seq_list_init(struct l2cap_seq_list *seq_list, u16 size)
 	int err = 0;
 	int i;
 
-	
+	/* Actual allocated size must be a power of 2 */
 	while (allocSize && allocSize <= size)
 		allocSize <<= 1;
 	if (!allocSize)
@@ -214,11 +220,11 @@ static u16 l2cap_seq_list_remove(struct l2cap_seq_list *seq_list, u16 seq)
 	BT_DBG("seq_list %p, seq %d", seq_list, (int) seq);
 
 	if (seq_list->head == L2CAP_SEQ_LIST_CLEAR) {
-		
+		/* In case someone tries to pop the head of an empty list */
 		BT_DBG("List empty");
 		return L2CAP_SEQ_LIST_CLEAR;
 	} else if (seq_list->head == seq) {
-		
+		/* Head can be removed quickly */
 		BT_DBG("Remove head");
 		seq_list->head = seq_list->list[seq & mask];
 		seq_list->list[seq & mask] = L2CAP_SEQ_LIST_CLEAR;
@@ -228,7 +234,7 @@ static u16 l2cap_seq_list_remove(struct l2cap_seq_list *seq_list, u16 seq)
 			seq_list->tail = L2CAP_SEQ_LIST_CLEAR;
 		}
 	} else {
-		
+		/* Non-head item must be found first */
 		u16 prev = seq_list->head;
 		BT_DBG("Find and remove");
 		while (seq_list->list[prev & mask] != seq) {
@@ -492,7 +498,7 @@ static void __l2cap_chan_add(struct l2cap_conn *conn, struct sock *sk)
 	if (!l2cap_pi(sk)->fixed_channel &&
 		(sk->sk_type == SOCK_SEQPACKET || sk->sk_type == SOCK_STREAM)) {
 		if (conn->hcon->type == LE_LINK) {
-			
+			/* LE connection */
 			if (l2cap_pi(sk)->imtu < L2CAP_LE_DEFAULT_MTU)
 				l2cap_pi(sk)->imtu = L2CAP_LE_DEFAULT_MTU;
 			if (l2cap_pi(sk)->omtu < L2CAP_LE_DEFAULT_MTU)
@@ -501,30 +507,35 @@ static void __l2cap_chan_add(struct l2cap_conn *conn, struct sock *sk)
 			l2cap_pi(sk)->scid = L2CAP_CID_LE_DATA;
 			l2cap_pi(sk)->dcid = L2CAP_CID_LE_DATA;
 		} else {
-			
+			/* Alloc CID for connection-oriented socket */
 			l2cap_pi(sk)->scid = l2cap_alloc_cid(l);
 			l2cap_pi(sk)->omtu = L2CAP_DEFAULT_MTU;
 		}
 	} else if (sk->sk_type == SOCK_DGRAM) {
-		
+		/* Connectionless socket */
 		l2cap_pi(sk)->scid = L2CAP_CID_CONN_LESS;
 		l2cap_pi(sk)->dcid = L2CAP_CID_CONN_LESS;
 		l2cap_pi(sk)->omtu = L2CAP_DEFAULT_MTU;
 	} else if (sk->sk_type == SOCK_RAW) {
-		
+		/* Raw socket can send/recv signalling messages only */
 		l2cap_pi(sk)->scid = L2CAP_CID_SIGNALING;
 		l2cap_pi(sk)->dcid = L2CAP_CID_SIGNALING;
 		l2cap_pi(sk)->omtu = L2CAP_DEFAULT_MTU;
 	}
 
 	if (l2cap_get_smallest_flushto(l) > l2cap_pi(sk)->flush_to) {
-		
+		/*if flush timeout of the channel is lesser than existing */
 		l2cap_set_acl_flushto(conn->hcon, l2cap_pi(sk)->flush_to);
 	}
+	/* Otherwise, do not set scid/dcid/omtu.  These will be set up
+	 * by l2cap_fixed_channel_config()
+	 */
 
 	__l2cap_chan_link(l, sk);
 }
 
+/* Delete channel.
+ * Must be called on the locked socket. */
 void l2cap_chan_del(struct sock *sk, int err)
 {
 	struct l2cap_conn *conn = l2cap_pi(sk)->conn;
@@ -536,7 +547,7 @@ void l2cap_chan_del(struct sock *sk, int err)
 
 	if (conn) {
 		struct l2cap_chan_list *l = &conn->chan_list;
-		
+		/* Unlink from channel list */
 		l2cap_chan_unlink(l, sk);
 		l2cap_pi(sk)->conn = NULL;
 		if (!l2cap_pi(sk)->fixed_channel)
@@ -7366,7 +7377,7 @@ static int l2cap_recv_acldata(struct hci_conn *hcon, struct sk_buff *skb, u16 fl
 			l2cap_conn_unreliable(conn, ECOMM);
 		}
 
-		
+		/* Start fragment always begin with Basic L2CAP header */
 		if (skb->len < L2CAP_HDR_SIZE) {
 			BT_ERR("Frame is too short (len %d)", skb->len);
 			l2cap_conn_unreliable(conn, ECOMM);
@@ -7377,7 +7388,7 @@ static int l2cap_recv_acldata(struct hci_conn *hcon, struct sk_buff *skb, u16 fl
 		len = __le16_to_cpu(hdr->len) + L2CAP_HDR_SIZE;
 
 		if (len == skb->len) {
-			
+			/* Complete frame received */
 			l2cap_recv_frame(conn, skb);
 			return 0;
 		}
@@ -7399,7 +7410,7 @@ static int l2cap_recv_acldata(struct hci_conn *hcon, struct sk_buff *skb, u16 fl
 			goto drop;
 		}
 
-		
+		/* Allocate skb for the complete frame (with header) */
 		conn->rx_skb = bt_skb_alloc(len, GFP_ATOMIC);
 		if (!conn->rx_skb)
 			goto drop;
@@ -7431,7 +7442,7 @@ static int l2cap_recv_acldata(struct hci_conn *hcon, struct sk_buff *skb, u16 fl
 		conn->rx_len -= skb->len;
 
 		if (!conn->rx_len) {
-			
+			/* Complete frame received */
 			l2cap_recv_frame(conn, conn->rx_skb);
 			conn->rx_skb = NULL;
 		}

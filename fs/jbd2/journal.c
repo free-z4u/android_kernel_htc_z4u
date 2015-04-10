@@ -1416,6 +1416,11 @@ int jbd2_journal_flush(journal_t *journal)
 	mutex_lock(&journal->j_checkpoint_mutex);
 	jbd2_cleanup_journal_tail(journal);
 
+	/* Finally, mark the journal as really needing no recovery.
+	 * This sets s_start==0 in the underlying superblock, which is
+	 * the magic code for a fully-recovered superblock.  Any future
+	 * commits of data to the journal will restore the current
+	 * s_start value. */
 	jbd2_mark_journal_empty(journal);
 	mutex_unlock(&journal->j_checkpoint_mutex);
 	write_lock(&journal->j_state_lock);
@@ -1428,6 +1433,18 @@ int jbd2_journal_flush(journal_t *journal)
 	return 0;
 }
 
+/**
+ * int jbd2_journal_wipe() - Wipe journal contents
+ * @journal: Journal to act on.
+ * @write: flag (see below)
+ *
+ * Wipe out all of the contents of a journal, safely.  This will produce
+ * a warning if the journal contains any valid recovery information.
+ * Must be called between journal_init_*() and jbd2_journal_load().
+ *
+ * If 'write' is non-zero, then we wipe out the journal on disk; otherwise
+ * we merely suppress recovery.
+ */
 
 int jbd2_journal_wipe(journal_t *journal, int write)
 {
@@ -1447,7 +1464,7 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 
 	err = jbd2_journal_skip_recovery(journal);
 	if (write) {
-		
+		/* Lock to make assertions happy... */
 		mutex_lock(&journal->j_checkpoint_mutex);
 		jbd2_mark_journal_empty(journal);
 		mutex_unlock(&journal->j_checkpoint_mutex);
@@ -1457,7 +1474,19 @@ int jbd2_journal_wipe(journal_t *journal, int write)
 	return err;
 }
 
+/*
+ * Journal abort has very specific semantics, which we describe
+ * for journal abort.
+ *
+ * Two internal functions, which provide abort to the jbd layer
+ * itself are here.
+ */
 
+/*
+ * Quick version for internal journal use (doesn't lock the journal).
+ * Aborts hard --- we mark the abort as occurred, but do _nothing_ else,
+ * and don't attempt to make any other journal updates.
+ */
 void __jbd2_journal_abort_hard(journal_t *journal)
 {
 	transaction_t *transaction;
@@ -1476,6 +1505,8 @@ void __jbd2_journal_abort_hard(journal_t *journal)
 	write_unlock(&journal->j_state_lock);
 }
 
+/* Soft abort: record the abort error status in the journal superblock,
+ * but don't do any other IO. */
 static void __journal_abort_soft (journal_t *journal, int errno)
 {
 	if (journal->j_flags & JBD2_ABORT)
@@ -1541,6 +1572,17 @@ void jbd2_journal_abort(journal_t *journal, int errno)
 	__journal_abort_soft(journal, errno);
 }
 
+/**
+ * int jbd2_journal_errno () - returns the journal's error state.
+ * @journal: journal to examine.
+ *
+ * This is the errno number set with jbd2_journal_abort(), the last
+ * time the journal was mounted - if the journal was stopped
+ * without calling abort this will be 0.
+ *
+ * If the journal has been aborted on this mount time -EROFS will
+ * be returned.
+ */
 int jbd2_journal_errno(journal_t *journal)
 {
 	int err;
@@ -1554,6 +1596,13 @@ int jbd2_journal_errno(journal_t *journal)
 	return err;
 }
 
+/**
+ * int jbd2_journal_clear_err () - clears the journal's error state
+ * @journal: journal to act on.
+ *
+ * An error must be cleared or acked to take a FS out of readonly
+ * mode.
+ */
 int jbd2_journal_clear_err(journal_t *journal)
 {
 	int err = 0;
@@ -1567,6 +1616,13 @@ int jbd2_journal_clear_err(journal_t *journal)
 	return err;
 }
 
+/**
+ * void jbd2_journal_ack_err() - Ack journal err.
+ * @journal: journal to act on.
+ *
+ * An error must be cleared or acked to take a FS out of readonly
+ * mode.
+ */
 void jbd2_journal_ack_err(journal_t *journal)
 {
 	write_lock(&journal->j_state_lock);
@@ -1580,6 +1636,9 @@ int jbd2_journal_blocks_per_page(struct inode *inode)
 	return 1 << (PAGE_CACHE_SHIFT - inode->i_sb->s_blocksize_bits);
 }
 
+/*
+ * helper functions to deal with 32 or 64bit block numbers.
+ */
 size_t journal_tag_bytes(journal_t *journal)
 {
 	if (JBD2_HAS_INCOMPAT_FEATURE(journal, JBD2_FEATURE_INCOMPAT_64BIT))
@@ -1588,6 +1647,21 @@ size_t journal_tag_bytes(journal_t *journal)
 		return JBD2_TAG_SIZE32;
 }
 
+/*
+ * JBD memory management
+ *
+ * These functions are used to allocate block-sized chunks of memory
+ * used for making copies of buffer_head data.  Very often it will be
+ * page-sized chunks of data, but sometimes it will be in
+ * sub-page-size chunks.  (For example, 16k pages on Power systems
+ * with a 4k block file system.)  For blocks smaller than a page, we
+ * use a SLAB allocator.  There are slab caches for each block size,
+ * which are allocated at mount time, if necessary, and we only free
+ * (all of) the slab caches when/if the jbd2 module is unloaded.  For
+ * this reason we don't need to a mutex to protect access to
+ * jbd2_slab[] allocating or releasing memory; only in
+ * jbd2_journal_create_slab().
+ */
 #define JBD2_MAX_SLABS 8
 static struct kmem_cache *jbd2_slab[JBD2_MAX_SLABS];
 
@@ -1625,7 +1699,7 @@ static int jbd2_journal_create_slab(size_t size)
 	mutex_lock(&jbd2_slab_create_mutex);
 	if (jbd2_slab[i]) {
 		mutex_unlock(&jbd2_slab_create_mutex);
-		return 0;	
+		return 0;	/* Already created */
 	}
 
 	slab_size = 1 << (i+10);
@@ -1654,7 +1728,7 @@ void *jbd2_alloc(size_t size, gfp_t flags)
 {
 	void *ptr;
 
-	BUG_ON(size & (size-1)); 
+	BUG_ON(size & (size-1)); /* Must be a power of 2 */
 
 	flags |= __GFP_REPEAT;
 	if (size == PAGE_SIZE)
@@ -1669,6 +1743,8 @@ void *jbd2_alloc(size_t size, gfp_t flags)
 	} else
 		ptr = kmem_cache_alloc(get_slab(size), flags);
 
+	/* Check alignment; SLUB has gotten this wrong in the past,
+	 * and this can lead to user data corruption! */
 	BUG_ON(((unsigned long) ptr) & (size-1));
 
 	return ptr;
@@ -1692,6 +1768,9 @@ void jbd2_free(void *ptr, size_t size)
 	kmem_cache_free(get_slab(size), ptr);
 };
 
+/*
+ * Journal_head storage management
+ */
 static struct kmem_cache *jbd2_journal_head_cache;
 #ifdef CONFIG_JBD2_DEBUG
 static atomic_t nr_journal_heads = ATOMIC_INIT(0);
@@ -1704,9 +1783,9 @@ static int jbd2_journal_init_journal_head_cache(void)
 	J_ASSERT(jbd2_journal_head_cache == NULL);
 	jbd2_journal_head_cache = kmem_cache_create("jbd2_journal_head",
 				sizeof(struct journal_head),
-				0,		
-				SLAB_TEMPORARY,	
-				NULL);		
+				0,		/* offset */
+				SLAB_TEMPORARY,	/* flags */
+				NULL);		/* ctor */
 	retval = 0;
 	if (!jbd2_journal_head_cache) {
 		retval = -ENOMEM;
@@ -1723,6 +1802,9 @@ static void jbd2_journal_destroy_journal_head_cache(void)
 	}
 }
 
+/*
+ * journal_head splicing and dicing
+ */
 static struct journal_head *journal_alloc_journal_head(void)
 {
 	struct journal_head *ret;
@@ -1751,7 +1833,47 @@ static void journal_free_journal_head(struct journal_head *jh)
 	kmem_cache_free(jbd2_journal_head_cache, jh);
 }
 
+/*
+ * A journal_head is attached to a buffer_head whenever JBD has an
+ * interest in the buffer.
+ *
+ * Whenever a buffer has an attached journal_head, its ->b_state:BH_JBD bit
+ * is set.  This bit is tested in core kernel code where we need to take
+ * JBD-specific actions.  Testing the zeroness of ->b_private is not reliable
+ * there.
+ *
+ * When a buffer has its BH_JBD bit set, its ->b_count is elevated by one.
+ *
+ * When a buffer has its BH_JBD bit set it is immune from being released by
+ * core kernel code, mainly via ->b_count.
+ *
+ * A journal_head is detached from its buffer_head when the journal_head's
+ * b_jcount reaches zero. Running transaction (b_transaction) and checkpoint
+ * transaction (b_cp_transaction) hold their references to b_jcount.
+ *
+ * Various places in the kernel want to attach a journal_head to a buffer_head
+ * _before_ attaching the journal_head to a transaction.  To protect the
+ * journal_head in this situation, jbd2_journal_add_journal_head elevates the
+ * journal_head's b_jcount refcount by one.  The caller must call
+ * jbd2_journal_put_journal_head() to undo this.
+ *
+ * So the typical usage would be:
+ *
+ *	(Attach a journal_head if needed.  Increments b_jcount)
+ *	struct journal_head *jh = jbd2_journal_add_journal_head(bh);
+ *	...
+ *      (Get another reference for transaction)
+ *	jbd2_journal_grab_journal_head(bh);
+ *	jh->b_transaction = xxx;
+ *	(Put original reference)
+ *	jbd2_journal_put_journal_head(jh);
+ */
 
+/*
+ * Give a buffer_head a journal_head.
+ *
+ * May sleep.
+ */
 struct journal_head *jbd2_journal_add_journal_head(struct buffer_head *bh)
 {
 	struct journal_head *jh;
@@ -1777,7 +1899,7 @@ repeat:
 		}
 
 		jh = new_jh;
-		new_jh = NULL;		
+		new_jh = NULL;		/* We consumed it */
 		set_buffer_jbd(bh);
 		bh->b_private = jh;
 		jh->b_bh = bh;
@@ -1791,6 +1913,10 @@ repeat:
 	return bh->b_private;
 }
 
+/*
+ * Grab a ref against this buffer_head's journal_head.  If it ended up not
+ * having a journal_head, return NULL
+ */
 struct journal_head *jbd2_journal_grab_journal_head(struct buffer_head *bh)
 {
 	struct journal_head *jh = NULL;
@@ -1825,11 +1951,15 @@ static void __journal_remove_journal_head(struct buffer_head *bh)
 		jbd2_free(jh->b_committed_data, bh->b_size);
 	}
 	bh->b_private = NULL;
-	jh->b_bh = NULL;	
+	jh->b_bh = NULL;	/* debug, really */
 	clear_buffer_jbd(bh);
 	journal_free_journal_head(jh);
 }
 
+/*
+ * Drop a reference on the passed journal_head.  If it fell to zero then
+ * release the journal_head from the buffer_head.
+ */
 void jbd2_journal_put_journal_head(struct journal_head *jh)
 {
 	struct buffer_head *bh = jh2bh(jh);
@@ -1845,6 +1975,9 @@ void jbd2_journal_put_journal_head(struct journal_head *jh)
 		jbd_unlock_bh_journal_head(bh);
 }
 
+/*
+ * Initialize jbd inode head
+ */
 void jbd2_journal_init_jbd_inode(struct jbd2_inode *jinode, struct inode *inode)
 {
 	jinode->i_transaction = NULL;
@@ -1854,6 +1987,11 @@ void jbd2_journal_init_jbd_inode(struct jbd2_inode *jinode, struct inode *inode)
 	INIT_LIST_HEAD(&jinode->i_list);
 }
 
+/*
+ * Function to be called before we start removing inode from memory (i.e.,
+ * clear_inode() is a fine place to be called from). It removes inode from
+ * transaction's lists.
+ */
 void jbd2_journal_release_jbd_inode(journal_t *journal,
 				    struct jbd2_inode *jinode)
 {
@@ -1861,7 +1999,7 @@ void jbd2_journal_release_jbd_inode(journal_t *journal,
 		return;
 restart:
 	spin_lock(&journal->j_list_lock);
-	
+	/* Is commit writing out inode - we have to wait */
 	if (test_bit(__JI_COMMIT_RUNNING, &jinode->i_flags)) {
 		wait_queue_head_t *wq;
 		DEFINE_WAIT_BIT(wait, &jinode->i_flags, __JI_COMMIT_RUNNING);
@@ -1880,6 +2018,9 @@ restart:
 	spin_unlock(&journal->j_list_lock);
 }
 
+/*
+ * debugfs tunables
+ */
 #ifdef CONFIG_JBD2_DEBUG
 u8 jbd2_journal_enable_debug __read_mostly;
 EXPORT_SYMBOL(jbd2_journal_enable_debug);
@@ -1966,6 +2107,9 @@ static void jbd2_journal_destroy_handle_cache(void)
 
 }
 
+/*
+ * Module startup and shutdown
+ */
 
 static int __init journal_init_caches(void)
 {

@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/clock.c
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2007-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2007-2012, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -23,6 +23,7 @@
 #include <linux/clkdev.h>
 #include <linux/list.h>
 #include <trace/events/power.h>
+
 #include <asm/mach-types.h>
 #include <linux/delay.h>
 
@@ -544,4 +545,6 @@ static int __init clock_late_init(void)
 		ret = clk_init_data->late_init();
 	return ret;
 }
+
 late_initcall(clock_late_init);
+

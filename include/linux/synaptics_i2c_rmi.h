@@ -173,4 +173,4 @@ enum {
 };
 
 extern uint8_t getPowerKeyState(void);
-#endif 
+#endif /* _LINUX_SYNAPTICS_I2C_RMI_H */

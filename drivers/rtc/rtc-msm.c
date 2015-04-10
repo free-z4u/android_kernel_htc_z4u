@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2008 Google, Inc.
- * Copyright (c) 2009-2011 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009-2011 The Linux Foundation. All rights reserved.
  * Author: San Mehat <san@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -809,6 +809,13 @@ static int __init msmrtc_init(void)
 {
 	int rc;
 
+	/*
+	 * For backward compatibility, register multiple platform
+	 * drivers with the RPC PROG_VERS to be supported.
+	 *
+	 * Explicit cast away of 'constness' for driver.name in order to
+	 * initialize it here.
+	 */
 	snprintf((char *)msmrtc_driver.driver.name,
 		 strlen(msmrtc_driver.driver.name)+1,
 		 "rs%08x", TIMEREMOTE_PROG_NUMBER);

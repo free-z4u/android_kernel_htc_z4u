@@ -26,6 +26,7 @@
 #include <linux/kmod.h>
 #include <linux/slab.h>
 #include <asm/uaccess.h>
+
 #include <asm/system.h>
 
 #include <media/v4l2-common.h>
@@ -674,3 +675,8 @@ MODULE_LICENSE("GPL");
 MODULE_ALIAS_CHARDEV_MAJOR(VIDEO_MAJOR);
 
 
+/*
+ * Local variables:
+ * c-basic-offset: 8
+ * End:
+ */

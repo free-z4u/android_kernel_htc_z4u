@@ -158,6 +158,7 @@ struct kmem_cache *vm_area_cachep;
 /* SLAB cache for mm_struct structures (tsk->mm) */
 static struct kmem_cache *mm_cachep;
 
+/* Notifier list called when a task struct is freed */
 static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
 
 static void account_kernel_stack(struct thread_info *ti, int account)

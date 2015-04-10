@@ -3366,7 +3366,8 @@ void snd_soc_dapm_shutdown(struct snd_soc_card *card)
 
 	list_for_each_entry(codec, &card->codec_dev_list, list) {
 		soc_dapm_shutdown_codec(&codec->dapm);
-		snd_soc_dapm_set_bias_level(&codec->dapm, SND_SOC_BIAS_OFF);
+		snd_soc_dapm_set_bias_level(&codec->dapm,
+						    SND_SOC_BIAS_OFF);
 	}
 }
 

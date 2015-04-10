@@ -48,7 +48,7 @@ extern void __aeabi_ulcmp(void);
 
 extern void fpundefinstr(void);
 
-	/* networking */
+	/* platform dependent support */
 EXPORT_SYMBOL(csum_partial);
 EXPORT_SYMBOL(csum_partial_copy_from_user);
 EXPORT_SYMBOL(csum_partial_copy_nocheck);

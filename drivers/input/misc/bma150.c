@@ -1,21 +1,28 @@
-/*  Date: 2011/3/7 11:00:00
- *  Revision: 2.11
- */
-
 /*
- * This software program is licensed subject to the GNU General Public License
- * (GPL).Version 2,June 1991, available at http://www.fsf.org/copyleft/gpl.html
-
- * (C) Copyright 2011 Bosch Sensortec GmbH
- * All Rights Reserved
+ * Copyright (c) 2011 Bosch Sensortec GmbH
+ * Copyright (c) 2011 Unixphere
+ *
+ * This driver adds support for Bosch Sensortec's digital acceleration
+ * sensors BMA150 and SMB380.
+ * The SMB380 is fully compatible with BMA150 and only differs in packaging.
+ *
+ * The datasheet for the BMA150 chip can be found here:
+ * http://www.bosch-sensortec.com/content/language1/downloads/BST-BMA150-DS000-07.pdf
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-
-/* file BMA150.c
-   brief This file contains all function implementations for the BMA150 in linux
-
-*/
-
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/i2c.h>

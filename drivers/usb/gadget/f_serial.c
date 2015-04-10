@@ -19,6 +19,14 @@
 #include "gadget_chips.h"
 
 
+/*
+ * This function packages a simple "generic serial" port with no real
+ * control mechanisms, just raw data transfer over two bulk endpoints.
+ *
+ * Because it's not standardized, this isn't as interoperable as the
+ * CDC ACM driver.  However, for many purposes it's just as functional
+ * if you can arrange appropriate host side drivers.
+ */
 #define GSERIAL_NO_PORTS 8
 
 

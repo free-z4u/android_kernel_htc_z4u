@@ -25,6 +25,7 @@
 #include <asm/system_misc.h>
 #include <asm/system_info.h>
 #include <asm/tlbflush.h>
+
 #include <asm/cputype.h>
 #if defined(CONFIG_ARCH_MSM_SCORPION) && !defined(CONFIG_MSM_SMP)
 #include <asm/io.h>

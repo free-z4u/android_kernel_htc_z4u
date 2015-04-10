@@ -20,6 +20,7 @@
 #include <linux/init.h>
 #include <linux/uaccess.h>
 #include <linux/user.h>
+
 #include <linux/proc_fs.h>
 
 #include <asm/cp15.h>

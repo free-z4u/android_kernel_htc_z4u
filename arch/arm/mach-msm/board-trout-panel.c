@@ -16,6 +16,7 @@
 
 #include <mach/msm_fb.h>
 #include <mach/vreg.h>
+
 #include <mach/proc_comm.h>
 
 #include "board-trout.h"

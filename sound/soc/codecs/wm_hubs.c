@@ -895,6 +895,7 @@ static const struct snd_soc_dapm_route lineout2_se_routes[] = {
 	{ "LINEOUT2N Mixer", "Right Output Switch", "Right Output PGA" },
 
 	{ "LINEOUT2P Mixer", NULL, "LINEOUT_VMID_BUF" },
+
 	{ "LINEOUT2P Mixer", "Right Output Switch", "Right Output PGA" },
 
 	{ "LINEOUT2N Driver", NULL, "LINEOUT2N Mixer" },

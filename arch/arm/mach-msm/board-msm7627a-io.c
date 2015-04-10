@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -27,7 +27,6 @@
 #include <asm/mach-types.h>
 #include <mach/rpc_server_handset.h>
 #include <mach/pmic.h>
-
 #include "devices.h"
 #include "board-msm7627a.h"
 #include "devices-msm7x2xa.h"

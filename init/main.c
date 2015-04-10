@@ -95,20 +95,34 @@ static inline void mark_rodata_ro(void) { }
 extern void tc_init(void);
 #endif
 
+/*
+ * Debug helper: via this flag we know that we are in 'early bootup code'
+ * where only the boot processor is running with IRQ disabled.  This means
+ * two things - IRQ must not be enabled before the flag is cleared and some
+ * operations which are not allowed with IRQ disabled are allowed while the
+ * flag is set.
+ */
 bool early_boot_irqs_disabled __read_mostly;
 
 enum system_states system_state __read_mostly;
 EXPORT_SYMBOL(system_state);
 
+/*
+ * Boot command-line arguments
+ */
 #define MAX_INIT_ARGS CONFIG_INIT_ENV_ARG_LIMIT
 #define MAX_INIT_ENVS CONFIG_INIT_ENV_ARG_LIMIT
 
 extern void time_init(void);
+/* Default late time init is NULL. archs can override this later. */
 void (*__initdata late_time_init)(void);
 extern void softirq_init(void);
 
+/* Untouched command line saved by arch-specific code. */
 char __initdata boot_command_line[COMMAND_LINE_SIZE];
+/* Untouched saved command line (eg. for /proc) */
 char *saved_command_line;
+/* Command line for parameter parsing */
 static char *static_command_line;
 char *print_command_line;
 static char *execute_command;
@@ -456,6 +470,10 @@ asmlinkage void __init start_kernel(void)
 
 	jump_label_init();
 
+	/*
+	 * These use large bootmem allocations and must precede
+	 * kmem_cache_init()
+	 */
 	setup_log_buf(0);
 	pidhash_init();
 	vfs_caches_init_early();
@@ -463,7 +481,16 @@ asmlinkage void __init start_kernel(void)
 	trap_init();
 	mm_init();
 
+	/*
+	 * Set up the scheduler prior starting any interrupts (such as the
+	 * timer interrupt). Full topology setup happens at smp_init()
+	 * time - but meanwhile we still have a functioning scheduler.
+	 */
 	sched_init();
+	/*
+	 * Disable preemption - early bootup scheduling is extremely
+	 * fragile until we cpu_idle() for the first time.
+	 */
 	preempt_disable();
 	if (!irqs_disabled()) {
 		printk(KERN_WARNING "start_kernel(): bug: interrupts were "
@@ -474,7 +501,7 @@ asmlinkage void __init start_kernel(void)
 	perf_event_init();
 	rcu_init();
 	radix_tree_init();
-	
+	/* init some links before init_ISA_irqs() */
 	early_irq_init();
 	init_IRQ();
 	prio_tree_init();
@@ -491,17 +518,27 @@ asmlinkage void __init start_kernel(void)
 	early_boot_irqs_disabled = false;
 	local_irq_enable();
 
-	
+	/* Interrupts are enabled now so all GFP allocations are safe. */
 	gfp_allowed_mask = __GFP_BITS_MASK;
 
 	kmem_cache_init_late();
 
+	/*
+	 * HACK ALERT! This is early. We're enabling the console before
+	 * we've done PCI setups etc, and console_init() must be aware of
+	 * this. But we do want output early, in case something goes wrong.
+	 */
 	console_init();
 	if (panic_later)
 		panic(panic_later, panic_param);
 
 	lockdep_info();
 
+	/*
+	 * Need to run this when irqs are enabled, because it wants
+	 * to self-test [hard/soft]-irqs on/off lock inversion bugs
+	 * too:
+	 */
 	locking_selftest();
 
 #ifdef CONFIG_BLK_DEV_INITRD
@@ -539,7 +576,7 @@ asmlinkage void __init start_kernel(void)
 	dbg_late_init();
 	vfs_caches_init(totalram_pages);
 	signals_init();
-	
+	/* rootfs populating might need page-writeback */
 	page_writeback_init();
 #ifdef CONFIG_PROC_FS
 	proc_root_init();
@@ -551,15 +588,16 @@ asmlinkage void __init start_kernel(void)
 
 	check_bugs();
 
-	acpi_early_init(); 
+	acpi_early_init(); /* before LAPIC and SMP init */
 	sfi_init_late();
 
 	ftrace_init();
 
-	
+	/* Do the rest non-__init'ed, we're now alive */
 	rest_init();
 }
 
+/* Call all constructor functions linked into the kernel. */
 static void __init do_ctors(void)
 {
 #ifdef CONFIG_CONSTRUCTORS
@@ -682,6 +720,13 @@ static void __init do_initcalls(void)
 		do_initcall_level(level);
 }
 
+/*
+ * Ok, the machine is now initialized. None of the devices
+ * have been touched yet, but the CPU subsystem is up and
+ * running, and memory and process management works.
+ *
+ * Now we can finally start doing some real work..
+ */
 static void __init do_basic_setup(void)
 {
 	cpuset_init_smp();
@@ -708,9 +753,12 @@ static void run_init_process(const char *init_filename)
 	kernel_execve(init_filename, argv_init, envp_init);
 }
 
+/* This is a non __init function. Force it to be noinline otherwise gcc
+ * makes it inline to init() and it becomes part of init.text section
+ */
 static noinline int init_post(void)
 {
-	
+	/* need to finish all async __init code before freeing the memory */
 	async_synchronize_full();
 	free_initmem();
 	mark_rodata_ro();
@@ -726,6 +774,12 @@ static noinline int init_post(void)
 				ramdisk_execute_command);
 	}
 
+	/*
+	 * We try each of these until one succeeds.
+	 *
+	 * The Bourne shell can be used instead of init if we are
+	 * trying to recover a really broken machine.
+	 */
 	if (execute_command) {
 		run_init_process(execute_command);
 		printk(KERN_WARNING "Failed to execute %s.  Attempting "
@@ -742,8 +796,17 @@ static noinline int init_post(void)
 
 static int __init kernel_init(void * unused)
 {
+	/*
+	 * Wait until kthreadd is all set-up.
+	 */
 	wait_for_completion(&kthreadd_done);
+	/*
+	 * init can allocate pages on any node
+	 */
 	set_mems_allowed(node_states[N_HIGH_MEMORY]);
+	/*
+	 * init can run on any cpu.
+	 */
 	set_cpus_allowed_ptr(current, cpu_all_mask);
 
 	cad_pid = task_pid(current);
@@ -758,12 +821,16 @@ static int __init kernel_init(void * unused)
 
 	do_basic_setup();
 
-	
+	/* Open the /dev/console on the rootfs, this should never fail */
 	if (sys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0)
 		printk(KERN_WARNING "Warning: unable to open an initial console.\n");
 
 	(void) sys_dup(0);
 	(void) sys_dup(0);
+	/*
+	 * check if there is an early userspace init.  If yes, let it do all
+	 * the work
+	 */
 
 	if (!ramdisk_execute_command)
 		ramdisk_execute_command = "/init";
@@ -773,6 +840,11 @@ static int __init kernel_init(void * unused)
 		prepare_namespace();
 	}
 
+	/*
+	 * Ok, we have completed the initial bootup, and
+	 * we're essentially up and running. Get rid of the
+	 * initmem segments and start the user-mode stuff..
+	 */
 
 	init_post();
 	return 0;

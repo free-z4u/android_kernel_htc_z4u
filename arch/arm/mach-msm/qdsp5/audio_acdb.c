@@ -43,6 +43,7 @@
 
 #include "audmgr.h"
 
+/* this is the ACDB device ID */
 #define DALDEVICEID_ACDB		0x02000069
 #define ACDB_PORT_NAME			"DAL00"
 #define ACDB_CPU			SMD_APPS_MODEM
@@ -55,7 +56,11 @@
 
 #define COMMON_OBJ_ID                   6
 
+/*below macro is used to align the session info received from
+Devctl driver with the state mentioned as not to alter the
+Existing code*/
 #define AUDREC_OFFSET	2
+/* rpc table index */
 enum {
 	ACDB_DAL_IOCTL = DALDEVICE_FIRST_DEVICE_API_IDX
 };
@@ -104,13 +109,13 @@ struct acdb_data {
 	int dec_id;
 	audpp_cmd_cfg_object_params_eqalizer eq;
 	struct audrec_session_info session_info;
-	
+	/*pmem info*/
 	int pmem_fd;
 	unsigned long paddr;
 	unsigned long kvaddr;
 	unsigned long pmem_len;
 	struct file *file;
-	
+	/* pmem for get acdb blk */
 	unsigned long	get_blk_paddr;
 	u8		*get_blk_kvaddr;
 	void *map_v_get_blk;
@@ -129,12 +134,15 @@ struct acdb_cache_node {
 
 struct acdb_cache_node acdb_cache_rx;
 
+/*for TX devices acdb values are applied based on AUDREC session and
+the depth of the tx cache is define by number of AUDREC sessions supported*/
 struct acdb_cache_node acdb_cache_tx;
 
+/*Audrec session info includes Attributes Sampling frequency and enc_id */
 struct audrec_session_info session_info;
 #ifdef CONFIG_DEBUG_FS
 
-#define RTC_MAX_TIMEOUT 500 
+#define RTC_MAX_TIMEOUT 500 /* 500 ms */
 #define PMEM_RTC_ACDB_QUERY_MEM 4096
 #define EXTRACT_HIGH_WORD(x) ((x & 0xFFFF0000)>>16)
 #define EXTRACT_LOW_WORD(x) (0x0000FFFF & x)
@@ -210,7 +218,7 @@ static u32 acdb_audpp_entry[][4] = {
 	AUDPREPROC_CMD_CFG_IIR_TUNING_FILTER_PARAMS,\
 	ACDB_RTC_TX
 	}
- 
+ /*Any new entries should be added here*/
 };
 
 static struct dentry *get_set_abid_dentry;
@@ -429,7 +437,7 @@ static ssize_t	rtc_getsetabid_data_dbg_read(struct file *file,
 				rtc_audpreproc.cmd_id =
 					AUDPREPROC_CMD_FEAT_QUERY_PARAMS;
 				rtc_audpreproc.feature_id = rtc_acdb.set_abid;
-				 
+				 /*AUDREC1 is used for pcm recording */
 				rtc_audpreproc.stream_id = 1;
 				rtc_audpreproc.extbufsizemsw =
 					EXTRACT_HIGH_WORD(\
@@ -1033,7 +1041,7 @@ void acdb_rtc_set_err(u32 err_code)
 {
 	return 0
 }
-#endif 
+#endif /*CONFIG_DEBUG_FS*/
 static s32 acdb_set_calibration_blk(unsigned long arg)
 {
 	struct acdb_cmd_device acdb_cmd;
@@ -1222,6 +1230,11 @@ static s32 acdb_get_calibration(void)
 				" result = %d\n", result);
 			goto error;
 		}
+		/*following check is introduced to handle boot up race
+		condition between AUDCAL SW peers running on apps
+		and modem (ACDB_RES_BADSTATE indicates modem AUDCAL SW is
+		not in initialized sate) we need to retry to get ACDB
+		values*/
 		if (acdb_data.acdb_result.result == ACDB_RES_BADSTATE) {
 			msleep(500);
 			iterations++;
@@ -1309,13 +1322,18 @@ static u8 check_device_info_already_present(
 			(device_info.acdb_id ==
 				acdb_cache_free_node->device_info.acdb_id)) {
 		MM_DBG("acdb values are already present\n");
+		/*if acdb state is not set for CAL_DATA_READY and node status
+		is filled, acdb state should be updated with CAL_DATA_READY
+		state*/
 		acdb_data.acdb_state |= CAL_DATA_READY;
-		return 1; 
+		return 1; /*node is present but status as filled*/
 	}
 	MM_DBG("copying device info into node\n");
+	/*as device information is not present in cache copy
+	the current device information into the node*/
 	memcpy(&acdb_cache_free_node->device_info,
 				 &device_info, sizeof(device_info));
-	return 0; 
+	return 0; /*cant find the node*/
 }
 
 static struct acdb_iir_block *get_audpp_irr_block(void)
@@ -1605,7 +1623,7 @@ static s32 acdb_fill_audpreproc_agc(void)
 	}
 	memset(acdb_data.preproc_agc, 0, sizeof(*acdb_data.preproc_agc));
 	acdb_data.preproc_agc->cmd_id = AUDPREPROC_CMD_CFG_AGC_PARAMS;
-	
+	/* 0xFE00 to configure all parameters */
 	acdb_data.preproc_agc->tx_agc_param_mask = 0xFFFF;
 	if (acdb_agc->enable_status)
 		acdb_data.preproc_agc->tx_agc_enable_flag =
@@ -1627,7 +1645,7 @@ static s32 acdb_fill_audpreproc_agc(void)
 	acdb_data.preproc_agc->compressor_rlink_slope =
 		acdb_agc->comp_rlink_slope;
 
-	
+	/* 0xFFF0 to configure all parameters */
 	acdb_data.preproc_agc->tx_adc_agc_param_mask = 0xFFFF;
 
 	acdb_data.preproc_agc->comp_rlink_aig_attackk =
@@ -1842,7 +1860,7 @@ static struct acdb_ns_tx_block *get_audpreproc_ns_block(void)
 static s32 acdb_fill_audpreproc_ns(void)
 {
 	struct acdb_ns_tx_block	*acdb_ns;
-	
+	/* TO DO: do we enable_status_filled */
 	acdb_ns = get_audpreproc_ns_block();
 	if (!acdb_ns) {
 		MM_DBG("unable to find preproc ns parameters winding up\n");
@@ -1945,7 +1963,7 @@ static void handle_tx_device_ready_callback(void)
 	u8 acdb_value_apply = 0;
 	u8 result = 0;
 
-	
+	/*check wheather AUDREC enabled before device call backs*/
 	if ((acdb_data.acdb_state & AUDREC_READY) &&
 			!(acdb_data.audrec_applied & AUDREC_READY)) {
 		MM_DBG("AUDREC already enabled apply acdb values\n");
@@ -2019,7 +2037,7 @@ done:
 static u32 allocate_memory_acdb_cache_tx(void)
 {
 	u32 result = 0;
-	
+	/*initialize local cache */
 	acdb_cache_tx.phys_addr_acdb_values =
 		allocate_contiguous_ebi_nomap(ACDB_BUF_SIZE,
 				SZ_4K);
@@ -2055,7 +2073,7 @@ static u32 allocate_memory_acdb_cache_rx(void)
 {
 	u32 result = 0;
 
-	
+	/*initialize local cache */
 	acdb_cache_rx.phys_addr_acdb_values =
 		allocate_contiguous_ebi_nomap(
 				ACDB_BUF_SIZE, SZ_4K);
@@ -2227,8 +2245,8 @@ static u8 check_device_change(struct dev_evt_msg device_info)
 {
 	if (!acdb_data.device_info) {
 		MM_ERR("not pointing to previous valid device detail\n");
-		return 1; 
-			
+		return 1; /*device info will not be pointing to*/
+			/* valid device when acdb driver comes up*/
 	}
 	if ((device_info.sample_rate ==
 				acdb_data.device_info->sample_rate) &&
@@ -2246,6 +2264,9 @@ static void device_cb(struct dev_evt_msg *evt, void *private)
 	u8 ret = 0;
 	u8 device_change = 0;
 
+	/*if session value is zero it indicates that device call back is for
+	voice call we will drop the request as acdb values for voice call is
+	not applied from acdb driver*/
 	if (!evt->session_info) {
 		MM_DBG("no active sessions and call back is for"\
 				" voice call\n");
@@ -2273,12 +2294,12 @@ static void device_cb(struct dev_evt_msg *evt, void *private)
 			goto update_cache;
 		}
 	} else
-		
+		/* state is updated to query the modem for values */
 		acdb_data.acdb_state &= ~CAL_DATA_READY;
 
 update_cache:
 	if (dev_type.tx_device) {
-		
+		/*Only one recording session possible*/
 		session_id = 0;
 		acdb_cache_free_node =	&acdb_cache_tx;
 		ret  = check_device_info_already_present(
@@ -2352,8 +2373,8 @@ static void audpp_cb(void *private, u32 id, u16 *msg)
 		}
 		goto done;
 	}
-	
-	
+	/*stream_id is used to keep track of number of active*/
+	/*sessions active on this device*/
 	acdb_cache_rx.stream_id++;
 
 	acdb_data.acdb_state |= AUDPP_READY;
@@ -2398,7 +2419,7 @@ static void audpreproc_cb(void *private, u32 id, void *event_data)
 {
 	u8 result = 0;
 	uint16_t *msg = event_data;
-	int stream_id = 0; 
+	int stream_id = 0; /* Only single tunnel mode recording supported */
 	if (id != AUDPREPROC_MSG_CMD_CFG_DONE_MSG)
 		goto done;
 
@@ -2412,6 +2433,11 @@ static void audpreproc_cb(void *private, u32 id, void *event_data)
 		acdb_data.acdb_state &= ~CAL_DATA_READY;
 		goto done;
 	}
+	/*Following check is added to make sure that device info
+	  is updated. audpre proc layer enabled without device
+	  callback at this scenario we should not access
+	  device information
+	 */
 	if (acdb_data.device_info &&
 			session_info.sampling_freq) {
 		acdb_data.device_info->sample_rate =
@@ -2519,7 +2545,7 @@ static s32 acdb_calibrate_device(void *data)
 {
 	s32 result = 0;
 
-	
+	/* initialize driver */
 	result = acdb_initialize_data();
 	if (result)
 		goto done;
@@ -2536,6 +2562,14 @@ static s32 acdb_calibrate_device(void *data)
 			acdb_data.device_cb_compl = 0;
 			if (!(acdb_data.acdb_state & CAL_DATA_READY)) {
 				if (acdb_data.device_info->dev_type.rx_device) {
+					/*we need to get calibration values
+					only for RX device as resampler
+					moved to start of the pre - proc chain
+					tx calibration value will be based on
+					sampling frequency what audrec is
+					configured, calibration values for tx
+					device are fetch in audpreproc
+					callback*/
 					result = acdb_get_calibration();
 					if (result < 0) {
 						mutex_unlock(
@@ -2629,7 +2663,7 @@ static int __init acdb_init(void)
 	}
 
 #ifdef CONFIG_DEBUG_FS
-	
+	/*This is RTC specific INIT used only with debugfs*/
 	if (!rtc_acdb_init())
 		MM_ERR("RTC ACDB=>INIT Failure\n");
 

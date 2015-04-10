@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -98,7 +98,6 @@ void msm_camera_io_memcpy(void __iomem *dest_addr,
 	msm_camera_io_dump(dest_addr, len);
 }
 
- 
 int msm_cam_clk_try(struct device *dev, const char *clk_name)
 {
 	struct clk *clk = NULL;

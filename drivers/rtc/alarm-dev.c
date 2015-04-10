@@ -44,7 +44,8 @@ module_param_named(debug_mask, debug_mask, int, S_IRUGO | S_IWUSR | S_IWGRP);
 	ANDROID_ALARM_RTC_WAKEUP_MASK | \
 	ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP_MASK)
 
-#define ANDROID_ALARM_SET_OLD               _IOW('a', 2, time_t) 
+/* support old usespace code */
+#define ANDROID_ALARM_SET_OLD               _IOW('a', 2, time_t) /* set alarm */
 #define ANDROID_ALARM_SET_AND_WAIT_OLD      _IOW('a', 3, time_t)
 
 static int alarm_opened;

@@ -1,6 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (c) 2000-2001, 2010-2012 Code Aurora Forum.  All rights reserved.
+   Copyright (c) 2000-2001, 2010-2012 The Linux Foundation.  All rights reserved.
    Copyright (C) 2009-2010 Gustavo F. Padovan <gustavo@padovan.org>
    Copyright (C) 2010 Google Inc.
 
@@ -27,6 +27,7 @@
 #ifndef __L2CAP_H
 #define __L2CAP_H
 
+/* L2CAP defaults */
 #define L2CAP_DEFAULT_MTU		672
 #define L2CAP_DEFAULT_MIN_MTU		48
 #define L2CAP_DEFAULT_MAX_SDU_SIZE	0xffff
@@ -34,11 +35,11 @@
 #define L2CAP_MAX_FLUSH_TO		0x7ff
 #define L2CAP_DEFAULT_TX_WINDOW		63
 #define L2CAP_DEFAULT_MAX_TX		3
-#define L2CAP_DEFAULT_RETRANS_TO	2000    
-#define L2CAP_DEFAULT_MONITOR_TO	12000   
-#define L2CAP_DEFAULT_MAX_PDU_SIZE	1482    
+#define L2CAP_DEFAULT_RETRANS_TO	2000    /* 2 seconds */
+#define L2CAP_DEFAULT_MONITOR_TO	12000   /* 12 seconds */
+#define L2CAP_DEFAULT_MAX_PDU_SIZE	1482    /* Sized for AMP or BR/EDR */
 #define L2CAP_DEFAULT_ACK_TO		200
-#define L2CAP_BREDR_MAX_PAYLOAD		1019    
+#define L2CAP_BREDR_MAX_PAYLOAD		1019    /* 3-DH5 packet */
 #define L2CAP_MAX_ERTM_QUEUED		5
 #define L2CAP_MIN_ERTM_QUEUED		2
 
@@ -48,8 +49,8 @@
 #define L2CAP_TX_WIN_MAX_EXTENDED	0x3fff
 #define L2CAP_LE_DEFAULT_MTU		23
 
-#define L2CAP_CONN_TIMEOUT	(40000) 
-#define L2CAP_INFO_TIMEOUT	(4000)  
+#define L2CAP_CONN_TIMEOUT	(40000) /* 40 seconds */
+#define L2CAP_INFO_TIMEOUT	(4000)  /*  4 seconds */
 #define L2CAP_MOVE_TIMEOUT		(2*HZ)  
 #define L2CAP_MOVE_ERTX_TIMEOUT		(60*HZ) 
 
@@ -694,4 +695,4 @@ void l2cap_amp_logical_complete(int result, struct hci_conn *ampcon,
 
 void l2cap_amp_logical_destroyed(struct hci_conn *ampcon);
 
-#endif 
+#endif /* __L2CAP_H */

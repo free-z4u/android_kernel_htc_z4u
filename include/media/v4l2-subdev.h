@@ -28,6 +28,7 @@
 #include <media/v4l2-fh.h>
 #include <media/v4l2-mediabus.h>
 
+/* generic v4l2_device notify callback notification values */
 #define V4L2_SUBDEV_IR_RX_NOTIFY		_IOW('v', 0, u32)
 #define V4L2_SUBDEV_IR_RX_FIFO_SERVICE_REQ	0x00000001
 #define V4L2_SUBDEV_IR_RX_END_OF_RX_DETECTED	0x00000002
@@ -45,29 +46,102 @@ struct v4l2_subdev;
 struct v4l2_subdev_fh;
 struct tuner_setup;
 
+/* decode_vbi_line */
 struct v4l2_decode_vbi_line {
-	u32 is_second_field;	
-	u8 *p; 			
-	u32 line;		
-	u32 type;		
+	u32 is_second_field;	/* Set to 0 for the first (odd) field,
+				   set to 1 for the second (even) field. */
+	u8 *p; 			/* Pointer to the sliced VBI data from the decoder.
+				   On exit points to the start of the payload. */
+	u32 line;		/* Line number of the sliced VBI data (1-23) */
+	u32 type;		/* VBI service type (V4L2_SLICED_*). 0 if no service found */
 };
 
+/* Sub-devices are devices that are connected somehow to the main bridge
+   device. These devices are usually audio/video muxers/encoders/decoders or
+   sensors and webcam controllers.
 
+   Usually these devices are controlled through an i2c bus, but other busses
+   may also be used.
 
-#define V4L2_SUBDEV_IO_PIN_DISABLE	(1 << 0) 
+   The v4l2_subdev struct provides a way of accessing these devices in a
+   generic manner. Most operations that these sub-devices support fall in
+   a few categories: core ops, audio ops, video ops and tuner ops.
+
+   More categories can be added if needed, although this should remain a
+   limited set (no more than approx. 8 categories).
+
+   Each category has its own set of ops that subdev drivers can implement.
+
+   A subdev driver can leave the pointer to the category ops NULL if
+   it does not implement them (e.g. an audio subdev will generally not
+   implement the video category ops). The exception is the core category:
+   this must always be present.
+
+   These ops are all used internally so it is no problem to change, remove
+   or add ops or move ops from one to another category. Currently these
+   ops are based on the original ioctls, but since ops are not limited to
+   one argument there is room for improvement here once all i2c subdev
+   drivers are converted to use these ops.
+ */
+
+/* Core ops: it is highly recommended to implement at least these ops:
+
+   g_chip_ident
+   log_status
+   g_register
+   s_register
+
+   This provides basic debugging support.
+
+   The ioctl ops is meant for generic ioctl-like commands. Depending on
+   the use-case it might be better to use subdev-specific ops (currently
+   not yet implemented) since ops provide proper type-checking.
+ */
+
+/* Subdevice external IO pin configuration */
+#define V4L2_SUBDEV_IO_PIN_DISABLE	(1 << 0) /* ENABLE assumed */
 #define V4L2_SUBDEV_IO_PIN_OUTPUT	(1 << 1)
 #define V4L2_SUBDEV_IO_PIN_INPUT	(1 << 2)
-#define V4L2_SUBDEV_IO_PIN_SET_VALUE	(1 << 3) 
-#define V4L2_SUBDEV_IO_PIN_ACTIVE_LOW	(1 << 4) 
+#define V4L2_SUBDEV_IO_PIN_SET_VALUE	(1 << 3) /* Set output value */
+#define V4L2_SUBDEV_IO_PIN_ACTIVE_LOW	(1 << 4) /* ACTIVE HIGH assumed */
 
 struct v4l2_subdev_io_pin_config {
-	u32 flags;	
-	u8 pin;		
-	u8 function;	
-	u8 value;	
-	u8 strength;	
+	u32 flags;	/* V4L2_SUBDEV_IO_PIN_* flags for this pin's config */
+	u8 pin;		/* Chip external IO pin to configure */
+	u8 function;	/* Internal signal pad/function to route to IO pin */
+	u8 value;	/* Initial value for pin - e.g. GPIO output value */
+	u8 strength;	/* Pin drive strength */
 };
 
+/*
+   s_io_pin_config: configure one or more chip I/O pins for chips that
+	multiplex different internal signal pads out to IO pins.  This function
+	takes a pointer to an array of 'n' pin configuration entries, one for
+	each pin being configured.  This function could be called at times
+	other than just subdevice initialization.
+
+   init: initialize the sensor registors to some sort of reasonable default
+	values. Do not use for new drivers and should be removed in existing
+	drivers.
+
+   load_fw: load firmware.
+
+   reset: generic reset command. The argument selects which subsystems to
+	reset. Passing 0 will always reset the whole chip. Do not use for new
+	drivers without discussing this first on the linux-media mailinglist.
+	There should be no reason normally to reset a device.
+
+   s_gpio: set GPIO pins. Very simple right now, might need to be extended with
+	a direction argument if needed.
+
+   s_power: puts subdevice in power saving mode (on == 0) or normal operation
+	mode (on == 1).
+
+   interrupt_service_routine: Called by the bridge chip's interrupt service
+	handler, when an interrupt status has be raised due to this subdev,
+	so that this subdev can handle the details.  It may schedule work to be
+	performed later.  It must not sleep.  *Called from an IRQ context*.
+ */
 struct v4l2_subdev_core_ops {
 	int (*g_chip_ident)(struct v4l2_subdev *sd, struct v4l2_dbg_chip_ident *chip);
 	int (*log_status)(struct v4l2_subdev *sd);
@@ -352,6 +426,7 @@ void v4l2_subdev_init(struct v4l2_subdev *sd,
 	(!(sd) ? -ENODEV : (((sd)->ops && (sd)->ops->o && (sd)->ops->o->f) ?	\
 		(sd)->ops->o->f((sd) , ##args) : -ENOIOCTLCMD))
 
+/* Send a notification to v4l2_device. */
 #define v4l2_subdev_notify(sd, notification, arg)			   \
 	((!(sd) || !(sd)->v4l2_dev || !(sd)->v4l2_dev->notify) ? -ENODEV : \
 	 (sd)->v4l2_dev->notify((sd), (notification), (arg)))

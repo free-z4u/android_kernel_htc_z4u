@@ -1,7 +1,7 @@
 
 /* audio_lpa.c - low power audio driver
  *
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * Based on the PCM decoder driver in arch/arm/mach-msm/qdsp5/audio_pcm.c
  *
@@ -58,6 +58,7 @@
 
 #include "audmgr.h"
 
+/* for queue ids - should be relative to module number*/
 #include "adsp.h"
 
 #define ADRV_STATUS_AIO_INTF 0x00000001
@@ -66,9 +67,11 @@
 #define ADRV_STATUS_FSYNC 0x00000008
 
 #define MSM_MAX_VOLUME 0x2000
+/* 17 added to avoid more deviation */
 #define MSM_VOLUME_STEP (MSM_MAX_VOLUME+17)
 #define MSM_VOLUME_FACTOR (10000)
 
+/* Size must be power of 2 */
 #define MAX_BUF 2
 #define BUFSZ (523200)
 

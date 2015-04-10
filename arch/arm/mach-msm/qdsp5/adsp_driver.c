@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/qdsp5/adsp_driver.c
  *
  * Copyright (C) 2008 Google, Inc.
- * Copyright (c) 2009, 2012 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009, 2012 The Linux Foundation. All rights reserved.
  * Author: Iliyan Malchev <ibm@android.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -219,11 +219,14 @@ static int adsp_ion_lookup_vaddr(struct msm_adsp_module *module, void **addr,
 
 	*region = NULL;
 
-	
+	/* returns physical address or zero */
 	hlist_for_each_entry(region_elt, node, &module->ion_regions, list) {
 		if (vaddr >= region_elt->vaddr &&
 		    vaddr < region_elt->vaddr + region_elt->len &&
 		    vaddr + len <= region_elt->vaddr + region_elt->len) {
+			/* offset since we could pass vaddr inside a registerd
+			 * pmem buffer
+			 */
 
 			match_count++;
 			if (!*region)

@@ -19,7 +19,18 @@
 
 struct device;
 
+/*
+ * All voltages, currents, charges, energies, time and temperatures in uV,
+ * µA, µAh, µWh, seconds and tenths of degree Celsius unless otherwise
+ * stated. It's driver's job to convert its raw values to units in which
+ * this class operates.
+ */
 
+/*
+ * For systems where the charger determines the maximum battery capacity
+ * the min and max fields should be used to present these values to user
+ * space. Unused/unknown fields will not appear in sysfs.
+ */
 
 enum {
 	POWER_SUPPLY_STATUS_UNKNOWN = 0,
@@ -140,9 +151,9 @@ enum power_supply_type {
 	POWER_SUPPLY_TYPE_MAINS,
 	POWER_SUPPLY_TYPE_USB,		
 	POWER_SUPPLY_TYPE_WIRELESS,
-	POWER_SUPPLY_TYPE_USB_DCP,	
-	POWER_SUPPLY_TYPE_USB_CDP,	
-	POWER_SUPPLY_TYPE_USB_ACA,	
+	POWER_SUPPLY_TYPE_USB_DCP,	/* Dedicated Charging Port */
+	POWER_SUPPLY_TYPE_USB_CDP,	/* Charging Downstream Port */
+	POWER_SUPPLY_TYPE_USB_ACA,	/* Accessory Charger Adapters */
 };
 
 union power_supply_propval {
@@ -170,10 +181,10 @@ struct power_supply {
 	void (*external_power_changed)(struct power_supply *psy);
 	void (*set_charged)(struct power_supply *psy);
 
-	
+	/* For APM emulation, think legacy userspace. */
 	int use_for_apm;
 
-	
+	/* private */
 	struct device *dev;
 	struct work_struct changed_work;
 	spinlock_t changed_lock;
@@ -194,6 +205,12 @@ struct power_supply {
 #endif
 };
 
+/*
+ * This is recommended structure to specify static power supply parameters.
+ * Generic one, parametrizable for different power supplies. Power supply
+ * class itself does not use it, but that's what implementing most platform
+ * drivers, should try reuse for consistency.
+ */
 
 struct power_supply_info {
 	const char *name;
@@ -227,6 +244,7 @@ extern int power_supply_register(struct device *parent,
 extern void power_supply_unregister(struct power_supply *psy);
 extern int power_supply_powers(struct power_supply *psy, struct device *dev);
 
+/* For APM emulation, think legacy userspace. */
 extern struct class *power_supply_class;
 
 static inline bool power_supply_is_amp_property(enum power_supply_property psp)
@@ -274,4 +292,4 @@ static inline bool power_supply_is_watt_property(enum power_supply_property psp)
 	return 0;
 }
 
-#endif 
+#endif /* __LINUX_POWER_SUPPLY_H__ */

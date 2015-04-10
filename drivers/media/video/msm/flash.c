@@ -1,5 +1,5 @@
 
-/* Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -631,8 +631,8 @@ int32_t msm_camera_flash_set_led_state(
 		else
 		
 			rc = msm_camera_flash_current_driver(
-				&fdata->flash_src->_fsrc.current_driver_src,
-				led_state);
+			&fdata->flash_src->_fsrc.current_driver_src,
+			led_state);
 		break;
 
 	case MSM_CAMERA_FLASH_SRC_EXT:
@@ -662,7 +662,7 @@ static int msm_strobe_flash_xenon_charge(int32_t flash_charge,
 	if (charge_enable) {
 		timer_flash.expires = jiffies +
 			msecs_to_jiffies(flash_recharge_duration);
-		
+		/* add timer for the recharge */
 		if (!timer_pending(&timer_flash))
 			add_timer(&timer_flash);
 	} else
@@ -689,7 +689,7 @@ static irqreturn_t strobe_flash_charge_ready_irq(int irq_num, void *data)
 	struct msm_camera_sensor_strobe_flash_data *sfdata =
 		(struct msm_camera_sensor_strobe_flash_data *)data;
 
-	
+	/* put the charge signal to low */
 	gpio_set_value_cansleep(sfdata->flash_charge, 0);
 
 	return IRQ_HANDLED;
@@ -717,7 +717,7 @@ static int msm_strobe_flash_xenon_init(
 		}
 
 		spin_lock_init(&sfdata->timer_lock);
-		
+		/* setup timer */
 		init_timer(&timer_flash);
 		timer_flash.function = strobe_flash_xenon_recharge_handler;
 		timer_flash.data = (unsigned long)sfdata;

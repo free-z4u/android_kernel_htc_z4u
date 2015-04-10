@@ -1,6 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (c) 2000-2001, 2010-2012, Code Aurora Forum. All rights reserved.
+   Copyright (c) 2000-2001, 2010-2012 The Linux Foundation. All rights reserved.
 
    Written 2000,2001 by Maxim Krasnyansky <maxk@qualcomm.com>
 
@@ -22,6 +22,7 @@
    SOFTWARE IS DISCLAIMED.
 */
 
+/* Bluetooth HCI event handling. */
 
 #include <linux/module.h>
 
@@ -44,6 +45,7 @@
 #include <net/bluetooth/bluetooth.h>
 #include <net/bluetooth/hci_core.h>
 
+/* Handle HCI Event packets */
 
 static void hci_cc_inquiry_cancel(struct hci_dev *hdev, struct sk_buff *skb)
 {
@@ -492,51 +494,55 @@ static void hci_setup_inquiry_mode(struct hci_dev *hdev)
 
 static void hci_setup_event_mask(struct hci_dev *hdev)
 {
+	/* The second byte is 0xff instead of 0x9f (two reserved bits
+	 * disabled) since a Broadcom 1.2 dongle doesn't respond to the
+	 * command otherwise */
 	u8 events[8] = { 0xff, 0xff, 0xfb, 0xff, 0x00, 0x00, 0x00, 0x00 };
 
 	BT_DBG("");
 
-	
+	/* Events for 1.2 and newer controllers */
 	if (hdev->lmp_ver > 1) {
-		events[4] |= 0x01; 
-		events[4] |= 0x02; 
-		events[4] |= 0x04; 
-		events[5] |= 0x08; 
-		events[5] |= 0x10; 
+		events[4] |= 0x01; /* Flow Specification Complete */
+		events[4] |= 0x02; /* Inquiry Result with RSSI */
+		events[4] |= 0x04; /* Read Remote Extended Features Complete */
+		events[5] |= 0x08; /* Synchronous Connection Complete */
+		events[5] |= 0x10; /* Synchronous Connection Changed */
 	}
 
 	if (hdev->features[3] & LMP_RSSI_INQ)
-		events[4] |= 0x04; 
+		events[4] |= 0x04; /* Inquiry Result with RSSI */
 
 	if (hdev->features[5] & LMP_SNIFF_SUBR)
-		events[5] |= 0x20; 
+		events[5] |= 0x20; /* Sniff Subrating */
 
 	if (hdev->features[5] & LMP_PAUSE_ENC)
-		events[5] |= 0x80; 
+		events[5] |= 0x80; /* Encryption Key Refresh Complete */
 
 	if (hdev->features[6] & LMP_EXT_INQ)
-		events[5] |= 0x40; 
+		events[5] |= 0x40; /* Extended Inquiry Result */
 
 	if (hdev->features[6] & LMP_NO_FLUSH)
-		events[7] |= 0x01; 
+		events[7] |= 0x01; /* Enhanced Flush Complete */
 
 	if (hdev->features[7] & LMP_LSTO)
-		events[6] |= 0x80; 
+		events[6] |= 0x80; /* Link Supervision Timeout Changed */
 
 	if (hdev->features[6] & LMP_SIMPLE_PAIR) {
-		events[6] |= 0x01;	
-		events[6] |= 0x02;	
-		events[6] |= 0x04;	
-		events[6] |= 0x08;	
-		events[6] |= 0x10;	
-		events[6] |= 0x20;	
-		events[7] |= 0x04;	
-		events[7] |= 0x08;	
-		events[7] |= 0x10;	
+		events[6] |= 0x01;	/* IO Capability Request */
+		events[6] |= 0x02;	/* IO Capability Response */
+		events[6] |= 0x04;	/* User Confirmation Request */
+		events[6] |= 0x08;	/* User Passkey Request */
+		events[6] |= 0x10;	/* Remote OOB Data Request */
+		events[6] |= 0x20;	/* Simple Pairing Complete */
+		events[7] |= 0x04;	/* User Passkey Notification */
+		events[7] |= 0x08;	/* Keypress Notification */
+		events[7] |= 0x10;	/* Remote Host Supported
+					 * Features Notification */
 	}
 
 	if (hdev->features[4] & LMP_LE)
-		events[7] |= 0x20;	
+		events[7] |= 0x20;	/* LE Meta-Event */
 
 	hci_send_cmd(hdev, HCI_OP_SET_EVENT_MASK, sizeof(events), events);
 }
@@ -645,6 +651,8 @@ static void hci_cc_read_local_features(struct hci_dev *hdev, struct sk_buff *skb
 		hci_setup_event_mask(hdev);
 	}
 
+	/* Adjust default settings according to features
+	 * supported by device. */
 
 	if (hdev->features[0] & LMP_3SLOT)
 		hdev->pkt_type |= (HCI_DM3 | HCI_DH3);
@@ -764,7 +772,7 @@ static void hci_cc_read_data_block_size(struct hci_dev *hdev,
 		hdev->acl_mtu  = __le16_to_cpu(rp->max_acl_len);
 		hdev->sco_mtu = 0;
 		hdev->data_block_len = __le16_to_cpu(rp->data_block_len);
-		
+		/* acl_pkts indicates the number of blocks */
 		hdev->acl_pkts = __le16_to_cpu(rp->num_blocks);
 		hdev->sco_pkts = 0;
 		hdev->acl_cnt = hdev->acl_pkts;
@@ -3530,6 +3538,7 @@ void hci_event_packet(struct hci_dev *hdev, struct sk_buff *skb)
 	hdev->stat.evt_rx++;
 }
 
+/* Generate internal stack event */
 void hci_si_event(struct hci_dev *hdev, int type, int dlen, void *data)
 {
 	struct hci_event_hdr *hdr;

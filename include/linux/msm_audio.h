@@ -1,7 +1,7 @@
 /* include/linux/msm_audio.h
  *
  * Copyright (C) 2008 Google, Inc.
- * Copyright (c) 2012 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012 The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -133,6 +133,10 @@
 #define TTY_HEADSET_MIC			0x0C
 #define TTY_HEADSET_SPKR		0x0D
 
+/* Default devices are not supported in a */
+/* device switching context. Only supported */
+/* for stream devices. */
+/* DO NOT USE */
 #define DEFAULT_TX			0x0E
 #define DEFAULT_RX			0x0F
 
@@ -205,9 +209,10 @@ struct msm_audio_aio_buf {
 	uint32_t buf_len;
 	uint32_t data_len;
 	void *private_data;
-	unsigned short mfield_sz; 
+	unsigned short mfield_sz; /*only useful for data has meta field */
 };
 
+/* Audio routing */
 
 #define SND_IOCTL_MAGIC 's'
 
@@ -237,10 +242,10 @@ struct msm_snd_device_config {
 #define SND_SET_DEVICE _IOW(SND_IOCTL_MAGIC, 2, struct msm_device_config *)
 
 enum cad_device_path_type {
-	CAD_DEVICE_PATH_RX,	
-	CAD_DEVICE_PATH_TX,	
-	CAD_DEVICE_PATH_RX_TX, 
-	CAD_DEVICE_PATH_LB,	
+	CAD_DEVICE_PATH_RX,	/*For Decoding session*/
+	CAD_DEVICE_PATH_TX,	/* For Encoding session*/
+	CAD_DEVICE_PATH_RX_TX, /* For Voice call */
+	CAD_DEVICE_PATH_LB,	/* For loopback (FM Analog)*/
 	CAD_DEVICE_PATH_MAX
 };
 
@@ -277,14 +282,21 @@ struct msm_cad_volume_config {
 
 #define CAD_SET_VOLUME _IOW(SND_IOCTL_MAGIC, 3, struct msm_cad_volume_config *)
 
+/* Returns the number of SND endpoints supported. */
 
 #define SND_GET_NUM_ENDPOINTS _IOR(SND_IOCTL_MAGIC, 4, unsigned *)
 
 struct msm_snd_endpoint {
-	int id; 
-	char name[64]; 
+	int id; /* input and output */
+	char name[64]; /* output only */
 };
 
+/* Takes an index between 0 and one less than the number returned by
+ * SND_GET_NUM_ENDPOINTS, and returns the SND index and name of a
+ * SND endpoint.  On input, the .id field contains the number of the
+ * endpoint, and on exit it contains the SND index, while .name contains
+ * the description of the endpoint.
+ */
 
 #define SND_GET_ENDPOINT _IOWR(SND_IOCTL_MAGIC, 5, struct msm_snd_endpoint *)
 
@@ -292,21 +304,29 @@ struct msm_snd_endpoint {
 #define SND_AVC_CTL _IOW(SND_IOCTL_MAGIC, 6, unsigned *)
 #define SND_AGC_CTL _IOW(SND_IOCTL_MAGIC, 7, unsigned *)
 
+/*return the number of CAD endpoints supported. */
 
 #define CAD_GET_NUM_ENDPOINTS _IOR(SND_IOCTL_MAGIC, 4, unsigned *)
 
 struct msm_cad_endpoint {
-	int id; 
-	char name[64]; 
+	int id; /* input and output */
+	char name[64]; /* output only */
 };
 
+/* Takes an index between 0 and one less than the number returned by
+ * SND_GET_NUM_ENDPOINTS, and returns the CAD index and name of a
+ * CAD endpoint.  On input, the .id field contains the number of the
+ * endpoint, and on exit it contains the SND index, while .name contains
+ * the description of the endpoint.
+ */
 
 #define CAD_GET_ENDPOINT _IOWR(SND_IOCTL_MAGIC, 5, struct msm_cad_endpoint *)
 
 struct msm_audio_pcm_config {
-	uint32_t pcm_feedback;	
-	uint32_t buffer_count;	
-	uint32_t buffer_size;	
+	uint32_t pcm_feedback;	/* 0 - disable > 0 - enable */
+	uint32_t buffer_count;	/* Number of buffers to allocate */
+	uint32_t buffer_size;	/* Size of buffer for capturing of
+				   PCM samples */
 };
 
 #define AUDIO_EVENT_SUSPEND 0
@@ -353,12 +373,12 @@ struct msm_audio_event {
 
 struct msm_snd_device_info {
 	uint32_t dev_id;
-	uint32_t dev_cap; 
+	uint32_t dev_cap; /* bitmask describe capability of device */
 	char dev_name[64];
 };
 
 struct msm_snd_device_list {
-	uint32_t  num_dev; 
+	uint32_t  num_dev; /* Indicate number of device info to be retrieved */
 	struct msm_snd_device_info *list;
 };
 
@@ -386,16 +406,16 @@ struct msm_audio_route_config {
 #define AUDIO_MAX_EQ_BANDS 12
 
 struct msm_audio_eq_band {
-	uint16_t     band_idx; 
-	uint32_t     filter_type; 
-	uint32_t     center_freq_hz; 
-	uint32_t     filter_gain; 
-			
+	uint16_t     band_idx; /* The band index, 0 .. 11 */
+	uint32_t     filter_type; /* Filter band type */
+	uint32_t     center_freq_hz; /* Filter band center frequency */
+	uint32_t     filter_gain; /* Filter band initial gain (dB) */
+			/* Range is +12 dB to -12 dB with 1dB increments. */
 	uint32_t     q_factor;
 } __attribute__ ((packed));
 
 struct msm_audio_eq_stream_config {
-	uint32_t	enable; 
+	uint32_t	enable; /* Number of consequtive bands specified */
 	uint32_t	num_bands;
 	struct msm_audio_eq_band	eq_bands[AUDIO_MAX_EQ_BANDS];
 } __attribute__ ((packed));
@@ -404,11 +424,11 @@ struct msm_acdb_cmd_device {
 	uint32_t     command_id;
 	uint32_t     device_id;
 	uint32_t     network_id;
-	uint32_t     sample_rate_id;      
-	uint32_t     interface_id;        
-	uint32_t     algorithm_block_id;  
-	uint32_t     total_bytes;         
-	uint32_t     *phys_buf;           
+	uint32_t     sample_rate_id;      /* Actual sample rate value */
+	uint32_t     interface_id;        /* See interface id's above */
+	uint32_t     algorithm_block_id;  /* See enumerations above */
+	uint32_t     total_bytes;         /* Length in bytes used by buffer */
+	uint32_t     *phys_buf;           /* Physical Address of data */
 };
 
 

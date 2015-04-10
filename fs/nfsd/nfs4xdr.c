@@ -1721,6 +1721,13 @@ static void write_cinfo(__be32 **p, struct nfsd4_change_info *c)
 								\
 	save = resp->p;
 
+/*
+ * Routine for encoding the result of a "seqid-mutating" NFSv4 operation.  This
+ * is where sequence id's are incremented, and the replay cache is filled.
+ * Note that we increment sequence id's here, at the last moment, so we're sure
+ * we know whether the error to be returned is a sequence id mutating error.
+ */
+
 static bool seqid_mutating_err(__be32 err)
 {
 	/* rfc 3530 section 8.1.5: */

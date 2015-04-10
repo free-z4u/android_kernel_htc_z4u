@@ -670,6 +670,12 @@ static void dma_cache_maint_page(struct page *page, unsigned long offset,
 	size_t size, enum dma_data_direction dir,
 	void (*op)(const void *, size_t, int))
 {
+	/*
+	 * A single sg entry may refer to multiple physically contiguous
+	 * pages.  But we still need to process highmem pages individually.
+	 * If highmem is not configured then the bulk of this loop gets
+	 * optimized out.
+	 */
 	size_t left = size;
 	do {
 		size_t len = left;
@@ -689,7 +695,7 @@ static void dma_cache_maint_page(struct page *page, unsigned long offset,
 				op(vaddr, len, dir);
 				kunmap_high(page);
 			} else if (cache_is_vipt()) {
-				
+				/* unmapped pages might still be cached */
 				vaddr = kmap_atomic(page);
 				op(vaddr + offset, len, dir);
 				kunmap_atomic(vaddr);
@@ -717,7 +723,7 @@ void ___dma_page_cpu_to_dev(struct page *page, unsigned long off,
 	} else {
 		outer_clean_range(paddr, paddr + size);
 	}
-	
+	/* FIXME: non-speculating: flush on bidirectional mappings? */
 }
 EXPORT_SYMBOL(___dma_page_cpu_to_dev);
 
@@ -726,18 +732,37 @@ void ___dma_page_dev_to_cpu(struct page *page, unsigned long off,
 {
 	unsigned long paddr = page_to_phys(page) + off;
 
-	
-	
+	/* FIXME: non-speculating: not required */
+	/* don't bother invalidating if DMA to device */
 	if (dir != DMA_TO_DEVICE)
 		outer_inv_range(paddr, paddr + size);
 
 	dma_cache_maint_page(page, off, size, dir, dmac_unmap_area);
 
+	/*
+	 * Mark the D-cache clean for this page to avoid extra flushing.
+	 */
 	if (dir != DMA_TO_DEVICE && off == 0 && size >= PAGE_SIZE)
 		set_bit(PG_dcache_clean, &page->flags);
 }
 EXPORT_SYMBOL(___dma_page_dev_to_cpu);
 
+/**
+ * dma_map_sg - map a set of SG buffers for streaming mode DMA
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @sg: list of buffers
+ * @nents: number of buffers to map
+ * @dir: DMA transfer direction
+ *
+ * Map a set of buffers described by scatterlist in streaming mode for DMA.
+ * This is the scatter-gather version of the dma_map_single interface.
+ * Here the scatter gather list elements are each tagged with the
+ * appropriate dma address and length.  They are obtained via
+ * sg_dma_{address,length}.
+ *
+ * Device ownership issues as mentioned for dma_map_single are the same
+ * here.
+ */
 int dma_map_sg(struct device *dev, struct scatterlist *sg, int nents,
 		enum dma_data_direction dir)
 {
@@ -762,6 +787,16 @@ int dma_map_sg(struct device *dev, struct scatterlist *sg, int nents,
 }
 EXPORT_SYMBOL(dma_map_sg);
 
+/**
+ * dma_unmap_sg - unmap a set of SG buffers mapped by dma_map_sg
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @sg: list of buffers
+ * @nents: number of buffers to unmap (same as was passed to dma_map_sg)
+ * @dir: DMA transfer direction (same as was passed to dma_map_sg)
+ *
+ * Unmap a set of streaming mode DMA translations.  Again, CPU access
+ * rules concerning calls here are the same as for dma_unmap_single().
+ */
 void dma_unmap_sg(struct device *dev, struct scatterlist *sg, int nents,
 		enum dma_data_direction dir)
 {
@@ -775,6 +810,13 @@ void dma_unmap_sg(struct device *dev, struct scatterlist *sg, int nents,
 }
 EXPORT_SYMBOL(dma_unmap_sg);
 
+/**
+ * dma_sync_sg_for_cpu
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @sg: list of buffers
+ * @nents: number of buffers to map (returned from dma_map_sg)
+ * @dir: DMA transfer direction (same as was passed to dma_map_sg)
+ */
 void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
 			int nents, enum dma_data_direction dir)
 {
@@ -794,6 +836,13 @@ void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
 }
 EXPORT_SYMBOL(dma_sync_sg_for_cpu);
 
+/**
+ * dma_sync_sg_for_device
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @sg: list of buffers
+ * @nents: number of buffers to map (returned from dma_map_sg)
+ * @dir: DMA transfer direction (same as was passed to dma_map_sg)
+ */
 void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
 			int nents, enum dma_data_direction dir)
 {
@@ -813,6 +862,12 @@ void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
 }
 EXPORT_SYMBOL(dma_sync_sg_for_device);
 
+/*
+ * Return whether the given device DMA address mask can be supported
+ * properly.  For example, if your device can only drive the low 24-bits
+ * during bus mastering, then you would pass 0x00ffffff as the mask
+ * to this function.
+ */
 int dma_supported(struct device *dev, u64 mask)
 {
 	if (mask < (u64)arm_dma_limit)

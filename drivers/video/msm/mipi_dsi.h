@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -23,9 +23,9 @@
 
 #define BIT(x)  (1<<(x))
 
-#define MMSS_CC_BASE_PHY 0x04000000	
-#define MMSS_SFPB_BASE_PHY 0x05700000	
-#define MMSS_SERDES_BASE_PHY 0x04f01000 
+#define MMSS_CC_BASE_PHY 0x04000000	/* mmss clcok control */
+#define MMSS_SFPB_BASE_PHY 0x05700000	/* mmss SFPB CFG */
+#define MMSS_SERDES_BASE_PHY 0x04f01000 /* mmss (De)Serializer CFG */
 
 #define MIPI_DSI_BASE mipi_dsi_base
 
@@ -54,7 +54,7 @@
 #define MIPI_DSI_PANEL_720P_PT	8
 #define DSI_PANEL_MAX	8
 
-enum {		
+enum {		/* mipi dsi panel */
 	DSI_VIDEO_MODE,
 	DSI_CMD_MODE,
 };
@@ -120,10 +120,10 @@ enum dsi_trigger_type {
 #define DSI_MDP_TERM	BIT(8)
 #define DSI_CMD_TERM	BIT(0)
 
-#define DSI_CMD_TRIGGER_NONE		0x0	
+#define DSI_CMD_TRIGGER_NONE		0x0	/* mdp trigger */
 #define DSI_CMD_TRIGGER_TE		0x02
 #define DSI_CMD_TRIGGER_SW		0x04
-#define DSI_CMD_TRIGGER_SW_SEOF		0x05	
+#define DSI_CMD_TRIGGER_SW_SEOF		0x05	/* cmd dma only */
 #define DSI_CMD_TRIGGER_SW_TE		0x06
 
 extern struct device dsi_dev;
@@ -132,16 +132,16 @@ extern u32 dsi_irq;
 extern u32 esc_byte_ratio;
 
 extern void  __iomem *periph_base;
-extern char *mmss_cc_base;	
-extern char *mmss_sfpb_base;	
+extern char *mmss_cc_base;	/* mutimedia sub system clock control */
+extern char *mmss_sfpb_base;	/* mutimedia sub system sfpb */
 
 struct dsiphy_pll_divider_config {
 	u32 clk_rate;
 	u32 fb_divider;
 	u32 ref_divider_ratio;
-	u32 bit_clk_divider;	
-	u32 byte_clk_divider;	
-	u32 dsi_clk_divider;	
+	u32 bit_clk_divider;	/* oCLK1 */
+	u32 byte_clk_divider;	/* oCLK2 */
+	u32 dsi_clk_divider;	/* oCLK3 */
 };
 
 extern struct dsiphy_pll_divider_config pll_divider_config;
@@ -349,4 +349,4 @@ void update_lane_config(struct msm_panel_info *pinfo);
 #ifdef CONFIG_MACH_DUMMY
 #endif
 int mipi_lg_lcd_off(struct platform_device *pdev);
-#endif 
+#endif /* MIPI_DSI_H */

@@ -53,6 +53,7 @@
 #define MDDI_MF_CNT             0x0084
 #define MDDI_CURR_REV_PTR       0x0088
 #define MDDI_CORE_VER           0x008c
+
 #define MDDI_FIFO_ALLOC         0x0090
 #define MDDI_PAD_IO_CTL         0x00a0
 #define MDDI_PAD_CAL            0x00a4

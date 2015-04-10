@@ -4,6 +4,11 @@
  * Copyright (C) 1994-1999  Linus Torvalds
  */
 
+/*
+ * This file handles the generic file mmap semantics used by
+ * most "normal" filesystems (but you don't /have/ to use this:
+ * the NFS filesystem used to do this differently, for example)
+ */
 #include <linux/export.h>
 #include <linux/compiler.h>
 #include <linux/fs.h>
@@ -26,12 +31,15 @@
 #include <linux/security.h>
 #include <linux/syscalls.h>
 #include <linux/cpuset.h>
-#include <linux/hardirq.h> 
+#include <linux/hardirq.h> /* for BUG_ON(!in_atomic()) only */
 #include <linux/memcontrol.h>
 #include <linux/cleancache.h>
 #include "internal.h"
 
-#include <linux/buffer_head.h> 
+/*
+ * FIXME: remove all knowledge of the buffer layer from the core VM
+ */
+#include <linux/buffer_head.h> /* for try_to_free_buffers */
 
 #include <asm/mman.h>
 
@@ -1206,9 +1214,17 @@ retry_find:
 	}
 	VM_BUG_ON(page->index != offset);
 
+	/*
+	 * We have a locked page in the page cache, now we need to check
+	 * that it's up-to-date. If not, it is going to be due to an error.
+	 */
 	if (unlikely(!PageUptodate(page)))
 		goto page_not_uptodate;
 
+	/*
+	 * Found the page and have a reference on it.
+	 * We must recheck i_size under page lock.
+	 */
 	size = (i_size_read(inode) + PAGE_CACHE_SIZE - 1) >> PAGE_CACHE_SHIFT;
 	if (unlikely(offset >= size)) {
 		unlock_page(page);
@@ -1220,16 +1236,36 @@ retry_find:
 	return ret | VM_FAULT_LOCKED;
 
 no_cached_page:
+	/*
+	 * We're only likely to ever get here if MADV_RANDOM is in
+	 * effect.
+	 */
 	error = page_cache_read(file, offset);
 
+	/*
+	 * The page we want has now been added to the page cache.
+	 * In the unlikely event that someone removed it in the
+	 * meantime, we'll just come back here and read it again.
+	 */
 	if (error >= 0)
 		goto retry_find;
 
+	/*
+	 * An error return from page_cache_read can result if the
+	 * system is low on memory, or a problem occurs while trying
+	 * to schedule I/O.
+	 */
 	if (error == -ENOMEM)
 		return VM_FAULT_OOM;
 	return VM_FAULT_SIGBUS;
 
 page_not_uptodate:
+	/*
+	 * Umm, take care of errors if the page isn't up-to-date.
+	 * Try to re-read it _once_. We do this synchronously,
+	 * because there really aren't any performance issues here
+	 * and we need to check for errors.
+	 */
 	ClearPageError(page);
 	error = mapping->a_ops->readpage(file, page);
 	if (!error) {
@@ -1242,7 +1278,7 @@ page_not_uptodate:
 	if (!error || error == AOP_TRUNCATED_PAGE)
 		goto retry_find;
 
-	
+	/* Things didn't work out. Return zero to tell the mm layer so. */
 	shrink_readahead_size_eio(file, ra);
 	return VM_FAULT_SIGBUS;
 }
@@ -1252,6 +1288,7 @@ const struct vm_operations_struct generic_file_vm_ops = {
 	.fault		= filemap_fault,
 };
 
+/* This is used for a general mmap of a disk file */
 
 int generic_file_mmap(struct file * file, struct vm_area_struct * vma)
 {
@@ -1265,6 +1302,9 @@ int generic_file_mmap(struct file * file, struct vm_area_struct * vma)
 	return 0;
 }
 
+/*
+ * This is for filesystems which do not implement ->writepage.
+ */
 int generic_file_readonly_mmap(struct file *file, struct vm_area_struct *vma)
 {
 	if ((vma->vm_flags & VM_SHARED) && (vma->vm_flags & VM_MAYWRITE))
@@ -1280,7 +1320,7 @@ int generic_file_readonly_mmap(struct file * file, struct vm_area_struct * vma)
 {
 	return -ENOSYS;
 }
-#endif 
+#endif /* CONFIG_MMU */
 
 EXPORT_SYMBOL(generic_file_mmap);
 EXPORT_SYMBOL(generic_file_readonly_mmap);
@@ -1304,7 +1344,7 @@ repeat:
 			page_cache_release(page);
 			if (err == -EEXIST)
 				goto repeat;
-			
+			/* Presumably ENOMEM for radix tree node */
 			return ERR_PTR(err);
 		}
 		err = filler(data, page);
@@ -1353,6 +1393,21 @@ out:
 	return page;
 }
 
+/**
+ * read_cache_page_async - read into page cache, fill it if needed
+ * @mapping:	the page's address_space
+ * @index:	the page index
+ * @filler:	function to perform the read
+ * @data:	first arg to filler(data, page) function, often left as NULL
+ *
+ * Same as read_cache_page, but don't wait for page to become unlocked
+ * after submitting it to the filler.
+ *
+ * Read into the page cache. If a page already exists, and PageUptodate() is
+ * not set, try to fill the page but don't wait for it to become unlocked.
+ *
+ * If the page does not get brought uptodate, return -EIO.
+ */
 struct page *read_cache_page_async(struct address_space *mapping,
 				pgoff_t index,
 				int (*filler)(void *, struct page *),
@@ -1374,6 +1429,17 @@ static struct page *wait_on_page_read(struct page *page)
 	return page;
 }
 
+/**
+ * read_cache_page_gfp - read into page cache, using specified page allocation flags.
+ * @mapping:	the page's address_space
+ * @index:	the page index
+ * @gfp:	the page allocator flags to use if allocating
+ *
+ * This is the same as "read_mapping_page(mapping, index, NULL)", but with
+ * any new page allocations done using the specified allocation flags.
+ *
+ * If the page does not get brought uptodate, return -EIO.
+ */
 struct page *read_cache_page_gfp(struct address_space *mapping,
 				pgoff_t index,
 				gfp_t gfp)
@@ -1384,6 +1450,18 @@ struct page *read_cache_page_gfp(struct address_space *mapping,
 }
 EXPORT_SYMBOL(read_cache_page_gfp);
 
+/**
+ * read_cache_page - read into page cache, fill it if needed
+ * @mapping:	the page's address_space
+ * @index:	the page index
+ * @filler:	function to perform the read
+ * @data:	first arg to filler(data, page) function, often left as NULL
+ *
+ * Read into the page cache. If a page already exists, and PageUptodate() is
+ * not set, try to fill the page then wait for it to become unlocked.
+ *
+ * If the page does not get brought uptodate, return -EIO.
+ */
 struct page *read_cache_page(struct address_space *mapping,
 				pgoff_t index,
 				int (*filler)(void *, struct page *),
@@ -1393,15 +1471,25 @@ struct page *read_cache_page(struct address_space *mapping,
 }
 EXPORT_SYMBOL(read_cache_page);
 
+/*
+ * The logic we want is
+ *
+ *	if suid or (sgid and xgrp)
+ *		remove privs
+ */
 int should_remove_suid(struct dentry *dentry)
 {
 	umode_t mode = dentry->d_inode->i_mode;
 	int kill = 0;
 
-	
+	/* suid always must be killed */
 	if (unlikely(mode & S_ISUID))
 		kill = ATTR_KILL_SUID;
 
+	/*
+	 * sgid without any exec bits is just a mandatory locking mark; leave
+	 * it alone.  If some exec bits are set, it's a real sgid; kill it.
+	 */
 	if (unlikely((mode & S_ISGID) && (mode & S_IXGRP)))
 		kill |= ATTR_KILL_SGID;
 
@@ -1428,7 +1516,7 @@ int file_remove_suid(struct file *file)
 	int killpriv;
 	int error = 0;
 
-	
+	/* Fast path for nothing security related */
 	if (IS_NOSEC(inode))
 		return 0;
 
@@ -1470,6 +1558,11 @@ static size_t __iovec_copy_from_user_inatomic(char *vaddr,
 	return copied - left;
 }
 
+/*
+ * Copy as much as we can into the page and return the number of bytes which
+ * were successfully copied.  If a fault is encountered then return the number of
+ * bytes which were copied.
+ */
 size_t iov_iter_copy_from_user_atomic(struct page *page,
 		struct iov_iter *i, unsigned long offset, size_t bytes)
 {
@@ -1493,6 +1586,12 @@ size_t iov_iter_copy_from_user_atomic(struct page *page,
 }
 EXPORT_SYMBOL(iov_iter_copy_from_user_atomic);
 
+/*
+ * This has the same sideeffects and return value as
+ * iov_iter_copy_from_user_atomic().
+ * The difference is that it attempts to resolve faults.
+ * Page must not be locked.
+ */
 size_t iov_iter_copy_from_user(struct page *page,
 		struct iov_iter *i, unsigned long offset, size_t bytes)
 {
@@ -1526,6 +1625,10 @@ void iov_iter_advance(struct iov_iter *i, size_t bytes)
 		size_t base = i->iov_offset;
 		unsigned long nr_segs = i->nr_segs;
 
+		/*
+		 * The !iov->iov_len check ensures we skip over unlikely
+		 * zero-length segments (without overruning the iovec).
+		 */
 		while (bytes || unlikely(i->count && !iov->iov_len)) {
 			int copy;
 
@@ -1547,6 +1650,15 @@ void iov_iter_advance(struct iov_iter *i, size_t bytes)
 }
 EXPORT_SYMBOL(iov_iter_advance);
 
+/*
+ * Fault in the first iovec of the given iov_iter, to a maximum length
+ * of bytes. Returns 0 on success, or non-zero if the memory could not be
+ * accessed (ie. because it is an invalid address).
+ *
+ * writev-intensive code may want this to prefault several iovecs -- that
+ * would be possible (callers must not rely on the fact that _only_ the
+ * first iovec will be faulted with the current implementation).
+ */
 int iov_iter_fault_in_readable(struct iov_iter *i, size_t bytes)
 {
 	char __user *buf = i->iov->iov_base + i->iov_offset;
@@ -1555,6 +1667,9 @@ int iov_iter_fault_in_readable(struct iov_iter *i, size_t bytes)
 }
 EXPORT_SYMBOL(iov_iter_fault_in_readable);
 
+/*
+ * Return the count of just the current iov_iter segment.
+ */
 size_t iov_iter_single_seg_count(struct iov_iter *i)
 {
 	const struct iovec *iov = i->iov;
@@ -1565,6 +1680,13 @@ size_t iov_iter_single_seg_count(struct iov_iter *i)
 }
 EXPORT_SYMBOL(iov_iter_single_seg_count);
 
+/*
+ * Performs necessary checks before doing a write
+ *
+ * Can adjust writing position or amount of bytes to write.
+ * Returns appropriate error code that caller should return or
+ * zero in case that write should be allowed.
+ */
 inline int generic_write_checks(struct file *file, loff_t *pos, size_t *count, int isblk)
 {
 	struct inode *inode = file->f_mapping->host;
@@ -1574,7 +1696,7 @@ inline int generic_write_checks(struct file *file, loff_t *pos, size_t *count, i
                 return -EINVAL;
 
 	if (!isblk) {
-		
+		/* FIXME: this is for backwards compatibility with 2.4 */
 		if (file->f_flags & O_APPEND)
                         *pos = i_size_read(inode);
 
@@ -1589,6 +1711,9 @@ inline int generic_write_checks(struct file *file, loff_t *pos, size_t *count, i
 		}
 	}
 
+	/*
+	 * LFS rule
+	 */
 	if (unlikely(*pos + *count > MAX_NON_LFS &&
 				!(file->f_flags & O_LARGEFILE))) {
 		if (*pos >= MAX_NON_LFS) {
@@ -1611,7 +1736,7 @@ inline int generic_write_checks(struct file *file, loff_t *pos, size_t *count, i
 			if (*count || *pos > inode->i_sb->s_maxbytes) {
 				return -EFBIG;
 			}
-			
+			/* zero-length writes at ->s_maxbytes are OK */
 		}
 
 		if (unlikely(*pos + *count > inode->i_sb->s_maxbytes))
@@ -1681,9 +1806,19 @@ generic_file_direct_write(struct kiocb *iocb, const struct iovec *iov,
 	if (written)
 		goto out;
 
+	/*
+	 * After a write we want buffered reads to be sure to go to disk to get
+	 * the new data.  We invalidate clean cached page from the region we're
+	 * about to write.  We do this *before* the write so that we can return
+	 * without clobbering -EIOCBQUEUED from ->direct_IO().
+	 */
 	if (mapping->nrpages) {
 		written = invalidate_inode_pages2_range(mapping,
 					pos >> PAGE_CACHE_SHIFT, end);
+		/*
+		 * If a page can not be invalidated, return 0 to fall back
+		 * to buffered write.
+		 */
 		if (written) {
 			if (written == -EBUSY)
 				return 0;
@@ -1693,6 +1828,14 @@ generic_file_direct_write(struct kiocb *iocb, const struct iovec *iov,
 
 	written = mapping->a_ops->direct_IO(WRITE, iocb, iov, pos, *nr_segs);
 
+	/*
+	 * Finally, try again to invalidate clean pages which might have been
+	 * cached by non-direct readahead, or faulted in by get_user_pages()
+	 * if the source of the write was an mmap'ed region of the file
+	 * we're writing.  Either one is a pretty crazy thing to do,
+	 * so we don't support it 100%.  If this invalidation
+	 * fails, tough, the write still worked...
+	 */
 	if (mapping->nrpages) {
 		invalidate_inode_pages2_range(mapping,
 					      pos >> PAGE_CACHE_SHIFT, end);
@@ -1711,6 +1854,10 @@ out:
 }
 EXPORT_SYMBOL(generic_file_direct_write);
 
+/*
+ * Find or create a page at the given pagecache position. Return the locked
+ * page. This function is specifically for buffered writes.
+ */
 struct page *grab_cache_page_write_begin(struct address_space *mapping,
 					pgoff_t index, unsigned flags)
 {
@@ -1755,14 +1902,17 @@ static ssize_t generic_perform_write(struct file *file,
 	ssize_t written = 0;
 	unsigned int flags = 0;
 
+	/*
+	 * Copies from kernel address space cannot fail (NFSD is a big user).
+	 */
 	if (segment_eq(get_fs(), KERNEL_DS))
 		flags |= AOP_FLAG_UNINTERRUPTIBLE;
 
 	do {
 		struct page *page;
-		unsigned long offset;	
-		unsigned long bytes;	
-		size_t copied;		
+		unsigned long offset;	/* Offset into pagecache page */
+		unsigned long bytes;	/* Bytes to write to page */
+		size_t copied;		/* Bytes copied from user */
 		void *fsdata;
 
 		offset = (pos & (PAGE_CACHE_SIZE - 1));
@@ -1770,6 +1920,16 @@ static ssize_t generic_perform_write(struct file *file,
 						iov_iter_count(i));
 
 again:
+		/*
+		 * Bring in the user page that we will copy from _first_.
+		 * Otherwise there's a nasty deadlock on copying from the
+		 * same page as we're writing to, without it being marked
+		 * up-to-date.
+		 *
+		 * Not only is this an optimisation, but it is also required
+		 * to check that the address is actually valid, when atomic
+		 * usercopies are used, below.
+		 */
 		if (unlikely(iov_iter_fault_in_readable(i, bytes))) {
 			status = -EFAULT;
 			break;
@@ -1799,6 +1959,14 @@ again:
 
 		iov_iter_advance(i, copied);
 		if (unlikely(copied == 0)) {
+			/*
+			 * If we were unable to copy any data at all, we must
+			 * fall back to a single segment length write.
+			 *
+			 * If we didn't fallback here, we could livelock
+			 * because not all segments in the iov can be copied at
+			 * once without a pagefault.
+			 */
 			bytes = min_t(unsigned long, PAGE_CACHE_SIZE - offset,
 						iov_iter_single_seg_count(i));
 			goto again;
@@ -1837,13 +2005,32 @@ generic_file_buffered_write(struct kiocb *iocb, const struct iovec *iov,
 }
 EXPORT_SYMBOL(generic_file_buffered_write);
 
+/**
+ * __generic_file_aio_write - write data to a file
+ * @iocb:	IO state structure (file, offset, etc.)
+ * @iov:	vector with data to write
+ * @nr_segs:	number of segments in the vector
+ * @ppos:	position where to write
+ *
+ * This function does all the work needed for actually writing data to a
+ * file. It does all basic checks, removes SUID from the file, updates
+ * modification times and calls proper subroutines depending on whether we
+ * do direct IO or a standard buffered write.
+ *
+ * It expects i_mutex to be grabbed unless we work on a block device or similar
+ * object which does not need locking at all.
+ *
+ * This function does *not* take care of syncing data in case of O_SYNC write.
+ * A caller has to handle it. This is mainly due to the fact that we want to
+ * avoid syncing under i_mutex.
+ */
 ssize_t __generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 				 unsigned long nr_segs, loff_t *ppos)
 {
 	struct file *file = iocb->ki_filp;
 	struct address_space * mapping = file->f_mapping;
-	size_t ocount;		
-	size_t count;		
+	size_t ocount;		/* original count */
+	size_t count;		/* after file limit checks */
 	struct inode 	*inode = mapping->host;
 	loff_t		pos;
 	ssize_t		written;
@@ -1859,7 +2046,7 @@ ssize_t __generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 
 	vfs_check_frozen(inode->i_sb, SB_FREEZE_WRITE);
 
-	
+	/* We can write back this queue in page reclaim */
 	current->backing_dev_info = mapping->backing_dev_info;
 	written = 0;
 
@@ -1876,7 +2063,7 @@ ssize_t __generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 
 	file_update_time(file);
 
-	
+	/* coalesce the iovecs and go direct-to-BIO for O_DIRECT */
 	if (unlikely(file->f_flags & O_DIRECT)) {
 		loff_t endbyte;
 		ssize_t written_buffered;
@@ -1885,6 +2072,10 @@ ssize_t __generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 							ppos, count, ocount);
 		if (written < 0 || written == count)
 			goto out;
+		/*
+		 * direct-io write to a hole: fall through to buffered I/O
+		 * for completing the rest of the request.
+		 */
 		pos += written;
 		count -= written;
 		written_buffered = generic_file_buffered_write(iocb, iov,
@@ -1930,6 +2121,17 @@ out:
 }
 EXPORT_SYMBOL(__generic_file_aio_write);
 
+/**
+ * generic_file_aio_write - write data to a file
+ * @iocb:	IO state structure
+ * @iov:	vector with data to write
+ * @nr_segs:	number of segments in the vector
+ * @pos:	position in file where to write
+ *
+ * This is a wrapper around __generic_file_aio_write() to be used by most
+ * filesystems. It takes care of syncing the file in case of O_SYNC file
+ * and acquires i_mutex as needed.
+ */
 ssize_t generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 		unsigned long nr_segs, loff_t pos)
 {
@@ -1957,6 +2159,23 @@ ssize_t generic_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 }
 EXPORT_SYMBOL(generic_file_aio_write);
 
+/**
+ * try_to_release_page() - release old fs-specific metadata on a page
+ *
+ * @page: the page which the kernel is trying to free
+ * @gfp_mask: memory allocation flags (and I/O mode)
+ *
+ * The address_space is to try to release any data against the page
+ * (presumably at page->private).  If the release was successful, return `1'.
+ * Otherwise return zero.
+ *
+ * This may also be called if PG_fscache is set on a page, indicating that the
+ * page is known to the local caching routines.
+ *
+ * The @gfp_mask argument specifies whether I/O may be performed to release
+ * this page (__GFP_IO), and whether the call may block (__GFP_WAIT & __GFP_FS).
+ *
+ */
 int try_to_release_page(struct page *page, gfp_t gfp_mask)
 {
 	struct address_space * const mapping = page->mapping;

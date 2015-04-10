@@ -45,113 +45,160 @@
 #include "workqueue_sched.h"
 
 enum {
-	
-	GCWQ_MANAGE_WORKERS	= 1 << 0,	
-	GCWQ_MANAGING_WORKERS	= 1 << 1,	
-	GCWQ_DISASSOCIATED	= 1 << 2,	
-	GCWQ_FREEZING		= 1 << 3,	
-	GCWQ_HIGHPRI_PENDING	= 1 << 4,	
+	/* global_cwq flags */
+	GCWQ_MANAGE_WORKERS	= 1 << 0,	/* need to manage workers */
+	GCWQ_MANAGING_WORKERS	= 1 << 1,	/* managing workers */
+	GCWQ_DISASSOCIATED	= 1 << 2,	/* cpu can't serve workers */
+	GCWQ_FREEZING		= 1 << 3,	/* freeze in progress */
+	GCWQ_HIGHPRI_PENDING	= 1 << 4,	/* highpri works on queue */
 
-	
-	WORKER_STARTED		= 1 << 0,	
-	WORKER_DIE		= 1 << 1,	
-	WORKER_IDLE		= 1 << 2,	
-	WORKER_PREP		= 1 << 3,	
-	WORKER_ROGUE		= 1 << 4,	
-	WORKER_REBIND		= 1 << 5,	
-	WORKER_CPU_INTENSIVE	= 1 << 6,	
-	WORKER_UNBOUND		= 1 << 7,	
+	/* worker flags */
+	WORKER_STARTED		= 1 << 0,	/* started */
+	WORKER_DIE		= 1 << 1,	/* die die die */
+	WORKER_IDLE		= 1 << 2,	/* is idle */
+	WORKER_PREP		= 1 << 3,	/* preparing to run works */
+	WORKER_ROGUE		= 1 << 4,	/* not bound to any cpu */
+	WORKER_REBIND		= 1 << 5,	/* mom is home, come back */
+	WORKER_CPU_INTENSIVE	= 1 << 6,	/* cpu intensive */
+	WORKER_UNBOUND		= 1 << 7,	/* worker is unbound */
 
 	WORKER_NOT_RUNNING	= WORKER_PREP | WORKER_ROGUE | WORKER_REBIND |
 				  WORKER_CPU_INTENSIVE | WORKER_UNBOUND,
 
-	
-	TRUSTEE_START		= 0,		
-	TRUSTEE_IN_CHARGE	= 1,		
-	TRUSTEE_BUTCHER		= 2,		
-	TRUSTEE_RELEASE		= 3,		
-	TRUSTEE_DONE		= 4,		
+	/* gcwq->trustee_state */
+	TRUSTEE_START		= 0,		/* start */
+	TRUSTEE_IN_CHARGE	= 1,		/* trustee in charge of gcwq */
+	TRUSTEE_BUTCHER		= 2,		/* butcher workers */
+	TRUSTEE_RELEASE		= 3,		/* release workers */
+	TRUSTEE_DONE		= 4,		/* trustee is done */
 
-	BUSY_WORKER_HASH_ORDER	= 6,		
+	BUSY_WORKER_HASH_ORDER	= 6,		/* 64 pointers */
 	BUSY_WORKER_HASH_SIZE	= 1 << BUSY_WORKER_HASH_ORDER,
 	BUSY_WORKER_HASH_MASK	= BUSY_WORKER_HASH_SIZE - 1,
 
-	MAX_IDLE_WORKERS_RATIO	= 4,		
-	IDLE_WORKER_TIMEOUT	= 300 * HZ,	
+	MAX_IDLE_WORKERS_RATIO	= 4,		/* 1/4 of busy can be idle */
+	IDLE_WORKER_TIMEOUT	= 300 * HZ,	/* keep idle ones for 5 mins */
 
 	MAYDAY_INITIAL_TIMEOUT  = HZ / 100 >= 2 ? HZ / 100 : 2,
-	MAYDAY_INTERVAL		= HZ / 10,	
-	CREATE_COOLDOWN		= HZ,		
-	TRUSTEE_COOLDOWN	= HZ / 10,	
+						/* call for help after 10ms
+						   (min two ticks) */
+	MAYDAY_INTERVAL		= HZ / 10,	/* and then every 100ms */
+	CREATE_COOLDOWN		= HZ,		/* time to breath after fail */
+	TRUSTEE_COOLDOWN	= HZ / 10,	/* for trustee draining */
 
+	/*
+	 * Rescue workers are used only on emergencies and shared by
+	 * all cpus.  Give -20.
+	 */
 	RESCUER_NICE_LEVEL	= -20,
 };
 
+/*
+ * Structure fields follow one of the following exclusion rules.
+ *
+ * I: Modifiable by initialization/destruction paths and read-only for
+ *    everyone else.
+ *
+ * P: Preemption protected.  Disabling preemption is enough and should
+ *    only be modified and accessed from the local cpu.
+ *
+ * L: gcwq->lock protected.  Access with gcwq->lock held.
+ *
+ * X: During normal operation, modification requires gcwq->lock and
+ *    should be done only from local cpu.  Either disabling preemption
+ *    on local cpu or grabbing gcwq->lock is enough for read access.
+ *    If GCWQ_DISASSOCIATED is set, it's identical to L.
+ *
+ * F: wq->flush_mutex protected.
+ *
+ * W: workqueue_lock protected.
+ */
 
 struct global_cwq;
 
+/*
+ * The poor guys doing the actual heavy lifting.  All on-duty workers
+ * are either serving the manager role, on idle list or on busy hash.
+ */
 struct worker {
-	
+	/* on idle list while idle, on busy hash table while busy */
 	union {
-		struct list_head	entry;	
-		struct hlist_node	hentry;	
+		struct list_head	entry;	/* L: while idle */
+		struct hlist_node	hentry;	/* L: while busy */
 	};
 
-	struct work_struct	*current_work;	
-	struct cpu_workqueue_struct *current_cwq; 
-	struct list_head	scheduled;	
-	struct task_struct	*task;		
-	struct global_cwq	*gcwq;		
-	
-	unsigned long		last_active;	
-	unsigned int		flags;		
-	int			id;		
-	struct work_struct	rebind_work;	
+	struct work_struct	*current_work;	/* L: work being processed */
+	struct cpu_workqueue_struct *current_cwq; /* L: current_work's cwq */
+	struct list_head	scheduled;	/* L: scheduled works */
+	struct task_struct	*task;		/* I: worker task */
+	struct global_cwq	*gcwq;		/* I: the associated gcwq */
+	/* 64 bytes boundary on 64bit, 32 on 32bit */
+	unsigned long		last_active;	/* L: last active timestamp */
+	unsigned int		flags;		/* X: flags */
+	int			id;		/* I: worker id */
+	struct work_struct	rebind_work;	/* L: rebind worker to cpu */
 };
 
+/*
+ * Global per-cpu workqueue.  There's one and only one for each cpu
+ * and all works are queued and processed here regardless of their
+ * target workqueues.
+ */
 struct global_cwq {
-	spinlock_t		lock;		
-	struct list_head	worklist;	
-	unsigned int		cpu;		
-	unsigned int		flags;		
+	spinlock_t		lock;		/* the gcwq lock */
+	struct list_head	worklist;	/* L: list of pending works */
+	unsigned int		cpu;		/* I: the associated cpu */
+	unsigned int		flags;		/* L: GCWQ_* flags */
 
-	int			nr_workers;	
-	int			nr_idle;	
+	int			nr_workers;	/* L: total number of workers */
+	int			nr_idle;	/* L: currently idle ones */
 
-	
-	struct list_head	idle_list;	
+	/* workers are chained either in the idle_list or busy_hash */
+	struct list_head	idle_list;	/* X: list of idle workers */
 	struct hlist_head	busy_hash[BUSY_WORKER_HASH_SIZE];
-						
+						/* L: hash of busy workers */
 
-	struct timer_list	idle_timer;	
-	struct timer_list	mayday_timer;	
+	struct timer_list	idle_timer;	/* L: worker idle timeout */
+	struct timer_list	mayday_timer;	/* L: SOS timer for dworkers */
 
-	struct ida		worker_ida;	
+	struct ida		worker_ida;	/* L: for worker IDs */
 
-	struct task_struct	*trustee;	
-	unsigned int		trustee_state;	
-	wait_queue_head_t	trustee_wait;	
-	struct worker		*first_idle;	
+	struct task_struct	*trustee;	/* L: for gcwq shutdown */
+	unsigned int		trustee_state;	/* L: trustee state */
+	wait_queue_head_t	trustee_wait;	/* trustee wait */
+	struct worker		*first_idle;	/* L: first idle worker */
 } ____cacheline_aligned_in_smp;
 
+/*
+ * The per-CPU workqueue.  The lower WORK_STRUCT_FLAG_BITS of
+ * work_struct->data are used for flags and thus cwqs need to be
+ * aligned at two's power of the number of flag bits.
+ */
 struct cpu_workqueue_struct {
-	struct global_cwq	*gcwq;		
-	struct workqueue_struct *wq;		
-	int			work_color;	
-	int			flush_color;	
+	struct global_cwq	*gcwq;		/* I: the associated gcwq */
+	struct workqueue_struct *wq;		/* I: the owning workqueue */
+	int			work_color;	/* L: current color */
+	int			flush_color;	/* L: flushing color */
 	int			nr_in_flight[WORK_NR_COLORS];
-						
-	int			nr_active;	
-	int			max_active;	
-	struct list_head	delayed_works;	
+						/* L: nr of in_flight works */
+	int			nr_active;	/* L: nr of active works */
+	int			max_active;	/* L: max active works */
+	struct list_head	delayed_works;	/* L: delayed works */
 };
 
+/*
+ * Structure used to wait for workqueue flush.
+ */
 struct wq_flusher {
-	struct list_head	list;		
-	int			flush_color;	
-	struct completion	done;		
+	struct list_head	list;		/* F: list of flushers */
+	int			flush_color;	/* F: flush color waiting for */
+	struct completion	done;		/* flush completion */
 };
 
+/*
+ * All cpumasks are assumed to be always set on UP and thus can't be
+ * used to determine whether there's something to be done.
+ */
 #ifdef CONFIG_SMP
 typedef cpumask_var_t mayday_mask_t;
 #define mayday_test_and_set_cpu(cpu, mask)	\
@@ -169,32 +216,36 @@ typedef unsigned long mayday_mask_t;
 #define free_mayday_mask(mask)			do { } while (0)
 #endif
 
+/*
+ * The externally visible workqueue abstraction is an array of
+ * per-CPU workqueues:
+ */
 struct workqueue_struct {
-	unsigned int		flags;		
+	unsigned int		flags;		/* W: WQ_* flags */
 	union {
 		struct cpu_workqueue_struct __percpu	*pcpu;
 		struct cpu_workqueue_struct		*single;
 		unsigned long				v;
-	} cpu_wq;				
-	struct list_head	list;		
+	} cpu_wq;				/* I: cwq's */
+	struct list_head	list;		/* W: list of all workqueues */
 
-	struct mutex		flush_mutex;	
-	int			work_color;	
-	int			flush_color;	
-	atomic_t		nr_cwqs_to_flush; 
-	struct wq_flusher	*first_flusher;	
-	struct list_head	flusher_queue;	
-	struct list_head	flusher_overflow; 
+	struct mutex		flush_mutex;	/* protects wq flushing */
+	int			work_color;	/* F: current work color */
+	int			flush_color;	/* F: current flush color */
+	atomic_t		nr_cwqs_to_flush; /* flush in progress */
+	struct wq_flusher	*first_flusher;	/* F: first flusher */
+	struct list_head	flusher_queue;	/* F: flush waiters */
+	struct list_head	flusher_overflow; /* F: flush overflow list */
 
-	mayday_mask_t		mayday_mask;	
-	struct worker		*rescuer;	
+	mayday_mask_t		mayday_mask;	/* cpus requesting rescue */
+	struct worker		*rescuer;	/* I: rescue worker */
 
-	int			nr_drainers;	
-	int			saved_max_active; 
+	int			nr_drainers;	/* W: drain in progress */
+	int			saved_max_active; /* W: saved cwq max_active */
 #ifdef CONFIG_LOCKDEP
 	struct lockdep_map	lockdep_map;
 #endif
-	char			name[];		
+	char			name[];		/* I: workqueue name */
 };
 
 struct workqueue_struct *system_wq __read_mostly;
@@ -209,7 +260,6 @@ EXPORT_SYMBOL_GPL(system_nrt_wq);
 EXPORT_SYMBOL_GPL(system_unbound_wq);
 EXPORT_SYMBOL_GPL(system_freezable_wq);
 EXPORT_SYMBOL_GPL(system_nrt_freezable_wq);
-
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/workqueue.h>
@@ -239,6 +289,19 @@ static inline int __next_wq_cpu(int cpu, const struct cpumask *mask,
 	return __next_gcwq_cpu(cpu, mask, !(wq->flags & WQ_UNBOUND) ? 1 : 2);
 }
 
+/*
+ * CPU iterators
+ *
+ * An extra gcwq is defined for an invalid cpu number
+ * (WORK_CPU_UNBOUND) to host workqueues which are not bound to any
+ * specific CPU.  The following iterators are similar to
+ * for_each_*_cpu() iterators but also considers the unbound gcwq.
+ *
+ * for_each_gcwq_cpu()		: possible CPUs + WORK_CPU_UNBOUND
+ * for_each_online_gcwq_cpu()	: online CPUs + WORK_CPU_UNBOUND
+ * for_each_cwq_cpu()		: possible CPUs for bound workqueues,
+ *				  WORK_CPU_UNBOUND for unbound workqueues
+ */
 #define for_each_gcwq_cpu(cpu)						\
 	for ((cpu) = __next_gcwq_cpu(-1, cpu_possible_mask, 3);		\
 	     (cpu) < WORK_CPU_NONE;					\
@@ -263,6 +326,10 @@ static void *work_debug_hint(void *addr)
 	return ((struct work_struct *) addr)->func;
 }
 
+/*
+ * fixup_init is called when:
+ * - an active object is initialized
+ */
 static int work_fixup_init(void *addr, enum debug_obj_state state)
 {
 	struct work_struct *work = addr;
@@ -277,6 +344,11 @@ static int work_fixup_init(void *addr, enum debug_obj_state state)
 	}
 }
 
+/*
+ * fixup_activate is called when:
+ * - an active object is activated
+ * - an unknown object is activated (might be a statically initialized object)
+ */
 static int work_fixup_activate(void *addr, enum debug_obj_state state)
 {
 	struct work_struct *work = addr;
@@ -284,6 +356,11 @@ static int work_fixup_activate(void *addr, enum debug_obj_state state)
 	switch (state) {
 
 	case ODEBUG_STATE_NOTAVAILABLE:
+		/*
+		 * This is not really a fixup. The work struct was
+		 * statically initialized. We just make sure that it
+		 * is tracked in the object tracker.
+		 */
 		if (test_bit(WORK_STRUCT_STATIC_BIT, work_data_bits(work))) {
 			debug_object_init(work, &work_debug_descr);
 			debug_object_activate(work, &work_debug_descr);
@@ -300,6 +377,10 @@ static int work_fixup_activate(void *addr, enum debug_obj_state state)
 	}
 }
 
+/*
+ * fixup_free is called when:
+ * - an active object is freed
+ */
 static int work_fixup_free(void *addr, enum debug_obj_state state)
 {
 	struct work_struct *work = addr;
@@ -352,15 +433,26 @@ static inline void debug_work_activate(struct work_struct *work) { }
 static inline void debug_work_deactivate(struct work_struct *work) { }
 #endif
 
+/* Serializes the accesses to the list of workqueues. */
 static DEFINE_SPINLOCK(workqueue_lock);
 static LIST_HEAD(workqueues);
-static bool workqueue_freezing;		
+static bool workqueue_freezing;		/* W: have wqs started freezing? */
 
+/*
+ * The almighty global cpu workqueues.  nr_running is the only field
+ * which is expected to be used frequently by other cpus via
+ * try_to_wake_up().  Put it in a separate cacheline.
+ */
 static DEFINE_PER_CPU(struct global_cwq, global_cwq);
 static DEFINE_PER_CPU_SHARED_ALIGNED(atomic_t, gcwq_nr_running);
 
+/*
+ * Global cpu workqueue and nr_running counter for unbound gcwq.  The
+ * gcwq is always online, has GCWQ_DISASSOCIATED set, and all its
+ * workers have WORKER_UNBOUND set.
+ */
 static struct global_cwq unbound_global_cwq;
-static atomic_t unbound_gcwq_nr_running = ATOMIC_INIT(0);	
+static atomic_t unbound_gcwq_nr_running = ATOMIC_INIT(0);	/* always 0 */
 
 static int worker_thread(void *__worker);
 
@@ -407,6 +499,20 @@ static int work_next_color(int color)
 	return (color + 1) % WORK_NR_COLORS;
 }
 
+/*
+ * A work's data points to the cwq with WORK_STRUCT_CWQ set while the
+ * work is on queue.  Once execution starts, WORK_STRUCT_CWQ is
+ * cleared and the work data contains the cpu number it was last on.
+ *
+ * set_work_{cwq|cpu}() and clear_work_data() can be used to set the
+ * cwq, cpu or clear work->data.  These functions should only be
+ * called while the work is owned - ie. while the PENDING bit is set.
+ *
+ * get_work_[g]cwq() can be used to obtain the gcwq or cwq
+ * corresponding to a work.  gcwq is available once the work has been
+ * queued anywhere after initialization.  cwq is available only from
+ * queueing until execution starts.
+ */
 static inline void set_work_data(struct work_struct *work, unsigned long data,
 				 unsigned long flags)
 {
@@ -2607,7 +2713,7 @@ static int __init init_workqueues(void)
 		init_waitqueue_head(&gcwq->trustee_wait);
 	}
 
-	
+	/* create the initial worker */
 	for_each_online_gcwq_cpu(cpu) {
 		struct global_cwq *gcwq = get_gcwq(cpu);
 		struct worker *worker;

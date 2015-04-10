@@ -14,6 +14,7 @@ extern struct proto tcpv6_prot;
 
 struct flowi6;
 
+/* extension headers */
 extern void initialize_hashidentrnd(void);
 
 /* extension headers */

@@ -2714,3 +2714,4 @@ static int __init htc_battery_init(void)
 module_init(htc_battery_init);
 MODULE_DESCRIPTION("HTC Battery Driver");
 MODULE_LICENSE("GPL");
+

@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -991,6 +991,7 @@ static int msm_isp_config(struct msm_cam_media_controller *pmctl,
 
 static struct msm_isp_ops isp_subdev[MSM_MAX_CAMERA_CONFIGS];
 
+/**/
 int msm_isp_init_module(int g_num_config_nodes)
 {
 	int i = 0;
@@ -1005,6 +1006,8 @@ int msm_isp_init_module(int g_num_config_nodes)
 }
 EXPORT_SYMBOL(msm_isp_init_module);
 
+/*
+*/
 int msm_isp_register(struct msm_cam_server_dev *psvr)
 {
 	int i = 0;
@@ -1013,7 +1016,7 @@ int msm_isp_register(struct msm_cam_server_dev *psvr)
 
 	BUG_ON(!psvr);
 
-	
+	/* Initialize notify function for v4l2_dev */
 	for (i = 0; i < psvr->config_info.num_config_nodes; i++)
 		psvr->isp_subdev[i] = &(isp_subdev[i]);
 
@@ -1021,6 +1024,7 @@ int msm_isp_register(struct msm_cam_server_dev *psvr)
 }
 EXPORT_SYMBOL(msm_isp_register);
 
+/**/
 void msm_isp_unregister(struct msm_cam_server_dev *psvr)
 {
 	int i = 0;
@@ -1036,6 +1040,3 @@ int msm_isp_subdev_ioctl(struct v4l2_subdev *isp_subdev,
 	vfe_params.data = data;
 	return v4l2_subdev_call(isp_subdev, core, ioctl, 0, &vfe_params);
 }
-
-
-

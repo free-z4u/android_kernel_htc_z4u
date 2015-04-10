@@ -213,7 +213,7 @@ static void tcm_loop_submission_work(struct work_struct *work)
 	 * associated read buffers, go ahead and do that here for type
 	 * SCF_SCSI_CONTROL_SG_IO_CDB.  Also note that this is currently
 	 * guaranteed to be a single SGL for SCF_SCSI_CONTROL_SG_IO_CDB
-	 * by target core in target_setup_cmd_from_cdb() ->
+	 * by target core in transport_generic_allocate_tasks() ->
 	 * transport_generic_cmd_sequencer().
 	 */
 	if (se_cmd->se_cmd_flags & SCF_SCSI_CONTROL_SG_IO_CDB &&

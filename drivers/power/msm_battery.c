@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2011, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2011, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -229,7 +229,6 @@ struct msm_battery_info {
 	u32 battery_level;
 	u32 battery_voltage; /* in millie volts */
 	u32 battery_temp;  /* in celsius */
-
 	u32(*calculate_capacity) (u32 voltage);
 
 	s32 batt_handle;

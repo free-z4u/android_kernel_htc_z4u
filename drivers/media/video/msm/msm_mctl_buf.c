@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -35,13 +35,13 @@
 #endif
 
 static int msm_vb2_ops_queue_setup(struct vb2_queue *vq,
-					const struct v4l2_format *fmt,
-					unsigned int *num_buffers,
-					unsigned int *num_planes,
-					unsigned int sizes[],
-					void *alloc_ctxs[])
+				const struct v4l2_format *fmt,
+				unsigned int *num_buffers,
+				unsigned int *num_planes,
+				unsigned int sizes[],
+				void *alloc_ctxs[])
 {
-	
+	/* get the video device */
 	struct msm_cam_v4l2_dev_inst *pcam_inst = vb2_get_drv_priv(vq);
 	struct msm_cam_v4l2_device *pcam = pcam_inst->pcam;
 	int i;
@@ -65,11 +65,11 @@ static int msm_vb2_ops_queue_setup(struct vb2_queue *vq,
 
 static void msm_vb2_ops_wait_prepare(struct vb2_queue *q)
 {
-	
+	/* we use polling so do not use this fn now */
 }
 static void msm_vb2_ops_wait_finish(struct vb2_queue *q)
 {
-	
+	/* we use polling so do not use this fn now */
 }
 
 static int msm_vb2_ops_buf_init(struct vb2_buffer *vb)

@@ -135,6 +135,10 @@ struct mmc_platform_data {
 	unsigned int (*status)(struct device *);
 	struct embedded_sdio_data *embedded_sdio;
 	int (*register_status_notify)(void (*callback)(int card_present, void *dev_id), void *dev_id);
+	/*
+	 * XPC controls the maximum current in the
+	 * default speed mode of SDXC card.
+	 */
 	unsigned int *slot_type;
 	/*
 	 * XPC controls the maximum current in the

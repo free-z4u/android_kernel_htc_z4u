@@ -148,4 +148,4 @@ extern int board_mfg_mode(void);
 extern char *board_get_mfg_sleep_gpio_table(void);
 extern void gpio_set_diag_gpio_table(unsigned long *dwMFG_gpio_table);
 
-#endif  
+#endif  /* __ARCH_ARM_MACH_MSM_PM_H */

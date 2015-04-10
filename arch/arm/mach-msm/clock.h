@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/clock.h
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2007-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2007-2012, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -37,18 +37,32 @@
 #define CLKFLAG_MIN			0x00000400
 #define CLKFLAG_MAX			0x00000800
 
+/*
+ * Bit manipulation macros
+ */
 #define BM(msb, lsb)	(((((uint32_t)-1) << (31-msb)) >> (31-msb+lsb)) << lsb)
 #define BVAL(msb, lsb, val)	(((val) << lsb) & BM(msb, lsb))
 
-#define HALT		0	
-#define NOCHECK		1	
-#define HALT_VOTED	2	
-#define ENABLE		3	
-#define ENABLE_VOTED	4	
-#define DELAY		5	
+/*
+ * Halt/Status Checking Mode Macros
+ */
+#define HALT		0	/* Bit pol: 1 = halted */
+#define NOCHECK		1	/* No bit to check, do nothing */
+#define HALT_VOTED	2	/* Bit pol: 1 = halted; delay on disable */
+#define ENABLE		3	/* Bit pol: 1 = running */
+#define ENABLE_VOTED	4	/* Bit pol: 1 = running; delay on disable */
+#define DELAY		5	/* No bit to check, just delay */
 
 #define MAX_VDD_LEVELS			4
 
+/**
+ * struct clk_vdd_class - Voltage scaling class
+ * @class_name: name of the class
+ * @set_vdd: function to call when applying a new voltage setting
+ * @level_votes: array of votes for each level
+ * @cur_level: the currently set voltage level
+ * @lock: lock to protect this struct
+ */
 struct clk_vdd_class {
 	const char *class_name;
 	int (*set_vdd)(struct clk_vdd_class *v_class, int level);
@@ -93,6 +107,17 @@ struct clk_ops {
 	bool (*is_local)(struct clk *clk);
 };
 
+/**
+ * struct clk
+ * @prepare_count: prepare refcount
+ * @prepare_lock: protects clk_prepare()/clk_unprepare() path and @prepare_count
+ * @count: enable refcount
+ * @lock: protects clk_enable()/clk_disable() path and @count
+ * @depends: non-direct parent of clock to enable when this clock is enabled
+ * @vdd_class: voltage scaling requirement class
+ * @fmax: maximum frequency in Hz supported at each voltage level
+ * @warned: true if the clock has warned of incorrect usage, false otherwise
+ */
 struct clk {
 	uint32_t flags;
 	struct clk_ops *ops;
@@ -118,6 +143,14 @@ struct clk {
 	.children = LIST_HEAD_INIT((name).children), \
 	.siblings = LIST_HEAD_INIT((name).siblings)
 
+/**
+ * struct clock_init_data - SoC specific clock initialization data
+ * @table: table of lookups to add
+ * @size: size of @table
+ * @pre_init: called before initializing the clock driver.
+ * @post_init: called after registering @table. clock APIs can be called inside.
+ * @late_init: called during late init
+ */
 struct clock_init_data {
 	struct clk_lookup *table;
 	size_t size;

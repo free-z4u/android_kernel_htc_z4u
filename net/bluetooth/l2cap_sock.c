@@ -1,6 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (c) 2000-2001, 2011-2012 Code Aurora Forum.  All rights reserved.
+   Copyright (c) 2000-2001, 2011-2012 The Linux Foundation.  All rights reserved.
    Copyright (C) 2009-2010 Gustavo F. Padovan <gustavo@padovan.org>
    Copyright (C) 2010 Google Inc.
 
@@ -24,6 +24,8 @@
    SOFTWARE IS DISCLAIMED.
 */
 
+/* Bluetooth L2CAP sockets. */
+
 #include <linux/interrupt.h>
 #include <linux/module.h>
 
@@ -33,6 +35,7 @@
 #include <net/bluetooth/smp.h>
 #include <net/bluetooth/amp.h>
 
+/* ---- L2CAP timers ---- */
 static void l2cap_sock_timeout(unsigned long arg)
 {
 	struct sock *sk = (struct sock *) arg;
@@ -43,7 +46,7 @@ static void l2cap_sock_timeout(unsigned long arg)
 	bh_lock_sock(sk);
 
 	if (sock_owned_by_user(sk)) {
-		
+		/* sk is owned by user. Try again later */
 		l2cap_sock_set_timer(sk, HZ / 5);
 		bh_unlock_sock(sk);
 		sock_put(sk);

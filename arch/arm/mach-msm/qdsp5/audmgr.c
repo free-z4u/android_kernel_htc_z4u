@@ -3,7 +3,7 @@
  * interface to "audmgr" service on the baseband cpu
  *
  * Copyright (C) 2008 Google, Inc.
- * Copyright (c) 2009, 2012, 2013 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009, 2012, 2013 The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -22,6 +22,7 @@
 #include <linux/kthread.h>
 #include <linux/wait.h>
 #include <linux/slab.h>
+
 #include <linux/io.h>
 
 #include <asm/atomic.h>

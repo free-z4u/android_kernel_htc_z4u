@@ -398,4 +398,5 @@ static inline int snd_soc_dai_trigger(struct snd_pcm_substream *substream,
 		return dai->driver->ops->trigger(substream, cmd, dai);
 	return 0;
 }
+
 #endif

@@ -301,7 +301,7 @@ static int ncp6335d_set_mode(struct regulator_dev *rdev,
 	int rc;
 	struct ncp6335d_info *dd = rdev_get_drvdata(rdev);
 
-	
+	/* only FAST and NORMAL mode types are supported */
 	if (mode != REGULATOR_MODE_FAST && mode != REGULATOR_MODE_NORMAL) {
 		dev_err(dd->dev, "Mode %d not supported\n", mode);
 		return -EINVAL;
@@ -382,7 +382,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 		return -EINVAL;
 	}
 
-	
+	/* get the current programmed voltage */
 	rc = regmap_read(dd->regmap, dd->vsel_reg, &val);
 	if (rc) {
 		dev_err(dd->dev, "Unable to get volatge rc(%d)", rc);
@@ -392,7 +392,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 	dd->curr_voltage = ((val & NCP6335D_VOUT_SEL_MASK) *
 			NCP6335D_STEP_VOLTAGE_UV) + NCP6335D_MIN_VOLTAGE_UV;
 
-	
+	/* set discharge */
 	rc = regmap_update_bits(dd->regmap, REG_NCP6335D_PGOOD,
 					NCP6335D_PGOOD_DISCHG,
 					(pdata->discharge_enable ?
@@ -402,7 +402,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 		return -EINVAL;
 	}
 
-	
+	/* set slew rate */
 	if (pdata->slew_rate_ns < NCP6335D_MIN_SLEW_NS ||
 			pdata->slew_rate_ns > NCP6335D_MAX_SLEW_NS) {
 		dev_err(dd->dev, "Invalid slew rate %d\n", pdata->slew_rate_ns);
@@ -429,7 +429,7 @@ static int __devinit ncp6335d_init(struct ncp6335d_info *dd,
 					rc);
 	}
 
-	
+	/* Set Sleep mode bit */
 	rc = regmap_update_bits(dd->regmap, REG_NCP6335D_COMMAND,
 				NCP6335D_SLEEP_MODE, pdata->sleep_enable ?
 						NCP6335D_SLEEP_MODE : 0);
@@ -514,6 +514,10 @@ static int __devinit ncp6335d_regulator_probe(struct i2c_client *client,
 	}
 
 	ncp6335d = dd;
+	/*
+	 * Register for the syscore shutdown hook. This is to make sure
+	 * that the buck voltage is set to default before restart.
+	 */
 	dd->ncp6335d_syscore.shutdown = ncp6335d_restart_config;
 	register_syscore_ops(&dd->ncp6335d_syscore);
 

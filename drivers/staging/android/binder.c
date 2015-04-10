@@ -3058,8 +3058,8 @@ static void binder_deferred_release(struct binder_proc *proc)
 			buffer->transaction = NULL;
 			binder_debug(BINDER_DEBUG_TOP_ERRORS,
 				     "binder: release proc %d, "
-				     "transaction %d, not freed\n",
-				     proc->pid, t->debug_id);
+			       "transaction %d, not freed\n",
+			       proc->pid, t->debug_id);
 			/*BUG();*/
 		}
 		binder_free_buf(proc, buffer);

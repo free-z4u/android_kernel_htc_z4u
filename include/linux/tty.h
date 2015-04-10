@@ -1,35 +1,39 @@
 #ifndef _LINUX_TTY_H
 #define _LINUX_TTY_H
 
+/*
+ * 'tty.h' defines some structures used by tty_io.c and some defines.
+ */
 
 #define NR_LDISCS		30
 
+/* line disciplines */
 #define N_TTY		0
 #define N_SLIP		1
 #define N_MOUSE		2
 #define N_PPP		3
 #define N_STRIP		4
 #define N_AX25		5
-#define N_X25		6	
+#define N_X25		6	/* X.25 async */
 #define N_6PACK		7
-#define N_MASC		8	
-#define N_R3964		9	
-#define N_PROFIBUS_FDL	10	
-#define N_IRDA		11	
-#define N_SMSBLOCK	12	
-				
-#define N_HDLC		13	
-#define N_SYNC_PPP	14	
-#define N_HCI		15	
-#define N_GIGASET_M101	16	
-#define N_SLCAN		17	
-#define N_PPS		18	
-#define N_V253		19	
-#define N_CAIF		20      
-#define N_GSM0710	21	
-#define N_TI_WL		22	
-#define N_TRACESINK	23	
-#define N_TRACEROUTER	24	
+#define N_MASC		8	/* Reserved for Mobitex module <kaz@cafe.net> */
+#define N_R3964		9	/* Reserved for Simatic R3964 module */
+#define N_PROFIBUS_FDL	10	/* Reserved for Profibus */
+#define N_IRDA		11	/* Linux IrDa - http://irda.sourceforge.net/ */
+#define N_SMSBLOCK	12	/* SMS block mode - for talking to GSM data */
+				/* cards about SMS messages */
+#define N_HDLC		13	/* synchronous HDLC */
+#define N_SYNC_PPP	14	/* synchronous PPP */
+#define N_HCI		15	/* Bluetooth HCI UART */
+#define N_GIGASET_M101	16	/* Siemens Gigaset M101 serial DECT adapter */
+#define N_SLCAN		17	/* Serial / USB serial CAN Adaptors */
+#define N_PPS		18	/* Pulse per Second */
+#define N_V253		19	/* Codec control over voice modem */
+#define N_CAIF		20      /* CAIF protocol for talking to modems */
+#define N_GSM0710	21	/* GSM 0710 Mux */
+#define N_TI_WL		22	/* for TI's WL BT, FM, GPS combo chips */
+#define N_TRACESINK	23	/* Trace data routing for MIPI P1149.7 */
+#define N_TRACEROUTER	24	/* Trace data routing for MIPI P1149.7 */
 #define N_SMUX		25	
 #define N_TS2710	26	
 
@@ -286,33 +290,43 @@ struct tty_struct {
 	struct mutex rcv_room_lock;
 };
 
+/* Each of a tty's open files has private_data pointing to tty_file_private */
 struct tty_file_private {
 	struct tty_struct *tty;
 	struct file *file;
 	struct list_head list;
 };
 
+/* tty magic number */
 #define TTY_MAGIC		0x5401
 
-#define TTY_THROTTLED 		0	
-#define TTY_IO_ERROR 		1	
-#define TTY_OTHER_CLOSED 	2	
-#define TTY_EXCLUSIVE 		3	
-#define TTY_DEBUG 		4	
-#define TTY_DO_WRITE_WAKEUP 	5	
-#define TTY_PUSH 		6	
-#define TTY_CLOSING 		7	
-#define TTY_LDISC 		9	
-#define TTY_LDISC_CHANGING 	10	
-#define TTY_LDISC_OPEN	 	11	
-#define TTY_HW_COOK_OUT 	14	
-#define TTY_HW_COOK_IN 		15	
-#define TTY_PTY_LOCK 		16	
-#define TTY_NO_WRITE_SPLIT 	17	
-#define TTY_HUPPED 		18	
-#define TTY_FLUSHING		19	
-#define TTY_FLUSHPENDING	20	
-#define TTY_HUPPING 		21	
+/*
+ * These bits are used in the flags field of the tty structure.
+ *
+ * So that interrupts won't be able to mess up the queues,
+ * copy_to_cooked must be atomic with respect to itself, as must
+ * tty->write.  Thus, you must use the inline functions set_bit() and
+ * clear_bit() to make things atomic.
+ */
+#define TTY_THROTTLED 		0	/* Call unthrottle() at threshold min */
+#define TTY_IO_ERROR 		1	/* Cause an I/O error (may be no ldisc too) */
+#define TTY_OTHER_CLOSED 	2	/* Other side (if any) has closed */
+#define TTY_EXCLUSIVE 		3	/* Exclusive open mode */
+#define TTY_DEBUG 		4	/* Debugging */
+#define TTY_DO_WRITE_WAKEUP 	5	/* Call write_wakeup after queuing new */
+#define TTY_PUSH 		6	/* n_tty private */
+#define TTY_CLOSING 		7	/* ->close() in progress */
+#define TTY_LDISC 		9	/* Line discipline attached */
+#define TTY_LDISC_CHANGING 	10	/* Line discipline changing */
+#define TTY_LDISC_OPEN	 	11	/* Line discipline is open */
+#define TTY_HW_COOK_OUT 	14	/* Hardware can do output cooking */
+#define TTY_HW_COOK_IN 		15	/* Hardware can do input cooking */
+#define TTY_PTY_LOCK 		16	/* pty private */
+#define TTY_NO_WRITE_SPLIT 	17	/* Preserve write boundaries to driver */
+#define TTY_HUPPED 		18	/* Post driver->hangup() */
+#define TTY_FLUSHING		19	/* Flushing to ldisc in progress */
+#define TTY_FLUSHPENDING	20	/* Queued buffer flush pending */
+#define TTY_HUPPING 		21	/* ->hangup() in progress */
 
 #define TTY_WRITE_FLUSH(tty) tty_write_flush((tty))
 
@@ -325,6 +339,14 @@ extern int vcs_init(void);
 
 extern struct class *tty_class;
 
+/**
+ *	tty_kref_get		-	get a tty reference
+ *	@tty: tty device
+ *
+ *	Return a new reference to a tty object. The caller must hold
+ *	sufficient locks/counts to ensure that their existing reference cannot
+ *	go away
+ */
 
 static inline struct tty_struct *tty_kref_get(struct tty_struct *tty)
 {
@@ -471,12 +493,15 @@ extern void tty_ldisc_release(struct tty_struct *tty, struct tty_struct *o_tty);
 extern void tty_ldisc_init(struct tty_struct *tty);
 extern void tty_ldisc_deinit(struct tty_struct *tty);
 extern void tty_ldisc_begin(void);
+/* This last one is just for the tty layer internals and shouldn't be used elsewhere */
 extern void tty_ldisc_enable(struct tty_struct *tty);
 
 
+/* n_tty.c */
 extern struct tty_ldisc_ops tty_ldisc_N_TTY;
 extern void n_tty_inherit_ops(struct tty_ldisc_ops *ops);
 
+/* tty_audit.c */
 #ifdef CONFIG_AUDIT
 extern void tty_audit_add_data(struct tty_struct *tty, unsigned char *data,
 			       size_t size);
@@ -510,19 +535,24 @@ static inline int tty_audit_push_task(struct task_struct *tsk,
 }
 #endif
 
+/* tty_io.c */
 extern int __init tty_init(void);
 
+/* tty_ioctl.c */
 extern int n_tty_ioctl_helper(struct tty_struct *tty, struct file *file,
 		       unsigned int cmd, unsigned long arg);
 extern long n_tty_compat_ioctl_helper(struct tty_struct *tty, struct file *file,
 		       unsigned int cmd, unsigned long arg);
 
+/* serial.c */
 
 extern void serial_console_init(void);
 
+/* pcxx.c */
 
 extern int pcxe_open(struct tty_struct *tty, struct file *filp);
 
+/* vt.c */
 
 extern int vt_ioctl(struct tty_struct *tty,
 		    unsigned int cmd, unsigned long arg);
@@ -530,17 +560,41 @@ extern int vt_ioctl(struct tty_struct *tty,
 extern long vt_compat_ioctl(struct tty_struct *tty,
 		     unsigned int cmd, unsigned long arg);
 
+/* tty_mutex.c */
+/* functions for preparation of BKL removal */
 extern void __lockfunc tty_lock(void) __acquires(tty_lock);
 extern void __lockfunc tty_unlock(void) __releases(tty_lock);
 
+/*
+ * this shall be called only from where BTM is held (like close)
+ *
+ * We need this to ensure nobody waits for us to finish while we are waiting.
+ * Without this we were encountering system stalls.
+ *
+ * This should be indeed removed with BTM removal later.
+ *
+ * Locking: BTM required. Nobody is allowed to hold port->mutex.
+ */
 static inline void tty_wait_until_sent_from_close(struct tty_struct *tty,
 		long timeout)
 {
-	tty_unlock(); 
+	tty_unlock(); /* tty->ops->close holds the BTM, drop it while waiting */
 	tty_wait_until_sent(tty, timeout);
 	tty_lock();
 }
 
+/*
+ * wait_event_interruptible_tty -- wait for a condition with the tty lock held
+ *
+ * The condition we are waiting for might take a long time to
+ * become true, or might depend on another thread taking the
+ * BTM. In either case, we need to drop the BTM to guarantee
+ * forward progress. This is a leftover from the conversion
+ * from the BKL and should eventually get removed as the BTM
+ * falls out of use.
+ *
+ * Do not use in new code.
+ */
 #define wait_event_interruptible_tty(wq, condition)			\
 ({									\
 	int __ret = 0;							\
@@ -571,5 +625,5 @@ do {									\
 } while (0)
 
 
-#endif 
+#endif /* __KERNEL__ */
 #endif

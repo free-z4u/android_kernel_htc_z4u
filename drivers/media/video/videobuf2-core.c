@@ -1028,6 +1028,13 @@ void vb2_queue_release(struct vb2_queue *q)
 }
 EXPORT_SYMBOL_GPL(vb2_queue_release);
 
+/**
+ * struct vb2_fileio_buf - buffer context used by file io emulator
+ *
+ * vb2 provides a compatibility layer and emulator of file io (read and
+ * write) calls on top of streaming API. This structure is used for
+ * tracking context related to the buffers.
+ */
 struct vb2_fileio_buf {
 	void *vaddr;
 	unsigned int size;
@@ -1035,6 +1042,14 @@ struct vb2_fileio_buf {
 	unsigned int queued:1;
 };
 
+/**
+ * struct vb2_fileio_data - queue context used by file io emulator
+ *
+ * vb2 provides a compatibility layer and emulator of file io (read and
+ * write) calls on top of streaming API. For proper operation it required
+ * this structure to save the driver state between each call of the read
+ * or write function.
+ */
 struct vb2_fileio_data {
 	struct v4l2_requestbuffers req;
 	struct v4l2_buffer b;
@@ -1045,22 +1060,39 @@ struct vb2_fileio_data {
 	unsigned int flags;
 };
 
+/**
+ * __vb2_init_fileio() - initialize file io emulator
+ * @q:		videobuf2 queue
+ * @read:	mode selector (1 means read, 0 means write)
+ */
 static int __vb2_init_fileio(struct vb2_queue *q, int read)
 {
 	struct vb2_fileio_data *fileio;
 	int i, ret;
 	unsigned int count = 0;
 
+	/*
+	 * Sanity check
+	 */
 	if ((read && !(q->io_modes & VB2_READ)) ||
 	   (!read && !(q->io_modes & VB2_WRITE)))
 		BUG();
 
+	/*
+	 * Check if device supports mapping buffers to kernel virtual space.
+	 */
 	if (!q->mem_ops->vaddr)
 		return -EBUSY;
 
+	/*
+	 * Check if streaming api has not been already activated.
+	 */
 	if (q->streaming || q->num_buffers > 0)
 		return -EBUSY;
 
+	/*
+	 * Start with count 1, driver can increase it in queue_setup()
+	 */
 	count = 1;
 
 	dprintk(3, "setting up file io: mode %s, count %d, flags %08x\n",
@@ -1072,6 +1104,10 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
 
 	fileio->flags = q->io_flags;
 
+	/*
+	 * Request buffers and use MMAP type to force driver
+	 * to allocate buffers by itself.
+	 */
 	fileio->req.count = count;
 	fileio->req.memory = V4L2_MEMORY_MMAP;
 	fileio->req.type = q->type;
@@ -1079,12 +1115,19 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
 	if (ret)
 		goto err_kfree;
 
+	/*
+	 * Check if plane_count is correct
+	 * (multiplane buffers are not supported).
+	 */
 	if (q->bufs[0]->num_planes != 1) {
 		fileio->req.count = 0;
 		ret = -EBUSY;
 		goto err_reqbufs;
 	}
 
+	/*
+	 * Get kernel address of each buffer.
+	 */
 	for (i = 0; i < q->num_buffers; i++) {
 		fileio->bufs[i].vaddr = vb2_plane_vaddr(q->bufs[i], 0);
 		if (fileio->bufs[i].vaddr == NULL)
@@ -1092,7 +1135,13 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
 		fileio->bufs[i].size = vb2_plane_size(q->bufs[i], 0);
 	}
 
+	/*
+	 * Read mode requires pre queuing of all buffers.
+	 */
 	if (read) {
+		/*
+		 * Queue all buffers.
+		 */
 		for (i = 0; i < q->num_buffers; i++) {
 			struct v4l2_buffer *b = &fileio->b;
 			memset(b, 0, sizeof(*b));
@@ -1105,6 +1154,9 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
 			fileio->bufs[i].queued = 1;
 		}
 
+		/*
+		 * Start streaming.
+		 */
 		ret = vb2_streamon(q, q->type);
 		if (ret)
 			goto err_reqbufs;
@@ -1122,11 +1174,19 @@ err_kfree:
 	return ret;
 }
 
+/**
+ * __vb2_cleanup_fileio() - free resourced used by file io emulator
+ * @q:		videobuf2 queue
+ */
 static int __vb2_cleanup_fileio(struct vb2_queue *q)
 {
 	struct vb2_fileio_data *fileio = q->fileio;
 
 	if (fileio) {
+		/*
+		 * Hack fileio context to enable direct calls to vb2 ioctl
+		 * interface.
+		 */
 		q->fileio = NULL;
 
 		vb2_streamoff(q, q->type);
@@ -1138,6 +1198,15 @@ static int __vb2_cleanup_fileio(struct vb2_queue *q)
 	return 0;
 }
 
+/**
+ * __vb2_perform_fileio() - perform a single file io (read or write) operation
+ * @q:		videobuf2 queue
+ * @data:	pointed to target userspace buffer
+ * @count:	number of bytes to read or write
+ * @ppos:	file handle position tracking pointer
+ * @nonblock:	mode selector (1 means blocking calls, 0 means nonblocking)
+ * @read:	access mode selector (1 means read, 0 means write)
+ */
 static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_t count,
 		loff_t *ppos, int nonblock, int read)
 {
@@ -1152,6 +1221,9 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
 	if (!data)
 		return -EINVAL;
 
+	/*
+	 * Initialize emulator on first call.
+	 */
 	if (!q->fileio) {
 		ret = __vb2_init_fileio(q, read);
 		dprintk(3, "file io: vb2_init_fileio result: %d\n", ret);
@@ -1160,14 +1232,24 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
 	}
 	fileio = q->fileio;
 
+	/*
+	 * Hack fileio context to enable direct calls to vb2 ioctl interface.
+	 * The pointer will be restored before returning from this function.
+	 */
 	q->fileio = NULL;
 
 	index = fileio->index;
 	buf = &fileio->bufs[index];
 
+	/*
+	 * Check if we need to dequeue the buffer.
+	 */
 	if (buf->queued) {
 		struct vb2_buffer *vb;
 
+		/*
+		 * Call vb2_dqbuf to get buffer back.
+		 */
 		memset(&fileio->b, 0, sizeof(fileio->b));
 		fileio->b.type = q->type;
 		fileio->b.memory = q->memory;
@@ -1178,16 +1260,25 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
 			goto end;
 		fileio->dq_count += 1;
 
+		/*
+		 * Get number of bytes filled by the driver
+		 */
 		vb = q->bufs[index];
 		buf->size = vb2_get_plane_payload(vb, 0);
 		buf->queued = 0;
 	}
 
+	/*
+	 * Limit count on last few bytes of the buffer.
+	 */
 	if (buf->pos + count > buf->size) {
 		count = buf->size - buf->pos;
 		dprintk(5, "reducing read count: %zd\n", count);
 	}
 
+	/*
+	 * Transfer data to userspace.
+	 */
 	dprintk(3, "file io: copying %zd bytes - buffer %d, offset %u\n",
 		count, index, buf->pos);
 	if (read)
@@ -1200,18 +1291,33 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
 		goto end;
 	}
 
+	/*
+	 * Update counters.
+	 */
 	buf->pos += count;
 	*ppos += count;
 
+	/*
+	 * Queue next buffer if required.
+	 */
 	if (buf->pos == buf->size ||
 	   (!read && (fileio->flags & VB2_FILEIO_WRITE_IMMEDIATELY))) {
+		/*
+		 * Check if this is the last buffer to read.
+		 */
 		if (read && (fileio->flags & VB2_FILEIO_READ_ONCE) &&
 		    fileio->dq_count == 1) {
 			dprintk(3, "file io: read limit reached\n");
+			/*
+			 * Restore fileio pointer and release the context.
+			 */
 			q->fileio = fileio;
 			return __vb2_cleanup_fileio(q);
 		}
 
+		/*
+		 * Call vb2_qbuf and give buffer to the driver.
+		 */
 		memset(&fileio->b, 0, sizeof(fileio->b));
 		fileio->b.type = q->type;
 		fileio->b.memory = q->memory;
@@ -1222,13 +1328,22 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
 		if (ret)
 			goto end;
 
+		/*
+		 * Buffer has been queued, update the status
+		 */
 		buf->pos = 0;
 		buf->queued = 1;
 		buf->size = q->bufs[0]->v4l2_planes[0].length;
 		fileio->q_count += 1;
 
+		/*
+		 * Switch to the next buffer
+		 */
 		fileio->index = (index + 1) % q->num_buffers;
 
+		/*
+		 * Start streaming if required.
+		 */
 		if (!read && !q->streaming) {
 			ret = vb2_streamon(q, q->type);
 			if (ret)
@@ -1236,9 +1351,15 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
 		}
 	}
 
+	/*
+	 * Return proper number of bytes processed.
+	 */
 	if (ret == 0)
 		ret = count;
 end:
+	/*
+	 * Restore the fileio context and block vb2 ioctl interface.
+	 */
 	q->fileio = fileio;
 	return ret;
 }

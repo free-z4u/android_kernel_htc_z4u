@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -10,7 +10,12 @@
  * GNU General Public License for more details.
  *
  */
+/*
+ * QUP driver for Qualcomm MSM platforms
+ *
+ */
 
+/* #define DEBUG */
 
 #include <linux/module.h>
 #include <linux/clk.h>
@@ -36,6 +41,7 @@ MODULE_LICENSE("GPL v2");
 MODULE_VERSION("0.2");
 MODULE_ALIAS("platform:i2c_qup");
 
+/* QUP Registers */
 enum {
 	QUP_CONFIG              = 0x0,
 	QUP_STATE               = 0x4,
@@ -58,6 +64,7 @@ enum {
 	QUP_I2C_STATUS          = 0x404,
 };
 
+/* QUP States and reset values */
 enum {
 	QUP_RESET_STATE         = 0,
 	QUP_RUN_STATE           = 1U,
@@ -69,18 +76,21 @@ enum {
 	QUP_I2C_STATUS_RESET    = 0xFFFFFC,
 };
 
+/* QUP OPERATIONAL FLAGS */
 enum {
 	QUP_OUT_SVC_FLAG        = 1U << 8,
 	QUP_IN_SVC_FLAG         = 1U << 9,
 	QUP_MX_INPUT_DONE       = 1U << 11,
 };
 
+/* I2C mini core related values */
 enum {
 	I2C_MINI_CORE           = 2U << 8,
 	I2C_N_VAL               = 0xF,
 
 };
 
+/* Packing Unpacking words in FIFOs , and IO modes*/
 enum {
 	QUP_WR_BLK_MODE  = 1U << 10,
 	QUP_RD_BLK_MODE  = 1U << 12,
@@ -88,6 +98,7 @@ enum {
 	QUP_PACK_EN = 1U << 15,
 };
 
+/* QUP tags */
 enum {
 	QUP_OUT_NOP   = 0,
 	QUP_OUT_START = 1U << 8,
@@ -99,6 +110,7 @@ enum {
 	QUP_IN_NACK   = 7U << 8,
 };
 
+/* Status, Error flags */
 enum {
 	I2C_STATUS_WR_BUFFER_FULL  = 1U << 0,
 	I2C_STATUS_BUS_ACTIVE      = 1U << 8,
@@ -109,6 +121,7 @@ enum {
 	QUP_STATUS_ERROR_FLAGS     = 0x7C,
 };
 
+/* Master status clock states */
 enum {
 	I2C_CLK_RESET_BUSIDLE_STATE	= 0,
 	I2C_CLK_FORCED_LOW_STATE	= 5,
@@ -1400,7 +1413,7 @@ static int qup_i2c_suspend(struct device *device)
 	struct platform_device *pdev = to_platform_device(device);
 	struct qup_i2c_dev *dev = platform_get_drvdata(pdev);
 
-	
+	/* Grab mutex to ensure ongoing transaction is over */
 	mutex_lock(&dev->mlock);
 	dev->suspended = 1;
 	mutex_unlock(&dev->mlock);
@@ -1423,7 +1436,7 @@ static int qup_i2c_resume(struct device *device)
 	dev->suspended = 0;
 	return 0;
 }
-#endif 
+#endif /* CONFIG_PM */
 
 #ifdef CONFIG_PM_RUNTIME
 static int i2c_qup_runtime_idle(struct device *dev)
@@ -1475,6 +1488,7 @@ static struct platform_driver qup_i2c_driver = {
 	},
 };
 
+/* QUP may be needed to bring up other drivers */
 static int __init
 qup_i2c_init_driver(void)
 {

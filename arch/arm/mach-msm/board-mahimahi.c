@@ -31,6 +31,7 @@
 #include <mach/board.h>
 #include <mach/hardware.h>
 #include <mach/system.h>
+
 #include <mach/proc_comm.h>
 
 #include "board-mahimahi.h"

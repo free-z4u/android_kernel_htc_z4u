@@ -19,16 +19,18 @@
 #include <linux/usb/ch9.h>
 #include <linux/usb/gadget.h>
 
+
 /**
- * usb_find_descriptor_fillbuf - fill buffer with the requested descriptor
+ * usb_descriptor_fillbuf - fill buffer with descriptors
  * @buf: Buffer to be filled
  * @buflen: Size of buf
  * @src: Array of descriptor pointers, terminated by null pointer.
- * @desc_type: bDescriptorType field of the requested descriptor.
  *
- * Copies the requested descriptor into the buffer, returning the length
- * or a negative error code if it is not found or can't be copied.  Useful
- * when DT_OTG descriptor is requested.
+ * Copies descriptors into the buffer, returning the length or a
+ * negative error code if they can't all be copied.  Useful when
+ * assembling descriptors for an associated set of interfaces used
+ * as part of configuring a composite device; or in other cases where
+ * sets of descriptors need to be marshaled.
  */
 int
 usb_find_descriptor_fillbuf(void *buf, unsigned buflen,

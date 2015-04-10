@@ -8,6 +8,9 @@
  * bio rewrite, highmem i/o, etc, Jens Axboe <axboe@suse.de> - may 2001
  */
 
+/*
+ * This handles all read/write requests to block devices
+ */
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/backing-dev.h>
@@ -1208,6 +1211,30 @@ wp_end_io:
 #endif
 }
 
+/**
+ * generic_make_request - hand a buffer to its device driver for I/O
+ * @bio:  The bio describing the location in memory and on the device.
+ *
+ * generic_make_request() is used to make I/O requests of block
+ * devices. It is passed a &struct bio, which describes the I/O that needs
+ * to be done.
+ *
+ * generic_make_request() does not return any status.  The
+ * success/failure status of the request, along with notification of
+ * completion, is delivered asynchronously through the bio->bi_end_io
+ * function described (one day) else where.
+ *
+ * The caller of generic_make_request must make sure that bi_io_vec
+ * are set to describe the memory buffer, and that bi_dev and bi_sector are
+ * set to describe the device address, and the
+ * bi_end_io and optionally bi_private are set to describe how
+ * completion notification should be signaled.
+ *
+ * generic_make_request and the drivers it calls may use bi_next if this
+ * bio happens to be merged with someone else, and may resubmit the bio to
+ * a lower device by calling into generic_make_request recursively, which
+ * means the bio should NOT be touched after the call to ->make_request_fn.
+ */
 void generic_make_request(struct bio *bio)
 {
 	struct bio_list bio_list_on_stack;
@@ -1215,11 +1242,35 @@ void generic_make_request(struct bio *bio)
 	if (!generic_make_request_checks(bio))
 		return;
 
+	/*
+	 * We only want one ->make_request_fn to be active at a time, else
+	 * stack usage with stacked devices could be a problem.  So use
+	 * current->bio_list to keep a list of requests submited by a
+	 * make_request_fn function.  current->bio_list is also used as a
+	 * flag to say if generic_make_request is currently active in this
+	 * task or not.  If it is NULL, then no make_request is active.  If
+	 * it is non-NULL, then a make_request is active, and new requests
+	 * should be added at the tail
+	 */
 	if (current->bio_list) {
 		bio_list_add(current->bio_list, bio);
 		return;
 	}
 
+	/* following loop may be a bit non-obvious, and so deserves some
+	 * explanation.
+	 * Before entering the loop, bio->bi_next is NULL (as all callers
+	 * ensure that) so we have a list with a single bio.
+	 * We pretend that we have just taken it off a longer list, so
+	 * we assign bio_list to a pointer to the bio_list_on_stack,
+	 * thus initialising the bio_list of new bios to be
+	 * added.  ->make_request() may indeed add some more bios
+	 * through a recursive call to generic_make_request.  If it
+	 * did, we find a non-NULL value in bio_list and re-enter the loop
+	 * from the top.  In this case we really did just take the bio
+	 * of the top of the list (no pretending) and so remove it from
+	 * bio_list, and call into ->make_request() again.
+	 */
 	BUG_ON(bio->bi_next);
 	bio_list_init(&bio_list_on_stack);
 	current->bio_list = &bio_list_on_stack;
@@ -1230,16 +1281,30 @@ void generic_make_request(struct bio *bio)
 
 		bio = bio_list_pop(current->bio_list);
 	} while (bio);
-	current->bio_list = NULL; 
+	current->bio_list = NULL; /* deactivate */
 }
 EXPORT_SYMBOL(generic_make_request);
 
+/**
+ * submit_bio - submit a bio to the block device layer for I/O
+ * @rw: whether to %READ or %WRITE, or maybe to %READA (read ahead)
+ * @bio: The &struct bio which describes the I/O
+ *
+ * submit_bio() is very similar in purpose to generic_make_request(), and
+ * uses that function to do most of the work. Both are fairly rough
+ * interfaces; @bio must be presetup and ready for I/O.
+ *
+ */
 void submit_bio(int rw, struct bio *bio)
 {
 	int count = bio_sectors(bio);
 
 	bio->bi_rw |= rw;
 
+	/*
+	 * If it's a regular read/write or a barrier with data attached,
+	 * go through the normal accounting stuff before submission.
+	 */
 	if (bio_has_data(bio) &&
 	    (!(rw & (REQ_DISCARD | REQ_SANITIZE)))) {
 		if (rw & WRITE) {
@@ -1264,6 +1329,27 @@ void submit_bio(int rw, struct bio *bio)
 }
 EXPORT_SYMBOL(submit_bio);
 
+/**
+ * blk_rq_check_limits - Helper function to check a request for the queue limit
+ * @q:  the queue
+ * @rq: the request being checked
+ *
+ * Description:
+ *    @rq may have been made based on weaker limitations of upper-level queues
+ *    in request stacking drivers, and it may violate the limitation of @q.
+ *    Since the block layer and the underlying device driver trust @rq
+ *    after it is inserted to @q, it should be checked against @q before
+ *    the insertion using this generic function.
+ *
+ *    This function should also be useful for request stacking drivers
+ *    in some cases below, so export this function.
+ *    Request stacking drivers like request-based dm may change the queue
+ *    limits while requests are in the queue (e.g. dm's table swapping).
+ *    Such request stacking drivers should check those requests agaist
+ *    the new queue limits again when they dispatch those requests,
+ *    although such checkings are also done against the old queue limits
+ *    when submitting requests.
+ */
 int blk_rq_check_limits(struct request_queue *q, struct request *rq)
 {
 	if (rq->cmd_flags & (REQ_DISCARD | REQ_SANITIZE))
@@ -1275,6 +1361,12 @@ int blk_rq_check_limits(struct request_queue *q, struct request *rq)
 		return -EIO;
 	}
 
+	/*
+	 * queue's settings related to segment counting like q->bounce_pfn
+	 * may differ from that of other stacking queues.
+	 * Recalculate it to check the request correctly on this queue's
+	 * limitation.
+	 */
 	blk_recalc_rq_segments(rq);
 	if (rq->nr_phys_segments > queue_max_segments(q)) {
 		printk(KERN_ERR "%s: over max segments limit.\n", __func__);
@@ -1285,6 +1377,11 @@ int blk_rq_check_limits(struct request_queue *q, struct request *rq)
 }
 EXPORT_SYMBOL_GPL(blk_rq_check_limits);
 
+/**
+ * blk_insert_cloned_request - Helper for stacking drivers to submit a request
+ * @q:  the queue to submit the request
+ * @rq: the request being queued
+ */
 int blk_insert_cloned_request(struct request_queue *q, struct request *rq)
 {
 	unsigned long flags;
@@ -1303,6 +1400,10 @@ int blk_insert_cloned_request(struct request_queue *q, struct request *rq)
 		return -ENODEV;
 	}
 
+	/*
+	 * Submitting request must be dequeued before calling this function
+	 * because it will be linked to another request_queue
+	 */
 	BUG_ON(blk_queued_rq(rq));
 
 	if (rq->cmd_flags & (REQ_FLUSH|REQ_FUA))
@@ -1317,6 +1418,22 @@ int blk_insert_cloned_request(struct request_queue *q, struct request *rq)
 }
 EXPORT_SYMBOL_GPL(blk_insert_cloned_request);
 
+/**
+ * blk_rq_err_bytes - determine number of bytes till the next failure boundary
+ * @rq: request to examine
+ *
+ * Description:
+ *     A request could be merge of IOs which require different failure
+ *     handling.  This function determines the number of bytes which
+ *     can be failed from the beginning of the request without
+ *     crossing into area which need to be retried further.
+ *
+ * Return:
+ *     The number of bytes to fail.
+ *
+ * Context:
+ *     queue_lock must be held.
+ */
 unsigned int blk_rq_err_bytes(const struct request *rq)
 {
 	unsigned int ff = rq->cmd_flags & REQ_FAILFAST_MASK;
@@ -1326,13 +1443,20 @@ unsigned int blk_rq_err_bytes(const struct request *rq)
 	if (!(rq->cmd_flags & REQ_MIXED_MERGE))
 		return blk_rq_bytes(rq);
 
+	/*
+	 * Currently the only 'mixing' which can happen is between
+	 * different fastfail types.  We can safely fail portions
+	 * which have all the failfast bits that the first one has -
+	 * the ones which are at least as eager to fail as the first
+	 * one.
+	 */
 	for (bio = rq->bio; bio; bio = bio->bi_next) {
 		if ((bio->bi_rw & ff) != ff)
 			break;
 		bytes += bio->bi_size;
 	}
 
-	
+	/* this could lead to infinite loop */
 	BUG_ON(blk_rq_bytes(rq) && !bytes);
 	return bytes;
 }
@@ -1354,6 +1478,11 @@ static void blk_account_io_completion(struct request *req, unsigned int bytes)
 
 static void blk_account_io_done(struct request *req)
 {
+	/*
+	 * Account IO completion.  flush_rq isn't accounted as a
+	 * normal IO on queueing nor completion.  Accounting the
+	 * containing request is enough.
+	 */
 	if (blk_do_io_stat(req) && !(req->cmd_flags & REQ_FLUSH_SEQ)) {
 		unsigned long duration = jiffies - req->start_time;
 		const int rw = rq_data_dir(req);
@@ -1373,6 +1502,22 @@ static void blk_account_io_done(struct request *req)
 	}
 }
 
+/**
+ * blk_peek_request - peek at the top of a request queue
+ * @q: request queue to peek at
+ *
+ * Description:
+ *     Return the request at the top of @q.  The returned request
+ *     should be started using blk_start_request() before LLD starts
+ *     processing it.
+ *
+ * Return:
+ *     Pointer to the request at the top of @q if available.  Null
+ *     otherwise.
+ *
+ * Context:
+ *     queue_lock must be held.
+ */
 struct request *blk_peek_request(struct request_queue *q)
 {
 	struct request *rq;
@@ -1380,9 +1525,19 @@ struct request *blk_peek_request(struct request_queue *q)
 
 	while ((rq = __elv_next_request(q)) != NULL) {
 		if (!(rq->cmd_flags & REQ_STARTED)) {
+			/*
+			 * This is the first time the device driver
+			 * sees this request (possibly after
+			 * requeueing).  Notify IO scheduler.
+			 */
 			if (rq->cmd_flags & REQ_SORTED)
 				elv_activate_rq(q, rq);
 
+			/*
+			 * just mark as started even if we don't start
+			 * it, a request that has been delayed should
+			 * not be passed by new incoming requests
+			 */
 			rq->cmd_flags |= REQ_STARTED;
 			trace_block_rq_issue(q, rq);
 		}
@@ -1396,6 +1551,12 @@ struct request *blk_peek_request(struct request_queue *q)
 			break;
 
 		if (q->dma_drain_size && blk_rq_bytes(rq)) {
+			/*
+			 * make sure space for the drain appears we
+			 * know we can do this because max_hw_segments
+			 * has been adjusted to be one fewer than the
+			 * device can handle
+			 */
 			rq->nr_phys_segments++;
 		}
 
@@ -1406,8 +1567,18 @@ struct request *blk_peek_request(struct request_queue *q)
 		if (ret == BLKPREP_OK) {
 			break;
 		} else if (ret == BLKPREP_DEFER) {
+			/*
+			 * the request may have been (partially) prepped.
+			 * we need to keep this request in the front to
+			 * avoid resource deadlock.  REQ_STARTED will
+			 * prevent other fs requests from passing this one.
+			 */
 			if (q->dma_drain_size && blk_rq_bytes(rq) &&
 			    !(rq->cmd_flags & REQ_DONTPREP)) {
+				/*
+				 * remove the space for the drain we added
+				 * so that we don't add it again
+				 */
 				--rq->nr_phys_segments;
 			}
 
@@ -1415,6 +1586,10 @@ struct request *blk_peek_request(struct request_queue *q)
 			break;
 		} else if (ret == BLKPREP_KILL) {
 			rq->cmd_flags |= REQ_QUIET;
+			/*
+			 * Mark this request as started so we don't trigger
+			 * any debug logic in the end I/O path.
+			 */
 			blk_start_request(rq);
 			__blk_end_request_all(rq, -EIO);
 		} else {
@@ -1436,16 +1611,39 @@ void blk_dequeue_request(struct request *rq)
 
 	list_del_init(&rq->queuelist);
 
+	/*
+	 * the time frame between a request being removed from the lists
+	 * and to it is freed is accounted as io that is in progress at
+	 * the driver side.
+	 */
 	if (blk_account_rq(rq)) {
 		q->in_flight[rq_is_sync(rq)]++;
 		set_io_start_time_ns(rq);
 	}
 }
 
+/**
+ * blk_start_request - start request processing on the driver
+ * @req: request to dequeue
+ *
+ * Description:
+ *     Dequeue @req and start timeout timer on it.  This hands off the
+ *     request to the driver.
+ *
+ *     Block internal functions which don't want to start timer should
+ *     call blk_dequeue_request().
+ *
+ * Context:
+ *     queue_lock must be held.
+ */
 void blk_start_request(struct request *req)
 {
 	blk_dequeue_request(req);
 
+	/*
+	 * We are now handing the request to the hardware, initialize
+	 * resid_len to full count and add the timeout handler.
+	 */
 	req->resid_len = blk_rq_bytes(req);
 	if (unlikely(blk_bidi_rq(req)))
 		req->next_rq->resid_len = blk_rq_bytes(req->next_rq);
@@ -1454,6 +1652,21 @@ void blk_start_request(struct request *req)
 }
 EXPORT_SYMBOL(blk_start_request);
 
+/**
+ * blk_fetch_request - fetch a request from a request queue
+ * @q: request queue to fetch a request from
+ *
+ * Description:
+ *     Return the request at the top of @q.  The request is started on
+ *     return and LLD can start processing it immediately.
+ *
+ * Return:
+ *     Pointer to the request at the top of @q if available.  Null
+ *     otherwise.
+ *
+ * Context:
+ *     queue_lock must be held.
+ */
 struct request *blk_fetch_request(struct request_queue *q)
 {
 	struct request *rq;
@@ -1465,6 +1678,28 @@ struct request *blk_fetch_request(struct request_queue *q)
 }
 EXPORT_SYMBOL(blk_fetch_request);
 
+/**
+ * blk_update_request - Special helper function for request stacking drivers
+ * @req:      the request being processed
+ * @error:    %0 for success, < %0 for error
+ * @nr_bytes: number of bytes to complete @req
+ *
+ * Description:
+ *     Ends I/O on a number of bytes attached to @req, but doesn't complete
+ *     the request structure even if @req doesn't have leftover.
+ *     If @req has leftover, sets it up for the next range of segments.
+ *
+ *     This special helper function is only for request stacking drivers
+ *     (e.g. request-based dm) so that they can handle partial completion.
+ *     Actual device drivers should use blk_end_request instead.
+ *
+ *     Passing the result of blk_rq_bytes() as @nr_bytes guarantees
+ *     %false return from this function.
+ *
+ * Return:
+ *     %false - this request doesn't have any more data
+ *     %true  - this request has more data
+ **/
 bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 {
 	int total_bytes, bio_nbytes, next_idx = 0;
@@ -1475,6 +1710,14 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 
 	trace_block_rq_complete(req->q, req);
 
+	/*
+	 * For fs requests, rq is just carrier of independent bio's
+	 * and each partial completion should be handled separately.
+	 * Reset per-request error on each partial completion.
+	 *
+	 * TODO: tj: This is too subtle.  It would be better to let
+	 * low level drivers do what they see fit.
+	 */
 	if (req->cmd_type == REQ_TYPE_FS)
 		req->errors = 0;
 
@@ -1527,12 +1770,18 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 			nbytes = bio_iovec_idx(bio, idx)->bv_len;
 			BIO_BUG_ON(nbytes > bio->bi_size);
 
+			/*
+			 * not a complete bvec done
+			 */
 			if (unlikely(nbytes > nr_bytes)) {
 				bio_nbytes += nr_bytes;
 				total_bytes += nr_bytes;
 				break;
 			}
 
+			/*
+			 * advance to the next vector
+			 */
 			next_idx++;
 			bio_nbytes += nbytes;
 		}
@@ -1542,16 +1791,30 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 
 		bio = req->bio;
 		if (bio) {
+			/*
+			 * end more in this run, or just return 'not-done'
+			 */
 			if (unlikely(nr_bytes <= 0))
 				break;
 		}
 	}
 
+	/*
+	 * completely done
+	 */
 	if (!req->bio) {
+		/*
+		 * Reset counters so that the request stacking driver
+		 * can find how many bytes remain in the request
+		 * later.
+		 */
 		req->__data_len = 0;
 		return false;
 	}
 
+	/*
+	 * if the request wasn't completed, update state
+	 */
 	if (bio_nbytes) {
 		req_bio_endio(req, bio, bio_nbytes, error);
 		bio->bi_idx += next_idx;
@@ -1562,22 +1825,26 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 	req->__data_len -= total_bytes;
 	req->buffer = bio_data(req->bio);
 
-	
+	/* update sector only for requests with clear definition of sector */
 	if (req->cmd_type == REQ_TYPE_FS || (req->cmd_flags & REQ_DISCARD))
 		req->__sector += total_bytes >> 9;
 
-	
+	/* mixed attributes always follow the first bio */
 	if (req->cmd_flags & REQ_MIXED_MERGE) {
 		req->cmd_flags &= ~REQ_FAILFAST_MASK;
 		req->cmd_flags |= req->bio->bi_rw & REQ_FAILFAST_MASK;
 	}
 
+	/*
+	 * If total number of sectors is less than the first segment
+	 * size, something has gone terribly wrong.
+	 */
 	if (blk_rq_bytes(req) < blk_rq_cur_bytes(req)) {
 		blk_dump_rq_flags(req, "request botched");
 		req->__data_len = blk_rq_cur_bytes(req);
 	}
 
-	
+	/* recalculate the number of segments */
 	blk_recalc_rq_segments(req);
 
 	return true;
@@ -1591,7 +1858,7 @@ static bool blk_update_bidi_request(struct request *rq, int error,
 	if (blk_update_request(rq, error, nr_bytes))
 		return true;
 
-	
+	/* Bidi request must be completed as a whole */
 	if (unlikely(blk_bidi_rq(rq)) &&
 	    blk_update_request(rq->next_rq, error, bidi_bytes))
 		return true;
@@ -1602,6 +1869,16 @@ static bool blk_update_bidi_request(struct request *rq, int error,
 	return false;
 }
 
+/**
+ * blk_unprep_request - unprepare a request
+ * @req:	the request
+ *
+ * This function makes a request ready for complete resubmission (or
+ * completion).  It happens only after all error handling is complete,
+ * so represents the appropriate moment to deallocate any resources
+ * that were allocated to the request in the prep_rq_fn.  The queue
+ * lock is held when calling this.
+ */
 void blk_unprep_request(struct request *req)
 {
 	struct request_queue *q = req->q;
@@ -1612,6 +1889,9 @@ void blk_unprep_request(struct request *req)
 }
 EXPORT_SYMBOL_GPL(blk_unprep_request);
 
+/*
+ * queue lock must be held
+ */
 static void blk_finish_request(struct request *req, int error)
 {
 	if (blk_rq_tagged(req))
@@ -1640,6 +1920,23 @@ static void blk_finish_request(struct request *req, int error)
 	}
 }
 
+/**
+ * blk_end_bidi_request - Complete a bidi request
+ * @rq:         the request to complete
+ * @error:      %0 for success, < %0 for error
+ * @nr_bytes:   number of bytes to complete @rq
+ * @bidi_bytes: number of bytes to complete @rq->next_rq
+ *
+ * Description:
+ *     Ends I/O on a number of bytes attached to @rq and @rq->next_rq.
+ *     Drivers that supports bidi can safely call this member for any
+ *     type of request, bidi or uni.  In the later case @bidi_bytes is
+ *     just ignored.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ **/
 static bool blk_end_bidi_request(struct request *rq, int error,
 				 unsigned int nr_bytes, unsigned int bidi_bytes)
 {
@@ -1656,6 +1953,21 @@ static bool blk_end_bidi_request(struct request *rq, int error,
 	return false;
 }
 
+/**
+ * __blk_end_bidi_request - Complete a bidi request with queue lock held
+ * @rq:         the request to complete
+ * @error:      %0 for success, < %0 for error
+ * @nr_bytes:   number of bytes to complete @rq
+ * @bidi_bytes: number of bytes to complete @rq->next_rq
+ *
+ * Description:
+ *     Identical to blk_end_bidi_request() except that queue lock is
+ *     assumed to be locked on entry and remains so on return.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ **/
 bool __blk_end_bidi_request(struct request *rq, int error,
 				   unsigned int nr_bytes, unsigned int bidi_bytes)
 {
@@ -1667,12 +1979,34 @@ bool __blk_end_bidi_request(struct request *rq, int error,
 	return false;
 }
 
+/**
+ * blk_end_request - Helper function for drivers to complete the request.
+ * @rq:       the request being processed
+ * @error:    %0 for success, < %0 for error
+ * @nr_bytes: number of bytes to complete
+ *
+ * Description:
+ *     Ends I/O on a number of bytes attached to @rq.
+ *     If @rq has leftover, sets it up for the next range of segments.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ **/
 bool blk_end_request(struct request *rq, int error, unsigned int nr_bytes)
 {
 	return blk_end_bidi_request(rq, error, nr_bytes, 0);
 }
 EXPORT_SYMBOL(blk_end_request);
 
+/**
+ * blk_end_request_all - Helper function for drives to finish the request.
+ * @rq: the request to finish
+ * @error: %0 for success, < %0 for error
+ *
+ * Description:
+ *     Completely finish @rq.
+ */
 void blk_end_request_all(struct request *rq, int error)
 {
 	bool pending;
@@ -1686,12 +2020,36 @@ void blk_end_request_all(struct request *rq, int error)
 }
 EXPORT_SYMBOL(blk_end_request_all);
 
+/**
+ * blk_end_request_cur - Helper function to finish the current request chunk.
+ * @rq: the request to finish the current chunk for
+ * @error: %0 for success, < %0 for error
+ *
+ * Description:
+ *     Complete the current consecutively mapped chunk from @rq.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ */
 bool blk_end_request_cur(struct request *rq, int error)
 {
 	return blk_end_request(rq, error, blk_rq_cur_bytes(rq));
 }
 EXPORT_SYMBOL(blk_end_request_cur);
 
+/**
+ * blk_end_request_err - Finish a request till the next failure boundary.
+ * @rq: the request to finish till the next failure boundary for
+ * @error: must be negative errno
+ *
+ * Description:
+ *     Complete @rq till the next failure boundary.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ */
 bool blk_end_request_err(struct request *rq, int error)
 {
 	WARN_ON(error >= 0);
@@ -1699,12 +2057,33 @@ bool blk_end_request_err(struct request *rq, int error)
 }
 EXPORT_SYMBOL_GPL(blk_end_request_err);
 
+/**
+ * __blk_end_request - Helper function for drivers to complete the request.
+ * @rq:       the request being processed
+ * @error:    %0 for success, < %0 for error
+ * @nr_bytes: number of bytes to complete
+ *
+ * Description:
+ *     Must be called with queue lock held unlike blk_end_request().
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ **/
 bool __blk_end_request(struct request *rq, int error, unsigned int nr_bytes)
 {
 	return __blk_end_bidi_request(rq, error, nr_bytes, 0);
 }
 EXPORT_SYMBOL(__blk_end_request);
 
+/**
+ * __blk_end_request_all - Helper function for drives to finish the request.
+ * @rq: the request to finish
+ * @error: %0 for success, < %0 for error
+ *
+ * Description:
+ *     Completely finish @rq.  Must be called with queue lock held.
+ */
 void __blk_end_request_all(struct request *rq, int error)
 {
 	bool pending;
@@ -1718,12 +2097,38 @@ void __blk_end_request_all(struct request *rq, int error)
 }
 EXPORT_SYMBOL(__blk_end_request_all);
 
+/**
+ * __blk_end_request_cur - Helper function to finish the current request chunk.
+ * @rq: the request to finish the current chunk for
+ * @error: %0 for success, < %0 for error
+ *
+ * Description:
+ *     Complete the current consecutively mapped chunk from @rq.  Must
+ *     be called with queue lock held.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ */
 bool __blk_end_request_cur(struct request *rq, int error)
 {
 	return __blk_end_request(rq, error, blk_rq_cur_bytes(rq));
 }
 EXPORT_SYMBOL(__blk_end_request_cur);
 
+/**
+ * __blk_end_request_err - Finish a request till the next failure boundary.
+ * @rq: the request to finish till the next failure boundary for
+ * @error: must be negative errno
+ *
+ * Description:
+ *     Complete @rq till the next failure boundary.  Must be called
+ *     with queue lock held.
+ *
+ * Return:
+ *     %false - we are done with this request
+ *     %true  - still buffers pending for this request
+ */
 bool __blk_end_request_err(struct request *rq, int error)
 {
 	WARN_ON(error >= 0);
@@ -1734,7 +2139,7 @@ EXPORT_SYMBOL_GPL(__blk_end_request_err);
 void blk_rq_bio_prep(struct request_queue *q, struct request *rq,
 		     struct bio *bio)
 {
-	
+	/* Bit 0 (R/W) is identical in rq->cmd_flags and bio->bi_rw */
 	rq->cmd_flags |= bio->bi_rw & REQ_WRITE;
 
 	if (bio_has_data(bio)) {
@@ -1749,6 +2154,13 @@ void blk_rq_bio_prep(struct request_queue *q, struct request *rq,
 }
 
 #if ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE
+/**
+ * rq_flush_dcache_pages - Helper function to flush all pages in a request
+ * @rq: the request to be flushed
+ *
+ * Description:
+ *     Flush all pages in @rq.
+ */
 void rq_flush_dcache_pages(struct request *rq)
 {
 	struct req_iterator iter;
@@ -1760,6 +2172,25 @@ void rq_flush_dcache_pages(struct request *rq)
 EXPORT_SYMBOL_GPL(rq_flush_dcache_pages);
 #endif
 
+/**
+ * blk_lld_busy - Check if underlying low-level drivers of a device are busy
+ * @q : the queue of the device being checked
+ *
+ * Description:
+ *    Check if underlying low-level drivers of a device are busy.
+ *    If the drivers want to export their busy state, they must set own
+ *    exporting function using blk_queue_lld_busy() first.
+ *
+ *    Basically, this function is used only by request stacking drivers
+ *    to stop dispatching requests to underlying devices when underlying
+ *    devices are busy.  This behavior helps more I/O merging on the queue
+ *    of the request stacking driver and prevents I/O throughput regression
+ *    on burst I/O load.
+ *
+ * Return:
+ *    0 - Not busy (The request stacking driver should dispatch request)
+ *    1 - Busy (The request stacking driver should stop dispatching request)
+ */
 int blk_lld_busy(struct request_queue *q)
 {
 	if (q->lld_busy_fn)
@@ -1769,6 +2200,13 @@ int blk_lld_busy(struct request_queue *q)
 }
 EXPORT_SYMBOL_GPL(blk_lld_busy);
 
+/**
+ * blk_rq_unprep_clone - Helper function to free all bios in a cloned request
+ * @rq: the clone request to be cleaned up
+ *
+ * Description:
+ *     Free all bios in @rq for a cloned request.
+ */
 void blk_rq_unprep_clone(struct request *rq)
 {
 	struct bio *bio;
@@ -1781,6 +2219,10 @@ void blk_rq_unprep_clone(struct request *rq)
 }
 EXPORT_SYMBOL_GPL(blk_rq_unprep_clone);
 
+/*
+ * Copy attributes of the original request to the clone request.
+ * The actual data parts (e.g. ->cmd, ->buffer, ->sense) are not copied.
+ */
 static void __blk_rq_prep_clone(struct request *dst, struct request *src)
 {
 	dst->cpu = src->cpu;
@@ -1793,6 +2235,25 @@ static void __blk_rq_prep_clone(struct request *dst, struct request *src)
 	dst->extra_len = src->extra_len;
 }
 
+/**
+ * blk_rq_prep_clone - Helper function to setup clone request
+ * @rq: the request to be setup
+ * @rq_src: original request to be cloned
+ * @bs: bio_set that bios for clone are allocated from
+ * @gfp_mask: memory allocation mask for bio
+ * @bio_ctr: setup function to be called for each clone bio.
+ *           Returns %0 for success, non %0 for failure.
+ * @data: private data to be passed to @bio_ctr
+ *
+ * Description:
+ *     Clones bios in @rq_src to @rq, and copies attributes of @rq_src to @rq.
+ *     The actual data parts of @rq_src (e.g. ->cmd, ->buffer, ->sense)
+ *     are not copied, and copying such parts is the caller's responsibility.
+ *     Also, pages which the original bios are pointing to are not copied
+ *     and the cloned bios just point same pages.
+ *     So cloned bios must be completed before original bios, which means
+ *     the caller must complete @rq before @rq_src.
+ */
 int blk_rq_prep_clone(struct request *rq, struct request *rq_src,
 		      struct bio_set *bs, gfp_t gfp_mask,
 		      int (*bio_ctr)(struct bio *, struct bio *, void *),
@@ -1854,6 +2315,20 @@ EXPORT_SYMBOL(kblockd_schedule_delayed_work);
 
 #define PLUG_MAGIC	0x91827364
 
+/**
+ * blk_start_plug - initialize blk_plug and track it inside the task_struct
+ * @plug:	The &struct blk_plug that needs to be initialized
+ *
+ * Description:
+ *   Tracking blk_plug inside the task_struct will help with auto-flushing the
+ *   pending I/O should the task end up blocking between blk_start_plug() and
+ *   blk_finish_plug(). This is important from a performance perspective, but
+ *   also ensures that we don't deadlock. For instance, if the task is blocking
+ *   for a memory allocation, memory reclaim could end up wanting to free a
+ *   page belonging to that request that is currently residing in our private
+ *   plug. By flushing the pending I/O when the process goes to sleep, we avoid
+ *   this kind of deadlock.
+ */
 void blk_start_plug(struct blk_plug *plug)
 {
 	struct task_struct *tsk = current;
@@ -1863,7 +2338,15 @@ void blk_start_plug(struct blk_plug *plug)
 	INIT_LIST_HEAD(&plug->cb_list);
 	plug->should_sort = 0;
 
+	/*
+	 * If this is a nested plug, don't actually assign it. It will be
+	 * flushed on its own.
+	 */
 	if (!tsk->plug) {
+		/*
+		 * Store ordering should not be needed here, since a potential
+		 * preempt will imply a full memory barrier
+		 */
 		tsk->plug = plug;
 	}
 }
@@ -1877,17 +2360,31 @@ static int plug_rq_cmp(void *priv, struct list_head *a, struct list_head *b)
 	return !(rqa->q <= rqb->q);
 }
 
+/*
+ * If 'from_schedule' is true, then postpone the dispatch of requests
+ * until a safe kblockd context. We due this to avoid accidental big
+ * additional stack usage in driver dispatch, in places where the originally
+ * plugger did not intend it.
+ */
 static void queue_unplugged(struct request_queue *q, unsigned int depth,
 			    bool from_schedule)
 	__releases(q->queue_lock)
 {
 	trace_block_unplug(q, depth, !from_schedule);
 
+	/*
+	 * Don't mess with dead queue.
+	 */
 	if (unlikely(blk_queue_dead(q))) {
 		spin_unlock(q->queue_lock);
 		return;
 	}
 
+	/*
+	 * If we are punting this to kblockd, then we can safely drop
+	 * the queue_lock before waking kblockd (which needs to take
+	 * this lock).
+	 */
 	if (from_schedule) {
 		spin_unlock(q->queue_lock);
 		blk_run_queue_async(q);
@@ -1940,12 +2437,19 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
 	q = NULL;
 	depth = 0;
 
+	/*
+	 * Save and disable interrupts here, to avoid doing it for every
+	 * queue lock we have to take.
+	 */
 	local_irq_save(flags);
 	while (!list_empty(&list)) {
 		rq = list_entry_rq(list.next);
 		list_del_init(&rq->queuelist);
 		BUG_ON(!rq->q);
 		if (rq->q != q) {
+			/*
+			 * This drops the queue lock
+			 */
 			if (q)
 				queue_unplugged(q, depth, from_schedule);
 			q = rq->q;
@@ -1953,11 +2457,17 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
 			spin_lock(q->queue_lock);
 		}
 
+		/*
+		 * Short-circuit if @q is dead
+		 */
 		if (unlikely(blk_queue_dead(q))) {
 			__blk_end_request_all(rq, -ENODEV);
 			continue;
 		}
 
+		/*
+		 * rq is already accounted, so use raw insert
+		 */
 		if (rq->cmd_flags & (REQ_FLUSH | REQ_FUA))
 			__elv_add_request(q, rq, ELEVATOR_INSERT_FLUSH);
 		else
@@ -1966,6 +2476,9 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
 		depth++;
 	}
 
+	/*
+	 * This drops the queue lock
+	 */
 	if (q)
 		queue_unplugged(q, depth, from_schedule);
 
@@ -1986,7 +2499,7 @@ int __init blk_dev_init(void)
 	BUILD_BUG_ON(__REQ_NR_BITS > 8 *
 			sizeof(((struct request *)0)->cmd_flags));
 
-	
+	/* used for unplugging and affects IO latency/throughput - HIGHPRI */
 	kblockd_workqueue = alloc_workqueue("kblockd",
 					    WQ_MEM_RECLAIM | WQ_HIGHPRI, 0);
 	if (!kblockd_workqueue)

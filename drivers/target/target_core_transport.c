@@ -1550,7 +1550,7 @@ static int transport_check_alloc_task_attr(struct se_cmd *cmd)
 	return 0;
 }
 
-/*	target_setup_cmd_from_cdb():
+/*	transport_generic_allocate_tasks():
  *
  *	Called from fabric RX Thread.
  */

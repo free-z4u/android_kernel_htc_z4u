@@ -58,12 +58,19 @@ static const unsigned int tacc_mant[] = {
 		__res & __mask;						\
 	})
 
+/*
+ * Given the decoded CSD structure, decode the raw CID to our CID structure.
+ */
 void mmc_decode_cid(struct mmc_card *card)
 {
 	u32 *resp = card->raw_cid;
 
 	memset(&card->cid, 0, sizeof(struct mmc_cid));
 
+	/*
+	 * SD doesn't currently have a version field so we will
+	 * have to assume we can parse this.
+	 */
 	card->cid.manfid		= UNSTUFF_BITS(resp, 120, 8);
 	card->cid.oemid			= UNSTUFF_BITS(resp, 104, 16);
 	card->cid.prod_name[0]		= UNSTUFF_BITS(resp, 96, 8);
@@ -77,9 +84,12 @@ void mmc_decode_cid(struct mmc_card *card)
 	card->cid.year			= UNSTUFF_BITS(resp, 12, 8);
 	card->cid.month			= UNSTUFF_BITS(resp, 8, 4);
 
-	card->cid.year += 2000; 
+	card->cid.year += 2000; /* SD cards year offset */
 }
 
+/*
+ * Given a 128-bit response, decode to our card CSD structure.
+ */
 static int mmc_decode_csd(struct mmc_card *card)
 {
 	struct mmc_csd *csd = &card->csd;
@@ -120,10 +130,16 @@ static int mmc_decode_csd(struct mmc_card *card)
 		}
 		break;
 	case 1:
+		/*
+		 * This is a block-addressed SDHC or SDXC card. Most
+		 * interesting fields are unused and have fixed
+		 * values. To avoid getting tripped by buggy cards,
+		 * we assume those fixed values ourselves.
+		 */
 		mmc_card_set_blockaddr(card);
 
-		csd->tacc_ns	 = 0; 
-		csd->tacc_clks	 = 0; 
+		csd->tacc_ns	 = 0; /* Unused */
+		csd->tacc_clks	 = 0; /* Unused */
 
 		m = UNSTUFF_BITS(resp, 99, 4);
 		e = UNSTUFF_BITS(resp, 96, 3);
@@ -131,7 +147,7 @@ static int mmc_decode_csd(struct mmc_card *card)
 		csd->cmdclass	  = UNSTUFF_BITS(resp, 84, 12);
 		csd->c_size	  = UNSTUFF_BITS(resp, 48, 22);
 
-		
+		/* SDXC cards have a minimum C_SIZE of 0x00FFFF */
 		if (csd->c_size >= 0xFFFF)
 			mmc_card_set_ext_capacity(card);
 
@@ -142,7 +158,7 @@ static int mmc_decode_csd(struct mmc_card *card)
 		csd->read_partial = 0;
 		csd->write_misalign = 0;
 		csd->read_misalign = 0;
-		csd->r2w_factor = 4; 
+		csd->r2w_factor = 4; /* Unused */
 		csd->write_blkbits = 9;
 		csd->write_partial = 0;
 		csd->erase_size = 1;
@@ -158,6 +174,9 @@ static int mmc_decode_csd(struct mmc_card *card)
 	return 0;
 }
 
+/*
+ * Given a 64-bit response, decode to our card SCR structure.
+ */
 static int mmc_decode_scr(struct mmc_card *card)
 {
 	struct sd_scr *scr = &card->scr;
@@ -177,7 +196,7 @@ static int mmc_decode_scr(struct mmc_card *card)
 	scr->sda_vsn = UNSTUFF_BITS(resp, 56, 4);
 	scr->bus_widths = UNSTUFF_BITS(resp, 48, 4);
 	if (scr->sda_vsn == SCR_SPEC_VER_2)
-		
+		/* Check if Physical Layer Spec v3.0 is supported */
 		scr->sda_spec3 = UNSTUFF_BITS(resp, 47, 1);
 
 	if (UNSTUFF_BITS(resp, 55, 1))
@@ -190,6 +209,9 @@ static int mmc_decode_scr(struct mmc_card *card)
 	return 0;
 }
 
+/*
+ * Fetch and process SD Status register.
+ */
 static int mmc_read_ssr(struct mmc_card *card)
 {
 	unsigned int au, es, et, eo, spd_cls;

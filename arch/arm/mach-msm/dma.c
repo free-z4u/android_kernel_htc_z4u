@@ -1,7 +1,7 @@
 /* linux/arch/arm/mach-msm/dma.c
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2008-2010, 2012 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2008-2010, 2012 The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -285,6 +285,7 @@ enum {
 	NONGRACEFUL,
 };
 
+/* Caller must hold the list lock */
 static struct msm_dmov_cmd *start_ready_cmd(unsigned ch, int adm)
 {
 	struct msm_dmov_cmd *cmd;
@@ -584,8 +585,8 @@ static irqreturn_t msm_dmov_isr(int irq, void *dev_id)
 					list_del(&cmd->list);
 					cmd->complete_func(cmd, ch_result, &errdata);
 				}
-				
-				
+				/* this does not seem to work, once we get an error */
+				/* the datamover will no longer accept commands */
 				writel_relaxed(0, DMOV_REG(DMOV_FLUSH0(ch),
 					       adm));
 			}
@@ -667,13 +668,13 @@ static int msm_dmov_init_clocks(struct platform_device *pdev)
 	dmov_conf[adm].pclk = clk_get(&pdev->dev, "iface_clk");
 	if (IS_ERR(dmov_conf[adm].pclk)) {
 		dmov_conf[adm].pclk = NULL;
-		
+		/* pclk not present on all SoCs, don't bail on failure */
 	}
 
 	dmov_conf[adm].ebiclk = clk_get(&pdev->dev, "mem_clk");
 	if (IS_ERR(dmov_conf[adm].ebiclk)) {
 		dmov_conf[adm].ebiclk = NULL;
-		
+		/* ebiclk not present on all SoCs, don't bail on failure */
 	} else {
 		ret = clk_set_rate(dmov_conf[adm].ebiclk, 27000000);
 		if (ret)
@@ -691,7 +692,7 @@ static void config_datamover(int adm)
 		struct msm_dmov_chan_conf *chan_conf =
 			dmov_conf[adm].chan_conf;
 		unsigned conf;
-		
+		/* Only configure scorpion channels */
 		if (chan_conf[i].sd <= 1) {
 			conf = readl_relaxed(DMOV_REG(DMOV_CONF(i), adm));
 			conf &= ~DMOV_CONF_SD(7);
@@ -795,6 +796,7 @@ static struct platform_driver msm_dmov_driver = {
 	},
 };
 
+/* static int __init */
 static int __init msm_init_datamover(void)
 {
 	int ret;

@@ -970,6 +970,12 @@ ktime_t ktime_get_monotonic_offset(void)
 EXPORT_SYMBOL_GPL(ktime_get_monotonic_offset);
 
 
+/**
+ * xtime_update() - advances the timekeeping infrastructure
+ * @ticks:	number of ticks, that have elapsed since the last call.
+ *
+ * Must be called with interrupts disabled.
+ */
 void xtime_update(unsigned long ticks)
 {
 	write_seqlock(&xtime_lock);

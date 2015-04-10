@@ -39,6 +39,10 @@
 #include <asm/cacheflush.h>
 #include "audit.h"	/* audit_signal_info() */
 
+/*
+ * SLAB caches for signal bits.
+ */
+
 static struct dying_pid dying_pid_buf[MAX_DYING_PROC_COUNT];
 static unsigned int dying_pid_buf_idx;
 

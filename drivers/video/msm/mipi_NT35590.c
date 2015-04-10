@@ -35,6 +35,7 @@ static char disp_on2[2] = {0x26, 0x00};
 static char disp_on3[2] = {0xFF, 0x00}; /* WaitTime(10) */
 
 static char lane[2] = {0xBA, 0x03}; /* MIPI 4 lane */
+
 static char disp_on_rotate[2] = {0x36, 0xd7}; 
 
 static char command_mode[2] = {0xC2, 0x08}; /* Setting 0x08 for MIPI cmd mode */

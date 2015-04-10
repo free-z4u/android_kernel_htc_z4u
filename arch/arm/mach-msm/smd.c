@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/smd.c
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2008-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -42,6 +42,7 @@
 #include <mach/socinfo.h>
 #include <mach/proc_comm.h>
 #include <asm/cacheflush.h>
+
 #include <mach/board_htc.h>
 
 #include "smd_private.h"

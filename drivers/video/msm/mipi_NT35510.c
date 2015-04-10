@@ -428,6 +428,7 @@ static char video26[6] = {
 static char video27[2] = {
 	0x35, 0x00,
 };
+
 static char config_video_MADCTL[2] = {0x36, 0xC0};
 static struct dsi_cmd_desc nt35510_video_display_on_cmds[] = {
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 0, sizeof(video0), video0},

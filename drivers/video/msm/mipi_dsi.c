@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -29,6 +29,7 @@
 #include <mach/hardware.h>
 #include <mach/gpio.h>
 #include <mach/clk.h>
+
 #include <mach/debug_display.h>
 
 #include "msm_fb.h"
@@ -381,6 +382,11 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 
 		if (mdp_rev == MDP_REV_42 && mipi_dsi_pdata &&
 			mipi_dsi_pdata->target_type == 1) {
+			/* Target type is 1 for device with (De)serializer
+			 * 0x4f00000 is the base for TV Encoder.
+			 * Unused Offset 0x1000 is used for
+			 * (de)serializer on emulation platform
+			 */
 			periph_base = ioremap(MMSS_SERDES_BASE_PHY, 0x100);
 
 			if (periph_base) {
@@ -446,8 +452,14 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 	if (!mdp_dev)
 		return -ENOMEM;
 
+	/*
+	 * link to the latest pdev
+	 */
 	mfd->pdev = mdp_dev;
 
+	/*
+	 * alloc panel device data
+	 */
 	if (platform_device_add_data
 	    (mdp_dev, pdev->dev.platform_data,
 	     sizeof(struct msm_fb_panel_data))) {
@@ -455,11 +467,17 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 		platform_device_put(mdp_dev);
 		return -ENOMEM;
 	}
+	/*
+	 * data chain
+	 */
 	pdata = mdp_dev->dev.platform_data;
 	pdata->on = mipi_dsi_on;
 	pdata->off = mipi_dsi_off;
 	pdata->next = pdev;
 
+	/*
+	 * get/set panel specific fb info
+	 */
 	mfd->panel_info = pdata->panel_info;
 	pinfo = &mfd->panel_info;
 
@@ -521,7 +539,7 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 		 || (mipi->dst_format == DSI_VIDEO_DST_FORMAT_RGB565))
 		bpp = 2;
 	else
-		bpp = 3;		
+		bpp = 3;		/* Default format set to RGB888 */
 
 	if (mfd->panel_info.type == MIPI_VIDEO_PANEL &&
 		!mfd->panel_info.clk_rate) {
@@ -549,8 +567,14 @@ static int mipi_dsi_probe(struct platform_device *pdev)
 		dsi_pclk_rate = 35000000;
 	mipi->dsi_pclk_rate = dsi_pclk_rate;
 
+	/*
+	 * set driver data
+	 */
 	platform_set_drvdata(mdp_dev, mfd);
 
+	/*
+	 * register in mdp driver
+	 */
 	rc = platform_device_add(mdp_dev);
 	if (rc)
 		goto mipi_dsi_probe_err;

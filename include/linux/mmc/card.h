@@ -319,7 +319,7 @@ struct mmc_card {
 	unsigned int		wr_perf; 
 	s8                      speed_class; 
 
-	struct mmc_wr_pack_stats wr_pack_stats; 
+	struct mmc_wr_pack_stats wr_pack_stats; /* packed commands stats*/
 };
 
 /*

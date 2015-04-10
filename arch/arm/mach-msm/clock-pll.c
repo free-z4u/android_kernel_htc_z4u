@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -23,6 +23,7 @@
 #include "clock.h"
 #include "clock-pll.h"
 #include "smd_private.h"
+
 #ifdef CONFIG_HTC_ACPU_DEBUG
 #include <mach/proc_comm.h>
 #endif
@@ -422,13 +423,16 @@ static enum handoff pll_clk_handoff(struct clk *c)
 	unsigned int pll_lval;
 	struct pll_rate *l;
 
+	/*
+	 * Wait for the PLLs to be initialized and then read their frequency.
+	 */
 	do {
 		pll_lval = readl_relaxed(PLL_MODE_REG(pll) + 4) & 0x3ff;
 		cpu_relax();
 		udelay(50);
 	} while (pll_lval == 0);
 
-	
+	/* Convert PLL L values to PLL Output rate */
 	for (l = pll_l_rate; l->rate != 0; l++) {
 		if (l->lvalue == pll_lval) {
 			c->rate = l->rate;
@@ -455,21 +459,21 @@ static void __init __set_fsm_mode(void __iomem *mode_reg)
 {
 	u32 regval = readl_relaxed(mode_reg);
 
-	
+	/* De-assert reset to FSM */
 	regval &= ~BIT(21);
 	writel_relaxed(regval, mode_reg);
 
-	
+	/* Program bias count */
 	regval &= ~BM(19, 14);
 	regval |= BVAL(19, 14, 0x1);
 	writel_relaxed(regval, mode_reg);
 
-	
+	/* Program lock count */
 	regval &= ~BM(13, 8);
 	regval |= BVAL(13, 8, 0x8);
 	writel_relaxed(regval, mode_reg);
 
-	
+	/* Enable PLL FSM voting */
 	regval |= BIT(20);
 	writel_relaxed(regval, mode_reg);
 }
@@ -485,30 +489,30 @@ void __init configure_pll(struct pll_config *config,
 
 	regval = readl_relaxed(PLL_CONFIG_REG(regs));
 
-	
+	/* Enable the MN accumulator  */
 	if (config->mn_ena_mask) {
 		regval &= ~config->mn_ena_mask;
 		regval |= config->mn_ena_val;
 	}
 
-	
+	/* Enable the main output */
 	if (config->main_output_mask) {
 		regval &= ~config->main_output_mask;
 		regval |= config->main_output_val;
 	}
 
-	
+	/* Set pre-divider and post-divider values */
 	regval &= ~config->pre_div_mask;
 	regval |= config->pre_div_val;
 	regval &= ~config->post_div_mask;
 	regval |= config->post_div_val;
 
-	
+	/* Select VCO setting */
 	regval &= ~config->vco_mask;
 	regval |= config->vco_val;
 	writel_relaxed(regval, PLL_CONFIG_REG(regs));
 
-	
+	/* Configure in FSM mode if necessary */
 	if (ena_fsm_mode)
 		__set_fsm_mode(PLL_MODE_REG(regs));
 }

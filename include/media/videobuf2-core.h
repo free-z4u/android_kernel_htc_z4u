@@ -20,6 +20,43 @@
 struct vb2_alloc_ctx;
 struct vb2_fileio_data;
 
+/**
+ * struct vb2_mem_ops - memory handling/memory allocator operations
+ * @alloc:	allocate video memory and, optionally, allocator private data,
+ *		return NULL on failure or a pointer to allocator private,
+ *		per-buffer data on success; the returned private structure
+ *		will then be passed as buf_priv argument to other ops in this
+ *		structure
+ * @put:	inform the allocator that the buffer will no longer be used;
+ *		usually will result in the allocator freeing the buffer (if
+ *		no other users of this buffer are present); the buf_priv
+ *		argument is the allocator private per-buffer structure
+ *		previously returned from the alloc callback
+ * @get_userptr: acquire userspace memory for a hardware operation; used for
+ *		 USERPTR memory types; vaddr is the address passed to the
+ *		 videobuf layer when queuing a video buffer of USERPTR type;
+ *		 should return an allocator private per-buffer structure
+ *		 associated with the buffer on success, NULL on failure;
+ *		 the returned private structure will then be passed as buf_priv
+ *		 argument to other ops in this structure
+ * @put_userptr: inform the allocator that a USERPTR buffer will no longer
+ *		 be used
+ * @vaddr:	return a kernel virtual address to a given memory buffer
+ *		associated with the passed private structure or NULL if no
+ *		such mapping exists
+ * @cookie:	return allocator specific cookie for a given memory buffer
+ *		associated with the passed private structure or NULL if not
+ *		available
+ * @num_users:	return the current number of users of a memory buffer;
+ *		return 1 if the videobuf layer (or actually the driver using
+ *		it) is the only user
+ * @mmap:	setup a userspace mapping for a given memory buffer under
+ *		the provided virtual memory region
+ *
+ * Required ops for USERPTR types: get_userptr, put_userptr.
+ * Required ops for MMAP types: alloc, put, num_users, mmap.
+ * Required ops for read/write access types: alloc, put, num_users, vaddr
+ */
 struct vb2_mem_ops {
 	void		*(*alloc)(void *alloc_ctx, unsigned long size);
 	void		(*put)(void *buf_priv);
@@ -154,21 +191,41 @@ size_t vb2_read(struct vb2_queue *q, char __user *data, size_t count,
 size_t vb2_write(struct vb2_queue *q, char __user *data, size_t count,
 		loff_t *ppos, int nonblock);
 
+/**
+ * vb2_is_streaming() - return streaming status of the queue
+ * @q:		videobuf queue
+ */
 static inline bool vb2_is_streaming(struct vb2_queue *q)
 {
 	return q->streaming;
 }
 
+/**
+ * vb2_is_busy() - return busy status of the queue
+ * @q:		videobuf queue
+ *
+ * This function checks if queue has any buffers allocated.
+ */
 static inline bool vb2_is_busy(struct vb2_queue *q)
 {
 	return (q->num_buffers > 0);
 }
 
+/**
+ * vb2_get_drv_priv() - return driver private data associated with the queue
+ * @q:		videobuf queue
+ */
 static inline void *vb2_get_drv_priv(struct vb2_queue *q)
 {
 	return q->drv_priv;
 }
 
+/**
+ * vb2_set_plane_payload() - set bytesused for the plane plane_no
+ * @vb:		buffer for which plane payload should be set
+ * @plane_no:	plane number for which payload should be set
+ * @size:	payload in bytes
+ */
 static inline void vb2_set_plane_payload(struct vb2_buffer *vb,
 				 unsigned int plane_no, unsigned long size)
 {
@@ -176,6 +233,12 @@ static inline void vb2_set_plane_payload(struct vb2_buffer *vb,
 		vb->v4l2_planes[plane_no].bytesused = size;
 }
 
+/**
+ * vb2_get_plane_payload() - get bytesused for the plane plane_no
+ * @vb:		buffer for which plane payload should be set
+ * @plane_no:	plane number for which payload should be set
+ * @size:	payload in bytes
+ */
 static inline unsigned long vb2_get_plane_payload(struct vb2_buffer *vb,
 				 unsigned int plane_no)
 {
@@ -184,6 +247,11 @@ static inline unsigned long vb2_get_plane_payload(struct vb2_buffer *vb,
 	return 0;
 }
 
+/**
+ * vb2_plane_size() - return plane size in bytes
+ * @vb:		buffer for which plane size should be returned
+ * @plane_no:	plane number for which size should be returned
+ */
 static inline unsigned long
 vb2_plane_size(struct vb2_buffer *vb, unsigned int plane_no)
 {
@@ -192,4 +260,4 @@ vb2_plane_size(struct vb2_buffer *vb, unsigned int plane_no)
 	return 0;
 }
 
-#endif 
+#endif /* _MEDIA_VIDEOBUF2_CORE_H */

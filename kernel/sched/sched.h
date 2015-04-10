@@ -8,20 +8,39 @@
 
 extern __read_mostly int scheduler_running;
 
+/*
+ * Convert user-nice values [ -20 ... 0 ... 19 ]
+ * to static priority [ MAX_RT_PRIO..MAX_PRIO-1 ],
+ * and back.
+ */
 #define NICE_TO_PRIO(nice)	(MAX_RT_PRIO + (nice) + 20)
 #define PRIO_TO_NICE(prio)	((prio) - MAX_RT_PRIO - 20)
 #define TASK_NICE(p)		PRIO_TO_NICE((p)->static_prio)
 
+/*
+ * 'User priority' is the nice value converted to something we
+ * can work with better when scaling various scheduler parameters,
+ * it's a [ 0 ... 39 ] range.
+ */
 #define USER_PRIO(p)		((p)-MAX_RT_PRIO)
 #define TASK_USER_PRIO(p)	USER_PRIO((p)->static_prio)
 #define MAX_USER_PRIO		(USER_PRIO(MAX_PRIO))
 
+/*
+ * Helpers for converting nanosecond timing to jiffy resolution
+ */
 #define NS_TO_JIFFIES(TIME)	((unsigned long)(TIME) / (NSEC_PER_SEC / HZ))
 
 #define NICE_0_LOAD		SCHED_LOAD_SCALE
 #define NICE_0_SHIFT		SCHED_LOAD_SHIFT
 
+/*
+ * These are the 'tuning knobs' of the scheduler:
+ */
 
+/*
+ * single value that denotes runtime == period, ie unlimited time.
+ */
 #define RUNTIME_INF	((u64)~0ULL)
 
 static inline int rt_policy(int policy)
@@ -36,13 +55,16 @@ static inline int task_has_rt_policy(struct task_struct *p)
 	return rt_policy(p->policy);
 }
 
+/*
+ * This is the priority-queue data structure of the RT scheduling class:
+ */
 struct rt_prio_array {
-	DECLARE_BITMAP(bitmap, MAX_RT_PRIO+1); 
+	DECLARE_BITMAP(bitmap, MAX_RT_PRIO+1); /* include 1 bit for delimiter */
 	struct list_head queue[MAX_RT_PRIO];
 };
 
 struct rt_bandwidth {
-	
+	/* nests inside the rq lock: */
 	raw_spinlock_t		rt_runtime_lock;
 	ktime_t			rt_period;
 	u64			rt_runtime;

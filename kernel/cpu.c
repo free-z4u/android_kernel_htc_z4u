@@ -16,6 +16,7 @@
 #include <linux/mutex.h>
 #include <linux/gfp.h>
 #include <linux/suspend.h>
+
 #ifdef CONFIG_HTC_ACPU_DEBUG
 #include <mach/proc_comm.h>
 #endif

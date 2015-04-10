@@ -35,6 +35,7 @@
 
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
+
 #include <linux/msm_kgsl.h>
 
 #include "mm.h"

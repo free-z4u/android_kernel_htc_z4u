@@ -3,7 +3,7 @@
  * MSM7K, QSD io support
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2008-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -40,7 +40,9 @@
 
 #define MSM_DEVICE(name) MSM_CHIP_DEVICE(name, MSM)
 
-
+/* msm_shared_ram_phys default value of 0x00100000 is the most common value
+ * and should work as-is for any target without stacked memory.
+ */
 unsigned int msm_shared_ram_phys = 0x00200000;
 
 static void __init msm_map_io(struct map_desc *io_desc, int size)
@@ -487,4 +489,4 @@ void __init msm_map_msm9625_io(void)
 	msm_shared_ram_phys = MSM9625_SHARED_RAM_PHYS;
 	msm_map_io(msm9625_io_desc, ARRAY_SIZE(msm9625_io_desc));
 }
-#endif 
+#endif /* CONFIG_ARCH_MSM9625 */

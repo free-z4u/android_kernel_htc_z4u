@@ -1,7 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (C) 2000-2001 Qualcomm Incorporated
-   Copyright (C) 2011 ProFUSION Embedded Systems
+   Copyright (c) 2000-2001, 2010-2012 The Linux Foundation.  All rights reserved.
 
    Written 2000,2001 by Maxim Krasnyansky <maxk@qualcomm.com>
 
@@ -55,7 +54,6 @@
 
 #define AUTO_OFF_TIMEOUT 2000
 
-
 static void hci_cmd_task(unsigned long arg);
 static void hci_rx_task(unsigned long arg);
 static void hci_tx_task(unsigned long arg);
@@ -72,15 +70,18 @@ DEFINE_RWLOCK(hci_dev_list_lock);
 LIST_HEAD(hci_cb_list);
 DEFINE_RWLOCK(hci_cb_list_lock);
 
-
+/* AMP Manager event callbacks */
 LIST_HEAD(amp_mgr_cb_list);
 DEFINE_RWLOCK(amp_mgr_cb_list_lock);
 
+/* HCI protocols */
 #define HCI_MAX_PROTO	2
 struct hci_proto *hci_proto[HCI_MAX_PROTO];
 
+/* HCI notifiers list */
 static ATOMIC_NOTIFIER_HEAD(hci_notifier);
 
+/* ---- HCI notifications ---- */
 
 int hci_register_notifier(struct notifier_block *nb)
 {
@@ -91,8 +92,6 @@ int hci_unregister_notifier(struct notifier_block *nb)
 {
 	return atomic_notifier_chain_unregister(&hci_notifier, nb);
 }
-
-/* ---- HCI notifications ---- */
 
 static void hci_notify(struct hci_dev *hdev, int event)
 {

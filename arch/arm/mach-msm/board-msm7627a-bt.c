@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -24,6 +24,7 @@
 
 #include "board-msm7627a.h"
 #include "devices-msm7x2xa.h"
+
 #if defined(CONFIG_QCT2243_V21)
 #include "linux/i2c/cpld.h"
 #endif
@@ -1018,7 +1019,7 @@ static struct marimba_fm_platform_data marimba_fm_pdata = {
 	.irq = MSM_GPIO_TO_INT(FM_GPIO),
 	.vreg_s2 = NULL,
 	.vreg_xo_out = NULL,
-	
+	/* Configuring the FM SoC as I2S Master */
 	.is_fm_soc_i2s_master = true,
 	.config_i2s_gpio = msm_bahama_setup_pcm_i2s,
 };

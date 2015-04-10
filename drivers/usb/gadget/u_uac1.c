@@ -679,6 +679,7 @@ int gaudio_setup(struct gaudio *card)
 		the_card = card;
 
 	return ret;
+
 }
 
 /**

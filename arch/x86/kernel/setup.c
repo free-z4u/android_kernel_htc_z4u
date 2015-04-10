@@ -50,6 +50,7 @@
 #include <asm/pci-direct.h>
 #include <linux/init_ohci1394_dma.h>
 #include <linux/kvm_para.h>
+
 #include <linux/dma-contiguous.h>
 
 #include <linux/errno.h>

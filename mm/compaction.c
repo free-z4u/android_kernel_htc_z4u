@@ -900,4 +900,4 @@ void compaction_unregister_node(struct node *node)
 }
 #endif /* CONFIG_SYSFS && CONFIG_NUMA */
 
-#endif /* CONFIG_COMPACTION */
+#endif /* CONFIG_SYSFS && CONFIG_NUMA */

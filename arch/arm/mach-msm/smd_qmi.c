@@ -102,6 +102,7 @@ static struct workqueue_struct *qmi_wq;
 
 static int verbose = 0;
 
+/* anyone waiting for a state change waits here */
 static DECLARE_WAIT_QUEUE_HEAD(qmi_wait_queue);
 
 
@@ -154,6 +155,9 @@ int qmi_add_tlv(struct qmi_msg *msg,
 	return 0;
 }
 
+/* Extract a tagged item from a qmi message buffer,
+** taking care not to overrun the buffer.
+*/
 static int qmi_get_tlv(struct qmi_msg *msg,
 		       unsigned type, unsigned size, void *data)
 {
@@ -164,7 +168,7 @@ static int qmi_get_tlv(struct qmi_msg *msg,
 	while (len >= 3) {
 		len -= 3;
 
-		
+		/* size of this item */
 		n = x[1] | (x[2] << 8);
 		if (n > len)
 			break;
@@ -195,8 +199,10 @@ static unsigned qmi_get_status(struct qmi_msg *msg, unsigned *error)
 	}
 }
 
+/* 0x01 <qmux-header> <payload> */
 #define QMUX_HEADER    13
 
+/* should be >= HEADER + FOOTER */
 #define QMUX_OVERHEAD  16
 
 static int qmi_send(struct qmi_ctxt *ctxt, struct qmi_msg *msg)
@@ -214,25 +220,25 @@ static int qmi_send(struct qmi_ctxt *ctxt, struct qmi_msg *msg)
 		hlen = QMUX_HEADER;
 	}
 
-	
+	/* QMUX length is total header + total payload - IFC selector */
 	len = hlen + msg->size - 1;
 	if (len > 0xffff)
 		return -1;
 
 	data = msg->tlv - hlen;
 
-	
-	*data++ = 0x01; 
+	/* prepend encap and qmux header */
+	*data++ = 0x01; /* ifc selector */
 
-	
+	/* qmux header */
 	*data++ = len;
 	*data++ = len >> 8;
-	*data++ = 0x00; 
+	*data++ = 0x00; /* flags: client */
 	*data++ = msg->service;
 	*data++ = msg->client_id;
 
-	
-	*data++ = 0x00; 
+	/* qmi header */
+	*data++ = 0x00; /* flags: send */
 	*data++ = msg->txn_id;
 	if (msg->service != QMI_CTL)
 		*data++ = msg->txn_id >> 8;
@@ -242,7 +248,7 @@ static int qmi_send(struct qmi_ctxt *ctxt, struct qmi_msg *msg)
 	*data++ = msg->size;
 	*data++ = msg->size >> 8;
 
-	
+	/* len + 1 takes the interface selector into account */
 	r = smd_write(ctxt->ch, msg->tlv - hlen, len + 1);
 
 	if (r != len) {

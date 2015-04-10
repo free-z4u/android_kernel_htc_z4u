@@ -1,8 +1,15 @@
+/*
+ * Definitions for akm8975 compass chip.
+ */
 #ifndef AKM8975_H
 #define AKM8975_H
 
 #include <linux/ioctl.h>
 
+/*! \name AK8975 operation mode
+ \anchor AK8975_Mode
+ Defines an operation mode of the AK8975.*/
+/*! @{*/
 #define AKM8975_I2C_NAME "akm8975"
 
 

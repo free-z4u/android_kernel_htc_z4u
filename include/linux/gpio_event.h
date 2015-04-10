@@ -123,6 +123,7 @@ struct gpio_event_input_info {
 	void (*set_qty_irq)(uint8_t);
 };
 
+/* outputs */
 extern int gpio_event_output_func(struct gpio_event_input_devs *input_devs,
 			struct gpio_event_info *info, void **data, int func);
 extern int gpio_event_output_event(struct gpio_event_input_devs *input_devs,
@@ -130,7 +131,7 @@ extern int gpio_event_output_event(struct gpio_event_input_devs *input_devs,
 			unsigned int dev, unsigned int type,
 			unsigned int code, int value);
 struct gpio_event_output_info {
-	
+	/* initialize to gpio_event_output_func and gpio_event_output_event */
 	struct gpio_event_info info;
 	uint16_t flags;
 	uint16_t type;
@@ -139,6 +140,7 @@ struct gpio_event_output_info {
 };
 
 
+/* axes */
 
 enum gpio_event_axis_flags {
 	GPIOEAF_PRINT_UNKNOWN_DIRECTION  = 1U << 16,
@@ -149,11 +151,11 @@ enum gpio_event_axis_flags {
 extern int gpio_event_axis_func(struct gpio_event_input_devs *input_devs,
 			struct gpio_event_info *info, void **data, int func);
 struct gpio_event_axis_info {
-	
+	/* initialize to gpio_event_axis_func */
 	struct gpio_event_info info;
-	uint8_t  count; 
-	uint8_t  dev; 
-	uint8_t  type; 
+	uint8_t  count; /* number of gpios for this axis */
+	uint8_t  dev; /* device index when using multiple input devices */
+	uint8_t  type; /* EV_REL or EV_ABS */
 	uint16_t code;
 	uint16_t decoded_size;
 	uint16_t (*map)(struct gpio_event_axis_info *info, uint16_t in);

@@ -3,7 +3,7 @@
  * Register/Interrupt access for userspace aDSP library.
  *
  * Copyright (C) 2008 Google, Inc.
- * Copyright (c) 2008-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
  * Author: Iliyan Malchev <ibm@android.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -17,6 +17,12 @@
  *
  */
 
+/* TODO:
+ * - move shareable rpc code outside of adsp.c
+ * - general solution for virt->phys patchup
+ * - queue IDs should be relative to modules
+ * - disallow access to non-associated queues
+ */
 
 #include <linux/clk.h>
 #include <linux/delay.h>
@@ -37,7 +43,7 @@ static struct dentry *dentry_adsp;
 static struct dentry *dentry_wdata;
 static struct dentry *dentry_rdata;
 static int wdump, rdump;
-#endif
+#endif /* CONFIG_DEBUG_FS */
 static struct wake_lock adsp_wake_lock;
 static inline void prevent_suspend(void)
 {
@@ -70,6 +76,7 @@ static struct workqueue_struct *msm_adsp_probe_work_queue;
 static void adsp_probe_work(struct work_struct *work);
 static DECLARE_WORK(msm_adsp_probe_work, adsp_probe_work);
 
+/* protect interactions with the ADSP command/message queue */
 static spinlock_t adsp_cmd_lock;
 static spinlock_t adsp_write_lock;
 
@@ -1485,7 +1492,7 @@ static int __init adsp_init(void)
 	}
 	rdump = 0;
 	wdump = 0;
-#endif
+#endif /* CONFIG_DEBUG_FS */
 
 	rpc_adsp_rtos_atom_prog = 0x3000000a;
 	rpc_adsp_rtos_atom_vers = 0x10001;

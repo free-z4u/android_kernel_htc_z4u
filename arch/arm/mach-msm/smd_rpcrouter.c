@@ -15,6 +15,10 @@
  *
  */
 
+/* TODO: handle cases where smd_write() will tempfail due to full fifo */
+/* TODO: thread priority? schedule a work to bump it? */
+/* TODO: maybe make server_list_lock a mutex */
+/* TODO: pool fragments to avoid kmalloc/kfree churn */
 
 #include <linux/slab.h>
 #include <linux/module.h>
@@ -2499,7 +2503,7 @@ static int __init rpcrouter_init(void)
 	if (ret)
 		pr_err("%s: Failed to register reboot notifier", __func__);
 
-	
+	/* Initialize what we need to start processing */
 	rpcrouter_workqueue =
 		create_singlethread_workqueue("rpcrouter");
 	if (!rpcrouter_workqueue) {

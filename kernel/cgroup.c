@@ -404,8 +404,15 @@ static void free_css_set_rcu(struct rcu_head *obj)
 	schedule_work(&cg->work);
 }
 
+/* We don't maintain the lists running through each css_set to its
+ * task until after the first call to cgroup_iter_start(). This
+ * reduces the fork()/exit() overhead for people who have cgroups
+ * compiled into their kernel but not actually in use */
 static int use_task_css_set_links __read_mostly;
 
+/*
+ * refcounted get/put for css_set objects
+ */
 static inline void get_css_set(struct css_set *cg)
 {
 	atomic_inc(&cg->refcount);
@@ -413,6 +420,11 @@ static inline void get_css_set(struct css_set *cg)
 
 static void put_css_set(struct css_set *cg)
 {
+	/*
+	 * Ensure that the refcount doesn't hit zero while any readers
+	 * can see it. Similar to atomic_dec_and_lock(), but for an
+	 * rwlock
+	 */
 	if (atomic_add_unless(&cg->refcount, -1, 1))
 		return;
 	write_lock(&css_set_lock);
@@ -757,9 +769,9 @@ static struct cgroup *task_cgroup_from_root(struct task_struct *task,
  * cgroup_attach_task(), which overwrites one tasks cgroup pointer with
  * another.  It does so using cgroup_mutex, however there are
  * several performance critical places that need to reference
- * task->cgroup without the expense of grabbing a system global
+ * task->cgroups without the expense of grabbing a system global
  * mutex.  Therefore except as noted below, when dereferencing or, as
- * in cgroup_attach_task(), modifying a task'ss cgroup pointer we use
+ * in cgroup_attach_task(), modifying a task's cgroups pointer we use
  * task_lock(), which acts on a spinlock (task->alloc_lock) already in
  * the task_struct routinely used for such matters.
  *
@@ -1854,13 +1866,13 @@ static void cgroup_task_migrate(struct cgroup *cgrp, struct cgroup *oldcgrp,
 		list_move(&tsk->cg_list, &newcg->tasks);
 	write_unlock(&css_set_lock);
 
-	put_css_set(oldcg);
-
 	/*
 	 * We just gained a reference on oldcg by taking it from the task. As
 	 * trading it for newcg is protected by cgroup_mutex, we're safe to drop
 	 * it here; it will be freed under RCU.
 	 */
+	put_css_set(oldcg);
+
 	set_bit(CGRP_RELEASABLE, &oldcgrp->flags);
 }
 
@@ -1928,7 +1940,7 @@ int cgroup_attach_task(struct cgroup *cgrp, struct task_struct *tsk)
 			ss->attach(cgrp, &tset);
 	}
 	set_bit(CGRP_RELEASABLE, &cgrp->flags);
-	
+	/* put_css_set will not destroy cg until after an RCU grace period */
 	put_css_set(cg);
 
 	/*
@@ -2179,6 +2191,10 @@ retry_find_task:
 		if (cred->euid &&
 		    cred->euid != tcred->uid &&
 		    cred->euid != tcred->suid) {
+			/*
+			 * if the default permission check fails, give each
+			 * cgroup a chance to extend the permission check
+			 */
 			struct cgroup_taskset tset = { };
 			tset.single.task = tsk;
 			tset.single.cgrp = cgrp;
@@ -3938,6 +3954,8 @@ static int cgroup_clear_css_refs(struct cgroup *cgrp)
 	return !failed;
 }
 
+/* checks if all of the css_sets attached to a cgroup have a refcount of 0.
+ * Must be called with css_set_lock held */
 static int cgroup_css_sets_empty(struct cgroup *cgrp)
 {
 	struct cg_cgroup_link *link;
@@ -4498,25 +4516,51 @@ static const struct file_operations proc_cgroupstats_operations = {
  *
  * A pointer to the shared css_set was automatically copied in
  * fork.c by dup_task_struct().  However, we ignore that copy, since
- * it was not made under the protection of RCU or cgroup_mutex, so
- * might no longer be a valid cgroup pointer.  cgroup_attach_task() might
- * have already changed current->cgroups, allowing the previously
- * referenced cgroup group to be removed and freed.
+ * it was not made under the protection of RCU, cgroup_mutex or
+ * threadgroup_change_begin(), so it might no longer be a valid
+ * cgroup pointer.  cgroup_attach_task() might have already changed
+ * current->cgroups, allowing the previously referenced cgroup
+ * group to be removed and freed.
+ *
+ * Outside the pointer validity we also need to process the css_set
+ * inheritance between threadgoup_change_begin() and
+ * threadgoup_change_end(), this way there is no leak in any process
+ * wide migration performed by cgroup_attach_proc() that could otherwise
+ * miss a thread because it is too early or too late in the fork stage.
  *
  * At the point that cgroup_fork() is called, 'current' is the parent
  * task, and the passed argument 'child' points to the child task.
  */
 void cgroup_fork(struct task_struct *child)
 {
+	/*
+	 * We don't need to task_lock() current because current->cgroups
+	 * can't be changed concurrently here. The parent obviously hasn't
+	 * exited and called cgroup_exit(), and we are synchronized against
+	 * cgroup migration through threadgroup_change_begin().
+	 */
 	child->cgroups = current->cgroups;
 	get_css_set(child->cgroups);
 	INIT_LIST_HEAD(&child->cg_list);
 }
 
+/**
+ * cgroup_fork_callbacks - run fork callbacks
+ * @child: the new task
+ *
+ * Called on a new task very soon before adding it to the
+ * tasklist. No need to take any locks since no-one can
+ * be operating on this task.
+ */
 void cgroup_fork_callbacks(struct task_struct *child)
 {
 	if (need_forkexit_callback) {
 		int i;
+		/*
+		 * forkexit callbacks are only supported for builtin
+		 * subsystems, and the builtin section of the subsys array is
+		 * immutable, so we don't need to lock the subsys array here.
+		 */
 		for (i = 0; i < CGROUP_BUILTIN_SUBSYS_COUNT; i++) {
 			struct cgroup_subsys *ss = subsys[i];
 			if (ss->fork)
@@ -4529,11 +4573,10 @@ void cgroup_fork_callbacks(struct task_struct *child)
  * cgroup_post_fork - called on a new task after adding it to the task list
  * @child: the task in question
  *
- * Adds the task to the list running through its css_set if necessary and
- * call the subsystem fork() callbacks.  Has to be after the task is
- * visible on the task list in case we race with the first call to
- * cgroup_iter_start() - to guarantee that the new task ends up on its
- * list.
+ * Adds the task to the list running through its css_set if necessary.
+ * Has to be after the task is visible on the task list in case we race
+ * with the first call to cgroup_iter_start() - to guarantee that the
+ * new task ends up on its list.
  */
 void cgroup_post_fork(struct task_struct *child)
 {
@@ -4551,12 +4594,21 @@ void cgroup_post_fork(struct task_struct *child)
 	if (use_task_css_set_links) {
 		write_lock(&css_set_lock);
 		if (list_empty(&child->cg_list)) {
+			/*
+			 * It's safe to use child->cgroups without task_lock()
+			 * here because we are protected through
+			 * threadgroup_change_begin() against concurrent
+			 * css_set change in cgroup_task_migrate(). Also
+			 * the task can't exit at that point until
+			 * wake_up_new_task() is called, so we are protected
+			 * against cgroup_exit() setting child->cgroup to
+			 * init_css_set.
+			 */
 			list_add(&child->cg_list, &child->cgroups->tasks);
 		}
 		write_unlock(&css_set_lock);
 	}
 }
-
 /**
  * cgroup_exit - detach cgroup from exiting task
  * @tsk: pointer to task_struct of exiting process
@@ -4685,6 +4737,7 @@ static void check_for_release(struct cgroup *cgrp)
 	}
 }
 
+/* Caller must verify that the css is not for root cgroup */
 void __css_get(struct cgroup_subsys_state *css, int count)
 {
 	atomic_add(count, &css->refcnt);
@@ -4692,6 +4745,7 @@ void __css_get(struct cgroup_subsys_state *css, int count)
 }
 EXPORT_SYMBOL_GPL(__css_get);
 
+/* Caller must verify that the css is not for root cgroup */
 void __css_put(struct cgroup_subsys_state *css, int count)
 {
 	struct cgroup *cgrp = css->cgroup;

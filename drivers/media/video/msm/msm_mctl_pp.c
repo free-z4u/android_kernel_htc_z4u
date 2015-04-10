@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -36,6 +36,7 @@
 #define D(fmt, args...) do {} while (0)
 #endif
 
+
 static int msm_mctl_pp_vpe_ioctl(struct v4l2_subdev *vpe_sd,
 	struct msm_mctl_pp_cmd *cmd, void *data)
 {
@@ -46,7 +47,6 @@ static int msm_mctl_pp_vpe_ioctl(struct v4l2_subdev *vpe_sd,
 	rc = v4l2_subdev_call(vpe_sd, core, ioctl, VIDIOC_MSM_VPE_CFG, &parm);
 	return rc;
 }
-
 
 static int msm_mctl_pp_buf_divert(
 			struct msm_cam_media_controller *pmctl,
@@ -912,7 +912,7 @@ int msm_mctl_pp_done(
 			0, sizeof(buf));
 		if (p_mctl->pp_info.cur_frame_id[image_mode] !=
 					frame.frame_id) {
-			
+			/* dirty frame. should not pass to app */
 			dirty = 1;
 		}
 	} else {
@@ -923,7 +923,7 @@ int msm_mctl_pp_done(
 			buf.ch_paddr[0] = frame.sp.phy_addr + frame.sp.y_off;
 	}
 	spin_unlock_irqrestore(&p_mctl->pp_info.lock, flags);
-	
+	/* here buf.addr is phy_addr */
 	rc = msm_mctl_buf_done_pp(p_mctl, image_mode, &buf, dirty, 0);
 	return rc;
 }

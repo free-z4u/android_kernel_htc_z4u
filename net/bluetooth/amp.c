@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2010-2011 Code Aurora Forum.  All rights reserved.
+   Copyright (c) 2010-2012 The Linux Foundation.  All rights reserved.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License version 2 and
@@ -12,7 +12,6 @@
 */
 
 #include <linux/interrupt.h>
-
 #include <linux/module.h>
 #include <linux/types.h>
 #include <linux/errno.h>
@@ -1795,6 +1794,7 @@ void amp_conn_ind(struct l2cap_conn *conn, struct sk_buff *skb)
 	}
 }
 
+/* L2CAP Physical Link interface */
 
 void amp_create_physical(struct l2cap_conn *conn, struct sock *sk)
 {
@@ -1832,6 +1832,7 @@ void amp_accept_physical(struct l2cap_conn *conn, u8 id, struct sock *sk)
 	}
 }
 
+/* HCI interface */
 
 static void amp_cmd_cmplt_worker(struct work_struct *w)
 {
@@ -1981,6 +1982,7 @@ static int amp_dev_event(struct notifier_block *this, unsigned long event,
 }
 
 
+/* L2CAP module init continued */
 
 static struct notifier_block amp_notifier = {
 	.notifier_call = amp_dev_event

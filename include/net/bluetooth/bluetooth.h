@@ -1,6 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (c) 2000-2001, 2010-2012 Code Aurora Forum.  All rights reserved.
+   Copyright (c) 2000-2001, 2010-2012 The Linux Foundation.  All rights reserved.
 
    Written 2000,2001 by Maxim Krasnyansky <maxk@qualcomm.com>
 
@@ -36,6 +36,7 @@
 #define PF_BLUETOOTH	AF_BLUETOOTH
 #endif
 
+/* Reserv for core and drivers use */
 #define BT_SKB_RESERVE	8
 #define BT_SKB_RESERVE_80211	32
 
@@ -73,10 +74,29 @@ struct bt_power {
 
 #define BT_AMP_POLICY          10
 
+/* Require BR/EDR (default policy)
+ *   AMP controllers cannot be used
+ *   Channel move requests from the remote device are denied
+ *   If the L2CAP channel is currently using AMP, move the channel to BR/EDR
+ */
 #define BT_AMP_POLICY_REQUIRE_BR_EDR   0
 
+/* Prefer BR/EDR
+ *   Allow use of AMP controllers
+ *   If the L2CAP channel is currently on AMP, move it to BR/EDR
+ *   Channel move requests from the remote device are allowed
+ */
 #define BT_AMP_POLICY_PREFER_BR_EDR    1
 
+/* Prefer AMP
+ *   Allow use of AMP controllers
+ *   If the L2CAP channel is currently on BR/EDR and AMP controller
+ *     resources are available, initiate a channel move to AMP
+ *   Channel move requests from the remote device are allowed
+ *   If the L2CAP socket has not been connected yet, try to create
+ *     and configure the channel directly on an AMP controller rather
+ *     than BR/EDR
+ */
 #define BT_AMP_POLICY_PREFER_AMP       2
 
 #define BT_INFO(fmt, arg...) printk(KERN_INFO "Bluetooth: " fmt "\n" , ## arg)
@@ -157,6 +177,7 @@ void bt_accept_enqueue(struct sock *parent, struct sock *sk);
 void bt_accept_unlink(struct sock *sk);
 struct sock *bt_accept_dequeue(struct sock *parent, struct socket *newsock);
 
+/* Skb helpers */
 struct bt_l2cap_control {
 	__u8  frame_type;
 	__u8  final;
@@ -233,12 +254,10 @@ extern void bt_sysfs_cleanup(void);
 
 extern struct dentry *bt_debugfs;
 
-
 int l2cap_init(void);
 void l2cap_exit(void);
 
 int sco_init(void);
 void sco_exit(void);
 
-
-#endif 
+#endif /* __BLUETOOTH_H */

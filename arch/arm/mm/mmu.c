@@ -220,7 +220,7 @@ static struct mem_type mem_types[] = {
 		.prot_l1	= PMD_TYPE_TABLE,
 		.prot_sect	= PROT_SECT_DEVICE | PMD_SECT_WB,
 		.domain		= DOMAIN_IO,
-	},
+	},	
 	[MT_DEVICE_WC] = {	/* ioremap_wc */
 		.prot_pte	= PROT_PTE_DEVICE | L_PTE_MT_DEV_WC,
 		.prot_l1	= PMD_TYPE_TABLE,
@@ -628,7 +628,7 @@ static void __init alloc_init_pte(pmd_t *pmd, unsigned long addr,
 	pte_t *start_pte = early_pte_alloc(pmd);
 	pte_t *pte = start_pte + pte_index(addr);
 
-
+	/* If replacing a section mapping, the whole section must be replaced */
 	BUG_ON(pmd_bad(*pmd) && ((addr | end) & ~PMD_MASK));
 
 	do {
@@ -831,8 +831,8 @@ void __init iotable_init(struct map_desc *io_desc, int nr)
 		create_mapping(md, false);
 		vm->addr = (void *)(md->virtual & PAGE_MASK);
 		vm->size = PAGE_ALIGN(md->length + (md->virtual & ~PAGE_MASK));
-		vm->phys_addr = __pfn_to_phys(md->pfn);
-		vm->flags = VM_IOREMAP | VM_ARM_STATIC_MAPPING;
+		vm->phys_addr = __pfn_to_phys(md->pfn); 
+		vm->flags = VM_IOREMAP | VM_ARM_STATIC_MAPPING; 
 		vm->flags |= VM_ARM_MTYPE(md->type);
 		vm->caller = iotable_init;
 		vm_area_add_early(vm++);
@@ -1245,7 +1245,27 @@ void mem_text_writeable_spinunlock(unsigned long *flags)
 	spin_unlock_irqrestore(&mem_text_writeable_lock, *flags);
 }
 
+/*
+ * mem_text_address_writeable() and mem_text_address_restore()
+ * should be called as a pair. They are used to make the
+ * specified address in the kernel text section temporarily writeable
+ * when it has been marked read-only by STRICT_MEMORY_RWX.
+ * Used by kprobes and other debugging tools to set breakpoints etc.
+ * mem_text_address_writeable() is invoked before writing.
+ * After the write, mem_text_address_restore() must be called
+ * to restore the original state.
+ * This is only effective when used on the kernel text section
+ * marked as MEMORY_RX by map_lowmem()
+ *
+ * They must each be called with mem_text_writeable_lock locked
+ * by the caller, with no unlocking between the calls.
+ * The caller should release mem_text_writeable_lock immediately
+ * after the call to mem_text_address_restore().
+ * Only the write and associated cache operations should be performed
+ * between the calls.
+ */
 
+/* this function must be called with mem_text_writeable_lock held */
 void mem_text_address_writeable(unsigned long addr)
 {
 	struct task_struct *tsk = current;
@@ -1277,6 +1297,7 @@ void mem_text_address_writeable(unsigned long addr)
 	mem_unprotect.made_writeable = 1;
 }
 
+/* this function must be called with mem_text_writeable_lock held */
 void mem_text_address_restore(void)
 {
 	if (mem_unprotect.made_writeable) {

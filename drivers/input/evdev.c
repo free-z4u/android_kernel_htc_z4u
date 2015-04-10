@@ -732,7 +732,7 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 		return error;
 	}
 
-	
+	/* Multi-number variable-length handlers */
 	if (_IOC_TYPE(cmd) != 'E')
 		return -EINVAL;
 
@@ -775,10 +775,15 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 			if (size < sizeof(struct input_absinfo))
 				abs.resolution = 0;
 
-			
+			/* We can't change number of reserved MT slots */
 			if (t == ABS_MT_SLOT)
 				return -EINVAL;
 
+			/*
+			 * Take event lock to ensure that we are not
+			 * changing device parameters in the middle
+			 * of event.
+			 */
 			spin_lock_irq(&dev->event_lock);
 			dev->absinfo[t] = abs;
 			spin_unlock_irq(&dev->event_lock);
@@ -844,17 +849,29 @@ static const struct file_operations evdev_fops = {
 
 static int evdev_install_chrdev(struct evdev *evdev)
 {
+	/*
+	 * No need to do any locking here as calls to connect and
+	 * disconnect are serialized by the input core
+	 */
 	evdev_table[evdev->minor] = evdev;
 	return 0;
 }
 
 static void evdev_remove_chrdev(struct evdev *evdev)
 {
+	/*
+	 * Lock evdev table to prevent race with evdev_open()
+	 */
 	mutex_lock(&evdev_table_mutex);
 	evdev_table[evdev->minor] = NULL;
 	mutex_unlock(&evdev_table_mutex);
 }
 
+/*
+ * Mark device non-existent. This disables writes, ioctls and
+ * prevents new users from opening the device. Already posted
+ * blocking reads will stay, however new ones will fail.
+ */
 static void evdev_mark_dead(struct evdev *evdev)
 {
 	mutex_lock(&evdev->mutex);
@@ -870,13 +887,17 @@ static void evdev_cleanup(struct evdev *evdev)
 	evdev_hangup(evdev);
 	evdev_remove_chrdev(evdev);
 
-	
+	/* evdev is marked dead so no one else accesses evdev->open */
 	if (evdev->open) {
 		input_flush_device(handle, NULL);
 		input_close_device(handle);
 	}
 }
 
+/*
+ * Create new evdev device. Note that input core serializes calls
+ * to connect and disconnect so we don't need to lock evdev_table here.
+ */
 static int evdev_connect(struct input_handler *handler, struct input_dev *dev,
 			 const struct input_device_id *id)
 {
@@ -951,8 +972,8 @@ static void evdev_disconnect(struct input_handle *handle)
 }
 
 static const struct input_device_id evdev_ids[] = {
-	{ .driver_info = 1 },	
-	{ },			
+	{ .driver_info = 1 },	/* Matches all devices */
+	{ },			/* Terminating zero entry */
 };
 
 MODULE_DEVICE_TABLE(input, evdev_ids);

@@ -211,14 +211,20 @@ struct ieee80211_sta_ht_cap {
 };
 
 /**
- * struct ieee80211_sta_vht_cap - STA's VHT capabilities
+ * struct ieee80211_supported_band - frequency band definition
  *
- * This structure describes most essential parameters needed
- * to describe 802.11ac VHT capabilities for an STA.
+ * This structure describes a frequency band a wiphy
+ * is able to operate in.
  *
- * @vht_supported: is VHT supported by the STA
- * @cap: VHT capabilities map as described in 802.11ac spec
- * @vht_mcs: Supported VHT MCS rates
+ * @channels: Array of channels the hardware can operate in
+ *	in this band.
+ * @band: the band this structure represents
+ * @n_channels: Number of channels in @channels
+ * @bitrates: Array of bitrates the hardware can operate with
+ *	in this band. Must be sorted to give a valid "supported
+ *	rates" IE, i.e. CCK rates first, then OFDM.
+ * @n_bitrates: Number of bitrates in @bitrates
+ * @ht_cap: HT capabilities in this band
  */
 struct ieee80211_sta_vht_cap {
 	bool vht_supported;

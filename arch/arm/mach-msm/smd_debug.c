@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/smd_debug.c
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -1132,6 +1132,9 @@ struct tramp_gpio_smem {
 	uint32_t polarity[NUM_GPIO_INT_REGISTERS];
 };
 
+/*
+ * Print debug information on shared memory sleep variables
+ */
 void smsm_print_sleep_info(uint32_t sleep_delay, uint32_t sleep_limit,
 	uint32_t irq_mask, uint32_t wakeup_reason, uint32_t pending_irqs)
 {

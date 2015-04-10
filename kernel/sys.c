@@ -47,6 +47,7 @@
 #include <linux/user_namespace.h>
 
 #include <linux/kmsg_dump.h>
+/* Move somewhere else to avoid recompiling? */
 #include <generated/utsrelease.h>
 
 #include <asm/uaccess.h>
@@ -510,6 +511,11 @@ static void deferred_cad(struct work_struct *dummy)
 	kernel_restart(NULL);
 }
 
+/*
+ * This function gets called by ctrl-alt-del - ie the keyboard interrupt.
+ * As it's called within an interrupt, it may NOT sync: the only choice
+ * is whether to reboot at once, or just ignore the ctrl-alt-del.
+ */
 void ctrl_alt_del(void)
 {
 	static DECLARE_WORK(cad_work, deferred_cad);
@@ -520,6 +526,24 @@ void ctrl_alt_del(void)
 		kill_cad_pid(SIGINT, 1);
 }
 	
+/*
+ * Unprivileged users may change the real gid to the effective gid
+ * or vice versa.  (BSD-style)
+ *
+ * If you set the real gid at all, or set the effective gid to a value not
+ * equal to the real gid, then the saved gid is set to the new effective gid.
+ *
+ * This makes it possible for a setgid program to completely drop its
+ * privileges, which is often a useful assertion to make when you are doing
+ * a security audit over a program.
+ *
+ * The general idea is that a program which uses just setregid() will be
+ * 100% compatible with BSD.  A program which uses just setgid() will be
+ * 100% compatible with POSIX with saved IDs. 
+ *
+ * SMP: There are not races, the GIDs are checked only by filesystem
+ *      operations (as far as semantic preservation is concerned).
+ */
 SYSCALL_DEFINE2(setregid, gid_t, rgid, gid_t, egid)
 {
 	const struct cred *old;
@@ -562,6 +586,11 @@ error:
 	return retval;
 }
 
+/*
+ * setgid() is implemented like SysV w/ SAVED_IDS 
+ *
+ * SMP: Same implicit races as above.
+ */
 SYSCALL_DEFINE1(setgid, gid_t, gid)
 {
 	const struct cred *old;
@@ -588,6 +617,9 @@ error:
 	return retval;
 }
 
+/*
+ * change the user struct in a credentials set to match the new UID
+ */
 static int set_user(struct cred *new)
 {
 	struct user_struct *new_user;
@@ -614,6 +646,21 @@ static int set_user(struct cred *new)
 	return 0;
 }
 
+/*
+ * Unprivileged users may change the real uid to the effective uid
+ * or vice versa.  (BSD-style)
+ *
+ * If you set the real uid at all, or set the effective uid to a value not
+ * equal to the real uid, then the saved uid is set to the new effective uid.
+ *
+ * This makes it possible for a setuid program to completely drop its
+ * privileges, which is often a useful assertion to make when you are doing
+ * a security audit over a program.
+ *
+ * The general idea is that a program which uses just setreuid() will be
+ * 100% compatible with BSD.  A program which uses just setuid() will be
+ * 100% compatible with POSIX with saved IDs. 
+ */
 SYSCALL_DEFINE2(setreuid, uid_t, ruid, uid_t, euid)
 {
 	const struct cred *old;
@@ -664,6 +711,17 @@ error:
 	return retval;
 }
 		
+/*
+ * setuid() is implemented like SysV with SAVED_IDS 
+ * 
+ * Note that SAVED_ID's is deficient in that a setuid root program
+ * like sendmail, for example, cannot set its uid to be a normal 
+ * user and then switch back, because if you're root, setuid() sets
+ * the saved uid too.  If you don't like this, blame the bright people
+ * in the POSIX committee and/or USG.  Note that the BSD-style setreuid()
+ * will allow a root program to temporarily drop privileges and be able to
+ * regain them by swapping the real and effective uid.  
+ */
 SYSCALL_DEFINE1(setuid, uid_t, uid)
 {
 	const struct cred *old;
@@ -701,6 +759,10 @@ error:
 }
 
 
+/*
+ * This function implements a generic ability to update ruid, euid,
+ * and suid.  This allows you to implement the 4.4 compatible seteuid().
+ */
 SYSCALL_DEFINE3(setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)
 {
 	const struct cred *old;
@@ -763,6 +825,9 @@ SYSCALL_DEFINE3(getresuid, uid_t __user *, ruid, uid_t __user *, euid, uid_t __u
 	return retval;
 }
 
+/*
+ * Same as above, but for rgid, egid, sgid.
+ */
 SYSCALL_DEFINE3(setresgid, gid_t, rgid, gid_t, egid, gid_t, sgid)
 {
 	const struct cred *old;
@@ -815,6 +880,12 @@ SYSCALL_DEFINE3(getresgid, gid_t __user *, rgid, gid_t __user *, egid, gid_t __u
 }
 
 
+/*
+ * "setfsuid()" sets the fsuid - the uid used for filesystem checks. This
+ * is used for "access()" and for the NFS daemon (letting nfsd stay at
+ * whatever uid it wants to). It normally shadows "euid", except when
+ * explicitly set by setfsuid() or for access..
+ */
 SYSCALL_DEFINE1(setfsuid, uid_t, uid)
 {
 	const struct cred *old;
@@ -845,6 +916,9 @@ change_okay:
 	return old_fsuid;
 }
 
+/*
+ * Samma på svenska..
+ */
 SYSCALL_DEFINE1(setfsgid, gid_t, gid)
 {
 	const struct cred *old;
@@ -902,6 +976,18 @@ SYSCALL_DEFINE1(times, struct tms __user *, tbuf)
 	return (long) jiffies_64_to_clock_t(get_jiffies_64());
 }
 
+/*
+ * This needs some heavy checking ...
+ * I just haven't the stomach for it. I also don't fully
+ * understand sessions/pgrp etc. Let somebody who does explain it.
+ *
+ * OK, I think I have the protection semantics right.... this is really
+ * only important on a multi-user system anyway, to make sure one user
+ * can't send a signal to a process owned by another.  -TYT, 12/12/91
+ *
+ * Auch. Had to add the 'did_exec' flag to conform completely to POSIX.
+ * LBT 04.03.94
+ */
 SYSCALL_DEFINE2(setpgid, pid_t, pid, pid_t, pgid)
 {
 	struct task_struct *p;
@@ -917,6 +1003,9 @@ SYSCALL_DEFINE2(setpgid, pid_t, pid, pid_t, pgid)
 		return -EINVAL;
 	rcu_read_lock();
 
+	/* From this point forward we keep holding onto the tasklist lock
+	 * so that our parent does not change from under us. -DaveM
+	 */
 	write_lock_irq(&tasklist_lock);
 
 	err = -ESRCH;
@@ -964,7 +1053,7 @@ SYSCALL_DEFINE2(setpgid, pid_t, pid, pid_t, pgid)
 
 	err = 0;
 out:
-	
+	/* All paths lead to here, thus we are safe. -DaveM */
 	write_unlock_irq(&tasklist_lock);
 	rcu_read_unlock();
 	return err;
@@ -1043,10 +1132,13 @@ SYSCALL_DEFINE0(setsid)
 	int err = -EPERM;
 
 	write_lock_irq(&tasklist_lock);
-	
+	/* Fail if I am already a session leader */
 	if (group_leader->signal->leader)
 		goto out;
 
+	/* Fail if a process group id already exists that equals the
+	 * proposed session id.
+	 */
 	if (pid_task(sid, PIDTYPE_PGID))
 		goto out;
 
@@ -1076,6 +1168,10 @@ DECLARE_RWSEM(uts_sem);
 #define override_architecture(name)	0
 #endif
 
+/*
+ * Work around broken programs that cannot handle "Linux 3.0".
+ * Instead we map 3.x to 2.6.40+x, so e.g. 3.0 would be 2.6.40
+ */
 static int override_release(char __user *release, size_t len)
 {
 	int ret = 0;
@@ -1119,6 +1215,9 @@ SYSCALL_DEFINE1(newuname, struct new_utsname __user *, name)
 }
 
 #ifdef __ARCH_WANT_SYS_OLD_UNAME
+/*
+ * Old cruft
+ */
 SYSCALL_DEFINE1(uname, struct old_utsname __user *, name)
 {
 	int error = 0;
@@ -1220,6 +1319,10 @@ SYSCALL_DEFINE2(gethostname, char __user *, name, int, len)
 
 #endif
 
+/*
+ * Only setdomainname; getdomainname can be implemented by calling
+ * uname()
+ */
 SYSCALL_DEFINE2(setdomainname, char __user *, name, int, len)
 {
 	int errno;
@@ -1258,6 +1361,9 @@ SYSCALL_DEFINE2(getrlimit, unsigned int, resource, struct rlimit __user *, rlim)
 
 #ifdef __ARCH_WANT_SYS_OLD_GETRLIMIT
 
+/*
+ *	Back compatibility for getrlimit. Needed for some apps.
+ */
  
 SYSCALL_DEFINE2(old_getrlimit, unsigned int, resource,
 		struct rlimit __user *, rlim)
@@ -1311,6 +1417,7 @@ static void rlim64_to_rlim(const struct rlimit64 *rlim64, struct rlimit *rlim)
 		rlim->rlim_max = (unsigned long)rlim64->rlim_max;
 }
 
+/* make sure you are allowed to change @tsk limits before calling this */
 int do_prlimit(struct task_struct *tsk, unsigned int resource,
 		struct rlimit *new_rlim, struct rlimit *old_rlim)
 {
@@ -1327,7 +1434,7 @@ int do_prlimit(struct task_struct *tsk, unsigned int resource,
 			return -EPERM;
 	}
 
-	
+	/* protect tsk->signal and tsk->sighand from disappearing */
 	read_lock(&tasklist_lock);
 	if (!tsk->sighand) {
 		retval = -ESRCH;
@@ -1337,6 +1444,8 @@ int do_prlimit(struct task_struct *tsk, unsigned int resource,
 	rlim = tsk->signal->rlim + resource;
 	task_lock(tsk->group_leader);
 	if (new_rlim) {
+		/* Keep the capable check against init_user_ns until
+		   cgroups can contain all limits */
 		if (new_rlim->rlim_max > rlim->rlim_max &&
 				!capable(CAP_SYS_RESOURCE))
 			retval = -EPERM;
@@ -1344,6 +1453,12 @@ int do_prlimit(struct task_struct *tsk, unsigned int resource,
 			retval = security_task_setrlimit(tsk->group_leader,
 					resource, new_rlim);
 		if (resource == RLIMIT_CPU && new_rlim->rlim_cur == 0) {
+			/*
+			 * The caller is asking for an immediate RLIMIT_CPU
+			 * expiry.  But we use the zero value to mean "it was
+			 * never set".  So let's cheat and make it one second
+			 * instead
+			 */
 			new_rlim->rlim_cur = 1;
 		}
 	}
@@ -1355,6 +1470,12 @@ int do_prlimit(struct task_struct *tsk, unsigned int resource,
 	}
 	task_unlock(tsk->group_leader);
 
+	/*
+	 * RLIMIT_CPU handling.   Note that the kernel fails to return an error
+	 * code if it rejected the user's attempt to set RLIMIT_CPU.  This is a
+	 * very long-standing error, and fixing it now risks breakage of
+	 * applications, so we live with it
+	 */
 	 if (!retval && new_rlim && resource == RLIMIT_CPU &&
 			 new_rlim->rlim_cur != RLIM_INFINITY)
 		update_rlimit_cpu(tsk, new_rlim->rlim_cur);
@@ -1363,6 +1484,7 @@ out:
 	return retval;
 }
 
+/* rcu lock must be held */
 static int check_prlimit_permission(struct task_struct *task)
 {
 	const struct cred *cred = current_cred(), *tcred;
@@ -1436,6 +1558,38 @@ SYSCALL_DEFINE2(setrlimit, unsigned int, resource, struct rlimit __user *, rlim)
 	return do_prlimit(current, resource, &new_rlim, NULL);
 }
 
+/*
+ * It would make sense to put struct rusage in the task_struct,
+ * except that would make the task_struct be *really big*.  After
+ * task_struct gets moved into malloc'ed memory, it would
+ * make sense to do this.  It will make moving the rest of the information
+ * a lot simpler!  (Which we're not doing right now because we're not
+ * measuring them yet).
+ *
+ * When sampling multiple threads for RUSAGE_SELF, under SMP we might have
+ * races with threads incrementing their own counters.  But since word
+ * reads are atomic, we either get new values or old values and we don't
+ * care which for the sums.  We always take the siglock to protect reading
+ * the c* fields from p->signal from races with exit.c updating those
+ * fields when reaping, so a sample either gets all the additions of a
+ * given child after it's reaped, or none so this sample is before reaping.
+ *
+ * Locking:
+ * We need to take the siglock for CHILDEREN, SELF and BOTH
+ * for  the cases current multithreaded, non-current single threaded
+ * non-current multithreaded.  Thread traversal is now safe with
+ * the siglock held.
+ * Strictly speaking, we donot need to take the siglock if we are current and
+ * single threaded,  as no one else can take our signal_struct away, no one
+ * else can  reap the  children to update signal->c* counters, and no one else
+ * can race with the signal-> fields. If we do not take any lock, the
+ * signal-> fields could be read out of order while another thread was just
+ * exiting. So we should  place a read memory barrier when we avoid the lock.
+ * On the writer side,  write memory barrier is implied in  __exit_signal
+ * as __exit_signal releases  the siglock spinlock after updating the signal->
+ * fields. But we don't do this yet to keep things simple.
+ *
+ */
 
 static void accumulate_thread_rusage(struct task_struct *t, struct rusage *r)
 {
@@ -1518,7 +1672,7 @@ out:
 			mmput(mm);
 		}
 	}
-	r->ru_maxrss = maxrss * (PAGE_SIZE / 1024); 
+	r->ru_maxrss = maxrss * (PAGE_SIZE / 1024); /* convert pages to KBs */
 }
 
 int getrusage(struct task_struct *p, int who, struct rusage __user *ru)
@@ -1566,7 +1720,7 @@ static int prctl_set_mm(int opt, unsigned long addr,
 	vma = find_vma(mm, addr);
 
 	if (opt != PR_SET_MM_START_BRK && opt != PR_SET_MM_BRK) {
-		
+		/* It must be existing VMA */
 		if (!vma || vma->vm_start > addr)
 			goto out;
 	}
@@ -1652,7 +1806,7 @@ out:
 
 	return error;
 }
-#else 
+#else /* CONFIG_CHECKPOINT_RESTORE */
 static int prctl_set_mm(int opt, unsigned long addr,
 			unsigned long arg4, unsigned long arg5)
 {
@@ -1846,6 +2000,13 @@ static void argv_cleanup(struct subprocess_info *info)
 	argv_free(info->argv);
 }
 
+/**
+ * orderly_poweroff - Trigger an orderly system poweroff
+ * @force: force poweroff if command execution fails
+ *
+ * This may be called from any context to trigger a system shutdown.
+ * If the orderly shutdown fails, it will force an immediate shutdown.
+ */
 int orderly_poweroff(bool force)
 {
 	int argc;
@@ -1879,6 +2040,9 @@ int orderly_poweroff(bool force)
 		printk(KERN_WARNING "Failed to start orderly shutdown: "
 		       "forcing the issue\n");
 
+		/* I guess this should try to kick off some daemon to
+		   sync and poweroff asap.  Or not even bother syncing
+		   if we're doing an emergency shutdown? */
 		emergency_sync();
 		kernel_power_off();
 	}

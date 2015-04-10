@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -26,8 +26,8 @@
 #else
 #include <linux/time.h>
 #endif
-
 #include <linux/ion.h>
+
 #define MSM_CAM_IOCTL_MAGIC 'm'
 
 #define MSM_CAM_IOCTL_GET_SENSOR_INFO \
@@ -1780,4 +1780,4 @@ struct msm_ver_num_info {
         uint32_t rev;
 };
 
-#endif 
+#endif /* __LINUX_MSM_CAMERA_H */

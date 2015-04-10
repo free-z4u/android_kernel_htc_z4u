@@ -31,19 +31,59 @@
 
 #include "sched.h"
 
+/*
+ * Targeted preemption latency for CPU-bound tasks:
+ * (default: 6ms * (1 + ilog(ncpus)), units: nanoseconds)
+ *
+ * NOTE: this latency value is not the same as the concept of
+ * 'timeslice length' - timeslices in CFS are of variable length
+ * and have no persistent notion like in traditional, time-slice
+ * based scheduling concepts.
+ *
+ * (to see the precise effective timeslice length of your workload,
+ *  run vmstat and monitor the context-switches (cs) field)
+ */
 unsigned int sysctl_sched_latency = 6000000ULL;
 unsigned int normalized_sysctl_sched_latency = 6000000ULL;
 
+/*
+ * The initial- and re-scaling of tunables is configurable
+ * (default SCHED_TUNABLESCALING_LOG = *(1+ilog(ncpus))
+ *
+ * Options are:
+ * SCHED_TUNABLESCALING_NONE - unscaled, always *1
+ * SCHED_TUNABLESCALING_LOG - scaled logarithmical, *1+ilog(ncpus)
+ * SCHED_TUNABLESCALING_LINEAR - scaled linear, *ncpus
+ */
 enum sched_tunable_scaling sysctl_sched_tunable_scaling
 	= SCHED_TUNABLESCALING_LOG;
 
+/*
+ * Minimal preemption granularity for CPU-bound tasks:
+ * (default: 0.75 msec * (1 + ilog(ncpus)), units: nanoseconds)
+ */
 unsigned int sysctl_sched_min_granularity = 750000ULL;
 unsigned int normalized_sysctl_sched_min_granularity = 750000ULL;
 
+/*
+ * is kept at sysctl_sched_latency / sysctl_sched_min_granularity
+ */
 static unsigned int sched_nr_latency = 8;
 
+/*
+ * After fork, child runs first. If set to 0 (default) then
+ * parent will (try to) run first.
+ */
 unsigned int sysctl_sched_child_runs_first __read_mostly;
 
+/*
+ * SCHED_OTHER wake-up granularity.
+ * (default: 1 msec * (1 + ilog(ncpus)), units: nanoseconds)
+ *
+ * This option delays the preemption effects of decoupled workloads
+ * and reduces their over-scheduling. Synchronous workloads will still
+ * have immediate wakeup/sleep latencies.
+ */
 unsigned int __read_mostly sysctl_sched_wake_to_idle;
 
 unsigned int sysctl_sched_wakeup_granularity = 1000000UL;
@@ -3947,8 +3987,11 @@ static void rq_offline_fair(struct rq *rq)
 	unthrottle_offline_cfs_rqs(rq);
 }
 
-#endif 
+#endif /* CONFIG_SMP */
 
+/*
+ * scheduler tick hitting a task of our scheduling class:
+ */
 static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
 {
 	struct cfs_rq *cfs_rq;
@@ -3960,6 +4003,11 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
 	}
 }
 
+/*
+ * called on fork with the child task as argument from the parent's context
+ *  - child not yet on the tasklist
+ *  - preemption disabled
+ */
 static void task_fork_fair(struct task_struct *p)
 {
 	struct cfs_rq *cfs_rq;
@@ -3988,6 +4036,10 @@ static void task_fork_fair(struct task_struct *p)
 	place_entity(cfs_rq, se, 1);
 
 	if (sysctl_sched_child_runs_first && curr && entity_before(curr, se)) {
+		/*
+		 * Upon rescheduling, sched_class::put_prev_task() will place
+		 * 'current' within the tree based on its new key value.
+		 */
 		swap(curr->vruntime, se->vruntime);
 		resched_task(rq->curr);
 	}
@@ -3997,12 +4049,21 @@ static void task_fork_fair(struct task_struct *p)
 	raw_spin_unlock_irqrestore(&rq->lock, flags);
 }
 
+/*
+ * Priority of the task has changed. Check to see if we preempt
+ * the current task.
+ */
 static void
 prio_changed_fair(struct rq *rq, struct task_struct *p, int oldprio)
 {
 	if (!p->se.on_rq)
 		return;
 
+	/*
+	 * Reschedule if we are currently running on this runqueue and
+	 * our priority decreased, or if we are not currently running on
+	 * this runqueue and our priority is higher than the current's
+	 */
 	if (rq->curr == p) {
 		if (p->prio > oldprio)
 			resched_task(rq->curr);
@@ -4015,23 +4076,49 @@ static void switched_from_fair(struct rq *rq, struct task_struct *p)
 	struct sched_entity *se = &p->se;
 	struct cfs_rq *cfs_rq = cfs_rq_of(se);
 
+	/*
+	 * Ensure the task's vruntime is normalized, so that when its
+	 * switched back to the fair class the enqueue_entity(.flags=0) will
+	 * do the right thing.
+	 *
+	 * If it was on_rq, then the dequeue_entity(.flags=0) will already
+	 * have normalized the vruntime, if it was !on_rq, then only when
+	 * the task is sleeping will it still have non-normalized vruntime.
+	 */
 	if (!se->on_rq && p->state != TASK_RUNNING) {
+		/*
+		 * Fix up our vruntime so that the current sleep doesn't
+		 * cause 'unlimited' sleep bonus.
+		 */
 		place_entity(cfs_rq, se, 0);
 		se->vruntime -= cfs_rq->min_vruntime;
 	}
 }
 
+/*
+ * We switched to the sched_fair class.
+ */
 static void switched_to_fair(struct rq *rq, struct task_struct *p)
 {
 	if (!p->se.on_rq)
 		return;
 
+	/*
+	 * We were most likely switched from sched_rt, so
+	 * kick off the schedule if running, otherwise just see
+	 * if we can still preempt the current task.
+	 */
 	if (rq->curr == p)
 		resched_task(rq->curr);
 	else
 		check_preempt_curr(rq, p, 0);
 }
 
+/* Account for a task changing its policy or group.
+ *
+ * This routine is mostly called to set cfs_rq->curr field when a task
+ * migrates between groups/classes.
+ */
 static void set_curr_task_fair(struct rq *rq)
 {
 	struct sched_entity *se = &rq->curr->se;
@@ -4040,7 +4127,7 @@ static void set_curr_task_fair(struct rq *rq)
 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
 
 		set_next_entity(cfs_rq, se);
-		
+		/* ensure bandwidth has been allocated on our new cfs_rq */
 		account_cfs_rq_runtime(cfs_rq, 0);
 	}
 }
@@ -4057,6 +4144,31 @@ void init_cfs_rq(struct cfs_rq *cfs_rq)
 #ifdef CONFIG_FAIR_GROUP_SCHED
 static void task_move_group_fair(struct task_struct *p, int on_rq)
 {
+	/*
+	 * If the task was not on the rq at the time of this cgroup movement
+	 * it must have been asleep, sleeping tasks keep their ->vruntime
+	 * absolute on their old rq until wakeup (needed for the fair sleeper
+	 * bonus in place_entity()).
+	 *
+	 * If it was on the rq, we've just 'preempted' it, which does convert
+	 * ->vruntime to a relative base.
+	 *
+	 * Make sure both cases convert their relative position when migrating
+	 * to another cgroup's rq. This does somewhat interfere with the
+	 * fair sleeper stuff for the first placement, but who cares.
+	 */
+	/*
+	 * When !on_rq, vruntime of the task has usually NOT been normalized.
+	 * But there are some cases where it has already been normalized:
+	 *
+	 * - Moving a forked child which is waiting for being woken up by
+	 *   wake_up_new_task().
+	 * - Moving a task which has been woken up by try_to_wake_up() and
+	 *   waiting for actually being woken up by sched_ttwu_pending().
+	 *
+	 * To prevent boost or penalty in the new cfs_rq caused by delta
+	 * min_vruntime between the two cfs_rqs, we skip vruntime adjustment.
+	 */
 	if (!on_rq && (!p->se.sum_exec_runtime || p->state == TASK_WAKING))
 		on_rq = 1;
 
@@ -4129,6 +4241,10 @@ void unregister_fair_sched_group(struct task_group *tg, int cpu)
 	struct rq *rq = cpu_rq(cpu);
 	unsigned long flags;
 
+	/*
+	* Only empty task groups can be destroyed; so we can speculatively
+	* check on_list without danger of it being re-added.
+	*/
 	if (!tg->cfs_rq[cpu]->on_list)
 		return;
 
@@ -4146,7 +4262,7 @@ void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
 	cfs_rq->tg = tg;
 	cfs_rq->rq = rq;
 #ifdef CONFIG_SMP
-	
+	/* allow initial update_cfs_load() to truncate */
 	cfs_rq->load_stamp = 1;
 #endif
 	init_cfs_rq_runtime(cfs_rq);
@@ -4154,7 +4270,7 @@ void init_tg_cfs_entry(struct task_group *tg, struct cfs_rq *cfs_rq,
 	tg->cfs_rq[cpu] = cfs_rq;
 	tg->se[cpu] = se;
 
-	
+	/* se could be NULL for root_task_group */
 	if (!se)
 		return;
 
@@ -4175,6 +4291,9 @@ int sched_group_set_shares(struct task_group *tg, unsigned long shares)
 	int i;
 	unsigned long flags;
 
+	/*
+	 * We can't change the weight of the root cgroup.
+	 */
 	if (!tg->se[0])
 		return -EINVAL;
 
@@ -4190,7 +4309,7 @@ int sched_group_set_shares(struct task_group *tg, unsigned long shares)
 		struct sched_entity *se;
 
 		se = tg->se[i];
-		
+		/* Propagate contribution to hierarchy */
 		raw_spin_lock_irqsave(&rq->lock, flags);
 		for_each_sched_entity(se)
 			update_cfs_shares(group_cfs_rq(se));
@@ -4201,7 +4320,7 @@ done:
 	mutex_unlock(&shares_mutex);
 	return 0;
 }
-#else 
+#else /* CONFIG_FAIR_GROUP_SCHED */
 
 void free_fair_sched_group(struct task_group *tg) { }
 
@@ -4212,7 +4331,7 @@ int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
 
 void unregister_fair_sched_group(struct task_group *tg, int cpu) { }
 
-#endif 
+#endif /* CONFIG_FAIR_GROUP_SCHED */
 
 
 static unsigned int get_rr_interval_fair(struct rq *rq, struct task_struct *task)
@@ -4220,12 +4339,19 @@ static unsigned int get_rr_interval_fair(struct rq *rq, struct task_struct *task
 	struct sched_entity *se = &task->se;
 	unsigned int rr_interval = 0;
 
+	/*
+	 * Time slice is 0 for SCHED_OTHER tasks that are on an otherwise
+	 * idle runqueue:
+	 */
 	if (rq->cfs.load.weight)
 		rr_interval = NS_TO_JIFFIES(sched_slice(&rq->cfs, se));
 
 	return rr_interval;
 }
 
+/*
+ * All the scheduling class methods:
+ */
 const struct sched_class fair_sched_class = {
 	.next			= &idle_sched_class,
 	.enqueue_task		= enqueue_task_fair,
@@ -4284,6 +4410,6 @@ __init void init_sched_fair_class(void)
 	zalloc_cpumask_var(&nohz.idle_cpus_mask, GFP_NOWAIT);
 	cpu_notifier(sched_ilb_notifier, 0);
 #endif
-#endif 
+#endif /* SMP */
 
 }

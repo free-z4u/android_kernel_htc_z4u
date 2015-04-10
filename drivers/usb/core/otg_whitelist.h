@@ -42,6 +42,7 @@ static struct usb_device_id whitelist_table [] = {
 /* gadget zero, for testing */
 { USB_DEVICE(0x0525, 0xa4a0), },
 #endif
+
 { USB_DEVICE_CLASS_INFO(USB_CLASS_AUDIO), },
 { USB_INTERFACE_CLASS_INFO(USB_CLASS_AUDIO), },
 { USB_DEVICE_CLASS_INFO(USB_CLASS_HID), },

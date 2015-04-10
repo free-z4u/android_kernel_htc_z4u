@@ -173,6 +173,8 @@ int __devinit msm_pm_boot_init(struct msm_pm_boot_platform_data *pdata)
 			 * On 8625 while cores coming out of GDFS observed
 			 * the memory corruption at very first memory read.
 			 */
+
+			/* ldr r0, 0x34 */
 			msm_pm_reset_vector[0] = 0xE59F000C; /* ldr r0, 0x14 */
 			msm_pm_reset_vector[1] = 0xE59F1008; /* ldr r1, 0x14 */
 			msm_pm_reset_vector[2] = 0xE1500001; /* cmp r0, r1 */

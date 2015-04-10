@@ -5,7 +5,7 @@
  * Copyright (C) 2008 by David Brownell
  * Copyright (C) 2008 by Nokia Corporation
  * Copyright (C) 2009 by Samsung Electronics
- * Copyright (c) 2011 Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2011 The Linux Foundation. All rights reserved.
  * Author: Michal Nazarewicz (mina86@mina86.com)
  *
  * This software is distributed under the terms of the GNU General
@@ -13,6 +13,7 @@
  * either version 2 of that License or (at your option) any later version.
  */
 
+/* #define VERBOSE_DEBUG */
 
 #include <linux/slab.h>
 #include <linux/kernel.h>
@@ -24,6 +25,22 @@
 #include "gadget_chips.h"
 
 
+/*
+ * This CDC ACM function support just wraps control functions and
+ * notifications around the generic serial-over-usb code.
+ *
+ * Because CDC ACM is standardized by the USB-IF, many host operating
+ * systems have drivers for it.  Accordingly, ACM is the preferred
+ * interop solution for serial-port type connections.  The control
+ * models are often not necessary, and in any case don't do much in
+ * this bare-bones implementation.
+ *
+ * Note that even MS-Windows has some support for ACM.  However, that
+ * support is somewhat broken because when you use ACM in a composite
+ * device, having multiple interfaces confuses the poor OS.  It doesn't
+ * seem to understand CDC Union descriptors.  The new "association"
+ * descriptors (roughly equivalent to CDC Unions) may sometimes help.
+ */
 
 struct f_acm {
 	struct gserial			port;
@@ -33,19 +50,23 @@ struct f_acm {
 
 	u8				pending;
 
+	/* lock is mostly for pending and notify_req ... they get accessed
+	 * by callbacks both from tty (open/close/break) under its spinlock,
+	 * and notify_req.complete() which can't use that lock.
+	 */
 	spinlock_t			lock;
 
 	struct usb_ep			*notify;
 	struct usb_request		*notify_req;
 
-	struct usb_cdc_line_coding	port_line_coding;	
+	struct usb_cdc_line_coding	port_line_coding;	/* 8-N-1 etc */
 
-	
+	/* SetControlLineState request -- CDC 1.1 section 6.2.14 (INPUT) */
 	u16				port_handshake_bits;
-#define ACM_CTRL_RTS	(1 << 1)	
-#define ACM_CTRL_DTR	(1 << 0)	
+#define ACM_CTRL_RTS	(1 << 1)	/* unused with full duplex */
+#define ACM_CTRL_DTR	(1 << 0)	/* host is ready for data r/w */
 
-	
+	/* SerialState notification -- CDC 1.1 section 6.3.5 (OUTPUT) */
 	u16				serial_state;
 #define ACM_CTRL_OVERRUN	(1 << 6)
 #define ACM_CTRL_PARITY		(1 << 5)
@@ -55,6 +76,7 @@ struct f_acm {
 #define ACM_CTRL_DSR		(1 << 1)
 #define ACM_CTRL_DCD		(1 << 0)
 };
+
 static struct f_acm *_f_acm;
 static inline struct f_acm *func_to_acm(struct usb_function *f)
 {

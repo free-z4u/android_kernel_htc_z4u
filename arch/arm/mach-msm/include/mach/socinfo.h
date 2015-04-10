@@ -1,4 +1,4 @@
-/* Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -318,6 +318,7 @@ static inline int cpu_is_msm8930aa(void)
 
 static inline int cpu_is_msm8627(void)
 {
+/* 8930 and 8627 will share the same CONFIG_ARCH type unless otherwise needed */
 #ifdef CONFIG_ARCH_MSM8930
 	return read_msm_cpu_type() == MSM_CPU_8627;
 #else

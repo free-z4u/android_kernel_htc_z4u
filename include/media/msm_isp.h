@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -15,6 +15,7 @@
 
 #define BIT(nr)			(1UL << (nr))
 
+/* ISP message IDs */
 #define MSG_ID_RESET_ACK                0
 #define MSG_ID_START_ACK                1
 #define MSG_ID_STOP_ACK                 2
@@ -336,5 +337,5 @@ struct msm_mctl_pp_frame_cmd {
 #define VFE_OUTPUTS_JPEG_AND_THUMB	BIT(9)
 #define VFE_OUTPUTS_THUMB_AND_JPEG	BIT(10)
 
-#endif 
+#endif /*__MSM_ISP_H__*/
 

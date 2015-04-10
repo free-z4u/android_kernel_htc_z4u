@@ -18,6 +18,7 @@
 #include <linux/mm.h>
 #include <linux/sched.h>
 #include <linux/file.h>
+
 #include <linux/slab.h>
 
 #include <media/videobuf2-core.h>
@@ -161,6 +162,10 @@ static void vb2_common_vm_close(struct vm_area_struct *vma)
 	h->put(h->arg);
 }
 
+/**
+ * vb2_common_vm_ops - common vm_ops used for tracking refcount of mmaped
+ * video buffers
+ */
 const struct vm_operations_struct vb2_common_vm_ops = {
 	.open = vb2_common_vm_open,
 	.close = vb2_common_vm_close,

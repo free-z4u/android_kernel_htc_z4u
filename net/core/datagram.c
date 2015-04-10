@@ -163,6 +163,9 @@ struct sk_buff *__skb_recv_datagram(struct sock *sk, unsigned flags,
 {
 	struct sk_buff *skb;
 	long timeo;
+	/*
+	 * Caller is allowed not to check sk->sk_err before skb_recv_datagram()
+	 */
 	int error = 0;
 	
 	if ((!sk) || (IS_ERR(sk)))

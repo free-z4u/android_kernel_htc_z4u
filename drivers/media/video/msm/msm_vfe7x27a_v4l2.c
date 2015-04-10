@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -30,6 +30,7 @@
 #include "msm_vfe7x27a_v4l2.h"
 #include "msm.h"
 
+/* ADSP Messages */
 #define MSG_RESET_ACK  0
 #define MSG_STOP_ACK  1
 #define MSG_SNAPSHOT  2
@@ -65,10 +66,12 @@
 #define QDSP_SCALEQUEUE 26
 #define QDSP_TABLEQUEUE 27
 
+/* ADSP Scler queue Cmd IDs */
 #define VFE_SCALE_OUTPUT1_CONFIG  0
 #define VFE_SCALE_OUTPUT2_CONFIG  1
 #define VFE_SCALE_MAX  0xFFFFFFFF
 
+/* ADSP table queue Cmd IDs */
 #define VFE_AXI_INPUT_CONFIG  0
 #define VFE_AXI_OUTPUT_CONFIG  1
 #define VFE_RGB_GAMMA_CONFIG  2
@@ -79,6 +82,7 @@
 #define VFE_DEMOSAICv3_CFG  8
 #define VFE_MAX  0xFFFFFFFF
 
+/* ADSP cfg queue cmd IDs */
 #define VFE_RESET  0
 #define VFE_START  1
 #define VFE_STOP  2

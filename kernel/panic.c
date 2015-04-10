@@ -4,6 +4,10 @@
  *  Copyright (C) 1991, 1992  Linus Torvalds
  */
 
+/*
+ * This function is used through-out the kernel (including mm and fs)
+ * to indicate a major problem.
+ */
 #include <linux/debug_locks.h>
 #include <linux/interrupt.h>
 #include <linux/kmsg_dump.h>
@@ -23,6 +27,7 @@
 #define PANIC_TIMER_STEP 100
 #define PANIC_BLINK_SPD 18
 
+/* Machine specific panic information string */
 char *mach_panic_string;
 
 int panic_on_oops;
@@ -46,9 +51,13 @@ static long no_blink(int state)
 	return 0;
 }
 
+/* Returns how long it waited in ms */
 long (*panic_blink)(int state);
 EXPORT_SYMBOL(panic_blink);
 
+/*
+ * Stop ourself in panic -- architecture code may override this
+ */
 void __weak panic_smp_self_stop(void)
 {
 	while (1)
@@ -131,6 +140,10 @@ void panic(const char *fmt, ...)
 	dump_mem("dump", "virt_start_ptr ", (unsigned int)virt_start_ptr, 0x200);
 
 	if (panic_timeout > 0) {
+		/*
+		 * Delay timeout seconds before rebooting the machine.
+		 * We can't use the "normal" timers since we just panicked.
+		 */
 		printk(KERN_EMERG "Rebooting in %d seconds..", panic_timeout);
 
 		for (i = 0; i < panic_timeout * 1000; i += PANIC_TIMER_STEP) {
@@ -143,12 +156,17 @@ void panic(const char *fmt, ...)
 		}
 	}
 	if (panic_timeout != 0) {
+		/*
+		 * This will not be a clean reboot, with everything
+		 * shutting down.  But if there is a chance of
+		 * rebooting the system it will be rebooted.
+		 */
 		emergency_restart();
 	}
 #ifdef __sparc__
 	{
 		extern int stop_a_enabled;
-		
+		/* Make sure the user can actually press Stop-A (L1-A) */
 		stop_a_enabled = 1;
 		printk(KERN_EMERG "Press Stop-A (L1-A) to return to the boot prom\n");
 	}
@@ -250,6 +268,13 @@ unsigned long get_taint(void)
 
 void add_taint(unsigned flag)
 {
+	/*
+	 * Can't trust the integrity of the kernel anymore.
+	 * We don't call directly debug_locks_off() because the issue
+	 * is not necessarily serious enough to set oops_in_progress to 1
+	 * Also we want to keep up lockdep for staging/out-of-tree
+	 * development and post-warning case.
+	 */
 	switch (flag) {
 	case TAINT_CRAP:
 	case TAINT_OOT_MODULE:
@@ -276,6 +301,10 @@ static void spin_msec(int msecs)
 	}
 }
 
+/*
+ * It just happens that oops_enter() and oops_exit() are identically
+ * implemented...
+ */
 static void do_oops_enter_exit(void)
 {
 	unsigned long flags;
@@ -286,12 +315,12 @@ static void do_oops_enter_exit(void)
 
 	spin_lock_irqsave(&pause_on_oops_lock, flags);
 	if (pause_on_oops_flag == 0) {
-		
+		/* This CPU may now print the oops message */
 		pause_on_oops_flag = 1;
 	} else {
-		
+		/* We need to stall this CPU */
 		if (!spin_counter) {
-			
+			/* This CPU gets to do the counting */
 			spin_counter = pause_on_oops;
 			do {
 				spin_unlock(&pause_on_oops_lock);
@@ -300,7 +329,7 @@ static void do_oops_enter_exit(void)
 			} while (--spin_counter);
 			pause_on_oops_flag = 0;
 		} else {
-			
+			/* This CPU waits for a different one */
 			while (spin_counter) {
 				spin_unlock(&pause_on_oops_lock);
 				spin_msec(1);
@@ -311,19 +340,40 @@ static void do_oops_enter_exit(void)
 	spin_unlock_irqrestore(&pause_on_oops_lock, flags);
 }
 
+/*
+ * Return true if the calling CPU is allowed to print oops-related info.
+ * This is a bit racy..
+ */
 int oops_may_print(void)
 {
 	return pause_on_oops_flag == 0;
 }
 
+/*
+ * Called when the architecture enters its oops handler, before it prints
+ * anything.  If this is the first CPU to oops, and it's oopsing the first
+ * time then let it proceed.
+ *
+ * This is all enabled by the pause_on_oops kernel boot option.  We do all
+ * this to ensure that oopses don't scroll off the screen.  It has the
+ * side-effect of preventing later-oopsing CPUs from mucking up the display,
+ * too.
+ *
+ * It turns out that the CPU which is allowed to print ends up pausing for
+ * the right duration, whereas all the other CPUs pause for twice as long:
+ * once in oops_enter(), once in oops_exit().
+ */
 void oops_enter(void)
 {
 	tracing_off();
-	
+	/* can't trust the integrity of the kernel anymore: */
 	debug_locks_off();
 	do_oops_enter_exit();
 }
 
+/*
+ * 64-bit random ID for oopses:
+ */
 static u64 oops_id;
 
 static int init_oops_id(void)
@@ -349,6 +399,10 @@ void print_oops_end_marker(void)
 		(unsigned long long)oops_id);
 }
 
+/*
+ * Called when the architecture exits its oops handler, after printing
+ * everything.
+ */
 void oops_exit(void)
 {
 	do_oops_enter_exit();
@@ -417,6 +471,10 @@ EXPORT_SYMBOL(warn_slowpath_null);
 
 #ifdef CONFIG_CC_STACKPROTECTOR
 
+/*
+ * Called when gcc's -fstack-protector feature is used, and
+ * gcc detects corruption of the on-stack canary value
+ */
 void __stack_chk_fail(void)
 {
 	panic("stack-protector: Kernel stack is corrupted in: %p\n",

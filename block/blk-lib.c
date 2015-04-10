@@ -115,13 +115,16 @@ int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
 EXPORT_SYMBOL(blkdev_issue_discard);
 
 /**
- * blkdev_issue_sanitize - queue a sanitize request
- * @bdev:	blockdev to issue sanitize for
+ * blkdev_issue_zeroout - generate number of zero filed write bios
+ * @bdev:	blockdev to issue
+ * @sector:	start sector
+ * @nr_sects:	number of sectors to write
  * @gfp_mask:	memory allocation flags (for bio_alloc)
  *
  * Description:
- *    Issue a sanitize request for the specified block device
+ *  Generate and issue number of bios with zerofiled pages.
  */
+
 int blkdev_issue_sanitize(struct block_device *bdev, gfp_t gfp_mask)
 {
 	DECLARE_COMPLETION_ONSTACK(wait);

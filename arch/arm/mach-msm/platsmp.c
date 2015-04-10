@@ -230,9 +230,12 @@ int __cpuinit boot_secondary(unsigned int cpu, struct task_struct *idle)
 
 	return pen_release != -1 ? -ENOSYS : 0;
 }
+
 /*
  * Initialise the CPU possible map early - this describes the CPUs
- * which may be present or become present in the system.
+ * which may be present or become present in the system. The msm8x60
+ * does not support the ARM SCU, so just set the possible cpu mask to
+ * NR_CPUS.
  */
 void __init smp_init_cpus(void)
 {
@@ -247,7 +250,7 @@ void __init smp_init_cpus(void)
 	for (i = 0; i < ncores; i++)
 		set_cpu_possible(i, true);
 
-	set_smp_cross_call(gic_raise_softirq);
+        set_smp_cross_call(gic_raise_softirq);
 }
 
 void __init platform_smp_prepare_cpus(unsigned int max_cpus)

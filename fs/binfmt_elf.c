@@ -1105,6 +1105,9 @@ static bool always_dump_vma(struct vm_area_struct *vma)
 	return false;
 }
 
+/*
+ * Decide what to dump of a segment, part, all or none.
+ */
 static int is_dex(struct vm_area_struct *vma);
 
 /*

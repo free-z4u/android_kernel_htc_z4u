@@ -5713,6 +5713,9 @@ static int __alloc_contig_migrate_range(unsigned long start, unsigned long end)
 	return ret > 0 ? 0 : ret;
 }
 
+/*
+ * Update zone's cma pages counter used for watermark level calculation.
+ */
 static inline void __update_cma_watermarks(struct zone *zone, int count)
 {
 	unsigned long flags;
@@ -5722,6 +5725,11 @@ static inline void __update_cma_watermarks(struct zone *zone, int count)
 	setup_per_zone_wmarks();
 }
 
+/*
+ * Trigger memory pressure bump to reclaim some pages in order to be able to
+ * allocate 'count' pages in single page units. Does similar work as
+ *__alloc_pages_slowpath() function.
+ */
 static int __reclaim_pages(struct zone *zone, gfp_t gfp_mask, int count)
 {
 	enum zone_type high_zoneidx = gfp_zone(gfp_mask);
@@ -5729,26 +5737,50 @@ static int __reclaim_pages(struct zone *zone, gfp_t gfp_mask, int count)
 	int did_some_progress = 0;
 	int order = 1;
 
+	/*
+	 * Increase level of watermarks to force kswapd do his job
+	 * to stabilise at new watermark level.
+	 */
 	__update_cma_watermarks(zone, count);
 
-	
+	/* Obey watermarks as if the page was being allocated */
 	while (!zone_watermark_ok(zone, 0, low_wmark_pages(zone), 0, 0)) {
 		wake_all_kswapd(order, zonelist, high_zoneidx, zone_idx(zone));
 
 		did_some_progress = __perform_reclaim(gfp_mask, order, zonelist,
 						      NULL);
 		if (!did_some_progress) {
-			
+			/* Exhausted what can be done so it's blamo time */
 			out_of_memory(zonelist, gfp_mask, order, NULL, false);
 		}
 	}
 
-	
+	/* Restore original watermark levels. */
 	__update_cma_watermarks(zone, -count);
 
 	return count;
 }
 
+/**
+ * alloc_contig_range() -- tries to allocate given range of pages
+ * @start:	start PFN to allocate
+ * @end:	one-past-the-last PFN to allocate
+ * @migratetype:	migratetype of the underlaying pageblocks (either
+ *			#MIGRATE_MOVABLE or #MIGRATE_CMA).  All pageblocks
+ *			in range must have the same migratetype and it must
+ *			be either of the two.
+ *
+ * The PFN range does not have to be pageblock or MAX_ORDER_NR_PAGES
+ * aligned, however it's the caller's responsibility to guarantee that
+ * we are the only thread that changes migrate type of pageblocks the
+ * pages fall in.
+ *
+ * The PFN range must belong to a single zone.
+ *
+ * Returns zero on success or negative error code.  On success all
+ * pages which PFN is in [start, end) are allocated for the caller and
+ * need to be freed with free_contig_range().
+ */
 int alloc_contig_range(unsigned long start, unsigned long end,
 		       unsigned migratetype)
 {
@@ -5756,6 +5788,29 @@ int alloc_contig_range(unsigned long start, unsigned long end,
 	unsigned long outer_start, outer_end;
 	int ret = 0, order;
 
+	/*
+	 * What we do here is we mark all pageblocks in range as
+	 * MIGRATE_ISOLATE.  Because pageblock and max order pages may
+	 * have different sizes, and due to the way page allocator
+	 * work, we align the range to biggest of the two pages so
+	 * that page allocator won't try to merge buddies from
+	 * different pageblocks and change MIGRATE_ISOLATE to some
+	 * other migration type.
+	 *
+	 * Once the pageblocks are marked as MIGRATE_ISOLATE, we
+	 * migrate the pages from an unaligned range (ie. pages that
+	 * we are interested in).  This will put all the pages in
+	 * range back to page allocator as MIGRATE_ISOLATE.
+	 *
+	 * When this is done, we take the pages in range from page
+	 * allocator removing them from the buddy system.  This way
+	 * page allocator will never consider using them.
+	 *
+	 * This lets us mark the pageblocks back as
+	 * MIGRATE_CMA/MIGRATE_MOVABLE so that free pages in the
+	 * aligned range but not in the unaligned, original range are
+	 * put back to page allocator so that buddy can use them.
+	 */
 
 	ret = start_isolate_page_range(pfn_max_align_down(start),
 				       pfn_max_align_up(end), migratetype);
@@ -5766,6 +5821,22 @@ int alloc_contig_range(unsigned long start, unsigned long end,
 	if (ret)
 		goto done;
 
+	/*
+	 * Pages from [start, end) are within a MAX_ORDER_NR_PAGES
+	 * aligned blocks that are marked as MIGRATE_ISOLATE.  What's
+	 * more, all pages in [start, end) are free in page allocator.
+	 * What we are going to do is to allocate all pages from
+	 * [start, end) (that is remove them from page allocator).
+	 *
+	 * The only problem is that pages at the beginning and at the
+	 * end of interesting range may be not aligned with pages that
+	 * page allocator holds, ie. they can be part of higher order
+	 * pages.  Because of this, we reserve the bigger range and
+	 * once this is done free the pages we are not interested in.
+	 *
+	 * We don't have to hold zone->lock here because the pages are
+	 * isolated thus they won't get removed from buddy.
+	 */
 
 	lru_add_drain_all();
 	drain_all_pages();
@@ -5780,7 +5851,7 @@ int alloc_contig_range(unsigned long start, unsigned long end,
 		outer_start &= ~0UL << order;
 	}
 
-	
+	/* Make sure the range is really isolated. */
 	if (test_pages_isolated(outer_start, end)) {
 		pr_warn("alloc_contig_range test_pages_isolated(%lx, %lx) failed\n",
 		       outer_start, end);
@@ -5788,16 +5859,20 @@ int alloc_contig_range(unsigned long start, unsigned long end,
 		goto done;
 	}
 
+	/*
+	 * Reclaim enough pages to make sure that contiguous allocation
+	 * will not starve the system.
+	 */
 	__reclaim_pages(zone, GFP_HIGHUSER_MOVABLE, end-start);
 
-	
+	/* Grab isolated pages from freelists. */
 	outer_end = isolate_freepages_range(outer_start, end);
 	if (!outer_end) {
 		ret = -EBUSY;
 		goto done;
 	}
 
-	
+	/* Free head and tail (if any) */
 	if (start != outer_start)
 		free_contig_range(outer_start, start - outer_start);
 	if (end != outer_end)

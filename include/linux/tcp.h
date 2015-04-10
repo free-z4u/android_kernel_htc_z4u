@@ -68,7 +68,7 @@ union tcp_word_hdr {
 
 #define tcp_flag_word(tp) ( ((union tcp_word_hdr *)(tp))->words [3]) 
 
-enum {
+enum { 
 	TCP_FLAG_CWR = __constant_htonl(0x00800000),
 	TCP_FLAG_ECE = __constant_htonl(0x00400000),
 	TCP_FLAG_URG = __constant_htonl(0x00200000),

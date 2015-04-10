@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/smd_tty.c
  *
  * Copyright (C) 2007 Google, Inc.
- * Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -32,6 +32,7 @@
 #include <mach/msm_smd.h>
 #include <mach/peripheral-loader.h>
 #include <mach/socinfo.h>
+
 #include <mach/board_htc.h>
 
 #include "smd_private.h"
@@ -558,6 +559,9 @@ static int __init smd_tty_init(void)
 			legacy_ds |= cpu_is_msm7x27() || cpu_is_msm7x30() || cpu_is_msm8625();
 #endif
 			legacy_ds |= cpu_is_qsd8x50() || cpu_is_msm8x55();
+			/*
+			 * use legacy mode for 8660 Standalone (subtype 0)
+			 */
 			legacy_ds |= cpu_is_msm8x60() &&
 					(socinfo_get_platform_subtype() == 0x0);
 
@@ -568,7 +572,7 @@ static int __init smd_tty_init(void)
 		tty_register_device(smd_tty_driver, idx, 0);
 		init_completion(&smd_tty[idx].ch_allocated);
 
-		
+		/* register platform device */
 		smd_tty[idx].driver.probe = smd_tty_dummy_probe;
 		smd_tty[idx].driver.driver.name = smd_configs[n].dev_name;
 		smd_tty[idx].driver.driver.owner = THIS_MODULE;
@@ -590,7 +594,7 @@ static int __init smd_tty_init(void)
 	return 0;
 
 out:
-	
+	/* unregister platform devices */
 	for (n = 0; n < ARRAY_SIZE(smd_configs); ++n) {
 		idx = smd_configs[n].tty_dev_index;
 

@@ -735,7 +735,7 @@ int devinet_ioctl(struct net *net, unsigned int cmd, void __user *arg)
 	case SIOCSIFBRDADDR:	/* Set the broadcast address */
 	case SIOCSIFDSTADDR:	/* Set the destination address */
 	case SIOCSIFNETMASK: 	/* Set the netmask for the interface */
-	case SIOCKILLADDR:	
+	case SIOCKILLADDR:	/* Nuke all sockets on this address */
 		ret = -EACCES;
 		if (!capable(CAP_NET_ADMIN))
 			goto out;
@@ -768,7 +768,7 @@ int devinet_ioctl(struct net *net, unsigned int cmd, void __user *arg)
 			   This is checked above. */
 			for (ifap = &in_dev->ifa_list; (ifa = *ifap) != NULL;
 			     ifap = &ifa->ifa_next) {
-				 if(IS_ERR(ifa) || (!ifa)) {
+				if(IS_ERR(ifa) || (!ifa)) {
 				 	printk(KERN_ERR "[Devinet] ifa is NULL or out of range in %s!\n", __func__);
 					break; 
 				 }

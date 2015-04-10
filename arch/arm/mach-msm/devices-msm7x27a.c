@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -43,15 +43,18 @@
 #include "msm_cpr.h"
 #include "msm_smem_iface.h"
 
+/* Address of GSBI blocks */
 #define MSM_GSBI0_PHYS		0xA1200000
 #define MSM_GSBI1_PHYS		0xA1300000
 
+/* GSBI QUPe devices */
 #define MSM_GSBI0_QUP_PHYS	(MSM_GSBI0_PHYS + 0x80000)
 #define MSM_GSBI1_QUP_PHYS	(MSM_GSBI1_PHYS + 0x80000)
 
 #define A11S_TEST_BUS_SEL_ADDR (MSM_CSR_BASE + 0x518)
 #define RBCPR_CLK_MUX_SEL (1 << 13)
 
+/* Reset Address of RBCPR (Active Low)*/
 #define RBCPR_SW_RESET_N       (MSM_CSR_BASE + 0x64)
 #define RBCPR_SW_RESET_N_8625Q	(MSM_CSR_BASE + 0x28)
 
@@ -2225,8 +2228,8 @@ int __init msm7x2x_misc_init(void)
 		platform_device_register(&msm8625q_device_acpuclk);
 	} else if (cpu_is_msm8625()) {
 		if (0) {
-			msm_acpuclock_init(0);			
-			platform_device_register(&msm8625q_device_acpuclk);			
+			msm_acpuclock_init(0);
+			platform_device_register(&msm8625q_device_acpuclk);
 		} else if (msm8625_cpu_id() == MSM8625)
 			platform_device_register(&msm7x27aa_device_acpuclk);
 		else if (msm8625_cpu_id() == MSM8625A)
@@ -2237,6 +2240,9 @@ int __init msm7x2x_misc_init(void)
 		platform_device_register(&msm7x27a_device_acpuclk);
 	}
 
+	/*
+	 * Remove the memory block @ 0xFC00000 to log debug information
+	 */
 	msm_pm_memory_reserve();
 
 	if (cpu_is_msm8625q() || (cpu_is_msm8625() &&
@@ -2261,19 +2267,19 @@ static int __init msm7x27x_cache_init(void)
 	int aux_ctrl = 0;
 	int pctrl = 0;
 
-	
+	/* Way Size 010(0x2) 32KB */
 	aux_ctrl = (0x1 << L2X0_AUX_CTRL_SHARE_OVERRIDE_SHIFT) | \
 		   (0x2 << L2X0_AUX_CTRL_WAY_SIZE_SHIFT) | \
 		   (0x1 << L2X0_AUX_CTRL_EVNT_MON_BUS_EN_SHIFT);
 
 	if (cpu_is_msm8625() || cpu_is_msm8625q()) {
-		
+		/* Way Size 011(0x3) 64KB */
 		aux_ctrl |= (0x3 << L2X0_AUX_CTRL_WAY_SIZE_SHIFT) | \
 			    (0x1 << L2X0_AUX_CTRL_DATA_PREFETCH_SHIFT) | \
 			    (0X1 << L2X0_AUX_CTRL_INSTR_PREFETCH_SHIFT) | \
 			    (0x1 << L2X0_AUX_CTRL_L2_FORCE_NWA_SHIFT);
 
-		
+		/* Write Prefetch Control settings */
 		pctrl = readl_relaxed(MSM_L2CC_BASE + L2X0_PREFETCH_CTRL);
 		pctrl |= (0x3 << L2X0_PREFETCH_CTRL_OFFSET_SHIFT) | \
 			 (0x1 << L2X0_PREFETCH_CTRL_WRAP8_INC_SHIFT) | \

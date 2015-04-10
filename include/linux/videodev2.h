@@ -57,7 +57,7 @@
 #define __LINUX_VIDEODEV2_H
 
 #ifdef __KERNEL__
-#include <linux/time.h>     
+#include <linux/time.h>     /* need struct timeval */
 #else
 #include <sys/time.h>
 #endif
@@ -65,6 +65,10 @@
 #include <linux/ioctl.h>
 #include <linux/types.h>
 
+/*
+ * Common stuff for both V4L1 and V4L2
+ * Moved from videodev.h
+ */
 #define VIDEO_MAX_FRAME               64 
 #define VIDEO_MAX_PLANES               8
 
@@ -1819,6 +1823,6 @@ struct v4l2_create_buffers {
 #define VIDIOC_PREPARE_BUF	_IOWR('V', 93, struct v4l2_buffer)
 
 
-#define BASE_VIDIOC_PRIVATE	192		
+#define BASE_VIDIOC_PRIVATE	192		/* 192-255 are private */
 
-#endif 
+#endif /* __LINUX_VIDEODEV2_H */

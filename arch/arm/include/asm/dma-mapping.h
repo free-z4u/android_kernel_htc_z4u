@@ -14,6 +14,11 @@
 #error Please update to __arch_pfn_to_dma
 #endif
 
+/*
+ * dma_to_pfn/pfn_to_dma/dma_to_virt/virt_to_dma are architecture private
+ * functions used internally by the DMA-mapping API to provide DMA
+ * addresses. They must not be used by drivers.
+ */
 #ifndef __arch_pfn_to_dma
 static inline dma_addr_t pfn_to_dma(struct device *dev, unsigned long pfn)
 {
@@ -56,6 +61,20 @@ static inline dma_addr_t virt_to_dma(struct device *dev, void *addr)
 }
 #endif
 
+/*
+ * The DMA API is built upon the notion of "buffer ownership".  A buffer
+ * is either exclusively owned by the CPU (and therefore may be accessed
+ * by it) or exclusively owned by the DMA device.  These helper functions
+ * represent the transitions between these two ownership states.
+ *
+ * Note, however, that on later ARMs, this notion does not work due to
+ * speculative prefetches.  We model our approach on the assumption that
+ * the CPU does do speculative prefetches, which means we clean caches
+ * before transfers and delay cache invalidation until transfer completion.
+ *
+ * Private support functions: these are not part of the API and are
+ * liable to change.  Drivers must not use these.
+ */
 static inline void __dma_single_cpu_to_dev(const void *kaddr, size_t size,
 	enum dma_data_direction dir)
 {
@@ -99,11 +118,18 @@ static inline void __dma_page_dev_to_cpu(struct page *page, unsigned long off,
 extern int dma_supported(struct device *, u64);
 extern int dma_set_mask(struct device *, u64);
 
+/*
+ * DMA errors are defined by all-bits-set in the DMA address.
+ */
 static inline int dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
 {
 	return dma_addr == ~0;
 }
 
+/*
+ * Dummy noncoherent implementation.  We don't provide a dma_cache_sync
+ * function so drivers using this API are highlighted with build warnings.
+ */
 static inline void *dma_alloc_noncoherent(struct device *dev, size_t size,
 		dma_addr_t *handle, gfp_t gfp)
 {
@@ -312,6 +338,20 @@ static inline dma_addr_t dma_map_page(struct device *dev, struct page *page,
 	return addr;
 }
 
+/**
+ * dma_unmap_single - unmap a single buffer previously mapped
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @handle: DMA address of buffer
+ * @size: size of buffer (same as passed to dma_map_single)
+ * @dir: DMA transfer direction (same as passed to dma_map_single)
+ *
+ * Unmap a single streaming mode DMA translation.  The handle and size
+ * must match what was provided in the previous dma_map_single() call.
+ * All other usages are undefined.
+ *
+ * After this call, reads by the CPU to the buffer are guaranteed to see
+ * whatever the device wrote there.
+ */
 static inline void dma_unmap_single(struct device *dev, dma_addr_t handle,
 		size_t size, enum dma_data_direction dir)
 {
@@ -319,6 +359,20 @@ static inline void dma_unmap_single(struct device *dev, dma_addr_t handle,
 	__dma_unmap_page(dev, handle, size, dir);
 }
 
+/**
+ * dma_unmap_page - unmap a buffer previously mapped through dma_map_page()
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @handle: DMA address of buffer
+ * @size: size of buffer (same as passed to dma_map_page)
+ * @dir: DMA transfer direction (same as passed to dma_map_page)
+ *
+ * Unmap a page streaming mode DMA translation.  The handle and size
+ * must match what was provided in the previous dma_map_page() call.
+ * All other usages are undefined.
+ *
+ * After this call, reads by the CPU to the buffer are guaranteed to see
+ * whatever the device wrote there.
+ */
 static inline void dma_unmap_page(struct device *dev, dma_addr_t handle,
 		size_t size, enum dma_data_direction dir)
 {
@@ -326,6 +380,24 @@ static inline void dma_unmap_page(struct device *dev, dma_addr_t handle,
 	__dma_unmap_page(dev, handle, size, dir);
 }
 
+/**
+ * dma_sync_single_range_for_cpu
+ * @dev: valid struct device pointer, or NULL for ISA and EISA-like devices
+ * @handle: DMA address of buffer
+ * @offset: offset of region to start sync
+ * @size: size of region to sync
+ * @dir: DMA transfer direction (same as passed to dma_map_single)
+ *
+ * Make physical memory consistent for a single streaming mode DMA
+ * translation after a transfer.
+ *
+ * If you perform a dma_map_single() but wish to interrogate the
+ * buffer using the cpu, yet do not wish to teardown the PCI dma
+ * mapping, you must call this function before doing so.  At the
+ * next point you give the PCI dma address back to the card, you
+ * must first the perform a dma_sync_for_device, and then the
+ * device again owns the buffer.
+ */
 static inline void dma_sync_single_range_for_cpu(struct device *dev,
 		dma_addr_t handle, unsigned long offset, size_t size,
 		enum dma_data_direction dir)
@@ -366,6 +438,9 @@ static inline void dma_sync_single_for_device(struct device *dev,
 	dma_sync_single_range_for_device(dev, handle, 0, size, dir);
 }
 
+/*
+ * The scatter list versions of the above methods.
+ */
 extern int dma_map_sg(struct device *, struct scatterlist *, int,
 		enum dma_data_direction);
 extern void dma_unmap_sg(struct device *, struct scatterlist *, int,
@@ -376,5 +451,5 @@ extern void dma_sync_sg_for_device(struct device *, struct scatterlist *, int,
 		enum dma_data_direction);
 
 
-#endif 
+#endif /* __KERNEL__ */
 #endif

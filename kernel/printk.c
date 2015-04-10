@@ -294,16 +294,25 @@ static inline void boot_delay_msec(void)
 }
 #endif
 
+/*
+ * Return the number of unread characters in the log buffer.
+ */
 static int log_buf_get_len(void)
 {
 	return logged_chars;
 }
 
+/*
+ * Clears the ring-buffer
+ */
 void log_buf_clear(void)
 {
 	logged_chars = 0;
 }
 
+/*
+ * Copy a range of characters from the log buffer.
+ */
 int log_buf_copy(char *dest, int idx, int len)
 {
 	int ret, max;

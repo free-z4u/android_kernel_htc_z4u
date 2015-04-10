@@ -15,6 +15,8 @@
  *
  */
 
+/* #define DEBUG */
+/* #define VERBOSE_DEBUG */
 
 #include <linux/module.h>
 #include <linux/init.h>
@@ -37,25 +39,31 @@
 #define MTP_BULK_BUFFER_SIZE       16384
 #define INTR_BUFFER_SIZE           28
 
+/* String IDs */
 #define INTERFACE_STRING_INDEX	0
 
-#define STATE_OFFLINE               0   
-#define STATE_READY                 1   
-#define STATE_BUSY                  2   
-#define STATE_CANCELED              3   
-#define STATE_ERROR                 4   
+/* values for mtp_dev.state */
+#define STATE_OFFLINE               0   /* initial state, disconnected */
+#define STATE_READY                 1   /* ready for userspace calls */
+#define STATE_BUSY                  2   /* processing userspace calls */
+#define STATE_CANCELED              3   /* transaction canceled by host */
+#define STATE_ERROR                 4   /* error from completion routine */
 
+/* number of tx and rx requests to allocate */
 #define TX_REQ_MAX 4
 #define RX_REQ_MAX 2
 #define INTR_REQ_MAX 5
 
+/* ID for Microsoft MTP OS String */
 #define MTP_OS_STRING_ID   0xEE
 
+/* MTP class reqeusts */
 #define MTP_REQ_CANCEL              0x64
 #define MTP_REQ_GET_EXT_EVENT_DATA  0x65
 #define MTP_REQ_RESET               0x66
 #define MTP_REQ_GET_DEVICE_STATUS   0x67
 
+/* constants for device status */
 #define MTP_RESPONSE_OK             0x2001
 #define MTP_RESPONSE_DEVICE_BUSY    0x2019
 

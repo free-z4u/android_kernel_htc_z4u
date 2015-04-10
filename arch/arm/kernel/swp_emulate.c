@@ -174,6 +174,11 @@ static int emulate_swpX(unsigned int address, unsigned int *data,
 	return res;
 }
 
+/*
+ * swp_handler logs the id of calling process, dissects the instruction, sanity
+ * checks the memory location, calls emulate_swpX for the actual operation and
+ * deals with fixup/error handling before returning
+ */
 static int check_condition(struct pt_regs *regs, unsigned int insn)
 {
 	unsigned int base_cond, neg, cond = 0;

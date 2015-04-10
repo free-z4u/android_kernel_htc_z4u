@@ -134,6 +134,7 @@ isolate_migratepages_range(struct zone *zone, struct compact_control *cc,
 
 #endif
 
+
 /*
  * function for dealing with page's order in buddy system.
  * zone->lock is already acquired when we use these.

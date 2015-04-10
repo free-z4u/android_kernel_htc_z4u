@@ -51,7 +51,7 @@ do {						\
 	(vmi)->alloc = 0;		\
 	(vmi)->map = 0;		\
 	(vmi)->usermap = 0;		\
-	(vmi)->vpages = 0;		\
+	(vmi)->vpages = 0;			\
 	(vmi)->largest_chunk = 0;		\
 } while(0)
 #endif

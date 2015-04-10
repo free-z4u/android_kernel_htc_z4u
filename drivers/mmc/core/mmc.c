@@ -235,6 +235,9 @@ static int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd)
 	return err;
 }
 
+/*
+ * Decode extended CSD.
+ */
 static void mmc_select_card_type(struct mmc_card *card)
 {
 	struct mmc_host *host = card->host;

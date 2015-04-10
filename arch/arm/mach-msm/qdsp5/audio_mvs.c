@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -125,6 +125,7 @@ enum audio_mvs_pkt_status_type {
 	AUDIO_MVS_PKT_SLOW
 };
 
+/* Parameters required for MVS acquire. */
 struct rpc_audio_mvs_acquire_args {
 	uint32_t client_id;
 	uint32_t cb_func_id;
@@ -135,6 +136,7 @@ struct audio_mvs_acquire_msg {
 	struct rpc_audio_mvs_acquire_args acquire_args;
 };
 
+/* Parameters required for MVS enable. */
 struct rpc_audio_mvs_enable_args {
 	uint32_t client_id;
 	uint32_t mode;
@@ -148,48 +150,57 @@ struct audio_mvs_enable_msg {
 	struct rpc_audio_mvs_enable_args enable_args;
 };
 
+/* Parameters required for MVS release. */
 struct audio_mvs_release_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t client_id;
 };
 
+/* Parameters required for setting AMR mode. */
 struct audio_mvs_set_amr_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t amr_mode;
 };
 
+/* Parameters required for setting DTX. */
 struct audio_mvs_set_dtx_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t dtx_mode;
 };
 
+/* Parameters required for setting EVRC mode. */
 struct audio_mvs_set_voc_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t max_rate;
 	uint32_t min_rate;
 };
 
+/* Parameters for G711 mode */
 struct audio_mvs_set_g711_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t g711_mode;
 };
 
+/* Parameters for G729 mode */
 struct audio_mvs_set_g729_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t g729_mode;
 };
 
+/* Parameters for G722 mode */
 struct audio_mvs_set_g722_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t g722_mode;
 };
 
 
+/* Parameters for G711A mode */
 struct audio_mvs_set_g711A_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t g711A_mode;
 };
 
+/* Parameters for EFR FR and HR mode */
 struct audio_mvs_set_efr_mode_msg {
 	struct rpc_request_hdr rpc_hdr;
 	uint32_t efr_mode;
@@ -248,12 +259,16 @@ struct audio_mvs_dl_cb_func_args {
 	uint32_t amr_frame;
 	uint32_t amr_mode;
 };
+/*general codec parameters includes AMR, G711A, PCM
+G729, VOC and HR vocoders
+*/
 struct gnr_cdc_param {
 	uint32_t param1;
 	uint32_t param2;
 	uint32_t valid_pkt_status_ptr;
 	uint32_t pkt_status;
 };
+/*G711 codec parameter*/
 struct g711_param {
 	uint32_t param1;
 	uint32_t valid_pkt_status_ptr;
@@ -283,6 +298,7 @@ struct audio_mvs_buf_node {
 	struct msm_audio_mvs_frame frame;
 };
 
+/* Each buffer is 20 ms, queue holds 200 ms of data. */
 #define MVS_MAX_Q_LEN 10
 
 struct audio_mvs_info_type {
@@ -329,7 +345,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 {
 	int rc = 0;
 
-	MM_DBG("\n"); 
+	MM_DBG("\n"); /* Macro prints the file name and function */
 
 	switch (audio->mvs_mode) {
 	case MVS_MODE_AMR:
@@ -337,7 +353,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		struct audio_mvs_set_amr_mode_msg set_amr_mode_msg;
 		struct audio_mvs_set_dtx_mode_msg set_dtx_mode_msg;
 
-		
+		/* Set AMR mode. */
 		memset(&set_amr_mode_msg, 0, sizeof(set_amr_mode_msg));
 		set_amr_mode_msg.amr_mode = cpu_to_be32(audio->rate_type);
 
@@ -361,10 +377,10 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		if (rc >= 0) {
 			MM_DBG("RPC write for set amr mode done\n");
 
-			
+			/* Save the MVS configuration information. */
 			audio->frame_mode = MVS_FRAME_MODE_AMR_DL;
 
-			
+			/* Disable DTX. */
 			memset(&set_dtx_mode_msg, 0, sizeof(set_dtx_mode_msg));
 			set_dtx_mode_msg.dtx_mode = cpu_to_be32(0);
 
@@ -390,6 +406,8 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 	}
 	case MVS_MODE_PCM:
 	case MVS_MODE_LINEAR_PCM: {
+		/* PCM does not have any params to be set.
+		Save the MVS configuration information. */
 		audio->rate_type = MVS_AMR_MODE_UNDEF;
 		audio->frame_mode = MVS_FRAME_MODE_PCM_DL;
 		break;
@@ -405,7 +423,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 	case MVS_MODE_4GV_WB: {
 		struct audio_mvs_set_voc_mode_msg set_voc_mode_msg;
 
-		
+		/* Set EVRC mode. */
 		memset(&set_voc_mode_msg, 0, sizeof(set_voc_mode_msg));
 		set_voc_mode_msg.min_rate = cpu_to_be32(audio->rate_type);
 		set_voc_mode_msg.max_rate = cpu_to_be32(audio->rate_type);
@@ -425,7 +443,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		if (rc >= 0) {
 			MM_DBG("RPC write for set voc mode done\n");
 
-			
+			/* Save the MVS configuration information. */
 			audio->frame_mode = MVS_FRAME_MODE_VOC_RX;
 
 			rc = 0;
@@ -437,7 +455,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 	case MVS_MODE_G711: {
 		struct audio_mvs_set_g711_mode_msg set_g711_mode_msg;
 
-		
+		/* Set G711 mode. */
 		memset(&set_g711_mode_msg, 0, sizeof(set_g711_mode_msg));
 		set_g711_mode_msg.g711_mode = cpu_to_be32(audio->rate_type);
 
@@ -455,7 +473,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 
 		if (rc >= 0) {
 			MM_DBG("RPC write for set g711 mode done\n");
-			
+			/* Save the MVS configuration information. */
 			audio->frame_mode = MVS_FRAME_MODE_G711_DL;
 
 			rc = 0;
@@ -467,7 +485,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 	case MVS_MODE_G729A: {
 		struct audio_mvs_set_g729_mode_msg set_g729_mode_msg;
 
-		
+		/* Set G729 mode. */
 		memset(&set_g729_mode_msg, 0, sizeof(set_g729_mode_msg));
 		set_g729_mode_msg.g729_mode = cpu_to_be32(audio->dtx_mode);
 
@@ -487,7 +505,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		if (rc >= 0) {
 			MM_DBG("RPC write for set g729 mode done\n");
 
-			
+			/* Save the MVS configuration information. */
 			audio->frame_mode = MVS_FRAME_MODE_G729A_DL;
 
 			rc = 0;
@@ -499,7 +517,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 	case MVS_MODE_G722: {
 		struct audio_mvs_set_g722_mode_msg set_g722_mode_msg;
 
-		
+		/* Set G722 mode. */
 		memset(&set_g722_mode_msg, 0, sizeof(set_g722_mode_msg));
 		set_g722_mode_msg.g722_mode = cpu_to_be32(audio->rate_type);
 
@@ -519,7 +537,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		if (rc >= 0) {
 			MM_DBG("RPC write for set g722 mode done\n");
 
-			
+			/* Save the MVS configuration information. */
 			audio->frame_mode = MVS_FRAME_MODE_G722_DL;
 
 			rc = 0;
@@ -530,7 +548,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		struct audio_mvs_set_g711A_mode_msg set_g711A_mode_msg;
 		struct audio_mvs_set_dtx_mode_msg set_dtx_mode_msg;
 
-		
+		/* Set G711A mode. */
 		memset(&set_g711A_mode_msg, 0, sizeof(set_g711A_mode_msg));
 		set_g711A_mode_msg.g711A_mode = cpu_to_be32(audio->rate_type);
 
@@ -550,9 +568,9 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		if (rc >= 0) {
 			MM_DBG("RPC write for set g711A mode done\n");
 
-			
+			/* Save the MVS configuration information. */
 			audio->frame_mode = MVS_FRAME_MODE_G711A_DL;
-			
+			/* Set DTX MODE. */
 			memset(&set_dtx_mode_msg, 0, sizeof(set_dtx_mode_msg));
 			set_dtx_mode_msg.dtx_mode =
 				cpu_to_be32((audio->dtx_mode));
@@ -583,7 +601,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 	case MVS_MODE_HR: {
 		struct audio_mvs_set_efr_mode_msg set_efr_mode_msg;
 
-		
+		/* Set G729 mode. */
 		memset(&set_efr_mode_msg, 0, sizeof(set_efr_mode_msg));
 		set_efr_mode_msg.efr_mode = cpu_to_be32(audio->dtx_mode);
 
@@ -603,7 +621,7 @@ static int audio_mvs_setup_mode(struct audio_mvs_info_type *audio)
 		if (rc >= 0) {
 			MM_DBG("RPC write for set EFR, FR and HR mode done\n");
 
-			
+			/* Save the MVS configuration information. */
 			if ((audio->mvs_mode == MVS_MODE_EFR) ||
 				(audio->mvs_mode == MVS_MODE_FR))
 				audio->frame_mode = MVS_FRAME_MODE_GSM_DL;
@@ -631,7 +649,7 @@ static int audio_mvs_setup(struct audio_mvs_info_type *audio)
 
 	MM_DBG("\n");
 
-	
+	/* Enable MVS. */
 	memset(&enable_msg, 0, sizeof(enable_msg));
 	enable_msg.enable_args.client_id = cpu_to_be32(MVS_CLIENT_ID_VOIP);
 	enable_msg.enable_args.mode = cpu_to_be32(audio->mvs_mode);
@@ -679,12 +697,12 @@ static int audio_mvs_start(struct audio_mvs_info_type *audio)
 
 	MM_DBG("\n");
 
-	
+	/* Prevent sleep. */
 	wake_lock(&audio->suspend_lock);
 	pm_qos_update_request(&audio->pm_qos_req,
 			      msm_cpuidle_get_deep_idle_latency());
 
-	
+	/* Acquire MVS. */
 	memset(&acquire_msg, 0, sizeof(acquire_msg));
 	acquire_msg.acquire_args.client_id = cpu_to_be32(MVS_CLIENT_ID_VOIP);
 	acquire_msg.acquire_args.cb_func_id = cpu_to_be32(MVS_CB_FUNC_ID);
@@ -734,7 +752,7 @@ static int audio_mvs_stop(struct audio_mvs_info_type *audio)
 
 	MM_DBG("\n");
 
-	
+	/* Release MVS. */
 	memset(&release_msg, 0, sizeof(release_msg));
 	release_msg.client_id = cpu_to_be32(MVS_CLIENT_ID_VOIP);
 
@@ -758,7 +776,7 @@ static int audio_mvs_stop(struct audio_mvs_info_type *audio)
 
 			audio->state = AUDIO_MVS_STOPPED;
 
-			
+			/* Un-block read in case it is waiting for data. */
 			wake_up(&audio->out_wait);
 			rc = 0;
 		} else {
@@ -768,7 +786,7 @@ static int audio_mvs_stop(struct audio_mvs_info_type *audio)
 		MM_ERR("RPC write for release failed %d\n", rc);
 	}
 
-	
+	/* Allow sleep. */
 	pm_qos_update_request(&audio->pm_qos_req, PM_QOS_DEFAULT_VALUE);
 	wake_unlock(&audio->suspend_lock);
 
@@ -829,7 +847,7 @@ static void audio_mvs_process_rpc_request(uint32_t procedure,
 			MM_ERR("MVS CB event pointer not valid\n");
 		}
 
-		
+		/* Send ack to modem. */
 		memset(&reply_hdr, 0, sizeof(reply_hdr));
 		reply_hdr.xid = cpu_to_be32(xid);
 		reply_hdr.type = cpu_to_be32(RPC_TYPE_REPLY);
@@ -865,7 +883,7 @@ static void audio_mvs_process_rpc_request(uint32_t procedure,
 		MM_DBG("UL pkt_len %d\n", pkt_len);
 		args++;
 
-		
+		/* Copy the vocoder packets. */
 		mutex_lock(&audio->out_lock);
 
 		if (!list_empty(&audio->free_out_queue)) {
@@ -905,46 +923,46 @@ static void audio_mvs_process_rpc_request(uint32_t procedure,
 			args++;
 
 			if (frame_mode == MVS_FRAME_MODE_AMR_UL) {
-				
+				/* Extract AMR frame type. */
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 
 				MM_DBG("UL AMR frame_type %d\n",
 					 be32_to_cpu(*args));
 			} else if (frame_mode == MVS_FRAME_MODE_PCM_UL) {
-				
+				/* PCM doesn't have frame_type */
 				buf_node->frame.frame_type = 0;
 			} else if (frame_mode == MVS_FRAME_MODE_VOC_TX) {
-				
+				/* Extracting EVRC current buffer frame rate*/
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 				pr_debug("%s: UL EVRC frame_type %d\n",
 					__func__, be32_to_cpu(*args));
 			} else if (frame_mode == MVS_FRAME_MODE_G711_UL) {
-				
+				/* Extract G711 frame type. */
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 
 				MM_DBG("UL G711 frame_type %d\n",
 					be32_to_cpu(*args));
 			} else if (frame_mode == MVS_FRAME_MODE_G729A_UL) {
-				
+				/* Extract G729 frame type. */
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 
 				MM_DBG("UL G729 frame_type %d\n",
 					be32_to_cpu(*args));
 			} else if (frame_mode == MVS_FRAME_MODE_G722_UL) {
-				
+				/* Extract G722 frame type. */
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 
 				MM_DBG("UL G722 frame_type %d\n",
 				       be32_to_cpu(*args));
 			} else if (frame_mode == MVS_FRAME_MODE_G711A_UL) {
-				
+				/* Extract G711A frame type. */
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 
 				MM_DBG("UL G711A frame_type %d\n",
 				       be32_to_cpu(*args));
 			} else if ((frame_mode == MVS_FRAME_MODE_GSM_UL) ||
 				   (frame_mode == MVS_FRAME_MODE_HR_UL)) {
-				
+				/* Extract EFR, FR and HR frame type. */
 				buf_node->frame.frame_type = be32_to_cpu(*args);
 
 				MM_DBG("UL EFR,FR,HR frame_type %d\n",
@@ -963,7 +981,7 @@ static void audio_mvs_process_rpc_request(uint32_t procedure,
 
 		wake_up(&audio->out_wait);
 
-		
+		/* Send UL message accept to modem. */
 		memset(&ul_reply, 0, sizeof(ul_reply));
 		ul_reply.reply_hdr.xid = cpu_to_be32(xid);
 		ul_reply.reply_hdr.type = cpu_to_be32(RPC_TYPE_REPLY);
@@ -1001,7 +1019,7 @@ static void audio_mvs_process_rpc_request(uint32_t procedure,
 		frame_mode = be32_to_cpu(args->frame_mode);
 		MM_DBG("DL frame_mode %d\n", frame_mode);
 
-		
+		/* Prepare and send the DL packets to modem. */
 		memset(&dl_reply, 0, sizeof(dl_reply));
 		dl_reply.reply_hdr.xid = cpu_to_be32(xid);
 		dl_reply.reply_hdr.type = cpu_to_be32(RPC_TYPE_REPLY);
@@ -1192,6 +1210,9 @@ static int audio_mvs_thread(void *data)
 					be32_to_cpu(rpc_reply->reply_stat);
 
 				if (reply_status != RPCMSG_REPLYSTAT_ACCEPTED) {
+					/* If the command is not accepted, there
+					 * will be no response callback. Wake
+					 * the caller and report error. */
 					audio->rpc_status = RPC_STATUS_REJECT;
 
 					wake_up(&audio->wait);

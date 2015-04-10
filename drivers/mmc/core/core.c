@@ -43,6 +43,10 @@
 #include "sd_ops.h"
 #include "sdio_ops.h"
 
+/*
+ * The Background operations can take a long time, depends on the house keeping
+ * operations the card has to perform
+ */
 #define MMC_BKOPS_MAX_TIMEOUT    (4 * 60 * 1000) 
 
 #define CREATE_TRACE_POINTS

@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1511,6 +1511,7 @@ void __init msm_fb_add_devices(void)
 #endif
 	if (machine_is_msm7627a_evb() || machine_is_msm8625_evb()
 					|| machine_is_msm8625_evt()) {
+
 		gpio_reg_2p85v = regulator_get(&mipi_dsi_device.dev,
 								"lcd_vdd");
 		if (IS_ERR(gpio_reg_2p85v))

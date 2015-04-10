@@ -1,4 +1,4 @@
-/* drivers/video/msm/mdp_csc_table.h
+/* drivers/video/msm_fb/mdp_csc_table.h
  *
  * Copyright (C) 2007 QUALCOMM Incorporated
  * Copyright (C) 2007 Google Incorporated

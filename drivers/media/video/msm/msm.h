@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -16,6 +16,7 @@
 
 #ifdef __KERNEL__
 
+/* Header files */
 #include <linux/wakelock.h>
 #include <linux/i2c.h>
 #include <linux/videodev2.h>
@@ -591,7 +592,6 @@ int msm_server_close_client(int idx);
 int msm_cam_server_open_mctl_session(struct msm_cam_v4l2_device *pcam,
 	int *p_active);
 int msm_cam_server_close_mctl_session(struct msm_cam_v4l2_device *pcam);
+#endif /* __KERNEL__ */
 
-#endif 
-
-#endif 
+#endif /* _MSM_H */

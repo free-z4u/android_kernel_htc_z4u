@@ -5,8 +5,6 @@
  * Copyright (C) 2003 Oliver Endriss
  * Copyright (C) 2004 Andrew de Quincey
  *
- * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
- *
  * based on code originally found in av7110.c & dvb_ci.c:
  * Copyright (C) 1999-2003 Ralph Metzler & Marcus Metzler
  *                         for convergence integrated media GmbH
@@ -136,6 +134,15 @@ extern void dvb_ringbuffer_read(struct dvb_ringbuffer *rbuf,
 extern ssize_t dvb_ringbuffer_write(struct dvb_ringbuffer *rbuf, const u8 *buf,
 				    size_t len);
 
+
+/**
+ * Write a packet into the ringbuffer.
+ *
+ * <rbuf> Ringbuffer to write to.
+ * <buf> Buffer to write.
+ * <len> Length of buffer (currently limited to 65535 bytes max).
+ * returns Number of bytes written, or -EFAULT, -ENOMEM, -EVINAL.
+ */
 extern ssize_t dvb_ringbuffer_write_user(struct dvb_ringbuffer *rbuf,
 					const u8 *buf, size_t len);
 

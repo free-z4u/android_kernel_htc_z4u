@@ -1316,6 +1316,10 @@ void usb_hnp_polling_work(struct work_struct *work)
 	struct usb_device *udev = bus->root_hub->children[bus->otg_port - 1];
 	u8 *status = NULL;
 
+	/*
+	 * The OTG-B device must hand back the host role to OTG PET
+	 * within 100 msec irrespective of host_request flag.
+	 */
 	if (bus->quick_hnp) {
 		bus->quick_hnp = 0;
 		goto start_hnp;
@@ -1330,7 +1334,7 @@ void usb_hnp_polling_work(struct work_struct *work)
 		0, OTG_STATUS_SELECTOR, status, sizeof(*status),
 		USB_CTRL_GET_TIMEOUT);
 	if (ret < 0) {
-		
+		/* Peripheral may not be supporting HNP polling */
 		dev_info(&udev->dev, "HNP polling failed. status %d\n", ret);
 		goto out;
 	}
@@ -1415,7 +1419,6 @@ int usb_resume(struct device *dev, pm_message_t msg)
 	struct usb_device	*udev = to_usb_device(dev);
 	int			status;
 
-	pm_runtime_get_sync(dev->parent);
 	/* For all calls, take the device back to full power and
 	 * tell the PM core in case it was autosuspended previously.
 	 * Unbind the interfaces that will need rebinding later,
@@ -1423,6 +1426,7 @@ int usb_resume(struct device *dev, pm_message_t msg)
 	 * (This can't be done in usb_resume_interface()
 	 * above because it doesn't own the right set of locks.)
 	 */
+	pm_runtime_get_sync(dev->parent);
 	status = usb_resume_both(udev, msg);
 	if (status == 0) {
 		pm_runtime_disable(dev);

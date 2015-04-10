@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2013, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2008-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -60,17 +60,17 @@ extern uint32 mdp_intr_mask;
 #define BIT(x)  (1<<(x))
 
 #define MDPOP_NOP               0
-#define MDPOP_LR                BIT(0)	
-#define MDPOP_UD                BIT(1)	
-#define MDPOP_ROT90             BIT(2)	
+#define MDPOP_LR                BIT(0)	/* left to right flip */
+#define MDPOP_UD                BIT(1)	/* up and down flip */
+#define MDPOP_ROT90             BIT(2)	/* rotate image to 90 degree */
 #define MDPOP_ROT180            (MDPOP_UD|MDPOP_LR)
 #define MDPOP_ROT270            (MDPOP_ROT90|MDPOP_UD|MDPOP_LR)
 #define MDPOP_ASCALE            BIT(7)
-#define MDPOP_ALPHAB            BIT(8)	
-#define MDPOP_TRANSP            BIT(9)	
-#define MDPOP_DITHER            BIT(10)	
-#define MDPOP_SHARPENING	BIT(11) 
-#define MDPOP_BLUR		BIT(12) 
+#define MDPOP_ALPHAB            BIT(8)	/* enable alpha blending */
+#define MDPOP_TRANSP            BIT(9)	/* enable transparency */
+#define MDPOP_DITHER            BIT(10)	/* enable dither */
+#define MDPOP_SHARPENING	BIT(11) /* enable sharpening */
+#define MDPOP_BLUR		BIT(12) /* enable blur */
 #define MDPOP_FG_PM_ALPHA       BIT(13)
 #define MDPOP_LAYER_IS_FG       BIT(14)
 #define MDP_ALLOC(x)  kmalloc(x, GFP_KERNEL)
@@ -821,16 +821,16 @@ void mdp_footswitch_ctrl(boolean on);
 #ifdef CONFIG_FB_MSM_MDP303
 static inline void mdp4_dsi_cmd_dma_busy_wait(struct msm_fb_data_type *mfd)
 {
-	
+	/* empty */
 }
 
 static inline void mdp4_dsi_blt_dmap_busy_wait(struct msm_fb_data_type *mfd)
 {
-	
+	/* empty */
 }
 static inline void mdp4_overlay_dsi_state_set(int state)
 {
-	
+	/* empty */
 }
 static inline int mdp4_overlay_dsi_state_get(void)
 {
@@ -841,7 +841,7 @@ static inline int mdp4_overlay_dsi_state_get(void)
 #ifndef CONFIG_FB_MSM_MDP40
 static inline void mdp_dsi_cmd_overlay_suspend(struct msm_fb_data_type *mfd)
 {
-	
+	/* empty */
 }
 static inline int msmfb_overlay_vsync_ctrl(struct fb_info *info,
 						void __user *argp)
@@ -861,7 +861,7 @@ void mdp_vid_quant_set(void);
 #else
 static inline void mdp_vid_quant_set(void)
 {
-	
+	/* empty */
 }
 #endif
-#endif 
+#endif /* MDP_H */
