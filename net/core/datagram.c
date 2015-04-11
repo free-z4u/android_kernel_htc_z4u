@@ -166,14 +166,7 @@ struct sk_buff *__skb_recv_datagram(struct sock *sk, unsigned flags,
 	/*
 	 * Caller is allowed not to check sk->sk_err before skb_recv_datagram()
 	 */
-	int error = 0;
-	
-	if ((!sk) || (IS_ERR(sk)))
-		goto no_packet;
-	/*
-	 * Caller is allowed not to check sk->sk_err before skb_recv_datagram()
-	 */
-	error = sock_error(sk);
+	int error = sock_error(sk);
 
 	if (error)
 		goto no_packet;

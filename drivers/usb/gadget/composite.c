@@ -240,13 +240,12 @@ ep_found:
 	_ep->comp_desc = comp_desc;
 	if (g->speed == USB_SPEED_SUPER) {
 		switch (usb_endpoint_type(_ep->desc)) {
+		case USB_ENDPOINT_XFER_ISOC:
+			/* mult: bits 1:0 of bmAttributes */
+			_ep->mult = comp_desc->bmAttributes & 0x3;
 		case USB_ENDPOINT_XFER_BULK:
 		case USB_ENDPOINT_XFER_INT:
 			_ep->maxburst = comp_desc->bMaxBurst;
-			break;
-		case USB_ENDPOINT_XFER_ISOC:
-			
-			_ep->mult = comp_desc->bmAttributes & 0x3;
 			break;
 		default:
 			
@@ -353,7 +352,6 @@ int usb_interface_id(struct usb_configuration *config,
 {
 	unsigned id = config->next_interface_id;
 
-	printk("===========interface_id %d %s\n",id, function->name);
 	if (id < MAX_CONFIG_INTERFACES) {
 		config->interface[id] = function;
 		config->next_interface_id = id + 1;
@@ -742,7 +740,7 @@ done:
 	return status;
 }
 
-static int remove_config(struct usb_composite_dev *cdev,
+static int unbind_config(struct usb_composite_dev *cdev,
 			      struct usb_configuration *config)
 {
 	while (!list_empty(&config->functions)) {
@@ -780,7 +778,8 @@ int usb_remove_config(struct usb_composite_dev *cdev,
 	spin_unlock_irqrestore(&cdev->lock, flags);
 	os_type = OS_NOT_YET;
 	fsg_update_mode(0);
-	return remove_config(cdev, config);
+
+	return unbind_config(cdev, config);
 }
 
 
@@ -1269,7 +1268,7 @@ composite_unbind(struct usb_gadget *gadget)
 		c = list_first_entry(&cdev->configs,
 				struct usb_configuration, list);
 		list_del(&c->list);
-		remove_config(cdev, c);
+		unbind_config(cdev, c);
 	}
 	if (composite->unbind)
 		composite->unbind(cdev);

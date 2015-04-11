@@ -389,11 +389,6 @@ ip6t_do_table(struct sk_buff *skb,
 				     table->name, private, e);
 #endif
 		/* Standard target? */
-		if((!t->u.kernel.target) || IS_ERR(t->u.kernel.target)) {
-			pr_info("[NET][IPV6]%s: WARN:u.kernel.target is NULL\n",__func__);
-			break;
-		}
-		
 		if (!t->u.kernel.target->target) {
 			int v;
 

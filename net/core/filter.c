@@ -216,7 +216,7 @@ unsigned int sk_run_filter(const struct sk_buff *skb,
 			k = K;
 load_w:
 			ptr = load_pointer(skb, k, 4, &tmp);
-			if ((ptr != NULL) && (!IS_ERR(ptr))) {
+			if (ptr != NULL) {
 				A = get_unaligned_be32(ptr);
 				continue;
 			}
@@ -225,7 +225,7 @@ load_w:
 			k = K;
 load_h:
 			ptr = load_pointer(skb, k, 2, &tmp);
-			if ((ptr != NULL) && (!IS_ERR(ptr))) {
+			if (ptr != NULL) {
 				A = get_unaligned_be16(ptr);
 				continue;
 			}
@@ -234,7 +234,7 @@ load_h:
 			k = K;
 load_b:
 			ptr = load_pointer(skb, k, 1, &tmp);
-			if ((ptr != NULL) && (!IS_ERR(ptr))) {
+			if (ptr != NULL) {
 				A = *(u8 *)ptr;
 				continue;
 			}
@@ -256,7 +256,7 @@ load_b:
 			goto load_b;
 		case BPF_S_LDX_B_MSH:
 			ptr = load_pointer(skb, K, 1, &tmp);
-			if ((ptr != NULL) && (!IS_ERR(ptr))) {
+			if (ptr != NULL) {
 				X = (*(u8 *)ptr & 0xf) << 2;
 				continue;
 			}

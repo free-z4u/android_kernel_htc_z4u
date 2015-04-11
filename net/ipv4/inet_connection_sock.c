@@ -113,11 +113,6 @@ again:
 				goto next_nolock;
 			head = &hashinfo->bhash[inet_bhashfn(net, rover,
 					hashinfo->bhash_size)];
-
-			if (IS_ERR(head) || (!head)) {
-				printk(KERN_ERR "[NET]%s: head error\n", __func__);
-			}
-
 			spin_lock(&head->lock);
 			inet_bind_bucket_for_each(tb, node, &head->chain)
 				if (net_eq(ib_net(tb), net) && tb->port == rover) {

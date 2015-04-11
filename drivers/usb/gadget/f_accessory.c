@@ -73,9 +73,12 @@ struct acc_dev {
 	struct usb_ep *ep_in;
 	struct usb_ep *ep_out;
 
-	
-	unsigned int online:1;
-	unsigned int disconnected:1;
+	/* set to 1 when we connect */
+	int online:1;
+	/* Set to 1 when we disconnect.
+	 * Not cleared until our file is closed.
+	 */
+	int disconnected:1;
 
 	/* strings sent by the host */
 	char manufacturer[ACC_STRING_SIZE];
@@ -536,7 +539,7 @@ static int create_bulk_endpoints(struct acc_dev *dev,
 	return 0;
 
 fail:
-	pr_err("acc_bind() could not allocate requests\n");
+	printk(KERN_ERR "acc_bind() could not allocate requests\n");
 	while ((req = req_get(dev, &dev->tx_idle)))
 		acc_request_free(req, dev->ep_in);
 	for (i = 0; i < RX_REQ_MAX; i++)
@@ -1082,8 +1085,6 @@ static int acc_function_set_alt(struct usb_function *f,
 	}
 	ret = usb_ep_enable(dev->ep_out);
 	if (ret) {
-		ERROR(cdev, "failed to enable ep %s, result %d\n",
-				dev->ep_out->name, ret);
 		usb_ep_disable(dev->ep_in);
 		return ret;
 	}

@@ -1762,14 +1762,14 @@ static struct leaf *leaf_walk_rcu(struct tnode *p, struct rt_trie_node *c)
 	do {
 		t_key idx;
 
-		if (c && !(IS_ERR(c)))
+		if (c)
 			idx = tkey_extract_bits(c->key, p->pos, p->bits) + 1;
 		else
 			idx = 0;
 
 		while (idx < 1u << p->bits) {
 			c = tnode_get_child_rcu(p, idx++);
-			if ((!c) || (IS_ERR(c)))
+			if (!c)
 				continue;
 
 			if (IS_LEAF(c)) {
@@ -1793,7 +1793,7 @@ static struct leaf *trie_firstleaf(struct trie *t)
 {
 	struct tnode *n = (struct tnode *)rcu_dereference_rtnl(t->trie);
 
-	if ((!n) || (IS_ERR(n)))
+	if (!n)
 		return NULL;
 
 	if (IS_LEAF(n))          /* trie is just a leaf */
@@ -1807,7 +1807,7 @@ static struct leaf *trie_nextleaf(struct leaf *l)
 	struct rt_trie_node *c = (struct rt_trie_node *) l;
 	struct tnode *p = node_parent_rcu(c);
 
-	if ((!p) || (IS_ERR(p)))
+	if (!p)
 		return NULL;	/* trie with just one leaf */
 
 	return leaf_walk_rcu(p, c);

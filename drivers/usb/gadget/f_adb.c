@@ -424,8 +424,7 @@ static void adb_release_work(struct work_struct *w)
 
 static int adb_open(struct inode *ip, struct file *fp)
 {
-	printk(KERN_INFO "[USB] adb_open: %s(parent:%s): tgid=%d\n",
-			current->comm, current->parent->comm, current->tgid);
+	pr_info("adb_open\n");
 	if (!_adb_dev)
 		return -ENODEV;
 
@@ -441,8 +440,8 @@ static int adb_open(struct inode *ip, struct file *fp)
 
 static int adb_release(struct inode *ip, struct file *fp)
 {
-	printk(KERN_INFO "[USB] adb_release: %s(parent:%s): tgid=%d\n",
-			current->comm, current->parent->comm, current->tgid);
+	pr_info("adb_release\n");
+
 	adb_unlock(&_adb_dev->open_excl);
 	return 0;
 }

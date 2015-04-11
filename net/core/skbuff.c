@@ -379,9 +379,6 @@ static void skb_clone_fraglist(struct sk_buff *skb)
 
 static void skb_release_data(struct sk_buff *skb)
 {
-	if ((!skb) || (IS_ERR(skb)))
-		return;
-		
 	if (!skb->cloned ||
 	    !atomic_sub_return(skb->nohdr ? (1 << SKB_DATAREF_SHIFT) + 1 : 1,
 			       &skb_shinfo(skb)->dataref)) {
@@ -470,10 +467,8 @@ static void skb_release_all(struct sk_buff *skb)
 
 void __kfree_skb(struct sk_buff *skb)
 {
-	if ((skb) && (!IS_ERR(skb))) {
-		skb_release_all(skb);
-		kfree_skbmem(skb);
-	}
+	skb_release_all(skb);
+	kfree_skbmem(skb);
 }
 EXPORT_SYMBOL(__kfree_skb);
 
@@ -1705,11 +1700,6 @@ struct sk_buff *skb_dequeue(struct sk_buff_head *list)
 	unsigned long flags;
 	struct sk_buff *result;
 
-	if ((!list) || (IS_ERR(list))) {
-		printk("[NET] list is NULL in %s\n", __func__);
-		return NULL;
-	}
-	
 	spin_lock_irqsave(&list->lock, flags);
 	result = __skb_dequeue(list);
 	spin_unlock_irqrestore(&list->lock, flags);

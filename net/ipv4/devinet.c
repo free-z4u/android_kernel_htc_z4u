@@ -768,10 +768,6 @@ int devinet_ioctl(struct net *net, unsigned int cmd, void __user *arg)
 			   This is checked above. */
 			for (ifap = &in_dev->ifa_list; (ifa = *ifap) != NULL;
 			     ifap = &ifa->ifa_next) {
-				if(IS_ERR(ifa) || (!ifa)) {
-				 	printk(KERN_ERR "[Devinet] ifa is NULL or out of range in %s!\n", __func__);
-					break; 
-				 }
 				if (!strcmp(ifr.ifr_name, ifa->ifa_label) &&
 				    sin_orig.sin_addr.s_addr ==
 							ifa->ifa_local) {

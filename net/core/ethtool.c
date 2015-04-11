@@ -1288,11 +1288,6 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
 	int rc;
 	u32 old_features;
 	
-	if (IS_ERR(net) || (!net)) {
-		printk("[NET] net is NULL in %s\n", __func__);
-		return -ENODEV;
-	}
-
 	if (!dev || !netif_device_present(dev))
 		return -ENODEV;
 

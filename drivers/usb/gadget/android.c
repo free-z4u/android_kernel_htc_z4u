@@ -219,19 +219,7 @@ static struct usb_device_descriptor device_desc = {
 	.bcdDevice            = __constant_cpu_to_le16(0xffff),
 	.bNumConfigurations   = 1,
 };
-#if 0
-static struct usb_otg_descriptor otg_descriptor = {
-	.bLength =		sizeof otg_descriptor,
-	.bDescriptorType =	USB_DT_OTG,
-	.bmAttributes =		USB_OTG_SRP | USB_OTG_HNP,
-	.bcdOTG               = __constant_cpu_to_le16(0x0200),
-};
 
-static const struct usb_descriptor_header *otg_desc[] = {
-	(struct usb_descriptor_header *) &otg_descriptor,
-	NULL,
-};
-#endif
 static struct usb_configuration android_config_driver = {
 	.label		= "android",
 	.unbind		= android_unbind_config,
@@ -1082,21 +1070,6 @@ static int mtp_function_ctrlrequest(struct android_usb_function *f,
 	return mtp_ctrlrequest(cdev, c);
 }
 
-static ssize_t mtp_debug_level_show(struct device *dev,
-		struct device_attribute *attr, char *buf)
-{
-	return sprintf(buf, "%d\n", htc_mtp_performance_debug);
-}
-
-static ssize_t mtp_debug_level_store(
-		struct device *dev, struct device_attribute *attr,
-		const char *buf, size_t size)
-{
-	if (buf[0] >= '0' && buf[0] <= '9' && buf[1] == '\n')
-		htc_mtp_performance_debug = buf[0] - '0';
-	return size;
-}
-
 static ssize_t mtp_iobusy_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -1109,12 +1082,9 @@ static ssize_t mtp_open_state_show(struct device *dev,
 	return sprintf(buf, "%d\n", htc_mtp_open_state);
 }
 
-static DEVICE_ATTR(mtp_debug_level, S_IRUGO | S_IWUSR, mtp_debug_level_show,
-						    mtp_debug_level_store);
 static DEVICE_ATTR(iobusy, S_IRUGO, mtp_iobusy_show, NULL);
 static DEVICE_ATTR(mtp_open_state, S_IRUGO, mtp_open_state_show, NULL);
 static struct device_attribute *mtp_function_attributes[] = {
-	&dev_attr_mtp_debug_level,
 	&dev_attr_iobusy,
 	&dev_attr_mtp_open_state,
 	NULL
@@ -2193,7 +2163,6 @@ field ## _store(struct device *dev, struct device_attribute *attr,	\
 		const char *buf, size_t size)				\
 {									\
 	int value;							\
-	pr_info("%s: %s\n", __func__, buf);				\
 	if (sscanf(buf, format_string, &value) == 1) {			\
 		device_desc.field = value;				\
 		return size;						\
@@ -2332,10 +2301,7 @@ static int android_bind(struct usb_composite_dev *cdev)
 		return id;
 	strings_dev[STRING_SERIAL_IDX].id = id;
 	device_desc.iSerialNumber = id;
-#if 0
-	if (gadget_is_otg(cdev->gadget))
-		android_config_driver.descriptors = otg_desc;
-#endif
+
 	gcnum = usb_gadget_controller_number(gadget);
 	if (gcnum >= 0)
 		device_desc.bcdDevice = cpu_to_le16(0x0200 + gcnum);

@@ -360,7 +360,7 @@ static int set_powered(struct sock *sk, u16 index, unsigned char *data, u16 len)
 
 	cp = (void *) data;
 
-	BT_INFO("DEBUG: %s: request for hci%u, cp->val : %d", __func__, index, cp->val);
+	BT_DBG("request for hci%u", index);
 
 	if (len != sizeof(*cp))
 		return cmd_status(sk, index, MGMT_OP_SET_POWERED, EINVAL);

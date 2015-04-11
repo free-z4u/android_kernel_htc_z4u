@@ -316,19 +316,7 @@ ____nf_conntrack_find(struct net *net, u16 zone,
 {
 	struct nf_conntrack_tuple_hash *h;
 	struct hlist_nulls_node *n;
-	unsigned int bucket = 0;
-	
-	if ((!net) || (IS_ERR(net))) {
-		printk("[NET] net is NULL in %s\n", __func__);
-		return NULL;
-	}
-	
-	bucket = hash_bucket(hash, net);
-	
-	if ((!tuple) || (IS_ERR(tuple))) {
-		printk("[NET] tuple is NULL in %s\n", __func__);
-		return NULL;
-	}
+	unsigned int bucket = hash_bucket(hash, net);
 
 	/* Disable BHs the entire time since we normally need to disable them
 	 * at least once for the stats anyway.

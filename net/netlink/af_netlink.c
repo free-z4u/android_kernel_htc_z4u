@@ -485,7 +485,7 @@ static int netlink_release(struct socket *sock)
 	struct sock *sk = sock->sk;
 	struct netlink_sock *nlk;
 
-	if (!sk || (IS_ERR(sk)))
+	if (!sk)
 		return 0;
 
 	netlink_remove(sk);
@@ -779,17 +779,6 @@ int netlink_attachskb(struct sock *sk, struct sk_buff *skb,
 		      long *timeo, struct sock *ssk)
 {
 	struct netlink_sock *nlk;
-	
-	
-	if (IS_ERR(sk) || (!sk)) {
-		printk("[NET] sk is NULL in %s\n", __func__);
-		return -EAGAIN;
-	}
-	
-	if (IS_ERR(skb) || (!skb)) {
-		printk("[NET] skb is NULL in %s\n", __func__);
-		return -EAGAIN;
-	}
 
 	nlk = nlk_sk(sk);
 
@@ -1389,7 +1378,7 @@ static int netlink_recvmsg(struct kiocb *kiocb, struct socket *sock,
 	copied = 0;
 
 	skb = skb_recv_datagram(sk, flags, noblock, &err);
-	if ((skb == NULL) || IS_ERR(skb))
+	if (skb == NULL)
 		goto out;
 
 	data_skb = skb;

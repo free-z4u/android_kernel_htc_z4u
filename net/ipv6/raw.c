@@ -887,8 +887,6 @@ back_from_confirm:
 	if (inet->hdrincl)
 		err = rawv6_send_hdrinc(sk, msg->msg_iov, len, &fl6, &dst, msg->msg_flags);
 	else {
-		if (IS_ERR(sk) || (!sk))
-			goto out;
 		lock_sock(sk);
 		err = ip6_append_data(sk, ip_generic_getfrag, msg->msg_iov,
 			len, 0, hlimit, tclass, opt, &fl6, (struct rt6_info*)dst,

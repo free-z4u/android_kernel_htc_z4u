@@ -1464,8 +1464,6 @@ static void if_tag_stat_update(const char *ifname, uid_t uid,
 		 *  - No {0, uid_tag} stats and no {acc_tag, uid_tag} stats.
 		 */
 		new_tag_stat = create_if_tag_stat(iface_entry, uid_tag);
-		if (!new_tag_stat)
-			goto unlock;
 		uid_tag_counters = &new_tag_stat->counters;
 	} else {
 		uid_tag_counters = &tag_stat_entry->counters;
@@ -1474,8 +1472,6 @@ static void if_tag_stat_update(const char *ifname, uid_t uid,
 	if (acct_tag) {
 		/* Create the child {acct_tag, uid_tag} and hook up parent. */
 		new_tag_stat = create_if_tag_stat(iface_entry, tag);
-		if (!new_tag_stat)
-			goto unlock;
 		new_tag_stat->parent_counters = uid_tag_counters;
 	} else {
 		/*
@@ -1489,7 +1485,6 @@ static void if_tag_stat_update(const char *ifname, uid_t uid,
 		BUG_ON(!new_tag_stat);
 	}
 	tag_stat_update(new_tag_stat, direction, proto, bytes);
-unlock:
 	spin_unlock_bh(&iface_entry->tag_stat_list_lock);
 }
 
@@ -1760,7 +1755,7 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 		 par->hooknum, skb, par->in, par->out, par->family);
 
 	atomic64_inc(&qtu_events.match_calls);
-	if ((IS_ERR(skb)) || (skb == NULL)) {
+	if (skb == NULL) {
 		res = (info->match ^ info->invert) == 0;
 		goto ret_res;
 	}
@@ -1781,7 +1776,7 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 	}
 
 	sk = skb->sk;
-	if ((sk == NULL) || (IS_ERR(sk))) {
+	if (sk == NULL) {
 		/*
 		 * A missing sk->sk_socket happens when packets are in-flight
 		 * and the matching socket is already closed and gone.
@@ -1833,11 +1828,6 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 	} else if (info->match & info->invert & XT_QTAGUID_SOCKET) {
 		res = false;
 		goto put_sock_ret_res;
-	}
-	if (IS_ERR(sk) || (!sk)) {
-		printk(KERN_ERR "[NET] sk is NULL or out of range in %s!\n", __func__);
-		res = false;
-		goto ret_res;
 	}
 	filp = sk->sk_socket->file;
 	if (filp == NULL) {

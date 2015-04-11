@@ -3684,32 +3684,19 @@ static int tcp_process_frto(struct sock *sk, int flag)
 /* This routine deals with incoming acks, but not outgoing ones. */
 static int tcp_ack(struct sock *sk, const struct sk_buff *skb, int flag)
 {
-	struct inet_connection_sock *icsk = NULL;
-	struct tcp_sock *tp = NULL;
-	u32 prior_snd_una = 0;
-	u32 ack_seq = 0;
-	u32 ack = 0;
+	struct inet_connection_sock *icsk = inet_csk(sk);
+	struct tcp_sock *tp = tcp_sk(sk);
+	u32 prior_snd_una = tp->snd_una;
+	u32 ack_seq = TCP_SKB_CB(skb)->seq;
+	u32 ack = TCP_SKB_CB(skb)->ack_seq;
 	bool is_dupack = false;
-	u32 prior_in_flight = 0;
-	u32 prior_fackets = 0;
-	int prior_packets = 0;
-	int prior_sacked = 0;
+	u32 prior_in_flight;
+	u32 prior_fackets;
+	int prior_packets;
+	int prior_sacked = tp->sacked_out;
 	int pkts_acked = 0;
 	int newly_acked_sacked = 0;
 	int frto_cwnd = 0;
-	
-	if ((!sk) || IS_ERR(sk))
-		goto invalid_ack;
-	
-	if ((!skb) || IS_ERR(skb))
-		goto invalid_ack;
-	
-	icsk = inet_csk(sk);
-	tp = tcp_sk(sk);
-	prior_snd_una = tp->snd_una;
-	ack_seq = TCP_SKB_CB(skb)->seq;
-	ack = TCP_SKB_CB(skb)->ack_seq;
-	prior_sacked = tp->sacked_out;
 
 	if (before(ack, prior_snd_una))
 		goto old_ack;

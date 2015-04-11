@@ -67,7 +67,6 @@
 #define MTP_RESPONSE_OK             0x2001
 #define MTP_RESPONSE_DEVICE_BUSY    0x2019
 
-static int htc_mtp_performance_debug;
 static int htc_mtp_open_state;
 #ifdef CONFIG_PERFLOCK
 #include <mach/perflock.h>
@@ -634,7 +633,7 @@ static ssize_t mtp_write(struct file *fp, const char __user *buf,
 			sendZLP = 0;
 
 		if (dev->state != STATE_BUSY) {
-			INFO(cdev, "mtp_write dev->error, state=%d\n", dev->state);
+			DBG(cdev, "mtp_write dev->error\n");
 			r = -EIO;
 			break;
 		}
@@ -661,7 +660,7 @@ static ssize_t mtp_write(struct file *fp, const char __user *buf,
 		req->length = xfer;
 		ret = usb_ep_queue(dev->ep_in, req, GFP_KERNEL);
 		if (ret < 0) {
-			INFO(cdev, "mtp_write: xfer error %d\n", ret);
+			DBG(cdev, "mtp_write: xfer error %d\n", ret);
 			r = -EIO;
 			break;
 		}
@@ -700,7 +699,6 @@ static void send_file_work(struct work_struct *data)
 	int xfer, ret, hdr_size;
 	int r = 0;
 	int sendZLP = 0;
-	long diff = 0;
 
 	
 	smp_rmb();
@@ -720,8 +718,6 @@ static void send_file_work(struct work_struct *data)
 	if ((count & (dev->ep_in->maxpacket - 1)) == 0)
 		sendZLP = 1;
 
-	if (htc_mtp_performance_debug)
-		do_gettimeofday(&dev->st0);
 	while (count > 0 || sendZLP) {
 		
 		if (count == 0)
@@ -780,11 +776,6 @@ static void send_file_work(struct work_struct *data)
 		
 		req = 0;
 	}
-	if (htc_mtp_performance_debug) {
-		do_gettimeofday(&dev->st1);
-		diff = (dev->st1.tv_sec-dev->st0.tv_sec)*1000 + (dev->st1.tv_usec-dev->st0.tv_usec)/1000;
-		printk(KERN_INFO "[USB][MTP]%s, total time:%ld\n", __func__, diff);
-	}
 
 	if (req)
 		mtp_req_put(dev, &dev->tx_idle, req);
@@ -809,7 +800,6 @@ static void receive_file_work(struct work_struct *data)
 	int64_t count;
 	int ret, cur_buf = 0;
 	int r = 0;
-	long diff = 0;
 
 	
 	smp_rmb();
@@ -818,8 +808,6 @@ static void receive_file_work(struct work_struct *data)
 	count = dev->xfer_file_length;
 
 	DBG(cdev, "receive_file_work(%lld)\n", count);
-	if (htc_mtp_performance_debug)
-		do_gettimeofday(&dev->st0);
 
 	while (count > 0 || write_req) {
 		if (count > 0) {
@@ -878,11 +866,6 @@ static void receive_file_work(struct work_struct *data)
 	}
 
 	DBG(cdev, "receive_file_work returning %d\n", r);
-	if (htc_mtp_performance_debug) {
-		do_gettimeofday(&dev->st1);
-		diff = (dev->st1.tv_sec-dev->st0.tv_sec)*1000 + (dev->st1.tv_usec-dev->st0.tv_usec)/1000;
-		printk(KERN_INFO "[USB][MTP]%s, total time:%ld\n", __func__, diff);
-	}
 #ifdef CONFIG_PERFLOCK
 	mod_timer(&dev->perf_timer, MTP_TRANSFER_EXPIRED);
 #endif
@@ -1317,7 +1300,7 @@ static int mtp_bind_config(struct usb_configuration *c, bool ptp_config)
 	struct mtp_dev *dev = _mtp_dev;
 	int ret = 0;
 
-	printk(KERN_INFO "[USB] mtp_bind_config\n");
+	printk(KERN_INFO "mtp_bind_config\n");
 
 	
 	if (mtp_string_defs[INTERFACE_STRING_INDEX].id == 0) {
@@ -1379,7 +1362,6 @@ static int mtp_setup(void)
 	INIT_WORK(&dev->receive_file_work, receive_file_work);
 
 	_mtp_dev = dev;
-	htc_mtp_performance_debug = 0;
 #ifdef CONFIG_PERFLOCK
 	INIT_WORK(&dev->release_perflock_work, release_perflock_work_func);
 	perf_lock_init(&dev->perf_lock, TYPE_PERF_LOCK, PERF_LOCK_HIGHEST, "htc_mtp");

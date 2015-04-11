@@ -2439,11 +2439,6 @@ int ip_route_input_common(struct sk_buff *skb, __be32 daddr, __be32 saddr,
 	struct net *net;
 	int res;
 
-	if ((!skb) || (IS_ERR(skb))) {
-		printk("[NET] skb is NULL in %s\n", __func__);
-		return -EINVAL;
-	}
-
 	net = dev_net(dev);
 
 	rcu_read_lock();
