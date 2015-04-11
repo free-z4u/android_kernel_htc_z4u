@@ -433,7 +433,7 @@ static int adb_open(struct inode *ip, struct file *fp)
 
 	fp->private_data = _adb_dev;
 
-	
+	/* clear the error latch */
 	atomic_set(&_adb_dev->error, 0);
 	return 0;
 }

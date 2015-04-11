@@ -225,7 +225,7 @@ static struct usb_configuration android_config_driver = {
 	.unbind		= android_unbind_config,
 	.bConfigurationValue = 1,
 	.bmAttributes	= USB_CONFIG_ATT_ONE | USB_CONFIG_ATT_SELFPOWER,
-	.bMaxPower	= 0xFA, 
+	.bMaxPower	= 0xFA, /* 500ma */
 };
 
 enum android_device_state {
@@ -280,7 +280,7 @@ static void android_work(struct work_struct *data)
 		uevent_envp = configured;
 		next_state = USB_CONFIGURED;
 
-		
+
 		list_for_each_entry(f, &dev->enabled_functions, enabled_list) {
 			if (f->performance_lock) {
 				pr_info("Performance lock for '%s'\n", f->name);
@@ -383,7 +383,6 @@ static void android_disable(struct android_dev *dev)
 		usb_remove_config(cdev, &android_config_driver);
 	}
 }
-
 
 static ssize_t func_en_show(struct device *dev, struct device_attribute *attr,
 		char *buf)
@@ -508,7 +507,6 @@ static struct android_usb_function adb_function = {
 	.cleanup	= adb_function_cleanup,
 	.bind_config	= adb_function_bind_config,
 };
-
 
 static int rmnet_smd_function_bind_config(struct android_usb_function *f,
 					  struct usb_configuration *c)
@@ -977,7 +975,7 @@ static int acm_function_bind_config(struct android_usb_function *f,
 	int err = -1;
 	int i, ports;
 
-	ports = serial_nports; 
+	ports = serial_nports;
 	if (ports < 0)
 		goto out;
 	for (i = 0; i < ports; i++) {
@@ -1073,7 +1071,7 @@ static int mtp_function_ctrlrequest(struct android_usb_function *f,
 static ssize_t mtp_iobusy_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
-	
+
 	return sprintf(buf, "%d\n", _mtp_dev->mtp_perf_lock_on?1:0);
 }
 static ssize_t mtp_open_state_show(struct device *dev,
@@ -1330,7 +1328,6 @@ static ssize_t rndis_ethaddr_show(struct device *dev,
 {
 	struct android_usb_function *f = dev_get_drvdata(dev);
 	struct rndis_function_config *rndis = f->config;
-
 	return snprintf(buf, PAGE_SIZE, "%02x:%02x:%02x:%02x:%02x:%02x\n",
 		rndis->ethaddr[0], rndis->ethaddr[1], rndis->ethaddr[2],
 		rndis->ethaddr[3], rndis->ethaddr[4], rndis->ethaddr[5]);
@@ -1358,7 +1355,6 @@ static ssize_t rndis_vendorID_show(struct device *dev,
 {
 	struct android_usb_function *f = dev_get_drvdata(dev);
 	struct rndis_function_config *config = f->config;
-
 	return snprintf(buf, PAGE_SIZE, "%04x\n", config->vendorID);
 }
 
@@ -1434,7 +1430,7 @@ static int mass_storage_function_init(struct android_usb_function *f,
 			}
 		}
 	} else {
-		
+
 		config->fsg.nluns = 1;
 		config->fsg.luns[0].removable = 1;
 	}
@@ -2096,7 +2092,7 @@ static ssize_t enable_store(struct device *pdev, struct device_attribute *attr,
 		dev->enabled = true;
 	} else if (!enabled && dev->enabled) {
 		usb_gadget_disconnect(cdev->gadget);
-		
+
 		usb_ep_dequeue(cdev->gadget->ep0, cdev->req);
 		usb_remove_config(cdev, &android_config_driver);
 		dev->enabled = false;
@@ -2125,7 +2121,6 @@ static ssize_t pm_qos_store(struct device *pdev,
 	struct android_dev *dev = dev_get_drvdata(pdev);
 
 	strlcpy(dev->pm_qos, buff, sizeof(dev->pm_qos));
-
 	return size;
 }
 
@@ -2222,7 +2217,6 @@ static struct device_attribute *android_usb_attributes[] = {
 };
 
 #include "htc_attr.c"
-
 /*-------------------------------------------------------------------------*/
 /* Composite driver */
 
@@ -2285,7 +2279,7 @@ static int android_bind(struct usb_composite_dev *cdev)
 	dev->num_functions = pdata->num_functions;
 	dev->match = pdata->match;
 
-	
+	/* Default strings - should be updated by userspace */
 	if (pdata->product_name)
 		strlcpy(product_string, pdata->product_name,
 			sizeof(product_string) - 1);
@@ -2313,7 +2307,6 @@ static int android_bind(struct usb_composite_dev *cdev)
 
 	usb_gadget_set_selfpowered(gadget);
 	dev->cdev = cdev;
-
 
 	cdev->sw_connect2pc.name = "usb_connect2pc";
 	ret = switch_dev_register(&cdev->sw_connect2pc);
@@ -2415,7 +2408,7 @@ static void android_disconnect(struct usb_gadget *gadget)
 	schedule_work(&dev->work);
 	spin_unlock_irqrestore(&cdev->lock, flags);
 
-	
+
 	is_mtp_enabled = false;
 }
 
@@ -2427,7 +2420,7 @@ static void android_mute_disconnect(struct usb_gadget *gadget)
 
 	composite_disconnect(gadget);
 
-	
+
 	if (is_mtp_enabled) {
 		spin_lock_irqsave(&cdev->lock, flags);
 		dev->connected = 0;
@@ -2546,7 +2539,7 @@ static void android_usb_init_work(struct work_struct *data)
 	__u16 product_id;
 
 #ifdef CONFIG_SENSE_4_PLUS
-	
+
 	if (board_mfg_mode() != 2) {
 		ret = android_enable_function(dev, "mtp");
 		if (ret)
@@ -2563,7 +2556,7 @@ static void android_usb_init_work(struct work_struct *data)
 		pr_err("android_usb: Cannot enable '%s'", "adb");
 #endif
 
-	
+
 	if (pdata->diag_init) {
 		ret = android_enable_function(dev, "diag");
 		if (ret)
@@ -2613,7 +2606,7 @@ static void android_usb_init_work(struct work_struct *data)
 	ret = usb_add_config(cdev, &android_config_driver,
 				android_bind_config);
 
-	
+
 	usb_gadget_request_reset(dev->cdev->gadget);
 
 	msleep(100);

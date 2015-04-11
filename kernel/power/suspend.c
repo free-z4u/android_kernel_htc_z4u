@@ -197,6 +197,10 @@ static int suspend_enter(suspend_state_t state, bool *wakeup)
 	return error;
 }
 
+/**
+ * suspend_devices_and_enter - Suspend devices and enter system sleep state.
+ * @state: System sleep state to enter.
+ */
 int suspend_devices_and_enter(suspend_state_t state)
 {
 	int error;

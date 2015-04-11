@@ -27,26 +27,26 @@
  */
 
 enum {
-	WAKE_LOCK_SUSPEND, /* Prevent suspend */
-	WAKE_LOCK_TYPE_COUNT
+        WAKE_LOCK_SUSPEND, /* Prevent suspend */
+        WAKE_LOCK_TYPE_COUNT
 };
 
 struct wake_lock {
 #ifdef CONFIG_HAS_WAKELOCK
-	struct list_head    link;
-	int                 flags;
-	const char         *name;
-	unsigned long       expires;
+        struct list_head    link;
+        int                 flags;
+        const char         *name;
+        unsigned long       expires;
 #ifdef CONFIG_WAKELOCK_STAT
-	struct {
-		int             count;
-		int             expire_count;
-		int             wakeup_count;
-		ktime_t         total_time;
-		ktime_t         prevent_suspend_time;
-		ktime_t         max_time;
-		ktime_t         last_time;
-	} stat;
+        struct {
+                int             count;
+                int             expire_count;
+                int             wakeup_count;
+                ktime_t         total_time;
+                ktime_t         prevent_suspend_time;
+                ktime_t         max_time;
+                ktime_t         last_time;
+        } stat;
 #endif
 #endif
 };
@@ -75,7 +75,7 @@ long has_wake_lock(int type);
 #else
 
 static inline void wake_lock_init(struct wake_lock *lock, int type,
-					const char *name) {}
+                                        const char *name) {}
 static inline void wake_lock_destroy(struct wake_lock *lock) {}
 static inline void wake_lock(struct wake_lock *lock) {}
 static inline void wake_lock_timeout(struct wake_lock *lock, long timeout) {}

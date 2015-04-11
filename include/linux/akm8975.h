@@ -17,44 +17,44 @@
 \anchor AK8975_REG
 Defines a register address of the AK8975.*/
 /*! @{*/
-#define AK8975_REG_WIA		0x00
-#define AK8975_REG_INFO		0x01
-#define AK8975_REG_ST1		0x02
-#define AK8975_REG_HXL		0x03
-#define AK8975_REG_HXH		0x04
-#define AK8975_REG_HYL		0x05
-#define AK8975_REG_HYH		0x06
-#define AK8975_REG_HZL		0x07
-#define AK8975_REG_HZH		0x08
-#define AK8975_REG_ST2		0x09
-#define AK8975_REG_CNTL		0x0A
-#define AK8975_REG_RSV		0x0B
-#define AK8975_REG_ASTC		0x0C
-#define AK8975_REG_TS1		0x0D
-#define AK8975_REG_TS2		0x0E
-#define AK8975_REG_I2CDIS	0x0F
+#define AK8975_REG_WIA          0x00
+#define AK8975_REG_INFO         0x01
+#define AK8975_REG_ST1          0x02
+#define AK8975_REG_HXL          0x03
+#define AK8975_REG_HXH          0x04
+#define AK8975_REG_HYL          0x05
+#define AK8975_REG_HYH          0x06
+#define AK8975_REG_HZL          0x07
+#define AK8975_REG_HZH          0x08
+#define AK8975_REG_ST2          0x09
+#define AK8975_REG_CNTL         0x0A
+#define AK8975_REG_RSV          0x0B
+#define AK8975_REG_ASTC         0x0C
+#define AK8975_REG_TS1          0x0D
+#define AK8975_REG_TS2          0x0E
+#define AK8975_REG_I2CDIS       0x0F
 /*! @}*/
 
 /*! \name AK8975 fuse-rom address
 \anchor AK8975_FUSE
 Defines a read-only address of the fuse ROM of the AK8975.*/
 /*! @{*/
-#define AK8975_FUSE_ASAX	0x10
-#define AK8975_FUSE_ASAY	0x11
-#define AK8975_FUSE_ASAZ	0x12
+#define AK8975_FUSE_ASAX        0x10
+#define AK8975_FUSE_ASAY        0x11
+#define AK8975_FUSE_ASAZ        0x12
 /*! @}*/
 
 
-#define AK8975_CNTL_SNG_MEASURE		0x01
-#define	AK8975_CNTL_CONT_MEASURE	0x02
-#define	AK8975_CNTL_TRIG_MEASURE	0x04
-#define	AK8975_CNTL_SELF_TEST		0x08
-#define	AK8975_CNTL_FUSE_ACCESS		0x0F
-#define	AK8975_CNTL_POWER_DOWN		0x00
+#define AK8975_CNTL_SNG_MEASURE         0x01
+#define AK8975_CNTL_CONT_MEASURE        0x02
+#define AK8975_CNTL_TRIG_MEASURE        0x04
+#define AK8975_CNTL_SELF_TEST           0x08
+#define AK8975_CNTL_FUSE_ACCESS         0x0F
+#define AK8975_CNTL_POWER_DOWN          0x00
 
-#define RBUFF_SIZE_8975		8	
+#define RBUFF_SIZE_8975         8
 
-#define AKMIO				0xA1
+#define AKMIO                           0xA1
 
 /* IOCTLs for AKM library */
 #define ECS_IOCTL_WRITE              _IOW(AKMIO, 0x01, char[5])
@@ -79,17 +79,17 @@ Defines a read-only address of the fuse ROM of the AK8975.*/
 #define ECS_IOCTL_APP_GET_TFLAG        _IOR(AKMIO, 0x16, short)
 #define ECS_IOCTL_APP_RESET_PEDOMETER  _IO(AKMIO, 0x17)
 #define ECS_IOCTL_APP_SET_DELAY        _IOW(AKMIO, 0x18, short)
-#define ECS_IOCTL_APP_GET_DELAY	       ECS_IOCTL_GET_DELAY
+#define ECS_IOCTL_APP_GET_DELAY        ECS_IOCTL_GET_DELAY
 /* Set raw magnetic vector flag */
 #define ECS_IOCTL_APP_SET_MVFLAG       _IOW(AKMIO, 0x19, short)
 /* Get raw magnetic vector flag */
 #define ECS_IOCTL_APP_GET_MVFLAG       _IOR(AKMIO, 0x1A, short)
 
 struct akm8975_platform_data {
-	short layouts[4][3][3];
-	short irq_trigger;
-	int use_pana_gyro;
-	int intr_pin;
+        short layouts[4][3][3];
+        short irq_trigger;
+        int use_pana_gyro;
+        int intr_pin;
 };
 
 void akm_get_akmd_data(short *getdata);
