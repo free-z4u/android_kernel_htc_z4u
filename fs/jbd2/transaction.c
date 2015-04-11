@@ -210,11 +210,6 @@ repeat:
 			goto alloc_transaction;
 		write_lock(&journal->j_state_lock);
 		
-		if (journal->j_barrier_count) {
-			printk(KERN_WARNING "JBD: %s: wait for transaction barrier\n", __func__);
-			write_unlock(&journal->j_state_lock);
-			goto repeat;
-		}
 		if (!journal->j_running_transaction) {
 			jbd2_get_transaction(journal, new_transaction);
 			new_transaction = NULL;

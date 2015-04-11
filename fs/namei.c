@@ -35,8 +35,6 @@
 #include <linux/posix_acl.h>
 #include <asm/uaccess.h>
 
-#include <trace/events/mmcio.h>
-
 #include "internal.h"
 #include "mount.h"
 
@@ -2810,7 +2808,6 @@ int vfs_unlink(struct inode *dir, struct dentry *dentry)
 	if (!dir->i_op->unlink)
 		return -EPERM;
 
-	trace_vfs_unlink(dentry, dentry->d_inode->i_size);
 	mutex_lock(&dentry->d_inode->i_mutex);
 	if (d_mountpoint(dentry))
 		error = -EBUSY;
@@ -2823,7 +2820,6 @@ int vfs_unlink(struct inode *dir, struct dentry *dentry)
 		}
 	}
 	mutex_unlock(&dentry->d_inode->i_mutex);
-	trace_vfs_unlink_done(dentry);
 
 	/* We don't d_delete() NFS sillyrenamed files--they still exist. */
 	if (!error && !(dentry->d_flags & DCACHE_NFSFS_RENAMED)) {

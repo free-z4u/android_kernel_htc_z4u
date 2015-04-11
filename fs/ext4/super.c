@@ -44,10 +44,6 @@
 #include <linux/kthread.h>
 #include <linux/freezer.h>
 
-#ifdef CONFIG_EXT4_E2FSCK_RECOVER
-#include <linux/reboot.h>
-#endif
-
 #include "ext4.h"
 #include "ext4_extents.h"
 #include "ext4_jbd2.h"
@@ -258,6 +254,7 @@ void ext4_itable_unused_set(struct super_block *sb,
 }
 
 
+/* Just increment the non-pointer handle value */
 static handle_t *ext4_get_nojournal(void)
 {
 	handle_t *handle = current->journal_info;
@@ -273,6 +270,7 @@ static handle_t *ext4_get_nojournal(void)
 }
 
 
+/* Decrement the non-pointer handle value */
 static void ext4_put_nojournal(handle_t *handle)
 {
 	unsigned long ref_cnt = (unsigned long)handle;
@@ -285,6 +283,18 @@ static void ext4_put_nojournal(handle_t *handle)
 	current->journal_info = handle;
 }
 
+/*
+ * Wrappers for jbd2_journal_start/end.
+ *
+ * The only special thing we need to do here is to make sure that all
+ * journal_end calls result in the superblock being marked dirty, so
+ * that sync() will call the filesystem's write_super callback if
+ * appropriate.
+ *
+ * To avoid j_barrier hold in userspace when a user calls freeze(),
+ * ext4 prevents a new handle from being started by s_frozen, which
+ * is in an upper layer.
+ */
 handle_t *ext4_journal_start_sb(struct super_block *sb, int nblocks)
 {
 	journal_t *journal;
@@ -297,11 +307,23 @@ handle_t *ext4_journal_start_sb(struct super_block *sb, int nblocks)
 	journal = EXT4_SB(sb)->s_journal;
 	handle = ext4_journal_current_handle();
 
+	/*
+	 * If a handle has been started, it should be allowed to
+	 * finish, otherwise deadlock could happen between freeze
+	 * and others(e.g. truncate) due to the restart of the
+	 * journal handle if the filesystem is forzen and active
+	 * handles are not stopped.
+	 */
 	if (!handle)
 		vfs_check_frozen(sb, SB_FREEZE_TRANS);
 
 	if (!journal)
 		return ext4_get_nojournal();
+	/*
+	 * Special case here: if the journal has aborted behind our
+	 * backs (eg. EIO in the commit thread), then we still need to
+	 * take the FS itself readonly cleanly.
+	 */
 	if (is_journal_aborted(journal)) {
 		ext4_abort(sb, "Detected aborted journal");
 		return ERR_PTR(-EROFS);
@@ -309,6 +331,12 @@ handle_t *ext4_journal_start_sb(struct super_block *sb, int nblocks)
 	return jbd2_journal_start(journal, nblocks);
 }
 
+/*
+ * The only special thing we need to do here is to make sure that all
+ * jbd2_journal_stop calls result in the superblock being marked dirty, so
+ * that sync() will call the filesystem's write_super callback if
+ * appropriate.
+ */
 int __ext4_journal_stop(const char *where, unsigned int line, handle_t *handle)
 {
 	struct super_block *sb;
@@ -372,6 +400,10 @@ static void __save_error_info(struct super_block *sb, const char *func,
 		es->s_first_error_ino = es->s_last_error_ino;
 		es->s_first_error_block = es->s_last_error_block;
 	}
+	/*
+	 * Start the daily error reporting function if it hasn't been
+	 * started already
+	 */
 	if (!es->s_error_count)
 		mod_timer(&EXT4_SB(sb)->s_err_report, jiffies + 24*60*60*HZ);
 	es->s_error_count = cpu_to_le32(le32_to_cpu(es->s_error_count) + 1);
@@ -384,6 +416,14 @@ static void save_error_info(struct super_block *sb, const char *func,
 	ext4_commit_super(sb, 1);
 }
 
+/*
+ * The del_gendisk() function uninitializes the disk-specific data
+ * structures, including the bdi structure, without telling anyone
+ * else.  Once this happens, any attempt to call mark_buffer_dirty()
+ * (for example, by ext4_commit_super), will cause a kernel OOPS.
+ * This is a kludge to prevent these oops until we can put in a proper
+ * hook in del_gendisk() to inform the VFS and file system layers.
+ */
 static int block_device_ejected(struct super_block *sb)
 {
 	struct inode *bd_inode = sb->s_bdev->bd_inode;
@@ -409,6 +449,20 @@ static void ext4_journal_commit_callback(journal_t *journal, transaction_t *txn)
 	spin_unlock(&sbi->s_md_lock);
 }
 
+/* Deal with the reporting of failure conditions on a filesystem such as
+ * inconsistencies detected or read IO failures.
+ *
+ * On ext2, we can store the error state of the filesystem in the
+ * superblock.  That is not possible on ext4, because we may have other
+ * write ordering constraints on the superblock which prevent us from
+ * writing it out straight away; and given that the journal is about to
+ * be aborted, we can't rely on the current, or future, transactions to
+ * write out the superblock safely.
+ *
+ * We'll just use the jbd2_journal_abort() error code to record an error in
+ * the journal instead.  On recovery, the journal will complain about
+ * that error until we've noted it down and cleared it.
+ */
 
 static void ext4_handle_error(struct super_block *sb)
 {
@@ -429,11 +483,6 @@ static void ext4_handle_error(struct super_block *sb)
 	if (test_opt(sb, ERRORS_PANIC))
 		panic("EXT4-fs (device %s): panic forced after error\n",
 			sb->s_id);
-
-#ifdef CONFIG_EXT4_E2FSCK_RECOVER
-	if (test_opt(sb, ERRORS_RO))
-		ext4_e2fsck(sb);
-#endif
 }
 
 void __ext4_error(struct super_block *sb, const char *function,
@@ -451,42 +500,6 @@ void __ext4_error(struct super_block *sb, const char *function,
 
 	ext4_handle_error(sb);
 }
-
-#ifdef CONFIG_EXT4_E2FSCK_RECOVER
-static void ext4_reboot(struct work_struct *work)
-{
-	printk(KERN_ERR "%s: reboot to run e2fsck\n", __func__);
-	kernel_restart("oem-22");
-}
-
-void ext4_e2fsck(struct super_block *sb)
-{
-	static int reboot;
-	struct workqueue_struct *wq;
-	struct ext4_sb_info *sb_info;
-	if (reboot)
-		return;
-	printk(KERN_ERR "%s\n", __func__);
-	reboot = 1;
-	sb_info = EXT4_SB(sb);
-	if (!sb_info) {
-		printk(KERN_ERR "%s: no sb_info\n", __func__);
-		reboot = 0;
-		return;
-	}
-	sb_info->recover_wq = create_workqueue("ext4-recover");
-	if (!sb_info->recover_wq) {
-		printk(KERN_ERR "EXT4-fs: failed to create recover workqueue\n");
-		reboot = 0;
-		return;
-	}
-
-	INIT_WORK(&sb_info->reboot_work, ext4_reboot);
-	wq = sb_info->recover_wq;
-	
-	queue_work(wq, &sb_info->reboot_work);
-}
-#endif
 
 void ext4_error_inode(struct inode *inode, const char *function,
 		      unsigned int line, ext4_fsblk_t block,

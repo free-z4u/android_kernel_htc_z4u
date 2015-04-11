@@ -10,19 +10,16 @@
 #include <linux/fs.h>
 #include <linux/buffer_head.h>
 #include <linux/time.h>
-#include <linux/genhd.h>
 #include "fat.h"
 
-static void set_disk_ro_uevent(struct gendisk *gd, int ro)
-{
-	char event[] = "DISK_RO=1";
-	char *envp[] = { event, NULL };
-
-	if (!ro)
-		event[8] = '0';
-	kobject_uevent_env(&disk_to_dev(gd)->kobj, KOBJ_CHANGE, envp);
-}
-
+/*
+ * fat_fs_error reports a file system problem that might indicate fa data
+ * corruption/inconsistency. Depending on 'errors' mount option the
+ * panic() is called, or error message is printed FAT and nothing is done,
+ * or filesystem is remounted read-only (default behavior).
+ * In case the file system is remounted read-only, it can be made writable
+ * again by remounting it.
+ */
 void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
 {
 	struct fat_mount_options *opts = &MSDOS_SB(sb)->options;
@@ -43,7 +40,6 @@ void __fat_fs_error(struct super_block *sb, int report, const char *fmt, ...)
 		sb->s_flags |= MS_RDONLY;
 		printk(KERN_ERR "FAT-fs (%s): Filesystem has been "
 				"set read-only\n", sb->s_id);
-		set_disk_ro_uevent(sb->s_bdev->bd_disk, 1);
 	}
 }
 EXPORT_SYMBOL_GPL(__fat_fs_error);
@@ -60,11 +56,7 @@ void fat_msg(struct super_block *sb, const char *level, const char *fmt, ...)
 	va_start(args, fmt);
 	vaf.fmt = fmt;
 	vaf.va = &args;
-	if (!strncmp(level, KERN_ERR, sizeof(KERN_ERR)))
-		printk_ratelimited("%sFAT-fs (%s): %pV\n", level,
-				   sb->s_id, &vaf);
-	else
-		printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
+	printk("%sFAT-fs (%s): %pV\n", level, sb->s_id, &vaf);
 	va_end(args);
 }
 
