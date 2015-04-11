@@ -1563,7 +1563,9 @@ static int copy_params(struct dm_ioctl __user *user, struct dm_ioctl **param)
 	if (copy_from_user(dmi, user, tmp.data_size))
 		goto bad;
 
-	/* Wipe the user buffer so we do not return it to userspace */
+	/*
+	 * Abort if something changed the ioctl data while it was being copied.
+	 */
 	if (secure_data && clear_user(user, tmp.data_size))
 		goto bad;
 

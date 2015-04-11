@@ -289,6 +289,7 @@ int radeon_vm_manager_init(struct radeon_device *rdev)
 	rdev->vm_manager.enabled = false;
 
 	/* mark first vm as always in use, it's the system one */
+	/* allocate enough for 2 full VM pts */
 	r = radeon_sa_bo_manager_init(rdev, &rdev->vm_manager.sa_manager,
 				      rdev->vm_manager.max_pfn * 8,
 				      RADEON_GEM_DOMAIN_VRAM);

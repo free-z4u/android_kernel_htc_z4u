@@ -94,19 +94,20 @@ struct cfs_bandwidth {
 	struct hrtimer period_timer, slack_timer;
 	struct list_head throttled_cfs_rq;
 
-	
+	/* statistics */
 	int nr_periods, nr_throttled;
 	u64 throttled_time;
 #endif
 };
 
+/* task group related information */
 struct task_group {
 	struct cgroup_subsys_state css;
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
-	
+	/* schedulable entities of this group on each cpu */
 	struct sched_entity **se;
-	
+	/* runqueue "owned" by this group on each cpu */
 	struct cfs_rq **cfs_rq;
 	unsigned long shares;
 
@@ -137,10 +138,21 @@ struct task_group {
 #ifdef CONFIG_FAIR_GROUP_SCHED
 #define ROOT_TASK_GROUP_LOAD	NICE_0_LOAD
 
+/*
+ * A weight of 0 or 1 can cause arithmetics problems.
+ * A weight of a cfs_rq is the sum of weights of which entities
+ * are queued on this cfs_rq, so a weight of a entity should not be
+ * too large, so as the shares value of a task group.
+ * (The default weight is 1024 - so there's no practical
+ *  limitation from this.)
+ */
 #define MIN_SHARES	(1UL <<  1)
 #define MAX_SHARES	(1UL << 18)
 #endif
 
+/* Default task group.
+ *	Every task in system belong to this group at bootup.
+ */
 extern struct task_group root_task_group;
 
 typedef int (*tg_visitor)(struct task_group *, void *);
@@ -148,6 +160,12 @@ typedef int (*tg_visitor)(struct task_group *, void *);
 extern int walk_tg_tree_from(struct task_group *from,
 			     tg_visitor down, tg_visitor up, void *data);
 
+/*
+ * Iterate the full tree, calling @down when first entering a node and @up when
+ * leaving it for the final time.
+ *
+ * Caller must hold rcu_lock or sufficient equivalent.
+ */
 static inline int walk_tg_tree(tg_visitor down, tg_visitor up, void *data)
 {
 	return walk_tg_tree_from(&root_task_group, down, up, data);
@@ -174,12 +192,13 @@ extern void init_tg_rt_entry(struct task_group *tg, struct rt_rq *rt_rq,
 		struct sched_rt_entity *rt_se, int cpu,
 		struct sched_rt_entity *parent);
 
-#else 
+#else /* CONFIG_CGROUP_SCHED */
 
 struct cfs_bandwidth { };
 
-#endif	
+#endif	/* CONFIG_CGROUP_SCHED */
 
+/* CFS-related fields in a runqueue */
 struct cfs_rq {
 	struct load_weight load;
 	unsigned long nr_running, h_nr_running;
@@ -193,6 +212,10 @@ struct cfs_rq {
 	struct rb_root tasks_timeline;
 	struct rb_node *rb_leftmost;
 
+	/*
+	 * 'curr' points to currently running entity on this cfs_rq.
+	 * It is set to NULL otherwise (i.e when none are currently running).
+	 */
 	struct sched_entity *curr, *next, *last, *skip;
 
 #ifdef	CONFIG_SCHED_DEBUG
@@ -200,21 +223,42 @@ struct cfs_rq {
 #endif
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
-	struct rq *rq;	
+	struct rq *rq;	/* cpu runqueue to which this cfs_rq is attached */
 
+	/*
+	 * leaf cfs_rqs are those that hold tasks (lowest schedulable entity in
+	 * a hierarchy). Non-leaf lrqs hold other higher schedulable entities
+	 * (like users, containers etc.)
+	 *
+	 * leaf_cfs_rq_list ties together list of leaf cfs_rq's in a cpu. This
+	 * list is used during load balance.
+	 */
 	int on_list;
 	struct list_head leaf_cfs_rq_list;
-	struct task_group *tg;	
+	struct task_group *tg;	/* group that "owns" this runqueue */
 
 #ifdef CONFIG_SMP
+	/*
+	 *   h_load = weight * f(tg)
+	 *
+	 * Where f(tg) is the recursive weight fraction assigned to
+	 * this group.
+	 */
 	unsigned long h_load;
 
+	/*
+	 * Maintaining per-cpu shares distribution for group scheduling
+	 *
+	 * load_stamp is the last time we updated the load average
+	 * load_last is the last time we updated the load average and saw load
+	 * load_unacc_exec_time is currently unaccounted execution time
+	 */
 	u64 load_avg;
 	u64 load_period;
 	u64 load_stamp, load_last, load_unacc_exec_time;
 
 	unsigned long load_contribution;
-#endif 
+#endif /* CONFIG_SMP */
 #ifdef CONFIG_CFS_BANDWIDTH
 	int runtime_enabled;
 	u64 runtime_expires;
@@ -223,8 +267,8 @@ struct cfs_rq {
 	u64 throttled_timestamp;
 	int throttled, throttle_count;
 	struct list_head throttled_list;
-#endif 
-#endif 
+#endif /* CONFIG_CFS_BANDWIDTH */
+#endif /* CONFIG_FAIR_GROUP_SCHED */
 };
 
 static inline int rt_bandwidth_enabled(void)
@@ -232,14 +276,15 @@ static inline int rt_bandwidth_enabled(void)
 	return sysctl_sched_rt_runtime >= 0;
 }
 
+/* Real-Time classes' related field in a runqueue: */
 struct rt_rq {
 	struct rt_prio_array active;
 	unsigned long rt_nr_running;
 #if defined CONFIG_SMP || defined CONFIG_RT_GROUP_SCHED
 	struct {
-		int curr; 
+		int curr; /* highest queued rt task prio */
 #ifdef CONFIG_SMP
-		int next; 
+		int next; /* next highest */
 #endif
 	} highest_prio;
 #endif
@@ -252,7 +297,7 @@ struct rt_rq {
 	int rt_throttled;
 	u64 rt_time;
 	u64 rt_runtime;
-	
+	/* Nests inside the rq lock: */
 	raw_spinlock_t rt_runtime_lock;
 
 #ifdef CONFIG_RT_GROUP_SCHED
@@ -266,6 +311,14 @@ struct rt_rq {
 
 #ifdef CONFIG_SMP
 
+/*
+ * We add the notion of a root-domain which will be used to define per-domain
+ * variables. Each exclusive cpuset essentially defines an island domain by
+ * fully partitioning the member cpus from any other cpuset. Whenever a new
+ * exclusive cpuset is created, we also create and attach a new root-domain
+ * object.
+ *
+ */
 struct root_domain {
 	atomic_t refcount;
 	atomic_t rto_count;
@@ -273,18 +326,33 @@ struct root_domain {
 	cpumask_var_t span;
 	cpumask_var_t online;
 
+	/*
+	 * The "RT overload" flag: it gets set if a CPU has more than
+	 * one runnable RT task.
+	 */
 	cpumask_var_t rto_mask;
 	struct cpupri cpupri;
 };
 
 extern struct root_domain def_root_domain;
 
-#endif 
+#endif /* CONFIG_SMP */
 
+/*
+ * This is the main, per-CPU runqueue data structure.
+ *
+ * Locking rule: those places that want to lock multiple runqueues
+ * (such as the load balancing or the thread migration code), lock
+ * acquire operations must be ordered by ascending &runqueue.
+ */
 struct rq {
-	
+	/* runqueue lock: */
 	raw_spinlock_t lock;
 
+	/*
+	 * nr_running and cpu_load should be in the same cacheline because
+	 * remote CPUs use both these fields when doing load calculation.
+	 */
 	unsigned long nr_running;
 	#define CPU_LOAD_IDX_MAX 5
 	unsigned long cpu_load[CPU_LOAD_IDX_MAX];
@@ -295,7 +363,7 @@ struct rq {
 #endif
 	int skip_clock_update;
 
-	
+	/* capture load from *all* tasks on this cpu: */
 	struct load_weight load;
 	unsigned long nr_load_updates;
 	u64 nr_switches;
@@ -304,13 +372,19 @@ struct rq {
 	struct rt_rq rt;
 
 #ifdef CONFIG_FAIR_GROUP_SCHED
-	
+	/* list of leaf cfs_rq on this cpu: */
 	struct list_head leaf_cfs_rq_list;
 #endif
 #ifdef CONFIG_RT_GROUP_SCHED
 	struct list_head leaf_rt_rq_list;
 #endif
 
+	/*
+	 * This is part of a global counter where only the total sum
+	 * over all CPUs matters. A task can increase this counter on
+	 * one CPU and if it got migrated afterwards it may decrease
+	 * it on another CPU. Always updated under the runqueue lock:
+	 */
 	unsigned long nr_uninterruptible;
 
 	struct task_struct *curr, *idle, *stop;
@@ -329,12 +403,12 @@ struct rq {
 	unsigned long cpu_power;
 
 	unsigned char idle_balance;
-	
+	/* For active balancing */
 	int post_schedule;
 	int active_balance;
 	int push_cpu;
 	struct cpu_stop_work active_balance_work;
-	
+	/* cpu of this runqueue: */
 	int cpu;
 	int online;
 
@@ -356,7 +430,7 @@ struct rq {
 	u64 prev_steal_time_rq;
 #endif
 
-	
+	/* calc_load related fields */
 	unsigned long calc_load_update;
 	long calc_load_active;
 
@@ -369,19 +443,19 @@ struct rq {
 #endif
 
 #ifdef CONFIG_SCHEDSTATS
-	
+	/* latency stats */
 	struct sched_info rq_sched_info;
 	unsigned long long rq_cpu_time;
-	
+	/* could above be rq->cfs_rq.exec_clock + rq->rt_rq.rt_runtime ? */
 
-	
+	/* sys_sched_yield() stats */
 	unsigned int yld_count;
 
-	
+	/* schedule() stats */
 	unsigned int sched_count;
 	unsigned int sched_goidle;
 
-	
+	/* try_to_wake_up() stats */
 	unsigned int ttwu_count;
 	unsigned int ttwu_local;
 #endif
@@ -414,12 +488,28 @@ DECLARE_PER_CPU(struct rq, runqueues);
 	rcu_dereference_check((p), \
 			      lockdep_is_held(&sched_domains_mutex))
 
+/*
+ * The domain tree (rq->sd) is protected by RCU's quiescent state transition.
+ * See detach_destroy_domains: synchronize_sched for details.
+ *
+ * The domain tree of any CPU may only be accessed from within
+ * preempt-disabled sections.
+ */
 #define for_each_domain(cpu, __sd) \
 	for (__sd = rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd); \
 			__sd; __sd = __sd->parent)
 
 #define for_each_lower_domain(sd) for (; sd; sd = sd->child)
 
+/**
+ * highest_flag_domain - Return highest sched_domain containing flag.
+ * @cpu:	The cpu whose highest level of sched domain is to
+ *		be returned.
+ * @flag:	The flag to check for the highest sched_domain
+ *		for the given cpu.
+ *
+ * Returns the highest sched_domain of a cpu which contains the given flag.
+ */
 static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
 {
 	struct sched_domain *sd, *hsd = NULL;
@@ -436,13 +526,26 @@ static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
 DECLARE_PER_CPU(struct sched_domain *, sd_llc);
 DECLARE_PER_CPU(int, sd_llc_id);
 
-#endif 
+#endif /* CONFIG_SMP */
 
 #include "stats.h"
 #include "auto_group.h"
 
 #ifdef CONFIG_CGROUP_SCHED
 
+/*
+ * Return the group to which this tasks belongs.
+ *
+ * We cannot use task_subsys_state() and friends because the cgroup
+ * subsystem changes that value before the cgroup_subsys::attach() method
+ * is called, therefore we cannot pin it and might observe the wrong value.
+ *
+ * The same is true for autogroup's p->signal->autogroup->tg, the autogroup
+ * core changes this before calling sched_move_task().
+ *
+ * Instead we use a 'copy' which is updated from sched_move_task() while
+ * holding both task_struct::pi_lock and rq::lock.
+ */
 static inline struct task_group *task_group(struct task_struct *p)
 {
 	struct task_group *tg;

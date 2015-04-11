@@ -293,7 +293,7 @@ static int mmc_read_switch(struct mmc_card *card)
 		return -ENOMEM;
 	}
 
-	
+
 	err = mmc_sd_switch(card, 0, 0, 1, status);
 	if (err) {
 		if (err != -EINVAL && err != -ENOSYS && err != -EFAULT)
@@ -312,7 +312,7 @@ static int mmc_read_switch(struct mmc_card *card)
 	if (card->scr.sda_spec3) {
 		card->sw_caps.sd3_bus_mode = status[13];
 
-		
+
 		err = mmc_sd_switch(card, 0, 2, 1, status);
 		if (err) {
 			if (err != -EINVAL && err != -ENOSYS && err != -EFAULT)
@@ -328,7 +328,7 @@ static int mmc_read_switch(struct mmc_card *card)
 
 		card->sw_caps.sd3_drv_type = status[9];
 
-		
+
 		err = mmc_sd_switch(card, 0, 3, 1, status);
 		if (err) {
 			if (err != -EINVAL && err != -ENOSYS && err != -EFAULT)
@@ -595,7 +595,7 @@ static int mmc_sd_init_uhs_card(struct mmc_card *card)
 		return -ENOMEM;
 	}
 
-	
+
 	if ((card->host->caps & MMC_CAP_4_BIT_DATA) &&
 	    (card->scr.bus_widths & SD_SCR_BUS_WIDTH_4)) {
 		err = mmc_app_set_bus_width(card, MMC_BUS_WIDTH_4);
@@ -607,22 +607,22 @@ static int mmc_sd_init_uhs_card(struct mmc_card *card)
 
 	sd_update_bus_speed_mode(card);
 
-	
+
 	err = sd_select_driver_type(card, status);
 	if (err)
 		goto out;
 
-	
+
 	err = sd_set_current_limit(card, status);
 	if (err)
 		goto out;
 
-	
+
 	err = sd_set_bus_speed_mode(card, status);
 	if (err)
 		goto out;
 
-	
+
 	if (!mmc_host_is_spi(card->host) && card->host->ops->execute_tuning) {
 		mmc_host_clk_hold(card->host);
 		err = card->host->ops->execute_tuning(card->host,
@@ -695,7 +695,7 @@ int mmc_sd_get_cid(struct mmc_host *host, u32 ocr, u32 *cid, u32 *rocr)
 	    MMC_CAP_UHS_SDR50 | MMC_CAP_UHS_SDR104 | MMC_CAP_UHS_DDR50))
 		ocr |= SD_OCR_S18R;
 
-	
+
 	if (host->caps & (MMC_CAP_SET_XPC_330 | MMC_CAP_SET_XPC_300 |
 	    MMC_CAP_SET_XPC_180))
 		ocr |= SD_OCR_XPC;
@@ -758,16 +758,19 @@ int mmc_sd_setup_card(struct mmc_host *host, struct mmc_card *card,
 		if (err)
 			return err;
 
-		
+
 		mmc_init_erase(card);
 
+		/*
+		 * Fetch switch information from card.
+		 */
 #ifdef CONFIG_MMC_PARANOID_SD_INIT
 		for (retries = 1; retries <= 3; retries++) {
 			err = mmc_read_switch(card);
 			if (!err) {
 				if (retries > 1) {
 					printk(KERN_WARNING
-					       "%s: recovered\n", 
+					       "%s: recovered\n",
 					       mmc_hostname(host));
 				}
 				break;
@@ -846,7 +849,7 @@ static int mmc_sd_init_card(struct mmc_host *host, u32 ocr,
 	BUG_ON(!host);
 	WARN_ON(!host->claimed);
 
-	
+
 	mmc_set_signal_voltage(host, MMC_SIGNAL_VOLTAGE_330, 0);
 
 	err = mmc_sd_get_cid(host, ocr, cid, &rocr);
@@ -893,13 +896,13 @@ static int mmc_sd_init_card(struct mmc_host *host, u32 ocr,
 	if (err)
 		goto free_card;
 
-	
+
 	if (rocr & SD_ROCR_S18A) {
 		err = mmc_sd_init_uhs_card(card);
 		if (err)
 			goto free_card;
 
-		
+
 		mmc_card_set_uhs(card);
 
 		if (host->ops->enable_preset_value) {
@@ -968,9 +971,12 @@ static void mmc_sd_detect(struct mmc_host *host)
 
 	BUG_ON(!host);
 	BUG_ON(!host->card);
-       
+
 	mmc_claim_host(host);
 
+	/*
+	 * Just check if our card has been removed.
+	 */
 #ifdef CONFIG_MMC_PARANOID_SD_INIT
 	while(retries) {
 		err = mmc_send_status(host->card, NULL);
@@ -1117,7 +1123,7 @@ int mmc_attach_sd(struct mmc_host *host)
 	BUG_ON(!host);
 	WARN_ON(!host->claimed);
 
-	
+
 	if (host->ops->enable_preset_value) {
 		mmc_host_clk_hold(host);
 		host->ops->enable_preset_value(host, false);
@@ -1162,6 +1168,9 @@ int mmc_attach_sd(struct mmc_host *host)
 		goto err;
 	}
 
+	/*
+	 * Detect and init the card.
+	 */
 #ifdef CONFIG_MMC_PARANOID_SD_INIT
 	retries = 5;
 	delayTime = 5;

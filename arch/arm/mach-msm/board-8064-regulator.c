@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -18,6 +18,7 @@
 #define VREG_CONSUMERS(_id) \
 	static struct regulator_consumer_supply vreg_consumers_##_id[]
 
+/* Regulators that are present when using either PM8921 or PM8917 */
 /*
  * Consumer specific regulator names:
  *			 regulator name		consumer dev_name

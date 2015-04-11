@@ -1013,9 +1013,10 @@ static bool dma64_rxidle(struct dma_info *di)
 
 /*
  * post receive buffers
- *  return false is refill failed completely and ring is empty this will stall
- *  the rx dma and user might want to call rxfill again asap. This unlikely
- *  happens on memory-rich NIC, but often on memory-constrained dongle
+ *  Return false if refill failed completely or dma mapping failed. The ring
+ *  is empty, which will stall the rx dma and user might want to call rxfill
+ *  again asap. This is unlikely to happen on a memory-rich NIC, but often on
+ *  memory-constrained dongle.
  */
 bool dma_rxfill(struct dma_pub *pub)
 {

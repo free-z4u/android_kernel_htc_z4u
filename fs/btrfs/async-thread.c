@@ -206,7 +206,7 @@ static noinline void run_ordered_completions(struct btrfs_workers *workers,
 
 		work->ordered_func(work);
 
-		/* now take the lock again and call the freeing code */
+		/* now take the lock again and drop our item from the list */
 		spin_lock(&workers->order_lock);
 		list_del(&work->order_list);
 		work->ordered_free(work);

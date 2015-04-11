@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -132,6 +132,11 @@ static inline uint32_t msm_spm_get_sts_curr_pmic_data(
 /******************************************************************************
  * Public functions
  *****************************************************************************/
+/**
+ * msm_spm_set_low_power_mode() - Configure SPM start address for low power mode
+ * @mode: SPM LPM mode to enter
+ * @notify_rpm: Notify RPM in this mode
+ */
 int msm_spm_set_low_power_mode(unsigned int mode, bool notify_rpm)
 {
 	struct msm_spm_device *dev = &__get_cpu_var(msm_spm_devices);
@@ -185,6 +190,11 @@ int msm_spm_set_low_power_mode(unsigned int mode, bool notify_rpm)
 	return 0;
 }
 
+/**
+ * msm_spm_set_vdd(): Set core voltage
+ * @cpu: core id
+ * @vlevel: Encoded PMIC data.
+ */
 int msm_spm_set_vdd(unsigned int cpu, unsigned int vlevel)
 {
 	struct msm_spm_device *dev;

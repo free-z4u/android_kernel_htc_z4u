@@ -2836,10 +2836,10 @@ static inline void hci_sync_conn_complete_evt(struct hci_dev *hdev, struct sk_bu
 		hci_conn_add_sysfs(conn);
 		break;
 
-	case 0x11:	
-	case 0x1c:	
-	case 0x1a:	
-	case 0x1f:	
+	case 0x11:	/* Unsupported Feature or Parameter Value */
+	case 0x1c:	/* SCO interval rejected */
+	case 0x1a:	/* Unsupported Remote Feature */
+	case 0x1f:	/* Unspecified error */
 		if (conn->out && conn->attempt < 2) {
 			if (!conn->hdev->is_wbs)
 				conn->pkt_type =
@@ -2848,7 +2848,7 @@ static inline void hci_sync_conn_complete_evt(struct hci_dev *hdev, struct sk_bu
 			hci_setup_sync(conn, conn->link->handle);
 			goto unlock;
 		}
-		
+
 
 	default:
 		conn->state = BT_CLOSED;
@@ -2910,7 +2910,7 @@ static inline u8 hci_get_auth_req(struct hci_conn *conn)
 {
 	BT_DBG("%p", conn);
 
-	
+
 	if (conn->remote_auth == 0x02 || conn->remote_auth == 0x03) {
 		if (conn->remote_cap == 0x03 || conn->io_capability == 0x03) {
 			return 0x02;
@@ -2920,7 +2920,7 @@ static inline u8 hci_get_auth_req(struct hci_conn *conn)
 		}
 	}
 
-	
+
 	if (conn->remote_auth <= 0x01)
 		return 0x00;
 
@@ -2950,7 +2950,7 @@ static inline void hci_io_capa_request_evt(struct hci_dev *hdev, struct sk_buff 
 		struct hci_cp_io_capability_reply cp;
 		u8 io_cap = conn->io_capability;
 
-		
+
 		cp.capability = (io_cap == 0x04) ? 0x01 : io_cap;
 		bacpy(&cp.bdaddr, &ev->bdaddr);
 		if (conn->auth_initiator)
@@ -2970,7 +2970,7 @@ static inline void hci_io_capa_request_evt(struct hci_dev *hdev, struct sk_buff 
 		struct hci_cp_io_capability_neg_reply cp;
 
 		bacpy(&cp.bdaddr, &ev->bdaddr);
-		cp.reason = 0x16; 
+		cp.reason = 0x16;
 
 		hci_send_cmd(hdev, HCI_OP_IO_CAPABILITY_NEG_REPLY,
 							sizeof(cp), &cp);
@@ -3538,7 +3538,6 @@ void hci_event_packet(struct hci_dev *hdev, struct sk_buff *skb)
 	hdev->stat.evt_rx++;
 }
 
-/* Generate internal stack event */
 void hci_si_event(struct hci_dev *hdev, int type, int dlen, void *data)
 {
 	struct hci_event_hdr *hdr;

@@ -109,6 +109,7 @@ int __ext4_handle_dirty_metadata(const char *where, unsigned int line,
 
 	if (ext4_handle_valid(handle)) {
 		err = jbd2_journal_dirty_metadata(handle, bh);
+		/* Errors can only happen if there is a bug */
 		if (err) {
 			/* Errors can only happen if there is a bug */
 			handle->h_err = err;

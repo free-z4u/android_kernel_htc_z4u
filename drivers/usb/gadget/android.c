@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Google, Inc.
  * Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
  * Author: Mike Lockwood <lockwood@android.com>
+ *         Benoit Goby <benoit@android.com>
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -16,11 +17,9 @@
  *
  */
 
-
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/fs.h>
-
 #include <linux/delay.h>
 #include <linux/kernel.h>
 #include <linux/utsname.h>
@@ -93,7 +92,6 @@ static int os_type;
 #include <mach/perflock.h>
 #endif
 
-
 MODULE_AUTHOR("Mike Lockwood");
 MODULE_DESCRIPTION("Android Composite USB Driver");
 MODULE_LICENSE("GPL");
@@ -138,7 +136,6 @@ struct android_usb_function {
 	int (*ctrlrequest)(struct android_usb_function *,
 					struct usb_composite_dev *,
 					const struct usb_ctrlrequest *);
-	
 	int performance_lock;
 };
 
@@ -158,7 +155,7 @@ struct android_dev {
 	struct pm_qos_request pm_qos_req_dma;
 	struct work_struct work;
 	struct delayed_work init_work;
-	
+
 	struct list_head function_list;
 
 	int num_products;

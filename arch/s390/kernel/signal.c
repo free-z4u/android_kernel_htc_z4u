@@ -148,7 +148,7 @@ static int restore_sigregs(struct pt_regs *regs, _sigregs __user *sregs)
 	/* Use regs->psw.mask instead of psw_user_bits to preserve PER bit. */
 	regs->psw.mask = (regs->psw.mask & ~PSW_MASK_USER) |
 		(user_sregs.regs.psw.mask & PSW_MASK_USER);
-	/* Check for invalid amode */
+	/* Check for invalid user address space control. */
 	if (regs->psw.mask & PSW_MASK_EA)
 		regs->psw.mask |= PSW_MASK_BA;
 	regs->psw.addr = user_sregs.regs.psw.addr;

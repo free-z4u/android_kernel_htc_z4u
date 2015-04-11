@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -10,8 +10,8 @@
  * GNU General Public License for more details.
  */
 
-#include <linux/module.h>			/* Needed by all modules */
-#include <linux/kernel.h>			/* Needed for KERN_INFO */
+#include <linux/module.h>        /* Just for modules */
+#include <linux/kernel.h>        /* Only for KERN_INFO */
 #include <linux/init.h>				/* Needed for the macros */
 #include <linux/cdev.h>
 #include <linux/err.h>				/* IS_ERR */

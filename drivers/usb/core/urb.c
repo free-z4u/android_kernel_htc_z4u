@@ -681,14 +681,16 @@ void usb_unpoison_urb(struct urb *urb)
 EXPORT_SYMBOL_GPL(usb_unpoison_urb);
 
 /**
- * usb_kill_anchored_urbs - cancel transfer requests en masse
- * @anchor: anchor the requests are bound to
+ * usb_block_urb - reliably prevent further use of an URB
+ * @urb: pointer to URB to be blocked, may be NULL
  *
- * this allows all outstanding URBs to be killed starting
- * from the back of the queue
+ * After the routine has run, attempts to resubmit the URB will fail
+ * with error -EPERM.  Thus even if the URB's completion handler always
+ * tries to resubmit, it will not succeed and the URB will become idle.
  *
- * This routine should not be called by a driver after its disconnect
- * method has returned.
+ * The URB must not be deallocated while this routine is running.  In
+ * particular, when a driver calls this routine, it must insure that the
+ * completion handler cannot deallocate the URB.
  */
 void usb_kill_anchored_urbs(struct usb_anchor *anchor)
 {

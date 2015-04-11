@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -57,9 +57,10 @@ int qpnpint_register_controller(struct device_node *node,
 				struct qpnp_local_int *li_cb);
 
 /**
- * qpnpint_handle_irq - Main interrupt handling routine
+ * qpnpint_unregister_controller() - Unregister local interrupt callbacks
  *
- * Pass a PMIC Arbiter interrupt to Linux.
+ * Used by the PMIC Arbiter driver or equivalent to unregister
+ * callbacks for interrupt events.
  */
 int qpnpint_handle_irq(struct spmi_controller *spmi_ctrl,
 		       struct qpnp_irq_spec *spec);

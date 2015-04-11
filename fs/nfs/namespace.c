@@ -37,6 +37,7 @@ static struct vfsmount *nfs_do_submount(struct dentry *dentry,
  * @dentry - pointer to dentry
  * @buffer - result buffer
  * @buflen - length of buffer
+ * @flags - options (see below)
  *
  * Helper function for constructing the server pathname
  * by arbitrary hashed dentry.
@@ -44,6 +45,11 @@ static struct vfsmount *nfs_do_submount(struct dentry *dentry,
  * This is mainly for use in figuring out the path on the
  * server side when automounting on top of an existing partition
  * and in generating /proc/mounts and friends.
+ *
+ * Supported flags:
+ * NFS_PATH_CANONICAL: ensure there is exactly one slash after
+ *		       the original device (export) name
+ *		       (if unset, the original name is returned verbatim)
  */
 char *nfs_path(char **p, struct dentry *dentry, char *buffer, ssize_t buflen)
 {

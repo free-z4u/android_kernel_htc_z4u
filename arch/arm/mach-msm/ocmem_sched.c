@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -25,9 +25,9 @@
 #include <mach/ocmem_priv.h>
 
 enum request_states {
-	R_FREE = 0x0,	/* request is not allocated */
-	R_PENDING,	/* request has a pending operation */
-	R_ALLOCATED,	/* request has been allocated */
+	R_FREE = 0x0,   /* request is not allocated */
+	R_PENDING,      /* request has a pending operation */
+	R_ALLOCATED,    /* request has been allocated */
 	R_MUST_GROW,	/* request must grow as a part of pending operation */
 	R_MUST_SHRINK,	/* request must shrink as a part of pending operation */
 	R_MUST_MAP,	/* request must be mapped before being used */

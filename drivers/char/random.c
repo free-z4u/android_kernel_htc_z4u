@@ -125,21 +125,26 @@
  * The current exported interfaces for gathering environmental noise
  * from the devices are:
  *
+ *	void add_device_randomness(const void *buf, unsigned int size);
  * 	void add_input_randomness(unsigned int type, unsigned int code,
  *                                unsigned int value);
- * 	void add_interrupt_randomness(int irq);
+ *	void add_interrupt_randomness(int irq, int irq_flags);
  * 	void add_disk_randomness(struct gendisk *disk);
+ *
+ * add_device_randomness() is for adding data to the random pool that
+ * is likely to differ between two devices (or possibly even per boot).
+ * This would be things like MAC addresses or serial numbers, or the
+ * read-out of the RTC. This does *not* add any actual entropy to the
+ * pool, but it initializes the pool to different values for devices
+ * that might otherwise be identical and have very little entropy
+ * available to them (particularly common in the embedded world).
  *
  * add_input_randomness() uses the input layer interrupt timing, as well as
  * the event type information from the hardware.
  *
- * add_interrupt_randomness() uses the inter-interrupt timing as random
- * inputs to the entropy pool.  Note that not all interrupts are good
- * sources of randomness!  For example, the timer interrupts is not a
- * good choice, because the periodicity of the interrupts is too
- * regular, and hence predictable to an attacker.  Network Interface
- * Controller interrupts are a better measure, since the timing of the
- * NIC interrupts are more unpredictable.
+ * add_interrupt_randomness() uses the interrupt timing as random
+ * inputs to the entropy pool. Using the cycle counters and the irq source
+ * as inputs, it feeds the randomness roughly once a second.
  *
  * add_disk_randomness() uses what amounts to the seek time of block
  * layer request events, on a per-disk_devt basis, as input to the
@@ -248,7 +253,6 @@
 #include <linux/percpu.h>
 #include <linux/cryptohash.h>
 #include <linux/fips.h>
-
 #ifdef CONFIG_GENERIC_HARDIRQS
 # include <linux/irq.h>
 #endif

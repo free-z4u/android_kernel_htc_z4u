@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010 Samsung Electronics Co.Ltd
  * Author: Joonyoung Shim <jy0922.shim@samsung.com>
- * Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute  it and/or modify it
  * under  the terms of  the GNU General  Public License as published by the
@@ -27,6 +27,7 @@
 #include <linux/regulator/consumer.h>
 #include <linux/string.h>
 #include <linux/of_gpio.h>
+
 #if defined(CONFIG_HAS_EARLYSUSPEND)
 #include <linux/earlysuspend.h>
 /* Early-suspend level */

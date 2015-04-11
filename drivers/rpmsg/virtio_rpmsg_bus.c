@@ -188,7 +188,15 @@ static int rpmsg_uevent(struct device *dev, struct kobj_uevent_env *env)
 					rpdev->id.name);
 }
 
-/* for more info, see below documentation of rpmsg_create_ept() */
+/**
+ * __ept_release() - deallocate an rpmsg endpoint
+ * @kref: the ept's reference count
+ *
+ * This function deallocates an ept, and is invoked when its @kref refcount
+ * drops to zero.
+ *
+ * Never invoke this function directly!
+ */
 static struct rpmsg_endpoint *__rpmsg_create_ept(struct virtproc_info *vrp,
 		struct rpmsg_channel *rpdev, rpmsg_rx_cb_t cb,
 		void *priv, u32 addr)

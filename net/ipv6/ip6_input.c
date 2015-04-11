@@ -111,10 +111,11 @@ int ipv6_rcv(struct sk_buff *skb, struct net_device *dev, struct packet_type *pt
 	    ipv6_addr_loopback(&hdr->daddr))
 		goto err;
 
-	/*
-	 * RFC4291 2.7
-	 * Multicast addresses must not be used as source addresses in IPv6
-	 * packets or appear in any Routing header.
+	/* RFC4291 Errata ID: 3480
+	 * Interface-Local scope spans only a single interface on a
+	 * node and is useful only for loopback transmission of
+	 * multicast.  Packets with interface-local scope received
+	 * from another node must be discarded.
 	 */
 	if (ipv6_addr_is_multicast(&hdr->saddr))
 		goto err;

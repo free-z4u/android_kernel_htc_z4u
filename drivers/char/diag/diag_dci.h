@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -11,6 +11,7 @@
  */
 #ifndef DIAG_DCI_H
 #define DIAG_DCI_H
+
 #define MAX_DCI_CLIENT 10
 #define DCI_CMD_CODE 0x93
 

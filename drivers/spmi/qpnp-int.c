@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -26,7 +26,6 @@
 #include <linux/radix-tree.h>
 #include <linux/slab.h>
 #include <linux/printk.h>
-
 #include <asm/irq.h>
 #include <asm/mach/irq.h>
 #include <mach/qpnp-int.h>

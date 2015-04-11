@@ -3047,6 +3047,11 @@ int jfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 
 		dir_index = (u32) filp->f_pos;
 
+		/*
+		 * NFSv4 reserves cookies 1 and 2 for . and .. so we add
+		 * the value we return to the vfs is one greater than the
+		 * one we use internally.
+		 */
 		if (dir_index > 1) {
 			struct dir_table_slot dirtab_slot;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -33,25 +33,25 @@
 #include <linux/msm_adc.h>
 
 /* Register TEMP_ALARM_CTRL bits */
-#define	TEMP_ALARM_CTRL_ST3_SD		0x80
-#define	TEMP_ALARM_CTRL_ST2_SD		0x40
-#define	TEMP_ALARM_CTRL_STATUS_MASK	0x30
-#define	TEMP_ALARM_CTRL_STATUS_SHIFT	4
-#define	TEMP_ALARM_CTRL_THRESH_MASK	0x0C
-#define	TEMP_ALARM_CTRL_THRESH_SHIFT	2
-#define	TEMP_ALARM_CTRL_OVRD_ST3	0x02
-#define	TEMP_ALARM_CTRL_OVRD_ST2	0x01
-#define	TEMP_ALARM_CTRL_OVRD_MASK	0x03
+#define TEMP_ALARM_CTRL_ST3_SD		0x80
+#define TEMP_ALARM_CTRL_ST2_SD		0x40
+#define TEMP_ALARM_CTRL_STATUS_MASK	0x30
+#define TEMP_ALARM_CTRL_STATUS_SHIFT	4
+#define TEMP_ALARM_CTRL_THRESH_MASK	0x0C
+#define TEMP_ALARM_CTRL_THRESH_SHIFT	2
+#define TEMP_ALARM_CTRL_OVRD_ST3	0x02
+#define TEMP_ALARM_CTRL_OVRD_ST2	0x01
+#define TEMP_ALARM_CTRL_OVRD_MASK	0x03
 
-#define	TEMP_STAGE_STEP			20000	/* Stage step: 20.000 C */
-#define	TEMP_STAGE_HYSTERESIS		2000
+#define TEMP_STAGE_STEP			20000	/* Stage step: 20.000 C */
+#define TEMP_STAGE_HYSTERESIS		2000
 
-#define	TEMP_THRESH_MIN			105000	/* Threshold Min: 105 C */
-#define	TEMP_THRESH_STEP		5000	/* Threshold step: 5 C */
+#define TEMP_THRESH_MIN			105000	/* Threshold Min: 105 C */
+#define TEMP_THRESH_STEP		5000	/* Threshold step: 5 C */
 
 /* Register TEMP_ALARM_PWM bits */
-#define	TEMP_ALARM_PWM_EN_MASK		0xC0
-#define	TEMP_ALARM_PWM_EN_SHIFT		6
+#define TEMP_ALARM_PWM_EN_MASK		0xC0
+#define TEMP_ALARM_PWM_EN_SHIFT		6
 #define	TEMP_ALARM_PWM_PER_PRE_MASK	0x38
 #define	TEMP_ALARM_PWM_PER_PRE_SHIFT	3
 #define	TEMP_ALARM_PWM_PER_DIV_MASK	0x07

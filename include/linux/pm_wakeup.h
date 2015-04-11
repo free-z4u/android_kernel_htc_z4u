@@ -33,12 +33,15 @@
  *
  * @total_time: Total time this wakeup source has been active.
  * @max_time: Maximum time this wakeup source has been continuously active.
- * @last_time: Monotonic clock when the wakeup source's was activated last time.
+ * @last_time: Monotonic clock when the wakeup source's was touched last time.
+ * @prevent_sleep_time: Total time this source has been preventing autosleep.
  * @event_count: Number of signaled wakeup events.
  * @active_count: Number of times the wakeup sorce was activated.
  * @relax_count: Number of times the wakeup sorce was deactivated.
- * @hit_count: Number of times the wakeup sorce might abort system suspend.
+ * @expire_count: Number of times the wakeup source's timeout has expired.
+ * @wakeup_count: Number of times the wakeup source might abort suspend.
  * @active: Status of the wakeup source.
+ * @has_timeout: The wakeup source has been activated with a timeout.
  */
 struct wakeup_source {
 	const char 		*name;

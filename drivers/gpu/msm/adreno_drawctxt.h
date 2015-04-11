@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2007-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2002,2007-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -16,8 +16,8 @@
 #include "adreno_pm4types.h"
 #include "a2xx_reg.h"
 
-/* Flags */
 
+/* Symbolic table for the adreno draw context type */
 #define CTXT_FLAGS_NOT_IN_USE		0x00000000
 #define CTXT_FLAGS_IN_USE		0x00000001
 

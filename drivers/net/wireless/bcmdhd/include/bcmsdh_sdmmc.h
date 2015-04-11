@@ -1,7 +1,7 @@
 /*
  * BCMSDH Function Driver for the native SDIO/MMC driver in the Linux Kernel
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmsdh_sdmmc.h 313732 2012-02-08 19:49:00Z $
+ * $Id: bcmsdh_sdmmc.h 396592 2013-04-13 16:14:38Z $
  */
 
 #ifndef __BCMSDH_SDMMC_H__
@@ -33,6 +33,7 @@
 #define sd_debug(x)
 #define sd_data(x)
 #define sd_ctrl(x)
+
 
 #define sd_sync_dma(sd, read, nbytes)
 #define sd_init_dma(sd)
@@ -59,7 +60,7 @@ extern void sdioh_sdmmc_osfree(sdioh_info_t *sd);
 
 /* private bus modes */
 #define SDIOH_MODE_SD4		2
-#define CLIENT_INTR 		0x100	/* Get rid of this! */
+#define CLIENT_INTR			0x100	/* Get rid of this! */
 
 struct sdioh_info {
 	osl_t 		*osh;			/* osh handler */

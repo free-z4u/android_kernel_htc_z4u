@@ -39,7 +39,7 @@ struct gpio_event_info {
 	int (*event)(struct gpio_event_input_devs *input_devs,
 		     struct gpio_event_info *info,
 		     void **data, unsigned int dev, unsigned int type,
-		     unsigned int code, int value); 
+		     unsigned int code, int value); /* out events */
 	bool no_suspend;
 };
 
@@ -48,15 +48,16 @@ struct gpio_event_platform_data {
 	struct gpio_event_info **info;
 	size_t info_count;
 	int (*power)(const struct gpio_event_platform_data *pdata, bool on);
-	const char *names[]; 
-			     
+	const char *names[]; /* If name is NULL, names contain a NULL */
+			     /* terminated list of input devices to create */
 };
 
 #define GPIO_EVENT_DEV_NAME "gpio-event"
 
+/* Key matrix */
 
 enum gpio_event_matrix_flags {
-	
+	/* unset: drive active output low, set: drive active output high */
 	GPIOKPF_ACTIVE_HIGH              = 1U << 0,
 	GPIOKPF_DEBOUNCE                 = 1U << 1,
 	GPIOKPF_REMOVE_SOME_PHANTOM_KEYS = 1U << 2,
@@ -77,25 +78,28 @@ enum gpio_event_matrix_flags {
 extern int gpio_event_matrix_func(struct gpio_event_input_devs *input_devs,
 			struct gpio_event_info *info, void **data, int func);
 struct gpio_event_matrix_info {
-	
+	/* initialize to gpio_event_matrix_func */
 	struct gpio_event_info info;
-	
+	/* size must be ninputs * noutputs */
 	const unsigned short *keymap;
 	unsigned int *input_gpios;
 	unsigned int *output_gpios;
 	unsigned int ninputs;
 	unsigned int noutputs;
-	
+	/* time to wait before reading inputs after driving each output */
 	ktime_t settle_time;
-	
+	/* time to wait before scanning the keypad a second time */
 	ktime_t debounce_delay;
 	ktime_t poll_time;
 	unsigned flags;
 };
 
+/* Directly connected inputs and outputs */
 
 enum gpio_event_direct_flags {
 	GPIOEDF_ACTIVE_HIGH         = 1U << 0,
+/*	GPIOEDF_USE_DOWN_IRQ        = 1U << 1, */
+/*	GPIOEDF_USE_IRQ             = (1U << 2) | GPIOIDF_USE_DOWN_IRQ, */
 	GPIOEDF_PRINT_KEYS          = 1U << 8,
 	GPIOEDF_PRINT_KEY_DEBOUNCE  = 1U << 9,
 	GPIOEDF_PRINT_KEY_UNSTABLE  = 1U << 10,
@@ -108,10 +112,11 @@ struct gpio_event_direct_entry {
 	bool     not_wakeup_src;
 };
 
+/* inputs */
 extern int gpio_event_input_func(struct gpio_event_input_devs *input_devs,
 			struct gpio_event_info *info, void **data, int func);
 struct gpio_event_input_info {
-	
+	/* initialize to gpio_event_input_func */
 	struct gpio_event_info info;
 	ktime_t debounce_time;
 	ktime_t poll_time;

@@ -418,8 +418,9 @@ static void kvm_extint_handler(struct ext_code ext_code,
 }
 
 /*
- * Init function for virtio
- * devices are in a single page above top of "normal" mem
+ * For s390-virtio, we expect a page above main storage containing
+ * the virtio configuration. Try to actually load from this area
+ * in order to figure out if the host provides this page.
  */
 static int __init kvm_devices_init(void)
 {

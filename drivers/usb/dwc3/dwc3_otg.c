@@ -1,7 +1,7 @@
 /**
  * dwc3_otg.c - DesignWare USB3 DRD Controller OTG
  *
- * Copyright (c) 2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -16,7 +16,6 @@
 #include <linux/usb.h>
 #include <linux/usb/hcd.h>
 #include <linux/platform_device.h>
-
 #include "core.h"
 #include "dwc3_otg.h"
 #include "io.h"

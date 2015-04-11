@@ -3,7 +3,14 @@
  *
  * Copyright 2004-2005  Andrea Arcangeli <andrea@cpushare.com>
  *
- * This defines a simple but solid secure-computing mode.
+ * Copyright (C) 2012 Google, Inc.
+ * Will Drewry <wad@chromium.org>
+ *
+ * This defines a simple but solid secure-computing facility.
+ *
+ * Mode 1 uses a fixed list of allowed system calls.
+ * Mode 2 allows user-defined system call filters in the form
+ *        of Berkeley Packet Filters/Linux Socket Filters.
  */
 
 #include <linux/audit.h>

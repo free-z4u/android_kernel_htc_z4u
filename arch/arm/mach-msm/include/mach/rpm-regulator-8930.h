@@ -85,7 +85,8 @@ enum rpm_vreg_power_mode_8930 {
 };
 
 /**
- * enum rpm_vreg_id - RPM regulator ID numbers (both real and pin control)
+ * enum rpm_vreg_id_8930_pm8038 - RPM regulator ID numbers (both real and
+ *		pin control) used with MSM8930 + PM8038
  */
 enum rpm_vreg_id_8930 {
 	RPM_VREG_ID_PM8038_L1,

@@ -61,6 +61,10 @@ static enum hrtimer_restart msm_idle_stats_busy_timer(struct hrtimer *timer)
 		container_of(timer, struct msm_idle_stats_device, busy_timer);
 
 
+	/* This is the only case that the event is modified without a device
+	 * lock. However, since the timer is cancelled in the other cases we are
+	 * assured that we have exclusive access to the event at this time.
+	 */
 	hrtimer_set_expires(&device->busy_timer, us_to_ktime(0));
 	msm_idle_stats_update_event(device,
 		MSM_IDLE_STATS_EVENT_BUSY_TIMER_EXPIRED);

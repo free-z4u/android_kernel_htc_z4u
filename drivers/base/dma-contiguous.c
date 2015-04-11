@@ -9,6 +9,9 @@
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License or (at your optional) any later version of the license.
+ *
+ * The Linux Foundation chooses to take subject only to the GPLv2 license
+ * terms, and distributes only under these terms.
  */
 
 #define pr_fmt(fmt) "cma: " fmt

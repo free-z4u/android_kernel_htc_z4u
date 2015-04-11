@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -14,6 +14,7 @@
 #define DIAGFWD_HSIC_H
 
 #include <mach/diag_bridge.h>
+
 #define N_MDM_WRITE	1 /* Upgrade to 2 with ping pong buffer */
 #define N_MDM_READ	1
 

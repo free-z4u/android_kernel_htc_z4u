@@ -420,6 +420,26 @@ extern int __must_check hex2bin(u8 *dst, const char *src, size_t count);
 			printk(KERN_INFO pr_aud_fmt(fmt), ##__VA_ARGS__)
 #define pr_aud_info1(fmt, ...) \
 			printk(KERN_INFO pr_aud_fmt1(fmt), ##__VA_ARGS__)
+
+/*
+ * General tracing related utility functions - trace_printk(),
+ * tracing_on/tracing_off and tracing_start()/tracing_stop
+ *
+ * Use tracing_on/tracing_off when you want to quickly turn on or off
+ * tracing. It simply enables or disables the recording of the trace events.
+ * This also corresponds to the user space /sys/kernel/debug/tracing/tracing_on
+ * file, which gives a means for the kernel and userspace to interact.
+ * Place a tracing_off() in the kernel where you want tracing to end.
+ * From user space, examine the trace, and then echo 1 > tracing_on
+ * to continue tracing.
+ *
+ * tracing_stop/tracing_start has slightly more overhead. It is used
+ * by things like suspend to ram where disabling the recording of the
+ * trace is not enough, but tracing must actually stop because things
+ * like calling smp_processor_id() may crash the system.
+ *
+ * Most likely, you want to use tracing_on/tracing_off.
+ */
 #ifdef CONFIG_RING_BUFFER
 /* trace_off_permanent stops recording with no way to bring it back */
 void tracing_off_permanent(void);
@@ -701,7 +721,6 @@ extern char *mach_panic_string;
 
 #endif /* __KERNEL__ */
 
-/* To identify board information in panic logs, set this */
 extern char *mach_panic_string;
 
 #endif

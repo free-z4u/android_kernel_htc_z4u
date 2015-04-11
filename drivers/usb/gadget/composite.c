@@ -18,6 +18,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+/* #define VERBOSE_DEBUG */
 
 #include <linux/kallsyms.h>
 #include <linux/kernel.h>
@@ -29,7 +30,14 @@
 #include <asm/unaligned.h>
 static bool is_mtp_enabled;
 
+/*
+ * The code in this file is utility code, used to build a gadget driver
+ * from one or more "function" drivers, one or more "configuration"
+ * objects, and a "usb_composite_driver" by gluing them together along
+ * with the relevant device-wide data.
+ */
 
+/* big enough to hold our biggest descriptor */
 #define USB_BUFSIZ	4096
 
 static struct usb_composite_driver *composite;
@@ -38,6 +46,10 @@ static void mtp_update_mode(int _mac_mtp_mode);
 static void fsg_update_mode(int _linux_fsg_mode);
 static bool is_mtp_enable(void);
 
+/* Some systems will need runtime overrides for the  product identifiers
+ * published in the device descriptor, either numbers or strings or both.
+ * String parameters are in UTF-8 (superset of ASCII's 7 bit characters).
+ */
 
 static ushort idVendor;
 module_param(idVendor, ushort, 0);
@@ -117,6 +129,17 @@ static void composite_request_reset(struct work_struct *w)
 		usb_composite_force_reset(cdev);
 	}
 }
+
+/*-------------------------------------------------------------------------*/
+/**
+ * next_ep_desc() - advance to the next EP descriptor
+ * @t: currect pointer within descriptor array
+ *
+ * Return: next EP descriptor or NULL
+ *
+ * Iterate over @t until either EP descriptor found or
+ * NULL (that indicates end of list) encountered
+ */
 static struct usb_descriptor_header**
 next_ep_desc(struct usb_descriptor_header **t)
 {
@@ -127,10 +150,34 @@ next_ep_desc(struct usb_descriptor_header **t)
 	return NULL;
 }
 
+/*
+ * for_each_ep_desc()- iterate over endpoint descriptors in the
+ *		descriptors list
+ * @start:	pointer within descriptor array.
+ * @ep_desc:	endpoint descriptor to use as the loop cursor
+ */
 #define for_each_ep_desc(start, ep_desc) \
 	for (ep_desc = next_ep_desc(start); \
 	      ep_desc; ep_desc = next_ep_desc(ep_desc+1))
 
+/**
+ * config_ep_by_speed() - configures the given endpoint
+ * according to gadget speed.
+ * @g: pointer to the gadget
+ * @f: usb function
+ * @_ep: the endpoint to configure
+ *
+ * Return: error code, 0 on success
+ *
+ * This function chooses the right descriptors for a given
+ * endpoint according to gadget speed and saves it in the
+ * endpoint desc field. If the endpoint already has a descriptor
+ * assigned to it - overwrites it with currently corresponding
+ * descriptor. The endpoint maxpacket field is updated according
+ * to the chosen descriptor.
+ * Note: the supplied function should hold all the descriptors
+ * for supported speeds
+ */
 int config_ep_by_speed(struct usb_gadget *g,
 			struct usb_function *f,
 			struct usb_ep *_ep)
@@ -141,12 +188,12 @@ int config_ep_by_speed(struct usb_gadget *g,
 	struct usb_ss_ep_comp_descriptor *comp_desc = NULL;
 	int want_comp_desc = 0;
 
-	struct usb_descriptor_header **d_spd; 
+	struct usb_descriptor_header **d_spd; /* cursor for speed desc */
 
 	if (!g || !f || !_ep)
 		return -EIO;
 
-	
+	/* select desired speed */
 	switch (g->speed) {
 	case USB_SPEED_SUPER:
 		if (gadget_is_superspeed(g)) {
@@ -154,17 +201,17 @@ int config_ep_by_speed(struct usb_gadget *g,
 			want_comp_desc = 1;
 			break;
 		}
-		
+		/* else: Fall trough */
 	case USB_SPEED_HIGH:
 		if (gadget_is_dualspeed(g)) {
 			speed_desc = f->hs_descriptors;
 			break;
 		}
-		
+		/* else: fall through */
 	default:
 		speed_desc = f->descriptors;
 	}
-	
+	/* find descriptors */
 	for_each_ep_desc(speed_desc, d_spd) {
 		chosen_desc = (struct usb_endpoint_descriptor *)*d_spd;
 		if (chosen_desc->bEndpointAddress == _ep->address)
@@ -173,7 +220,7 @@ int config_ep_by_speed(struct usb_gadget *g,
 	return -EIO;
 
 ep_found:
-	
+	/* commit results */
 	_ep->maxpacket = le16_to_cpu(chosen_desc->wMaxPacketSize);
 	_ep->desc = chosen_desc;
 	_ep->comp_desc = NULL;
@@ -182,6 +229,10 @@ ep_found:
 	if (!want_comp_desc)
 		return 0;
 
+	/*
+	 * Companion descriptor should follow EP descriptor
+	 * USB 3.0 spec, #9.6.7
+	 */
 	comp_desc = (struct usb_ss_ep_comp_descriptor *)*(++d_spd);
 	if (!comp_desc ||
 	    (comp_desc->bDescriptorType != USB_DT_SS_ENDPOINT_COMP))

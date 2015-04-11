@@ -1,6 +1,13 @@
 #ifndef _MSM_KGSL_H
 #define _MSM_KGSL_H
 
+/*
+ * The KGSL version has proven not to be very useful in userspace if features
+ * are cherry picked into other trees out of order so it is frozen as of 3.14.
+ * It is left here for backwards compatabilty and as a reminder that
+ * software releases are never linear. Also, I like pie.
+ */
+
 #define KGSL_VERSION_MAJOR        3
 #define KGSL_VERSION_MINOR        11
 

@@ -102,13 +102,16 @@ struct bam_pipe_parameters {
  *
  * @num_pipes - return number of pipes
  *
+ * @options - BAM configuration options
+ *
  * @return 0 on success, negative value on error
  *
  */
 int bam_init(void *base,
 		u32 ee,
 		u16 summing_threshold,
-		u32 irq_mask, u32 *version, u32 *num_pipes);
+		u32 irq_mask, u32 *version,
+		u32 *num_pipes);
 
 /**
  * Initialize BAM device security execution environment

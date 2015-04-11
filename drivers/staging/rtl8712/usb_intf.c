@@ -66,7 +66,7 @@ static struct usb_device_id rtl871x_usb_id_tbl[] = {
 	{USB_DEVICE(0x0B05, 0x1791)}, /* 11n mode disable */
 	/* Belkin */
 	{USB_DEVICE(0x050D, 0x945A)},
-	/* Corega */
+	/* ISY IWL - Belkin clone */
 	{USB_DEVICE(0x07AA, 0x0047)},
 	/* D-Link */
 	{USB_DEVICE(0x2001, 0x3306)},

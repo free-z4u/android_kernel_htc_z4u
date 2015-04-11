@@ -1,4 +1,4 @@
-/* Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2010-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -25,6 +25,7 @@
 #include <linux/uaccess.h>
 #include <linux/wait.h>
 #include <linux/workqueue.h>
+
 #include <linux/android_pmem.h>
 #include <linux/clk.h>
 #include <mach/msm_subsystem_map.h>

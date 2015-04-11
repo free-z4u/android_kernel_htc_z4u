@@ -78,4 +78,4 @@ struct sidetone_cal {
 
 #define	AUDIO_MAX_RTAC_IOCTL	(AUDIO_MAX_ACDB_IOCTL+20)
 
-#endif /* __MSM_AUDIO_ACDB_H */
+#endif /* _LINUX_MSM_AUDIO_ACDB_H */

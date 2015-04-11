@@ -32,6 +32,10 @@ enum arm_pmu_type {
  *	interrupt and passed the address of the low level handler,
  *	and can be used to implement any platform specific handling
  *	before or after calling it.
+ * @request_pmu_irq: an optional handler in case the platform wants
+ *	to use a percpu IRQ API call. e.g. request_percpu_irq
+ * @free_pmu_irq: an optional handler in case the platform wants
+ *	to use a percpu IRQ API call. e.g. free_percpu_irq
  * @enable_irq: an optional handler which will be called after
  *	request_irq and be used to handle some platform specific
  *	irq enablement

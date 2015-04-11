@@ -5,6 +5,7 @@
  *
  * Copyright (C) 2008 HTC Corporation
  * Copyright (C) 2008 Google, Inc.
+ * Copyright (c) 2012 The Linux Foundation. All rights reserved.
  *
  * All source code in this file is licensed under the following license except
  * where indicated.

@@ -257,12 +257,10 @@ static void dm9000_dumpblk_32bit(void __iomem *reg, int count)
 		tmp = readl(reg);
 }
 
-/* dm9000_set_io
- *
- * select the specified set of io routines to use with the
- * device
+/*
+ * Sleep, either by using msleep() or if we are suspending, then
+ * use mdelay() to sleep.
  */
-
 static void dm9000_set_io(struct board_info *db, int byte_width)
 {
 	/* use the size of the data resource to work out what IO

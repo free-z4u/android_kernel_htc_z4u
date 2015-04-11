@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2008-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -41,6 +41,7 @@
 
 #define GSBI_CTRL_REG                 0x0
 #define GSBI_SPI_CONFIG               0x30
+/* B-family only registers */
 #define QUP_HARDWARE_VER              0x0030
 #define QUP_OPERATIONAL_MASK          0x0028
 #define QUP_ERROR_FLAGS               0x0308

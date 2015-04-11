@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -43,7 +43,11 @@ static DEFINE_SPINLOCK(blk_dev_test_list_lock);
 static LIST_HEAD(blk_dev_test_list);
 static struct test_data *ptd;
 
-/* Get the request after `test_rq' in the test requests list */
+
+/**
+ * test_iosched_get_req_queue() - returns the request queue
+ * served by the scheduler
+ */
 static struct test_request *
 latter_test_request(struct request_queue *q,
 				 struct test_request *test_rq)

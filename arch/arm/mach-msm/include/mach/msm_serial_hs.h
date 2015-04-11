@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 Google, Inc.
+ * Copyright (C) 2010-2013, The Linux Foundation. All rights reserved.
  * Author: Nick Pelly <npelly@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -17,11 +18,23 @@
 
 #include<linux/serial_core.h>
 
-/* Optional platform device data for msm_serial_hs driver.
- * Used to configure low power wakeup */
+/**
+ * struct msm_serial_hs_platform_data - platform device data
+ *					for msm hsuart device
+ * @wakeup_irq : IRQ line to be configured as Wakeup source.
+ * @inject_rx_on_wakeup : Set 1 if specific character to be inserted on wakeup
+ * @rx_to_inject : Character to be inserted on wakeup
+ * @gpio_config : Configure gpios that are used for uart communication
+ * @userid : User-defined number to be used to enumerate device as tty<userid>
+ * @uart_tx_gpio: GPIO number for UART Tx Line.
+ * @uart_rx_gpio: GPIO number for UART Rx Line.
+ * @uart_cts_gpio: GPIO number for UART CTS Line.
+ * @uart_rfr_gpio: GPIO number for UART RFR Line.
+ * @bam_tx_ep_pipe_index : BAM TX Endpoint Pipe Index for HSUART
+ * @bam_tx_ep_pipe_index : BAM RX Endpoint Pipe Index for HSUART
+ */
 struct msm_serial_hs_platform_data {
 	int wakeup_irq;  /* wakeup irq */
-	/* bool: inject char into rx tty on wakeup */
 	unsigned char inject_rx_on_wakeup;
 	char rx_to_inject;
 	int (*gpio_config)(int);
