@@ -3698,6 +3698,9 @@ static int tcp_ack(struct sock *sk, const struct sk_buff *skb, int flag)
 	int newly_acked_sacked = 0;
 	int frto_cwnd = 0;
 
+	/* If the ack is older than previous acks
+	 * then we can probably ignore it.
+	 */
 	if (before(ack, prior_snd_una))
 		goto old_ack;
 

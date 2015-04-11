@@ -1002,6 +1002,9 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
 		goto lenout;
 	}
 
+	/* Dubious BSD thing... Probably nobody even uses it, but
+	 * the UNIX standard wants it for whatever reason... -DaveM
+	 */
 	case SO_ACCEPTCONN:
 		v.val = sk->sk_state == TCP_LISTEN;
 		break;
@@ -1048,6 +1051,11 @@ lenout:
 	return 0;
 }
 
+/*
+ * Initialize an sk_lock.
+ *
+ * (We also register the sk_lock with the lock validator.)
+ */
 static inline void sock_lock_init(struct sock *sk)
 {
 	sock_lock_init_class_and_name(sk,
@@ -1057,6 +1065,11 @@ static inline void sock_lock_init(struct sock *sk)
 			af_family_keys + sk->sk_family);
 }
 
+/*
+ * Copy all fields from osk to nsk but nsk->sk_refcnt must not change yet,
+ * even temporarly, because of RCU lookups. sk_node should also be left as is.
+ * We must not copy fields between sk_dontcopy_begin and sk_dontcopy_end
+ */
 static void sock_copy(struct sock *nsk, const struct sock *osk)
 {
 #ifdef CONFIG_SECURITY_NETWORK
@@ -1073,6 +1086,10 @@ static void sock_copy(struct sock *nsk, const struct sock *osk)
 #endif
 }
 
+/*
+ * caches using SLAB_DESTROY_BY_RCU should let .next pointer from nulls nodes
+ * un-modified. Special care is taken when initializing object to zero.
+ */
 static inline void sk_prot_clear_nulls(struct sock *sk, int size)
 {
 	if (offsetof(struct sock, sk_node.next) != 0)

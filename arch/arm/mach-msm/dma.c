@@ -805,4 +805,6 @@ static int __init msm_init_datamover(void)
 		return ret;
 	return 0;
 }
+
 arch_initcall(msm_init_datamover);
+

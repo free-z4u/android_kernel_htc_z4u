@@ -540,4 +540,4 @@ int msm_fb_writeback_stop(struct fb_info *info);
 int msm_fb_writeback_terminate(struct fb_info *info);
 #endif
 
-#endif /*_MSM_MDP_H_*/
+#endif /* _MSM_MDP_H_ */

@@ -153,6 +153,7 @@ static const struct usb_device_id usb_quirk_list[] = {
 	/* Protocol and OTG Electrical Test Device */
 	{ USB_DEVICE(0x1a0a, 0x0200), .driver_info = USB_QUIRK_OTG_PET },
 
+	/* Protocol and OTG Electrical Test Device */
 	{ }  /* terminating entry must be last */
 };
 

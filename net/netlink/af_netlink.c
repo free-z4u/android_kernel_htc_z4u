@@ -492,6 +492,10 @@ static int netlink_release(struct socket *sock)
 	sock_orphan(sk);
 	nlk = nlk_sk(sk);
 
+	/*
+	 * OK. Socket is unlinked, any packets that arrive now
+	 * will be purged.
+	 */
 
 	sock->sk = NULL;
 	wake_up_interruptible_all(&nlk->wait);
@@ -552,7 +556,7 @@ retry:
 		if (!net_eq(sock_net(osk), net))
 			continue;
 		if (nlk_sk(osk)->pid == pid) {
-			
+			/* Bind collision, search negative pid values. */
 			pid = rover--;
 			if (rover > -4097)
 				rover = -4097;
@@ -566,7 +570,7 @@ retry:
 	if (err == -EADDRINUSE)
 		goto retry;
 
-	
+	/* If 2 threads race to autobind, that is fine.  */
 	if (err == -EBUSY)
 		err = 0;
 
@@ -636,7 +640,7 @@ static int netlink_bind(struct socket *sock, struct sockaddr *addr,
 	if (nladdr->nl_family != AF_NETLINK)
 		return -EINVAL;
 
-	
+	/* Only superuser is allowed to listen multicasts */
 	if (nladdr->nl_groups) {
 		if (!netlink_capable(sock, NL_NONROOT_RECV))
 			return -EPERM;
@@ -690,7 +694,7 @@ static int netlink_connect(struct socket *sock, struct sockaddr *addr,
 	if (addr->sa_family != AF_NETLINK)
 		return -EINVAL;
 
-	
+	/* Only superuser is allowed to send multicasts */
 	if (nladdr->nl_groups && !netlink_capable(sock, NL_NONROOT_SEND))
 		return -EPERM;
 
@@ -749,7 +753,7 @@ static struct sock *netlink_getsockbypid(struct sock *ssk, u32 pid)
 	if (!sock)
 		return ERR_PTR(-ECONNREFUSED);
 
-	
+	/* Don't bother queuing skb if kernel socket has no input function */
 	nlk = nlk_sk(sock);
 	if (sock->sk_state == NETLINK_CONNECTED &&
 	    nlk->dst_pid != nlk_sk(ssk)->pid) {
@@ -775,6 +779,16 @@ struct sock *netlink_getsockbyfilp(struct file *filp)
 	return sock;
 }
 
+/*
+ * Attach a skb to a netlink socket.
+ * The caller must hold a reference to the destination socket. On error, the
+ * reference is dropped. The skb is not send to the destination, just all
+ * all error checks are performed and memory in the queue is reserved.
+ * Return values:
+ * < 0: error. skb freed, reference to sock dropped.
+ * 0: continue
+ * 1: repeat lookup - reference dropped while waiting for socket memory.
+ */
 int netlink_attachskb(struct sock *sk, struct sk_buff *skb,
 		      long *timeo, struct sock *ssk)
 {
@@ -998,12 +1012,16 @@ static int do_one_broadcast(struct sock *sk,
 			p->skb2 = skb_clone(p->skb, p->allocation);
 		} else {
 			p->skb2 = skb_get(p->skb);
+			/*
+			 * skb ownership may have been set when
+			 * delivered to a previous socket.
+			 */
 			skb_orphan(p->skb2);
 		}
 	}
 	if (p->skb2 == NULL) {
 		netlink_overrun(sk);
-		
+		/* Clone failed. Notify ALL listeners. */
 		p->failure = 1;
 		if (nlk->flags & NETLINK_BROADCAST_SEND_ERROR)
 			p->delivery_failure = 1;
@@ -1054,7 +1072,7 @@ int netlink_broadcast_filtered(struct sock *ssk, struct sk_buff *skb, u32 pid,
 	info.tx_filter = filter;
 	info.tx_data = filter_data;
 
-	
+	/* While we sleep in clone, do not allow to change socket list */
 
 	netlink_lock_table();
 
@@ -1121,6 +1139,16 @@ out:
 	return ret;
 }
 
+/**
+ * netlink_set_err - report error to broadcast listeners
+ * @ssk: the kernel netlink socket, as returned by netlink_kernel_create()
+ * @pid: the PID of a process that we want to skip (if any)
+ * @groups: the broadcast group that will notice the error
+ * @code: error code, must be negative (as usual in kernelspace)
+ *
+ * This function returns the number of broadcast listeners that have set the
+ * NETLINK_RECV_NO_ENOBUFS socket option.
+ */
 int netlink_set_err(struct sock *ssk, u32 pid, u32 group, int code)
 {
 	struct netlink_set_err_data info;
@@ -1131,7 +1159,7 @@ int netlink_set_err(struct sock *ssk, u32 pid, u32 group, int code)
 	info.exclude_sk = ssk;
 	info.pid = pid;
 	info.group = group;
-	
+	/* sk->sk_err wants a positive error value */
 	info.code = -code;
 
 	read_lock(&nl_table_lock);
@@ -1144,6 +1172,7 @@ int netlink_set_err(struct sock *ssk, u32 pid, u32 group, int code)
 }
 EXPORT_SYMBOL(netlink_set_err);
 
+/* must be called with netlink table grabbed */
 static void netlink_update_socket_mc(struct netlink_sock *nlk,
 				     unsigned int group,
 				     int is_new)

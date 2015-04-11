@@ -135,6 +135,7 @@ struct ehci_hcd {			/* one per controller */
 	ktime_t			last_periodic_enable;
 	u32			command;
 
+	/* SILICON QUIRKS */
 	unsigned		log2_irq_thresh;
 
 	/* SILICON QUIRKS */
@@ -768,6 +769,7 @@ static inline void ehci_sync_mem(void)
 static inline void ehci_sync_mem(void)
 {
 }
+
 #endif
 
 /*-------------------------------------------------------------------------*/

@@ -13,6 +13,7 @@
 #include <linux/slab.h>
 #include <linux/kernel.h>
 #include <linux/device.h>
+
 #include <mach/usb_gadget_xport.h>
 
 #include "u_serial.h"

@@ -1944,10 +1944,10 @@ void tcp_v4_destroy_sock(struct sock *sk)
 
 	tcp_cleanup_congestion_control(sk);
 
-	
+	/* Cleanup up the write buffer. */
 	tcp_write_queue_purge(sk);
 
-	
+	/* Cleans up our, hopefully empty, out_of_order_queue. */
 	__skb_queue_purge(&tp->out_of_order_queue);
 
 #ifdef CONFIG_TCP_MD5SIG

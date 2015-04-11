@@ -1381,3 +1381,4 @@ static int __init msm7630_init_gpio(void)
 }
 
 postcore_initcall(msm7630_init_gpio);
+
