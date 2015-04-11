@@ -394,6 +394,11 @@ int apparmor_bprm_set_creds(struct linux_binprm *bprm)
 			new_profile = find_attach(ns, &ns->base.profiles, name);
 		if (!new_profile)
 			goto cleanup;
+		/*
+		 * NOTE: Domain transitions from unconfined are allowed
+		 * even when no_new_privs is set because this aways results
+		 * in a further reduction of permissions.
+		 */
 		goto apply;
 	}
 
@@ -455,6 +460,10 @@ int apparmor_bprm_set_creds(struct linux_binprm *bprm)
 		/* fail exec */
 		error = -EACCES;
 
+	/*
+	 * Policy has specified a domain transition, if no_new_privs then
+	 * fail the exec.
+	 */
 	if (!new_profile)
 		goto audit;
 

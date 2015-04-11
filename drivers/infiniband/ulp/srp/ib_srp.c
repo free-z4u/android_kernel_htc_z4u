@@ -586,6 +586,16 @@ static void srp_unmap_data(struct scsi_cmnd *scmnd,
 			scmnd->sc_data_direction);
 }
 
+/**
+ * srp_claim_req - Take ownership of the scmnd associated with a request.
+ * @target: SRP target port.
+ * @req: SRP request.
+ * @scmnd: If NULL, take ownership of @req->scmnd. If not NULL, only take
+ *         ownership of @req->scmnd if it equals @scmnd.
+ *
+ * Return value:
+ * Either NULL or a pointer to the SCSI command the caller became owner of.
+ */
 static void srp_remove_req(struct srp_target_port *target,
 			   struct srp_request *req, s32 req_lim_delta)
 {

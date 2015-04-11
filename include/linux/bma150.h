@@ -43,4 +43,4 @@ struct bma150_platform_data {
 	int (*irq_gpio_cfg)(void);
 };
 
-#endif /* _BMA150_H_ */
+#endif /* LINUX_BMA150_MODULE_H */

@@ -531,10 +531,14 @@ int irq_set_irq_wake(unsigned int irq, unsigned int on)
 }
 EXPORT_SYMBOL(irq_set_irq_wake);
 
-/*
- * Internal function that tells the architecture code whether a
- * particular irq has been exclusively allocated or is available
- * for driver use.
+/**
+ *     irq_read_line - read the value on an irq line
+ *     @irq: Interrupt number representing a hardware line
+ *
+ *     This function is meant to be called from within the irq handler.
+ *     Slowbus irq controllers might sleep, but it is assumed that the irq
+ *     handler for slowbus interrupts will execute in thread context, so
+ *     sleeping is okay.
  */
 int can_request_irq(unsigned int irq, unsigned long irqflags)
 {

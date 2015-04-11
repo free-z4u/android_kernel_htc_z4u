@@ -678,3 +678,4 @@ module_i2c_driver(bma150_driver);
 MODULE_AUTHOR("Albert Zhang <xu.zhang@bosch-sensortec.com>");
 MODULE_DESCRIPTION("BMA150 driver");
 MODULE_LICENSE("GPL");
+

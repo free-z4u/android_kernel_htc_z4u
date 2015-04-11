@@ -397,8 +397,9 @@ ipt_do_table(struct sk_buff *skb,
 			    !(e->ip.flags & IPT_F_GOTO)) {
 				if (*stackptr >= private->stacksize) {
 					verdict = NF_DROP;
-					break;
-				}
+			    break;
+			}
+
 				jumpstack[(*stackptr)++] = e;
 				pr_debug("Pushed %p into pos %u\n",
 					 e, *stackptr - 1);

@@ -1,6 +1,7 @@
 /* arch/arm/mach-msm/smd_debug.c
  *
  * Copyright (C) 2007 Google, Inc.
+ * Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -16,7 +17,6 @@
 
 #include <linux/debugfs.h>
 #include <linux/list.h>
-
 #include <mach/msm_iomap.h>
 
 #include "smd_private.h"

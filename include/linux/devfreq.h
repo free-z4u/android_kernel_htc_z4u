@@ -25,12 +25,12 @@ struct devfreq;
  * struct devfreq_dev_status - Data given from devfreq user device to
  *			     governors. Represents the performance
  *			     statistics.
- * @total_time		The total time represented by this instance of
+ * @total_time:		The total time represented by this instance of
  *			devfreq_dev_status
- * @busy_time		The time that the device was working among the
+ * @busy_time:		The time that the device was working among the
  *			total_time.
- * @current_frequency	The operating frequency.
- * @private_data	An entry not specified by the devfreq framework.
+ * @current_frequency:	The operating frequency.
+ * @private_data:	An entry not specified by the devfreq framework.
  *			A device and a specific governor may have their
  *			own protocol with private_data. However, because
  *			this is governor-specific, a governor using this
@@ -54,23 +54,27 @@ struct devfreq_dev_status {
 
 /**
  * struct devfreq_dev_profile - Devfreq's user device profile
- * @initial_freq	The operating frequency when devfreq_add_device() is
+ * @initial_freq:	The operating frequency when devfreq_add_device() is
  *			called.
- * @polling_ms		The polling interval in ms. 0 disables polling.
- * @target		The device should set its operating frequency at
+ * @polling_ms:		The polling interval in ms. 0 disables polling.
+ * @target:		The device should set its operating frequency at
  *			freq or lowest-upper-than-freq value. If freq is
  *			higher than any operable frequency, set maximum.
  *			Before returning, target function should set
  *			freq at the current frequency.
  *			The "flags" parameter's possible values are
  *			explained above with "DEVFREQ_FLAG_*" macros.
- * @get_dev_status	The device should provide the current performance
+ * @get_dev_status:	The device should provide the current performance
  *			status to devfreq, which is used by governors.
- * @exit		An optional callback that is called when devfreq
+ * @get_cur_freq:	The device should provide the current frequency
+ *			at which it is operating.
+ * @exit:		An optional callback that is called when devfreq
  *			is removing the devfreq object due to error or
  *			from devfreq_remove_device() call. If the user
  *			has registered devfreq->nb at a notifier-head,
  *			this is the time to unregister it.
+ * @freq_table:	Optional list of frequencies to support statistics.
+ * @max_state:	The size of freq_table.
  */
 struct devfreq_dev_profile {
 	unsigned long initial_freq;

@@ -1229,6 +1229,7 @@ static int security_context_to_sid_core(const char *scontext, u32 scontext_len,
 	struct context context;
 	int rc = 0;
 
+	/* An empty security context is never valid. */
 	if (!ss_initialized) {
 		int i;
 

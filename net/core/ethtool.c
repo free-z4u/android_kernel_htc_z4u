@@ -1287,7 +1287,7 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
 	u32 ethcmd;
 	int rc;
 	u32 old_features;
-
+	
 	if (!dev || !netif_device_present(dev))
 		return -ENODEV;
 

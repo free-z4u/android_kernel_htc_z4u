@@ -40,6 +40,9 @@
 static struct snd_minor *snd_oss_minors[SNDRV_OSS_MINORS];
 static DEFINE_MUTEX(sound_oss_mutex);
 
+/* NOTE: This function increments the refcount of the associated card like
+ * snd_lookup_minor_data(); the caller must call snd_card_unref() appropriately
+ */
 void *snd_lookup_oss_minor_data(unsigned int minor, int type)
 {
 	struct snd_minor *mreg;

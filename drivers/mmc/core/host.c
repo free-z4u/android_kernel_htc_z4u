@@ -58,7 +58,8 @@ static ssize_t clkgate_delay_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
 	struct mmc_host *host = cls_dev_to_mmc_host(dev);
-	return snprintf(buf, PAGE_SIZE, "%lu\n", host->clkgate_delay);
+	return snprintf(buf, PAGE_SIZE, "%lu\n",
+			host->clkgate_delay);
 }
 
 static ssize_t clkgate_delay_store(struct device *dev,

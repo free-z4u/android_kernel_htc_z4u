@@ -1,7 +1,7 @@
 /*
  * Misc system wide definitions
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,26 +21,38 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmdefs.h 316830 2012-02-23 20:29:22Z $
+ * $Id: bcmdefs.h 416231 2013-08-02 07:38:34Z $
  */
 
 #ifndef	_bcmdefs_h_
 #define	_bcmdefs_h_
 
+/*
+ * One doesn't need to include this file explicitly, gets included automatically if
+ * typedefs.h is included.
+ */
 
-
-
+/* Use BCM_REFERENCE to suppress warnings about intentionally-unused function
+ * arguments or local variables.
+ */
 #define BCM_REFERENCE(data)	((void)(data))
 
-
+/* Compile-time assert can be used in place of ASSERT if the expression evaluates
+ * to a constant at compile time.
+ */
 #define STATIC_ASSERT(expr) { \
-	 \
+	/* Make sure the expression is constant. */ \
 	typedef enum { _STATIC_ASSERT_NOT_CONSTANT = (expr) } _static_assert_e; \
-	 \
+	/* Make sure the expression is true. */ \
 	typedef char STATIC_ASSERT_FAIL[(expr) ? 1 : -1]; \
 }
 
-
+/* Reclaiming text and data :
+ * The following macros specify special linker sections that can be reclaimed
+ * after a system is considered 'up'.
+ * BCMATTACHFN is also used for detach functions (it's not worth having a BCMDETACHFN,
+ * as in most cases, the attach function calls the detach function to clean up on error).
+ */
 
 #define bcmreclaimed 		0
 #define _data	_data

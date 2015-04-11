@@ -57,6 +57,7 @@
  *   2.13.0 - virtual memory support, streamout
  *   2.14.0 - add evergreen tiling informations
  *   2.15.0 - add max_pipes query
+ *   2.16.0 - fix evergreen 2D tiled surface calculation
  */
 #define KMS_DRIVER_MAJOR	2
 #define KMS_DRIVER_MINOR	15

@@ -78,6 +78,9 @@ struct ieee1394_device_id {
  *	of a given interface; other interfaces may support other classes.
  * @bInterfaceSubClass: Subclass of interface; associated with bInterfaceClass.
  * @bInterfaceProtocol: Protocol of interface; associated with bInterfaceClass.
+ * @bInterfaceNumber: Number of interface; composite devices may use
+ *	fixed interface numbers to differentiate between vendor-specific
+ *	interfaces.
  * @driver_info: Holds information used by the driver.  Usually it holds
  *	a pointer to a descriptor understood by the driver, or perhaps
  *	device flags.

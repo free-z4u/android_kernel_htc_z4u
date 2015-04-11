@@ -1,4 +1,4 @@
-/* Copyright (c) 2009, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009-2011, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -117,7 +117,6 @@
 #define P_GSBI_P_CLK		99
 #define P_CE_CLK		100 /* Crypto engine */
 #define P_CODEC_SSBI_CLK	101
-
 #define P_NR_CLKS		102
 
 struct clk_ops;
@@ -134,7 +133,7 @@ int pc_clk_reset(unsigned id, enum clk_reset_action action);
 		.ops = &clk_ops_pcom, \
 		.flags = clk_flags, \
 		.dbg_name = #clk_id, \
-	}, \
+		}, \
 	}
 
 #endif

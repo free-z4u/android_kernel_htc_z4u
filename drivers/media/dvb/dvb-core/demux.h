@@ -7,6 +7,8 @@
  * Copyright (c) 2000 Nokia Research Center
  *                    Tampere, FINLAND
  *
+ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
@@ -61,8 +63,8 @@
  */
 
 enum dmx_success {
-  DMX_OK = 0, /* Received Ok */
-  DMX_LENGTH_ERROR, /* Incorrect length */
+	DMX_OK = 0, /* Received Ok */
+	DMX_LENGTH_ERROR, /* Incorrect length */
   DMX_OVERRUN_ERROR, /* Receiver ring buffer overrun */
   DMX_CRC_ERROR, /* Incorrect CRC */
   DMX_FRAME_ERROR, /* Frame alignment error */

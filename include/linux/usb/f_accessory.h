@@ -36,13 +36,15 @@
 #define ACCESSORY_STRING_URI            4
 #define ACCESSORY_STRING_SERIAL         5
 
-/* Control request for retrieving device's protocol version (currently 1)
+/* Control request for retrieving device's protocol version
  *
  *	requestType:    USB_DIR_IN | USB_TYPE_VENDOR
  *	request:        ACCESSORY_GET_PROTOCOL
  *	value:          0
  *	index:          0
  *	data            version number (16 bits little endian)
+ *                     1 for original accessory support
+ *                     2 adds HID and device to host audio support
  */
 #define ACCESSORY_GET_PROTOCOL  51
 
@@ -70,7 +72,17 @@
  */
 #define ACCESSORY_START         53
 
-/* ioctls for retrieving strings set by the host */
+/* Control request for registering a HID device.
+ * Upon registering, a unique ID is sent by the accessory in the
+ * value parameter. This ID will be used for future commands for
+ * the device
+ *
+ *	requestType:    USB_DIR_OUT | USB_TYPE_VENDOR
+ *	request:        ACCESSORY_REGISTER_HID_DEVICE
+ *	value:          Accessory assigned ID for the HID device
+ *	index:          total length of the HID report descriptor
+ *	data            none
+ */
 #define ACCESSORY_GET_STRING_MANUFACTURER   _IOW('M', 1, char[256])
 #define ACCESSORY_GET_STRING_MODEL          _IOW('M', 2, char[256])
 #define ACCESSORY_GET_STRING_DESCRIPTION    _IOW('M', 3, char[256])

@@ -1,6 +1,7 @@
 /* linux/arch/arm/mach-msm/devices.h
  *
  * Copyright (C) 2008 Google, Inc.
+ * Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -17,7 +18,6 @@
 #define __ARCH_ARM_MACH_MSM_DEVICES_H
 
 #include <linux/clkdev.h>
-
 #include "clock.h"
 
 extern struct platform_device msm_device_uart1;

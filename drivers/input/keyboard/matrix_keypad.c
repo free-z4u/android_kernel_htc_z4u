@@ -2,6 +2,7 @@
  *  GPIO driven matrix keyboard driver
  *
  *  Copyright (c) 2008 Marek Vasut <marek.vasut@gmail.com>
+ *  Copyright (c) 2012, The Linux Foundation. All rights reserved.
  *
  *  Based on corgikbd.c
  *

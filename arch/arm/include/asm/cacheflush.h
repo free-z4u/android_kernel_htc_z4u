@@ -88,6 +88,21 @@
  *	DMA Cache Coherency
  *	===================
  *
+ *	dma_inv_range(start, end)
+ *
+ *		Invalidate (discard) the specified virtual address range.
+ *		May not write back any entries.  If 'start' or 'end'
+ *		are not cache line aligned, those lines must be written
+ *		back.
+ *		- start  - virtual start address
+ *		- end    - virtual end address
+ *
+ *	dma_clean_range(start, end)
+ *
+ *		Clean (write back) the specified virtual address range.
+ *		- start  - virtual start address
+ *		- end    - virtual end address
+ *
  *	dma_flush_range(start, end)
  *
  *		Clean and invalidate the specified virtual address range.

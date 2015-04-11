@@ -28,5 +28,4 @@ unsigned long acpuclk_power_collapse(void);
 unsigned long acpuclk_get_wfi_rate(void);
 
 
-#endif
-
+#endif /*__ARCH_ARM_MACH_MSM_ACPUCLOCK_H*/

@@ -142,7 +142,7 @@ const bcmevent_name_t bcmevent_names[] = {
 	{ WLC_E_ACTION_FRAME_RX_NDIS, "WLC_E_ACTION_FRAME_RX_NDIS" },
 #ifdef WLTDLS
 	{ WLC_E_TDLS_PEER_EVENT, "TDLS_PEER_EVENT" },
-#endif /* WLTDLS */
+#endif /* GSCAN_SUPPORT */
 };
 
 const int bcmevent_names_size = ARRAYSIZE(bcmevent_names);

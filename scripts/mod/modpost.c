@@ -37,7 +37,7 @@ static int all_versions = 0;
 static int external_module = 0;
 /* Warn about section mismatch in vmlinux if set to 1 */
 static int vmlinux_section_warnings = 1;
-/* Only warn about unresolved symbols */
+/* Exit with an error when there is a section mismatch if set to 1 */
 static int warn_unresolved = 0;
 /* How a symbol is exported */
 static int sec_mismatch_count = 0;

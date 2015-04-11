@@ -1,4 +1,4 @@
-/* Copyright (c) 2010, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2010, 2012, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -12,7 +12,7 @@
 #ifndef __MACH_SCM_BOOT_H
 #define __MACH_SCM_BOOT_H
 
-#define SCM_BOOT_ADDR			0x1
+#define SCM_BOOT_ADDR				0x1
 #define SCM_FLAG_COLDBOOT_CPU1		0x1
 #define SCM_FLAG_WARMBOOT_CPU1		0x2
 #define SCM_FLAG_WARMBOOT_CPU0		0x4

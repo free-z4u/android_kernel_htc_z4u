@@ -69,6 +69,7 @@
 #define NCR_WAKEEN          (1<<6)
 #define NCR_FCOL            (1<<4)
 #define NCR_FDX             (1<<3)
+
 #define NCR_LBK             (3<<1)
 #define NCR_RST	            (1<<0)
 

@@ -1,7 +1,7 @@
 /*
  * Broadcom device-specific manifest constants.
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,13 +21,13 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmdevs.h 327007 2012-04-11 22:45:50Z $
+ * $Id: bcmdevs.h 414368 2013-07-24 15:00:23Z $
  */
 
 #ifndef	_BCMDEVS_H
 #define	_BCMDEVS_H
 
-
+/* PCI vendor IDs */
 #define	VENDOR_EPIGRAM		0xfeda
 #define	VENDOR_BROADCOM		0x14e4
 #define	VENDOR_3COM		0x10b7
@@ -38,20 +38,20 @@
 #define	VENDOR_HP		0x103c
 #define	VENDOR_HP_COMPAQ	0x0e11
 #define	VENDOR_APPLE		0x106b
-#define VENDOR_SI_IMAGE		0x1095		
-#define VENDOR_BUFFALO		0x1154		
-#define VENDOR_TI		0x104c		
-#define VENDOR_RICOH		0x1180		
+#define VENDOR_SI_IMAGE		0x1095		/* Silicon Image, used by Arasan SDIO Host */
+#define VENDOR_BUFFALO		0x1154		/* Buffalo vendor id */
+#define VENDOR_TI		0x104c		/* Texas Instruments */
+#define VENDOR_RICOH		0x1180		/* Ricoh */
 #define VENDOR_JMICRON		0x197b
 
 
-
+/* PCMCIA vendor IDs */
 #define	VENDOR_BROADCOM_PCMCIA	0x02d0
 
-
+/* SDIO vendor IDs */
 #define	VENDOR_BROADCOM_SDIO	0x00BF
 
-
+/* DONGLE VID/PIDs */
 #define BCM_DNGL_VID		0x0a5c
 #define BCM_DNGL_BL_PID_4328	0xbd12
 #define BCM_DNGL_BL_PID_4322	0xbd13
@@ -63,7 +63,6 @@
 #define BCM_DNGL_BL_PID_43239   0xbd1b
 #define BCM_DNGL_BL_PID_4324	0xbd1c
 #define BCM_DNGL_BL_PID_4360	0xbd1d
-
 #define BCM_DNGL_BDC_PID	0x0bdc
 #define BCM_DNGL_JTAG_PID	0x4a44
 

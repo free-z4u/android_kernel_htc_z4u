@@ -1,7 +1,8 @@
+
 /*
  * Linux cfg80211 driver
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,9 +22,9 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_cfg80211.c 328984 2012-04-23 14:08:37Z $
+ * $Id: wl_cfg80211.c 419844 2013-08-23 00:07:03Z $
  */
-
+/* */
 #include <typedefs.h>
 #include <linuxver.h>
 #include <osl.h>
@@ -42,7 +43,6 @@
 #include <dhdioctl.h>
 #include <wlioctl.h>
 #include <dhd_cfg80211.h>
-
 #include <proto/ethernet.h>
 #include <linux/kernel.h>
 #include <linux/kthread.h>

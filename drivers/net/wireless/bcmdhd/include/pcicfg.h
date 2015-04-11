@@ -1,7 +1,7 @@
 /*
  * pcicfg.h: PCI configuration constants and structures.
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,13 +21,16 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: pcicfg.h 309193 2012-01-19 00:03:57Z $
+ * $Id: pcicfg.h 346935 2012-07-25 00:24:55Z $
  */
 
 #ifndef	_h_pcicfg_
 #define	_h_pcicfg_
 
-
+/* A structure for the config registers is nice, but in most
+ * systems the config space is not memory mapped, so we need
+ * field offsetts. :-(
+ */
 #define	PCI_CFG_VID		0
 #define	PCI_CFG_DID		2
 #define	PCI_CFG_CMD		4

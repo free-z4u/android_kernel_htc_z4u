@@ -214,7 +214,12 @@ static int xen_hvm_console_init(void)
 	/* already configured */
 	if (info->intf != NULL)
 		return 0;
-
+	/*
+	 * If the toolstack (or the hypervisor) hasn't set these values, the
+	 * default value is 0. Even though mfn = 0 and evtchn = 0 are
+	 * theoretically correct values, in practice they never are and they
+	 * mean that a legacy toolstack hasn't initialized the pv console correctly.
+	 */
 	r = hvm_get_parameter(HVM_PARAM_CONSOLE_EVTCHN, &v);
 	if (r < 0) {
 		kfree(info);

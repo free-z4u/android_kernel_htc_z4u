@@ -93,6 +93,6 @@ void msm_sirc_exit_sleep(void);
 #define SPSS_SIRC_INT_CLEAR           (MSM_SIRC_BASE + 0x28)
 #define SPSS_SIRC_SOFT_INT            (MSM_SIRC_BASE + 0x2C)
 
-#endif
+#endif /* CONFIG_ARCH_MSM_SCORPION */
 
 #endif

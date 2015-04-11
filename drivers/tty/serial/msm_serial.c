@@ -1,9 +1,9 @@
 /*
- * Driver for msm7k serial device and console
+ * drivers/serial/msm_serial.c - driver for msm7k serial device and console
  *
  * Copyright (C) 2007 Google, Inc.
+ * Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
  * Author: Robert Love <rlove@google.com>
- * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and

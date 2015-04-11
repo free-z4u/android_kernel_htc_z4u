@@ -1,9 +1,13 @@
-/*
- * MSM 7k/8k High speed uart driver
+/* drivers/serial/msm_serial_hs.c
  *
- * Copyright (c) 2007-2011, Code Aurora Forum. All rights reserved.
+ * MSM 7k High speed uart driver
+ *
  * Copyright (c) 2008 Google Inc.
+ * Copyright (c) 2007-2012, The Linux Foundation. All rights reserved.
  * Modified: Nick Pelly <npelly@google.com>
+ *
+ * All source code in this file is licensed under the following license
+ * except where indicated.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

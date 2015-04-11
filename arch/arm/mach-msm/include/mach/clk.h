@@ -1,4 +1,4 @@
-/* Copyright (c) 2009, Code Aurora Forum. All rights reserved.
+/* Copyright (c) 2009, 2012-2013 The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -25,7 +25,7 @@ enum clk_reset_action {
 
 struct clk;
 
-/* Rate is minimum clock rate in Hz */
+/* Rate is maximum clock rate in Hz */
 int clk_set_min_rate(struct clk *clk, unsigned long rate);
 
 /* Rate is maximum clock rate in Hz */

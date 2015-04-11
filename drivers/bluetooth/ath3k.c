@@ -30,6 +30,7 @@
 #include <net/bluetooth/bluetooth.h>
 
 #define VERSION "1.0"
+
 #define ATH3K_FIRMWARE	"ath3k-1.fw"
 
 #define ATH3K_DNLOAD				0x01
