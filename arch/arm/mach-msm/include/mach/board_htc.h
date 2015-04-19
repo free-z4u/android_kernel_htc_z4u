@@ -79,6 +79,7 @@ enum {
 	KERNEL_FLAG_GPIO_DUMP = BIT(31),
 };
 
+/* common init routines for use by arch/arm/mach-msm/board-*.c */
 
 void __init msm_add_usb_devices(void (*phy_reset) (void));
 void __init msm_add_mem_devices(struct msm_pmem_setting *setting);
@@ -89,6 +90,7 @@ int __init msm_add_sdcc_devices(unsigned int controller, struct mmc_platform_dat
 int __init msm_add_serial_devices(unsigned uart);
 
 #if defined(CONFIG_USB_FUNCTION_MSM_HSUSB)
+/* START: add USB connected notify function */
 struct t_usb_status_notifier{
 	struct list_head notifier_link;
 	const char *name;
@@ -96,6 +98,7 @@ struct t_usb_status_notifier{
 };
 	int usb_register_notifier(struct t_usb_status_notifier *);
 	static LIST_HEAD(g_lh_usb_notifier_list);
+/* END: add USB connected notify function */
 #endif
 
 int __init board_mfg_mode(void);
@@ -107,11 +110,12 @@ int parse_tag_engineerid(const struct tag * tags);
 char *board_serialno(void);
 unsigned long get_kernel_flag(void);
 unsigned int get_radio_flag(void);
-#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
+#if (defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG))
 unsigned int get_radio2_flag(void);
 #endif
 int __init parse_tag_security(const struct tag *tags);
 unsigned int get_tamper_sf(void);
 int state_helper_register_notifier(void (*func)(void), const char *name);
 int board_build_flag(void);
+int board_mfg_mode(void);
 #endif

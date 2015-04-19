@@ -388,7 +388,7 @@ static unsigned int msm_AR600X_shutdown_power(bool on)
 		gpio_free(gpio_wlan_sys_rest_en);
 	}
 
-	
+	/* GPIO_WLAN_3V3_EN is only required for the QRD7627a */
 	if (machine_is_msm7627a_qrd1()) {
 		rc = gpio_tlmm_config(GPIO_CFG(GPIO_WLAN_3V3_EN, 0,
 					GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL,
@@ -422,7 +422,7 @@ gpio_fail:
 	    machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7()))
 			gpio_free(gpio_wlan_sys_rest_en);
 qrd_gpio_fail:
-	
+	/* GPIO_WLAN_3V3_EN is only required for the QRD7627a */
 	if (machine_is_msm7627a_qrd1())
 		gpio_free(GPIO_WLAN_3V3_EN);
 #endif

@@ -440,7 +440,7 @@ int __init board_mfg_mode_init(char *s)
 		mfg_mode = 7;
 	else if (!strcmp(s, "mfgkernel"))
 		mfg_mode = 8;
-#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
+#if (defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG))
 	else if (!strcmp(s, "radiorouter_sprd"))
 		mfg_mode = 9;
 	else if (!strcmp(s, "krouter1_sprd"))
@@ -506,23 +506,6 @@ int board_build_flag(void)
 
 EXPORT_SYMBOL(board_build_flag);
 
-#if 0
-
-#define ATAG_PS_TYPE 0x4d534D77
-int ps_type;
-EXPORT_SYMBOL(ps_type);
-int __init tag_ps_parsing(const struct tag *tags)
-{
-	ps_type = tags->u.revision.rev;
-
-	printk(KERN_DEBUG "[K] %s: PS type = 0x%x\n", __func__,
-		ps_type);
-
-	return ps_type;
-}
-__tagtable(ATAG_PS_TYPE, tag_ps_parsing);
-#endif
-
 static unsigned int radio_flag;
 int __init radio_flag_init(char *s)
 {
@@ -536,7 +519,7 @@ unsigned int get_radio_flag(void)
 	return radio_flag;
 }
 
-#if (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
+#if (defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG))
 static unsigned int radio2_flag;
 int __init radio2_flag_init(char *s)
 {

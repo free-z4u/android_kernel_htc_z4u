@@ -1061,7 +1061,7 @@ static int __init smd_debugfs_init(void)
 	debug_create("int_stats", 0444, dent, debug_int_stats);
 	debug_create("int_stats_reset", 0444, dent, debug_int_stats_reset);
 
-	
+	/* NNV: this is google only stuff */
 	debug_create("build", 0444, dent, debug_read_build_id);
 #if CONFIG_SMD_OFFSET_TCXO_STAT
 	sleep_stat = get_smem_sleep_stat();
@@ -1173,4 +1173,3 @@ void smsm_print_sleep_info(uint32_t sleep_delay, uint32_t sleep_limit,
 
 	spin_unlock_irqrestore(&smem_lock, flags);
 }
-

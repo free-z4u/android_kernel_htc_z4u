@@ -24,7 +24,6 @@
 
 #include "board-msm7627a.h"
 #include "devices-msm7x2xa.h"
-
 #if defined(CONFIG_QCT2243_V21)
 #include "linux/i2c/cpld.h"
 #endif
@@ -42,13 +41,13 @@ static struct platform_device msm_bt_power_device = {
 };
 
 static unsigned bt_config_power_on[] = {
-	
+	/*RFR*/
 	GPIO_CFG(43, 2, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
-	
+	/*CTS*/
 	GPIO_CFG(44, 2, GPIO_CFG_INPUT,  GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
-	
+	/*RX*/
 	GPIO_CFG(45, 2, GPIO_CFG_INPUT,  GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
-	
+	/*TX*/
 	GPIO_CFG(46, 2, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 };
 static unsigned bt_config_pcm_on[] = {
@@ -90,11 +89,11 @@ static unsigned bt_config_pcm_off[] = {
 #if defined(CONFIG_QCT2243_V21)
 #else
 static unsigned fm_i2s_config_power_on[] = {
-	
+	/*FM_I2S_SD*/
 	GPIO_CFG(68, 1, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
-	
+	/*FM_I2S_WS*/
 	GPIO_CFG(70, 1, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
-	
+	/*FM_I2S_SCK*/
 	GPIO_CFG(71, 1, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 };
 

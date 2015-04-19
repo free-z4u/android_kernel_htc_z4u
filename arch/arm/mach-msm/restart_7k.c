@@ -17,7 +17,6 @@
 #include <linux/init.h>
 #include <linux/reboot.h>
 #include <linux/pm.h>
-#include <linux/regulator/onsemi-ncp6335d.h>
 #include <asm/system_misc.h>
 #include <mach/proc_comm.h>
 
@@ -27,6 +26,7 @@ static uint32_t restart_reason = 0x776655AA;
 
 static void msm_pm_power_off(void)
 {
+	/* Disable interrupts */
 	local_irq_disable();
 	msm_proc_comm(PCOM_POWER_DOWN, 0, 0);
 	for (;;)
@@ -35,18 +35,9 @@ static void msm_pm_power_off(void)
 
 static void msm_pm_restart(char str, const char *cmd)
 {
-#if 0
-	int rc;
-#endif
 	pr_debug("The reset reason is %x\n", restart_reason);
 
-#if 0
-	rc = ncp6335d_restart_config();
-	if (rc)
-		pr_err("Unable to configure NCP6335D for restart\n");
-#endif
-
-	
+	/* Disable interrupts */
 	local_irq_disable();
 	local_fiq_disable();
 

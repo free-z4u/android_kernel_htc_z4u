@@ -19,22 +19,20 @@
 #include <linux/keyreset.h>
 #include <asm/mach-types.h>
 
-#include <mach/board_htc.h>
-
-#include "board-z4u.h"
+#include "board-cp3.h"
 #include <linux/module.h>
 #include <mach/proc_comm.h>
 
 
 static char *keycaps = "--qwerty";
 #undef MODULE_PARAM_PREFIX
-#define MODULE_PARAM_PREFIX "board_z4u."
+#define MODULE_PARAM_PREFIX "board-msm7627a."
 
 module_param_named(keycaps, keycaps, charp, 0);
 
 static struct gpio_event_direct_entry msm8625q_keypad_nav_map[] = {
 	{
-		.gpio = Z4U_POWER_KEY,
+		.gpio = CP3_POWER_KEY,
 		.code = KEY_POWER,
 	},
 	{
@@ -50,7 +48,7 @@ static struct gpio_event_direct_entry msm8625q_keypad_nav_map[] = {
 static void msm8625q_direct_inputs_gpio(void)
 {
 	static uint32_t matirx_inputs_gpio_table[] = {
-		GPIO_CFG(Z4U_POWER_KEY, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP,	GPIO_CFG_4MA),
+		GPIO_CFG(CP3_POWER_KEY, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP,	GPIO_CFG_4MA),
 	};
 	gpio_tlmm_config(matirx_inputs_gpio_table[0], GPIO_CFG_ENABLE);
 }

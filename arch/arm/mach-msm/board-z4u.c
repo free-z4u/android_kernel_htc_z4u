@@ -127,6 +127,8 @@
 #define RT5501_I2C_SLAVE_ADDR	(0xF0 >> 1)
 
 #define Z4U_GPIO_NFC_INT     (114)
+#define MAX_VKEY_LEN		200
+
 extern unsigned htc_get_skuid(void);
 
 int htc_get_usb_accessory_adc_level(uint32_t *buffer);
@@ -203,7 +205,7 @@ static void nfc_gpio_deinit(void)
 	printk(KERN_INFO"[NFC] %s, config NFC_IRQ pin\n",__func__);
 	gpio_tlmm_config(nfc_gpio_table[0], GPIO_CFG_ENABLE);
 
-	pn544_set_ven_gpio(0);	
+	pn544_set_ven_gpio(0);
 	return;
 }
 
@@ -213,7 +215,7 @@ static int nfc_init_check(void)
 {
 	unsigned int htc_skuid = 0;
 
-	
+
 	htc_skuid = htc_get_skuid();
 
 	if (( WITHOUT_NFC_CHIP_ONE == htc_skuid )||( WITHOUT_NFC_CHIP_TWO == htc_skuid )) {
@@ -302,7 +304,7 @@ static struct i2c_board_info msm_i2c_gsbi1_tfa9887_info[] = {
 static struct i2c_board_info i2c_cpld_devices[] = {
         {
                 I2C_BOARD_INFO("cpld",0x70),
-               
+
                .irq = MSM_GPIO_TO_INT(Z4U_GPIO_CPLD_INT),
         },
 };
@@ -320,12 +322,12 @@ static struct platform_device msm_wlan_ar6000_pm_device = {
 static ssize_t syn_vkeys_show(struct kobject *kobj,
 			struct kobj_attribute *attr, char *buf)
 {
-	return snprintf(buf, 200,
-	__stringify(EV_KEY) ":" __stringify(KEY_BACK) ":109:871:86:86"
-	
-	":" __stringify(EV_KEY) ":" __stringify(KEY_HOME) ":383:871:86:86"
-	
-	"\n");
+	char *virtual_keys = \
+	__stringify(EV_KEY) ":" __stringify(KEY_BACK) ":109:871:86:86" \
+	":" __stringify(EV_KEY) ":" __stringify(KEY_HOME) ":383:871:86:86" \
+	"\n";
+	return snprintf(buf, strnlen(virtual_keys, MAX_VKEY_LEN), "%s",
+			virtual_keys);
 }
 
 static struct kobj_attribute syn_vkeys_attr = {
@@ -351,7 +353,7 @@ static int synaptic_rmi_tp_power(int on)
 
 static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 	{
-		.version = 0x3332,							
+		.version = 0x3332,
 		.packrat_number = 1473052,
 		.abs_x_min       = 8,
 		.abs_x_max       = 712,
@@ -415,7 +417,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 		},
 	},
 	{
-		.version = 0x3332,							
+		.version = 0x3332,
 		.packrat_number = 1473052,
 		.abs_x_min       = 8,
 		.abs_x_max       = 712,
@@ -479,7 +481,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 		},
 	},
 	{
-		.packrat_number  = 1293984,						
+		.packrat_number  = 1293984,
 		.abs_x_min       = 0,
 		.abs_x_max       = 720,
 		.abs_y_min       = 0,
@@ -542,7 +544,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 		},
 	},
 	{
-		.packrat_number  = 1293984,						
+		.packrat_number  = 1293984,
 		.abs_x_min       = 0,
 		.abs_x_max       = 720,
 		.abs_y_min       = 0,
@@ -749,7 +751,7 @@ static struct msm_gpio msm8625q_i2c_gpio_config[] = {
 static struct i2c_gpio_platform_data msm8625q_i2c_gpio_pdata = {
 	.scl_pin = 31,
 	.sda_pin = 32,
-	.udelay = 5, 
+	.udelay = 5,
 };
 
 static struct platform_device msm8625q_i2c_gpio = {
@@ -762,31 +764,19 @@ static struct platform_device msm8625q_i2c_gpio = {
 
 #ifdef CONFIG_I2C_CPLD
 static struct msm_gpio msm8625q_i2c_cpld_config[] = {
-	
-	
-	
-	
-
-	
-#if 0
-	
-        { GPIO_CFG(4, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),   "CPLD_CLK"},
-#endif
 	{ GPIO_CFG(39, 0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),   "CPLD_INT"},
 	{ GPIO_CFG(49, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),  "CPLD_RST"},
-        { GPIO_CFG(116, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), "CPLD_I2C_EN"},
-	
-
+	{ GPIO_CFG(116, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), "CPLD_I2C_EN"},
 };
 
 static struct i2c_gpio_platform_data msm8625q_i2c_cpld_pdata = {
 	.scl_pin = 33,
 	.sda_pin = 82,
-	
-        .udelay = 1,
-        .timeout = 100,
-        .sda_is_open_drain = 1,
-        .scl_is_open_drain = 1,
+
+	.udelay = 1,
+	.timeout = 100,
+	.sda_is_open_drain = 1,
+	.scl_is_open_drain = 1,
 };
 
 static struct platform_device msm8625q_i2c_cpld = {
@@ -809,10 +799,10 @@ static void __init sprd_init(void)
 	printk(KERN_INFO "[SPRD]device init");
 	platform_device_register(&sprd_notify_device);
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_MSM7X27A
-#define CAMERA_ZSL_SIZE	    (SZ_1M * 111)  
+#define CAMERA_ZSL_SIZE	    (SZ_1M * 111)
 
 #ifdef CONFIG_ION_MSM
 #define MSM_ION_HEAP_NUM	4
@@ -823,7 +813,7 @@ static int msm_ion_sf_size;
 #endif
 #endif
 
-#define PM8058ADC_16BIT(adc) ((adc * 1800) / 65535) 
+#define PM8058ADC_16BIT(adc) ((adc * 1800) / 65535)
 int64_t z4u_get_usbid_adc(void)
 {
 	uint32_t adc_value = 0xffffffff;
@@ -882,7 +872,7 @@ static struct platform_device cable_detect_device = {
 
 static struct android_usb_platform_data android_usb_pdata = {
 	.vendor_id              = 0x0bb4,
-#ifdef CONFIG_MACH_DUMMY
+#ifdef CONFIG_MACH_PROTOU
 	.product_id             = 0x0dd5,
 #else
 	.product_id             = 0x0dc9,
@@ -975,7 +965,7 @@ static int msm_hsusb_ldo_init(int init)
 
 		return 0;
 	}
-	
+	/* else fall through */
 reg_free:
 	regulator_put(reg_hsusb);
 out:
@@ -1055,18 +1045,14 @@ void usb_phy_id_gpio_setting(void)
 
 void cp3_add_usb_devices(void)
 {
-#if 0
-FIXME
-	printk(KERN_INFO "%s rev: %d\n", __func__, system_rev);
-#endif
 	usb_phy_id_gpio_setting();
 	android_usb_pdata.products[0].product_id =
 		android_usb_pdata.product_id;
 
-	
+	/* diag bit set */
 	if (get_radio_flag() & 0x20000)
 		android_usb_pdata.diag_init = 1;
-	
+	/* add cdrom support in normal mode */
 	if (board_mfg_mode() == 0) {
 		android_usb_pdata.nluns = 1;
 		android_usb_pdata.cdrom_lun = 0x1;
@@ -1079,8 +1065,8 @@ FIXME
 
 #ifdef CONFIG_PERFLOCK
 static unsigned msm8x25q_perf_acpu_table[] = {
-	700800000, 
-	700800000, 
+	700800000,
+	700800000,
 	1008000000,
 	1008000000,
 	1209600000,
@@ -1115,7 +1101,7 @@ static struct perflock_screen_policy msm8x25q_screen_off_policy = {
 	.on_min  = NULL,
 	.off_max = &screen_off_ceiling_lock,
 };
-#endif 
+#endif
 #endif
 
 static int get_thermal_id(void)
@@ -1148,17 +1134,17 @@ static void z4u_poweralg_config_init(struct poweralg_config_type *config)
 	config->full_charging_ma = 180;
 	config->full_pending_ma = 50;
 	config->full_charging_timeout_sec = 60 * 60;
-	config->min_taper_current_mv = 0;	
-	config->min_taper_current_ma = 0;	
+	config->min_taper_current_mv = 0;	/* disabled */
+	config->min_taper_current_ma = 0;	/* disabled */
 	config->wait_votlage_statble_sec = 1 * 60;
 	config->predict_timeout_sec = 10;
 	config->polling_time_in_charging_sec = 30;
 
 	config->enable_full_calibration = TRUE;
 	config->enable_weight_percentage = TRUE;
-	config->software_charger_timeout_sec = 57600; 
-	config->superchg_software_charger_timeout_sec = 0;	
-	config->charger_hw_safety_timer_watchdog_sec =  0;	
+	config->software_charger_timeout_sec = 57600; /* 16hr */
+	config->superchg_software_charger_timeout_sec = 0;	/* disabled */
+	config->charger_hw_safety_timer_watchdog_sec =  0;	/* disabled */
 
 	config->debug_disable_shutdown = FALSE;
 	config->debug_fake_room_temp = FALSE;
@@ -1174,6 +1160,14 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 {
 	static int pState = 0;
 	int old_pState = pState;
+	/* pStates:
+		0: initial (temp detection)
+		1: temp < 0 degree c
+		2: 0 <= temp <= 45 degree c
+		3: 45 < temp <= 48 degree c
+		4: 48 < temp <= 60 degree c
+		5: 60 < temp
+	*/
 	enum {
 		PSTAT_DETECT = 0,
 		PSTAT_LOW_STOP,
@@ -1182,8 +1176,10 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 		PSTAT_LIMITED,
 		PSTAT_HIGH_STOP
 	};
+	/* generally we assumed that pState implies last temp.
+		it won't hold if temp changes faster than sample rate */
 
-	
+	// step 1. check if change state condition is hit
 	pr_debug("[BATT] %s(i=%d, v=%d, t=%d, %d, %d)\n",__func__, ibat_ma, vbat_mv, temp_01c, *chg_allowed, *hchg_allowed);
 	switch(pState) {
 		default:
@@ -1203,14 +1199,14 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 		case PSTAT_LOW_STOP:
 			if (30 <= temp_01c)
 				pState = PSTAT_NORMAL;
-			
+			/* suppose never jump to LIMITED/HIGH_STOP from here */
 			break;
 		case PSTAT_NORMAL:
 			if (temp_01c < 0)
 				pState = PSTAT_LOW_STOP;
 			else if (600 < temp_01c)
 				pState = PSTAT_HIGH_STOP;
-			else if (490 < temp_01c) 
+			else if (490 < temp_01c) /* also implies t <= 550 */
 				pState = PSTAT_LIMITED;
 			else if (460 < temp_01c)
 				pState = PSTAT_SLOW;
@@ -1242,13 +1238,15 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 				pState = PSTAT_SLOW;
 			else if (temp_01c <= 570)
 				pState = PSTAT_LIMITED;
-			
+			/* suppose never jump to LOW_STOP from here */
 			break;
 	}
 	if (old_pState != pState)
 		pr_info("[BATT] Protect pState changed from %d to %d\n", old_pState, pState);
 
-	
+	/* step 2. check state protect condition */
+	/* chg_allowed = TRUE:only means it's allowed no matter it has charger.
+		same as hchg_allowed. */
 	switch(pState) {
 		default:
 		case PSTAT_DETECT:
@@ -1263,16 +1261,7 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 			*chg_allowed = TRUE;
 			*hchg_allowed = TRUE;
 			break;
-#if 0 
-		case PSTAT_SLOW:	
-			if (4200 < vbat_mv)
-				*chg_allowed = FALSE;
-			else if (vbat_mv <= 4150)
-				*chg_allowed = TRUE;
-			*hchg_allowed = TRUE;
-			break;
-#endif
-		case PSTAT_LIMITED:	
+		case PSTAT_LIMITED:	/* 4.1V Charge Full, 3.8V recharge */
 			if (PSTAT_LIMITED != old_pState)
 				*chg_allowed = TRUE;
 			if (4100 < vbat_mv)
@@ -1287,7 +1276,7 @@ static int z4u_update_charging_protect_flag(int ibat_ma, int vbat_mv, int temp_0
 			break;
 	}
 
-	
+	/* update temp_fault */
 	if (PSTAT_NORMAL == pState || PSTAT_SLOW == pState)
 		*temp_fault = FALSE;
 	else
@@ -1361,14 +1350,14 @@ static struct platform_device gpio_leds = {
         },
 };
 
-
+/* battery parameters */
 UINT32 m_parameter_TWS_SDI_1650mah[] = {
-	
+	/* capacity (in 0.01%) -> voltage (in mV)*/
 	10000, 4250, 8100, 4101, 5100, 3846,
 	2000, 3711, 900, 3641, 0, 3411,
 };
 UINT32 m_parameter_Formosa_Sanyo_1650mah[] = {
-	
+	/* capacity (in 0.01%) -> voltage (in mV)*/
 	10000, 4250, 8100, 4145, 5100, 3845,
 	2000, 3735, 900, 3625, 0, 3405,
 };
@@ -1455,7 +1444,7 @@ static max17050_platform_data max17050_pdev_data = {
 	.func_get_battery_id = get_battery_id,
 	.func_poweralg_config_init = z4u_poweralg_config_init,
 	.func_update_charging_protect_flag = z4u_update_charging_protect_flag,
-	.r2_kohm = 0,	
+	.r2_kohm = 0,	/* use get_battery_id, doesn't need this */
 	.batt_param = &z4u_battery_parameter,
 #ifdef CONFIG_TPS65200
 	.func_kick_charger_ic = tps65200_kick_charger_ic,
@@ -1553,9 +1542,10 @@ static struct msm_pm_boot_platform_data msm_pm_boot_pdata __initdata = {
 	.p_addr = 0,
 };
 
+/* 8625 PM platform data */
 static struct msm_pm_platform_data
 		msm8625_pm_data[MSM_PM_SLEEP_MODE_NR * CONFIG_NR_CPUS] = {
-	
+	/* CORE0 entries */
 	[MSM_PM_MODE(0, MSM_PM_SLEEP_MODE_POWER_COLLAPSE)] = {
 					.idle_supported = 1,
 					.suspend_supported = 1,
@@ -1574,7 +1564,7 @@ static struct msm_pm_platform_data
 					.residency = 20000,
 	},
 
-	
+	/* picked latency & redisdency values from 7x30 */
 	[MSM_PM_MODE(0, MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE)] = {
 					.idle_supported = 0,
 					.suspend_supported = 0,
@@ -1593,7 +1583,7 @@ static struct msm_pm_platform_data
 					.residency = 10,
 	},
 
-	
+	/* picked latency & redisdency values from 7x30 */
 	[MSM_PM_MODE(1, MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE)] = {
 					.idle_supported = 1,
 					.suspend_supported = 1,
@@ -1612,7 +1602,7 @@ static struct msm_pm_platform_data
 					.residency = 10,
 	},
 
-	
+
 	[MSM_PM_MODE(2, MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE)] = {
 					.idle_supported = 1,
 					.suspend_supported = 1,
@@ -1631,7 +1621,7 @@ static struct msm_pm_platform_data
 					.residency = 10,
 	},
 
-	
+
 	[MSM_PM_MODE(3, MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE)] = {
 					.idle_supported = 1,
 					.suspend_supported = 1,
@@ -1747,43 +1737,6 @@ static struct platform_device msm_adc_device = {
 	},
 };
 
-#define SND(desc, num) { .name = #desc, .id = num }
-static struct snd_endpoint snd_endpoints_list[] = {
-	SND(HANDSET, 0),
-	SND(MONO_HEADSET, 2),
-	SND(HEADSET, 3),
-	SND(SPEAKER, 6),
-	SND(TTY_HEADSET, 8),
-	SND(TTY_VCO, 9),
-	SND(TTY_HCO, 10),
-	SND(BT, 12),
-	SND(IN_S_SADC_OUT_HANDSET, 16),
-	SND(IN_S_SADC_OUT_SPEAKER_PHONE, 25),
-	SND(FM_DIGITAL_STEREO_HEADSET, 26),
-	SND(FM_DIGITAL_SPEAKER_PHONE, 27),
-	SND(FM_DIGITAL_BT_A2DP_HEADSET, 28),
-	SND(STEREO_HEADSET_AND_SPEAKER, 31),
-	SND(CURRENT, 0x7FFFFFFE),
-	SND(FM_ANALOG_STEREO_HEADSET, 35),
-	SND(FM_ANALOG_STEREO_HEADSET_CODEC, 36),
-};
-#undef SND
-
-static struct msm_snd_endpoints msm_device_snd_endpoints = {
-	.endpoints = snd_endpoints_list,
-	.num = sizeof(snd_endpoints_list) / sizeof(struct snd_endpoint)
-};
-
-static struct platform_device msm_device_snd = {
-	.name = "msm_snd",
-	.id = -1,
-	.dev    = {
-	.platform_data = &msm_device_snd_endpoints
-	},
-};
-
-
-
 static struct fmem_platform_data fmem_pdata;
 
 static struct platform_device fmem_device = {
@@ -1855,7 +1808,7 @@ static struct platform_device pm8029_leds = {
                 .platform_data  = &pm8029_leds_data,
         },
 };
-#endif 
+#endif
 
 
 static struct htc_headset_gpio_platform_data htc_headset_gpio_data = {
@@ -1872,6 +1825,7 @@ static struct platform_device htc_headset_gpio = {
 	},
 };
 
+/* HTC_HEADSET_PMIC Driver */
 static struct htc_headset_pmic_platform_data htc_headset_pmic_data = {
 	.driver_flag		= DRIVER_HS_PMIC_RPC_KEY,
 	.hpin_gpio		= 0,
@@ -1910,11 +1864,12 @@ static struct platform_device htc_headset_one_wire = {
        },
 };
 
+/* HTC_HEADSET_MGR Driver */
 static struct platform_device *headset_devices[] = {
 	&htc_headset_pmic,
 	&htc_headset_gpio,
 	&htc_headset_one_wire,
-	
+	/* Please put the headset detection driver on the last */
 };
 
 static struct headset_adc_config htc_headset_mgr_config[] = {
@@ -1999,7 +1954,7 @@ static void headset_init(void)
 		ret = gpio_tlmm_config(headset_cpu_gpio[i], GPIO_CFG_ENABLE);
 		pr_info("[HS_BOARD]Config gpio[%d], ret = %d\n", (headset_cpu_gpio[i] & 0x3FF0) >> 4, ret);
 	}
-	gpio_set_value(Z4U_AUD_UART_OEz, 1); 
+	gpio_set_value(Z4U_AUD_UART_OEz, 1); /*Disable 1-wire level shift by default*/
 	gpio_set_value(Z4U_AUD_UART_SEL, 0);
 
 }
@@ -2046,6 +2001,7 @@ static struct platform_device htc_headset_mgr = {
 	},
 };
 
+/* HEADSET DRIVER END */
 
 
 static struct platform_device *common_devices[] __initdata = {
@@ -2064,7 +2020,7 @@ static struct platform_device *common_devices[] __initdata = {
 #ifdef CONFIG_LEDS_PM8029
 	&pm8029_leds,
 	&gpio_leds,
-#endif 
+#endif
 #ifdef CONFIG_ION_MSM
 	&ion_dev,
 #endif
@@ -2086,12 +2042,6 @@ static struct platform_device *qrd7627a_devices[] __initdata = {
 	&msm_device_gadget_peripheral,
 	&msm_kgsl_3d0,
 };
-
-#if 0
-static struct platform_device *qrd3_devices[] __initdata = {
-	&msm_device_nand,
-};
-#endif
 
 static struct platform_device *msm8625_evb_devices[] __initdata = {
 	&ram_console_device,
@@ -2151,7 +2101,7 @@ struct ion_platform_heap msm7627a_heaps[] = {
 			.name	= ION_VMALLOC_HEAP_NAME,
 		},
 #ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
-		
+
 		{
 			.id	= ION_CAMERA_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2159,7 +2109,7 @@ struct ion_platform_heap msm7627a_heaps[] = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
-		
+
 		{
 			.id	= ION_AUDIO_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2167,7 +2117,7 @@ struct ion_platform_heap msm7627a_heaps[] = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
-		
+
 		{
 			.id	= ION_SF_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2355,7 +2305,7 @@ static void __init msm8625_device_i2c_init(void)
 					= &msm_gsbi0_qup_i2c_pdata;
 	msm8625_gsbi1_qup_i2c_device.dev.platform_data
 					= &msm_gsbi1_qup_i2c_pdata;
-	if (0 || cpu_is_msm8625q()) {
+	if (machine_is_qrd_skud_prime() || cpu_is_msm8625q()) {
 		for (i = 0 ; i < ARRAY_SIZE(msm8625q_i2c_gpio_config); i++) {
 			rc = gpio_tlmm_config(
 					msm8625q_i2c_gpio_config[i].gpio_cfg,
@@ -2472,7 +2422,7 @@ static struct i2c_board_info i2c_cm36282_devices[] = {
         },
 };
 
-#endif 
+#endif
 
 
 static struct platform_device msm_proccomm_regulator_dev = {
@@ -2511,29 +2461,20 @@ static void __init add_platform_devices(void)
 				|| machine_is_msm8625_evt()
 				|| machine_is_msm8625q_evbd()
 				|| machine_is_msm8625q_skud()
-				|| 0
-				|| 0
-				|| 0
-				|| 0
-				|| 0
+				|| machine_is_qrd_skud_prime()
+				|| machine_is_cp3dcg()
+				|| machine_is_cp3dtg()
+				|| machine_is_cp3dug()
+				|| machine_is_cp3u()
 				|| machine_is_z4u()
 	) {
 		platform_add_devices(msm8625_evb_devices,
 				ARRAY_SIZE(msm8625_evb_devices));
-#if 0
-		platform_add_devices(qrd3_devices,
-				ARRAY_SIZE(qrd3_devices));
-#endif
 	} else {
 		platform_add_devices(qrd7627a_devices,
 				ARRAY_SIZE(qrd7627a_devices));
 	}
 
-#if 0
-	if (machine_is_msm7627a_qrd3() || machine_is_msm7627a_evb())
-		platform_add_devices(qrd3_devices,
-				ARRAY_SIZE(qrd3_devices));
-#endif
 	platform_add_devices(common_devices,
 			ARRAY_SIZE(common_devices));
 }
@@ -2580,10 +2521,12 @@ static void __init msm_pm_init(void)
 	}
 }
 
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 static void cp3_reset(void)
 {
 	gpio_set_value(Z4U_GPIO_PS_HOLD, 0);
 }
+#endif
 
 #ifdef CONFIG_GPS_1530
 #define UART3_RX        GPIO_CFG(86, 1, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA)
@@ -2706,11 +2649,14 @@ static void __init msm_z4u_init(void)
 #ifdef CONFIG_MMC_MSM
 	struct proc_dir_entry *entry = NULL;
 #endif
-
+#if defined(CONFIG_MSM_SERIAL_DEBUGGER)
 	msm_hw_reset_hook = cp3_reset;
+#endif
 	gpio_set_value(Z4U_GPIO_PS_HOLD, 1);
 
 	msm7x2x_misc_init();
+
+	/* Initialize regulators first so that other devices can use them */
 	msm7627a_init_regulators();
 	msmqrd_adsp_add_pdev();
 
@@ -2724,9 +2670,9 @@ static void __init msm_z4u_init(void)
                                 i2c_cpld_devices,
                                 ARRAY_SIZE(i2c_cpld_devices));
 #endif
-	
+
 	qrd7627a_uart1dm_config();
-	
+
 	qrd7627a_otg_gadget();
 
 	msm_add_footswitch_devices();
@@ -2737,14 +2683,14 @@ static void __init msm_z4u_init(void)
 	}
 	add_platform_devices();
 
-	
+
 	msm_qrd_init_ar6000pm();
 	cp3_add_usb_devices();
 	cp3_wifi_init();
 
 #ifdef CONFIG_MMC_MSM
 	printk(KERN_ERR "%s: start init mmc\n", __func__);
-	z4u_init_mmc();
+	msm7627a_init_mmc();
 	printk(KERN_ERR "%s: msm7627a_init_mmc()\n", __func__);
 	entry = create_proc_read_entry("emmc", 0, NULL, emmc_partition_read_proc, NULL);
 	printk(KERN_ERR "%s: create_proc_read_entry()\n", __func__);
@@ -2767,31 +2713,23 @@ static void __init msm_z4u_init(void)
 	msm_pm_init();
 
 	msm_pm_register_irqs();
-	
+
+	/* display initializations*/
 	z4_init_panel();
 	#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_3K
 	syn_init_vkeys_cp3();
 	#endif
 
-	if (0 || machine_is_msm8625q_evbd()
+	if (machine_is_qrd_skud_prime() || machine_is_msm8625q_evbd()
 					|| machine_is_msm8625q_skud()
-					|| 0
-					|| 0
-					|| 0
-					|| 0
+					|| machine_is_cp3dcg()
+					|| machine_is_cp3dtg()
+					|| machine_is_cp3dug()
+					|| machine_is_cp3u()
 					|| machine_is_z4u()
 	)
 		i2c_register_board_info(2, i2c2_info,
 				ARRAY_SIZE(i2c2_info));
-
-#if 0
-#if defined(CONFIG_I2C_CPLD)
-        i2c_register_board_info(3,
-				i2c_cpld_devices,
-                             	ARRAY_SIZE(i2c_cpld_devices));
-#endif
-#endif
-
 
 #if defined(CONFIG_BT) && defined(CONFIG_MARIMBA_CORE)
 	bt_export_bd_address();
@@ -2799,14 +2737,14 @@ static void __init msm_z4u_init(void)
 #endif
 
 #ifdef CONFIG_PERFLOCK_SCREEN_POLICY
-	
+
 	perf_lock_init(&screen_off_ceiling_lock, TYPE_CPUFREQ_CEILING,
 					PERF_LOCK_HIGH, "screen_off_scaling_max");
 	perflock_screen_policy_init(&msm8x25q_screen_off_policy);
 #endif
 
 	#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_3K
-	
+
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 				i2c_touch_device,
 				ARRAY_SIZE(i2c_touch_device));
@@ -2817,16 +2755,17 @@ static void __init msm_z4u_init(void)
                                 tps61310_i2c_info,
                                 ARRAY_SIZE(tps61310_i2c_info));
 #endif
-	
+
+	/*register gpio expander here*/
 	printk(KERN_ERR"NFC i2c registration\n");
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 		pn544_i2c_boardinfo, ARRAY_SIZE(pn544_i2c_boardinfo));
 
-	i2c_register_board_info(1,         
+	i2c_register_board_info(1,
 		msm_i2c_gsbi1_rt5501_info,
 		ARRAY_SIZE(msm_i2c_gsbi1_rt5501_info));
 
-	i2c_register_board_info(1,         
+	i2c_register_board_info(1,
 		msm_i2c_gsbi1_tfa9887_info,
 		ARRAY_SIZE(msm_i2c_gsbi1_tfa9887_info));
 
@@ -2838,7 +2777,7 @@ static void __init msm_z4u_init(void)
 
 	printk(KERN_INFO "[VERSION] board_version: %x\n",
 		htc_get_board_revision());
-	
+
 	if (htc_get_board_revision() == BOARD_EVM) {
 		printk(KERN_INFO "[GSNR]: Use EVM layout\n");
 		i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
@@ -2851,11 +2790,11 @@ static void __init msm_z4u_init(void)
 			ARRAY_SIZE(i2c_bma250_devices_evt));
 	}
 
-        
+
         i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
                 i2c_cm36282_devices, ARRAY_SIZE(i2c_cm36282_devices));
 	z4u_camera_init();
-	
+
 	msm7x25a_kgsl_3d0_init();
 	msm8x25_kgsl_3d0_init();
 #ifdef CONFIG_MSM_RPC_VIBRATOR

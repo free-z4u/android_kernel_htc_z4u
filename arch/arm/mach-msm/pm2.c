@@ -1996,6 +1996,13 @@ static int __init msm_pm_init(void)
 		clean_caches((unsigned long)&target_type, sizeof(target_type),
 				virt_to_phys(&target_type));
 
+		/*
+		 * Configure the MPA5_GDFS_CNT_VAL register for
+		 * DBGPWRUPEREQ_OVERRIDE[19:16] = Override the
+		 * DBGNOPOWERDN for each cpu.
+		 * MPA5_GDFS_CNT_VAL[9:0] = Delay counter for
+		 * GDFS control.
+		 */
 		if (cpu_is_msm8625q())
 			val = 0x000F0002;
 		else
@@ -2009,6 +2016,10 @@ static int __init msm_pm_init(void)
 	idle_v7_start_ptr = virt_start_ptr;
 
 #ifdef CONFIG_MSM_MEMORY_LOW_POWER_MODE
+	/* The wakeup_reason field is overloaded during initialization time
+	   to signal Modem that Apps will control the low power modes of
+	   the memory.
+	 */
 	msm_pm_smem_data->wakeup_reason = 1;
 	smsm_change_state(SMSM_APPS_DEM, 0, DEM_SLAVE_SMSM_RUN);
 #endif

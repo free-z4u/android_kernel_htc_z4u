@@ -417,6 +417,9 @@ config MSM_REMOTE_SPINLOCK_SFPB
 config MSM_ADM3
 	bool
 
+config HTC_PHONE
+	bool "HTC PHONE"
+
 config PERFLOCK
         depends on CPU_FREQ
         depends on ARCH_MSM
@@ -615,6 +618,48 @@ config MACH_MSM8625_EVT
 	help
 	  Support for the Qualcomm MSM8625 Reference Design.
 
+config MACH_PROTOU
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "Protou"
+	help
+	  Support for the Protou.
+
+config MACH_PROTODUG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "Protodug"
+	help
+	  Support for the Protodug.
+
+config MACH_PROTODCG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "Protodcg"
+	help
+	  Support for the Protodcg.
+
+config MACH_QRD_SKUD_PRIME
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	bool "MSM8625 SKUD PRIME"
+	help
+	  Support for the Qualcomm MSM8625 SKUD prime Reference Design.
+	  Add support for a SKUD prime reference design based on MSM8x25
+	  chipset. This device is much closer to a phone than regular form
+	  factor devices, with new touch, display panel and other hardware
+	  configurations.
+
 config MACH_MSM8625Q_EVBD
 	depends on ARCH_MSM8625
 	depends on !MSM_STACKED_MEMORY
@@ -639,15 +684,93 @@ config MACH_MSM8625Q_SKUD
 	  factor devices, with new touch, display panel and other hardware
 	  configurations.
 
-config MACH_Z4U
-        depends on ARCH_MSM8625
-        depends on !MSM_STACKED_MEMORY
-        default n
-        select FB_MSM_MIPI_VIDEO_ONLY
-        bool "Z4U"
-        help
-          Support for the Z4u.
+config MACH_MAGNIDS
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	select HTC_PHONE
+	default n
+	bool "Magnids"
+	help
+	  Support for the Magnids.
 
+config MACH_MAGNIU
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	select HTC_PHONE
+	default n
+	bool "Magniu"
+	help
+	  Support for the Magniu.
+
+config MACH_CP3DCG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "CP3DCG"
+	help
+	  Support for the Cp3dcg.
+
+config MACH_CP3DUG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "CP3DUG"
+	help
+	  Support for the Cp3dug.
+
+config MACH_CP3DTG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "CP3DTG"
+	help
+	  Support for the Cp3dtg.
+
+config MACH_CP3U
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	select HTC_PHONE
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	bool "CP3U"
+	help
+	  Support for the Cp3u.
+
+config MACH_Z4DUG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "Z4DUG"
+	help
+	  Support for the Z4dug.
+
+config MACH_Z4DCG
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	select FB_MSM_MIPI_VIDEO_ONLY
+	select HTC_PHONE
+	bool "Z4DCG"
+	help
+	  Support for the Z4dcg.
+
+config MACH_Z4U
+	 depends on ARCH_MSM8625
+	 depends on !MSM_STACKED_MEMORY
+	 default n
+	 select FB_MSM_MIPI_VIDEO_ONLY
+	 select HTC_PHONE
+	 bool "Z4U"
+	 help
+	   Support for the Z4u.
 
 config MACH_MSM7X30_SURF
        depends on ARCH_MSM7X30

@@ -1,7 +1,7 @@
 /* arch/arm/mach-msm/proc_comm.c
  *
  * Copyright (C) 2007-2008 Google, Inc.
- * Copyright (c) 2009-2012, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
  * Author: Brian Swetland <swetland@google.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -28,7 +28,7 @@
 
 static inline void notify_other_proc_comm(void)
 {
-	/* Make sure the write completes before interrupt */
+	
 	wmb();
 #if defined(CONFIG_ARCH_MSM7X30)
 	__raw_writel(1 << 6, MSM_APCS_GCC_BASE + 0x8);
@@ -79,6 +79,14 @@ static inline void notify_other_proc_comm(void)
 static DEFINE_SPINLOCK(proc_comm_lock);
 static int msm_proc_comm_disable;
 
+/* Poll for a state change, checking for possible
+ * modem crashes along the way (so we don't wait
+ * forever while the ARM9 is blowing up).
+ *
+ * Return an error in the event of a modem crash and
+ * restart so the msm_proc_comm() routine can restart
+ * the operation from the beginning.
+ */
 static int proc_comm_wait_for(unsigned addr, unsigned value)
 {
 	while (1) {
