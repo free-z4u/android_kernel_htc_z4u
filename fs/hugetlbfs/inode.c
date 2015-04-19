@@ -927,10 +927,6 @@ static int can_do_hugetlb_shm(void)
 	return capable(CAP_IPC_LOCK) || in_group_p(sysctl_hugetlb_shm_group);
 }
 
-/*
- * Note that size should be aligned to proper hugepage size in caller side,
- * otherwise hugetlb_reserve_pages reserves one less hugepages than intended.
- */
 struct file *hugetlb_file_setup(const char *name, unsigned long addr,
 				size_t size, vm_flags_t acctflag,
 				struct user_struct **user, int creat_flags)
@@ -981,8 +977,7 @@ struct file *hugetlb_file_setup(const char *name, unsigned long addr,
 	num_pages = ALIGN(size, huge_page_size(hstate)) >>
 			huge_page_shift(hstate);
 	error = -ENOMEM;
-	if (hugetlb_reserve_pages(inode, 0, num_pages, NULL,
-			acctflag))
+	if (hugetlb_reserve_pages(inode, 0, num_pages, NULL, acctflag))
 		goto out_inode;
 
 	d_instantiate(path.dentry, inode);

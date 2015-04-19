@@ -33,11 +33,6 @@
 #define TRACE_ON 1
 #define TRACE_OFF 0
 
-/*
- * Globals, our netlink socket pointer
- * and the work handle that will send up
- * netlink alerts
- */
 static void send_dm_alert(struct work_struct *unused);
 
 

@@ -51,8 +51,6 @@
 #include <linux/init_ohci1394_dma.h>
 #include <linux/kvm_para.h>
 
-#include <linux/dma-contiguous.h>
-
 #include <linux/errno.h>
 #include <linux/kernel.h>
 #include <linux/stddef.h>
@@ -936,7 +934,6 @@ void __init setup_arch(char **cmdline_p)
 	}
 #endif
 	memblock.current_limit = get_max_mapped();
-	dma_contiguous_reserve(0);
 
 	/*
 	 * NOTE: On x86-32, only from this point on, fixmaps are ready for use.

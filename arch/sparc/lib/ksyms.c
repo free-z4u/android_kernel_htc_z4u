@@ -125,7 +125,7 @@ EXPORT_SYMBOL(___copy_from_user);
 EXPORT_SYMBOL(___copy_in_user);
 EXPORT_SYMBOL(__clear_user);
 
-/* Atomic counter implementation. */
+/* RW semaphores */
 EXPORT_SYMBOL(__down_read);
 EXPORT_SYMBOL(__down_read_trylock);
 EXPORT_SYMBOL(__down_write);

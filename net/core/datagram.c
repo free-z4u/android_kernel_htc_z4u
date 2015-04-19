@@ -309,22 +309,9 @@ EXPORT_SYMBOL(skb_kill_datagram);
 int skb_copy_datagram_iovec(const struct sk_buff *skb, int offset,
 			    struct iovec *to, int len)
 {
-	int start = 0;
-	int i, copy = 0;
+	int start = skb_headlen(skb);
+	int i, copy = start - offset;
 	struct sk_buff *frag_iter;
-	
-	if ((!skb) || (IS_ERR(skb))) {
-		printk("[NET] skb is NULL in %s\n", __func__);
-		return 0;
-	}
-	
-	if ((!to) || (IS_ERR(to))) {
-		printk("[NET] to is NULL in %s\n", __func__);
-		return 0;
-	}
-	
-	start = skb_headlen(skb);
-	copy = start - offset;
 
 	trace_skb_copy_datagram_iovec(skb, len);
 
