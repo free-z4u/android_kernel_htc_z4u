@@ -321,4 +321,4 @@ extern int si_pcie_configspace_get(si_t *sih, uint8 *buf, uint size);
 char *si_getnvramflvar(si_t *sih, const char *name);
 
 
-#endif	
+#endif	/* _siutils_h_ */

@@ -769,7 +769,7 @@ static void __ir_to_input(struct wiimote_data *wdata, const __u8 *ir,
 
 	/*
 	 * Basic IR data is encoded into 3 bytes. The first two bytes are the
-	 * upper 8 bit of the X/Y data, the 3rd byte contains the lower 2 bits
+	 * lower 8 bit of the X/Y data, the 3rd byte contains the upper 2 bits
 	 * of both.
 	 * If data is packed, then the 3rd byte is put first and slightly
 	 * reordered. This allows to interleave packed and non-packed data to

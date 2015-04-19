@@ -305,4 +305,4 @@ suspend_state_t get_suspend_state(void);
 void request_onchg_state(int on);
 int get_onchg_state(void);
 #endif
-#endif
+#endif /* !CONFIG_PM_WAKELOCKS */

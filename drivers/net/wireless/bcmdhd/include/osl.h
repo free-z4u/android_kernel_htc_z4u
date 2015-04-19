@@ -86,5 +86,4 @@ typedef void  (*osl_wreg_fn_t)(void *ctx, volatile void *reg, unsigned int val, 
 #define	PKTCFREE		PKTFREE
 #endif
 
-
-#endif	
+#endif	/* _osl_h_ */

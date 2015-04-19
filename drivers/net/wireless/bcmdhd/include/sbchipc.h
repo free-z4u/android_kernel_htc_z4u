@@ -2158,14 +2158,17 @@ typedef volatile struct {
 
 #define CHIP_HOSTIF_USB(sih)	(si_chip_hostif(sih) & CST4360_MODE_USB)
 
-
+/*
+* Maximum delay for the PMU state transition in us.
+* This is an upper bound intended for spinwaits etc.
+*/
 #define PMU_MAX_TRANSITION_DLY	15000
 
-
+/* PMU resource up transition time in ILP cycles */
 #define PMURES_UP_TRANSITION	2
 
 
-
+/* SECI configuration */
 #define SECI_MODE_UART			0x0
 #define SECI_MODE_SECI			0x1
 #define SECI_MODE_LEGACY_3WIRE_BT	0x2
@@ -2177,13 +2180,13 @@ typedef volatile struct {
 #define SECI_ENAB_SECI_ECI	(1 << 2)
 #define SECI_ENAB_SECIOUT_DIS	(1 << 3)
 #define SECI_MODE_MASK		0x7
-#define SECI_MODE_SHIFT		4 
+#define SECI_MODE_SHIFT		4 /* (bits 5, 6, 7) */
 #define SECI_UPD_SECI		(1 << 7)
 
 #define SECI_SIGNOFF_0     0xDB
 #define SECI_SIGNOFF_1     0
 
-
+/* seci clk_ctl_st bits */
 #define CLKCTL_STS_SECI_CLK_REQ		(1 << 8)
 #define CLKCTL_STS_SECI_CLK_AVAIL	(1 << 24)
 
@@ -2192,12 +2195,12 @@ typedef volatile struct {
 #define SECI_UART_SECI_IN_STATE		(1 << 2)
 #define SECI_UART_SECI_IN2_STATE	(1 << 3)
 
-
-#define SECI_UART_LCR_STOP_BITS		(1 << 0) 
+/* SECI UART LCR/MCR register bits */
+#define SECI_UART_LCR_STOP_BITS		(1 << 0) /* 0 - 1bit, 1 - 2bits */
 #define SECI_UART_LCR_PARITY_EN		(1 << 1)
-#define SECI_UART_LCR_PARITY		(1 << 2) 
+#define SECI_UART_LCR_PARITY		(1 << 2) /* 0 - odd, 1 - even */
 #define SECI_UART_LCR_RX_EN		(1 << 3)
-#define SECI_UART_LCR_LBRK_CTRL		(1 << 4) 
+#define SECI_UART_LCR_LBRK_CTRL		(1 << 4) /* 1 => SECI_OUT held low */
 #define SECI_UART_LCR_TXO_EN		(1 << 5)
 #define SECI_UART_LCR_RTSO_EN		(1 << 6)
 #define SECI_UART_LCR_SLIPMODE_EN	(1 << 7)
@@ -2216,9 +2219,9 @@ typedef volatile struct {
 #define SECI_UART_MCR_BAUD_ADJ_EN	(1 << 7)
 #define SECI_UART_MCR_XONOFF_RPT	(1 << 9)
 
+/* WLAN channel numbers - used from wifi.h */
 
-
-
+/* WLAN BW */
 #define ECI_BW_20   0x0
 #define ECI_BW_25   0x1
 #define ECI_BW_30   0x2
@@ -2228,8 +2231,8 @@ typedef volatile struct {
 #define ECI_BW_50   0x6
 #define ECI_BW_ALL  0x7
 
-
+/* WLAN - number of antenna */
 #define WLAN_NUM_ANT1 TXANT_0
 #define WLAN_NUM_ANT2 TXANT_1
 
-#endif	
+#endif	/* _SBCHIPC_H */

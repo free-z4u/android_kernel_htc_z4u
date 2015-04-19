@@ -1053,3 +1053,5 @@ osl_os_close_image(void *image)
 	if (image)
 		filp_close((struct file *)image, NULL);
 }
+
+/* Linux Kernel: File Operations: end */

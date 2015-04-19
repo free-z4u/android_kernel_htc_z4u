@@ -68,10 +68,11 @@ static int hid_lg3ff_play(struct input_dev *dev, void *data,
 	int x, y;
 
 /*
- * Maxusage should always be 63 (maximum fields)
- * likely a better way to ensure this data is clean
+ * Available values in the field should always be 63, but we only use up to
+ * 35. Instead, clear the entire area, however big it is.
  */
-	memset(report->field[0]->value, 0, sizeof(__s32)*report->field[0]->maxusage);
+	memset(report->field[0]->value, 0,
+	       sizeof(__s32)*report->field[0]->maxusage);
 
 	switch (effect->type) {
 	case FF_CONSTANT:

@@ -159,7 +159,7 @@ static int debug_arch_supported(void)
 		arch >= ARM_DEBUG_ARCH_V7_1;
 }
 
-/* Determine number of WRP registers available. */
+/* Can we determine the watchpoint access type from the fsr? */
 static int get_num_wrp_resources(void)
 {
 	u32 didr;

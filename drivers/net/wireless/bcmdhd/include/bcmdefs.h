@@ -192,14 +192,20 @@ typedef struct {
 #define BCMEXTRAHDROOM 220
 #else 
 #define BCMEXTRAHDROOM 172
-#endif 
+#endif /* BCM_RPC_NOCOPY || BCM_RPC_TXNOCOPY */
 
-
+/* Packet alignment for most efficient SDIO (can change based on platform) */
 #ifndef SDALIGN
 #define SDALIGN	32
 #endif
 
-
+/* Headroom required for dongle-to-host communication.  Packets allocated
+ * locally in the dongle (e.g. for CDC ioctls or RNDIS messages) should
+ * leave this much room in front for low-level message headers which may
+ * be needed to get across the dongle bus to the host.  (These messages
+ * don't go over the network, so room for the full WL header above would
+ * be a waste.).
+*/
 #define BCMDONGLEHDRSZ 12
 #define BCMDONGLEPADSZ 16
 
@@ -215,7 +221,16 @@ typedef struct {
 #define BCMASSERT_SUPPORT
 #endif 
 
-
+/* Macros for doing definition and get/set of bitfields
+ * Usage example, e.g. a three-bit field (bits 4-6):
+ *    #define <NAME>_M	BITFIELD_MASK(3)
+ *    #define <NAME>_S	4
+ * ...
+ *    regval = R_REG(osh, &regs->regfoo);
+ *    field = GFIELD(regval, <NAME>);
+ *    regval = SFIELD(regval, <NAME>, 1);
+ *    W_REG(osh, &regs->regfoo, regval);
+ */
 #define BITFIELD_MASK(width) \
 		(((unsigned)1 << (width)) - 1)
 #define GFIELD(val, field) \
@@ -224,28 +239,28 @@ typedef struct {
 		(((val) & (~(field ## _M << field ## _S))) | \
 		 ((unsigned)(bits) << field ## _S))
 
-
+/* define BCMSMALL to remove misc features for memory-constrained environments */
 #ifdef BCMSMALL
 #undef	BCMSPACE
-#define bcmspace	FALSE	
+#define bcmspace	FALSE	/* if (bcmspace) code is discarded */
 #else
 #define	BCMSPACE
-#define bcmspace	TRUE	
+#define bcmspace	TRUE	/* if (bcmspace) code is retained */
 #endif
 
-
+/* Max. nvram variable table size */
 #define	MAXSZ_NVRAM_VARS	4096
 
 
-
+/* Max size for reclaimable NVRAM array */
 #ifdef DL_NVRAM
 #define NVRAM_ARRAY_MAXSIZE	DL_NVRAM
 #else
 #define NVRAM_ARRAY_MAXSIZE	MAXSZ_NVRAM_VARS
-#endif 
+#endif /* DL_NVRAM */
 
 #ifdef BCMUSBDEV_ENABLED
 extern uint32 gFWID;
 #endif
 
-#endif 
+#endif /* _bcmdefs_h_ */

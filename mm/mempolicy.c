@@ -607,7 +607,10 @@ check_range(struct mm_struct *mm, unsigned long start, unsigned long end,
 	return first;
 }
 
-/* Apply policy to a single VMA */
+/*
+ * Apply policy to a single VMA
+ * This must be called with the mmap_sem held for writing.
+ */
 static int policy_vma(struct vm_area_struct *vma, struct mempolicy *new)
 {
 	int err = 0;

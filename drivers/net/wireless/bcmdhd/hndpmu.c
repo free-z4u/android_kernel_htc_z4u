@@ -203,4 +203,4 @@ si_sdiod_drive_strength_init(si_t *sih, osl_t *osh, uint32 drivestrength)
 
 	/* Return to original core */
 	si_restore_core(sih, origidx, intr_val);
-}
+} /* si_sdiod_drive_strength_init */

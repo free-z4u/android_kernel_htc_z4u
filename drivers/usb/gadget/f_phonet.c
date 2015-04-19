@@ -548,6 +548,7 @@ int pn_bind(struct usb_configuration *c, struct usb_function *f)
 	return 0;
 
 err:
+
 	if (fp->out_ep)
 		fp->out_ep->driver_data = NULL;
 	if (fp->in_ep)

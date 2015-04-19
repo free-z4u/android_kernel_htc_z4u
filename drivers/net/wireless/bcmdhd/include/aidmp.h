@@ -372,4 +372,4 @@ typedef volatile struct _aidmp {
 #define OOB_SEL_OUTEN_B_5	15
 #define OOB_SEL_OUTEN_B_6	23
 
-#endif	
+#endif	/* _AIDMP_H */

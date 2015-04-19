@@ -851,6 +851,14 @@ void get_monotonic_boottime(struct timespec *ts)
 }
 EXPORT_SYMBOL_GPL(get_monotonic_boottime);
 
+/**
+ * ktime_get_boottime - Returns monotonic time since boot in a ktime
+ *
+ * Returns the monotonic time since boot in a ktime
+ *
+ * This is similar to CLOCK_MONTONIC/ktime_get, but also
+ * includes the time spent in suspend.
+ */
 ktime_t ktime_get_boottime(void)
 {
 	struct timespec ts;
@@ -860,6 +868,10 @@ ktime_t ktime_get_boottime(void)
 }
 EXPORT_SYMBOL_GPL(ktime_get_boottime);
 
+/**
+ * monotonic_to_bootbased - Convert the monotonic time to boot based.
+ * @ts:		pointer to the timespec to be converted
+ */
 void monotonic_to_bootbased(struct timespec *ts)
 {
 	*ts = timespec_add(*ts, timekeeper.total_sleep_time);
@@ -909,6 +921,11 @@ struct timespec get_monotonic_coarse(void)
 	return now;
 }
 
+/*
+ * The 64-bit jiffies value is not atomic - you MUST NOT read it
+ * without sampling the sequence number in xtime_lock.
+ * jiffies is defined in the linker script...
+ */
 void do_timer(unsigned long ticks)
 {
 	jiffies_64 += ticks;
@@ -916,6 +933,13 @@ void do_timer(unsigned long ticks)
 	calc_global_load(ticks);
 }
 
+/**
+ * get_xtime_and_monotonic_and_sleep_offset() - get xtime, wall_to_monotonic,
+ *    and sleep offsets.
+ * @xtim:	pointer to timespec to be set with xtime
+ * @wtom:	pointer to timespec to be set with wall_to_monotonic
+ * @sleep:	pointer to timespec to be set with time in suspend
+ */
 void get_xtime_and_monotonic_and_sleep_offset(struct timespec *xtim,
 				struct timespec *wtom, struct timespec *sleep)
 {
@@ -930,6 +954,14 @@ void get_xtime_and_monotonic_and_sleep_offset(struct timespec *xtim,
 }
 
 #ifdef CONFIG_HIGH_RES_TIMERS
+/**
+ * ktime_get_update_offsets - hrtimer helper
+ * @offs_real:	pointer to storage for monotonic -> realtime offset
+ * @offs_boot:	pointer to storage for monotonic -> boottime offset
+ *
+ * Returns current monotonic time and updates the offsets
+ * Called from hrtimer_interupt() or retrigger_next_event()
+ */
 ktime_t ktime_get_update_offsets(ktime_t *offs_real, ktime_t *offs_boot)
 {
 	ktime_t now;
@@ -942,7 +974,7 @@ ktime_t ktime_get_update_offsets(ktime_t *offs_real, ktime_t *offs_boot)
 		secs = timekeeper.xtime.tv_sec;
 		nsecs = timekeeper.xtime.tv_nsec;
 		nsecs += timekeeping_get_ns();
-		
+		/* If arch requires, add in gettimeoffset() */
 		nsecs += arch_gettimeoffset();
 
 		*offs_real = timekeeper.offs_real;
@@ -955,6 +987,9 @@ ktime_t ktime_get_update_offsets(ktime_t *offs_real, ktime_t *offs_boot)
 }
 #endif
 
+/**
+ * ktime_get_monotonic_offset() - get wall_to_monotonic in ktime_t format
+ */
 ktime_t ktime_get_monotonic_offset(void)
 {
 	unsigned long seq;

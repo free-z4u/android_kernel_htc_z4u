@@ -36,8 +36,10 @@ static DEFINE_PER_CPU(struct vcpu_runstate_info, xen_runstate);
 /* snapshots of runstate info */
 static DEFINE_PER_CPU(struct vcpu_runstate_info, xen_runstate_snapshot);
 
-/* unused ns of stolen and blocked time */
+/* unused ns of stolen time */
 static DEFINE_PER_CPU(u64, xen_residual_stolen);
+
+/* return an consistent snapshot of 64-bit time/counter value */
 static DEFINE_PER_CPU(u64, xen_residual_blocked);
 
 /* return an consistent snapshot of 64-bit time/counter value */

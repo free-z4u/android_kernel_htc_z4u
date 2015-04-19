@@ -321,64 +321,64 @@ typedef volatile struct {
 
 
 #define	D64_RS0_CD_MASK		0x00001fff	
-#define	D64_RS0_RS_MASK		0xf0000000     	
+#define	D64_RS0_RS_MASK		0xf0000000     	/* receive state */
 #define	D64_RS0_RS_SHIFT		28
-#define	D64_RS0_RS_DISABLED	0x00000000	
-#define	D64_RS0_RS_ACTIVE	0x10000000	
-#define	D64_RS0_RS_IDLE		0x20000000	
-#define	D64_RS0_RS_STOPPED	0x30000000	
-#define	D64_RS0_RS_SUSP		0x40000000	
+#define	D64_RS0_RS_DISABLED	0x00000000	/* disabled */
+#define	D64_RS0_RS_ACTIVE	0x10000000	/* active */
+#define	D64_RS0_RS_IDLE		0x20000000	/* idle wait */
+#define	D64_RS0_RS_STOPPED	0x30000000	/* stopped */
+#define	D64_RS0_RS_SUSP		0x40000000	/* suspend pending */
 
-#define	D64_RS1_AD_MASK		0x0001ffff	
-#define	D64_RS1_RE_MASK		0xf0000000     	
+#define	D64_RS1_AD_MASK		0x0001ffff	/* active descriptor */
+#define	D64_RS1_RE_MASK		0xf0000000     	/* receive errors */
 #define	D64_RS1_RE_SHIFT		28
-#define	D64_RS1_RE_NOERR	0x00000000	
-#define	D64_RS1_RE_DPO		0x10000000	
-#define	D64_RS1_RE_DFU		0x20000000	
-#define	D64_RS1_RE_DTE		0x30000000	
-#define	D64_RS1_RE_DESRE	0x40000000	
-#define	D64_RS1_RE_COREE	0x50000000	
+#define	D64_RS1_RE_NOERR	0x00000000	/* no error */
+#define	D64_RS1_RE_DPO		0x10000000	/* descriptor protocol error */
+#define	D64_RS1_RE_DFU		0x20000000	/* data fifo overflow */
+#define	D64_RS1_RE_DTE		0x30000000	/* data transfer error */
+#define	D64_RS1_RE_DESRE	0x40000000	/* descriptor read error */
+#define	D64_RS1_RE_COREE	0x50000000	/* core error */
 
-
-#define	D64_FA_OFF_MASK		0xffff		
-#define	D64_FA_SEL_MASK		0xf0000		
+/* fifoaddr */
+#define	D64_FA_OFF_MASK		0xffff		/* offset */
+#define	D64_FA_SEL_MASK		0xf0000		/* select */
 #define	D64_FA_SEL_SHIFT	16
-#define	D64_FA_SEL_XDD		0x00000		
-#define	D64_FA_SEL_XDP		0x10000		
-#define	D64_FA_SEL_RDD		0x40000		
-#define	D64_FA_SEL_RDP		0x50000		
-#define	D64_FA_SEL_XFD		0x80000		
-#define	D64_FA_SEL_XFP		0x90000		
-#define	D64_FA_SEL_RFD		0xc0000		
-#define	D64_FA_SEL_RFP		0xd0000		
-#define	D64_FA_SEL_RSD		0xe0000		
-#define	D64_FA_SEL_RSP		0xf0000		
+#define	D64_FA_SEL_XDD		0x00000		/* transmit dma data */
+#define	D64_FA_SEL_XDP		0x10000		/* transmit dma pointers */
+#define	D64_FA_SEL_RDD		0x40000		/* receive dma data */
+#define	D64_FA_SEL_RDP		0x50000		/* receive dma pointers */
+#define	D64_FA_SEL_XFD		0x80000		/* transmit fifo data */
+#define	D64_FA_SEL_XFP		0x90000		/* transmit fifo pointers */
+#define	D64_FA_SEL_RFD		0xc0000		/* receive fifo data */
+#define	D64_FA_SEL_RFP		0xd0000		/* receive fifo pointers */
+#define	D64_FA_SEL_RSD		0xe0000		/* receive frame status data */
+#define	D64_FA_SEL_RSP		0xf0000		/* receive frame status pointers */
 
+/* descriptor control flags 1 */
+#define D64_CTRL_COREFLAGS	0x0ff00000	/* core specific flags */
+#define	D64_CTRL1_EOT		((uint32)1 << 28)	/* end of descriptor table */
+#define	D64_CTRL1_IOC		((uint32)1 << 29)	/* interrupt on completion */
+#define	D64_CTRL1_EOF		((uint32)1 << 30)	/* end of frame */
+#define	D64_CTRL1_SOF		((uint32)1 << 31)	/* start of frame */
 
-#define D64_CTRL_COREFLAGS	0x0ff00000	
-#define	D64_CTRL1_EOT		((uint32)1 << 28)	
-#define	D64_CTRL1_IOC		((uint32)1 << 29)	
-#define	D64_CTRL1_EOF		((uint32)1 << 30)	
-#define	D64_CTRL1_SOF		((uint32)1 << 31)	
-
-
-#define	D64_CTRL2_BC_MASK	0x00007fff	
-#define	D64_CTRL2_AE		0x00030000	
+/* descriptor control flags 2 */
+#define	D64_CTRL2_BC_MASK	0x00007fff	/* buffer byte count. real data len must <= 16KB */
+#define	D64_CTRL2_AE		0x00030000	/* address extension bits */
 #define	D64_CTRL2_AE_SHIFT	16
-#define D64_CTRL2_PARITY	0x00040000      
+#define D64_CTRL2_PARITY	0x00040000      /* parity bit */
 
-
+/* control flags in the range [27:20] are core-specific and not defined here */
 #define	D64_CTRL_CORE_MASK	0x0ff00000
 
-#define D64_RX_FRM_STS_LEN	0x0000ffff	
-#define D64_RX_FRM_STS_OVFL	0x00800000	
-#define D64_RX_FRM_STS_DSCRCNT	0x0f000000	
-#define D64_RX_FRM_STS_DATATYPE	0xf0000000	
+#define D64_RX_FRM_STS_LEN	0x0000ffff	/* frame length mask */
+#define D64_RX_FRM_STS_OVFL	0x00800000	/* RxOverFlow */
+#define D64_RX_FRM_STS_DSCRCNT	0x0f000000	/* no. of descriptors used - 1, d11corerev >= 22 */
+#define D64_RX_FRM_STS_DATATYPE	0xf0000000	/* core-dependent data type */
 
-
+/* receive frame status */
 typedef volatile struct {
 	uint16 len;
 	uint16 flags;
 } dma_rxh_t;
 
-#endif	
+#endif	/* _sbhnddma_h_ */

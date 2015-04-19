@@ -394,29 +394,29 @@ do { \
 		PKTFREE((osh), (skb), (send)); \
 	} \
 } while (0)
-#endif 
+#endif /* PKTC */
 
-#else 
+#else /* ! BCMDRIVER */
 
 
-
+/* ASSERT */
 	#define ASSERT(exp)	do {} while (0)
 
-
+/* MALLOC and MFREE */
 #define MALLOC(o, l) malloc(l)
 #define MFREE(o, p, l) free(p)
 #include <stdlib.h>
 
-
+/* str* and mem* functions */
 #include <string.h>
 
-
+/* *printf functions */
 #include <stdio.h>
 
-
+/* bcopy, bcmp, and bzero */
 extern void bcopy(const void *src, void *dst, size_t len);
 extern int bcmp(const void *b1, const void *b2, size_t len);
 extern void bzero(void *b, size_t len);
-#endif 
+#endif /* ! BCMDRIVER */
 
-#endif	
+#endif	/* _linux_osl_h_ */

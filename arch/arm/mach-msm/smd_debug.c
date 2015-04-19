@@ -1173,3 +1173,4 @@ void smsm_print_sleep_info(uint32_t sleep_delay, uint32_t sleep_limit,
 
 	spin_unlock_irqrestore(&smem_lock, flags);
 }
+

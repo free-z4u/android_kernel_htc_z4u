@@ -791,4 +791,4 @@ unsigned int process_nvram_vars(char *varbuf, unsigned int len);
 	}
 #endif
 
-#endif	
+#endif	/* _bcmutils_h_ */

@@ -282,6 +282,27 @@ static int rpm_callback(int (*cb)(struct device *), struct device *dev)
 	return retval != -EACCES ? retval : -EIO;
 }
 
+/**
+ * rpm_suspend - Carry out runtime suspend of given device.
+ * @dev: Device to suspend.
+ * @rpmflags: Flag bits.
+ *
+ * Check if the device's runtime PM status allows it to be suspended.
+ * Cancel a pending idle notification, autosuspend or suspend. If
+ * another suspend has been started earlier, either return immediately
+ * or wait for it to finish, depending on the RPM_NOWAIT and RPM_ASYNC
+ * flags. If the RPM_ASYNC flag is set then queue a suspend request;
+ * otherwise run the ->runtime_suspend() callback directly. When
+ * ->runtime_suspend succeeded, if a deferred resume was requested while
+ * the callback was running then carry it out, otherwise send an idle
+ * notification for its parent (if the suspend succeeded and both
+ * ignore_children of parent->power and irq_safe of dev->power are not set).
+ * If ->runtime_suspend failed with -EAGAIN or -EBUSY, and if the RPM_AUTO
+ * flag is set and the next autosuspend-delay expiration time is in the
+ * future, schedule another autosuspend attempt.
+ *
+ * This function must be called under dev->power.lock with interrupts disabled.
+ */
 struct rpm_qos_data {
 	ktime_t time_now;
 	s64 constraint_ns;

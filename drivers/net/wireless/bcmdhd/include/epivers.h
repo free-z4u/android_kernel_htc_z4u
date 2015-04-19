@@ -45,4 +45,4 @@
 
 #define	EPI_VERSION_STR		"1.27 (r329705)"
 
-#endif 
+#endif /* _epivers_h_ */

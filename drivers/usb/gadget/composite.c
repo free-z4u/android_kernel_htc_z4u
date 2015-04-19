@@ -1618,6 +1618,13 @@ int usb_composite_probe(struct usb_composite_driver *driver,
 	return retval;
 }
 
+/**
+ * usb_composite_unregister() - unregister a composite driver
+ * @driver: the driver to unregister
+ *
+ * This function is used to unregister drivers using the composite
+ * driver framework.
+ */
 void usb_composite_unregister(struct usb_composite_driver *driver)
 {
 	if (composite != driver)
@@ -1625,6 +1632,16 @@ void usb_composite_unregister(struct usb_composite_driver *driver)
 	usb_gadget_unregister_driver(&composite_driver);
 }
 
+/**
+ * usb_composite_setup_continue() - Continue with the control transfer
+ * @cdev: the composite device who's control transfer was kept waiting
+ *
+ * This function must be called by the USB function driver to continue
+ * with the control transfer's data/status stage in case it had requested to
+ * delay the data/status stages. A USB function's setup handler (e.g. set_alt())
+ * can request the composite framework to delay the setup request's data/status
+ * stages by returning USB_GADGET_DELAYED_STATUS.
+ */
 void usb_composite_setup_continue(struct usb_composite_dev *cdev)
 {
 	int			value;

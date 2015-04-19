@@ -267,8 +267,8 @@ struct km_event {
 struct xfrm_replay {
 	void	(*advance)(struct xfrm_state *x, __be32 net_seq);
 	int	(*check)(struct xfrm_state *x,
-			 struct sk_buff *skb,
-			 __be32 net_seq);
+			   struct sk_buff *skb,
+			   __be32 net_seq);
 	void	(*notify)(struct xfrm_state *x, int event);
 	int	(*overflow)(struct xfrm_state *x, struct sk_buff *skb);
 };

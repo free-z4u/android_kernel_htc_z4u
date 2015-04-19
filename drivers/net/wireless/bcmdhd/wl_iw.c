@@ -3695,13 +3695,13 @@ wl_iw_attach(struct net_device *dev, void * dhdp)
 		return -ENOMEM;
 	memset(iscan, 0, sizeof(iscan_info_t));
 	iscan->sysioc_pid = -1;
-	
+	/* we only care about main interface so save a global here */
 	g_iscan = iscan;
 	iscan->dev = dev;
 	iscan->iscan_state = ISCAN_STATE_IDLE;
 
 
-	
+	/* Set up the timer */
 	iscan->timer_ms    = 2000;
 	init_timer(&iscan->timer);
 	iscan->timer.data = (ulong)iscan;
@@ -3735,4 +3735,4 @@ void wl_iw_detach(void)
 	g_iscan = NULL;
 }
 
-#endif 
+#endif /* USE_IW */

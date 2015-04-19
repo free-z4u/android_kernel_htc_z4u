@@ -141,9 +141,9 @@ mext_next_extent(struct inode *inode, struct ext4_ext_path *path,
 }
 
 /**
- * mext_check_null_inode - NULL check for two inodes
+ * double_down_write_data_sem - Acquire two inodes' write lock of i_data_sem
  *
- * If inode1 or inode2 is NULL, return -EIO. Otherwise, return 0.
+ * Acquire write lock of i_data_sem of the two inodes
  */
 static int
 mext_check_null_inode(struct inode *inode1, struct inode *inode2,

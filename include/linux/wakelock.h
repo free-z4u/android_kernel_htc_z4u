@@ -1,6 +1,6 @@
 /* include/linux/wakelock.h
  *
- * Copyright (C) 2007-2008 Google, Inc.
+ * Copyright (C) 2007-2012 Google, Inc.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and

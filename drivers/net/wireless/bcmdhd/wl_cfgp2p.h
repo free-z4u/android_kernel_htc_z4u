@@ -1,7 +1,7 @@
 /*
  * Linux cfgp2p driver
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_cfgp2p.h 316197 2012-02-21 13:16:39Z $
+ * $Id: wl_cfgp2p.h 415640 2013-07-31 02:43:28Z $
  */
 #ifndef _wl_cfgp2p_h_
 #define _wl_cfgp2p_h_

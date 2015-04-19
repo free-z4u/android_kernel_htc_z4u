@@ -312,7 +312,8 @@ static struct scsi_host_template zfcp_scsi_host_template = {
 	.can_queue		 = 4096,
 	.this_id		 = -1,
 	.sg_tablesize		 = 1, /* adjusted later */
-	.max_sectors		 = 8, /* adjusted later */
+	.max_sectors		 = 8,
+				   /* GCD, adjusted later */
 	.dma_boundary		 = ZFCP_QDIO_SBALE_LEN - 1,
 	.cmd_per_lun		 = 1,
 	.use_clustering		 = 1,
