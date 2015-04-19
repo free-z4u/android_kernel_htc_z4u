@@ -68,7 +68,7 @@
 #include <mach/htc_headset_one_wire.h>
 #include <linux/ds2746_battery.h>
 #include <linux/tps65200.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 #include <asm/setup.h>
 #include "devices.h"
 #include "timer.h"

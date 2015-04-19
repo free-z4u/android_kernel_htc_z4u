@@ -40,7 +40,7 @@
 #include <linux/msm_adc.h>
 #include <linux/fmem.h>
 #include <linux/regulator/msm-gpio-regulator.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 #include <linux/i2c-gpio.h>
 #include <linux/regulator/onsemi-ncp6335d.h>
 #include <linux/i2c/cpld.h>
@@ -268,7 +268,7 @@ static struct i2c_board_info msm_i2c_gsbi1_tfa9887_info[] = {
 static struct i2c_board_info i2c_cpld_devices[] = {
         {
                 I2C_BOARD_INFO("cpld",0x70),
-               
+
                .irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_CPLD_INT),
         },
 };
@@ -288,9 +288,9 @@ static ssize_t syn_vkeys_show(struct kobject *kobj,
 {
 	return snprintf(buf, 200,
 	__stringify(EV_KEY) ":" __stringify(KEY_BACK) ":102:1021:98:98"
-	
+
 	":" __stringify(EV_KEY) ":" __stringify(KEY_HOME) ":447:1021:98:98"
-	
+
 	"\n");
 }
 
@@ -316,7 +316,7 @@ static int synaptic_rmi_tp_power(int on)
 }
 
 static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1473052,
 		.abs_x_min = 10,
@@ -380,7 +380,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x78, 0x14, 0x34, 0x03, 0x08
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1473052,
 		.abs_x_min = 10,
@@ -444,7 +444,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x78, 0x14, 0x34, 0x03, 0x08
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1460308,
 		.abs_x_min = 8,
@@ -507,7 +507,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x20, 0x01, 0x02
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1460308,
 		.abs_x_min = 8,
@@ -570,7 +570,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x20, 0x01, 0x02
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1457068,
 		.abs_x_min = 0,
@@ -633,7 +633,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x20, 0x01
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1457068,
 		.abs_x_min = 0,
@@ -696,7 +696,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x20, 0x01
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1423922,
 		.abs_x_min = 0,
@@ -759,7 +759,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x20, 0x01
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1423922,
 		.abs_x_min = 0,
@@ -822,7 +822,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x4F, 0x53
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1293984,
 		.abs_x_min = 0,
@@ -885,7 +885,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x4F, 0x53
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1293984,
 		.abs_x_min = 0,
@@ -948,7 +948,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x4F, 0x53
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1293984,
 		.abs_x_min = 0,
@@ -1011,7 +1011,7 @@ static struct synaptics_i2c_rmi_platform_data syn_ts_3k_data[] = {
 			0x00, 0x00
 		},
 	},
-	{ 														
+	{
 		.version = 0x3332,
 		.packrat_number = 1293984,
 		.abs_x_min = 0,
@@ -1218,7 +1218,7 @@ static struct msm_gpio msm8625q_i2c_gpio_config[] = {
 static struct i2c_gpio_platform_data msm8625q_i2c_gpio_pdata = {
 	.scl_pin = 31,
 	.sda_pin = 32,
-	.udelay = 5, 
+	.udelay = 5,
 };
 
 static struct platform_device msm8625q_i2c_gpio = {
@@ -1231,26 +1231,26 @@ static struct platform_device msm8625q_i2c_gpio = {
 
 #ifdef CONFIG_I2C_CPLD
 static struct msm_gpio msm8625q_i2c_cpld_config[] = {
-	
-	
-	
-	
-	
+
+
+
+
+
 #if 0
-	
+
         { GPIO_CFG(4, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),   "CPLD_CLK"},
 #endif
 	{ GPIO_CFG(39, 0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),   "CPLD_INT"},
 	{ GPIO_CFG(49, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),  "CPLD_RST"},
 	{ GPIO_CFG(116, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), "CPLD_I2C_EN"},
-	
+
 
 };
 
 static struct i2c_gpio_platform_data msm8625q_i2c_cpld_pdata = {
 	.scl_pin = 33,
 	.sda_pin = 82,
-	
+
         .udelay = 1,
         .timeout = 100,
         .sda_is_open_drain = 1,
@@ -1277,10 +1277,10 @@ static void __init sprd_init(void)
 	printk(KERN_INFO "[SPRD]device init");
 	platform_device_register(&sprd_notify_device);
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_MSM7X27A
-#define CAMERA_ZSL_SIZE     (SZ_1M * 111)  
+#define CAMERA_ZSL_SIZE     (SZ_1M * 111)
 
 #ifdef CONFIG_ION_MSM
 #define MSM_ION_HEAP_NUM	4
@@ -1291,7 +1291,7 @@ static int msm_ion_sf_size;
 #endif
 #endif
 
-#define PM8058ADC_16BIT(adc) ((adc * 1800) / 65535) 
+#define PM8058ADC_16BIT(adc) ((adc * 1800) / 65535)
 int64_t cp3dug_get_usbid_adc(void)
 {
 	uint32_t adc_value = 0xffffffff;
@@ -1533,8 +1533,8 @@ FIXME
 
 #ifdef CONFIG_PERFLOCK
 static unsigned msm8x25q_perf_acpu_table[] = {
-	700800000, 
-	700800000, 
+	700800000,
+	700800000,
 	1008000000,
 	1008000000,
 	1209600000,
@@ -1569,7 +1569,7 @@ static struct perflock_screen_policy msm8x25q_screen_off_policy = {
 	.on_min  = NULL,
 	.off_max = &screen_off_ceiling_lock,
 };
-#endif 
+#endif
 #endif
 
 static int get_thermal_id(void)
@@ -1729,7 +1729,7 @@ static int cp3dcg_update_charging_protect_flag(int ibat_ma, int vbat_mv, int tem
 			*chg_allowed = TRUE;
 			*hchg_allowed = TRUE;
 			break;
-#if 0 
+#if 0
 		case PSTAT_SLOW:	/* 4.2V Charge Full, 4.15V recharge */
 			if (4200 < vbat_mv)
 				*chg_allowed = FALSE;
@@ -2057,7 +2057,7 @@ static struct msm_pm_platform_data
 					.residency = 10,
 	},
 
-	
+
 	[MSM_PM_MODE(2, MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE)] = {
 					.idle_supported = 1,
 					.suspend_supported = 1,
@@ -2076,7 +2076,7 @@ static struct msm_pm_platform_data
 					.residency = 10,
 	},
 
-	
+
 	[MSM_PM_MODE(3, MSM_PM_SLEEP_MODE_POWER_COLLAPSE_STANDALONE)] = {
 					.idle_supported = 1,
 					.suspend_supported = 1,
@@ -2461,7 +2461,7 @@ static struct platform_device pm8029_leds = {
 		.platform_data  = &pm8029_leds_data,
 	},
 };
-#endif 
+#endif
 
 static struct platform_device *common_devices[] __initdata = {
 	&android_pmem_device,
@@ -2478,7 +2478,7 @@ static struct platform_device *common_devices[] __initdata = {
 	&fmem_device,
 #ifdef CONFIG_LEDS_PM8029
 	&pm8029_leds,
-#endif 
+#endif
 #ifdef CONFIG_ION_MSM
 	&ion_dev,
 #endif
@@ -2562,7 +2562,7 @@ struct ion_platform_heap msm7627a_heaps[] = {
 			.name	= ION_VMALLOC_HEAP_NAME,
 		},
 #ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
-		
+
 		{
 			.id	= ION_CAMERA_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2570,7 +2570,7 @@ struct ion_platform_heap msm7627a_heaps[] = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
-		
+
 		{
 			.id	= ION_AUDIO_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2578,7 +2578,7 @@ struct ion_platform_heap msm7627a_heaps[] = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
-		
+
 		{
 			.id	= ION_SF_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2881,7 +2881,7 @@ static struct i2c_board_info i2c_cm36282_devices[] = {
 		.irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_PROXIMITY_INT),
 	},
 };
-#endif 
+#endif
 
 static struct platform_device msm_proccomm_regulator_dev = {
 	.name   = PROCCOMM_REGULATOR_DEV_NAME,
@@ -3025,9 +3025,9 @@ static void __init msm_cp3dcg_init(void)
                                 i2c_cpld_devices,
                                 ARRAY_SIZE(i2c_cpld_devices));
 #endif
-	
+
 	qrd7627a_uart1dm_config();
-	
+
 	qrd7627a_otg_gadget();
 
 	msm_add_footswitch_devices();
@@ -3038,7 +3038,7 @@ static void __init msm_cp3dcg_init(void)
 	}
 	add_platform_devices();
 
-	
+
 	msm_qrd_init_ar6000pm();
 	cp3_add_usb_devices();
 	cp3_wifi_init();
@@ -3068,7 +3068,7 @@ static void __init msm_cp3dcg_init(void)
 	msm_pm_init();
 
 	msm_pm_register_irqs();
-	
+
 	/* display initializations*/
 	cp3dcg_init_panel();
 	#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_3K
@@ -3099,14 +3099,14 @@ static void __init msm_cp3dcg_init(void)
 #endif
 
 #ifdef CONFIG_PERFLOCK_SCREEN_POLICY
-	
+
 	perf_lock_init(&screen_off_ceiling_lock, TYPE_CPUFREQ_CEILING,
 					PERF_LOCK_HIGH, "screen_off_scaling_max");
 	perflock_screen_policy_init(&msm8x25q_screen_off_policy);
 #endif
 
 	#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_3K
-	
+
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 				i2c_touch_device,
 				ARRAY_SIZE(i2c_touch_device));
@@ -3123,11 +3123,11 @@ static void __init msm_cp3dcg_init(void)
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 		pn544_i2c_boardinfo, ARRAY_SIZE(pn544_i2c_boardinfo));
 
-	i2c_register_board_info(1,         
+	i2c_register_board_info(1,
 		msm_i2c_gsbi1_rt5501_info,
 		ARRAY_SIZE(msm_i2c_gsbi1_rt5501_info));
 
-	i2c_register_board_info(1,         
+	i2c_register_board_info(1,
 		msm_i2c_gsbi1_tfa9887_info,
 		ARRAY_SIZE(msm_i2c_gsbi1_tfa9887_info));
 
@@ -3138,7 +3138,7 @@ static void __init msm_cp3dcg_init(void)
 #endif
 	printk(KERN_INFO "[VERSION] board_version: %x\n", htc_get_board_revision());
 
-	
+
 	if (htc_get_board_revision() >= BOARD_CPEDCG_EVT_XC) {
 		printk(KERN_INFO "[GSNR]: Use XC layout\n");
 		i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
@@ -3153,12 +3153,12 @@ static void __init msm_cp3dcg_init(void)
 			i2c_bma250_devices, ARRAY_SIZE(i2c_bma250_devices));
 	}
 
-	
+
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 			i2c_cm36282_devices, ARRAY_SIZE(i2c_cm36282_devices));
 
 	cp3dcg_camera_init();
-	
+
 	msm7x25a_kgsl_3d0_init();
 	msm8x25_kgsl_3d0_init();
 
@@ -3166,13 +3166,13 @@ static void __init msm_cp3dcg_init(void)
 	msm_init_pmic_vibrator(3000);
 #endif
 
-	
+
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 			i2c_tps65200_devices, ARRAY_SIZE(i2c_tps65200_devices));
 
 	msm8625Q_init_keypad();
 
-       
+
 	if (~get_kernel_flag() & KERNEL_FLAG_TEST_PWR_SUPPLY) {
 		htc_monitor_init();
 		htc_PM_monitor_init();
@@ -3192,7 +3192,7 @@ static void __init cp3dcg_fixup(struct tag *tags, char **cmdline, struct meminfo
     mi->bank[1].start = 0x10000000;
 
     if(radio_security && 0x1){
-      
+
       mi->bank[1].size = 0x2E600000;
     }
     else{
@@ -3202,7 +3202,7 @@ static void __init cp3dcg_fixup(struct tag *tags, char **cmdline, struct meminfo
 
 static void __init qrd7627a_init_early(void)
 {
-	
+
 }
 
 MACHINE_START(CP3DCG, "cp3dcg")

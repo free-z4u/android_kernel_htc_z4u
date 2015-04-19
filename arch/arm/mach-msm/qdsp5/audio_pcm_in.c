@@ -26,7 +26,7 @@
 #include <linux/kthread.h>
 #include <linux/wait.h>
 #include <linux/dma-mapping.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 
 #include <linux/delay.h>
 
@@ -107,35 +107,35 @@ struct audio_in {
 	struct msm_adsp_module *audrec;
 	const char *module_name;
 	unsigned queue_ids;
-	uint16_t enc_id; 
+	uint16_t enc_id;
 
-	
+
 	uint32_t samp_rate;
 	uint32_t channel_mode;
-	uint32_t buffer_size; 
-	uint32_t enc_type; 
-	uint32_t mode; 
+	uint32_t buffer_size;
+	uint32_t enc_type;
+	uint32_t mode;
 	uint32_t dsp_cnt;
-	uint32_t in_head; 
-	uint32_t in_tail; 
-	uint32_t in_count; 
+	uint32_t in_head;
+	uint32_t in_tail;
+	uint32_t in_count;
 
 	unsigned short samp_rate_index;
 	uint32_t audrec_obj_idx ;
 
 	struct audmgr audmgr;
 
-	
+
 	char *data;
 	dma_addr_t phys;
 
 	int opened;
 	int enabled;
 	int running;
-	int stopped; 
-	struct audrec_session_info session_info; 
+	int stopped;
+	struct audrec_session_info session_info;
 
-	
+
 	int tx_agc_enable;
 	struct tx_agc_config agc;
 
@@ -143,7 +143,7 @@ struct audio_in {
 	struct ns_config ns;
 
 	int iir_enable;
-	audpreproc_cmd_cfg_iir_tuning_filter_params iir_cfg; 
+	audpreproc_cmd_cfg_iir_tuning_filter_params iir_cfg;
 	struct ion_client *client;
 	struct ion_handle *output_buff_handle;
 };
@@ -263,7 +263,7 @@ static int audpcm_in_enable(struct audio_in *audio)
 	audio->enabled = 1;
 	audpcm_in_dsp_enable(audio, 1);
 
-	
+
 	audio->session_info.session_id = audio->enc_id;
 	audio->session_info.sampling_freq =
 			convert_samp_index(audio->samp_rate);
@@ -284,7 +284,7 @@ static int audpcm_in_disable(struct audio_in *audio)
 
 		msm_adsp_disable(audio->audrec);
 		audpreproc_disable(audio->enc_id, audio);
-		
+
 		audio->session_info.sampling_freq = 0;
 		audpreproc_update_audrec_info(&audio->session_info);
 		audmgr_disable(&audio->audmgr);
@@ -315,7 +315,7 @@ static void audpcm_in_get_dsp_frames(struct audio_in *audio)
 
 	audio->in_head = (audio->in_head + 1) & (FRAME_NUM - 1);
 
-	
+
 	if (audio->in_head == audio->in_tail) {
 		audio->in_tail = (audio->in_tail + 1) & (FRAME_NUM - 1);
 		MM_AUD_ERR("Error! not able to keep up the read\n");
@@ -419,7 +419,7 @@ static int audio_dsp_set_tx_agc(struct audio_in *audio)
 
 	cmd.cmd_id = AUDPREPROC_CMD_CFG_AGC_PARAMS;
 	if (audio->tx_agc_enable) {
-		
+
 		cmd.tx_agc_param_mask =
 		(1 << AUDPREPROC_CMD_TX_AGC_PARAM_MASK_COMP_SLOPE) |
 		(1 << AUDPREPROC_CMD_TX_AGC_PARAM_MASK_COMP_TH) |
@@ -432,11 +432,11 @@ static int audio_dsp_set_tx_agc(struct audio_in *audio)
 			AUDPREPROC_CMD_TX_AGC_ENA_FLAG_ENA;
 		memcpy(&cmd.comp_rlink_static_gain, &audio->agc.agc_params[0],
 			sizeof(uint16_t) * 6);
-		
-		
-		
+
+
+
 		cmd.tx_adc_agc_param_mask =
-		
+
 			(1 << AUDPREPROC_CMD_PARAM_MASK_RMS_TAY) |
 			(1 << AUDPREPROC_CMD_PARAM_MASK_RELEASEK) |
 			(1 << AUDPREPROC_CMD_PARAM_MASK_DELAY) |
@@ -557,12 +557,12 @@ static int audio_dsp_set_iir(struct audio_in *audio)
 
 	memset(&cmd, 0, sizeof(cmd));
 
-	cmd = audio->iir_cfg; 
+	cmd = audio->iir_cfg;
 
 	cmd.cmd_id = AUDPREPROC_CMD_CFG_IIR_TUNING_FILTER_PARAMS;
 
 	if (audio->iir_enable)
-		
+
 		cmd.active_flag = AUDPREPROC_CMD_IIR_ACTIVE_FLAG_ENA;
 	else
 		cmd.active_flag = AUDPREPROC_CMD_IIR_ACTIVE_FLAG_DIS;
@@ -594,7 +594,7 @@ static int audpcm_in_dsp_enable(struct audio_in *audio, int enable)
 
 	cmd.audrec_enc_type = (audio->enc_type & 0xFF) |
 	(enable ? AUDREC_CMD_ENC_ENA : AUDREC_CMD_ENC_DIS);
-	
+
 	cmd.audrec_obj_idx = audio->audrec_obj_idx;
 
 	return audio_send_queue_rec(audio, &cmd, sizeof(cmd));
@@ -610,11 +610,11 @@ static int audpcm_in_encmem_config(struct audio_in *audio)
 
 	cmd.cmd_id = AUDREC_CMD_ARECMEM_CFG;
 	cmd.audrec_obj_idx = audio->audrec_obj_idx;
-	
+
 	cmd.audrec_up_pkt_intm_cnt = 1;
 	cmd.audrec_extpkt_buffer_msw = audio->phys >> 16;
 	cmd.audrec_extpkt_buffer_lsw = audio->phys;
-	
+
 	cmd.audrec_extpkt_buffer_num = FRAME_NUM;
 
 	for (cnt = 0; cnt < FRAME_NUM; cnt++) {
@@ -633,7 +633,7 @@ static int audpcm_in_encparam_config(struct audio_in *audio)
 	cmd.common.cmd_id = AUDREC_CMD_ARECPARAM_CFG;
 	cmd.common.audrec_obj_idx = audio->audrec_obj_idx;
 	cmd.samp_rate_idx = audio->samp_rate_index;
-	cmd.stereo_mode = audio->channel_mode; 
+	cmd.stereo_mode = audio->channel_mode;
 
 	return audio_send_queue_rec(audio, &cmd, sizeof(cmd));
 }
@@ -781,7 +781,7 @@ static ssize_t audpcm_in_read(struct file *file,
 		data = (uint8_t *) audio->in[index].data;
 		size = audio->in[index].size;
 		if (count >= size) {
-			
+
 			dma_coherent_post_ops();
 			if (copy_to_user(buf, data, size)) {
 				rc = -EFAULT;
@@ -1032,7 +1032,7 @@ static long audpre_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	}
 	case AUDIO_SET_TX_IIR: {
 		if (copy_from_user(&audio->iir_cfg, (void *) arg,
-					sizeof(audio->iir_cfg))) 
+					sizeof(audio->iir_cfg)))
 			goto out_fault;
 #if DEBUG
 		MM_AUD_INFO("set iir\n");

@@ -25,7 +25,7 @@
 #include <mach/board.h>
 #include <media/msm_camera.h>
 #include <mach/msm_subsystem_map.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 
 #define CONFIG_MSM_CAMERA_DEBUG
 #ifdef CONFIG_MSM_CAMERA_DEBUG
@@ -364,14 +364,14 @@ struct msm_actuator_ctrl {
 	int (*a_create_subdevice)(void *, void *);
 	int (*a_config)(void __user *);
 	int is_ois_supported;
-    int is_cal_supported; 
-	
+    int is_cal_supported;
+
 	void (*do_vcm_on_cb)(void);
 	void (*do_vcm_off_cb)(void);
 	void (*actuator_poweroff_af)(void);
-	struct mutex *actrl_vcm_on_mut; 
+	struct mutex *actrl_vcm_on_mut;
 	enum cam_vcm_onoff_type *actrl_vcm_wa_camera_on;
-	
+
 };
 
 struct msm_strobe_flash_ctrl {
@@ -612,7 +612,7 @@ enum msm_camio_clk_type {
 	CAMIO_CSI1_PHY_CLK,
 	CAMIO_CSIPHY_TIMER_SRC_CLK,
 	CAMIO_IMEM_CLK,
-	CAMIO_CAM_RAWCHIP_MCLK_CLK, 
+	CAMIO_CAM_RAWCHIP_MCLK_CLK,
 
 	CAMIO_MAX_CLK
 };
@@ -720,7 +720,7 @@ void *msm_isp_sync_alloc(int size, gfp_t gfp);
 
 void msm_isp_sync_free(void *ptr);
 
-int msm_cam_clk_try(struct device *dev, const char *clk_name); 
+int msm_cam_clk_try(struct device *dev, const char *clk_name);
 int msm_cam_clk_enable(struct device *dev, struct msm_cam_clk_info *clk_info,
 		struct clk **clk_ptr, int num_clk, int enable);
 int msm_cam_core_reset(void);

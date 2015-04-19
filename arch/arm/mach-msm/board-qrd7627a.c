@@ -33,7 +33,7 @@
 #include <linux/msm_adc.h>
 #include <linux/fmem.h>
 #include <linux/regulator/msm-gpio-regulator.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 #include <linux/i2c-gpio.h>
 #include <linux/regulator/onsemi-ncp6335d.h>
 #include <asm/mach/mmc.h>

@@ -41,7 +41,7 @@
 #include <linux/msm_adc.h>
 #include <linux/fmem.h>
 #include <linux/regulator/msm-gpio-regulator.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 #include <linux/i2c-gpio.h>
 #include <linux/regulator/onsemi-ncp6335d.h>
 #include <linux/i2c/cpld.h>
@@ -2339,7 +2339,7 @@ static void __init msm8625_device_i2c_init(void)
 int flashlight_control(int mode)
 {
 	int	rc;
-	
+
 	static int	backlight_off = 0;
 
 	if (mode != FL_MODE_PRE_FLASH && mode != FL_MODE_OFF) {
@@ -2802,14 +2802,14 @@ static void __init msm_z4u_init(void)
 #endif
 
 
-	
+
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 			i2c_tps65200_devices, ARRAY_SIZE(i2c_tps65200_devices));
 
 	msm8625Q_init_keypad();
 
 
-        
+
 	if (~get_kernel_flag() & KERNEL_FLAG_TEST_PWR_SUPPLY) {
 		htc_monitor_init();
 		htc_PM_monitor_init();
@@ -2834,7 +2834,7 @@ static void __init z4u_fixup(struct tag *tags, char **cmdline, struct meminfo *m
     mi->bank[1].start = 0x10000000;
 
     if(radio_security && 0x1){
-      
+
       mi->bank[1].size = 0x2E600000;
     }
     else{
@@ -2844,7 +2844,7 @@ static void __init z4u_fixup(struct tag *tags, char **cmdline, struct meminfo *m
 
 static void __init qrd7627a_init_early(void)
 {
-	
+
 }
 
 MACHINE_START(Z4U, "z4u")

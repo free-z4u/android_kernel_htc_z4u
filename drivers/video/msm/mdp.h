@@ -24,7 +24,7 @@
 #include <linux/msm_mdp.h>
 #include <linux/memory_alloc.h>
 #include <mach/hardware.h>
-#include <linux/ion.h>
+#include <linux/msm_ion.h>
 
 #ifdef CONFIG_MSM_BUS_SCALING
 #include <mach/msm_bus.h>
@@ -109,14 +109,14 @@ struct vsync {
 extern struct vsync vsync_cntrl;
 
 typedef struct mdpImg_ {
-	uint32 imgType;		
-	uint32 *bmy_addr;	
-	uint32 *cbcr_addr;	
-	uint32 width;		
-	uint32 mdpOp;		
-	uint32 tpVal;		
-	uint32 alpha;		
-	int    sp_value;        
+	uint32 imgType;
+	uint32 *bmy_addr;
+	uint32 *cbcr_addr;
+	uint32 width;
+	uint32 mdpOp;
+	uint32 tpVal;
+	uint32 alpha;
+	int    sp_value;
 } MDPIMG;
 
 #define MDP_OUTP(addr, data) outpdw((addr), (data))
@@ -172,10 +172,10 @@ typedef enum {
 #endif
 
 #define PHI_Q_FACTOR          29
-#define PQF_PLUS_5            (PHI_Q_FACTOR + 5)	
+#define PQF_PLUS_5            (PHI_Q_FACTOR + 5)
 #define PQF_PLUS_4            (PHI_Q_FACTOR + 4)
-#define PQF_PLUS_2            (PHI_Q_FACTOR + 2)	
-#define PQF_MINUS_2           (PHI_Q_FACTOR - 2)	
+#define PQF_PLUS_2            (PHI_Q_FACTOR + 2)
+#define PQF_MINUS_2           (PHI_Q_FACTOR - 2)
 #define PQF_PLUS_5_PLUS_2     (PQF_PLUS_5 + 2)
 #define PQF_PLUS_5_MINUS_2    (PQF_PLUS_5 - 2)
 
@@ -191,10 +191,10 @@ typedef enum {
 } MDP_IBUF_STATE;
 
 struct mdp_dirty_region {
-	__u32 xoffset;		
-	__u32 yoffset;		
-	__u32 width;		
-	__u32 height;		
+	__u32 xoffset;
+	__u32 yoffset;
+	__u32 width;
+	__u32 height;
 };
 
 typedef struct mdp_roi_s {
@@ -293,7 +293,7 @@ extern struct mdp_hist_mgmt *mdp_hist_mgmt_array[];
 #ifdef CONFIG_FB_MSM_MDP40
 #define MDP_OVERLAY0_TERM 0x20
 #define MDP_OVERLAY1_TERM 0x40
-#define MDP_DMAP_TERM MDP_DMA2_TERM	
+#define MDP_DMAP_TERM MDP_DMA2_TERM
 #define MDP_PRIM_VSYNC_TERM 0x100
 #define MDP_EXTER_VSYNC_TERM 0x200
 #define MDP_PRIM_RDPTR_TERM 0x400
@@ -442,7 +442,7 @@ extern struct mdp_hist_mgmt *mdp_hist_mgmt_array[];
 #define PPP_SRC_FETCH_PLANES_INTERLVD 0
 #define PPP_SRC_FETCH_PLANES_PSEUDOPLNR BIT(20)
 
-#define PPP_SRC_WMV9_MODE BIT(21)	
+#define PPP_SRC_WMV9_MODE BIT(21)
 
 #define PPP_OP_SCALE_X_ON BIT(0)
 #define PPP_OP_SCALE_Y_ON BIT(1)
@@ -603,8 +603,8 @@ extern struct mdp_hist_mgmt *mdp_hist_mgmt_array[];
 #define DMA_AHBM_LCD_SEL_SECONDARY          0
 #define DMA_IBUF_C3ALPHA_EN                 0
 #define DMA_BUF_FORMAT_RGB565		BIT(25)
-#define DMA_DITHER_EN                       BIT(24)	
-#define DMA_DEFLKR_EN                       BIT(24)	
+#define DMA_DITHER_EN                       BIT(24)
+#define DMA_DEFLKR_EN                       BIT(24)
 #define DMA_MDDI_DMAOUT_LCD_SEL_PRIMARY     0
 #define DMA_MDDI_DMAOUT_LCD_SEL_SECONDARY   0
 #define DMA_MDDI_DMAOUT_LCD_SEL_EXTERNAL    0
@@ -613,7 +613,7 @@ extern struct mdp_hist_mgmt *mdp_hist_mgmt_array[];
 #endif
 
 #define MDDI_VDO_PACKET_DESC_16  0x5565
-#define MDDI_VDO_PACKET_DESC	 0x5666	
+#define MDDI_VDO_PACKET_DESC	 0x5666
 #define MDDI_VDO_PACKET_DESC_24  0x5888
 
 #define MDP_HIST_INTR_STATUS_OFF	(0x0014)
