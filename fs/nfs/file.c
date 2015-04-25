@@ -454,7 +454,8 @@ static int nfs_release_page(struct page *page, gfp_t gfp)
 	/* Only do I/O if gfp is a superset of GFP_KERNEL, and we're not
 	 * doing this memory reclaim for a fs-related allocation.
 	 */
-	if (mapping && (gfp & GFP_KERNEL) == GFP_KERNEL) {
+	if (mapping && (gfp & GFP_KERNEL) == GFP_KERNEL &&
+	    !(current->flags & PF_FSTRANS)) {
 		int how = FLUSH_SYNC;
 
 		/* Don't let kswapd deadlock waiting for OOM RPC calls */

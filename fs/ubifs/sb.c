@@ -728,7 +728,8 @@ static int fixup_free_space(struct ubifs_info *c)
 	 * Fixup the log head which contains the only a CS node at the
 	 * beginning.
 	 */
-	err = fixup_leb(c, c->lhead_lnum, c->lhead_offs);
+	err = fixup_leb(c, c->lhead_lnum,
+			ALIGN(UBIFS_CS_NODE_SZ, c->min_io_size));
 	if (err)
 		goto out;
 
