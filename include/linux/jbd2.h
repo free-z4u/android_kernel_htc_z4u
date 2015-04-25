@@ -470,6 +470,7 @@ struct transaction_s
 		T_COMMIT,
 		T_COMMIT_DFLUSH,
 		T_COMMIT_JFLUSH,
+		T_COMMIT_CALLBACK,
 		T_FINISHED
 	}			t_state;
 
@@ -939,20 +940,27 @@ struct journal_s
 	 * superblock pointer here
 	 */
 	void *j_private;
-
-	
-	unsigned int		commit_callback_done;
 };
 
-#define JBD2_UNMOUNT	0x001	
-#define JBD2_ABORT	0x002	
-#define JBD2_ACK_ERR	0x004	
-#define JBD2_FLUSHED	0x008	
-#define JBD2_LOADED	0x010	
-#define JBD2_BARRIER	0x020	
-#define JBD2_ABORT_ON_SYNCDATA_ERR	0x040	
+/*
+ * Journal flag definitions
+ */
+#define JBD2_UNMOUNT	0x001	/* Journal thread is being destroyed */
+#define JBD2_ABORT	0x002	/* Journaling has been aborted for errors. */
+#define JBD2_ACK_ERR	0x004	/* The errno in the sb has been acked */
+#define JBD2_FLUSHED	0x008	/* The journal superblock has been flushed */
+#define JBD2_LOADED	0x010	/* The journal superblock has been loaded */
+#define JBD2_BARRIER	0x020	/* Use IDE barriers */
+#define JBD2_ABORT_ON_SYNCDATA_ERR	0x040	/* Abort the journal on file
+						 * data write error in ordered
+						 * mode */
 
+/*
+ * Function declarations for the journaling transaction and buffer
+ * management
+ */
 
+/* Filing buffers */
 extern void jbd2_journal_unfile_buffer(journal_t *, struct journal_head *);
 extern void __jbd2_journal_refile_buffer(struct journal_head *);
 extern void jbd2_journal_refile_buffer(journal_t *, struct journal_head *);
@@ -961,6 +969,7 @@ extern void __journal_free_buffer(struct journal_head *bh);
 extern void jbd2_journal_file_buffer(struct journal_head *, transaction_t *, int);
 extern void __journal_clean_data_list(transaction_t *transaction);
 
+/* Log buffer allocation */
 extern struct journal_head * jbd2_journal_get_descriptor_buffer(journal_t *);
 int jbd2_journal_next_log_block(journal_t *, unsigned long long *);
 int jbd2_journal_get_log_tail(journal_t *journal, tid_t *tid,
@@ -968,13 +977,18 @@ int jbd2_journal_get_log_tail(journal_t *journal, tid_t *tid,
 void __jbd2_update_log_tail(journal_t *journal, tid_t tid, unsigned long block);
 void jbd2_update_log_tail(journal_t *journal, tid_t tid, unsigned long block);
 
+/* Commit management */
 extern void jbd2_journal_commit_transaction(journal_t *);
 
+/* Checkpoint list management */
 int __jbd2_journal_clean_checkpoint_list(journal_t *journal);
 int __jbd2_journal_remove_checkpoint(struct journal_head *);
 void __jbd2_journal_insert_checkpoint(struct journal_head *, transaction_t *);
 
 
+/*
+ * Triggers
+ */
 
 struct jbd2_buffer_trigger_type {
 	/*
@@ -987,6 +1001,10 @@ struct jbd2_buffer_trigger_type {
 			 struct buffer_head *bh, void *mapped_data,
 			 size_t size);
 
+	/*
+	 * Fired during journal abort for dirty buffers that will not be
+	 * committed.
+	 */
 	void (*t_abort)(struct jbd2_buffer_trigger_type *type,
 			struct buffer_head *bh);
 };
@@ -997,24 +1015,42 @@ extern void jbd2_buffer_frozen_trigger(struct journal_head *jh,
 extern void jbd2_buffer_abort_trigger(struct journal_head *jh,
 				      struct jbd2_buffer_trigger_type *triggers);
 
+/* Buffer IO */
 extern int
 jbd2_journal_write_metadata_buffer(transaction_t	  *transaction,
 			      struct journal_head  *jh_in,
 			      struct journal_head **jh_out,
 			      unsigned long long   blocknr);
 
+/* Transaction locking */
 extern void		__wait_on_journal (journal_t *);
 
+/* Transaction cache support */
 extern void jbd2_journal_destroy_transaction_cache(void);
 extern int  jbd2_journal_init_transaction_cache(void);
 extern void jbd2_journal_free_transaction(transaction_t *);
 
+/*
+ * Journal locking.
+ *
+ * We need to lock the journal during transaction state changes so that nobody
+ * ever tries to take a handle on the running transaction while we are in the
+ * middle of moving it to the commit phase.  j_state_lock does this.
+ *
+ * Note that the locking is completely interrupt unsafe.  We never touch
+ * journal structures from interrupts.
+ */
 
 static inline handle_t *journal_current_handle(void)
 {
 	return current->journal_info;
 }
 
+/* The journaling code user interface:
+ *
+ * Create and destroy handles
+ * Register buffer modifications against the current transaction.
+ */
 
 extern handle_t *jbd2_journal_start(journal_t *, int nblocks);
 extern handle_t *jbd2__journal_start(journal_t *, int nblocks, gfp_t gfp_mask);
@@ -1056,6 +1092,7 @@ extern int	   jbd2_journal_destroy    (journal_t *);
 extern int	   jbd2_journal_recover    (journal_t *journal);
 extern int	   jbd2_journal_wipe       (journal_t *, int);
 extern int	   jbd2_journal_skip_recovery	(journal_t *);
+extern void	   jbd2_journal_update_sb_errno(journal_t *);
 extern void	   jbd2_journal_update_sb_log_tail	(journal_t *, tid_t,
 				unsigned long, int);
 extern void	   __jbd2_journal_abort_hard	(journal_t *);
@@ -1071,10 +1108,16 @@ extern int	   jbd2_journal_begin_ordered_truncate(journal_t *journal,
 extern void	   jbd2_journal_init_jbd_inode(struct jbd2_inode *jinode, struct inode *inode);
 extern void	   jbd2_journal_release_jbd_inode(journal_t *journal, struct jbd2_inode *jinode);
 
+/*
+ * journal_head management
+ */
 struct journal_head *jbd2_journal_add_journal_head(struct buffer_head *bh);
 struct journal_head *jbd2_journal_grab_journal_head(struct buffer_head *bh);
 void jbd2_journal_put_journal_head(struct journal_head *jh);
 
+/*
+ * handle management
+ */
 extern struct kmem_cache *jbd2_handle_cache;
 
 static inline handle_t *jbd2_alloc_handle(gfp_t gfp_flags)
@@ -1087,6 +1130,10 @@ static inline void jbd2_free_handle(handle_t *handle)
 	kmem_cache_free(jbd2_handle_cache, handle);
 }
 
+/*
+ * jbd2_inode management (optional, for those file systems that want to use
+ * dynamically allocated jbd2_inode structures)
+ */
 extern struct kmem_cache *jbd2_inode_cache;
 
 static inline struct jbd2_inode *jbd2_alloc_inode(gfp_t gfp_flags)
@@ -1099,6 +1146,7 @@ static inline void jbd2_free_inode(struct jbd2_inode *jinode)
 	kmem_cache_free(jbd2_inode_cache, jinode);
 }
 
+/* Primary revoke support */
 #define JOURNAL_REVOKE_DEFAULT_HASH 256
 extern int	   jbd2_journal_init_revoke(journal_t *, int);
 extern void	   jbd2_journal_destroy_revoke_caches(void);
@@ -1110,14 +1158,21 @@ extern int	   jbd2_journal_cancel_revoke(handle_t *, struct journal_head *);
 extern void	   jbd2_journal_write_revoke_records(journal_t *,
 						     transaction_t *, int);
 
+/* Recovery revoke support */
 extern int	jbd2_journal_set_revoke(journal_t *, unsigned long long, tid_t);
 extern int	jbd2_journal_test_revoke(journal_t *, unsigned long long, tid_t);
 extern void	jbd2_journal_clear_revoke(journal_t *);
 extern void	jbd2_journal_switch_revoke_table(journal_t *journal);
 extern void	jbd2_clear_buffer_revoked_flags(journal_t *journal);
 
+/*
+ * The log thread user interface:
+ *
+ * Request space in the current transaction, and force transaction commit
+ * transitions on demand.
+ */
 
-int __jbd2_log_space_left(journal_t *); 
+int __jbd2_log_space_left(journal_t *); /* Called with journal locked */
 int jbd2_log_start_commit(journal_t *journal, tid_t tid);
 int __jbd2_log_start_commit(journal_t *journal, tid_t tid);
 int jbd2_journal_start_commit(journal_t *journal, tid_t *tid);
@@ -1130,6 +1185,7 @@ void __jbd2_log_wait_for_space(journal_t *journal);
 extern void __jbd2_journal_drop_transaction(journal_t *, transaction_t *);
 extern int jbd2_cleanup_journal_tail(journal_t *);
 
+/* Debugging code only: */
 
 #define jbd_ENOSYS() \
 do {								           \
@@ -1138,6 +1194,15 @@ do {								           \
 	schedule();						           \
 } while (1)
 
+/*
+ * is_journal_abort
+ *
+ * Simple test wrapper function to test the JBD2_ABORT state flag.  This
+ * bit, when set, indicates that we have had a fatal error somewhere,
+ * either inside the journaling layer or indicated to us by the client
+ * (eg. ext3), and that we and should not commit any further
+ * transactions.
+ */
 
 static inline int is_journal_aborted(journal_t *journal)
 {
@@ -1156,8 +1221,10 @@ static inline void jbd2_journal_abort_handle(handle_t *handle)
 	handle->h_aborted = 1;
 }
 
-#endif 
+#endif /* __KERNEL__   */
 
+/* Comparison functions for transaction IDs: perform comparisons using
+ * modulo arithmetic so that they work over sequence number wraps. */
 
 static inline int tid_gt(tid_t x, tid_t y)
 {
@@ -1174,6 +1241,10 @@ static inline int tid_geq(tid_t x, tid_t y)
 extern int jbd2_journal_blocks_per_page(struct inode *inode);
 extern size_t journal_tag_bytes(journal_t *journal);
 
+/*
+ * Return the minimum number of blocks which must be free in the journal
+ * before a new transaction may be started.  Must be called under j_state_lock.
+ */
 static inline int jbd_space_needed(journal_t *journal)
 {
 	int nblocks = journal->j_max_transaction_buffers;
@@ -1183,18 +1254,22 @@ static inline int jbd_space_needed(journal_t *journal)
 	return nblocks;
 }
 
+/*
+ * Definitions which augment the buffer_head layer
+ */
 
-#define BJ_None		0	
-#define BJ_Metadata	1	
-#define BJ_Forget	2	
-#define BJ_IO		3	
-#define BJ_Shadow	4	
-#define BJ_LogCtl	5	
-#define BJ_Reserved	6	
+/* journaling buffer types */
+#define BJ_None		0	/* Not journaled */
+#define BJ_Metadata	1	/* Normal journaled metadata */
+#define BJ_Forget	2	/* Buffer superseded by this transaction */
+#define BJ_IO		3	/* Buffer is for temporary IO use */
+#define BJ_Shadow	4	/* Buffer contents being shadowed to the log */
+#define BJ_LogCtl	5	/* Buffer contains log descriptors */
+#define BJ_Reserved	6	/* Buffer is reserved for access by journal */
 #define BJ_Types	7
 
 extern int jbd_blocks_per_page(struct inode *inode);
-extern atomic_t vfs_emergency_remount;
+
 #ifdef __KERNEL__
 
 #define buffer_trace_init(bh)	do {} while (0)
