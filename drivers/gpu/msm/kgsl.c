@@ -238,52 +238,6 @@ kgsl_mem_entry_create(void)
 	return entry;
 }
 
-unsigned int kgsl_get_alloc_size(int detailed)
-{
-	unsigned int ret = 0;
-	struct kgsl_process_private *private;
-	int i = 0;
-
-	ret = kgsl_driver.stats.page_alloc;
-
-	if (!detailed)
-		return ret;
-
-	mutex_lock(&kgsl_driver.process_mutex);
-
-	list_for_each_entry(private, &kgsl_driver.process_list, list) {
-		printk("kgsl: below is going to list all memory info of pid:%d \n", private->pid);
-		for (i = 0; i < KGSL_MEM_ENTRY_MAX; i++) {
-			switch (i) {
-
-			case KGSL_MEM_ENTRY_KERNEL:
-				if(private != NULL && private->stats[KGSL_MEM_ENTRY_KERNEL].cur != 0)
-					printk("kgsl: kernel alloc %d\n", private->stats[KGSL_MEM_ENTRY_KERNEL].cur);
-				break;
-			case KGSL_MEM_ENTRY_PMEM:
-				if(private != NULL && private->stats[KGSL_MEM_ENTRY_PMEM].cur != 0)
-					printk("kgsl: pmem alloc %d\n", private->stats[KGSL_MEM_ENTRY_PMEM].cur);
-				break;
-			case KGSL_MEM_ENTRY_ASHMEM:
-				if(private != NULL && private->stats[KGSL_MEM_ENTRY_ASHMEM].cur != 0)
-					printk("kgsl: ashmem alloc %d\n", private->stats[KGSL_MEM_ENTRY_ASHMEM].cur);
-				break;
-			case KGSL_MEM_ENTRY_USER:
-				if(private != NULL && private->stats[KGSL_MEM_ENTRY_USER].cur != 0)
-					printk("kgsl: user alloc %d\n", private->stats[KGSL_MEM_ENTRY_USER].cur);
-				break;
-			case KGSL_MEM_ENTRY_ION:
-				if(private != NULL && private->stats[KGSL_MEM_ENTRY_ION].cur != 0)
-					printk("kgsl: ion alloc %d\n", private->stats[KGSL_MEM_ENTRY_ION].cur);
-				break;
-			}
-		}
-	}
-	mutex_unlock(&kgsl_driver.process_mutex);
-
-	return ret;
-}
-
 void
 kgsl_mem_entry_destroy(struct kref *kref)
 {
@@ -2322,7 +2276,7 @@ kgsl_mmap_memstore(struct kgsl_device *device, struct vm_area_struct *vma)
 
 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
 
-	result = remap_pfn_range(vma, vma->vm_start, device->memstore.physaddr >> PAGE_SHIFT,
+	result = remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
 				 vma_size, vma->vm_page_prot);
 	if (result != 0)
 		KGSL_MEM_ERR(device, "remap_pfn_range failed: %d\n",
@@ -2376,7 +2330,7 @@ static int kgsl_mmap(struct file *file, struct vm_area_struct *vma)
 
 	/* Handle leagacy behavior for memstore */
 
-	if (vma_offset == device->memstore.gpuaddr)
+	if (vma_offset == device->memstore.physaddr)
 		return kgsl_mmap_memstore(device, vma);
 
 	/* Find a chunk of GPU memory */
@@ -2744,6 +2698,8 @@ static int __init kgsl_core_init(void)
 	kgsl_mmu_set_mmutype(ksgl_mmu_type);
 
 	if (KGSL_MMU_TYPE_GPU == kgsl_mmu_get_mmutype()) {
+		if (cpu_is_msm8625q() && (get_ddr_size() > SZ_512M))
+			kgsl_pagetable_count = 16 ;
 		result = kgsl_ptdata_init();
 		if (result)
 			goto err;

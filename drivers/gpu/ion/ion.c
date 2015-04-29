@@ -1539,8 +1539,7 @@ static size_t ion_debug_heap_total(struct ion_client *client,
 	size_t size = 0;
 	struct rb_node *n;
 
-	if (!mutex_trylock(&client->lock))
-		return -1;
+	mutex_lock(&client->lock);
 	for (n = rb_first(&client->handles); n; n = rb_next(n)) {
 		struct ion_handle *handle = rb_entry(n,
 						     struct ion_handle,
@@ -1552,27 +1551,26 @@ static size_t ion_debug_heap_total(struct ion_client *client,
 	return size;
 }
 
-static int ion_debug_find_buffer_owner(struct ion_client *client,
+/**
+ * Searches through a clients handles to find if the buffer is owned
+ * by this client. Used for debug output.
+ * @param client pointer to candidate owner of buffer
+ * @param buf pointer to buffer that we are trying to find the owner of
+ * @return 1 if found, 0 otherwise
+ */
+static int ion_debug_find_buffer_owner(const struct ion_client *client,
 				       const struct ion_buffer *buf)
 {
 	struct rb_node *n;
-	int found = 0;
-
-	if (!mutex_trylock(&client->lock))
-		return 0;
 
 	for (n = rb_first(&client->handles); n; n = rb_next(n)) {
 		const struct ion_handle *handle = rb_entry(n,
 						     const struct ion_handle,
 						     node);
-		if (handle->buffer == buf) {
-			found = 1;
-			break;
-		}
+		if (handle->buffer == buf)
+			return 1;
 	}
-
-	mutex_unlock(&client->lock);
-	return found;
+	return 0;
 }
 
 /**

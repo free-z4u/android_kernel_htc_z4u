@@ -515,8 +515,6 @@ struct kgsl_timestamp_event_genlock {
 #define IOCTL_KGSL_SETPROPERTY \
 	_IOW(KGSL_IOC_TYPE, 0x32, struct kgsl_device_getproperty)
 
-unsigned int kgsl_get_alloc_size(int detailed);
-
 #ifdef __KERNEL__
 #ifdef CONFIG_MSM_KGSL_DRM
 int kgsl_gem_obj_addr(int drm_fd, int handle, unsigned long *start,
