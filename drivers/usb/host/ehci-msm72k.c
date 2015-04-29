@@ -90,7 +90,7 @@ static void msm_xusb_enable_clks(struct msmusb_hcd *mhcd)
 
 	switch (PHY_TYPE(pdata->phy_info)) {
 	case USB_PHY_INTEGRATED:
-		
+
 		break;
 	case USB_PHY_SERIAL_PMIC:
 		clk_prepare_enable(mhcd->alt_core_clk);
@@ -113,7 +113,7 @@ static void msm_xusb_disable_clks(struct msmusb_hcd *mhcd)
 
 	switch (PHY_TYPE(pdata->phy_info)) {
 	case USB_PHY_INTEGRATED:
-		
+
 		break;
 	case USB_PHY_SERIAL_PMIC:
 		clk_disable_unprepare(mhcd->alt_core_clk);
@@ -308,7 +308,7 @@ static int ehci_msm_bus_resume(struct usb_hcd *hcd)
 
 	if (PHY_TYPE(mhcd->pdata->phy_info) == USB_PHY_INTEGRATED) {
 		otg_set_suspend(mhcd->xceiv, 0);
-	} else { 
+	} else {
 		usb_lpm_exit(hcd);
 		if (cancel_work_sync(&(mhcd->lpm_exit_work)))
 			usb_lpm_exit_w(&mhcd->lpm_exit_work);
@@ -323,7 +323,7 @@ static int ehci_msm_bus_resume(struct usb_hcd *hcd)
 #define ehci_msm_bus_suspend NULL
 #define ehci_msm_bus_resume NULL
 
-#endif	
+#endif
 
 static int ehci_msm_reset(struct usb_hcd *hcd)
 {
@@ -334,7 +334,7 @@ static int ehci_msm_reset(struct usb_hcd *hcd)
 	ehci->regs = USB_CAPLENGTH +
 		HC_LENGTH(ehci, ehci_readl(ehci, &ehci->caps->hc_capbase));
 
-	
+
 	ehci->hcs_params = ehci_readl(ehci, &ehci->caps->hcs_params);
 
 	retval = ehci_init(hcd);
@@ -346,11 +346,11 @@ static int ehci_msm_reset(struct usb_hcd *hcd)
 
 	retval = ehci_reset(ehci);
 
-	
+
 	writel(0x0, USB_AHB_MODE);
 	writel(0x0, USB_AHB_BURST);
 
-	
+
 	ehci_msm_bus_resume(hcd);
 	return retval;
 }
@@ -371,11 +371,11 @@ static int ehci_msm_run(struct usb_hcd *hcd)
 	hcd->uses_new_polling = 1;
 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
 
-	
+
 	reg_ptr = (u32 __iomem *)(((u8 __iomem *)ehci->regs) + USBMODE);
 	ehci_writel(ehci, (USBMODE_VBUS | USBMODE_SDIS), reg_ptr);
 
-	
+
 	while (port--)
 		ehci_writel(ehci, (PTS_VAL(pdata->phy_info) | PORT_POWER |
 				PORT_PE), &ehci->regs->port_status[port]);
@@ -390,11 +390,11 @@ static int ehci_msm_run(struct usb_hcd *hcd)
 	ehci->command &= ~(CMD_LRESET|CMD_IAAD|CMD_PSE|CMD_ASE|CMD_RESET);
 	ehci->command |= CMD_RUN;
 	ehci_writel(ehci, ehci->command, &ehci->regs->command);
-	ehci_readl(ehci, &ehci->regs->command); 
+	ehci_readl(ehci, &ehci->regs->command);
 
 	hcd->state = HC_STATE_RUNNING;
 
-	
+
 	ehci_writel(ehci, INTR_MASK, &ehci->regs->intr_enable);
 
 	return retval;
@@ -494,7 +494,7 @@ static void msm_hsusb_request_host(void *handle, int request)
 		if (!mhcd->running)
 			break;
 		mhcd->running = 0;
-		
+
 		if (PHY_TYPE(pdata->phy_info) == USB_PHY_SERIAL_PMIC) {
 			usb_lpm_exit(hcd);
 			if (cancel_work_sync(&(mhcd->lpm_exit_work)))
@@ -596,7 +596,7 @@ static int msm_xusb_init_host(struct platform_device *pdev,
 		if (pdata->vbus_init)
 			pdata->vbus_init(1);
 
-		
+
 		if (pdata->vbus_power)
 			pdata->vbus_power(pdata->phy_info, 0);
 
@@ -616,7 +616,7 @@ static int msm_xusb_init_host(struct platform_device *pdev,
 
 		if (!hcd->regs)
 			return -EFAULT;
-		
+
 		mhcd->alt_core_clk = clk_get(&pdev->dev, "alt_core_clk");
 		if (IS_ERR(mhcd->alt_core_clk)) {
 			iounmap(hcd->regs);

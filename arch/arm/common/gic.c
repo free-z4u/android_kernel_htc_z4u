@@ -228,7 +228,7 @@ static int gic_suspend_one(struct gic_chip_data *gic)
 		dummy_r = readl_relaxed(base + GIC_DIST_ENABLE_SET + i * 4);
 		mb();
 	}
-	
+
 	return 0;
 }
 
@@ -1045,7 +1045,7 @@ void gic_raise_softirq(const struct cpumask *mask, unsigned int irq)
 	if (gic->need_access_lock)
 		raw_spin_lock_irqsave(&irq_controller_lock, flags);
 	udelay(1);
-	
+
 	/* this always happens on GIC0 */
 	writel_relaxed(sgir, gic_data_dist_base(gic) + GIC_DIST_SOFTINT);
 	dummy_r = readl_relaxed(gic_data_dist_base(&gic_data[0]) + GIC_DIST_ENABLE_SET);
@@ -1243,7 +1243,7 @@ void read_active_irq(void)
        int x;
        struct gic_chip_data *gic = &gic_data[0];
        void __iomem *dist_base = gic_data_dist_base(gic);
-       
+
        ret = readl_relaxed(dist_base + GIC_DIST_ACTIVE_BIT);
        for (x = 1; x < 8; x++) {
 			ret =  readl_relaxed(dist_base + GIC_DIST_ACTIVE_BIT + (x * 4));

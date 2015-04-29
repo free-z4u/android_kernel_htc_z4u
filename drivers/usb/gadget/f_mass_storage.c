@@ -763,42 +763,42 @@ static int _read_toc_raw(struct fsg_common *common, struct fsg_buffhd *bh)
 
 	q = buf + 2;
 	memset(q, 0, 46);
-	*q++ = 1; 
-	*q++ = 1; 
+	*q++ = 1;
+	*q++ = 1;
 
-	*q++ = 1; 
-	*q++ = 0x14; 
-	*q++ = 0; 
-	*q++ = 0xa0; 
-	*q++ = 0; 
-	*q++ = 0; 
-	*q++ = 0; 
+	*q++ = 1;
+	*q++ = 0x14;
 	*q++ = 0;
-	*q++ = 1; 
-	*q++ = 0x00; 
+	*q++ = 0xa0;
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 1;
+	*q++ = 0x00;
 	*q++ = 0x00;
 
-	*q++ = 1; 
-	*q++ = 0x14; 
-	*q++ = 0; 
+	*q++ = 1;
+	*q++ = 0x14;
+	*q++ = 0;
 	*q++ = 0xa1;
-	*q++ = 0; 
-	*q++ = 0; 
-	*q++ = 0; 
 	*q++ = 0;
-	*q++ = 1; 
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 1;
 	*q++ = 0x00;
 	*q++ = 0x00;
 
-	*q++ = 1; 
-	*q++ = 0x14; 
-	*q++ = 0; 
-	*q++ = 0xa2; 
-	*q++ = 0; 
-	*q++ = 0; 
-	*q++ = 0; 
+	*q++ = 1;
+	*q++ = 0x14;
+	*q++ = 0;
+	*q++ = 0xa2;
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 0;
 	if (msf) {
-		*q++ = 0; 
+		*q++ = 0;
 		_lba_to_msf(q, curlun->num_sectors);
 		q += 3;
 	} else {
@@ -806,13 +806,13 @@ static int _read_toc_raw(struct fsg_common *common, struct fsg_buffhd *bh)
 		q += 4;
 	}
 
-	*q++ = 1; 
-	*q++ = 0x14; 
-	*q++ = 0; 
-	*q++ = 1; 
-	*q++ = 0; 
-	*q++ = 0; 
-	*q++ = 0; 
+	*q++ = 1;
+	*q++ = 0x14;
+	*q++ = 0;
+	*q++ = 1;
+	*q++ = 0;
+	*q++ = 0;
+	*q++ = 0;
 	if (msf) {
 		*q++ = 0;
 		_lba_to_msf(q, 0);
@@ -831,21 +831,21 @@ static int _read_toc_raw(struct fsg_common *common, struct fsg_buffhd *bh)
 
 static void cd_data_to_raw(u8 *buf, int lba)
 {
-	
+
 	buf[0] = 0x00;
 	memset(buf + 1, 0xff, 10);
 	buf[11] = 0x00;
 	buf += 12;
 
-	
+
 	_lba_to_msf(buf, lba);
-	buf[3] = 0x01; 
+	buf[3] = 0x01;
 	buf += 4;
 
-	
+
 	buf += 2048;
 
-	
+
 	memset(buf, 0, 288);
 }
 
@@ -903,7 +903,7 @@ static int do_read(struct fsg_common *common)
 	if ((transfer_request & 0xf8) == 0xf8) {
 		file_offset = ((loff_t) lba) << 11;
 
-		
+
 		amount_left = 2352;
 	} else {
 		file_offset = ((loff_t) lba) << curlun->blkbits;
@@ -912,7 +912,7 @@ static int do_read(struct fsg_common *common)
 		amount_left = common->data_size_from_cmnd;
 	}
 	if (unlikely(amount_left == 0))
-		return -EIO;		
+		return -EIO;
 
 	for (;;) {
 		/*
@@ -1040,11 +1040,11 @@ static int do_read_buffer(struct fsg_common *common)
 		bh = common->next_buffhd_to_fill;
 		bh->inreq->length = 0;
 		bh->state = BUF_STATE_FULL;
-		return -EIO;		
+		return -EIO;
 	}
 
 
-	
+
 	amount_left = common->data_size_from_cmnd;
 
 	if (file_offset + amount_left > desc->len) {
@@ -1057,30 +1057,30 @@ static int do_read_buffer(struct fsg_common *common)
 		bh = common->next_buffhd_to_fill;
 		bh->inreq->length = 0;
 		bh->state = BUF_STATE_FULL;
-		return -EIO;		
+		return -EIO;
 	}
 
-	
-	if (unlikely(amount_left == 0))
-		return -EIO;		
 
-	
+	if (unlikely(amount_left == 0))
+		return -EIO;
+
+
 
 	for (;;) {
-		
+
 
 		amount = min(amount_left, FSG_BUFLEN);
 		amount = min((loff_t) amount, desc->len - file_offset);
-		
 
-		
+
+
 		bh = common->next_buffhd_to_fill;
 		while (bh->state != BUF_STATE_EMPTY) {
 			rc = sleep_thread(common);
 			if (rc)
 				return rc;
 		}
-		
+
 
 		if (amount == 0) {
 			curlun->sense_data =
@@ -1101,21 +1101,21 @@ static int do_read_buffer(struct fsg_common *common)
 		bh->state = BUF_STATE_FULL;
 
 		if (amount_left == 0)
-			break;		
+			break;
 
-		
+
 #if 0
 		START_TRANSFER_OR(common, bulk_in, bh->inreq,
 				&bh->inreq_busy, &bh->state)
 #else
 		bh->inreq->zero = 0;
 		if (!start_in_transfer(common, bh))
-			
+
 #endif
 			return -EIO;
 		common->next_buffhd_to_fill = bh->next;
 	}
-	return -EIO;		
+	return -EIO;
 }
 #endif
 
@@ -1371,7 +1371,7 @@ static int do_write_buffer(struct fsg_common *common)
 	get_some_more = 1;
 	file_offset = get_unaligned_be32(&common->cmnd[2]);
 
-	
+
 	desc = curlun->op_desc[common->cmnd[0]-SC_VENDOR_START];
 	if (!desc->buffer){
 		printk("[fms_CR7]%s: cmd=%d not ready\n", __func__, common->cmnd[0]);
@@ -1379,13 +1379,13 @@ static int do_write_buffer(struct fsg_common *common)
 				SS_LOGICAL_BLOCK_ADDRESS_OUT_OF_RANGE;
 		curlun->sense_data_info = file_offset;
 		curlun->info_valid = 1;
-		return -EIO;		
+		return -EIO;
 	}
 
 	amount_left_to_req = amount_left_to_write = common->data_size_from_cmnd;
-	
-	
-	
+
+
+
 	if (file_offset + amount_left_to_write > desc->len) {
 		printk("[fms_CR7]%s: vendor buffer out of range offset=0x%x write-len=0x%x buf-len=0x%x\n",
 			__func__, (unsigned int)file_offset, amount_left_to_req, desc->len);
@@ -1393,27 +1393,27 @@ static int do_write_buffer(struct fsg_common *common)
 				SS_LOGICAL_BLOCK_ADDRESS_OUT_OF_RANGE;
 		curlun->sense_data_info = file_offset;
 		curlun->info_valid = 1;
-		return -EIO;		
+		return -EIO;
 	}
 
 	while (amount_left_to_write > 0) {
 
-		
+
 		bh = common->next_buffhd_to_fill;
 		if (bh->state == BUF_STATE_EMPTY && get_some_more) {
 
 			amount = min(amount_left_to_req, FSG_BUFLEN);
-			
 
-			
+
+
 			common->usb_amount_left -= amount;
 			amount_left_to_req -= amount;
 			if (amount_left_to_req == 0)
 				get_some_more = 0;
 
-			
-			
-			
+
+
+
 
 			bh->outreq->length = bh->bulk_out_intended_length =
 					amount;
@@ -1422,24 +1422,24 @@ static int do_write_buffer(struct fsg_common *common)
 					&bh->outreq_busy, &bh->state)
 #else
 			if (!start_out_transfer(common, bh))
-				
+
 #endif
 				return -EIO;
 			common->next_buffhd_to_fill = bh->next;
 			continue;
 		}
 
-		
+
 		bh = common->next_buffhd_to_drain;
 		if (bh->state == BUF_STATE_EMPTY && !get_some_more){
-			break;			
+			break;
 		}
 		if (bh->state == BUF_STATE_FULL) {
 			smp_rmb();
 			common->next_buffhd_to_drain = bh->next;
 			bh->state = BUF_STATE_EMPTY;
 
-			
+
 			if (bh->outreq->status != 0) {
 				curlun->sense_data = SS_COMMUNICATION_FAILURE;
 				curlun->sense_data_info = file_offset >> 9;
@@ -1456,8 +1456,8 @@ static int do_write_buffer(struct fsg_common *common)
 				amount = desc->len - file_offset;
 			}
 
-			
-			
+
+
 			memcpy(desc->buffer + file_offset, (char __user *) bh->buf,amount);
 			file_offset += amount;
 			amount_left_to_write -= amount;
@@ -1470,7 +1470,7 @@ static int do_write_buffer(struct fsg_common *common)
 				curlun->unflushed_bytes = 0;
 			}
 #endif
-			
+
 			if (bh->outreq->actual != bh->outreq->length) {
 				common->short_packet_received = 1;
 				break;
@@ -1478,13 +1478,13 @@ static int do_write_buffer(struct fsg_common *common)
 			continue;
 		}
 
-		
+
 		rc = sleep_thread(common);
 		if (rc)
 			return rc;
 	}
 
-	return -EIO;		
+	return -EIO;
 }
 #endif
 
@@ -1637,8 +1637,8 @@ static int do_inquiry(struct fsg_common *common, struct fsg_buffhd *bh)
 	buf[3] = 2;		/* SCSI-2 INQUIRY data format */
 #ifdef CONFIG_LISMO
 	if ( strcmp(dev_name(&curlun->dev),"lun0") == 0 ){
-		buf[4] = 31 + INQUIRY_VENDOR_SPECIFIC_SIZE;		
-		buf[5] = 0;		
+		buf[4] = 31 + INQUIRY_VENDOR_SPECIFIC_SIZE;
+		buf[5] = 0;
 		buf[6] = 0;
 		buf[7] = 0;
 		memcpy(buf + 8, common->inquiry_string, sizeof common->inquiry_string);
@@ -1655,8 +1655,8 @@ static int do_inquiry(struct fsg_common *common, struct fsg_buffhd *bh)
 	}
 #else
 
-	buf[4] = 31;		
-	buf[5] = 0;		
+	buf[4] = 31;
+	buf[5] = 0;
 	buf[6] = 0;
 	buf[7] = 0;
 	memcpy(buf + 8, common->inquiry_string, sizeof common->inquiry_string);
@@ -2009,15 +2009,15 @@ static int do_reserve(struct fsg_common *common, struct fsg_buffhd *bh)
 
 	if (common->cmnd[1] == ('h'&0x1f) && common->cmnd[2] == 't'
 		&& common->cmnd[3] == 'c') {
-		
+
 		switch (common->cmnd[5]) {
-		case 0x01: 
+		case 0x01:
 			call_us_ret = call_usermodehelper(exec_path[1],
 				argv_start, envp, UMH_WAIT_PROC);
 			usb_function_ebl = 1;
 			schedule_work(&ums_do_reserve_work);
 		break;
-		case 0x02: 
+		case 0x02:
 			call_us_ret = call_usermodehelper(exec_path[0],
 				argv_stop, envp, UMH_WAIT_PROC);
 			usb_function_ebl = 0;
@@ -2706,7 +2706,7 @@ static int do_scsi_command(struct fsg_common *common)
 			common->data_size_from_cmnd = 0;
 			sprintf(unknown, "Unknown x%02x", common->cmnd[0]);
 			if ((reply = check_command(common, common->cmnd_size,
-					DATA_DIR_UNKNOWN, 0x3ff, 0, unknown)) == 0) { 
+					DATA_DIR_UNKNOWN, 0x3ff, 0, unknown)) == 0) {
 				common->curlun->sense_data = SS_INVALID_COMMAND;
 				reply = -EINVAL;
 			}
@@ -3002,7 +3002,7 @@ static int fsg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 	struct fsg_common *common = fsg->common;
 	int rc;
 
-	
+
 	rc = config_ep_by_speed(common->gadget, &(fsg->function), fsg->bulk_in);
 	if (rc)
 		return rc;
@@ -3037,7 +3037,7 @@ static void fsg_disable(struct usb_function *f)
 {
 	struct fsg_dev *fsg = fsg_from_func(f);
 
-	
+
 	if (fsg->bulk_in_enabled) {
 		usb_ep_disable(fsg->bulk_in);
 		fsg->bulk_in_enabled = 0;
@@ -3309,7 +3309,7 @@ static DEVICE_ATTR(perf, 0644, fsg_show_perf, fsg_store_perf);
 static void buffer_notify_sysfs(struct work_struct *work)
 {
 	struct op_desc	*desc;
-	
+
 	desc = container_of(work, struct op_desc, work);
 	sysfs_notify_dirent(desc->value_sd);
 }
@@ -3330,7 +3330,7 @@ vendor_cmd_read_buffer(struct file* f, struct kobject *kobj, struct bin_attribut
 	ssize_t	status;
 	struct op_desc	*desc = attr->private;
 
-	
+
 	mutex_lock(&sysfs_lock);
 
 	if (!test_bit(FLAG_EXPORT, &desc->flags))
@@ -3365,7 +3365,7 @@ vendor_cmd_write_buffer(struct file* f, struct kobject *kobj, struct bin_attribu
 	ssize_t	status;
 	struct op_desc	*desc = attr->private;
 
-	
+
 	mutex_lock(&sysfs_lock);
 
 	if (!test_bit(FLAG_EXPORT, &desc->flags))
@@ -3511,7 +3511,7 @@ done:
 	mutex_unlock(&sysfs_lock);
 	return status ? : size;
 }
-static DEVICE_ATTR(size, 0606, vendor_size_show, vendor_size_store); 
+static DEVICE_ATTR(size, 0606, vendor_size_show, vendor_size_store);
 
 static ssize_t vendor_update_show(struct device *dev,
 	struct device_attribute *attr, char *buf)
@@ -3529,7 +3529,7 @@ static ssize_t vendor_update_show(struct device *dev,
 	mutex_unlock(&sysfs_lock);
 	return status;
 }
-static DEVICE_ATTR(update, 0404, vendor_update_show, 0); 
+static DEVICE_ATTR(update, 0404, vendor_update_show, 0);
 
 static int vendor_cmd_export(struct device *dev, unsigned cmd, int init)
 {
@@ -3721,7 +3721,7 @@ done:
 	return status ? : len;
 }
 
-static DEVICE_ATTR(export, 0220, 0, vendor_export_store); 
+static DEVICE_ATTR(export, 0220, 0, vendor_export_store);
 
 static ssize_t vendor_unexport_store(struct device *dev,
                 struct device_attribute *attr, const char *buf, size_t len)
@@ -3749,7 +3749,7 @@ done:
 		pr_debug(KERN_INFO"%s: status %d\n", __func__, status);
 	return status ? : len;
 }
-static DEVICE_ATTR(unexport, 0220, 0, vendor_unexport_store); 
+static DEVICE_ATTR(unexport, 0220, 0, vendor_unexport_store);
 
 static ssize_t vendor_inquiry_show(struct device *dev,
 	struct device_attribute *attr, char *buf)
@@ -3778,7 +3778,7 @@ static ssize_t vendor_inquiry_store(struct device *dev,
 	return 0;
 }
 
-static DEVICE_ATTR(inquiry, 0660, vendor_inquiry_show, vendor_inquiry_store); 
+static DEVICE_ATTR(inquiry, 0660, vendor_inquiry_show, vendor_inquiry_store);
 
 static void op_release(struct device *dev)
 {

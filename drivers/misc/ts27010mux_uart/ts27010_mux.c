@@ -176,8 +176,8 @@ static int ts0710_valid_control(u8 control)
 #ifdef TS27010_UART_RETRAN
 static int ts0710_valid_sn(u8 sn)
 {
-	
-	
+
+
 	if (sn != INDIFFERENT_SN && sn & MAX_TRANS_SN)
 		return 0;
 	else
@@ -320,7 +320,7 @@ static int ts0710_pkt_send(struct ts0710_con *ts0710, u8 *data)
 		header_len = sizeof(*long_pkt);
 	}
 
-	
+
 	data[0] = TS0710_BASIC_FLAG;
 #ifdef TS27010_UART_RETRAN
 	if (CLR_PF(pkt->h.control) == UIH) {
@@ -374,12 +374,12 @@ static void ts0710_reset_dlci_data(struct dlci_struct *d)
 	d->clients = 0;
 	d->mtu = DEF_TS0710_MTU;
 	d->initiator = 0;
-	
+
 #ifdef TS27010_NET
 	d->net = NULL;
 	d->line_no = 0;
 #endif
-	
+
 
 	FUNC_EXIT();
 }
@@ -504,10 +504,10 @@ static int ts27010_send_uih(struct ts0710_con *ts0710, u8 dlci,
 		 len, dlci);
 	ts0710_pkt_set_header(frame,
 		len,
-		1, 
-		MCC_CMD, 
-		dlci, 
-		CLR_PF(UIH)); 
+		1,
+		MCC_CMD,
+		dlci,
+		CLR_PF(UIH));
 
 	memcpy(ts0710_pkt_data(frame), data, len);
 	ret = ts0710_pkt_send(ts0710, frame);
@@ -718,7 +718,7 @@ static void ts27010_handle_test(struct ts0710_con *ts0710, u8 type,
 				if (data[i] != (i & 0xFF))
 					ts0710->test_errs++;
 			}
-			ts0710->be_testing = 0;	
+			ts0710->be_testing = 0;
 			wake_up_interruptible(&ts0710->test_wait);
 		} else {
 			mux_print(MSG_ERROR, "Err: shouldn't or late "
@@ -819,7 +819,7 @@ static void ts27010_handle_pn(struct ts0710_con *ts0710, u8 type,
 			"received PN command with frame size %d\n",
 			frame_size);
 
-		
+
 		frame_size = min(frame_size, ts0710->dlci[dlci].mtu);
 		ts27010_send_pn(ts0710, pn.prior, frame_size,
 				0, 0, dlci, MCC_RSP);
@@ -969,7 +969,7 @@ static void ts27010_flow_on(u8 dlci, struct ts0710_con *ts0710)
 			mux_print(MSG_INFO,
 				"send flow on on dlci %d to BP successfully\n",
 				dlci);
-			
+
 			d->flow_control = 0;
 			break;
 		}
@@ -1025,7 +1025,7 @@ static void ts27010_flow_off(struct tty_struct *tty, u8 dlci,
 			mux_print(MSG_INFO,
 				"send flow off on dlci %d successfully\n",
 				dlci);
-			
+
 			d->flow_control = 1;
 			break;
 		}
@@ -1047,7 +1047,7 @@ static void ts27010_handle_sabm(
 		wake_up_interruptible(&d->open_wait);
 	} else {
 		mux_print(MSG_WARNING, "invalid dlci %d.\n", dlci);
-		
+
 	}
 	FUNC_EXIT();
 }
@@ -1160,7 +1160,7 @@ static void ts27010_handle_uih(struct ts0710_con *ts0710, u8 control, int dlci,
 
 	if ((dlci >= TS0710_MAX_CHN)) {
 		mux_print(MSG_ERROR, "invalid dlci %d\n", dlci);
-		
+
 		return;
 	}
 
@@ -1192,7 +1192,7 @@ static void ts27010_handle_uih(struct ts0710_con *ts0710, u8 control, int dlci,
 		mux_print(MSG_WARNING, "dlci %d: uih_len:%d "
 			   "is bigger than mtu:%d, discarding.\n",
 			    dlci, len, ts0710->dlci[dlci].mtu);
-		
+
 		len = ts0710->dlci[dlci].mtu;
 	}
 	if (len == 0) {
@@ -1337,7 +1337,7 @@ static int ts27010_close_channel(u8 dlci)
 		retval = 0;
 		goto EXIT;
 	} else if (d->state == DISCONNECTING) {
-		
+
 		mux_print(MSG_WARNING,
 			"DLCI %d is being disconnected!\n", dlci);
 
@@ -1365,18 +1365,18 @@ static int ts27010_close_channel(u8 dlci)
 	}
 
 	WARN_ON(d->clients != 1);
-	
+
 	d->state = DISCONNECTING;
 	try = 10;
 	while (try--) {
 #ifdef MUX_FORCE_CLOSE_BY_GPIO
 		mdm_alive = gpio_get_value(SPRD_SC800x_GPIO_MDM_ALIVE);
 		mux_print(MSG_CRIT, "Modem alive=%d, force close=%d!\n", mdm_alive, g_mux_force_close);
-		if(mdm_alive == 0) break;	
-		else if(g_mux_force_close) break;	
+		if(mdm_alive == 0) break;
+		else if(g_mux_force_close) break;
 #else
 		mux_print(MSG_CRIT, "Force close=%d!\n", g_mux_force_close);
-		if(g_mux_force_close) break;	
+		if(g_mux_force_close) break;
 #endif
 		retval = ts27010_send_disc(ts0710, dlci);
 		if (retval) {
@@ -1397,7 +1397,7 @@ static int ts27010_close_channel(u8 dlci)
 	if (try < 0 && d->state != DISCONNECTED)
 		retval = -EIO;
 
-	
+
 	if (d->state != DISCONNECTED) {
 		if (dlci == 0) {
 			ts0710_upon_disconnect(ts0710);
@@ -1428,11 +1428,11 @@ EXIT:
 
 void ts27010_mux_uart_line_close(int line)
 {
-	
+
 #ifdef TS27010_NET
 	struct ts0710_con *ts0710 = &ts0710_connection;
 #endif
-	
+
 	int dlci;
 	int closeCTRL = 1;
 	int j;
@@ -1446,13 +1446,13 @@ void ts27010_mux_uart_line_close(int line)
 		return;
 	}
 
-	
+
 #ifdef TS27010_NET
 	mutex_lock(&ts0710->dlci[dlci].lock);
 	ts27010_destroy_network(&ts0710->dlci[dlci]);
 	mutex_unlock(&ts0710->dlci[dlci].lock);
 #endif
-	
+
 
 	ts27010_close_channel(dlci);
 
@@ -1467,7 +1467,7 @@ void ts27010_mux_uart_line_close(int line)
 		mux_print(MSG_INFO, "All mux devices closed, "
 			"will close control channel. force close off\n");
 		ts27010_close_channel(0);
-		g_mux_force_close = 0;	
+		g_mux_force_close = 0;
 	}
 
 	mux_print(MSG_CRIT, " close line = %d end!\n", line);
@@ -1504,7 +1504,7 @@ static int ts27010_wait_for_open(struct ts0710_con *ts0710, int dlci)
 	}
 
 	if (d->state != CONNECTED && d->state != FLOW_STOPPED) {
-		
+
 		mux_print(MSG_ERROR,
 			"DLCI %d Wait for connecting got invalid state: %d!\n",
 			dlci, d->state);
@@ -1625,7 +1625,7 @@ static int ts27010_open_channel(u8 dlci)
 		goto EXIT;
 	}
 	if ((d->state != DISCONNECTED) && (d->state != REJECTED)) {
-		
+
 		mux_print(MSG_ERROR,
 			"DLCI %d state is invalid: %d!\n", dlci, d->state);
 		retval = -ENODEV;
@@ -1635,7 +1635,7 @@ static int ts27010_open_channel(u8 dlci)
 	WARN_ON(d->clients != 0);
 	d->state = NEGOTIATING;
 	d->initiator = 1;
-#if 0 
+#if 0
 	try = 10;
 	while (try--) {
 		retval = ts27010_send_pn(ts0710, 7, d->mtu, 0, 0, dlci, 1);
@@ -1686,10 +1686,10 @@ static int ts27010_open_channel(u8 dlci)
 			dlci, d->state);
 		d->state = REJECTED;
 		retval = -ENODEV;
-		
+
 	}
 
-	
+
 	wake_up_interruptible(&d->open_wait);
 
 EXIT:
@@ -1708,7 +1708,7 @@ static int ts27010_open_ctrl_channel(int dlci)
 
 	mutex_lock(&d->lock);
 	if (d->state == CONNECTED || d->state == FLOW_STOPPED) {
-		
+
 		mux_print(MSG_INFO,
 			"DLCI %d has been opened clients: %d!\n",
 			dlci, d->clients);
@@ -1724,11 +1724,11 @@ static int ts27010_open_ctrl_channel(int dlci)
 			else
 				break;
 		}
-		if (!retval) 
+		if (!retval)
 			d->clients++;
 		goto EXIT;
 	} else if (d->clients > 0) {
-		
+
 		mux_print(MSG_ERROR,
 			"DLCI %d state invalid: %d, clients: %d!\n",
 			dlci, d->state, d->clients);
@@ -1737,7 +1737,7 @@ static int ts27010_open_ctrl_channel(int dlci)
 	}
 
 	if ((d->state != DISCONNECTED) && (d->state != REJECTED)) {
-		
+
 		mux_print(MSG_ERROR,
 			"DLCI %d state invalid: %d!\n", dlci, d->state);
 		retval = -ENODEV;
@@ -1774,7 +1774,7 @@ static int ts27010_open_ctrl_channel(int dlci)
 		mux_print(MSG_ERROR, "open DLCI 0 failed: %d\n",
 			d->state);
 		retval = -ENODEV;
-		
+
 	}
 
 	if (d->state == CONNECTING)
@@ -1801,7 +1801,7 @@ int ts27010_mux_uart_line_open(int line)
 		return -EINVAL;
 	}
 
-	
+
 	retval = ts27010_open_ctrl_channel(0);
 	if (retval != 0) {
 		mux_print(MSG_ERROR, "Can't open control DLCI 0!\n");
@@ -2068,12 +2068,12 @@ void ts27010_mux_uart_line_unthrottle(int line)
 
 static int ts27010_send_test_cmd(struct ts0710_con *ts0710)
 {
-	u8 *d_buf = NULL; 
+	u8 *d_buf = NULL;
 	int retval = -EFAULT;
 	int j;
 
 	if (ts0710->be_testing) {
-		
+
 		retval = wait_event_interruptible_timeout(ts0710->test_wait,
 			ts0710->be_testing != 1, TS0710MUX_TIME_OUT * 3);
 		if (retval == 0) {
@@ -2093,7 +2093,7 @@ static int ts27010_send_test_cmd(struct ts0710_con *ts0710)
 				retval = -EFAULT;
 		}
 	} else {
-		ts0710->be_testing = 1;	
+		ts0710->be_testing = 1;
 		d_buf = kmalloc(TEST_PATTERN_SIZE, GFP_KERNEL);
 		if (!d_buf) {
 			ts0710->test_errs = TEST_PATTERN_SIZE;
@@ -2140,7 +2140,7 @@ static int ts27010_send_test_cmd(struct ts0710_con *ts0710)
 			}
 		}
 EXIT:
-		ts0710->be_testing = 0;	
+		ts0710->be_testing = 0;
 		wake_up_interruptible(&ts0710->test_wait);
 
 		kfree(d_buf);
@@ -2153,14 +2153,14 @@ int ts27010_mux_uart_line_ioctl(unsigned int cmd, unsigned long arg, int line)
 	int dlci;
 	int ret;
 	struct ts0710_con *ts0710 = &ts0710_connection;
-	
+
 #ifdef TS27010_NET
-	
+
 	struct ts27010_netconfig nc;
 	int index;
 	mux_print(MSG_MSGDUMP, "ts0710_connection Address: %x \n", (unsigned int)&ts0710_connection);
 #endif
-	
+
 	FUNC_ENTER();
 
 	dlci = tty2dlci[line];
@@ -2169,9 +2169,9 @@ int ts27010_mux_uart_line_ioctl(unsigned int cmd, unsigned long arg, int line)
 		return -EINVAL;
 	}
 
-	
+
 	mux_print(MSG_DEBUG, "ioctl cmd: %x \n", cmd);
-	
+
 	switch (cmd) {
 	case TS0710MUX_IO_MSC_HANGUP:
 		ret = ts27010_send_msc(ts0710, EA | RTR | DV, MCC_CMD, dlci);
@@ -2203,7 +2203,7 @@ int ts27010_mux_uart_line_ioctl(unsigned int cmd, unsigned long arg, int line)
 				arg);
 		}
 
-	
+
 #ifdef TS27010_NET
 		break;
 	case TS27010IOC_ENABLE_NET:
@@ -2215,7 +2215,7 @@ int ts27010_mux_uart_line_ioctl(unsigned int cmd, unsigned long arg, int line)
 		ts0710->dlci[dlci].line_no = line;
 		mux_print(MSG_INFO, "net name: %s\n", nc.if_name);
 
-		
+
 		mutex_lock(&ts0710->dlci[dlci].lock);
 		index = ts27010_create_network(&ts0710->dlci[dlci], &nc);
 		mutex_unlock(&ts0710->dlci[dlci].lock);
@@ -2231,7 +2231,7 @@ int ts27010_mux_uart_line_ioctl(unsigned int cmd, unsigned long arg, int line)
 		mutex_unlock(&ts0710->dlci[dlci].lock);
 		return 0;
 #endif
-	
+
 	case TS0710MUX_IO_FORCE_CLOSE:
 		g_mux_force_close = 1;
 		mux_print(MSG_INFO, "force close on");
@@ -2361,11 +2361,11 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 	int i;
 	u8 c;
 	int state = RECV_STATE_IDLE;
-	int count; 
-	
+	int count;
+
 	int consume_idx = -1;
-	int data_idx = 0; 
-	int start_flag = 0; 
+	int data_idx = 0;
+	int start_flag = 0;
 
 	u8 addr = 0;
 	u8 control = 0;
@@ -2378,11 +2378,11 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 
 	FUNC_ENTER();
 
-	
+
 	count = ts27010_ringbuf_level(rbuf);
-	
+
 	mux_print(MSG_MSGDUMP, "Data length: %d byte\n", count);
-	
+
 
 #ifdef PROC_DEBUG_MUX_STAT
 	if (g_nStatUARTDrvIO)
@@ -2397,12 +2397,12 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 		switch (state) {
 		case RECV_STATE_IDLE:
 			if (c == TS0710_BASIC_FLAG) {
-				
+
 				mux_print(MSG_MSGDUMP,
 					"state transit IDLE->ADDR\n");
 				fcs = ts0710_crc_start();
 				state = RECV_STATE_ADDR;
-				
+
 				start_flag = i;
 			} else {
 				consume_idx = i;
@@ -2470,7 +2470,7 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 					"RECV_STATE_SN RX wrong data %02x, Drop msg.\n", c);
 				ts27010_mux_dump_ringbuf(rbuf, start_flag);
 				consume_idx = start_flag;
-				i = start_flag; 
+				i = start_flag;
 				state = RECV_STATE_IDLE;
 #ifdef PROC_DEBUG_MUX_STAT
 				if (g_nStatUARTDrvIO)
@@ -2489,7 +2489,7 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 #endif
 				mux_print(MSG_MSGDUMP,
 					"state transit: %02x SN->LEN\n", sn);
-#endif 
+#endif
 				state = RECV_STATE_LEN;
 			}
 			break;
@@ -2521,8 +2521,8 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 			fcs = ts0710_crc_calc(fcs, c);
 			len |= c << 7;
 			data_idx = i + 1;
-			
-			
+
+
 			if (len > DEF_TS0710_MTU) {
 				mux_print(MSG_ERROR, "wrong length: %d-%d-%d, "
 					"out of rbuf size or MTU, drop msg.\n",
@@ -2549,19 +2549,19 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 
 		case RECV_STATE_DATA:
 #ifdef TS27010_UART_RETRAN
-			
+
 			c = ts27010_ringbuf_peek(rbuf, i);
 			fcs = ts0710_crc_calc(fcs, c);
 			if (i == data_idx + len) {
-				
+
 				mux_print(MSG_MSGDUMP,
 					"recved FCS: %x, calced FCS: %x\n",
 					c, fcs);
 				state = RECV_STATE_END;
 			}
-#else 
+#else
 			if (i == data_idx + len) {
-				
+
 				c = ts27010_ringbuf_peek(rbuf, i);
 				fcs = ts0710_crc_calc(fcs, c);
 				mux_print(MSG_DEBUG,
@@ -2569,7 +2569,7 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 					c, fcs);
 				state = RECV_STATE_END;
 			}
-#endif 
+#endif
 			else if (i > data_idx + len) {
 				mux_print(MSG_ERROR, "overflow: %d, %d, %d\n",
 					i, data_idx, len);
@@ -2581,7 +2581,7 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 #ifdef TS27010_UART_RETRAN
 			crc_error = ts0710_crc_check(fcs);
 			if (c == TS0710_BASIC_FLAG && crc_error) {
-				
+
 				consume_idx = i;
 #ifndef MUX_UART_UT
 				ts27010_handle_retran_frame(
@@ -2597,11 +2597,11 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 					s_nMuxDataRecved += len + 7;
 				}
 #endif
-#else 
-			
+#else
+
 			if (c == TS0710_BASIC_FLAG) {
-				
-				
+
+
 				consume_idx = i;
 #ifndef MUX_USB_UT
 				ts27010_handle_frame(
@@ -2617,7 +2617,7 @@ void ts27010_mux_uart_recv(struct ts27010_ringbuf *rbuf)
 					s_nMuxDataRecved += len + 7;
 				}
 #endif
-#endif 
+#endif
 			} else {
 				mux_print(MSG_ERROR, "lost synchronization, "
 					"discard a frame flag 0x%x,%d,%d\n",c,i,count);
@@ -2651,7 +2651,7 @@ static int __init mux_init(void)
 
 	FUNC_ENTER();
 
-	
+
 	g_mux_uart_print_level = MSG_ERROR;
 #ifdef DUMP_FRAME
 	g_mux_uart_dump_frame = 0;
@@ -2664,7 +2664,7 @@ static int __init mux_init(void)
 	ts27010_mux_uart_mux_stat_clear();
 #endif
 
-	
+
 	ts0710_init(&ts0710_connection);
 
 #ifdef MUX_UART_UT
@@ -2678,21 +2678,21 @@ static int __init mux_init(void)
 		return -ENOMEM;
 	}
 
-	
+
 	err = ts27010_ldisc_uart_init();
 	if (err != 0) {
 		mux_print(MSG_ERROR, "error %d registering line disc.\n", err);
 		return err;
 	}
 
-	
+
 	err = ts27010_tty_uart_init();
 	if (err != 0) {
 		mux_print(MSG_ERROR, "error %d registering tty.\n", err);
 		goto err0;
 	}
 
-	
+
 	err = ts27010_uart_td_init();
 	if (err != 0) {
 		mux_print(MSG_ERROR, "error %d td init.\n", err);

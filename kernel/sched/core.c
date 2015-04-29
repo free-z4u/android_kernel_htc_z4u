@@ -2388,7 +2388,7 @@ void calc_global_load(unsigned long ticks)
 	 * Account one period with whatever state we found before
 	 * folding in the nohz state and ageing the entire idle period.
 	 *
-	 * This avoids loosing a sample when we go idle between 
+	 * This avoids loosing a sample when we go idle between
 	 * calc_load_account_active() (10 ticks ago) and now and thus
 	 * under-accounting.
 	 */
@@ -5187,7 +5187,7 @@ static void migrate_tasks(unsigned int dead_cpu)
 		BUG_ON(!next);
 		next->sched_class->put_prev_task(rq, next);
 
-		
+
 		dest_cpu = select_fallback_rq(dead_cpu, next);
 		raw_spin_unlock(&rq->lock);
 
@@ -5199,7 +5199,7 @@ static void migrate_tasks(unsigned int dead_cpu)
 	rq->stop = stop;
 }
 
-#endif 
+#endif
 
 #if defined(CONFIG_SCHED_DEBUG) && defined(CONFIG_SYSCTL)
 
@@ -5288,7 +5288,7 @@ sd_alloc_ctl_domain_table(struct sched_domain *sd)
 		sizeof(int), 0644, proc_dointvec_minmax);
 	set_table_entry(&table[11], "name", sd->name,
 		CORENAME_MAX_SIZE, 0444, proc_dostring);
-	
+
 
 	return table;
 }
@@ -5404,7 +5404,7 @@ migration_call(struct notifier_block *nfb, unsigned long action, void *hcpu)
 		break;
 
 	case CPU_ONLINE:
-		
+
 		raw_spin_lock_irqsave(&rq->lock, flags);
 		if (rq->rd) {
 			BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
@@ -5417,14 +5417,14 @@ migration_call(struct notifier_block *nfb, unsigned long action, void *hcpu)
 #ifdef CONFIG_HOTPLUG_CPU
 	case CPU_DYING:
 		sched_ttwu_pending();
-		
+
 		raw_spin_lock_irqsave(&rq->lock, flags);
 		if (rq->rd) {
 			BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
 			set_rq_offline(rq);
 		}
 		migrate_tasks(cpu);
-		BUG_ON(rq->nr_running != 1); 
+		BUG_ON(rq->nr_running != 1);
 		raw_spin_unlock_irqrestore(&rq->lock, flags);
 
 		migrate_nr_uninterruptible(rq);
@@ -5473,13 +5473,13 @@ static int __init migration_init(void)
 	void *cpu = (void *)(long)smp_processor_id();
 	int err;
 
-	
+
 	err = migration_call(&migration_notifier, CPU_UP_PREPARE, cpu);
 	BUG_ON(err == NOTIFY_BAD);
 	migration_call(&migration_notifier, CPU_ONLINE, cpu);
 	register_cpu_notifier(&migration_notifier);
 
-	
+
 	cpu_notifier(sched_cpu_active, CPU_PRI_SCHED_ACTIVE);
 	cpu_notifier(sched_cpu_inactive, CPU_PRI_SCHED_INACTIVE);
 
@@ -5490,7 +5490,7 @@ early_initcall(migration_init);
 
 #ifdef CONFIG_SMP
 
-static cpumask_var_t sched_domains_tmpmask; 
+static cpumask_var_t sched_domains_tmpmask;
 
 #ifdef CONFIG_SCHED_DEBUG
 
@@ -5608,16 +5608,16 @@ static void sched_domain_debug(struct sched_domain *sd, int cpu)
 			break;
 	}
 }
-#else 
+#else
 # define sched_domain_debug(sd, cpu) do { } while (0)
-#endif 
+#endif
 
 static int sd_degenerate(struct sched_domain *sd)
 {
 	if (cpumask_weight(sched_domain_span(sd)) == 1)
 		return 1;
 
-	
+
 	if (sd->flags & (SD_LOAD_BALANCE |
 			 SD_BALANCE_NEWIDLE |
 			 SD_BALANCE_FORK |
@@ -5628,7 +5628,7 @@ static int sd_degenerate(struct sched_domain *sd)
 			return 0;
 	}
 
-	
+
 	if (sd->flags & (SD_WAKE_AFFINE))
 		return 0;
 
@@ -5646,7 +5646,7 @@ sd_parent_degenerate(struct sched_domain *sd, struct sched_domain *parent)
 	if (!cpumask_equal(sched_domain_span(sd), sched_domain_span(parent)))
 		return 0;
 
-	
+
 	if (parent->groups == parent->groups->next) {
 		pflags &= ~(SD_LOAD_BALANCE |
 				SD_BALANCE_NEWIDLE |
@@ -5821,7 +5821,7 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
 	struct rq *rq = cpu_rq(cpu);
 	struct sched_domain *tmp;
 
-	
+
 	for (tmp = sd; tmp; ) {
 		struct sched_domain *parent = tmp->parent;
 		if (!parent)
@@ -5874,17 +5874,17 @@ static int find_next_best_node(int node, nodemask_t *used_nodes)
 	min_val = INT_MAX;
 
 	for (i = 0; i < nr_node_ids; i++) {
-		
+
 		n = (node + i) % nr_node_ids;
 
 		if (!nr_cpus_node(n))
 			continue;
 
-		
+
 		if (node_isset(n, *used_nodes))
 			continue;
 
-		
+
 		val = node_distance(node, n);
 
 		if (val < min_val) {
@@ -5930,7 +5930,7 @@ static const struct cpumask *cpu_allnodes_mask(int cpu)
 {
 	return cpu_possible_mask;
 }
-#endif 
+#endif
 
 static const struct cpumask *cpu_cpu_mask(int cpu)
 {
@@ -6040,7 +6040,7 @@ static int get_group(int cpu, struct sd_data *sdd, struct sched_group **sg)
 	if (sg) {
 		*sg = *per_cpu_ptr(sdd->sg, cpu);
 		(*sg)->sgp = *per_cpu_ptr(sdd->sgp, cpu);
-		atomic_set(&(*sg)->sgp->ref, 1); 
+		atomic_set(&(*sg)->sgp->ref, 1);
 	}
 
 	return cpu;
@@ -6180,10 +6180,10 @@ static void set_domain_attribute(struct sched_domain *sd,
 	} else
 		request = attr->relax_domain_level;
 	if (request < sd->level) {
-		
+
 		sd->flags &= ~(SD_BALANCE_WAKE|SD_BALANCE_NEWIDLE);
 	} else {
-		
+
 		sd->flags |= (SD_BALANCE_WAKE|SD_BALANCE_NEWIDLE);
 	}
 }
@@ -6197,11 +6197,11 @@ static void __free_domain_allocs(struct s_data *d, enum s_alloc what,
 	switch (what) {
 	case sa_rootdomain:
 		if (!atomic_read(&d->rd->refcount))
-			free_rootdomain(&d->rd->rcu); 
+			free_rootdomain(&d->rd->rcu);
 	case sa_sd:
-		free_percpu(d->sd); 
+		free_percpu(d->sd);
 	case sa_sd_storage:
-		__sdt_free(cpu_map); 
+		__sdt_free(cpu_map);
 	case sa_none:
 		break;
 	}
@@ -6382,7 +6382,7 @@ static int build_sched_domains(const struct cpumask *cpu_map,
 	if (alloc_state != sa_rootdomain)
 		goto error;
 
-	
+
 	for_each_cpu(i, cpu_map) {
 		struct sched_domain_topology_level *tl;
 
@@ -6401,7 +6401,7 @@ static int build_sched_domains(const struct cpumask *cpu_map,
 		*per_cpu_ptr(d.sd, i) = sd;
 	}
 
-	
+
 	for_each_cpu(i, cpu_map) {
 		for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
 			sd->span_weight = cpumask_weight(sched_domain_span(sd));
@@ -6415,7 +6415,7 @@ static int build_sched_domains(const struct cpumask *cpu_map,
 		}
 	}
 
-	
+
 	for (i = nr_cpumask_bits-1; i >= 0; i--) {
 		if (!cpumask_test_cpu(i, cpu_map))
 			continue;
@@ -6426,7 +6426,7 @@ static int build_sched_domains(const struct cpumask *cpu_map,
 		}
 	}
 
-	
+
 	rcu_read_lock();
 	for_each_cpu(i, cpu_map) {
 		sd = *per_cpu_ptr(d.sd, i);
@@ -6440,10 +6440,10 @@ error:
 	return ret;
 }
 
-static cpumask_var_t *doms_cur;	
-static int ndoms_cur;		
+static cpumask_var_t *doms_cur;
+static int ndoms_cur;
 static struct sched_domain_attr *dattr_cur;
-				
+
 
 static cpumask_var_t fallback_doms;
 
@@ -6509,7 +6509,7 @@ static int dattrs_equal(struct sched_domain_attr *cur, int idx_cur,
 {
 	struct sched_domain_attr tmp;
 
-	
+
 	if (!new && !cur)
 		return 1;
 
@@ -6527,22 +6527,22 @@ void partition_sched_domains(int ndoms_new, cpumask_var_t doms_new[],
 
 	mutex_lock(&sched_domains_mutex);
 
-	
+
 	unregister_sched_domain_sysctl();
 
-	
+
 	new_topology = arch_update_cpu_topology();
 
 	n = doms_new ? ndoms_new : 0;
 
-	
+
 	for (i = 0; i < ndoms_cur; i++) {
 		for (j = 0; j < n && !new_topology; j++) {
 			if (cpumask_equal(doms_cur[i], doms_new[j])
 			    && dattrs_equal(dattr_cur, i, dattr_new, j))
 				goto match1;
 		}
-		
+
 		detach_destroy_domains(doms_cur[i]);
 match1:
 		;
@@ -6555,23 +6555,23 @@ match1:
 		WARN_ON_ONCE(dattr_new);
 	}
 
-	
+
 	for (i = 0; i < ndoms_new; i++) {
 		for (j = 0; j < ndoms_cur && !new_topology; j++) {
 			if (cpumask_equal(doms_new[i], doms_cur[j])
 			    && dattrs_equal(dattr_new, i, dattr_cur, j))
 				goto match2;
 		}
-		
+
 		build_sched_domains(doms_new[i], dattr_new ? dattr_new + i : NULL);
 match2:
 		;
 	}
 
-	
+
 	if (doms_cur != &fallback_doms)
 		free_sched_domains(doms_cur, ndoms_cur);
-	kfree(dattr_cur);	
+	kfree(dattr_cur);
 	doms_cur = doms_new;
 	dattr_cur = dattr_new;
 	ndoms_cur = ndoms_new;
@@ -6586,7 +6586,7 @@ static void reinit_sched_domains(void)
 {
 	get_online_cpus();
 
-	
+
 	partition_sched_domains(0, NULL, NULL);
 
 	rebuild_sched_domains();
@@ -6664,7 +6664,7 @@ int __init sched_create_sysfs_power_savings_entries(struct device *dev)
 #endif
 	return err;
 }
-#endif 
+#endif
 
 static int cpuset_cpu_active(struct notifier_block *nfb, unsigned long action,
 			     void *hcpu)
@@ -6710,12 +6710,12 @@ void __init sched_init_smp(void)
 	hotcpu_notifier(cpuset_cpu_active, CPU_PRI_CPUSET_ACTIVE);
 	hotcpu_notifier(cpuset_cpu_inactive, CPU_PRI_CPUSET_INACTIVE);
 
-	
+
 	hotcpu_notifier(update_runtime, 0);
 
 	init_hrtick();
 
-	
+
 	if (set_cpus_allowed_ptr(current, non_isolated_cpus) < 0)
 		BUG();
 	sched_init_granularity();
@@ -6728,7 +6728,7 @@ void __init sched_init_smp(void)
 {
 	sched_init_granularity();
 }
-#endif 
+#endif
 
 const_debug unsigned int sysctl_timer_migration = 1;
 

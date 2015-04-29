@@ -75,18 +75,18 @@ static struct msm_rpc_endpoint *endpoint_current;
 
 static struct hs_pmic_current_threshold current_threshold_lut[] = {
 	{
-		.adc_max = 14909, 
-		.adc_min = 0, 
+		.adc_max = 14909,
+		.adc_min = 0,
 		.current_uA = 500,
 	},
 	{
-		.adc_max = 29825, 
-		.adc_min = 14910, 
+		.adc_max = 29825,
+		.adc_min = 14910,
 		.current_uA = 600,
 	},
 	{
-		.adc_max = 65535, 
-		.adc_min = 29826, 
+		.adc_max = 65535,
+		.adc_min = 29826,
 		.current_uA = 500,
 	},
 };
@@ -194,7 +194,7 @@ static int hs_pmic_remote_adc_pm8921(int *adc)
 	pm8xxx_adc_mpp_config_read(hi->pdata.adc_mpp, hi->pdata.adc_amux,
 				   &result);
 	*adc = (int) result.physical;
-	*adc = *adc / 1000; 
+	*adc = *adc / 1000;
 	HS_LOG("Remote ADC %d (0x%X)", *adc, *adc);
 
 	return 1;
@@ -386,7 +386,7 @@ static void button_irq_set_mode(int mode)
 	if (mode == HS_PMIC_BTN_IRQ_EDGE_MODE) {
 		set_irq_type(hi->pdata.key_irq, IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING);
 		HS_LOG("set irq as edge trigger mode.");
-	} else { 
+	} else {
 		value = gpio_get_value(hi->pdata.key_gpio);
 		set_irq_type(hi->pdata.key_irq, value ? IRQF_TRIGGER_LOW : IRQF_TRIGGER_HIGH);
 		HS_LOG("set irq as level trigger mode.");
@@ -613,7 +613,7 @@ int register_attributes(void)
 		hi->pmic_dev = NULL;
 	}
 
-	
+
 	ret = device_create_file(hi->pmic_dev, &dev_attr_pmic_headset_adc);
 	if (ret)
 		goto err_create_pmic_device_file;
@@ -632,13 +632,13 @@ static void register_adc_rpc_func(struct work_struct *work)
 	uint32_t vers = 0;
 
 	if (hi->pdata.driver_flag & DRIVER_HS_PMIC_RPC_KEY) {
-		
+
 		endpoint_adc = msm_rpc_connect(HS_RPC_CLIENT_PROG,
 					       HS_RPC_CLIENT_VERS, 0);
 		if (IS_ERR(endpoint_adc)) {
 			if(reg_adc_times<REGISTER_ADC_RPC_Retry_Times)
 				{
-					
+
 					schedule_delayed_work(&register_adc_rpc, REGISTER_ADC_RPC_Retry);
 					register_adc_rpc_ret=0;
 					reg_adc_times++;
@@ -657,7 +657,7 @@ static void register_adc_rpc_func(struct work_struct *work)
 	}
 
 	if (hi->pdata.driver_flag & DRIVER_HS_PMIC_DYNAMIC_THRESHOLD) {
-		
+
 		vers = HS_PMIC_RPC_CLIENT_VERS_3_1;
 		endpoint_current = msm_rpc_connect_compatible(
 				   HS_PMIC_RPC_CLIENT_PROG, vers, 0);

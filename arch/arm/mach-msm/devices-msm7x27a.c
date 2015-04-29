@@ -283,7 +283,7 @@ struct platform_device msm8625q_device_acpuclk = {
 };
 
 static struct acpuclk_pdata msm8625_acpuclk_pdata = {
-	
+
 	.max_speed_delta_khz = 604800,
 };
 
@@ -592,7 +592,7 @@ static struct msm_pm_cpr_ops msm8625_pm_cpr_ops = {
 
 void __init msm_pm_register_cpr_ops(void)
 {
-	
+
 	if ((cpu_is_msm8625() &&
 			SOCINFO_VERSION_MAJOR(socinfo_get_version()) >= 2)
 			|| cpu_is_msm8625q())
@@ -1011,7 +1011,7 @@ void __init msm8x25_kgsl_3d0_init(void)
 
 	if (cpu_is_msm8625()) {
 		if (SOCINFO_VERSION_MAJOR(socinfo_get_version()) >= 2)
-			
+
 			kgsl_3d0_pdata.pwrlevel[0].gpu_freq = 320000000;
 		else
 			kgsl_3d0_pdata.pwrlevel[0].gpu_freq = 300000000;
@@ -1069,7 +1069,7 @@ static struct led_info msm_kpbl_pdm_led_pdata = {
 
 struct platform_device led_pdev = {
 	.name	= "leds-msm-pdm",
-	
+
 	.id	= 0,
 	.num_resources	= ARRAY_SIZE(resources_led),
 	.resource	= resources_led,
@@ -1822,16 +1822,16 @@ static int __init msm8625_cpu_id(void)
 
 	raw_id = socinfo_get_raw_id();
 	switch (raw_id) {
-	
+
 	case 0x770:
 	case 0x771:
 	case 0x77C:
 	case 0x780:
-	case 0x785: 
+	case 0x785:
 	case 0x8D0:
 		cpu = MSM8625;
 		break;
-	
+
 	case 0x773:
 	case 0x774:
 	case 0x781:
@@ -1904,7 +1904,7 @@ msm_cpr_get_quot(uint32_t max_quot, uint32_t max_freq, uint32_t new_freq)
 {
 	uint32_t quot;
 
-	
+
 	quot = max_quot - (((max_freq - new_freq) * 7) / 10);
 
 	return quot;
@@ -1914,12 +1914,12 @@ static void msm_cpr_clk_enable(void)
 {
 	uint32_t reg_val;
 
-	
+
 	reg_val = readl_relaxed(A11S_TEST_BUS_SEL_ADDR);
 	reg_val |= RBCPR_CLK_MUX_SEL;
 	writel_relaxed(reg_val, A11S_TEST_BUS_SEL_ADDR);
 
-	
+
 	if(cpu_is_msm8625q()) {
 		writel_relaxed(0x1, RBCPR_SW_RESET_N_8625Q);
 	} else {
@@ -1929,7 +1929,7 @@ static void msm_cpr_clk_enable(void)
 
 static void msm_cpr_reset(void)
 {
-	
+
 	if(cpu_is_msm8625q()) {
 		writel_relaxed(0x0, RBCPR_SW_RESET_N_8625Q);
 	} else {
@@ -1997,7 +1997,7 @@ static void __init msm_cpr_init(void)
 
 	msm_cpr_mode_data.ring_osc = ring_osc;
 
-	
+
 	msm_cpr_mode_data.ring_osc_data[ring_osc].gcnt = 19;
 
 	msm_cpr_pdata.max_quot = cpr_info->turbo_quot * 10 + 600;
@@ -2222,7 +2222,7 @@ int __init msm7x2x_misc_init(void)
 	msm_clock_init(&msm7x27a_clock_init_data);
 	if (cpu_is_msm7x27aa() || cpu_is_msm7x25ab())
 		platform_device_register(&msm7x27aa_device_acpuclk);
-		
+
 	else if (cpu_is_msm8625q()) {
 		msm_acpuclock_init(1);
 		platform_device_register(&msm8625q_device_acpuclk);

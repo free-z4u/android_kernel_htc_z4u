@@ -53,8 +53,8 @@ static atomic_t PhoneOn_flag = ATOMIC_INIT(0);
 #define DEVICE_ACCESSORY_ATTR(_name, _mode, _show, _store) \
 struct device_attribute dev_attr_##_name = __ATTR(_name, _mode, _show, _store)
 
-#define	ASENSE_TARGET			0x02D0		
-#define TIME_LOG		50	
+#define	ASENSE_TARGET			0x02D0
+#define TIME_LOG		50
 static unsigned int numCount;
 bool sensors_on;
 static atomic_t m_flag;
@@ -153,7 +153,7 @@ static int BMA_Init(void)
 	range = (buffer[0] & 0xF0) | DEFAULT_RANGE;
 	bw = (buffer[1] & 0xE0) | DEFAULT_BW;
 
-	
+
 
 	buffer[1] = bw;
 	buffer[0] = bma250_BW_SEL_REG;
@@ -171,7 +171,7 @@ static int BMA_Init(void)
 		return -1;
 	}
 
-	
+
 	buffer[0] = bma250_RANGE_SEL_REG;
 	ret = BMA_I2C_RxData(buffer, 2);
 	if (ret < 0)
@@ -226,7 +226,7 @@ static int BMA_set_mode(unsigned char mode)
 		ret = BMA_I2C_RxData(buffer, 1);
 		if (ret < 0)
 			return -1;
-		
+
 
 		switch (mode) {
 		case bma250_MODE_NORMAL:
@@ -240,14 +240,14 @@ static int BMA_set_mode(unsigned char mode)
 			break;
 		}
 
-		
+
 		buffer[0] = bma250_MODE_CTRL_REG;
 		buffer[1] = data1;
 		ret = BMA_I2C_TxData(buffer, 2);
 	} else
 		ret = E_OUT_OF_RANGE;
 
-	
+
 
 	return ret;
 }
@@ -436,7 +436,7 @@ static void gsensor_poll_work_func(struct work_struct *work)
 			}
 		}
 		for (i = 0; i < 3; i++) {
-			
+
 			gval[i] = ((buffer[i] + offset_buf[i] - user_offset[i])
 					*ASENSE_TARGET) / 256;
 		}
@@ -445,7 +445,7 @@ static void gsensor_poll_work_func(struct work_struct *work)
 				m_Alayout[j][k] = pdata->layouts[3][j][k];
 		}
 
-		
+
 		g_acc[0] = (gval[0])*m_Alayout[0][0] +
 			   (gval[1])*m_Alayout[0][1] +
 			   (gval[2])*m_Alayout[0][2];
@@ -471,7 +471,7 @@ static void gsensor_poll_work_func(struct work_struct *work)
 			D("GSensor [%d,%d,%d]\n", gval[0], gval[1], gval[2]);
 	}
 
-	
+
 	mutex_unlock(&gsensor_lock);
 	schedule_delayed_work(&akm->input_work,
 			msecs_to_jiffies(akm->poll_interval));
@@ -546,15 +546,15 @@ int sensor_open(void)
 		akm8975_misc_data->poll_interval = 200;
 	}
 
-	#if 1  
+	#if 1
 	akm8975_misc_data->input_dev->absinfo[ABS_X].value = 0xffff;
 	akm8975_misc_data->input_dev->absinfo[ABS_Y].value = 0xffff;
 	akm8975_misc_data->input_dev->absinfo[ABS_Z].value = 0xffff;
-	#endif 
+	#endif
 
 	sensors_on = true;
 
-	#if 1  
+	#if 1
 	schedule_delayed_work(&akm8975_misc_data->input_work, 0);
 	#else
 	schedule_delayed_work(&akm8975_misc_data->input_work,
@@ -748,7 +748,7 @@ static void bma250_late_resume(struct early_suspend *handler)
 	BMA_set_mode(bma250_MODE_NORMAL);
 }
 
-#else 
+#else
 
 static int bma250_suspend(struct i2c_client *client, pm_message_t mesg)
 {
@@ -762,7 +762,7 @@ static int bma250_resume(struct i2c_client *client)
 	BMA_set_mode(bma250_MODE_NORMAL);
 	return 0;
 }
-#endif 
+#endif
 
 static ssize_t bma250_show(struct device *dev,
 				  struct device_attribute *attr, char *buf)
@@ -866,12 +866,12 @@ static int bma250_registerAttr(void)
 		goto err_create_accelerometer_device;
 	}
 
-	
+
 	ret = device_create_file(accelerometer_dev, &dev_attr_PhoneOnOffFlag);
 	if (ret)
 		goto err_create_accelerometer_device_file;
 
-	
+
 	ret = device_create_file(accelerometer_dev, &dev_attr_debug_en);
 	if (ret)
 		goto err_create_accelerometer_debug_en_device_file;
@@ -990,13 +990,13 @@ static int bma250_probe(struct i2c_client *client,
 	}
 
 	set_bit(EV_ABS, akm->input_dev->evbit);
-	
+
 	input_set_abs_params(akm->input_dev, ABS_X, -1872, 1872, 0, 0);
-	
+
 	input_set_abs_params(akm->input_dev, ABS_Y, -1872, 1872, 0, 0);
-	
+
 	input_set_abs_params(akm->input_dev, ABS_Z, -1872, 1872, 0, 0);
-	
+
 	input_set_abs_params(akm->input_dev, ABS_WHEEL, -32768, 3, 0, 0);
 
 	akm->input_dev->name = "compass";

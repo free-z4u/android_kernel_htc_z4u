@@ -34,7 +34,7 @@ Abstract:
 #include <mach/htc_battery.h>
 #include <asm/mach-types.h>
 #include "../../arch/arm/mach-msm/proc_comm.h"
-#include <linux/i2c.h>  					
+#include <linux/i2c.h>
 #include <linux/time.h>
 #include <linux/rtc.h>
 #include <linux/slab.h>
@@ -46,12 +46,12 @@ struct max17050_device_info {
 		struct device *dev;
 		struct device *w1_dev;
 		struct workqueue_struct *monitor_wqueue;
-		
+
 		struct delayed_work monitor_work;
-		
+
 		struct mutex lock;
-		
-		unsigned long update_time;	
+
+		unsigned long update_time;
 		struct alarm alarm;
 		struct wake_lock work_wake_lock;
 		spinlock_t spin_lock;
@@ -128,8 +128,8 @@ static void bounding_fullly_charged_level(int upperbd)
 	int current_level;
 	b_is_charge_off_by_bounding = FALSE;
 	if (upperbd <= 0)
-		return; 
-	lowerbd = upperbd - 5; 
+		return;
+	lowerbd = upperbd - 5;
 
 	if (lowerbd < 0)
 		lowerbd = 0;
@@ -160,13 +160,13 @@ static BOOL is_charge_off_by_bounding_condition(void)
 void calibrate_id_ohm(struct battery_type *battery)
 {
 	if (!poweralg.charging_source || !poweralg.charging_enable){
-		battery->id_ohm += 500; 		
+		battery->id_ohm += 500;
 	}
 	else if (poweralg.charging_source == 2 && battery->current_mA >= 400 && battery->id_ohm >= 1500){
-		battery->id_ohm -= 1500;		
+		battery->id_ohm -= 1500;
 	}
 	else if (battery->id_ohm >= 700){
-		battery->id_ohm -= 700; 		
+		battery->id_ohm -= 700;
 	}
 }
 
@@ -193,7 +193,7 @@ static BOOL is_charging_avaiable(void)
 #if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
 	set_smem_chg_avalible(chg_avalible);
 #endif
-	return chg_avalible; 
+	return chg_avalible;
 }
 
 static BOOL is_high_current_charging_avaialable(void)
@@ -235,13 +235,13 @@ static void update_next_charge_state(BOOL bFirstEntry)
 		printk(DRIVER_ZONE "Time changed, reassigned start time [%lld]\n",ktime_to_ms(poweralg.start_ktime));
 	}
 
-	for (i = 0; i < 25; i++) 
+	for (i = 0; i < 25; i++)
 	{
 		next_charge_state = poweralg.charge_state;
 
 		if (next_charge_state == poweralg.charge_state){
-			
-			
+
+
 			if (poweralg.charge_state == CHARGE_STATE_UNKNOWN ||
 				poweralg.charge_state == CHARGE_STATE_CHARGING ||
 				poweralg.charge_state == CHARGE_STATE_PENDING ||
@@ -257,8 +257,8 @@ static void update_next_charge_state(BOOL bFirstEntry)
 				}
 			}
 
-			
-			
+
+
 			if (poweralg.charge_state == CHARGE_STATE_UNKNOWN ||
 				poweralg.charge_state == CHARGE_STATE_DISCHARGE){
 				if (poweralg.is_cable_in){
@@ -267,9 +267,9 @@ static void update_next_charge_state(BOOL bFirstEntry)
 			}
 		}
 
-		
 
-		
+
+
 		if (next_charge_state == poweralg.charge_state){
 			switch (poweralg.charge_state){
 				case CHARGE_STATE_PREDICTION:
@@ -294,7 +294,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 					if (poweralg.battery.voltage_mV >= config.full_charging_mv &&
 						poweralg.battery.current_mA >= 0 &&
 						poweralg.battery.current_mA <= config.full_charging_ma){
-						
+
 						next_charge_state = CHARGE_STATE_FULL_WAIT_STABLE;
 					}
 					if (force_full_cnt > ONE_HOUR) {
@@ -304,7 +304,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 					}
 
 					if (poweralg.battery.current_mA <= 0){
-						
+
 						if (count_charge_over_load < 5)
 							count_charge_over_load++;
 						else
@@ -315,9 +315,9 @@ static void update_next_charge_state(BOOL bFirstEntry)
 						poweralg.is_charge_over_load = FALSE;
 					}
 
-					
-					
-					
+
+
+
 					if (!poweralg.protect_flags.is_fake_room_temp &&
 						get_cable_status() > CONNECT_TYPE_USB &&
 						config.software_charger_timeout_sec &&
@@ -328,9 +328,9 @@ static void update_next_charge_state(BOOL bFirstEntry)
 								poweralg.is_software_charger_timeout = TRUE;
 					}
 #if 0
-					
+
 					if (config.software_charger_timeout_sec && poweralg.is_china_ac_in){
-						
+
 						UINT32 end_time_ms = BAHW_MyGetMSecs();
 
 						if (end_time_ms - poweralg.state_start_time_ms >=
@@ -343,11 +343,11 @@ static void update_next_charge_state(BOOL bFirstEntry)
 						}
 					}
 #endif
-					
+
 #if 0
 					if (config.superchg_software_charger_timeout_sec && poweralg.is_super_ac
 						&& FALSE==poweralg.is_superchg_software_charger_timeout){
-						
+
 						UINT32 end_time_ms = BAHW_MyGetMSecs();
 
 						if (end_time_ms - poweralg.state_start_time_ms >=
@@ -377,7 +377,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 					break;
 				case CHARGE_STATE_FULL_WAIT_STABLE:
 					{
-						
+
 						if (poweralg.battery.voltage_mV >= config.full_charging_mv &&
 							poweralg.battery.current_mA >= 0 &&
 							poweralg.battery.current_mA <= config.full_charging_ma){
@@ -399,7 +399,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 					break;
 				case CHARGE_STATE_FULL_CHARGING:
 					{
-						
+
 						end_ktime = ktime_get_real();
 						force_full_cnt = 0;
 
@@ -438,7 +438,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 						poweralg.battery.voltage_mV < config.voltage_recharge_mv) ||
 						(poweralg.capacity_01p>= 0 &&
 						poweralg.capacity_01p <= config.capacity_recharge_p * 10)){
-						
+
 						next_charge_state = CHARGE_STATE_FULL_RECHARGING;
 						batt_full_eoc_stop = false;
 					} else {
@@ -458,7 +458,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 						else if (poweralg.battery.voltage_mV >= config.full_charging_mv &&
 							poweralg.battery.current_mA >= 0 &&
 							poweralg.battery.current_mA <= config.full_charging_ma){
-							
+
 							next_charge_state = CHARGE_STATE_FULL_CHARGING;
 						}
 					}
@@ -480,17 +480,17 @@ static void update_next_charge_state(BOOL bFirstEntry)
 
 					if (poweralg.is_cable_in &&
 						poweralg.protect_flags.is_charging_enable_available){
-						
+
 						next_charge_state = CHARGE_STATE_CHARGING;
 					}
 					break;
 			}
 		}
 
-		
-		
+
+
 		if (next_charge_state != poweralg.charge_state){
-			
+
 			switch (poweralg.charge_state){
 				case CHARGE_STATE_UNKNOWN:
 					if (poweralg.capacity_01p > 990)
@@ -512,7 +512,7 @@ static void update_next_charge_state(BOOL bFirstEntry)
 					break;
 			}
 
-			
+
 			poweralg.start_ktime = ktime_get_real();
 
 			switch (next_charge_state){
@@ -525,13 +525,13 @@ static void update_next_charge_state(BOOL bFirstEntry)
 				case CHARGE_STATE_CHARGING:
 					poweralg.is_need_toggle_charger = FALSE;
 					poweralg.last_charger_enable_toggled_time_ms = BAHW_MyGetMSecs();
-					poweralg.is_software_charger_timeout = FALSE;   
+					poweralg.is_software_charger_timeout = FALSE;
 					poweralg.is_charge_over_load = FALSE;
 					count_charge_over_load = 0;
 					poweralg.battery.charge_full_real_mAh = poweralg.battery.charge_full_design_mAh;
 					break;
 				case CHARGE_STATE_FULL_WAIT_STABLE:
-					
+
 					count_charging_full_condition = 0;
 					break;
 			}
@@ -558,7 +558,7 @@ static void __update_capacity(BOOL bFirstEntry)
 	if (poweralg.charge_state == CHARGE_STATE_PREDICTION ||
 		poweralg.charge_state == CHARGE_STATE_UNKNOWN) {
 		if (bFirstEntry) {
-			
+
 			poweralg.capacity_01p = 550;
 			printk(DRIVER_ZONE "fake percentage (%d) during prediction.\n",
 				poweralg.capacity_01p);
@@ -583,11 +583,11 @@ static void __update_capacity(BOOL bFirstEntry)
 			printk(DRIVER_ZONE "To force shutdown due to vbatt:%d < 3v\n",
 				poweralg.battery.voltage_mV);
 			poweralg.capacity_01p = 0;
-		
+
 		} else if (poweralg.battery.voltage_mV < 3100) {
 			printk(DRIVER_ZONE "To decrease 6 percent every 1min: due to vbatt:%d < 3.1v\n",
 				poweralg.battery.voltage_mV);
-			poweralg.capacity_01p -= 60; 
+			poweralg.capacity_01p -= 60;
 		} else if (config.smooth_chg_full_delay_min && g_is_smooth_cap_to_full) {
 			cap_01p = poweralg.capacity_01p;
 			poweralg.capacity_01p = poweralg.last_capacity_01p - 10;
@@ -616,7 +616,7 @@ int check_charging_function(void)
 	if (is_charging_avaiable()) {
 		chg_en_time_sec += delta_time_sec;
 		chg_kick_time_sec += delta_time_sec;
-		
+
 		if (poweralg.pdata->func_kick_charger_ic &&
 			600 <= chg_kick_time_sec) {
 			chg_kick_time_sec = 0;
@@ -645,8 +645,8 @@ int check_charging_function(void)
 		} else
 			max17050_charger_control(ENABLE_SLOW_CHG);
 
-		
-		
+
+
 		if ((config.min_taper_current_ma > 0)) {
 			if (is_set_min_taper_current())
 				max17050_charger_control(ENABLE_MIN_TAPER);
@@ -680,7 +680,7 @@ void update_htc_extension_state(void)
 
 BOOL do_power_alg(BOOL is_event_triggered)
 {
-	
+
 	static BOOL s_bFirstEntry = TRUE;
 	static INT32 s_level;
 	static ktime_t s_pre_time_ktime, pre_param_update_ktime;
@@ -688,7 +688,7 @@ BOOL do_power_alg(BOOL is_event_triggered)
 #if !HTC_BATTERY_MAX17050_DEBUG_ENABLE
 	BOOL show_debug_message = FALSE;
 #endif
-	
+
 
 	if (MSPERIOD(pre_param_update_ktime, now_time_ktime) > 0 || MSPERIOD(s_pre_time_ktime, now_time_ktime) > 0) {
 		printk(DRIVER_ZONE "Time changed, update to the current time [%lld]\n",ktime_to_ms(now_time_ktime));
@@ -706,7 +706,7 @@ BOOL do_power_alg(BOOL is_event_triggered)
 			poweralg.capacity_01p = max17050_get_batt_level(&poweralg.battery);
 	}
 
-	
+
 	if (poweralg.pdata->func_adjust_qrtable_by_temp
 		&& poweralg.pdata->batt_param->m_qrtable_tbl != NULL
 		&& (poweralg.battery.id_index > 0
@@ -718,14 +718,14 @@ BOOL do_power_alg(BOOL is_event_triggered)
 
 	update_next_charge_state(s_bFirstEntry);
 
-	
+
 	update_htc_extension_state();
 
 	if (poweralg.charge_state != CHARGE_STATE_UNKNOWN)
 		poweralg.is_gauge_driver_ready = TRUE;
 
 	if (s_bFirstEntry || MSPERIOD(now_time_ktime, s_pre_time_ktime) >= 10 * 1000 || !is_event_triggered){
-		
+
 		__update_capacity(s_bFirstEntry);
 
 		s_bFirstEntry = FALSE;
@@ -753,7 +753,7 @@ BOOL do_power_alg(BOOL is_event_triggered)
 
 	bounding_fullly_charged_level(config.full_level);
 
-	
+
 	if (config.superchg_software_charger_timeout_sec && poweralg.is_super_ac
 		&& FALSE==poweralg.is_superchg_software_charger_timeout){
 		super_chg_on_time_sec += delta_time_sec;
@@ -808,7 +808,7 @@ BOOL do_power_alg(BOOL is_event_triggered)
 			poweralg.charging_enable);
 #endif
 
-	
+
 	return TRUE;
 }
 
@@ -816,24 +816,24 @@ static void poweralg_config_init(struct poweralg_config_type *config)
 {
 	config->full_charging_mv = 4110;
 	config->full_charging_ma = 50;
-	config->full_pending_ma = 0;	
+	config->full_pending_ma = 0;
 	config->full_charging_timeout_sec = 60 * 60;
 	config->voltage_recharge_mv = 4150;
 	config->capacity_recharge_p = 0;
 	config->voltage_exit_full_mv = 4100;
-	config->min_taper_current_mv = 0; 
-	config->min_taper_current_ma = 0; 
+	config->min_taper_current_mv = 0;
+	config->min_taper_current_ma = 0;
 	config->wait_votlage_statble_sec = 1 * 60;
 	config->predict_timeout_sec = 10;
-	
+
 	config->polling_time_in_charging_sec = 30;
 	config->polling_time_in_discharging_sec = 30;
 
 	config->enable_full_calibration = TRUE;
 	config->enable_weight_percentage = TRUE;
-	config->software_charger_timeout_sec = 0;	
-	config->superchg_software_charger_timeout_sec = 0;	
-	config->charger_hw_safety_timer_watchdog_sec =  0;	
+	config->software_charger_timeout_sec = 0;
+	config->superchg_software_charger_timeout_sec = 0;
+	config->charger_hw_safety_timer_watchdog_sec =  0;
 
 	config->debug_disable_shutdown = FALSE;
 	config->debug_fake_room_temp = FALSE;
@@ -890,7 +890,7 @@ void power_alg_init(struct poweralg_config_type *debug_config)
 		poweralg_config_init(&config);
 
 #if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
-	 
+
 	if (poweralg.battery.id_index!=BATTERY_ID_TWS_SDI_1650MAH &&
 		poweralg.battery.id_index!=BATTERY_ID_FORMOSA_SANYO) {
 			config.full_charging_mv = 4110;
@@ -919,12 +919,12 @@ void power_alg_init(struct poweralg_config_type *debug_config)
 
 	battery_param_init(&poweralg.battery);
 
-	
+
 }
 
 void power_alg_preinit(void)
 {
-	
+
 }
 
 static BLOCKING_NOTIFIER_HEAD(max17050_notifier_list);
@@ -949,7 +949,7 @@ int max17050_blocking_notify(unsigned long val, void *v)
 			if (0 == poweralg.charging_enable)
 				return 0;
 		} else if (poweralg.battery.id_index != BATTERY_ID_UNKNOWN && poweralg.charge_state != CHARGE_STATE_PREDICTION) {
-			
+
 			if (g_first_update_charger_ctl == 1) {
 				printk(DRIVER_ZONE "first update charger control forcely.\n");
 				g_first_update_charger_ctl = 0;
@@ -963,7 +963,7 @@ int max17050_blocking_notify(unsigned long val, void *v)
 				poweralg.charging_enable = chg_ctl;
 		} else {
 			if (poweralg.charging_enable == DISABLE) {
-				
+
 			} else {
 				poweralg.charging_enable = DISABLE;
 				v = DISABLE;
@@ -977,19 +977,19 @@ int max17050_blocking_notify(unsigned long val, void *v)
 
 int max17050_get_battery_info(struct battery_info_reply *batt_info)
 {
-	batt_info->batt_id = poweralg.battery.id_index; 
-	batt_info->batt_vol = poweralg.battery.voltage_mV; 
-	batt_info->batt_temp = poweralg.battery.temp_01c; 
-	batt_info->batt_current = poweralg.battery.current_mA; 
-	batt_info->level = CEILING(poweralg.capacity_01p, 10); 
+	batt_info->batt_id = poweralg.battery.id_index;
+	batt_info->batt_vol = poweralg.battery.voltage_mV;
+	batt_info->batt_temp = poweralg.battery.temp_01c;
+	batt_info->batt_current = poweralg.battery.current_mA;
+	batt_info->level = CEILING(poweralg.capacity_01p, 10);
 	batt_info->charging_source = poweralg.charging_source;
 	batt_info->charging_enabled = poweralg.charging_enable;
 	batt_info->full_bat = poweralg.battery.charge_full_capacity_mAh;
 	batt_info->temp_fault = poweralg.protect_flags.is_temperature_fault;
 	batt_info->batt_state = poweralg.is_gauge_driver_ready;
-	
+
 	if (config.debug_fake_room_temp && (680 < poweralg.battery.temp_01c))
-		batt_info->batt_temp = 680; 
+		batt_info->batt_temp = 680;
 
 	return 0;
 }
@@ -1089,7 +1089,7 @@ static int cable_status_handler_func(struct notifier_block *nfb,
                 cable_type = smem_cable_type;
         }
 
-	
+
 	batt_full_eoc_stop = false;
 
 	if (cable_type == CONNECT_TYPE_NONE) {
@@ -1102,13 +1102,13 @@ static int cable_status_handler_func(struct notifier_block *nfb,
 		chg_en_time_sec = super_chg_on_time_sec = delta_time_sec = chg_kick_time_sec = 0;
 		force_update_batt_info = 1;
 		if (TRUE == poweralg.is_superchg_software_charger_timeout) {
-			poweralg.is_superchg_software_charger_timeout = FALSE;	
+			poweralg.is_superchg_software_charger_timeout = FALSE;
 			printk(DRIVER_ZONE "reset superchg software timer\n");
 		}
 		if (!is_charging_avaiable()) {
 			poweralg.protect_flags.is_charging_reverse_protect = FALSE;
 		}
-		
+
 		if (g_di_ptr) {
 			alarm_try_to_cancel(&g_di_ptr->alarm);
 			max17050_program_alarm(g_di_ptr, 0);
@@ -1125,7 +1125,7 @@ static int cable_status_handler_func(struct notifier_block *nfb,
 		chg_en_time_sec = super_chg_on_time_sec = delta_time_sec = chg_kick_time_sec = 0;
 		force_update_batt_info = 1;
 		force_set_chg = 1;
-		
+
 		if (g_di_ptr) {
 			alarm_try_to_cancel(&g_di_ptr->alarm);
 			max17050_program_alarm(g_di_ptr, 0);
@@ -1142,7 +1142,7 @@ static int cable_status_handler_func(struct notifier_block *nfb,
 		chg_en_time_sec = super_chg_on_time_sec = delta_time_sec = chg_kick_time_sec = 0;
 		force_update_batt_info = 1;
 		force_set_chg = 1;
-		
+
 		if (g_di_ptr) {
 			alarm_try_to_cancel(&g_di_ptr->alarm);
 			max17050_program_alarm(g_di_ptr, 0);
@@ -1158,7 +1158,7 @@ static int cable_status_handler_func(struct notifier_block *nfb,
 		chg_en_time_sec = super_chg_on_time_sec = delta_time_sec = chg_kick_time_sec = 0;
 		force_update_batt_info = 1;
 		force_set_chg = 1;
-		
+
 		if (g_di_ptr) {
 			alarm_try_to_cancel(&g_di_ptr->alarm);
 			max17050_program_alarm(g_di_ptr, 0);
@@ -1207,7 +1207,7 @@ void max17050_charger_control(int type)
 
 	switch (charge_type){
 		case DISABLE:
-			
+
 			max17050_blocking_notify(MAX17050_CHARGING_CONTROL, &charge_type);
 			break;
 		case ENABLE_SLOW_CHG:
@@ -1235,7 +1235,7 @@ void max17050_charger_control(int type)
 static void max17050_battery_work(struct work_struct *work)
 {
 	struct max17050_device_info *di = container_of(work,
-				struct max17050_device_info, monitor_work.work); 
+				struct max17050_device_info, monitor_work.work);
 	static int alarm_delta_ready = 0;
 	unsigned long flags;
 
@@ -1252,7 +1252,7 @@ static void max17050_battery_work(struct work_struct *work)
 	get_state_check_interval_min_sec();
 	di->last_poll = alarm_get_elapsed_realtime();
 
-	
+
 	spin_lock_irqsave(&di->spin_lock, flags);
 
 	wake_unlock(&di->work_wake_lock);
@@ -1267,14 +1267,14 @@ static void max17050_battery_alarm(struct alarm *alarm)
 	struct max17050_device_info *di = container_of(alarm, struct max17050_device_info, alarm);
 	wake_lock(&di->work_wake_lock);
 	queue_delayed_work(di->monitor_wqueue, &di->monitor_work, 0);
-	
+
 }
 
 static int max17050_battery_probe(struct platform_device *pdev)
 {
 	int rc;
 	struct max17050_device_info *di;
-	max17050_platform_data *pdata = pdev->dev.platform_data; 
+	max17050_platform_data *pdata = pdev->dev.platform_data;
 	poweralg.pdata = pdev->dev.platform_data;
 	poweralg.battery.thermal_id = pdata->func_get_thermal_id();
 	if ((pdata->func_get_battery_id != NULL) && (0 < pdata->func_get_battery_id())) {
@@ -1306,7 +1306,7 @@ static int max17050_battery_probe(struct platform_device *pdev)
 
 	power_alg_preinit();
 	power_alg_init(&debug_config);
-	
+
 	poweralg.protect_flags.func_update_charging_protect_flag = pdata->func_update_charging_protect_flag;
 
 	di = kzalloc(sizeof(*di), GFP_KERNEL);
@@ -1320,11 +1320,11 @@ static int max17050_battery_probe(struct platform_device *pdev)
 
 	di->dev = &pdev->dev;
 
-	
+
 	INIT_DELAYED_WORK(&di->monitor_work, max17050_battery_work);
 	di->monitor_wqueue = create_singlethread_workqueue(dev_name(&pdev->dev));
 
-	
+
 	di->last_poll = alarm_get_elapsed_realtime();
 	spin_lock_init(&di->spin_lock);
 
@@ -1340,13 +1340,13 @@ static int max17050_battery_probe(struct platform_device *pdev)
 	if (alarm_delta_is_ready()) {
 		printk(DRIVER_ZONE "alarm delta is ready\n");
 		queue_delayed_work(di->monitor_wqueue, &di->monitor_work, 0);
-		
+
 	} else {
 		printk(DRIVER_ZONE "[probe] alarm delta isn't ready so delay 500ms\n");
 		queue_delayed_work(di->monitor_wqueue, &di->monitor_work, msecs_to_jiffies(500));
 	}
 
-	g_di_ptr = di; 
+	g_di_ptr = di;
 	return 0;
 
 	fail_workqueue : fail_register : kfree(di);
@@ -1383,7 +1383,7 @@ static int max17050_battery_remove(struct platform_device *pdev)
 	struct max17050_device_info *di = platform_get_drvdata(pdev);
 
 	cancel_delayed_work_sync(&di->monitor_work);
-	
+
 	destroy_workqueue(di->monitor_wqueue);
 
 	return 0;
@@ -1410,7 +1410,7 @@ static int max17050_suspend(struct device *dev)
 		}
 		spin_unlock_irqrestore(&di->spin_lock, flags);
 	}
-	
+
 	return 0;
 }
 static void max17050_resume(struct device *dev)
@@ -1420,8 +1420,8 @@ static void max17050_resume(struct device *dev)
 	unsigned long flags;
 	ktime_t now_time_ktime;
 
-	
-	
+
+
 	if (di->slow_poll){
 		spin_lock_irqsave(&di->spin_lock, flags);
 		if ((MSPERIOD(ktime_get_real(), last_poll_ktime) >=
@@ -1479,7 +1479,7 @@ static int __init max17050_battery_init(void)
 		return ret;
 	}
 
-	
+
 	return platform_driver_register(&max17050_battery_driver);
 }
 

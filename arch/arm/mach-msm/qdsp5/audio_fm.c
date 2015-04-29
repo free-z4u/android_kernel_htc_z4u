@@ -37,17 +37,17 @@ struct audio {
 	int running;
 	struct audmgr audmgr;
 	uint16_t volume;
-	enum msm_aud_decoder_state dec_state; 
+	enum msm_aud_decoder_state dec_state;
 	wait_queue_head_t wait;
-	uint8_t out_needed; 
+	uint8_t out_needed;
 	int dec_id;
-	int wflush; 
+	int wflush;
 	wait_queue_head_t write_wait;
-	int teos; 
-	
+	int teos;
+
 	uint32_t out_sample_rate;
 	uint32_t out_channel_mode;
-	uint32_t out_bits; 
+	uint32_t out_bits;
 	struct msm_adsp_module *audplay;
 	const char *module_name;
 	unsigned queue_id;
@@ -118,7 +118,7 @@ static void audio_dsp_event(void *private, unsigned id, uint16_t *msg)
 						MSM_AUD_DECODER_STATE_FAILURE;
 					wake_up(&audio->wait);
 				} else if (reason == AUDPP_MSG_REASON_NONE) {
-					
+
 					audio->dec_state =
 						MSM_AUD_DECODER_STATE_CLOSE;
 					wake_up(&audio->wait);
@@ -193,7 +193,7 @@ static int audio_enable(struct audio *audio)
 	cfg.rx_rate = RPC_AUD_DEF_SAMPLE_RATE_48000;
 	cfg.def_method = RPC_AUD_DEF_METHOD_HOST_PCM;
 	cfg.codec = RPC_AUD_DEF_CODEC_PCM;
-	cfg.snd_method = RPC_SND_METHOD_MIDI; 
+	cfg.snd_method = RPC_SND_METHOD_MIDI;
 	rc = audmgr_enable(&audio->audmgr, &cfg);
 	if (rc < 0)
 		return rc;
@@ -215,7 +215,7 @@ static int audio_disable(struct audio *audio)
 	if (audio->enabled) {
 		audio->enabled = 0;
 		audmgr_disable(&audio->audmgr);
-		audpp_disable(audio->dec_id, audio); 
+		audpp_disable(audio->dec_id, audio);
 	}
 	return 0;
 }
@@ -257,10 +257,10 @@ static int audio_release(struct inode *inode, struct file *file)
 	audio->running = 0;
 	audio->enabled = 0;
 	audio->opened = 0;
-	
+
 	if (audio->dec_id != -1)
 		audpp_adec_free(audio->dec_id);
-	
+
 	mutex_unlock(&audio->lock);
 	return 0;
 }
@@ -268,7 +268,7 @@ static int audio_release(struct inode *inode, struct file *file)
 static int audio_open(struct inode *inode, struct file *file)
 {
 	struct audio *audio = &fm_audio;
-	int rc = 0, dec_attrb, dec_id = 0; 
+	int rc = 0, dec_attrb, dec_id = 0;
 
 	MM_DBG("\n"); /* Macro prints the file name and function */
 	mutex_lock(&audio->lock);
@@ -279,9 +279,9 @@ static int audio_open(struct inode *inode, struct file *file)
 		goto done;
 	}
 
-	
+
 	dec_attrb = AUDDEC_DEC_PCM;
-	dec_attrb |= MSM_AUD_MODE_NONTUNNEL;  
+	dec_attrb |= MSM_AUD_MODE_NONTUNNEL;
 
 	dec_id = audpp_adec_alloc(dec_attrb, &audio->module_name,
 			&audio->queue_id);
@@ -291,7 +291,7 @@ static int audio_open(struct inode *inode, struct file *file)
 	} else {
 		audio->dec_id = dec_id & MSM_AUD_DECODER_MASK;
 	}
-	
+
 
 	rc = audmgr_open(&audio->audmgr);
 
@@ -300,10 +300,10 @@ static int audio_open(struct inode *inode, struct file *file)
 		goto done;
 	}
 
-	
+
 	init_waitqueue_head(&audio->write_wait);
 	init_waitqueue_head(&audio->wait);
-	
+
 	file->private_data = audio;
 	audio->opened = 1;
 

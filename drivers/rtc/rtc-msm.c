@@ -63,15 +63,15 @@
 
 enum rtc_rpc_err {
 	ERR_NONE,
-	ERR_CLIENT_ID_PTR,		
-	ERR_CLIENT_TYPE,		
-	ERR_CLIENT_ID,			
-	ERR_TASK_NOT_READY,		
-	ERR_INVALID_PROCESSOR,		
-	ERR_UNSUPPORTED,		
-	ERR_GENERAL,			
-	ERR_RPC,			
-	ERR_ALREADY_REG,		
+	ERR_CLIENT_ID_PTR,
+	ERR_CLIENT_TYPE,
+	ERR_CLIENT_ID,
+	ERR_TASK_NOT_READY,
+	ERR_INVALID_PROCESSOR,
+	ERR_UNSUPPORTED,
+	ERR_GENERAL,
+	ERR_RPC,
+	ERR_ALREADY_REG,
 	ERR_MAX
 };
 
@@ -277,9 +277,9 @@ static int msmrtc_tod_proc_result(struct msm_rpc_client *client, void *buff,
 			rtc_args->tm->tm_min, rtc_args->tm->tm_sec,
 			rtc_args->tm->tm_wday);
 
-		
+
 		rtc_args->tm->tm_year -= 1900;
-		
+
 		rtc_args->tm->tm_mon--;
 
 		if (rtc_valid_tm(rtc_args->tm) < 0) {
@@ -466,7 +466,7 @@ static void process_cb_request(void *buffer)
 	rtc_cb->cb_info_ptr = be32_to_cpu(rtc_cb->cb_info_ptr);
 
 	if (rtc_cb->event == EVENT_TOD_CHANGE) {
-		
+
 		rtc_cb->cb_info_data.tod_update.tick =
 			be32_to_cpu(rtc_cb->cb_info_data.tod_update.tick);
 		rtc_cb->cb_info_data.tod_update.stamp =
@@ -483,7 +483,7 @@ static void process_cb_request(void *buffer)
 		msmrtc_updateatsuspend(&ts);
 		rtc_hctosys();
 		getnstimeofday(&tv);
-		
+
 		alarm_update_timedelta(ts, tv);
 
 	} else
@@ -524,7 +524,7 @@ static int msmrtc_rpc_proc_args(struct msm_rpc_client *client, void *buff,
 	struct msm_rtc *rtc_pdata = data;
 
 	if (rtc_pdata->proc == RTC_CLIENT_INIT_PROC) {
-		
+
 		struct rtc_client_init_req {
 			enum client_type client;
 			uint32_t client_id_ptr;
@@ -541,7 +541,7 @@ static int msmrtc_rpc_proc_args(struct msm_rpc_client *client, void *buff,
 		return sizeof(*req_1);
 
 	} else if (rtc_pdata->proc == RTC_REQUEST_CB_PROC) {
-		
+
 		struct rtc_event_req {
 			u8 client_id;
 			uint32_t rtc_cb_id;
@@ -563,7 +563,7 @@ static int msmrtc_rpc_proc_result(struct msm_rpc_client *client, void *buff,
 	struct msm_rtc *rtc_pdata = data;
 
 	if (rtc_pdata->proc == RTC_CLIENT_INIT_PROC) {
-		
+
 		uint32_t client_id_ptr;
 		result = be32_to_cpu(*(uint32_t *)buff);
 		buff += sizeof(uint32_t);
@@ -578,7 +578,7 @@ static int msmrtc_rpc_proc_result(struct msm_rpc_client *client, void *buff,
 			return -EINVAL;
 		}
 	} else if (rtc_pdata->proc == RTC_REQUEST_CB_PROC) {
-		
+
 		result = be32_to_cpu(*(uint32_t *)buff);
 	}
 
@@ -597,7 +597,7 @@ static int msmrtc_setup_cb(struct msm_rtc *rtc_pdata)
 {
 	int rc;
 
-	
+
 	rtc_pdata->proc = RTC_CLIENT_INIT_PROC;
 	rc = msm_rpc_client_req(rtc_pdata->rpc_client, RTC_CLIENT_INIT_PROC,
 				msmrtc_rpc_proc_args, rtc_pdata,
@@ -608,7 +608,7 @@ static int msmrtc_setup_cb(struct msm_rtc *rtc_pdata)
 		return rc;
 	}
 
-	
+
 	rtc_pdata->proc = RTC_REQUEST_CB_PROC;
 	rc = msm_rpc_client_req(rtc_pdata->rpc_client, RTC_REQUEST_CB_PROC,
 				msmrtc_rpc_proc_args, rtc_pdata,

@@ -1659,7 +1659,7 @@ static int __cpuinit init_timers_cpu(int cpu)
 			if (!base)
 				return -ENOMEM;
 
-			
+
 			if (tbase_get_deferrable(base)) {
 				WARN_ON(1);
 				kfree(base);
@@ -1738,7 +1738,7 @@ static void __cpuinit migrate_timers(int cpu)
 	spin_unlock_irq(&new_base->lock);
 	put_cpu_var(tvec_bases);
 }
-#endif 
+#endif
 
 static int __cpuinit timer_cpu_notify(struct notifier_block *self,
 				unsigned long action, void *hcpu)

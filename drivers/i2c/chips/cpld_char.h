@@ -7,4 +7,4 @@ extern uint8_t stress_mode;
 int cpld_char_init(void);
 void cpld_char_exit(void);
 
-#endif 
+#endif

@@ -50,7 +50,7 @@ extern u8 modem_fatal;
 
 #include <mach/board_htc.h>
 static int uart2_handshaking_mask = 0;
-#define MODULE_NAME "[GSM_RADIO]" 
+#define MODULE_NAME "[GSM_RADIO]"
 #define pr_uartdm_debug(x...) do {                             \
                 if (uart2_handshaking_mask) \
                         printk(KERN_DEBUG MODULE_NAME " "x);            \
@@ -150,7 +150,7 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
 		return 1;
 
 	if (!state->xmit.buf) {
-		
+
 		page = get_zeroed_page(GFP_KERNEL);
 		if (!page)
 			return -ENOMEM;
@@ -236,7 +236,7 @@ uart_update_timeout(struct uart_port *port, unsigned int cflag,
 {
 	unsigned int bits;
 
-	
+
 	switch (cflag & CSIZE) {
 	case CS5:
 		bits = 7;
@@ -249,7 +249,7 @@ uart_update_timeout(struct uart_port *port, unsigned int cflag,
 		break;
 	default:
 		bits = 10;
-		break; 
+		break;
 	}
 
 	if (cflag & CSTOPB)
@@ -314,7 +314,7 @@ uart_get_baud_rate(struct uart_port *port, struct ktermios *termios,
 							max - 1, max - 1);
 		}
 	}
-	
+
 	WARN_ON(1);
 	return 0;
 }
@@ -413,7 +413,7 @@ static int uart_write(struct tty_struct *tty,
 	circ = &state->xmit;
 
 #ifdef CONFIG_IMC_UART2DM_HANDSHAKE
-	
+
 	if (!strcmp(tty->name,"ttyHS1") && !modem_fatal) {
 		if (!radio_state) {
 			printk("[GSM_RADIO] %s %s radio is off \n",__func__, tty->name);
@@ -758,7 +758,7 @@ static int uart_set_info(struct tty_struct *tty, struct uart_state *state,
 		if (uport->type != PORT_UNKNOWN) {
 			retval = uport->ops->request_port(uport);
 		} else {
-			
+
 			retval = 0;
 		}
 
@@ -774,7 +774,7 @@ static int uart_set_info(struct tty_struct *tty, struct uart_state *state,
 				uport->type = PORT_UNKNOWN;
 
 			retval = -EBUSY;
-			
+
 			goto exit;
 		}
 	}
@@ -948,7 +948,7 @@ uart_wait_modem_status(struct uart_state *state, unsigned long arg)
 
 		schedule();
 
-		
+
 		if (signal_pending(current)) {
 			ret = -ERESTARTSYS;
 			break;
@@ -1012,8 +1012,8 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd,
 		ret = uart_do_autoconfig(tty, state);
 		break;
 
-	case TIOCSERGWILD: 
-	case TIOCSERSWILD: 
+	case TIOCSERGWILD:
+	case TIOCSERSWILD:
 		ret = 0;
 		break;
 	}
@@ -1043,7 +1043,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd,
 	}
 
 	switch (cmd) {
-	case TIOCSERGETLSR: 
+	case TIOCSERGETLSR:
 		ret = uart_get_lsr_info(tty, state, uarg);
 		break;
 
@@ -1087,10 +1087,10 @@ static void uart_set_termios(struct tty_struct *tty,
 
 	uart_change_speed(tty, state, old_termios);
 
-	
+
 	if ((old_termios->c_cflag & CBAUD) && !(cflag & CBAUD))
 		uart_clear_mctrl(state->uart_port, TIOCM_RTS | TIOCM_DTR);
-	
+
 	else if (!(old_termios->c_cflag & CBAUD) && (cflag & CBAUD)) {
 		unsigned int mask = TIOCM_DTR;
 		if (!(cflag & CRTSCTS) ||
@@ -1099,14 +1099,14 @@ static void uart_set_termios(struct tty_struct *tty,
 		uart_set_mctrl(state->uart_port, mask);
 	}
 
-	
+
 	if ((old_termios->c_cflag & CRTSCTS) && !(cflag & CRTSCTS)) {
 		spin_lock_irqsave(&state->uart_port->lock, flags);
 		tty->hw_stopped = 0;
 		__uart_start(tty);
 		spin_unlock_irqrestore(&state->uart_port->lock, flags);
 	}
-	
+
 	else if (!(old_termios->c_cflag & CRTSCTS) && (cflag & CRTSCTS)) {
 		spin_lock_irqsave(&state->uart_port->lock, flags);
 		if (!(state->uart_port->ops->get_mctrl(state->uart_port) & TIOCM_CTS)) {
@@ -1539,7 +1539,7 @@ uart_set_options(struct uart_port *port, struct console *co,
 	switch (parity) {
 	case 'o': case 'O':
 		termios.c_cflag |= PARODD;
-		
+
 	case 'e': case 'E':
 		termios.c_cflag |= PARENB;
 		break;
@@ -1557,7 +1557,7 @@ uart_set_options(struct uart_port *port, struct console *co,
 	return 0;
 }
 EXPORT_SYMBOL_GPL(uart_set_options);
-#endif 
+#endif
 
 static void uart_change_pm(struct uart_state *state, int pm_state)
 {
@@ -1582,7 +1582,7 @@ static int serial_match_port(struct device *dev, void *data)
 	dev_t devt = MKDEV(tty_drv->major, tty_drv->minor_start) +
 		match->port->line;
 
-	return dev->devt == devt; 
+	return dev->devt == devt;
 }
 
 int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
@@ -1688,7 +1688,7 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
 		ops->set_mctrl(uport, 0);
 		spin_unlock_irq(&uport->lock);
 		if (console_suspend_enabled || !uart_console(uport)) {
-			
+
 			struct tty_struct *tty = port->tty;
 			ret = ops->startup(uport);
 			if (ret == 0) {
@@ -1770,7 +1770,7 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
 
 		uart_report_port(drv, port);
 
-		
+
 		uart_change_pm(state, 0);
 
 		spin_lock_irqsave(&port->lock, flags);
@@ -1915,7 +1915,7 @@ int uart_register_driver(struct uart_driver *drv)
 
 		tty_port_init(port);
 		port->ops = &uart_port_ops;
-		port->close_delay     = HZ / 2;	
+		port->close_delay     = HZ / 2;
 		port->closing_wait    = 30 * HZ;
 	}
 

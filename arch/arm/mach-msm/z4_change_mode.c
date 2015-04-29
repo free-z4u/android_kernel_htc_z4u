@@ -34,12 +34,12 @@ static int set_value(int setmode)
 
 	if(ret == REGULATOR_MODE_FAST)
 		pr_info("Z4 mode is PWM.\n");
-	else if(ret == REGULATOR_MODE_NORMAL)	
+	else if(ret == REGULATOR_MODE_NORMAL)
 		pr_info("Z4 mode is PFM.\n");
 	else
 		pr_info("Z4 mode is unknown.\n");
 
-	if(rild_value == 1){ 
+	if(rild_value == 1){
 		if(setmode == 2){
 			pr_info("Z4 mode: set back to PFM\n");
 			rild_value = 2;
@@ -69,7 +69,7 @@ static int set_value(int setmode)
 
 	if(ret == REGULATOR_MODE_FAST)
 		pr_info("Z4 mode: PWM.\n");
-	else if(ret == REGULATOR_MODE_NORMAL)	
+	else if(ret == REGULATOR_MODE_NORMAL)
 		pr_info("Z4 mode: PFM.\n");
 	else
 		pr_info("[Z4 mode: unknown.\n");
@@ -111,13 +111,13 @@ static ssize_t z4mode_change_write(struct device *dev,
 				struct device_attribute *attr,
 				const char *buf, size_t count)
 {
-	if (!strncmp(buf, "1", 1)){ 
+	if (!strncmp(buf, "1", 1)){
 		set_value(1);
-	}else if (!strncmp(buf, "2", 1)){ 
+	}else if (!strncmp(buf, "2", 1)){
 		set_value(2);
-	}else if (!strncmp(buf, "3", 1)){ 
+	}else if (!strncmp(buf, "3", 1)){
 		set_value(3);
-	}else if (!strncmp(buf, "4", 1)){ 
+	}else if (!strncmp(buf, "4", 1)){
 		set_value(4);
 	}
 	return count;

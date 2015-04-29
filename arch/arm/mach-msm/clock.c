@@ -206,7 +206,7 @@ int clk_enable(struct clk *clk)
 #ifdef CONFIG_HTC_ACPU_DEBUG
 		if (strncmp(clk->dbg_name, "pll", 3)) {
 			unsigned int clk_enable_doing = 1;
-			
+
 			msm_proc_comm( PCOM_BACKUP_CLK_ENABLE, &clk_enable_doing, (unsigned*)clk->dbg_name);
 		}
 #endif
@@ -216,7 +216,7 @@ int clk_enable(struct clk *clk)
 #ifdef CONFIG_HTC_ACPU_DEBUG
 		if (strncmp(clk->dbg_name, "pll", 3)) {
 			unsigned int clk_enable_done = 0;
-			
+
 			msm_proc_comm( PCOM_BACKUP_CLK_ENABLE, &clk_enable_done, (unsigned*)clk->dbg_name);
 		}
 #endif
@@ -260,7 +260,7 @@ void clk_disable(struct clk *clk)
 #ifdef CONFIG_HTC_ACPU_DEBUG
 		if (strncmp(clk->dbg_name, "pll", 3)) {
 			unsigned int clk_disable_doing = 1;
-			
+
 			msm_proc_comm( PCOM_BACKUP_CLK_DISABLE, &clk_disable_doing, (unsigned*)clk->dbg_name);
 		}
 #endif
@@ -270,7 +270,7 @@ void clk_disable(struct clk *clk)
 #ifdef CONFIG_HTC_ACPU_DEBUG
 		if (strncmp(clk->dbg_name, "pll", 3)) {
 			unsigned int clk_disable_done = 0;
-			
+
 			msm_proc_comm( PCOM_BACKUP_CLK_DISABLE, &clk_disable_done, (unsigned*)clk->dbg_name);
 		}
 #endif
@@ -352,21 +352,21 @@ int clk_set_rate(struct clk *clk, unsigned long rate)
 
 	spin_lock_irqsave(&clk->lock, flags);
 
-	
+
 	if (clk->rate == rate)
 		goto out;
 
 	trace_clock_set_rate(clk->dbg_name, rate, smp_processor_id());
 	if (clk->count) {
 		start_rate = clk->rate;
-		
+
 		rc = vote_rate_vdd(clk, rate);
 		if (rc)
 			goto err_vote_vdd;
 		rc = clk->ops->set_rate(clk, rate);
 		if (rc)
 			goto err_set_rate;
-		
+
 		unvote_rate_vdd(clk, start_rate);
 	} else {
 		rc = clk->ops->set_rate(clk, rate);
@@ -454,7 +454,7 @@ static enum handoff __init __handoff_clk(struct clk *clk)
 	if (clk == NULL || clk->count)
 		return HANDOFF_ENABLED_CLK;
 
-	
+
 	if (!clk->ops->handoff || (clk->flags & CLKFLAG_SKIP_HANDOFF))
 		return HANDOFF_DISABLED_CLK;
 

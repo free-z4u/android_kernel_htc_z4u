@@ -142,18 +142,18 @@ struct msm_hsusb_gadget_platform_data {
 };
 
 struct msm_hsusb_platform_data {
-	
+
 	void (*phy_reset)(void);
 	int self_powered;
 
 	void (*phy_shutdown)(void);
 
-	
+
 	void (*hw_reset)(bool enable);
 
-	
+
 	void (*usb_connected)(int);
-	
+
 	void (*usb_uart_switch)(int);
 	void (*config_usb_id_gpios)(bool enable);
 	void (*config_batid_usbid_sel_gpios)(bool enable);
@@ -161,16 +161,16 @@ struct msm_hsusb_platform_data {
 	void (*serial_debug_gpios)(int);
 	int (*china_ac_detect)(void);
 	void (*disable_usb_charger)(void);
-	
+
 	int *phy_init_seq;
 	void (*change_phy_voltage)(int);
 	int (*ldo_init) (int init);
 	int (*ldo_enable) (int enable);
 	int (*rpc_connect)(int);
-	
+
 	void (*usb_mhl_switch)(bool);
 #ifdef CONFIG_USB_FUNCTION
-	
+
 	__u16 vendor_id;
 
 	__u16 product_id;
@@ -179,7 +179,7 @@ struct msm_hsusb_platform_data {
 	char *product_name;
 	char *manufacturer_name;
 
-	
+
 	int num_functions;
 	char **functions;
 
@@ -259,7 +259,7 @@ struct msm_otg_platform_data {
 	int  (*chg_init)(int init);
 	int (*config_vddcx)(int high);
 	int (*init_vddcx)(int init);
-	
+
 	void (*usb_uart_switch)(int);
 
 	int usb_oc_pin;

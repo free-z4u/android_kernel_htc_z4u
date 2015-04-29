@@ -5,7 +5,7 @@
 #include <linux/netdevice.h>
 
 struct ts27010_netconfig {
-	char if_name[IFNAMSIZ];	
+	char if_name[IFNAMSIZ];
 };
 
 #define TS27010IOC_ENABLE_NET _IOW('m', 4, struct ts27010_netconfig)
@@ -21,4 +21,4 @@ void ts27010_destroy_network(struct dlci_struct *dlci);
 
 int ts27010_create_network(struct dlci_struct *dlci, struct ts27010_netconfig *nc);
 
-#endif 
+#endif

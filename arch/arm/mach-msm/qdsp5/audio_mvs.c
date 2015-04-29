@@ -1252,7 +1252,7 @@ static int audio_mvs_alloc_buf(struct audio_mvs_info_type *audio)
 
 	MM_DBG("\n");
 
-	
+
 	for (i = 0; i < MVS_MAX_Q_LEN; i++) {
 		buf_node = kmalloc(sizeof(struct audio_mvs_buf_node),
 				   GFP_KERNEL);
@@ -1267,7 +1267,7 @@ static int audio_mvs_alloc_buf(struct audio_mvs_info_type *audio)
 		buf_node = NULL;
 	}
 
-	
+
 	for (i = 0; i < MVS_MAX_Q_LEN; i++) {
 		buf_node = kmalloc(sizeof(struct audio_mvs_buf_node),
 				   GFP_KERNEL);
@@ -1312,7 +1312,7 @@ static void audio_mvs_free_buf(struct audio_mvs_info_type *audio)
 	MM_DBG("\n");
 
 	mutex_lock(&audio->in_lock);
-	
+
 	list_for_each_safe(ptr, next, &audio->in_queue) {
 		buf_node = list_entry(ptr, struct audio_mvs_buf_node, list);
 		list_del(&buf_node->list);
@@ -1321,7 +1321,7 @@ static void audio_mvs_free_buf(struct audio_mvs_info_type *audio)
 	}
 
 	ptr = next = NULL;
-	
+
 	list_for_each_safe(ptr, next, &audio->free_in_queue) {
 		buf_node = list_entry(ptr, struct audio_mvs_buf_node, list);
 		list_del(&buf_node->list);
@@ -1332,7 +1332,7 @@ static void audio_mvs_free_buf(struct audio_mvs_info_type *audio)
 
 	mutex_lock(&audio->out_lock);
 	ptr = next = NULL;
-	
+
 	list_for_each_safe(ptr, next, &audio->out_queue) {
 		buf_node = list_entry(ptr, struct audio_mvs_buf_node, list);
 		list_del(&buf_node->list);
@@ -1340,7 +1340,7 @@ static void audio_mvs_free_buf(struct audio_mvs_info_type *audio)
 		buf_node = NULL;
 	}
 
-	
+
 	ptr = next = NULL;
 	list_for_each_safe(ptr, next, &audio->free_out_queue) {
 		buf_node = list_entry(ptr, struct audio_mvs_buf_node, list);

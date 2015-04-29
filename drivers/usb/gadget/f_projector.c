@@ -123,7 +123,7 @@ struct projector_dev {
 	struct work_struct send_fb_work_legacy;
 	int start_send_fb;
 
-	
+
 	struct htcmode_protocol *htcmode_proto;
 	u8 is_htcmode;
 	struct hsml_header header;
@@ -187,11 +187,11 @@ static struct usb_descriptor_header *hs_projector_descs[] = {
 
 static struct usb_string projector_string_defs[] = {
 	[0].s = "HTC PROJECTOR",
-	{  } 
+	{  }
 };
 
 static struct usb_gadget_strings projector_string_table = {
-	.language =		0x0409,	
+	.language =		0x0409,
 	.strings =		projector_string_defs,
 };
 
@@ -243,7 +243,7 @@ static struct usb_request *projector_request_new(struct usb_ep *ep, int buffer_s
 	if (!req)
 		return NULL;
 
-	
+
 	req->buf = kmalloc(buffer_size, GFP_KERNEL);
 	if (!req->buf) {
 		usb_ep_free_request(ep, req);
@@ -292,7 +292,7 @@ static void projector_queue_out(struct projector_dev *dev)
 	int ret;
 	struct usb_request *req;
 
-	
+
 	while ((req = proj_req_get(dev, &dev->rx_idle))) {
 		req->length = RXN_MAX;
 		VDBG("%s: queue %p\n", __func__, req);
@@ -338,7 +338,7 @@ static void projector_send_multitouch_event(struct projector_dev *dev,
 	if (event->num_touch == 0)
 		content = NULL;
 	else {
-		
+
 		content = (struct touch_content *)(data + sizeof(struct touch_event));
 	}
 	touch_event_func(dev, content, event->num_touch);
@@ -365,10 +365,10 @@ static void projector_send_touch_event(struct projector_dev *dev,
 			input_report_key(tdev, BTN_2, 0);
 			input_sync(tdev);
 			b_firstPenDown = false;
-			b_prePenDown = true; 
+			b_prePenDown = true;
 			printk(KERN_INFO "projector: Pen down %d, %d\n", iX, iY);
 		} else {
-			
+
 			if (iX != iCal_LastX || iY != iCal_LastY) {
 				input_report_abs(tdev, ABS_X, iX);
 				input_report_abs(tdev, ABS_Y, iY);
@@ -597,7 +597,7 @@ void send_fb_do_work_legacy(struct work_struct *work)
 
 	send_fb(dev);
 	dev->frame_count++;
-	
+
 	if (dev->frame_count == 30 * 30) {
 		projector_send_Key_event(dev, 0);
 		dev->frame_count = 0;
@@ -818,7 +818,7 @@ static void projector_complete_out(struct usb_ep *ep, struct usb_request *req)
 		handled = projector_handle_common_msg(dev, req);
 
 	if (!handled) {
-		
+
 		mouse_data[0] = *((int *)(req->buf));
 
 		if (!strncmp("init", data, 4)) {
@@ -830,7 +830,7 @@ static void projector_complete_out(struct usb_ep *ep, struct usb_request *req)
 			dev->framesize = dev->width * dev->height * (BITSPIXEL / 8);
 
 			send_info(dev);
-			
+
 			projector_send_Key_event(dev, 0);
 
 			atomic_set(&htc_mode_status, HTC_MODE_RUNNING);
@@ -875,7 +875,7 @@ static int projector_create_bulk_endpoints(struct projector_dev *dev,
 		return -ENODEV;
 	}
 	DBG("usb_ep_autoconfig for ep_in got %s\n", ep->name);
-	ep->driver_data = dev;		
+	ep->driver_data = dev;
 	dev->ep_in = ep;
 
 	ep = usb_ep_autoconfig(cdev->gadget, out_desc);
@@ -884,10 +884,10 @@ static int projector_create_bulk_endpoints(struct projector_dev *dev,
 		return -ENODEV;
 	}
 	DBG("usb_ep_autoconfig for projector ep_out got %s\n", ep->name);
-	ep->driver_data = dev;		
+	ep->driver_data = dev;
 	dev->ep_out = ep;
 
-	
+
 	for (i = 0; i < dev->rx_req_count; i++) {
 		req = projector_request_new(dev->ep_out, RXN_MAX);
 		if (!req)
@@ -925,20 +925,20 @@ projector_function_bind(struct usb_configuration *c, struct usb_function *f)
 	dev->cdev = cdev;
 	DBG("%s\n", __func__);
 
-	
+
 	id = usb_interface_id(c, f);
 	if (id < 0)
 		return id;
 
 	projector_interface_desc.bInterfaceNumber = id;
 
-	
+
 	ret = projector_create_bulk_endpoints(dev, &projector_fullspeed_in_desc,
 			&projector_fullspeed_out_desc);
 	if (ret)
 		return ret;
 
-	
+
 	if (gadget_is_dualspeed(c->cdev->gadget)) {
 		projector_highspeed_in_desc.bEndpointAddress =
 			projector_fullspeed_in_desc.bEndpointAddress;
@@ -1020,7 +1020,7 @@ static int projector_touch_init(struct projector_dev *dev)
 	set_bit(EV_ABS,    tdev->evbit);
 
 
-	
+
 	if (dev->htcmode_proto->version < 0x0006) {
 		pr_info("%s: single-touch support\n", __func__);
 
@@ -1054,7 +1054,7 @@ static int projector_touch_init(struct projector_dev *dev)
 static int projector_keypad_init(struct projector_dev *dev)
 {
 	struct input_dev *kdev;
-	
+
 	dev->keypad_input = input_allocate_device();
 	if (dev->keypad_input == NULL) {
 		printk(KERN_ERR "%s: Failed to allocate input device\n",
@@ -1096,7 +1096,7 @@ static int projector_keypad_init(struct projector_dev *dev)
 	kdev->id.version = 0x0100;
 	kdev->keycodesize = sizeof(unsigned int);
 
-	
+
 	if (input_register_device(kdev) < 0) {
 		printk(KERN_ERR "%s: Unable to register %s input device\n",
 			__func__, kdev->name);

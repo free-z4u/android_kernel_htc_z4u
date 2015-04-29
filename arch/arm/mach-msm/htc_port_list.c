@@ -285,9 +285,9 @@ int add_or_remove_port(struct sock *sk, int add_or_remove)
 		return 0;
 	}
 
-	
+
 	if (sk->sk_protocol == IPPROTO_TCP && src != 0x0100007F && srcp != 0) {
-		
+
 		if (sk->sk_state != TCP_LISTEN) {
 			wake_unlock(&port_suspend_lock);
 			return 0;

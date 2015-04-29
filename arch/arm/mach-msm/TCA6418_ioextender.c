@@ -241,9 +241,9 @@ int ioext_gpio_set_value(uint8_t gpio, uint8_t value)
 
 	/*fill gpio value into register value*/
 	if (value)
-		wdata = rdata | (1 << TCA6418_GPIO_BITMAP[gpio]);  	
+		wdata = rdata | (1 << TCA6418_GPIO_BITMAP[gpio]);
 	else
-		wdata = rdata & ~(1 << TCA6418_GPIO_BITMAP[gpio]);  
+		wdata = rdata & ~(1 << TCA6418_GPIO_BITMAP[gpio]);
 
 	/*write register value into register*/
 	if ( ioext_i2c_write(addr, &wdata, 1) ) {
@@ -503,7 +503,7 @@ static int ioext_i2c_probe(struct i2c_client *client
 
 err_exit:
 
-err_cdata:	
+err_cdata:
 	printk(KERN_INFO "%s()-, FAIL!\n", __func__);
 	return ret;
 

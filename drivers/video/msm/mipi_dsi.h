@@ -189,57 +189,57 @@ struct dsi_clk_desc {
 #define DSI_HDR_WC(wc)		((wc) & 0x0ffff)
 
 #define DSI_BUF_SIZE	1024
-#define MIPI_DSI_MRPS	0x04	
+#define MIPI_DSI_MRPS	0x04
 
-#define MIPI_DSI_LEN 8 
+#define MIPI_DSI_LEN 8
 
 struct dsi_buf {
-	uint32 *hdr;	
-	char *start;	
-	char *end;	
-	int size;	
-	char *data;	
-	int len;	
-	dma_addr_t dmap; 
+	uint32 *hdr;
+	char *start;
+	char *end;
+	int size;
+	char *data;
+	int len;
+	dma_addr_t dmap;
 };
 
-#define DTYPE_DCS_WRITE		0x05	
-#define DTYPE_DCS_WRITE1	0x15	
-#define DTYPE_DCS_READ		0x06	
-#define DTYPE_DCS_LWRITE	0x39	
+#define DTYPE_DCS_WRITE		0x05
+#define DTYPE_DCS_WRITE1	0x15
+#define DTYPE_DCS_READ		0x06
+#define DTYPE_DCS_LWRITE	0x39
 
-#define DTYPE_GEN_WRITE		0x03	
-#define DTYPE_GEN_WRITE1	0x13	
-#define DTYPE_GEN_WRITE2	0x23	
-#define DTYPE_GEN_LWRITE	0x29	
-#define DTYPE_GEN_READ		0x04	
-#define DTYPE_GEN_READ1		0x14	
-#define DTYPE_GEN_READ2		0x24	
+#define DTYPE_GEN_WRITE		0x03
+#define DTYPE_GEN_WRITE1	0x13
+#define DTYPE_GEN_WRITE2	0x23
+#define DTYPE_GEN_LWRITE	0x29
+#define DTYPE_GEN_READ		0x04
+#define DTYPE_GEN_READ1		0x14
+#define DTYPE_GEN_READ2		0x24
 
-#define DTYPE_TEAR_ON		0x35	
-#define DTYPE_MAX_PKTSIZE	0x37	
-#define DTYPE_NULL_PKT		0x09	
-#define DTYPE_BLANK_PKT		0x19	
+#define DTYPE_TEAR_ON		0x35
+#define DTYPE_MAX_PKTSIZE	0x37
+#define DTYPE_NULL_PKT		0x09
+#define DTYPE_BLANK_PKT		0x19
 
-#define DTYPE_CM_ON		0x02	
-#define DTYPE_CM_OFF		0x12	
+#define DTYPE_CM_ON		0x02
+#define DTYPE_CM_OFF		0x12
 #define DTYPE_PERIPHERAL_OFF	0x22
 #define DTYPE_PERIPHERAL_ON	0x32
 
 #define DTYPE_ACK_ERR_RESP      0x02
-#define DTYPE_EOT_RESP          0x08    
-#define DTYPE_GEN_READ1_RESP    0x11    
-#define DTYPE_GEN_READ2_RESP    0x12    
+#define DTYPE_EOT_RESP          0x08
+#define DTYPE_GEN_READ1_RESP    0x11
+#define DTYPE_GEN_READ2_RESP    0x12
 #define DTYPE_GEN_LREAD_RESP    0x1a
 #define DTYPE_DCS_LREAD_RESP    0x1c
-#define DTYPE_DCS_READ1_RESP    0x21    
-#define DTYPE_DCS_READ2_RESP    0x22    
+#define DTYPE_DCS_READ1_RESP    0x21
+#define DTYPE_DCS_READ2_RESP    0x22
 
 struct dsi_cmd_desc {
 	int dtype;
 	int last;
 	int vc;
-	int ack;	
+	int ack;
 	int wait;
 	int dlen;
 	char *payload;
@@ -266,7 +266,7 @@ struct dcs_cmd_req {
 	struct dsi_cmd_desc *cmds;
 	int cmds_cnt;
 	u32 flags;
-	int rlen;	
+	int rlen;
 	fxn cb;
 };
 

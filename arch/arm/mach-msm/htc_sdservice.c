@@ -25,7 +25,7 @@
 
 #if !defined(CONFIG_ARCH_MSM7X30) && !defined(CONFIG_ARCH_MSM7X27A)
 #include <mach/scm.h>
-#else	
+#else
 #include <linux/types.h>
 #include <linux/errno.h>
 #include <linux/mm.h>
@@ -45,7 +45,7 @@
 #define OEM_RAPI_STREAMING_FUNCTION_PROC          2
 
 #define OEM_RAPI_CLIENT_MAX_OUT_BUFF_SIZE 32
-#endif	
+#endif
 
 #define DEVICE_NAME "htc_sdservice"
 
@@ -59,7 +59,7 @@
 		__func__, current->pid, current->comm, ## args)
 #else
 #define PDEBUG(fmt, args...) do {} while (0)
-#endif 
+#endif
 
 #undef PERR
 #define PERR(fmt, args...) printk(KERN_ERR "%s(%i, %s): " fmt "\n", \
@@ -104,12 +104,12 @@ int oem_rapi_client_cb(struct msm_rpc_client *client,
 	ret.out_len = NULL;
 	ret.output = NULL;
 
-	xdr_recv_uint32(xdr, &cb_id);                    
-	xdr_recv_uint32(xdr, &arg.event);                
-	xdr_recv_uint32(xdr, (uint32_t *)(&arg.handle)); 
-	xdr_recv_uint32(xdr, &arg.in_len);               
-	xdr_recv_bytes(xdr, (void **)&arg.input, &temp); 
-	xdr_recv_uint32(xdr, &arg.out_len_valid);        
+	xdr_recv_uint32(xdr, &cb_id);
+	xdr_recv_uint32(xdr, &arg.event);
+	xdr_recv_uint32(xdr, (uint32_t *)(&arg.handle));
+	xdr_recv_uint32(xdr, &arg.in_len);
+	xdr_recv_bytes(xdr, (void **)&arg.input, &temp);
+	xdr_recv_uint32(xdr, &arg.out_len_valid);
 	if (arg.out_len_valid) {
 		ret.out_len = kmalloc(sizeof(*ret.out_len), GFP_KERNEL);
 		if (!ret.out_len) {
@@ -118,9 +118,9 @@ int oem_rapi_client_cb(struct msm_rpc_client *client,
 		}
 	}
 
-	xdr_recv_uint32(xdr, &arg.output_valid);         
+	xdr_recv_uint32(xdr, &arg.output_valid);
 	if (arg.output_valid) {
-		xdr_recv_uint32(xdr, &arg.output_size);  
+		xdr_recv_uint32(xdr, &arg.output_size);
 
 		ret.output = kmalloc(arg.output_size, GFP_KERNEL);
 		if (!ret.output) {
@@ -149,7 +149,7 @@ int oem_rapi_client_cb(struct msm_rpc_client *client,
 		xdr_send_pointer(xdr, (void **)&(ret.out_len), temp,
 				 xdr_send_uint32);
 
-		
+
 		if (ret.output && ret.out_len)
 			xdr_send_bytes(xdr, (const void **)&ret.output,
 					     ret.out_len);
@@ -180,16 +180,16 @@ int oem_rapi_client_streaming_function_arg(struct msm_rpc_client *client,
 	if ((cb_id < 0) && (cb_id != MSM_RPC_CLIENT_NULL_CB_ID))
 		return cb_id;
 
-	xdr_send_uint32(xdr, &arg->event);                
-	xdr_send_uint32(xdr, &cb_id);                     
-	xdr_send_uint32(xdr, (uint32_t *)(&arg->handle)); 
-	xdr_send_uint32(xdr, &arg->in_len);               
+	xdr_send_uint32(xdr, &arg->event);
+	xdr_send_uint32(xdr, &cb_id);
+	xdr_send_uint32(xdr, (uint32_t *)(&arg->handle));
+	xdr_send_uint32(xdr, &arg->in_len);
 	xdr_send_bytes(xdr, (const void **)&arg->input,
-			     &arg->in_len);                     
-	xdr_send_uint32(xdr, &arg->out_len_valid);        
-	xdr_send_uint32(xdr, &arg->output_valid);         
+			     &arg->in_len);
+	xdr_send_uint32(xdr, &arg->out_len_valid);
+	xdr_send_uint32(xdr, &arg->output_valid);
 
-	
+
 	if (arg->output_valid)
 		xdr_send_uint32(xdr, &arg->output_size);
 
@@ -203,11 +203,11 @@ int oem_rapi_client_streaming_function_ret(struct msm_rpc_client *client,
 	struct oem_rapi_client_streaming_func_ret *ret = data;
 	uint32_t temp;
 
-	
+
 	xdr_recv_pointer(xdr, (void **)&(ret->out_len), sizeof(uint32_t),
 			 xdr_recv_uint32);
 
-	
+
 	if (ret->out_len && *ret->out_len)
 		xdr_recv_bytes(xdr, (void **)&ret->output, &temp);
 
@@ -254,7 +254,7 @@ struct msm_rpc_client *oem_rapi_client_init2(void)
 		if (!IS_ERR(rpc_client))
 			open_count++;
 	} else {
-		
+
 		open_count++;
 	}
 	mutex_unlock(&oem_rapi_client_lock);
@@ -295,7 +295,7 @@ ssize_t oem_rapi_pack_send(unsigned int operation, char *buf, size_t size)
 
 	return 0;
 }
-#endif 
+#endif
 
 static long htc_sdservice_ioctl(struct file *file, unsigned int command, unsigned long arg)
 {
@@ -311,7 +311,7 @@ static long htc_sdservice_ioctl(struct file *file, unsigned int command, unsigne
 		}
 #if defined(CONFIG_ARCH_MSM7X30) || defined(CONFIG_ARCH_MSM7X27A)
 		oem_rapi_client_init2();
-#endif 
+#endif
 		PDEBUG("func = %x\n", hmsg.func);
 		switch (hmsg.func) {
 		case HTC_SD_KEY_ENCRYPT:
@@ -328,7 +328,7 @@ static long htc_sdservice_ioctl(struct file *file, unsigned int command, unsigne
 			oem_rapi_client_close2();
 #else
 			ret = secure_access_item(0, HTC_SD_KEY_ENCRYPT, hmsg.req_len, htc_sdkey);
-#endif	
+#endif
 			if (ret)
 				PERR("Encrypt SD key fail (%d)\n", ret);
 
@@ -352,7 +352,7 @@ static long htc_sdservice_ioctl(struct file *file, unsigned int command, unsigne
 			oem_rapi_client_close2();
 #else
 			ret = secure_access_item(0, HTC_SD_KEY_DECRYPT, hmsg.req_len, htc_sdkey);
-#endif	
+#endif
 			if (ret)
 				PERR("Encrypt SD key fail (%d)\n", ret);
 

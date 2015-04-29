@@ -307,7 +307,7 @@ static int pppolac_connect(struct socket *sock, struct sockaddr *useraddr,
 		dst_release(dst);
 	}
 #ifndef PPP_MTU
-#define PPP_MTU 1500 
+#define PPP_MTU 1500
 #endif
 
 	po->chan.hdrlen = 12;

@@ -41,12 +41,12 @@ int v4l2_device_register(struct device *dev, struct v4l2_device *v4l2_dev)
 	kref_init(&v4l2_dev->ref);
 	v4l2_dev->dev = dev;
 	if (dev == NULL) {
-		
+
 		WARN_ON(!v4l2_dev->name[0]);
 		return 0;
 	}
 
-	
+
 	if (!v4l2_dev->name[0])
 		snprintf(v4l2_dev->name, sizeof(v4l2_dev->name), "%s %s",
 			dev->driver->name, dev_name(dev));
@@ -106,7 +106,7 @@ void v4l2_device_unregister(struct v4l2_device *v4l2_dev)
 		return;
 	v4l2_device_disconnect(v4l2_dev);
 
-	
+
 	list_for_each_entry_safe(sd, next, &v4l2_dev->subdevs, list) {
 		v4l2_device_unregister_subdev(sd);
 #if defined(CONFIG_I2C) || (defined(CONFIG_I2C_MODULE) && defined(MODULE))
@@ -139,11 +139,11 @@ int v4l2_device_register_subdev(struct v4l2_device *v4l2_dev,
 #endif
 	int err;
 
-	
+
 	if (v4l2_dev == NULL || sd == NULL || !sd->name[0])
 		return -EINVAL;
 
-	
+
 	WARN_ON(sd->v4l2_dev != NULL);
 
 	if (!try_module_get(sd->owner))
@@ -158,7 +158,7 @@ int v4l2_device_register_subdev(struct v4l2_device *v4l2_dev,
 		}
 	}
 
-	
+
 	err = v4l2_ctrl_add_handler(v4l2_dev->ctrl_handler, sd->ctrl_handler);
 	if (err) {
 		if (sd->internal_ops && sd->internal_ops->unregistered)
@@ -168,7 +168,7 @@ int v4l2_device_register_subdev(struct v4l2_device *v4l2_dev,
 	}
 
 #if defined(CONFIG_MEDIA_CONTROLLER)
-	
+
 	if (v4l2_dev->mdev) {
 		err = media_device_register_entity(v4l2_dev->mdev, entity);
 		if (err < 0) {
@@ -224,7 +224,7 @@ void v4l2_device_unregister_subdev(struct v4l2_subdev *sd)
 {
 	struct v4l2_device *v4l2_dev;
 
-	
+
 	if (sd == NULL || sd->v4l2_dev == NULL)
 		return;
 

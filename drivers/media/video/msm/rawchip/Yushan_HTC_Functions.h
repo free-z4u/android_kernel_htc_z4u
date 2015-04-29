@@ -153,8 +153,8 @@ typedef struct {
 } rawchip_aec_params_t;
 
 typedef struct {
-  uint8_t rg_ratio; 
-  uint8_t bg_ratio; 
+  uint8_t rg_ratio;
+  uint8_t bg_ratio;
 } rawchip_awb_params_t;
 
 typedef struct {

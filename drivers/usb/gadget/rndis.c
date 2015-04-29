@@ -689,7 +689,7 @@ static int rndis_reset_response(int configNr, rndis_reset_msg_type *buf)
 	u32 length;
 	u8 *xbuf;
 
-	
+
 	while ((xbuf = rndis_get_next_response(configNr, &length)))
 		rndis_free_response(configNr, xbuf);
 

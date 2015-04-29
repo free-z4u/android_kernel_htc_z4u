@@ -258,7 +258,7 @@ struct msm_gpio_chip {
 	unsigned                int_status_copy;
 #endif
 	unsigned int            both_edge_detect;
-	unsigned int            int_enable[2]; 
+	unsigned int            int_enable[2];
 };
 
 static int msm_gpio_write(struct msm_gpio_chip *msm_chip,
@@ -332,9 +332,9 @@ static int msm_gpio_clear_detect_status(struct msm_gpio_chip *msm_chip,
 	unsigned bit = BIT(offset);
 
 #if MSM_GPIO_BROKEN_INT_CLEAR
-	
-	
-	
+
+
+
 	msm_chip->int_status_copy |= __raw_readl(msm_chip->regs.int_status);
 	msm_chip->int_status_copy &= ~bit;
 #endif

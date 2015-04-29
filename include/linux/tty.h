@@ -34,8 +34,8 @@
 #define N_TI_WL		22	/* for TI's WL BT, FM, GPS combo chips */
 #define N_TRACESINK	23	/* Trace data routing for MIPI P1149.7 */
 #define N_TRACEROUTER	24	/* Trace data routing for MIPI P1149.7 */
-#define N_SMUX		25	
-#define N_TS2710	26	
+#define N_SMUX		25
+#define N_TS2710	26
 
 #ifdef __KERNEL__
 #include <linux/fs.h>
@@ -48,9 +48,9 @@
 
 
 
-#define NR_UNIX98_PTY_DEFAULT	4096      
-#define NR_UNIX98_PTY_RESERVE	1024	  
-#define NR_UNIX98_PTY_MAX	(1 << MINORBITS) 
+#define NR_UNIX98_PTY_DEFAULT	4096
+#define NR_UNIX98_PTY_RESERVE	1024
+#define NR_UNIX98_PTY_MAX	(1 << MINORBITS)
 
 #define __DISABLED_CHAR '\0'
 
@@ -66,7 +66,7 @@ struct tty_buffer {
 	int size;
 	int commit;
 	int read;
-	
+
 	unsigned long data[0];
 };
 
@@ -77,10 +77,10 @@ struct tty_buffer {
 struct tty_bufhead {
 	struct work_struct work;
 	spinlock_t lock;
-	struct tty_buffer *head;	
-	struct tty_buffer *tail;	
-	struct tty_buffer *free;	
-	int memory_used;		
+	struct tty_buffer *head;
+	struct tty_buffer *tail;
+	struct tty_buffer *free;
+	int memory_used;
 };
 #define TTY_NORMAL	0
 #define TTY_BREAK	1
@@ -177,35 +177,35 @@ struct signal_struct;
 struct tty_port;
 
 struct tty_port_operations {
-	
+
 	int (*carrier_raised)(struct tty_port *port);
-	
+
 	void (*dtr_rts)(struct tty_port *port, int raise);
 	void (*shutdown)(struct tty_port *port);
 	void (*drop)(struct tty_port *port);
 	int (*activate)(struct tty_port *port, struct tty_struct *tty);
-	
+
 	void (*destruct)(struct tty_port *port);
 };
-	
+
 struct tty_port {
-	struct tty_struct	*tty;		
-	const struct tty_port_operations *ops;	
-	spinlock_t		lock;		
-	int			blocked_open;	
-	int			count;		
-	wait_queue_head_t	open_wait;	
-	wait_queue_head_t	close_wait;	
-	wait_queue_head_t	delta_msr_wait;	
-	unsigned long		flags;		
-	unsigned char		console:1;	
-	struct mutex		mutex;		
-	struct mutex		buf_mutex;	
-	unsigned char		*xmit_buf;	
-	unsigned int		close_delay;	
-	unsigned int		closing_wait;	
-	int			drain_delay;	
-	struct kref		kref;		
+	struct tty_struct	*tty;
+	const struct tty_port_operations *ops;
+	spinlock_t		lock;
+	int			blocked_open;
+	int			count;
+	wait_queue_head_t	open_wait;
+	wait_queue_head_t	close_wait;
+	wait_queue_head_t	delta_msr_wait;
+	unsigned long		flags;
+	unsigned char		console:1;
+	struct mutex		mutex;
+	struct mutex		buf_mutex;
+	unsigned char		*xmit_buf;
+	unsigned int		close_delay;
+	unsigned int		closing_wait;
+	int			drain_delay;
+	struct kref		kref;
 };
 
 
@@ -219,32 +219,32 @@ struct tty_struct {
 	const struct tty_operations *ops;
 	int index;
 
-	
+
 	struct mutex ldisc_mutex;
 	struct tty_ldisc *ldisc;
 
 	struct mutex termios_mutex;
 	spinlock_t ctrl_lock;
-	
+
 	struct ktermios *termios, *termios_locked;
-	struct termiox *termiox;	
+	struct termiox *termiox;
 	char name[64];
-	struct pid *pgrp;		
+	struct pid *pgrp;
 	struct pid *session;
 	unsigned long flags;
 	int count;
-	struct winsize winsize;		
+	struct winsize winsize;
 	unsigned char stopped:1, hw_stopped:1, flow_stopped:1, packet:1;
 	unsigned char low_latency:1, warned:1;
 	unsigned char update_room_in_ldisc:1;
-	unsigned char ctrl_status;	
-	unsigned int receive_room;	
+	unsigned char ctrl_status;
+	unsigned int receive_room;
 	unsigned int rr_bug;
 
 	struct tty_struct *link;
 	struct fasync_struct *fasync;
-	struct tty_bufhead buf;		
-	int alt_speed;		
+	struct tty_bufhead buf;
+	int alt_speed;
 	wait_queue_head_t write_wait;
 	wait_queue_head_t read_wait;
 	struct work_struct hangup_work;
@@ -280,11 +280,11 @@ struct tty_struct {
 	unsigned char *write_buf;
 	int write_cnt;
 	spinlock_t read_lock;
-	
+
 	struct work_struct SAK_work;
 	struct tty_port *port;
 
-	
+
 	spinlock_t rcv_lock;
 	int is_rcvlock;
 	struct mutex rcv_room_lock;

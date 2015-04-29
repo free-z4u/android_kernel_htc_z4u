@@ -191,7 +191,7 @@ static ssize_t dsp_debug_write(struct file *file, const char __user *buf,
 {
 	int len;
 
-	if (count == 0) 
+	if (count == 0)
 		return 0;
 	len = count > (MAX_LEN - HDR_LEN - 1) ? (MAX_LEN - HDR_LEN - 1) : count;
 	if (copy_from_user(l_buf + HDR_LEN, buf, len)) {

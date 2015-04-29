@@ -80,38 +80,38 @@ enum {
 } rmt_storage_event;
 
 struct shared_ramfs_entry {
-	uint32_t client_id;	
-	uint32_t base_addr;	
-	uint32_t size;		
-	uint32_t client_sts;	
+	uint32_t client_id;
+	uint32_t base_addr;
+	uint32_t size;
+	uint32_t client_sts;
 };
 struct shared_ramfs_table {
-	uint32_t magic_id;	
-	uint32_t version;	
-	uint32_t entries;	
-	
+	uint32_t magic_id;
+	uint32_t version;
+	uint32_t entries;
+
 	struct shared_ramfs_entry ramfs_entry[MAX_RAMFS_TBL_ENTRIES];
 };
 
 struct rmt_storage_client_info {
 	unsigned long cids;
-	struct list_head shrd_mem_list; 
+	struct list_head shrd_mem_list;
 	int open_excl;
 	atomic_t total_events;
 	wait_queue_head_t event_q;
 	struct list_head event_list;
-	struct list_head client_list;	
-	
+	struct list_head client_list;
+
 	spinlock_t lock;
-	
+
 	struct wake_lock wlock;
 	atomic_t wcount;
 	struct workqueue_struct *workq;
-	
+
 	uint32_t msm_final_call;
 	uint32_t mdm_final_call;
 	wait_queue_head_t final_waitq;
-	
+
 };
 
 struct rmt_storage_kevent {
@@ -129,7 +129,7 @@ struct rmt_storage_srv {
 
 struct rmt_storage_client {
 	uint32_t handle;
-	uint32_t sid;			
+	uint32_t sid;
 	char path[MAX_PATH_NAME];
 	struct rmt_storage_srv *srv;
 	struct list_head list;
@@ -158,7 +158,7 @@ DECLARE_DELAYED_WORK(sdio_smem_work, rmt_storage_sdio_smem_work);
 #ifdef CONFIG_MSM_SDIO_SMEM
 #define MDM_LOCAL_BUF_SZ	0xC0000
 static struct sdio_smem_client *sdio_smem;
-static int nv_size = 0;		
+static int nv_size = 0;
 #endif
 
 #ifdef CONFIG_MSM_RMT_STORAGE_CLIENT_STATS
@@ -389,9 +389,9 @@ static int rmt_storage_event_open_cb(struct rmt_storage_event *event_args,
 	}
 	strncpy(rs_client->path, event_args->path, MAX_PATH_NAME);
 
-	
+
 	spin_lock(&rmc->lock);
-	cid = find_first_zero_bit(&rmc->cids, sizeof(rmc->cids) * 8);	
+	cid = find_first_zero_bit(&rmc->cids, sizeof(rmc->cids) * 8);
 	if (cid > MAX_NUM_CLIENTS) {
 		pr_err("%s: Max clients are reached\n", __func__);
 		cid = 0;
@@ -535,7 +535,7 @@ static int rmt_storage_event_close_cb(struct rmt_storage_event *event_args,
 	close = &event->params.close;
 	event_args->handle = close->handle;
 	event_args->id = RMT_STORAGE_CLOSE;
-	
+
 	spin_lock(&rmc->lock);
 	__clear_bit(event_args->handle, &rmc->cids);
 	spin_unlock(&rmc->lock);
@@ -617,7 +617,7 @@ static int rmt_storage_event_get_err_cb(struct rmt_storage_event *event_args,
 	get_err = &event->params.get_err;
 	event_args->handle = get_err->handle;
 	kfree(event);
-	
+
 	return -1;
 
 }
@@ -766,7 +766,7 @@ static int rmt_storage_sdio_smem_probe(struct platform_device *pdev)
 
 	sdio_smem = container_of(pdev, struct sdio_smem_client, plat_dev);
 
-	
+
 	shrd_mem = rmt_storage_get_shrd_mem(RAMFS_MDM_STORAGE_ID);
 	if (!shrd_mem) {
 		pr_err("%s: No shared mem entry for sid=0x%08x\n",
@@ -775,8 +775,8 @@ static int rmt_storage_sdio_smem_probe(struct platform_device *pdev)
 	}
 	sdio_smem->buf = __va(shrd_mem->start);
 	sdio_smem->size = shrd_mem->size;
-	
-	
+
+
 	sdio_smem->size = nv_size;
 	sdio_smem->cb_func = sdio_smem_cb;
 	ret = sdio_smem_register_client();
@@ -860,7 +860,7 @@ static int rmt_storage_event_alloc_rmt_buf_cb(
 
 #ifdef CONFIG_MSM_SDIO_SMEM
 	if (rs_client->srv->prog == MDM_RMT_STORAGE_APIPROG) {
-		
+
 		nv_size = size;
 		if (!sdio_smem_drv_registered) {
 			ret = platform_driver_register(&sdio_smem_drv);
@@ -909,18 +909,18 @@ static int handle_rmt_storage_call(struct msm_rpc_client *client,
 
 	switch (req->procedure) {
 	case RMT_STORAGE_OPEN_CB_TYPE_PROC:
-		
+
 		event_args->usr_data = client->prog;
-		
+
 
 	case RMT_STORAGE_WRITE_IOVEC_CB_TYPE_PROC:
-		
+
 
 	case RMT_STORAGE_READ_IOVEC_CB_TYPE_PROC:
-		
+
 
 	case RMT_STORAGE_ALLOC_RMT_BUF_CB_TYPE_PROC:
-		
+
 
 	case RMT_STORAGE_EVENT_CB_TYPE_PROC: {
 		uint32_t cb_id;
@@ -940,7 +940,7 @@ static int handle_rmt_storage_call(struct msm_rpc_client *client,
 		if (IS_ERR_VALUE(rc)) {
 			pr_err("%s: Invalid parameters received\n", __func__);
 			if (req->procedure == RMT_STORAGE_OPEN_CB_TYPE_PROC)
-				result = 0; 
+				result = 0;
 			else
 				result = RMT_STORAGE_ERROR_PARAM;
 			kfree(kevent);
@@ -1094,9 +1094,9 @@ static long rmt_storage_ioctl(struct file *fp, unsigned int cmd,
 				rmt_storage_send_sts_arg,
 				&status, NULL, NULL, -1);
 
-			
+
 			if (rmc->msm_final_call || rmc->mdm_final_call) {
-				if (atomic_read(&rmc->wcount) <= 2) {	
+				if (atomic_read(&rmc->wcount) <= 2) {
 					if (rpc_client->prog == MSM_RMT_STORAGE_APIPROG)
 						rmc->msm_final_call = 0;
 					else if (rpc_client->prog == MDM_RMT_STORAGE_APIPROG)
@@ -1107,7 +1107,7 @@ static long rmt_storage_ioctl(struct file *fp, unsigned int cmd,
 				} else
 					printk(KERN_INFO"%s: rmc->wcount != 0\n", __func__);
 			}
-			
+
 		} else
 			ret = -EINVAL;
 		if (ret < 0)
@@ -1138,11 +1138,11 @@ int wait_rmt_final_call_back(int timeout)
 
 	if (repeat_times == 1) {
 		repeat_times++;
-		rmc->msm_final_call = 1;	
+		rmc->msm_final_call = 1;
 		smsm_change_state(SMSM_APPS_STATE, SMSM_APPS_REBOOT, SMSM_APPS_REBOOT);
 	}
 	rc = wait_event_timeout(rmc->final_waitq, (rmc->msm_final_call == 0), timeout * HZ);
-	
+
 	if (!rc) {
 		printk(KERN_INFO"%s: Wait for final MSM efs_sync: TIME OUT (%d sec)\n", __func__, timeout);
 		return 0;
@@ -1306,7 +1306,7 @@ static ssize_t rmt_storage_stats_read(struct file *file, char __user *ubuf,
 	struct rmt_storage_stats *stats;
 
 	max = sizeof(buf) - 1;
-	
+
 	spin_lock(&rmc->lock);
 	tot_clients = find_first_zero_bit(&rmc->cids, sizeof(rmc->cids)) - 1;
 	spin_unlock(&rmc->lock);
@@ -1510,13 +1510,13 @@ static int rmt_storage_reboot_call(
 	case SYS_HALT:
 	case SYS_POWER_OFF:
                 msleep(1500);
-                
+
 		timeout = timeout - 1.5;
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
-		
+
 		for(i=0; i<timeout*2; i++)
 		{
-			if(readl_relaxed(MSM_SHARED_RAM_BASE + APP_EFS_MAGIC) == HTC_FINAL_EFS_SYNC_MAGIC){ 
+			if(readl_relaxed(MSM_SHARED_RAM_BASE + APP_EFS_MAGIC) == HTC_FINAL_EFS_SYNC_MAGIC){
 				printk(KERN_INFO "[HTC][EFS] NV items is updated in 1.5+0.5*%ds.\n", i);
 				break;
 			}
@@ -1554,14 +1554,14 @@ static int rmt_storage_reboot_call(
                                msleep(RMT_SLEEP_INTERVAL_MS);
                        }
                 }
-						
+
                 if (atomic_read(&rmc->wcount))
-                        pr_err("%s: Efs_sync still incomplete, waiting:%dms\n", 
+                        pr_err("%s: Efs_sync still incomplete, waiting:%dms\n",
 						__func__, RMT_SLEEP_INTERVAL_MS*count);
 		else
 			pr_info("%s: Efs_sync completed, waiting:%dms\n",
 						__func__, RMT_SLEEP_INTERVAL_MS*count);
-		
+
                 pr_info("%s: Un register RMT storage client.\n", __func__);
                 msm_rpc_unregister_client(rmt_srv->rpc_client);
                 pr_info("%s --\n", __func__);
@@ -1783,7 +1783,7 @@ static int rmt_storage_probe(struct platform_device *pdev)
 
 	INIT_DELAYED_WORK(&srv->restart_work, rmt_storage_restart_work);
 
-	
+
 	srv->rpc_client = msm_rpc_register_client2("rmt_storage",
 						   dev->prog, dev->vers, 1,
 						   handle_rmt_storage_call);
@@ -1806,7 +1806,7 @@ static int rmt_storage_probe(struct platform_device *pdev)
 	pr_info("%s: Remote storage RPC client (0x%x)initialized\n",
 		__func__, dev->prog);
 
-	
+
 	ret = rmt_storage_reg_callbacks(srv->rpc_client);
 	if (ret) {
 		pr_info("%s: unable to register alloc rmt buf callback %d\n",
@@ -1814,7 +1814,7 @@ static int rmt_storage_probe(struct platform_device *pdev)
 		goto unregister_client;
 	}
 
-	
+
 	rmt_storage_set_client_status(srv, 1);
 
 	ret = register_reboot_notifier(&rmt_storage_reboot_notifier);
@@ -1853,7 +1853,7 @@ static void rmt_storage_destroy_rmc(void)
 
 static void __init rmt_storage_init_client_info(void)
 {
-	
+
 	init_waitqueue_head(&rmc->event_q);
 	spin_lock_init(&rmc->lock);
 	atomic_set(&rmc->total_events, 0);
@@ -1864,19 +1864,19 @@ static void __init rmt_storage_init_client_info(void)
 	atomic_set(&rmc->wcount, 0);
 	wake_lock_init(&rmc->wlock, WAKE_LOCK_SUSPEND, "rmt_storage");
 
-	
+
 	rmc->msm_final_call = 0;
 	rmc->mdm_final_call = 0;
 	init_waitqueue_head(&rmc->final_waitq);
-	
+
 }
 
 static struct rmt_storage_srv msm_srv = {
 	.prog = MSM_RMT_STORAGE_APIPROG,
 	.plat_drv = {
 		.probe	  = rmt_storage_probe,
-		
-		.shutdown = NULL, 
+
+		.shutdown = NULL,
 		.driver	  = {
 			.name	= "rs300000a7",
 			.owner	= THIS_MODULE,
@@ -1926,12 +1926,12 @@ static uint32_t rmt_storage_get_sid(const char *path)
 		return RAMFS_MDM_STORAGE_ID;
 	if (!strncmp(path, "ssd", MAX_PATH_NAME))
 		return RAMFS_SSD_STORAGE_ID;
-	
+
 	if (!strncmp(path, "/boot/radio_config", MAX_PATH_NAME))
 		return RAMFS_MODEMSTORAGE_ID;
 	if (!strncmp(path, "/boot/mdm9k_config", MAX_PATH_NAME))
 		return RAMFS_MDM_STORAGE_ID;
-	
+
 	return 0;
 }
 

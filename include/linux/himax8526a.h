@@ -182,7 +182,7 @@ struct himax_i2c_platform_data_config_type_3 {
 };
 
 struct himax_i2c_platform_data {
-	
+
 	int abs_x_min;
 	int abs_x_max;
 	int abs_x_fuzz;
@@ -204,34 +204,34 @@ struct himax_i2c_platform_data {
 	uint32_t event_htc_enable;
 	uint8_t cable_config[2];
 
-	
-	uint8_t support_htc_event;
-	
 
-	
+	uint8_t support_htc_event;
+
+
+
 	uint8_t protocol_type;
 
-	
+
 	int screenWidth;
 	int screenHeight;
-	
 
-	
+
+
 	char ID0[20];
 	char ID1[20];
 	char ID2[20];
 	char ID3[20];
-	
+
 
 	void (*reset)(void);
 	int (*loadSensorConfig)(struct i2c_client *client, struct himax_i2c_platform_data *pdata, struct himax_config_init_api *i2c_api);
-	
+
 	uint8_t version;
 	uint8_t fw_version;
 	uint8_t tw_id;
-	
+
 	uint8_t *regCD;
-	
+
 	struct himax_i2c_platform_data_config_type_1 *type1;
 	int type1_size;
 	struct himax_i2c_platform_data_config_type_2 *type2;

@@ -16,7 +16,7 @@
 #include <mach/gpio.h>
 
 #define	TI201_TOTAL_STEPS_NEAR_TO_FAR			30
-#define	TI201_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF			256 
+#define	TI201_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF			256
 
 #define REG_VCM_NEW_CODE			0x30F2
 #define REG_VCM_I2C_ADDR			0x1C
@@ -45,7 +45,7 @@ DEFINE_MUTEX(ti201_act_mutex);
 static struct msm_actuator_ctrl_t ti201_act_t;
 
 static struct region_params_t g_regions[] = {
-	
+
 	{
 		.step_bound = {TI201_TOTAL_STEPS_NEAR_TO_FAR, 0},
 		.code_per_step = 2,
@@ -53,13 +53,13 @@ static struct region_params_t g_regions[] = {
 };
 
 static uint16_t g_scenario[] = {
-	
+
 	TI201_TOTAL_STEPS_NEAR_TO_FAR,
 };
 
 static struct damping_params_t g_damping[] = {
-	
-	
+
+
 	{
 		.damping_step = 2,
 		.damping_delay = 0,
@@ -67,8 +67,8 @@ static struct damping_params_t g_damping[] = {
 };
 
 static struct damping_t g_damping_params[] = {
-	
-	
+
+
 	{
 		.ringing_params = g_damping,
 	},
@@ -137,7 +137,7 @@ int32_t ti201_msm_actuator_init_table(
 			a_ctrl->initial_code = ref_table[0];
 	}
 
-	
+
 	if (a_ctrl->step_position_table != NULL) {
 		kfree(a_ctrl->step_position_table);
 		a_ctrl->step_position_table = NULL;
@@ -156,7 +156,7 @@ int32_t ti201_msm_actuator_init_table(
 		a_ctrl->step_position_table[0] = a_ctrl->initial_code;
 
 		for (i = 1; i <= a_ctrl->set_info.total_steps; i++) {
-			if (ti201_msm_actuator_info->use_rawchip_af && a_ctrl->af_algo == AF_ALGO_RAWCHIP) 
+			if (ti201_msm_actuator_info->use_rawchip_af && a_ctrl->af_algo == AF_ALGO_RAWCHIP)
 				a_ctrl->step_position_table[i] =
 					a_ctrl->step_position_table[i-1] + 4;
 			else
@@ -208,7 +208,7 @@ int32_t ti201_msm_actuator_move_focus(
 		dir,
 		num_steps);
 
-	
+
 	if (dir == MOVE_NEAR)
 		sign_dir = 1;
 	else if (dir == MOVE_FAR)
@@ -219,7 +219,7 @@ int32_t ti201_msm_actuator_move_focus(
 		return rc;
 	}
 
-	
+
 	dest_step_pos = a_ctrl->curr_step_pos +
 		(sign_dir * num_steps);
 
@@ -266,7 +266,7 @@ static int32_t ti201_wrapper_i2c_write(struct msm_actuator_ctrl_t *a_ctrl,
 
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_CODE_MSB,
-		((next_lens_position & 0x0300) >> 8),	
+		((next_lens_position & 0x0300) >> 8),
 		MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0) {
 		pr_err("%s VCM_CODE_MSB i2c write failed (%d)\n", __func__, rc);
@@ -275,7 +275,7 @@ static int32_t ti201_wrapper_i2c_write(struct msm_actuator_ctrl_t *a_ctrl,
 
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_CODE_LSB,
-		(next_lens_position & 0x00FF),	
+		(next_lens_position & 0x00FF),
 		MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0) {
 		pr_err("%s VCM_CODE_LSB i2c write failed (%d)\n", __func__, rc);
@@ -344,7 +344,7 @@ int32_t  ti201_act_set_af_value(struct msm_actuator_ctrl_t *a_ctrl, af_value_t a
 	OTP_data[3] = af_value.AF_INF_LSB;
 	OTP_data[4] = af_value.AF_MACRO_MSB;
 	OTP_data[5] = af_value.AF_MACRO_LSB;
-	
+
 
 	if (OTP_data[2] || OTP_data[3] || OTP_data[4] || OTP_data[5]) {
 		a_ctrl->af_OTP_info.VCM_OTP_Read = true;
@@ -399,7 +399,7 @@ static int ti201_act_config(
 {
 	LINFO("%s called\n", __func__);
 	return (int) msm_actuator_config(&ti201_act_t,
-		ti201_msm_actuator_info, argp); 
+		ti201_msm_actuator_info, argp);
 }
 
 static int ti201_i2c_add_driver_table(
@@ -423,13 +423,13 @@ static int ti201_i2c_add_driver_table(
 		pr_err("%s 0x02 ring enable register i2c write failed (%d)\n", __func__, rc);
 		return rc;
 	}
-	
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
 	rc = msm_camera_i2c_write(&ti201_act_t.i2c_client,
 		REG_VCM_MODE,
 		0x03,
@@ -439,10 +439,10 @@ static int ti201_i2c_add_driver_table(
 		return rc;
 	}
 
-	
-	
-	
-	
+
+
+
+
 	rc = msm_camera_i2c_write(&ti201_act_t.i2c_client,
 		REG_VCM_FREQ,
 		0x61,
@@ -538,16 +538,16 @@ static struct msm_actuator_ctrl_t ti201_act_t = {
 	},
 
 	.set_info = {
-		.total_steps = TI201_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF, 
-		.gross_steps = 3,	
-		.fine_steps = 1,	
+		.total_steps = TI201_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF,
+		.gross_steps = 3,
+		.fine_steps = 1,
 	},
 
 	.curr_step_pos = 0,
 	.curr_region_index = 0,
-	.initial_code = 0,	
+	.initial_code = 0,
 	.actuator_mutex = &ti201_act_mutex,
-	.af_algo = AF_ALGO_RAWCHIP, 
+	.af_algo = AF_ALGO_RAWCHIP,
 
 	.func_tbl = {
 		.actuator_init_table = ti201_msm_actuator_init_table,
@@ -563,7 +563,7 @@ static struct msm_actuator_ctrl_t ti201_act_t = {
 #endif
 	},
 
-	.get_info = {	
+	.get_info = {
 		.focal_length_num = 46,
 		.focal_length_den = 10,
 		.f_number_num = 265,
@@ -574,17 +574,17 @@ static struct msm_actuator_ctrl_t ti201_act_t = {
 		.total_f_dist_den = 1000,
 	},
 
-	
+
 	.ringing_scenario[MOVE_NEAR] = g_scenario,
 	.scenario_size[MOVE_NEAR] = ARRAY_SIZE(g_scenario),
 	.ringing_scenario[MOVE_FAR] = g_scenario,
 	.scenario_size[MOVE_FAR] = ARRAY_SIZE(g_scenario),
 
-	
+
 	.region_params = g_regions,
 	.region_size = ARRAY_SIZE(g_regions),
 
-	
+
 	.damping[MOVE_NEAR] = g_damping_params,
 	.damping[MOVE_FAR] = g_damping_params,
 };

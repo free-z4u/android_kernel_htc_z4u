@@ -16,7 +16,7 @@
 #include <linux/vmalloc.h>
 #include <mach/board.h>
 #include <mach/rpm.h>
-#if 0 
+#if 0
 #include <mach/perflock.h>
 #endif
 #include <mach/rpm-8960.h>
@@ -57,7 +57,7 @@ static u64 get_idle_time(int cpu)
 	u64 idle, idle_time = get_cpu_idle_time_us(cpu, NULL);
 
 	if (idle_time == -1ULL)
-		
+
 		idle = kcpustat_cpu(cpu).cpustat[CPUTIME_IDLE];
 	else
 		idle = usecs_to_cputime64(idle_time);
@@ -70,7 +70,7 @@ static u64 get_iowait_time(int cpu)
 	u64 iowait, iowait_time = get_cpu_iowait_time_us(cpu, NULL);
 
 	if (iowait_time == -1ULL)
-		
+
 		iowait = kcpustat_cpu(cpu).cpustat[CPUTIME_IOWAIT];
 	else
 		iowait = usecs_to_cputime64(iowait_time);
@@ -171,18 +171,18 @@ void htc_pm_monitor_work(struct work_struct *work)
 	printk(KERN_INFO "[K] [PM] hTC PM Statistic ");
 	printk(KERN_INFO "[K] %02d-%02d %02d:%02d:%02d \n", tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-	
+
 
 	htc_idle_stat_show(msm_htc_util_delay_time);
 	htc_idle_stat_clear();
 	htc_timer_stats_OnOff('0');
 	htc_timer_stats_show(300);
 	htc_timer_stats_OnOff('1');
-#if 0 
+#if 0
 	htc_print_active_perf_locks();
 #endif
-	
-	
+
+
 	htc_print_active_wake_locks(WAKE_LOCK_SUSPEND);
 
 
@@ -262,7 +262,7 @@ void htc_kernel_top(void)
 	spin_lock_irqsave(&lock, flags);
 	get_all_cpu_stat(&new_cpu_stat);
 
-	
+
 	for_each_process(p) {
 		thread_group_cputime(p, &cputime);
 
@@ -274,10 +274,10 @@ void htc_kernel_top(void)
 		}
 	}
 
-	
+
 	sorting(curr_proc_delta, top_loading);
 
-	
+
 	user_time = (unsigned long)((new_cpu_stat.cpustat[CPUTIME_USER] + new_cpu_stat.cpustat[CPUTIME_NICE])
 			- (old_cpu_stat.cpustat[CPUTIME_USER] + old_cpu_stat.cpustat[CPUTIME_NICE]));
 	system_time = (unsigned long)(new_cpu_stat.cpustat[CPUTIME_SYSTEM] - old_cpu_stat.cpustat[CPUTIME_SYSTEM]);
@@ -285,13 +285,13 @@ void htc_kernel_top(void)
 	irq_time = (unsigned long)((new_cpu_stat.cpustat[CPUTIME_IRQ] + new_cpu_stat.cpustat[CPUTIME_SOFTIRQ])
 			- (old_cpu_stat.cpustat[CPUTIME_IRQ] + old_cpu_stat.cpustat[CPUTIME_SOFTIRQ]));
 
-	
+
 
 	idle_time = (unsigned long)((new_cpu_stat.cpustat[CPUTIME_IDLE] > old_cpu_stat.cpustat[CPUTIME_IDLE])
 		? new_cpu_stat.cpustat[CPUTIME_IDLE] - old_cpu_stat.cpustat[CPUTIME_IDLE] : 0);
 	idle_time += (unsigned long)((new_cpu_stat.cpustat[CPUTIME_STEAL] + new_cpu_stat.cpustat[CPUTIME_GUEST])
 		- (old_cpu_stat.cpustat[CPUTIME_STEAL] + old_cpu_stat.cpustat[CPUTIME_GUEST]));
-	
+
 
 	delta_time = user_time + system_time + io_time + irq_time + idle_time;
 
@@ -299,7 +299,7 @@ void htc_kernel_top(void)
 	if ((full_loading_counter >= 9) && (full_loading_counter % 3 == 0))
 		 dump_top_stack = 1;
 
-	
+
 	printk(KERN_INFO "[K] CPU Usage\t\tPID\t\tName\n");
 	for (i = 0 ; i < NUM_BUSY_THREAD_CHECK ; i++) {
 		printk(KERN_INFO "[K] %8lu%%\t\t%d\t\t%s\t\t%d\n",
@@ -309,13 +309,13 @@ void htc_kernel_top(void)
 				curr_proc_delta[top_loading[i]]);
 	}
 
-	
+
 	if (dump_top_stack) {
 	   struct task_struct *t;
 	   for (i = 0 ; i < NUM_BUSY_THREAD_CHECK ; i++) {
 		if (task_ptr_array[top_loading[i]] != NULL && task_ptr_array[top_loading[i]]->stime > 0) {
 			t = task_ptr_array[top_loading[i]];
-			
+
 			do {
 				printk(KERN_INFO "\n[K] ###pid:%d name:%s state:%lu ppid:%d stime:%lu utime:%lu\n",
 				t->pid, t->comm, t->state, t->real_parent->pid, t->stime, t->utime);
@@ -325,7 +325,7 @@ void htc_kernel_top(void)
 		}
 	   }
 	}
-	
+
 	for_each_process(p) {
 		if (p->pid < MAX_PID) {
 			thread_group_cputime(p, &cputime);
@@ -368,7 +368,7 @@ void htc_PM_monitor_init(void)
 void htc_monitor_init(void)
 {
 	if (htc_pm_monitor_wq == NULL) {
-		
+
 		htc_pm_monitor_wq = create_workqueue("htc_pm_monitor_wq");
 		printk(KERN_INFO "[K] Create HTC private workqueue(0x%x)...\n", (unsigned int)htc_pm_monitor_wq);
 	}

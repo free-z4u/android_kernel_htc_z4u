@@ -12,7 +12,7 @@
 #endif
 #ifdef __cplusplus
 extern "C"{
-#endif   
+#endif
 
 
 
@@ -25,14 +25,14 @@ extern "C"{
 		extern	FILE	*fLogFile;
 		extern	FILE	*HtmlFileLog;
 		#define __func__  __FUNCTION__
-		
+
 		#define DEBUGLOG(...)  fprintf(HtmlFileLog, __VA_ARGS__); fprintf(HtmlFileLog, "<hr>\n")
-		
+
 	#else
 		#define DEBUGLOG  pr_info
 	#endif
 #else
-	#define DEBUGLOG(...)	
+	#define DEBUGLOG(...)
 #endif
 
 #define YUSHAN_VERBOSE 0
@@ -43,7 +43,7 @@ extern "C"{
 		#define VERBOSELOG  pr_info
 	#endif
 #else
-	#define VERBOSELOG(...)	
+	#define VERBOSELOG(...)
 #endif
 
 #ifdef WIN32
@@ -51,7 +51,7 @@ extern "C"{
 		#include <stdio.h>
 		extern	FILE	*fLogFile;
 		extern	FILE	*HtmlFileLog;
-		
+
 		#define __func__  __FUNCTION__
 	#endif
 	#define ERRORLOG(...)   fprintf(HtmlFileLog, __VA_ARGS__)
@@ -90,12 +90,12 @@ typedef unsigned int uint32_t;
 
 #define RAW8								8
 #define	RAW10								10
-#define	RAW10_8								108		
+#define	RAW10_8								108
 
 
 #define IDP_GEN_PIX_WIDTH					10
-#define DXO_CLK_LIMIT						0x12C0000	
-#define SYS_CLK_LIMIT						0x0C80000	
+#define DXO_CLK_LIMIT						0x12C0000
+#define SYS_CLK_LIMIT						0x0C80000
 
 #define PLL_CLK_INDEX				    	0
 #define IDIV_INDEX				    		1
@@ -137,7 +137,7 @@ typedef unsigned int uint32_t;
 #define FALSE_ALARM									0xFF
 
 #define YUSHAN_INTR_BASE_ADDR						0x0C00
-#define	YUSHAN_OFFSET_INTR_STATUS					0x00	
+#define	YUSHAN_OFFSET_INTR_STATUS					0x00
 #define	YUSHAN_OFFSET_INTR_ENABLE_STATUS			0x04
 #define YUSHAN_OFFSET_INTR_STATUS_CLEAR				0x08
 #define YUSHAN_OFFSET_INTR_DISABLE					0x10
@@ -185,7 +185,7 @@ typedef unsigned int uint32_t;
 #define EVENT_DXOPDP_NEWFRAMECMD_ACK				8
 #define EVENT_DXOPDP_NEWFRAMEPROC_ACK				9
 #define EVENT_DXOPDP_NEWFRAME_ERR					10
-	
+
 #define EVENT_DPP_BOOT							  	11
 #define EVENT_DPP_EOF_EXECCMD						12
 #define EVENT_DXODPP_EOP							13
@@ -268,9 +268,9 @@ typedef unsigned int uint32_t;
 #define EVENT_LINESIZE_REPROGRAM_DONE				80
 #define EVENT_PLL_STABLE							81
 #define EVENT_LDO_STABLE							82
-#define EVENT_LINE_POSITION_INTR					83	
-#define EVENT_TX_DATA_UNDERFLOW						84	
-#define EVENT_TX_INDEX_UNDERFLOW					85	
+#define EVENT_LINE_POSITION_INTR					83
+#define EVENT_TX_DATA_UNDERFLOW						84
+#define EVENT_TX_INDEX_UNDERFLOW					85
 
 #define EVENT_FIRST_INDEXFORSET {EVENT_CSI2RX_ECC_ERR, EVENT_PDP_BOOT, EVENT_DPP_BOOT, EVENT_DOP7_BOOT, EVENT_CSI2TX_SP_ERR, EVENT_RX_PHY_ERR_SOT_SOFT_DL4, EVENT_TXPHY_CTRL_ERR_D1, EVENT_UNMATCHED_IMAGE_SIZE_ERROR, EVENT_RX_CHAR_COLOR_BAR_0_ERR, EVENT_POST_DXO_WRAPPER_PROTOCOL_ERR, EVENT_LINESIZE_REPROGRAM_DONE, EVENT_LINE_POSITION_INTR, EVENT_TX_DATA_UNDERFLOW, TOTAL_INTERRUPT_COUNT+1}
 
@@ -283,7 +283,7 @@ typedef unsigned int uint32_t;
 #define TIME_100MS				5
 
 
-#define YUSHAN_FRAME_FORMAT_NORMAL_MODE		0	
+#define YUSHAN_FRAME_FORMAT_NORMAL_MODE		0
 #define YUSHAN_FRAME_FORMAT_VF_MODE			1
 #define YUSHAN_FRAME_FORMAT_STILL_MODE		2
 
@@ -301,11 +301,11 @@ extern bool_t			gPllLocked;
 typedef enum {
 	DXO_NO_ERR=100,
 	DXO_LINEBLANK_ERR,
-	DXO_FULLLINE_ERR, 
-	DXO_ACTIVE_FRAMELENGTH_ERR, 
-	DXO_FULLFRAMELENGTH_ERR, 
+	DXO_FULLLINE_ERR,
+	DXO_ACTIVE_FRAMELENGTH_ERR,
+	DXO_FULLFRAMELENGTH_ERR,
 	DXO_FRAMEBLANKING_ERR,
-	
+
 	DXO_LOLIMIT_EXCEED_HILIMIT  = 200
 }Yushan_DXO_Errors_e;
 
@@ -322,77 +322,77 @@ typedef enum {
 
 
 typedef struct {
-	uint16_t 	uwWordcount; 
-	
-	
+	uint16_t 	uwWordcount;
+
+
 	uint8_t 	bDatatype;
-	
+
 	uint8_t 	bActiveDatatype;
-	
-	
+
+
 	uint8_t 	bSelectStillVfMode;
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 } Yushan_Frame_Format_t;
 
 
 
 
 typedef	struct {
-	
-	
+
+
 	uint8_t 	bNumberOfLanes;
-	
-	
-	
-	
+
+
+
+
 	uint16_t 	uwPixelFormat;
-	
-	uint16_t 	uwBitRate; 
-	
-	uint32_t 	fpExternalClock; 
+
+	uint16_t 	uwBitRate;
+
+	uint32_t 	fpExternalClock;
 	uint32_t	fpSpiClock;
-	
+
 	uint16_t	uwActivePixels;
-	
+
 	uint16_t	uwLineBlankVf;
-	
+
 	uint16_t	uwLineBlankStill;
-	
+
 	uint16_t	uwLines;
-	
+
 	uint16_t	uwFrameBlank;
-	
-	
-	
-	
-	
-	uint8_t		bValidWCEntries; 
+
+
+
+
+
+	uint8_t		bValidWCEntries;
 	Yushan_Frame_Format_t sFrameFormat[15];
-	
+
 	uint8_t		bDxoSettingCmdPerFrame;
-	
+
 	bool_t		bUseExternalLDO;
-	
-	
+
+
 }Yushan_Init_Struct_t;
 
 
 typedef struct {
-	
-	uint16_t	uwActivePixels;			
-	
+
+	uint16_t	uwActivePixels;
+
 	uint16_t	uwLineBlank;
-	
-	uint16_t	uwActiveFrameLength;	
-	
+
+	uint16_t	uwActiveFrameLength;
+
 	uint8_t		bSelectStillVfMode;
-	
+
 	uint16_t	uwPixelFormat;
 
 }Yushan_New_Context_Config_t;
@@ -401,47 +401,47 @@ typedef struct {
 
 typedef	struct {
 	uint8_t 	*pDxoPdpRamImage[2];
-	
+
 	uint16_t	uwDxoPdpStartAddr;
-	
+
 	uint16_t	uwDxoPdpBootAddr;
 	// IP Boot address, where first add of Microcode has to be written
 	uint16_t 	uwDxoPdpRamImageSize[2];
-	
+
 	uint16_t	uwBaseAddrPdpMicroCode[2];
-	
+
 	uint8_t 	*pDxoDppRamImage[2];
-	
+
 	uint16_t	uwDxoDppStartAddr;
-	
+
 	uint16_t	uwDxoDppBootAddr;
 	// IP Boot address, where first add of Microcode has to be written
 	uint16_t 	uwDxoDppRamImageSize[2];
-	
+
 	uint16_t	uwBaseAddrDppMicroCode[2];
-	
+
 	uint8_t 	*pDxoDopRamImage[2];
-	
+
 	uint16_t	uwDxoDopStartAddr;
-	
+
 	uint16_t	uwDxoDopBootAddr;
 	// IP Boot address, where first add of Microcode has to be written
 	uint16_t 	uwDxoDopRamImageSize[2];
-	
+
 	uint16_t	uwBaseAddrDopMicroCode[2];
-	
+
 } Yushan_Init_Dxo_Struct_t;
 
 
 
 typedef struct {
-	
+
 	uint8_t		bDxoConstraints;
-	
+
 	uint32_t	udwDxoConstraintsMinValue;
-	
-	
-	
+
+
+
 
 }Yushan_SystemStatus_t;
 
@@ -454,11 +454,11 @@ typedef	struct {
 	uint16_t 	uwYAddrStart;
 	uint16_t 	uwXAddrEnd;
 	uint16_t 	uwYAddrEnd;
-	uint16_t 	uwXEvenInc;  
+	uint16_t 	uwXEvenInc;
 	uint16_t 	uwXOddInc;
-	uint16_t 	uwYEvenInc;  
+	uint16_t 	uwYEvenInc;
 	uint16_t 	uwYOddInc;
-	uint8_t 	bBinning;    
+	uint8_t 	bBinning;
 }Yushan_ImageChar_t;
 
 
@@ -469,16 +469,16 @@ typedef	struct {
 	uint16_t 	uwPreDigGainGR;
 	uint16_t 	uwPreDigGainR;
 	uint16_t 	uwPreDigGainB;
-	uint16_t 	uwExposureTime;    
+	uint16_t 	uwExposureTime;
 	uint8_t	bRedGreenRatio;
-	uint8_t	bBlueGreenRatio; 
+	uint8_t	bBlueGreenRatio;
 }Yushan_GainsExpTime_t;
 
 
 
 typedef	struct {
-	
-	uint8_t 	bTemporalSmoothing;   
+
+	uint8_t 	bTemporalSmoothing;
 	uint16_t 	uwFlashPreflashRating;
 	uint8_t 	bFocalInfo;
 }Yushan_DXO_DPP_Tuning_t;
@@ -486,8 +486,8 @@ typedef	struct {
 
 
 typedef	struct {
-	
-	
+
+
 	uint8_t 	bEstimationMode;
 	uint8_t 	bSharpness;
 	uint8_t 	bDenoisingLowGain;
@@ -496,7 +496,7 @@ typedef	struct {
 	uint8_t 	bNoiseVsDetailsLowGain;
 	uint8_t 	bNoiseVsDetailsMedGain;
 	uint8_t 	bNoiseVsDetailsHiGain;
-	uint8_t 	bTemporalSmoothing;    
+	uint8_t 	bTemporalSmoothing;
 }Yushan_DXO_DOP_Tuning_t;
 
 
@@ -620,7 +620,7 @@ void Yushan_Debug_Reg_Dump(uint8_t);
 
 #ifdef __cplusplus
 }
-#endif   
+#endif
 
 
-#endif 
+#endif

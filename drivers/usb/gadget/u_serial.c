@@ -1067,7 +1067,7 @@ static void gs_throttle(struct tty_struct *tty)
 	pr_vdebug("%s %d: read_cnt: %d, rcv_room: %d\n", __func__,
 			port->port_num, tty->read_cnt, tty->receive_room);
 
-	
+
 	if (tty->receive_room >= 128) {
 		printk(KERN_INFO "WA: race condition happens.\n");
 		if (test_and_clear_bit(TTY_THROTTLED, &tty->flags) &&

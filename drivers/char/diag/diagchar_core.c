@@ -498,7 +498,7 @@ long diagchar_ioctl(struct file *filp,
 				mutex_unlock(&driver->diagchar_mutex);
 				return -EFAULT;
 			}
-			
+
 			if (diag_max_reg > diag_threshold_reg) {
 				diag_max_reg = diag_threshold_reg;
 				pr_info("diag: best case memory allocation\n");
@@ -582,7 +582,7 @@ long diagchar_ioctl(struct file *filp,
 	} else if (iocmd == DIAG_IOCTL_DCI_REG) {
 		if (driver->dci_state == DIAG_DCI_NO_REG)
 			return DIAG_DCI_NO_REG;
-		
+
 		if (driver->num_dci_client >= MAX_DCI_CLIENT)
 			return DIAG_DCI_NO_REG;
 		dci_params = kzalloc(sizeof(struct diag_dci_client_tbl),
@@ -674,7 +674,7 @@ long diagchar_ioctl(struct file *filp,
 			driver->in_busy_qdsp_2 = 0;
 			driver->in_busy_wcnss_1 = 0;
 			driver->in_busy_wcnss_2 = 0;
-			
+
 			if (driver->ch)
 				queue_work(driver->diag_wq,
 					&(driver->diag_read_smd_work));
@@ -750,7 +750,7 @@ long diagchar_ioctl(struct file *filp,
 #endif
 			driver->qxdm2sd_drop = 1;
 		}
-#endif 
+#endif
 		success = 1;
 	} else if (iocmd == DIAG_IOCTL_NONBLOCKING_TIMEOUT) {
 		for (i = 0; i < driver->num_clients; i++)
@@ -1011,50 +1011,50 @@ drop:
 			}
 		}
 
-		
+
 		if (driver->in_busy_1 == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret,
 					*(driver->buf_in_1),
 					driver->write_ptr_1->length);
 			driver->in_busy_1 = 0;
 		}
 		if (driver->in_busy_2 == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret,
 					*(driver->buf_in_2),
 					driver->write_ptr_2->length);
 			driver->in_busy_2 = 0;
 		}
 
-		
+
 		if (driver->in_busy_qdsp_1 == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret, *(driver->
 					buf_in_qdsp_1),
 					driver->write_ptr_qdsp_1->length);
 			driver->in_busy_qdsp_1 = 0;
 		}
 		if (driver->in_busy_qdsp_2 == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret, *(driver->
 					buf_in_qdsp_2), driver->
 					write_ptr_qdsp_2->length);
 			driver->in_busy_qdsp_2 = 0;
 		}
 
-		
+
 		if (driver->in_busy_wcnss_1 == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret, *(driver->
 							buf_in_wcnss_1),
 					 driver->write_ptr_wcnss_1->length);
 			driver->in_busy_wcnss_1 = 0;
 		}
 
-		
+
 		if (driver->in_busy_wcnss_2 == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret, *(driver->
 							buf_in_wcnss_2),
 					 driver->write_ptr_wcnss_2->length);
@@ -1062,9 +1062,9 @@ drop:
 		}
 
 #ifdef CONFIG_DIAG_SDIO_PIPE
-		
+
 		if (driver->in_busy_sdio == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret,
 					*(driver->buf_in_sdio),
 					driver->write_ptr_mdm->length);
@@ -1072,9 +1072,9 @@ drop:
 		}
 #endif
 #if defined(CONFIG_DIAG_HSIC_PIPE) && defined(CONFIG_DIAG_HSIC_ON_LEGACY)
-		
+
 		if (driver->in_busy_hsic_write_on_device == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret,
 					*(driver->buf_in_hsic),
 					 driver->write_ptr_mdm->length);
@@ -1082,9 +1082,9 @@ drop:
 		}
 #endif
 #if defined(CONFIG_DIAG_HSIC_PIPE) && defined(CONFIG_DIAG_HSIC_ON_LEGACY)
-		
+
 		if (driver->in_busy_hsic_write_on_device == 1) {
-			
+
 			COPY_USER_SPACE_OR_EXIT(buf+ret,
 					*(driver->buf_in_hsic),
 					 driver->write_ptr_mdm->length);

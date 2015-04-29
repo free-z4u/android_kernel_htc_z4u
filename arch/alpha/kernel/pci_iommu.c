@@ -357,8 +357,8 @@ static dma_addr_t alpha_pci_map_page(struct device *dev, struct page *page,
 	if (dir == PCI_DMA_NONE)
 		BUG();
 
-	dac_allowed = pdev ? pci_dac_dma_supported(pdev, pdev->dma_mask) : 0; 
-	return pci_map_single_1(pdev, (char *)page_address(page) + offset, 
+	dac_allowed = pdev ? pci_dac_dma_supported(pdev, pdev->dma_mask) : 0;
+	return pci_map_single_1(pdev, (char *)page_address(page) + offset,
 				size, dac_allowed);
 }
 
@@ -845,7 +845,7 @@ static int alpha_pci_supported(struct device *dev, u64 mask)
  * AGP GART extensions to the IOMMU
  */
 int
-iommu_reserve(struct pci_iommu_arena *arena, long pg_count, long align_mask) 
+iommu_reserve(struct pci_iommu_arena *arena, long pg_count, long align_mask)
 {
 	unsigned long flags;
 	unsigned long *ptes;
@@ -875,7 +875,7 @@ iommu_reserve(struct pci_iommu_arena *arena, long pg_count, long align_mask)
 	return p;
 }
 
-int 
+int
 iommu_release(struct pci_iommu_arena *arena, long pg_start, long pg_count)
 {
 	unsigned long *ptes;
@@ -895,7 +895,7 @@ iommu_release(struct pci_iommu_arena *arena, long pg_start, long pg_count)
 }
 
 int
-iommu_bind(struct pci_iommu_arena *arena, long pg_start, long pg_count, 
+iommu_bind(struct pci_iommu_arena *arena, long pg_start, long pg_count,
 	   struct page **pages)
 {
 	unsigned long flags;
@@ -903,7 +903,7 @@ iommu_bind(struct pci_iommu_arena *arena, long pg_start, long pg_count,
 	long i, j;
 
 	if (!arena) return -EINVAL;
-	
+
 	spin_lock_irqsave(&arena->lock, flags);
 
 	ptes = arena->ptes;
@@ -914,7 +914,7 @@ iommu_bind(struct pci_iommu_arena *arena, long pg_start, long pg_count,
 			return -EBUSY;
 		}
 	}
-		
+
 	for(i = 0, j = pg_start; i < pg_count; i++, j++)
 		ptes[j] = mk_iommu_pte(page_to_phys(pages[i]));
 

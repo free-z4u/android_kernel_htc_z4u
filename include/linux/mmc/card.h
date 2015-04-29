@@ -19,7 +19,7 @@ extern void mmc_blk_set_wp_prevention_partno(int partno);
 extern char *mmc_blk_get_wp_prevention_partno(unsigned char *buff);
 extern unsigned int get_mmc0_write_protection_type(void);
 extern void set_mmc0_write_protection_type(unsigned int type);
-#endif	
+#endif
 
 struct mmc_cid {
 	unsigned int		manfid;
@@ -74,7 +74,7 @@ struct mmc_ext_csd {
 #define MMC_HS200_MAX_DTR	200000000
 	unsigned int		sectors;
 	unsigned int		card_type;
-	unsigned char		fwrev[7];			
+	unsigned char		fwrev[7];
 	unsigned int		hc_erase_size;		/* In sectors */
 	unsigned int		hc_erase_timeout;	/* In milliseconds */
 	unsigned int		sec_trim_mult;	/* Secure trim multiplier  */
@@ -91,9 +91,9 @@ struct mmc_ext_csd {
 	unsigned int            data_tag_unit_size;     /* DATA TAG UNIT size */
 	unsigned int		boot_ro_lock;		/* ro lock support */
 	bool			boot_ro_lockable;
-	bool			bkops;		
-	bool			bkops_en;	
-	u8			raw_exception_status;	
+	bool			bkops;
+	bool			bkops_en;
+	u8			raw_exception_status;
 	u8			raw_partition_support;	/* 160 */
 	u8			raw_erased_mem_count;	/* 181 */
 	u8			raw_ext_csd_structure;	/* 194 */
@@ -107,7 +107,7 @@ struct mmc_ext_csd {
 	u8			raw_sec_erase_mult;	/* 230 */
 	u8			raw_sec_feature_support;/* 231 */
 	u8			raw_trim_mult;		/* 232 */
-	u8			raw_bkops_status;	
+	u8			raw_bkops_status;
 	u8			raw_sectors[4];		/* 212 - 4 bytes */
 
 	unsigned int            feature_support;
@@ -248,11 +248,11 @@ struct mmc_card {
 #define MMC_TYPE_MMC		0		/* MMC card */
 #define MMC_TYPE_SD		1		/* SD card */
 #define MMC_TYPE_SDIO		2		/* SDIO card */
-#define MMC_TYPE_SDIO_WIMAX	3		
-#define MMC_TYPE_SDIO_SVLTE	4		
+#define MMC_TYPE_SDIO_WIMAX	3
+#define MMC_TYPE_SDIO_SVLTE	4
 #define MMC_TYPE_SD_COMBO	5		/* SD combo (IO+mem) card */
-#define MMC_TYPE_SDIO_WIFI	6		
-#define MMC_TYPE_SDIO_SPRD	7		
+#define MMC_TYPE_SDIO_WIFI	6
+#define MMC_TYPE_SDIO_SPRD	7
 	unsigned int		state;		/* (our) card state */
 #define MMC_STATE_PRESENT	(1<<0)		/* present in sysfs */
 #define MMC_STATE_READONLY	(1<<1)		/* card is read-only */
@@ -264,9 +264,9 @@ struct mmc_card {
 #define MMC_CARD_REMOVED	(1<<7)		/* card has been removed */
 #define MMC_STATE_HIGHSPEED_200	(1<<8)		/* card is in HS200 mode */
 #define MMC_STATE_SLEEP		(1<<9)		/* card is in sleep state */
-#define MMC_STATE_NEED_BKOPS	(1<<10)		
-#define MMC_STATE_DOING_BKOPS	(1<<11)		
-#define MMC_STATE_CHECK_BKOPS	(1<<12)		
+#define MMC_STATE_NEED_BKOPS	(1<<10)
+#define MMC_STATE_DOING_BKOPS	(1<<11)
+#define MMC_STATE_CHECK_BKOPS	(1<<12)
 	unsigned int		quirks; 	/* card quirks */
 #define MMC_QUIRK_LENIENT_FN0	(1<<0)		/* allow SDIO FN0 writes outside of the VS CCCR range */
 #define MMC_QUIRK_BLKSZ_FOR_BYTE_MODE (1<<1)	/* use func->cur_blksize */
@@ -281,7 +281,7 @@ struct mmc_card {
 #define MMC_QUIRK_BROKEN_BYTE_MODE_512 (1<<8)	/* Avoid sending 512 bytes in */
 #define MMC_QUIRK_LONG_READ_TIME (1<<9)		/* Data read time > CSD says */
 						/* byte mode */
-#define MMC_QUIRK_INAND_DATA_TIMEOUT  (1<<8)    
+#define MMC_QUIRK_INAND_DATA_TIMEOUT  (1<<8)
 	unsigned int    poweroff_notify_state;	/* eMMC4.5 notify feature */
 #define MMC_NO_POWER_NOTIFICATION	0
 #define MMC_POWERED_ON			1
@@ -316,8 +316,8 @@ struct mmc_card {
 	unsigned char           do_remove;
 	struct mmc_part	part[MMC_NUM_PHY_PARTITION]; /* physical partitions */
 	unsigned int    nr_parts;
-	unsigned int		wr_perf; 
-	s8                      speed_class; 
+	unsigned int		wr_perf;
+	s8                      speed_class;
 
 	struct mmc_wr_pack_stats wr_pack_stats; /* packed commands stats*/
 };

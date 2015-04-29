@@ -298,7 +298,7 @@ int __ref cpu_down(unsigned int cpu)
 
 out:
 	cpu_maps_update_done();
-	
+
 	printk("Take CPU%u down - End\n", cpu);
 	return err;
 }

@@ -13,24 +13,24 @@
 #include <linux/fs.h>
 #include <linux/device.h>
 #include <linux/mutex.h>
-#include <linux/compiler.h> 
+#include <linux/compiler.h>
 #include <linux/videodev2.h>
 
 struct v4l2_fh;
 
 struct v4l2_ioctl_ops {
-	
 
-	
+
+
 	int (*vidioc_querycap)(struct file *file, void *fh, struct v4l2_capability *cap);
 
-	
+
 	int (*vidioc_g_priority)   (struct file *file, void *fh,
 				    enum v4l2_priority *p);
 	int (*vidioc_s_priority)   (struct file *file, void *fh,
 				    enum v4l2_priority p);
 
-	
+
 	int (*vidioc_enum_fmt_vid_cap)     (struct file *file, void *fh,
 					    struct v4l2_fmtdesc *f);
 	int (*vidioc_enum_fmt_vid_overlay) (struct file *file, void *fh,
@@ -44,7 +44,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_enum_fmt_type_private)(struct file *file, void *fh,
 					    struct v4l2_fmtdesc *f);
 
-	
+
 	int (*vidioc_g_fmt_vid_cap)    (struct file *file, void *fh,
 					struct v4l2_format *f);
 	int (*vidioc_g_fmt_vid_overlay)(struct file *file, void *fh,
@@ -68,7 +68,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_g_fmt_type_private)(struct file *file, void *fh,
 					struct v4l2_format *f);
 
-	
+
 	int (*vidioc_s_fmt_vid_cap)    (struct file *file, void *fh,
 					struct v4l2_format *f);
 	int (*vidioc_s_fmt_vid_overlay)(struct file *file, void *fh,
@@ -92,7 +92,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_s_fmt_type_private)(struct file *file, void *fh,
 					struct v4l2_format *f);
 
-	
+
 	int (*vidioc_try_fmt_vid_cap)    (struct file *file, void *fh,
 					  struct v4l2_format *f);
 	int (*vidioc_try_fmt_vid_overlay)(struct file *file, void *fh,
@@ -116,7 +116,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_try_fmt_type_private)(struct file *file, void *fh,
 					  struct v4l2_format *f);
 
-	
+
 	int (*vidioc_reqbufs) (struct file *file, void *fh, struct v4l2_requestbuffers *b);
 	int (*vidioc_querybuf)(struct file *file, void *fh, struct v4l2_buffer *b);
 	int (*vidioc_qbuf)    (struct file *file, void *fh, struct v4l2_buffer *b);
@@ -129,7 +129,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_s_fbuf)   (struct file *file, void *fh,
 				struct v4l2_framebuffer *a);
 
-		
+
 	int (*vidioc_streamon) (struct file *file, void *fh, enum v4l2_buf_type i);
 	int (*vidioc_streamoff)(struct file *file, void *fh, enum v4l2_buf_type i);
 
@@ -137,19 +137,19 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_s_std) (struct file *file, void *fh, v4l2_std_id *norm);
 	int (*vidioc_querystd) (struct file *file, void *fh, v4l2_std_id *a);
 
-		
+
 	int (*vidioc_enum_input)(struct file *file, void *fh,
 				 struct v4l2_input *inp);
 	int (*vidioc_g_input)   (struct file *file, void *fh, unsigned int *i);
 	int (*vidioc_s_input)   (struct file *file, void *fh, unsigned int i);
 
-		
+
 	int (*vidioc_enum_output) (struct file *file, void *fh,
 				  struct v4l2_output *a);
 	int (*vidioc_g_output)   (struct file *file, void *fh, unsigned int *i);
 	int (*vidioc_s_output)   (struct file *file, void *fh, unsigned int i);
 
-		
+
 	int (*vidioc_queryctrl)        (struct file *file, void *fh,
 					struct v4l2_queryctrl *a);
 	int (*vidioc_g_ctrl)           (struct file *file, void *fh,
@@ -165,7 +165,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_querymenu)        (struct file *file, void *fh,
 					struct v4l2_querymenu *a);
 
-	
+
 	int (*vidioc_enumaudio)        (struct file *file, void *fh,
 					struct v4l2_audio *a);
 	int (*vidioc_g_audio)          (struct file *file, void *fh,
@@ -173,7 +173,7 @@ struct v4l2_ioctl_ops {
 	int (*vidioc_s_audio)          (struct file *file, void *fh,
 					struct v4l2_audio *a);
 
-	
+
 	int (*vidioc_enumaudout)       (struct file *file, void *fh,
 					struct v4l2_audioout *a);
 	int (*vidioc_g_audout)         (struct file *file, void *fh,
@@ -184,14 +184,14 @@ struct v4l2_ioctl_ops {
 					struct v4l2_modulator *a);
 	int (*vidioc_s_modulator)      (struct file *file, void *fh,
 					struct v4l2_modulator *a);
-	
+
 	int (*vidioc_cropcap)          (struct file *file, void *fh,
 					struct v4l2_cropcap *a);
 	int (*vidioc_g_crop)           (struct file *file, void *fh,
 					struct v4l2_crop *a);
 	int (*vidioc_s_crop)           (struct file *file, void *fh,
 					struct v4l2_crop *a);
-	
+
 	int (*vidioc_g_jpegcomp)       (struct file *file, void *fh,
 					struct v4l2_jpegcompression *a);
 	int (*vidioc_s_jpegcomp)       (struct file *file, void *fh,

@@ -159,24 +159,24 @@ int mdp_dsi_video_on(struct platform_device *pdev)
 			mfd->panel_info.bpp);
 		return -ENODEV;
 	}
-	
+
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
 
 
-	
+
 	MDP_OUTP(MDP_BASE + DMA_P_BASE + 0x8, (uint32) buf);
 
-	
+
 	MDP_OUTP(MDP_BASE + DMA_P_BASE + 0x4, ((fbi->var.yres) << 16) |
 		(fbi->var.xres));
 
-	
+
 	MDP_OUTP(MDP_BASE + DMA_P_BASE + 0xc, fbi->fix.line_length);
 
-	
+
 	MDP_OUTP(MDP_BASE + DMA_P_BASE + 0x10, 0);
 
-	
+
 	curr = inpdw(MDP_BASE + DMA_P_BASE);
 	mask = 0x0FFFFFFF;
 	dma2_cfg_reg = (dma2_cfg_reg & mask) | (curr & ~mask);
@@ -215,7 +215,7 @@ int mdp_dsi_video_on(struct platform_device *pdev)
 	active_v_end = active_v_start +	(var->yres) * hsync_period - 1;
 	active_v_start |= ACTIVE_START_Y_EN;
 
-	dsi_underflow_clr |= 0x80000000;	
+	dsi_underflow_clr |= 0x80000000;
 	hsync_polarity = 0;
 	vsync_polarity = 0;
 	data_en_polarity = 0;
@@ -246,13 +246,13 @@ int mdp_dsi_video_on(struct platform_device *pdev)
 
 	ret = panel_next_on(pdev);
 	if (ret == 0) {
-		
+
 		MDP_OUTP(MDP_BASE + DSI_VIDEO_BASE, 1);
-		
+
 		mdp_pipe_ctrl(MDP_DMA2_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
 	}
 
-	
+
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 
 	if (!vsync_cntrl.sysfs_created) {
@@ -313,12 +313,12 @@ int mdp_dsi_video_off(struct platform_device *pdev)
 	}
 
 	mdp_histogram_ctrl_all(FALSE);
-	
+
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
 	MDP_OUTP(MDP_BASE + DSI_VIDEO_BASE, 0);
-	
+
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
-	
+
 	mdp_pipe_ctrl(MDP_DMA2_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 
 	ret = panel_next_off(pdev);
@@ -326,7 +326,7 @@ int mdp_dsi_video_off(struct platform_device *pdev)
 	atomic_set(&vsync_cntrl.suspend, 1);
 	atomic_set(&vsync_cntrl.vsync_resume, 0);
 	complete_all(&vsync_cntrl.vsync_wait);
-	
+
 	msleep(20);
 
 	return ret;
@@ -383,10 +383,10 @@ void mdp_dsi_video_update(struct msm_fb_data_type *mfd)
 
 	buf += calc_fb_offset(mfd, fbi, bpp);
 
-	
-	
+
+
 	MDP_OUTP(MDP_BASE + DMA_P_BASE + 0x8, (uint32) buf);
-	
+
 	spin_lock_irqsave(&mdp_spin_lock, flag);
 	mdp_enable_irq(irq_block);
 	INIT_COMPLETION(mfd->dma->comp);

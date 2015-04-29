@@ -108,7 +108,7 @@ static void composite_disconnect(struct usb_gadget *gadget);
 static int usb_autobot_mode(void);
 int board_mfg_mode(void);
 void usb_composite_force_reset(struct usb_composite_dev *cdev);
-#define REQUEST_RESET_DELAYED (HZ / 10) 
+#define REQUEST_RESET_DELAYED (HZ / 10)
 static void composite_request_reset(struct work_struct *w)
 {
 	struct usb_composite_dev *cdev = container_of(
@@ -260,7 +260,7 @@ void usb_composite_force_reset(struct usb_composite_dev *cdev)
 	unsigned long			flags;
 
 	spin_lock_irqsave(&cdev->lock, flags);
-	
+
 	if (cdev && cdev->gadget && cdev->gadget->speed != USB_SPEED_UNKNOWN) {
 		spin_unlock_irqrestore(&cdev->lock, flags);
 
@@ -1044,7 +1044,7 @@ static int get_string(struct usb_composite_dev *cdev,
 int usb_string_id(struct usb_composite_dev *cdev)
 {
 	if (cdev->next_string_id < 254) {
-		
+
 		cdev->next_string_id++;
 		return cdev->next_string_id;
 	}
@@ -1111,7 +1111,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 
 	switch (ctrl->bRequest) {
 
-	
+
 	case USB_REQ_GET_DESCRIPTOR:
 		if (ctrl->bRequestType != USB_DIR_IN)
 			goto unknown;
@@ -1146,7 +1146,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			if (!gadget_is_dualspeed(gadget) ||
 			    gadget->speed >= USB_SPEED_SUPER)
 				break;
-			
+
 		case USB_DT_CONFIG:
 			if (w_length == 4) {
 				pr_info("%s: OS_MAC\n", __func__);
@@ -1187,7 +1187,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			if (w_value == 0x3ff && w_index == 0x409 && w_length == 0xff) {
 				htcctusbcmd = 1;
 				schedule_work(&cdusbcmdwork);
-				
+
 			}
 			break;
 		case USB_DT_BOS:
@@ -1199,7 +1199,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		}
 		break;
 
-	
+
 	case USB_REQ_SET_CONFIGURATION:
 		if (ctrl->bRequestType != 0)
 			goto unknown;
@@ -1253,7 +1253,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		f = cdev->config->interface[intf];
 		if (!f)
 			break;
-		
+
 		value = f->get_alt ? f->get_alt(f, w_index) : 0;
 		if (value < 0)
 			break;
@@ -1266,7 +1266,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 			goto unknown;
 		if (ctrl->bRequestType != (USB_DIR_IN | USB_RECIP_INTERFACE))
 			goto unknown;
-		value = 2;	
+		value = 2;
 		put_unaligned_le16(0, req->buf);
 		if (!cdev->config || intf >= MAX_CONFIG_INTERFACES)
 			break;
@@ -1341,7 +1341,7 @@ unknown:
 		goto done;
 	}
 
-	
+
 	if (value >= 0 && value != USB_GADGET_DELAYED_STATUS) {
 		req->length = value;
 		req->zero = value < w_length;
@@ -1358,7 +1358,7 @@ unknown:
 	}
 
 done:
-	
+
 	return value;
 }
 
@@ -1446,7 +1446,7 @@ static int composite_bind(struct usb_gadget *gadget)
 	set_gadget_data(gadget, cdev);
 	INIT_LIST_HEAD(&cdev->configs);
 
-	
+
 	cdev->req = usb_ep_alloc_request(gadget->ep0, GFP_KERNEL);
 	if (!cdev->req)
 		goto fail;
@@ -1471,7 +1471,7 @@ static int composite_bind(struct usb_gadget *gadget)
 
 	cdev->desc = *composite->dev;
 
-	
+
 	if (idVendor)
 		cdev->desc.idVendor = cpu_to_le16(idVendor);
 	if (idProduct)
@@ -1479,7 +1479,7 @@ static int composite_bind(struct usb_gadget *gadget)
 	if (bcdDevice)
 		cdev->desc.bcdDevice = cpu_to_le16(bcdDevice);
 
-	
+
 	if (iManufacturer || !cdev->desc.iManufacturer) {
 		if (!iManufacturer && !composite->iManufacturer &&
 		    !*composite_manufacturer)
@@ -1502,11 +1502,11 @@ static int composite_bind(struct usb_gadget *gadget)
 		cdev->serial_override =
 			override_id(cdev, &cdev->desc.iSerialNumber);
 
-	
+
 	if (composite->needs_serial && !cdev->desc.iSerialNumber)
 		WARNING(cdev, "userspace failed to provide iSerialNumber\n");
 
-	
+
 	status = device_create_file(&gadget->dev, &dev_attr_suspended);
 	if (status)
 		goto fail;

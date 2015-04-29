@@ -70,4 +70,4 @@ void ts27010_uart_td_close(void);
 int ts27010_uart_td_init(void);
 void ts27010_uart_td_remove(void);
 
-#endif 
+#endif

@@ -83,7 +83,7 @@ struct htc_headset_pmic_platform_data {
 	unsigned int hs_controller;
 	unsigned int hs_switch;
 
-	
+
 	uint32_t adc_mic;
 	uint32_t adc_mic_bias[2];
 	uint32_t adc_remote[6];

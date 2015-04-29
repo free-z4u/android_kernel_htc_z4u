@@ -261,14 +261,14 @@ drop:
 				smd_read(driver->ch, buf, r);
 				if (driver->qxdm2sd_drop && (driver->logging_mode == USB_MODE)
 					&& *((unsigned char *)buf) != 0xc8) {
-					
+
 					DIAG_DBUG("%s:Drop the diag payload :%d\n", __func__, retry);
 					print_hex_dump(KERN_DEBUG, "Drop Packet Data"
 						" from modem(first 16 bytes)", DUMP_PREFIX_ADDRESS,
 						16, 1, buf, 16, 1);
 					driver->in_busy_1 = 0;
 					driver->in_busy_2 = 0;
-					
+
 					msleep(10);
 					r = smd_read_avail(driver->ch);
 					s = smd_cur_packet_size(driver->ch);
@@ -1103,7 +1103,7 @@ static int diag_process_apps_pkt(unsigned char *buf, int len)
 			return 0;
 		}
 #endif
-	} 
+	}
 	else if ((*buf == 0x7d) && (*(buf+1) == 0x4)) {
 		ssid_first = *(uint16_t *)(buf + 2);
 		ssid_last = *(uint16_t *)(buf + 4);

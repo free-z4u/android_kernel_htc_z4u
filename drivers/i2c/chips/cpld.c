@@ -72,9 +72,9 @@ int is_cpld_ready(void)
 static int I2C_TxData(uint16_t slaveAddr, uint8_t *txData, int length)
 {
         uint8_t loop_i;
-        
+
 	int ret =0;
-        
+
         struct i2c_msg msg[] = {
                 {
                  .addr = slaveAddr,
@@ -90,7 +90,7 @@ static int I2C_TxData(uint16_t slaveAddr, uint8_t *txData, int length)
 #ifdef CPLD_I2C_DEBUG
 		printk(KERN_INFO "%s: cpld ret is %d\n", __func__, ret);
 #endif
-                
+
                 if (loop_i == 0 || loop_i == I2C_RETRY_COUNT - 1)
                         E("[I2C CPLD] %s, i2c err, slaveAddr 0x%x, register 0x%x,loop i =%d , \n",
                                 __func__, slaveAddr, txData[0],loop_i);
@@ -110,9 +110,9 @@ static int I2C_TxData(uint16_t slaveAddr, uint8_t *txData, int length)
 static int I2C_RxData(uint16_t slaveAddr, uint8_t *rxData, int length)
 {
         uint8_t loop_i;
-        
+
 	int ret=0;
-        
+
 
         struct i2c_msg msgs[] = {
                 {
@@ -129,7 +129,7 @@ static int I2C_RxData(uint16_t slaveAddr, uint8_t *rxData, int length)
 #ifdef CPLD_I2C_DEBUG
 		printk(KERN_INFO "%s: cpld ret is %d\n", __func__, ret);
 #endif
-                
+
                 if (loop_i == 0 || loop_i == I2C_RETRY_COUNT - 1)
                         E("[I2C CPLD] %s, i2c err, slaveAddr 0x%x loop_i =%d \n",
                                 __func__, slaveAddr,loop_i);
@@ -151,7 +151,7 @@ int CPLD_I2C_Write_Byte(uint16_t SlaveAddress,
         char buffer[2];
         int ret = 0;
 #if 0
-        
+
         printk(KERN_DEBUG
         "[CM3628] %s: _cm3628_I2C_Write_Byte[0x%x, 0x%x, 0x%x]\n",
                 __func__, SlaveAddress, cmd, data);
@@ -191,7 +191,7 @@ int CPLD_I2C_Read_Byte(uint16_t slaveAddr, uint8_t *pdata)
 	 printk("CPLD I2c slaveAddr is 0x%x Read data is 0x%x\n",slaveAddr,pdata[0]);
 #endif
 #if 0
-        
+
         printk(KERN_DEBUG "[CM3628] %s: I2C_RxData[0x%x] = 0x%x\n",
                 __func__, slaveAddr, buffer);
 #endif
@@ -260,11 +260,11 @@ static void handle_i2c_cpld_int_fn(struct work_struct *work)
 
 	pr_info("[I2C CPLD ]%s: CPLD interrupt processing...\n", __func__);
 
-	
+
 	CPLD_I2C_Read_Byte(0x16, &rdata);
 	pr_info("[I2C CPLD ]%s: CPLD GPI_LEVEL=0x%X...\n", __func__, rdata);
 
-	
+
 	CPLD_I2C_Read_Byte(0x07, &rdata);
 	pr_info("[I2C CPLD ]%s: CPLD INT_STATUS=0x%X...\n", __func__, rdata);
 #endif
@@ -347,7 +347,7 @@ int i2c_registerAttr(void){
                 i2c_dev = NULL;
                 goto err_create_i2c_device;
         }
-         
+
         ret = device_create_file(i2c_dev, &dev_attr_debug_en);
         if (ret){
                         goto err_create_i2c_device;
@@ -381,15 +381,15 @@ static int cpld_release(struct inode *inode, struct file *file)
 
 static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
 {
-	
+
 	int ret;
 #if 0
-	cpld_gpio_write(CPLD_EXT_GPIO_LCD_RST, 0);	
+	cpld_gpio_write(CPLD_EXT_GPIO_LCD_RST, 0);
 	cpld_gpio_write(CPLD_EXT_GPIO_AUD_SPK_RCV_SEL, 0);
 	cpld_gpio_write(CPLD_EXT_GPIO_AUD_REV_EN, 0);
 	cpld_gpio_write(CPLD_EXT_GPIO_BT_SHUTDOWN, 0);
 #endif
-	
+
 	if(get_cpld_keyirq_wake()==1)
 		{
 			cpld_irq_unmask(CPLD_IRQ_VOL_UP);
@@ -400,9 +400,9 @@ static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
 			cpld_irq_mask(CPLD_IRQ_VOL_UP);
 			cpld_irq_mask(CPLD_IRQ_VOL_DW);
 		}
-	
 
-#if 0 
+
+#if 0
 	printk(KERN_INFO "=======CPLD GPIO========\n");
 	printk(KERN_INFO "[I2C CPLD] %s\n", __func__);
 	CPLD_I2C_Read_Byte(CPLD_REG_1, &rdata);
@@ -416,37 +416,37 @@ static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
 	CPLD_I2C_Read_Byte(CPLD_REG_5, &rdata);
 	printk(KERN_INFO "[I2C CPLD] reg05(GPO 33-40): 0x%02x\n", rdata);
 	printk(KERN_INFO "===========END==========\n");
-#endif 
+#endif
 
-	
+
         ret = gpio_request(GPIO_CPLD_CLK, "CPLD_CLK");
         if (ret < 0) {
                 pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
                         __func__, GPIO_CPLD_CLK, ret);
-		
+
         }
 
 	if(htc_get_board_revision() == BOARD_EVM) {
 		#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
-			gpio_direction_output(GPIO_CPLD_CLK,   0); 
+			gpio_direction_output(GPIO_CPLD_CLK,   0);
 		#else
-			gpio_direction_output(GPIO_CPLD_CLK,   1); 
+			gpio_direction_output(GPIO_CPLD_CLK,   1);
 		#endif
 	}
 	else
-		gpio_direction_output(GPIO_CPLD_CLK,   1); 
+		gpio_direction_output(GPIO_CPLD_CLK,   1);
 
 	printk(KERN_INFO "[I2C CPLD] CPLD_CLK(%d):%d\n", GPIO_CPLD_CLK, gpio_get_value(GPIO_CPLD_CLK));
 
 	if(!ret) gpio_free(GPIO_CPLD_CLK);
 
-        
-        
+
+
         ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD_I2C_SCL");
         if(!gpio_direction_input(GPIO_CPLD_I2C_SCL))
                 printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SCL);
         if(!ret) gpio_free(GPIO_CPLD_I2C_SCL);
-        
+
         ret = gpio_request(GPIO_CPLD_I2C_SDA, "CPLD_I2C_SDA");
         if(!gpio_direction_input(GPIO_CPLD_I2C_SDA))
                 printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SDA);
@@ -463,39 +463,39 @@ static int cpld_resume(struct i2c_client *client)
         if (ret < 0) {
                 pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
                         		__func__, GPIO_CPLD_CLK, ret);
-		
+
         }
-	
+
 	if(htc_get_board_revision() == BOARD_EVM) {
 		#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
-			gpio_direction_output(GPIO_CPLD_CLK,   1); 
+			gpio_direction_output(GPIO_CPLD_CLK,   1);
 		#else
-			gpio_direction_output(GPIO_CPLD_CLK,   0); 
+			gpio_direction_output(GPIO_CPLD_CLK,   0);
 		#endif
 	}
 	else
-		gpio_direction_output(GPIO_CPLD_CLK,   0); 
+		gpio_direction_output(GPIO_CPLD_CLK,   0);
 
 	if(!ret) gpio_free(GPIO_CPLD_CLK);
 
 #if 1
-        
-	
+
+
         ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD I2C_SCL");
         if(!gpio_direction_output(GPIO_CPLD_I2C_SCL, 1))
                 printk(KERN_INFO "[I2C CPLD] set GPIO:%d as output, high.\n", GPIO_CPLD_I2C_SCL);
 	if(!ret) gpio_free(GPIO_CPLD_I2C_SCL);
-	
+
 	ret = gpio_request(GPIO_CPLD_I2C_SDA, "CPLD_I2C_SDA");
 	if(!gpio_direction_output(GPIO_CPLD_I2C_SDA, 1))
 		printk(KERN_INFO "[I2C CPLD] set GPIO:%d as output, high.\n", GPIO_CPLD_I2C_SDA);
         if (!ret) gpio_free(GPIO_CPLD_I2C_SDA);
 
 #endif
-	
+
 	cpld_irq_unmask(CPLD_IRQ_VOL_UP);
 	cpld_irq_unmask(CPLD_IRQ_VOL_DW);
-	
+
 
 #if 0
         cpld_gpio_write(CPLD_EXT_GPIO_LCD_RST, 1);
@@ -511,7 +511,7 @@ static const struct file_operations bma_fops = {
 	.owner = THIS_MODULE,
 	.open = cpld_open,
 	.release = cpld_release,
-	
+
 };
 
 static struct miscdevice bma_device = {
@@ -548,7 +548,7 @@ static int cpld_probe(struct i2c_client *client,
 
 	printk(KERN_INFO "[I2C CPLD] %s\n", __func__);
 
-	
+
         ret = gpio_request(4, "CPLD_CLK");
         if (ret < 0) {
                 pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
@@ -569,26 +569,26 @@ static int cpld_probe(struct i2c_client *client,
                 return ret;
         }
 
-	
+
 	printk(KERN_INFO "gpio_CPLD_CLK:%d\n", gpio_get_value(4));
 	printk(KERN_INFO "gpio_CPLD_RST:%d\n", gpio_get_value(49));
 	printk(KERN_INFO "gpio_I2C_EN:%d\n", gpio_get_value(116));
-	
 
-	
-	
-	
-	gpio_direction_output(GPIO_CPLD_RST,   1); 
-	gpio_direction_output(GPIO_CPLD_I2CEN, 1); 
 
-	
+
+
+
+	gpio_direction_output(GPIO_CPLD_RST,   1);
+	gpio_direction_output(GPIO_CPLD_I2CEN, 1);
+
+
 	gpio_set_value(GPIO_CPLD_I2CEN, 1);
 #if 0
-	
-	
-	gpio_set_value(GPIO_CPLD_CLK,   1);	
+
+
+	gpio_set_value(GPIO_CPLD_CLK,   1);
 #endif
-	
+
 	gpio_set_value(GPIO_CPLD_RST,   1);
 
 
@@ -624,15 +624,15 @@ static int cpld_probe(struct i2c_client *client,
         }
 
 
-	
-     	
+
+
 
 	if (client->irq) {
 		ret = request_irq(client->irq, cpld_int_handler,
 				  IRQF_TRIGGER_LOW, "I2C CPLD INT", cpldi);
 		if (ret == 0) {
 			printk(KERN_INFO "[I2C CPLD]%s: irq enabled at qpio: %d\n", __func__, client->irq);
-			
+
 			enable_irq_wake(client->irq);
 		} else {
 			printk(KERN_ERR "[I2C CPLD][ERR]%s: request_irq failed\n", __func__);
@@ -641,7 +641,7 @@ static int cpld_probe(struct i2c_client *client,
 		printk(KERN_INFO "[I2C CPLD][ERR]%s: client->irq is empty!!!\n", __func__);
 	}
 
-	flag_cpld_ready = 1;	
+	flag_cpld_ready = 1;
 	printk(KERN_INFO "[I2C CPLD] %s: done\n", __func__);
 
 	return 0;
@@ -687,7 +687,7 @@ static int __init cpld_init(void)
 	if( cpld_char_init() )
 		return -1;
 
-	
+
 	return i2c_add_driver(&cpld_driver);
 #else
 	return -1;

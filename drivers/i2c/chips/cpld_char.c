@@ -1,5 +1,5 @@
 #include <linux/timer.h>
-#include <linux/cdev.h> 
+#include <linux/cdev.h>
 
 #include <linux/fs.h>
 #include <linux/i2c.h>
@@ -12,18 +12,18 @@
 #include <linux/i2c/cpld.h>
 
 
-#define DEBUG_LEVEL 0x00010001 
+#define DEBUG_LEVEL 0x00010001
 #define PK_DEBUG(a, format, arg...) if(a & DEBUG_LEVEL) printk(format, ##arg)
 #define PK_INFO(a, format, arg...) if((a<<16) & DEBUG_LEVEL) pr_info(format, ##arg)
 
-static DEFINE_MUTEX(cpld_char_mtx); 
+static DEFINE_MUTEX(cpld_char_mtx);
 static int dev_major;
 static int dev_minor;
 struct cdev *cdev_cpld = NULL;
 
 #ifdef CPLD_TEST
-#define TEST_DELAY_1 HZ/2   
-#define TEST_DELAY_2 HZ/25  
+#define TEST_DELAY_1 HZ/2
+#define TEST_DELAY_2 HZ/25
 
 #define READ_WIRTE_LOOP 20
 
@@ -77,12 +77,12 @@ static void stress_test_timer_fn(unsigned long data)
 {
 	pr_info("[I2C CPLD ]%s: CPLD timer of test expired!\n", __func__);
 
-	
-	
+
+
     simulated_reg_int_st = (simulated_reg_int_st+1 % 6);
 
 
-    
+
     {
 		int ret = queue_work(timer_simulator_wq, &cpld_test_work);
 		PK_DEBUG(0x2, "WQ ret = %d\n", ret);
@@ -122,7 +122,7 @@ static void gpio_write_timer_fn(unsigned long data)
 }
 
 static void stress_test_timer_init(void)
-{  
+{
 	PK_DEBUG(0x1, KERN_INFO "[CPLD] %s\n", __func__);
 
 	init_timer(&stress_test_timer);
@@ -157,13 +157,13 @@ static ssize_t cpld_read(struct file *fp, char __user *buf,
 	int ret;
 	uint8_t reg_int_st,rdata;
 
-	
+
 	ret = CPLD_I2C_Read_Byte(CPLD_REG_INTR_STATUS, &reg_int_st);
 	if(ret >= 0)
 		printk(KERN_INFO "[CPLD]%s: CPLD INT_STATUS=0x%X...\n", __func__, reg_int_st);
-        
+
         ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &rdata);
-        if(ret >= 0) 
+        if(ret >= 0)
 		printk(KERN_INFO "[CPLD]%s: CPLD GPI_LEVEL=0x%X...\n", __func__, rdata);
 
 	for( i=1 ; i < CPLD_EXT_GPIO_MAX ; ++i )
@@ -210,7 +210,7 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 	sscanf(tmp, "%d,%d,%d\n", &gpio_num, &direct, &gpio_level);
 
 #ifdef CPLD_TEST
-	
+
 	if(gpio_level == -1){
 		if( tmp[0]=='t' && tmp[1]=='e' && tmp[2]=='s' && tmp[3]=='t' )
 		{
@@ -227,7 +227,7 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 			gpio_read_wq = create_singlethread_workqueue("gpio_read_wq");
 			gpio_write_wq = create_singlethread_workqueue("gpio_write_wq");
 			stress_test_timer_init( );
-		
+
 			return size;
 		}
 		else if( tmp[0]=='u' && tmp[1]=='n' && tmp[2]=='t' && tmp[3]=='e' && tmp[4]=='s' && tmp[5]=='t' )
@@ -238,7 +238,7 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 				return size;
 			}
 			stress_mode = 0;
-			del_timer(&stress_test_timer);	
+			del_timer(&stress_test_timer);
 			del_timer(&gpio_read_timer);
 			del_timer(&gpio_write_timer);
 			return size;
@@ -265,14 +265,14 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 #endif
 	mutex_lock(&cpld_char_mtx);
 
-	if(gpio_num <= 0 || gpio_num >= CPLD_EXT_GPIO_MAX) goto fail_cpld_write; 
+	if(gpio_num <= 0 || gpio_num >= CPLD_EXT_GPIO_MAX) goto fail_cpld_write;
 
-	if( direct == 0 ) 
+	if( direct == 0 )
 	{
-		
+
 		status = cpld_gpio_read( gpio_num );
 #if 0
-		
+
         	if( status == 0 )
             		ret = copy_to_user(args, " 0\n", 3);
         	else if( status == 1 )
@@ -295,7 +295,7 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 		}
 		PK_DEBUG(0x2, "Result from gpio_read(%d): %d\n", gpio_num, status);
     	}
-	else if( direct == 1 ) 
+	else if( direct == 1 )
 	{
 		status = cpld_gpio_write( gpio_num, gpio_level );
 		if( status == -1 )
@@ -318,7 +318,7 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 
 fail_cpld_write:
 	mutex_unlock(&cpld_char_mtx);
-	
+
 out__cpld_write:
 	return -EFAULT;
 }

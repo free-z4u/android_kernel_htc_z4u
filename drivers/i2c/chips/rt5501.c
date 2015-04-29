@@ -128,16 +128,16 @@ static int rt5501_headset_detect(int on)
 			} else {
 				rt5501_write_reg(1,0xc7);
 			}
-			
+
 				last_spkamp_state = 0;
 				pr_info("%s: OFF\n", __func__);
-			
+
 			rt5501_query.rt5501_status = RT5501_SUSPEND;
 		}
 		pr_info("%s: headset in --\n",__func__);
 		mutex_unlock(&rt5501_query.mlock);
 		mutex_unlock(&rt5501_query.gpiolock);
-		
+
 		queue_delayed_work(hs_wq,&rt5501_query.hs_imp_detec_work,msecs_to_jiffies(5));
 
 		pr_info("%s: headset in --2\n",__func__);
@@ -164,10 +164,10 @@ static int rt5501_headset_detect(int on)
 				rt5501_write_reg(1,0xc7);
 			}
 
-			
+
 				last_spkamp_state = 0;
 				pr_info("%s: OFF\n", __func__);
-			
+
 			rt5501_query.rt5501_status = RT5501_SUSPEND;
 		}
 
@@ -199,7 +199,7 @@ static int rt5501_write_reg(u8 reg, u8 val)
 	msg->buf = data;
 	data[0] = reg;
 	data[1] = val;
-	pr_info("%s: write reg 0x%x val 0x%x\n",__func__,data[0],data[1]); 
+	pr_info("%s: write reg 0x%x val 0x%x\n",__func__,data[0],data[1]);
 	err = i2c_transfer(this_client->adapter, msg, 1);
 	if (err >= 0)
 		return 0;
@@ -222,8 +222,8 @@ static int rt5501_i2c_write(struct rt5501_reg_data *txData, int length)
 		},
 	};
 	for (i = 0; i < length; i++) {
-		
-		
+
+
 		buf[0] = txData[i].addr;
 		buf[1] = txData[i].val;
 
@@ -251,7 +251,7 @@ static int rt5501_i2c_write(struct rt5501_reg_data *txData, int length)
 	return 0;
 }
 
-#if 0  
+#if 0
 static int rt5501_i2c_write_for_read(char *txData, int length)
 {
 	int i, retry, pass = 0;
@@ -265,8 +265,8 @@ static int rt5501_i2c_write_for_read(char *txData, int length)
 		},
 	};
 	for (i = 0; i < length; i++) {
-		
-		
+
+
 		buf[0] = i;
 		buf[1] = txData[i];
 #if DEBUG
@@ -448,7 +448,7 @@ static void hs_imp_gpio_off(struct work_struct *work)
 	rt5501_query.gpiostatus = AMP_GPIO_OFF;
 
 	if(rt5501_query.s4status == AMP_S4_PWM) {
-		
+
 		rt5501_query.s4status = AMP_S4_AUTO;
 	}
 
@@ -481,7 +481,7 @@ static void hs_imp_detec_func(struct work_struct *work)
 
 	if((hs->gpiostatus == AMP_GPIO_OFF) && pdata->gpio_rt5501_spk_en) {
 		if(rt5501_query.s4status == AMP_S4_AUTO) {
-			
+
 			rt5501_query.s4status = AMP_S4_PWM;
 			msleep(1);
 		}
@@ -499,7 +499,7 @@ static void hs_imp_detec_func(struct work_struct *work)
 	rt5501_write_reg(0,0x04);
 	rt5501_write_reg(0xa4,0x52);
 
-	
+
 
 	rt5501_write_reg(1,0x7);
 	msleep(10);
@@ -561,7 +561,7 @@ static void hs_imp_detec_func(struct work_struct *work)
 		om = (temp[0] & 0xe) >> 1;
 
 		if(temp[0] == 0xc0 || temp[0] == 0xc1) {
-			
+
 			hsom = HEADSET_MONO;
 		} else {
 			switch(om) {
@@ -628,7 +628,7 @@ static void hs_imp_detec_func(struct work_struct *work)
 
 		rt5501_write_reg(1,0xc7);
 	}
-	mutex_unlock(&hs->mlock);	 
+	mutex_unlock(&hs->mlock);
 	mutex_unlock(&hs->gpiolock);
 
 	if(rt5501_status == RT5501_SUSPEND)
@@ -643,7 +643,7 @@ static void volume_ramp_func(struct work_struct *work)
 		u8 val;
 		pr_info("%s: ramping-------------------------\n",__func__);
 		mdelay(1);
-		
+
 		if(high_imp)
 			rt5501_write_reg(0xb1,0x80);
 
@@ -733,7 +733,7 @@ void set_rt5501_amp(int on)
 	if(on) {
 		if((rt5501_query.gpiostatus == AMP_GPIO_OFF) && pdata->gpio_rt5501_spk_en) {
 			if(rt5501_query.s4status == AMP_S4_AUTO) {
-				
+
 				rt5501_query.s4status = AMP_S4_PWM;
 				msleep(1);
 			}
@@ -799,7 +799,7 @@ static long rt5501_ioctl(struct file *file, unsigned int cmd,
 		pr_info("%s: RT5501_WRITE_REG\n", __func__);
 		mutex_lock(&hp_amp_lock);
 		if (!last_spkamp_state) {
-			
+
 			mdelay(30);
 		}
 		if (copy_from_user(reg_value, argp, sizeof(reg_value)))
@@ -824,7 +824,7 @@ err1:
 
 		mutex_lock(&hp_amp_lock);
 		if (!last_spkamp_state) {
-			
+
 			mdelay(30);
 		}
 		if (copy_from_user(&reg, argp, sizeof(reg)))
@@ -890,12 +890,12 @@ err2:
 
 		pr_info("%s: update rt5501 i2c commands #%d success.\n",
 				__func__, rt5501_config_data.mode_num);
-		
+
 		mutex_lock(&hp_amp_lock);
 		update_amp_parameter(RT5501_MODE_OFF);
 		update_amp_parameter(RT5501_MUTE);
 		update_amp_parameter(RT5501_INIT);
-		
+
 		mutex_unlock(&hp_amp_lock);
 		rc = 0;
 		break;
@@ -910,7 +910,7 @@ err2:
 		else
 			rc = 0;
 		break;
-    
+
 	case RT5501_SET_AMP:
 		if (copy_from_user(&rt5501_onoff, argp, sizeof(rt5501_onoff)))
 			return -EFAULT;
@@ -983,19 +983,19 @@ int rt5501_probe(struct i2c_client *client, const struct i2c_device_id *id)
 
 #if defined(CONFIG_CPLD) && (defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
 		for(retrycnt = 0;retrycnt < 10; retrycnt++ ) {
-			
+
 			ret2 = cpld_gpio_write(pdata->gpio_rt5501_spk_en, 1);
 			if(ret2 < 0)
 				pr_err("%s: write error AUD_HP_EN\n", __func__);
 
-			usleep(5000); 
+			usleep(5000);
 			ret = rt5501_i2c_read(temp, 2);
 			if(ret < 0) {
 				pr_err("rt5501 is not connected, retry %d\n",retrycnt);
 				ret2 = cpld_gpio_write(pdata->gpio_rt5501_spk_en, 0);
 				if(ret2 < 0)
 					pr_err("%s: write error AUD_HP_EN to 0\n", __func__);
-				usleep(5000); 
+				usleep(5000);
 			} else
 				break;
 		}
@@ -1015,7 +1015,7 @@ int rt5501_probe(struct i2c_client *client, const struct i2c_device_id *id)
 			rt5501Connect = 1;
 		}
 #if defined(CONFIG_CPLD) && (defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
-		
+
 		ret = cpld_gpio_write(pdata->gpio_rt5501_spk_en, 0);
 		if(ret < 0)
 			pr_err("%s: write error AUD_HP_EN\n", __func__);

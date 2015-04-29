@@ -92,14 +92,14 @@ if(perflock && is_perf_lock_active(perflock))	\
 
 static void perflock_early_suspend(struct early_suspend *handler)
 {
-	
+
 	unlock_screen_policy(screen_policy.on_min);
 	lock_screen_policy(screen_policy.off_max);
 }
 
 static void perflock_late_resume(struct early_suspend *handler)
 {
-	
+
 	unlock_screen_policy(screen_policy.off_max);
 	lock_screen_policy(screen_policy.on_min);
 }
@@ -134,7 +134,7 @@ void __init perflock_screen_policy_init(struct perflock_screen_policy *policy)
 	register_onchg_suspend(&perflock_onchg_suspend);
 #endif
 
-	
+
 	if (policy->on_min != NULL &&
 		(policy->on_min->flags & PERF_LOCK_INITIALIZED)) {
 		screen_policy.on_min = policy->on_min;
@@ -194,7 +194,7 @@ int perflock_override(const struct cpufreq_policy *policy, const unsigned int ne
 		return 0;
 #endif
 	if (policy != NULL) {
-		
+
 		if (strncmp("ondemand", policy->governor->name, 8) != 0)
 			return 0;
 		policy_min = policy->min;
@@ -211,7 +211,7 @@ int perflock_override(const struct cpufreq_policy *policy, const unsigned int ne
 	if ((lock_speed = (get_perflock_speed() / 1000))) {
 		target_min_freq = lock_speed > policy_min? lock_speed : policy_min;
 		target_max_freq = policy_max;
-		
+
 		if (target_min_freq > target_max_freq)
 			target_min_freq = target_max_freq;
 		if (debug_mask & PERF_CPUFREQ_LOCK_DEBUG) {
@@ -222,7 +222,7 @@ int perflock_override(const struct cpufreq_policy *policy, const unsigned int ne
 	} else if ((cpufreq_ceiling_speed = (get_cpufreq_ceiling_speed() / 1000))) {
 		target_max_freq = cpufreq_ceiling_speed > policy_max? policy_max : cpufreq_ceiling_speed;
 		target_min_freq = policy_min;
-		
+
 		if (target_max_freq < target_min_freq)
 			target_max_freq = target_min_freq;
 		if (debug_mask & PERF_CPUFREQ_LOCK_DEBUG) {
@@ -231,7 +231,7 @@ int perflock_override(const struct cpufreq_policy *policy, const unsigned int ne
 			print_active_locks();
 		}
 	} else {
-		
+
 		spin_unlock_irqrestore(&policy_update_lock, irqflags);
 		return 0;
 	}
@@ -246,7 +246,7 @@ int perflock_override(const struct cpufreq_policy *policy, const unsigned int ne
 		return target_min_freq;
 	else
 		return new_freq;
-	
+
 	return 0;
 }
 
@@ -270,7 +270,7 @@ static unsigned int get_perflock_speed(void)
 	struct perf_lock *lock;
 	unsigned int perf_level = 0;
 
-	
+
 	if (list_empty(&active_perf_locks))
 		return 0;
 
@@ -290,7 +290,7 @@ static unsigned int get_cpufreq_ceiling_speed(void)
 	struct perf_lock *lock;
 	unsigned int perf_level = 0;
 
-	
+
 	if (list_empty(&active_cpufreq_ceiling_locks))
 		return 0;
 
@@ -560,11 +560,11 @@ struct perf_lock *perflock_acquire(const char *name)
 	lock = kzalloc(sizeof(struct perf_lock), GFP_KERNEL);
 	if(!lock) {
 		pr_err("%s: fail to alloc perflock %s\n", __func__, name);
-		return NULL; 
+		return NULL;
 	}
 	lock->name = name;
-	
-	lock->flags = 0; 
+
+	lock->flags = 0;
 
 	return lock;
 }
@@ -579,7 +579,7 @@ int perflock_release(const char *name)
 	if(!lock)
 		return -ENODEV;
 
-	
+
 	if(is_perf_lock_active(lock))
 		perf_unlock(lock);
 
@@ -688,7 +688,7 @@ static void perflock_floor_init(struct perflock_data *pdata)
 	initialized = 1;
 	pr_info("perflock floor init done\n");
 #ifdef CONFIG_PERFLOCK_BOOT_LOCK
-	
+
 	perf_lock_init(&boot_perf_lock, TYPE_PERF_LOCK, PERF_LOCK_HIGHEST, "boot-time");
 	perf_lock(&boot_perf_lock);
 	schedule_delayed_work(&work_expire_boot_lock, BOOT_LOCK_TIMEOUT);

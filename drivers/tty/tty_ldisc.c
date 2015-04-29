@@ -658,7 +658,7 @@ int tty_set_ldisc(struct tty_struct *tty, int ldisc)
 	tty_lock();
 	mutex_lock(&tty->ldisc_mutex);
 
-	
+
 	if (retval) {
 		tty_ldisc_put(new_ldisc);
 		goto enable;
@@ -672,16 +672,16 @@ int tty_set_ldisc(struct tty_struct *tty, int ldisc)
 		return -EIO;
 	}
 
-	
+
 	tty_ldisc_close(tty, o_ldisc);
 
-	
+
 	tty_ldisc_assign(tty, new_ldisc);
 	tty_set_termios_ldisc(tty, ldisc);
 
 	retval = tty_ldisc_open(tty, new_ldisc);
 	if (retval < 0) {
-		
+
 		tty_ldisc_put(new_ldisc);
 		tty_ldisc_restore(tty, o_ldisc);
 	}
@@ -756,7 +756,7 @@ void tty_ldisc_hangup(struct tty_struct *tty)
 
 	ld = tty_ldisc_ref(tty);
 	if (ld != NULL) {
-		
+
 		if (ld->ops->flush_buffer)
 			ld->ops->flush_buffer(tty);
 		tty_driver_flush_buffer(tty);
@@ -779,7 +779,7 @@ retry:
 	tty_lock();
 	mutex_lock(&tty->ldisc_mutex);
 
-	if (tty->ldisc) {	
+	if (tty->ldisc) {
 		if (atomic_read(&tty->ldisc->users) != 1) {
 			char cur_n[TASK_COMM_LEN], tty_n[64];
 			long timeout = 3 * HZ;

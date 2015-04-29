@@ -44,7 +44,7 @@ static int __init sysinfo_proc_init(void)
 
 	pr_info("%s: Init HTC system info proc interface.\r\n", __func__);
 
-	
+
 
 	entry = create_proc_read_entry("powerkey_debounce_ms", 0, NULL, sys_boot_powerkey_debounce_ms, NULL);
 	CHECK_PROC_ENTRY("powerkey_debounce_ms", entry);

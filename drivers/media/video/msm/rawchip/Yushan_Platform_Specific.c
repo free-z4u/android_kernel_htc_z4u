@@ -27,14 +27,14 @@ uint32_t	udwProtoInterruptList_Pad1[3];
 extern int rawchip_intr0, rawchip_intr1;
 extern atomic_t interrupt, interrupt2;
 extern struct yushan_int_t yushan_int;
-extern uint8_t	newframe_err_buf[10];	
+extern uint8_t	newframe_err_buf[10];
 
 bool_t Yushan_WaitForInterruptEvent (uint8_t bInterruptId ,uint32_t udwTimeOut)
 {
 
 	int					 counterLimit;
-	
-	bool_t				fStatus = 0; 
+
+	bool_t				fStatus = 0;
 	int rc = 0;
 	int i;
 
@@ -60,35 +60,35 @@ bool_t Yushan_WaitForInterruptEvent (uint8_t bInterruptId ,uint32_t udwTimeOut)
 			break;
 	}
 
-	fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad0);		
+	fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad0);
 	CDBG("[CAM] %s Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 	if ((fStatus)) {
-		
-		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad0, DEL_INTR_FROM_LIST); 
-		
+
+		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad0, DEL_INTR_FROM_LIST);
+
 		CDBG("[CAM] %s Del Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 		return SUCCESS;
 	}
 
 	for (i = 0; i < 10; i++) {
 	CDBG("[CAM] %s begin interrupt wait\n",__func__);
-	
-	
+
+
 	rc = wait_event_timeout(yushan_int.yushan_wait,
 	atomic_read(&interrupt),
 		counterLimit/200);
 	CDBG("[CAM] %s end interrupt: %d; interrupt id:%d wait rc=%d\n",__func__, atomic_read(&interrupt), bInterruptId, rc);
 	if(atomic_read(&interrupt))
 	{
-		
+
 		atomic_set(&interrupt, 0);
 		Yushan_Interrupt_Manager_Pad0();
-		fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad0);		
+		fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad0);
 		CDBG("[CAM] %s Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 		if (fStatus) {
-		
-		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad0, DEL_INTR_FROM_LIST); 
-		
+
+		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad0, DEL_INTR_FROM_LIST);
+
 		CDBG("[CAM] %s Del Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 		return SUCCESS;
 		}
@@ -103,8 +103,8 @@ bool_t Yushan_WaitForInterruptEvent2 (uint8_t bInterruptId ,uint32_t udwTimeOut)
 {
 
 	int					 counterLimit;
-	
-	bool_t				fStatus = 0; 
+
+	bool_t				fStatus = 0;
 	int rc = 0;
 	int i;
 
@@ -130,35 +130,35 @@ bool_t Yushan_WaitForInterruptEvent2 (uint8_t bInterruptId ,uint32_t udwTimeOut)
 			break;
 	}
 
-	fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad1);		
+	fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad1);
 	CDBG("[CAM] %s Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 	if ((fStatus)) {
-		
-		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad1, DEL_INTR_FROM_LIST); 
-		
+
+		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad1, DEL_INTR_FROM_LIST);
+
 		CDBG("[CAM] %s Del Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 		return SUCCESS;
 	}
 
 	for (i = 0; i < 10; i++) {
 	CDBG("[CAM] %s begin interrupt wait\n",__func__);
-	
-	
+
+
 	rc = wait_event_timeout(yushan_int.yushan_wait,
 	atomic_read(&interrupt2),
 		counterLimit/200);
 	CDBG("[CAM] %s end interrupt: %d; interrupt id:%d wait  rc=%d\n",__func__, atomic_read(&interrupt2), bInterruptId, rc);
 	if(atomic_read(&interrupt2))
 	{
-		
+
 		atomic_set(&interrupt2, 0);
 		Yushan_Interrupt_Manager_Pad1();
-		fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad1);		
+		fStatus = Yushan_CheckForInterruptIDInList(bInterruptId, udwProtoInterruptList_Pad1);
 		CDBG("[CAM] %s Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 		if (fStatus) {
-		
-		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad1, DEL_INTR_FROM_LIST); 
-		
+
+		Yushan_AddnRemoveIDInList(bInterruptId, udwProtoInterruptList_Pad1, DEL_INTR_FROM_LIST);
+
 		CDBG("[CAM] %s Del Yushan_CheckForInterruptIDInList:%d \n",__func__, fStatus);
 		return SUCCESS;
 		}
@@ -180,18 +180,18 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 	uint8_t	bSpiData;
 	uint32_t udwSpiBaseIndex;
 	uint8_t interrupt_type = 0;
-	uint8_t i = 0;	
+	uint8_t i = 0;
 
 	udwListOfInterrupts	= kmalloc(96, GFP_KERNEL);
 
-	
-	
+
+
 	Yushan_Intr_Status_Read((uint8_t *)udwListOfInterrupts, intr_pad);
 
-	
+
 	Yushan_Intr_Status_Clear((uint8_t *) udwListOfInterrupts);
 
-	
+
 	while (bCurrentInterruptID < (TOTAL_INTERRUPT_COUNT)) {
 		bAssertOrDeassert = ((udwListOfInterrupts[bInterruptWord])>>(bCurrentInterruptID%32))&0x01;
 
@@ -244,7 +244,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_DXOPDP_NEWFRAME_ERR, error code =%d\n", __func__, bSpiData);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -260,7 +260,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 
 				udwSpiBaseIndex = 0x08000;
 				SPI_Write(YUSHAN_HOST_IF_SPI_BASE_ADDRESS, 4, (uint8_t *)(&udwSpiBaseIndex));
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -270,12 +270,12 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_DXODOP7_NEWFRAME_ERR, error code =%d\n", __func__, bSpiData);
-				
 
-				
+
+
 				for (i = 0 ; i < 10 ; i++)
 					pr_info("[CAM] %s: newframe_err_buf[%d]=%d", __func__, i, newframe_err_buf[i]);
-				
+
 
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
@@ -481,7 +481,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]PRE_DXO_WRAPPER_PROTOCOL_ERR\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -490,7 +490,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]PRE_DXO_WRAPPER_FIFO_OVERFLOW\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -506,7 +506,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_TX_DATA_FIFO_OVERFLOW\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -515,7 +515,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_TX_INDEX_FIFO_OVERFLOW\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -580,7 +580,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_POST_DXO_WRAPPER_PROTOCOL_ERR\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -589,7 +589,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_POST_DXO_WRAPPER_FIFO_OVERFLOW\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -598,7 +598,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_TX_DATA_UNDERFLOW\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -607,7 +607,7 @@ uint8_t Yushan_parse_interrupt(int intr_pad, int error_times[TOTAL_INTERRUPT_COU
 				error_times[bCurrentInterruptID]++;
 				if (error_times[bCurrentInterruptID] <= 10 || error_times[bCurrentInterruptID] % 1000 == 0)
 				pr_err("[CAM] %s:[ERR]EVENT_TX_INDEX_UNDERFLOW\n", __func__);
-				
+
 				interrupt_type |= RAWCHIP_INT_TYPE_RESET_YUSHAN;
 				interrupt_type |= RAWCHIP_INT_TYPE_ERROR;
 				break;
@@ -641,14 +641,14 @@ void Yushan_Interrupt_Manager_Pad0(void)
 
 	udwListOfInterrupts	= (uint32_t *) kmalloc(96/8, GFP_KERNEL);
 
-	
-	
+
+
 	Yushan_Intr_Status_Read ((uint8_t *)udwListOfInterrupts, INTERRUPT_PAD_0);
 
-	
+
 	Yushan_Intr_Status_Clear((uint8_t *) udwListOfInterrupts);
 
-	
+
 	while (bCurrentInterruptID < (TOTAL_INTERRUPT_COUNT)) {
 		bAssertOrDeassert = ((udwListOfInterrupts[bInterruptWord])>>(bCurrentInterruptID%32))&0x01;
 
@@ -685,7 +685,7 @@ void Yushan_Interrupt_Manager_Pad0(void)
 				{
 					SPI_Read(DXO_PDP_BASE_ADDR+DxOPDP_error_code_7_0,1,&bSpiData);
 					pr_err("[CAM] %s:[ERR]EVENT_DXOPDP_NEWFRAME_ERR, error code =%d\n",__func__, bSpiData);
-					
+
 					break;
 				}
 				case EVENT_DXODPP_NEWFRAME_ERR :
@@ -698,14 +698,14 @@ void Yushan_Interrupt_Manager_Pad0(void)
 
 					udwSpiBaseIndex = 0x08000;
 					SPI_Write(YUSHAN_HOST_IF_SPI_BASE_ADDRESS, 4, (uint8_t *)(&udwSpiBaseIndex));
-					
+
 					break;
 				}
 				case EVENT_DXODOP7_NEWFRAME_ERR :
 				{
 					SPI_Read(DXO_DOP_BASE_ADDR+DxODOP_error_code_7_0,1,&bSpiData);
 					pr_err("[CAM] %s:[ERR]EVENT_DXODOP7_NEWFRAME_ERR, error code =%d\n",__func__, bSpiData);
-					
+
 					break;
 				}
 				case EVENT_CSI2TX_SP_ERR :
@@ -794,22 +794,22 @@ void Yushan_Interrupt_Manager_Pad0(void)
 					break;
 				case PRE_DXO_WRAPPER_PROTOCOL_ERR :
 					pr_err("[CAM] %s:[ERR]PRE_DXO_WRAPPER_PROTOCOL_ERR\n",__func__);
-					
+
 					break;
 				case PRE_DXO_WRAPPER_FIFO_OVERFLOW :
 					pr_err("[CAM] %s:[ERR]PRE_DXO_WRAPPER_FIFO_OVERFLOW\n",__func__);
-					
+
 					break;
 				case EVENT_BAD_FRAME_DETECTION :
 					pr_err("[CAM] %s:[ERR]EVENT_BAD_FRAME_DETECTION\n",__func__);
 					break;
 				case EVENT_TX_DATA_FIFO_OVERFLOW :
 					pr_err("[CAM] %s:[ERR]EVENT_TX_DATA_FIFO_OVERFLOW\n",__func__);
-					
+
 					break;
 				case EVENT_TX_INDEX_FIFO_OVERFLOW :
 					pr_err("[CAM] %s:[ERR]EVENT_TX_INDEX_FIFO_OVERFLOW\n",__func__);
-					
+
 					break;
 				case EVENT_RX_CHAR_COLOR_BAR_0_ERR :
 					pr_err("[CAM] %s:[ERR]EVENT_RX_CHAR_COLOR_BAR_0_ERR\n",__func__);
@@ -837,19 +837,19 @@ void Yushan_Interrupt_Manager_Pad0(void)
 					break;
 				case EVENT_POST_DXO_WRAPPER_PROTOCOL_ERR :
 					pr_err("[CAM] %s:[ERR]EVENT_POST_DXO_WRAPPER_PROTOCOL_ERR\n",__func__);
-					
+
 					break;
 				case EVENT_POST_DXO_WRAPPER_FIFO_OVERFLOW :
 					pr_err("[CAM] %s:[ERR]EVENT_POST_DXO_WRAPPER_FIFO_OVERFLOW\n",__func__);
-					
+
 					break;
 				case EVENT_TX_DATA_UNDERFLOW :
 					pr_err("[CAM] %s:[ERR]EVENT_TX_DATA_UNDERFLOW\n",__func__);
-					
+
 					break;
 				case EVENT_TX_INDEX_UNDERFLOW :
 					pr_err("[CAM] %s:[ERR]EVENT_TX_INDEX_UNDERFLOW\n",__func__);
-					
+
 					break;
 			}
 		}
@@ -876,16 +876,16 @@ void Yushan_Interrupt_Manager_Pad1(void)
 
 	udwListOfInterrupts	= (uint32_t *) kmalloc(96/8, GFP_KERNEL);
 
-	
-	
+
+
 	Yushan_Intr_Status_Read ((uint8_t *)udwListOfInterrupts, INTERRUPT_PAD_1);
 
 
-	
+
 	Yushan_Intr_Status_Clear((uint8_t *) udwListOfInterrupts);
 #if 1
 
-	
+
 	while (bCurrentInterruptID < (TOTAL_INTERRUPT_COUNT)) {
 		bAssertOrDeassert = ((udwListOfInterrupts[bInterruptWord])>>(bCurrentInterruptID%32))&0x01;
 
@@ -903,7 +903,7 @@ void Yushan_Interrupt_Manager_Pad1(void)
 					{
 						SPI_Read(DXO_DOP_BASE_ADDR+DxODOP_error_code_7_0,1,&bSpiData);
 						pr_err("[CAM] %s:[ERR]EVENT_DXODOP7_NEWFRAME_ERR, error code =%d\n",__func__, bSpiData);
-						
+
 						break;
 					}
 			}

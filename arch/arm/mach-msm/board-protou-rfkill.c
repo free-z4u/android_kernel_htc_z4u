@@ -40,25 +40,25 @@ extern unsigned int system_rev;
 
 static uint32_t protou_bt_on_table[] = {
 
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_RTS,
 				2,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_NO_PULL,
 				GPIO_CFG_8MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_CTS,
 				2,
 				GPIO_CFG_INPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_8MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_RX,
 				2,
 				GPIO_CFG_INPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_8MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_TX,
 				2,
 				GPIO_CFG_OUTPUT,
@@ -66,26 +66,26 @@ static uint32_t protou_bt_on_table[] = {
 				GPIO_CFG_8MA),
 
 #if 0
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_HOST_WAKE,
 				0,
 				GPIO_CFG_INPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_4MA),
 #endif
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_WAKE,
 				0,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_NO_PULL,
 				GPIO_CFG_4MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_RESET_N,
 				0,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_NO_PULL,
 				GPIO_CFG_4MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_SD_N,
 				0,
 				GPIO_CFG_OUTPUT,
@@ -95,52 +95,52 @@ static uint32_t protou_bt_on_table[] = {
 
 static uint32_t protou_bt_off_table[] = {
 
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_RTS,
 				0,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_8MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_CTS,
 				0,
 				GPIO_CFG_INPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_8MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_RX,
 				0,
 				GPIO_CFG_INPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_8MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_UART1_TX,
 				0,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_8MA),
 
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_RESET_N,
 				0,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_NO_PULL,
 				GPIO_CFG_4MA),
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_SD_N,
 				0,
 				GPIO_CFG_OUTPUT,
 				GPIO_CFG_NO_PULL,
 				GPIO_CFG_4MA),
 #if 0
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_HOST_WAKE,
 				0,
 				GPIO_CFG_INPUT,
 				GPIO_CFG_PULL_UP,
 				GPIO_CFG_4MA),
 #endif
-	
+
 	GPIO_CFG(PROTOU_GPIO_BT_WAKE,
 				0,
 				GPIO_CFG_OUTPUT,
@@ -182,12 +182,12 @@ static void protou_config_bt_on(void)
 {
 	printk(KERN_INFO "[BT]== R ON ==\n");
 
-	
+
 	config_bt_table(protou_bt_on_table,
 				ARRAY_SIZE(protou_bt_on_table));
 	printk(KERN_INFO "rfkill check system_rev: %d\n", system_rev);
 
-	if (system_rev == 0) {  
+	if (system_rev == 0) {
 		config_bt_table(protou_bt_host_wake_table_xa,
 					ARRAY_SIZE(protou_bt_host_wake_table_xa));
 	} else {
@@ -197,39 +197,39 @@ static void protou_config_bt_on(void)
 
 	mdelay(2);
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_RESET_N, 0);
 	mdelay(1);
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_SD_N, 0);
 	mdelay(5);
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_SD_N, 1);
 	mdelay(1);
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_RESET_N, 1);
 	mdelay(2);
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_WAKE, 0);
 }
 
 static void protou_config_bt_off(void)
 {
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_RESET_N, 0);
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_SD_N, 0);
 
-	
+
 	config_bt_table(protou_bt_off_table,
 				ARRAY_SIZE(protou_bt_off_table));
 
-	if (system_rev == 0) {  
+	if (system_rev == 0) {
 		config_bt_table(protou_bt_host_wake_table_xa,
 					ARRAY_SIZE(protou_bt_host_wake_table_xa));
 	} else {
@@ -237,20 +237,20 @@ static void protou_config_bt_off(void)
 					ARRAY_SIZE(protou_bt_host_wake_table_xc));
 	}
 
-	
+
 	gpio_set_value(PROTOU_GPIO_BT_UART1_RTS, 1);
 
-	
 
-	
+
+
 	gpio_set_value(PROTOU_GPIO_BT_UART1_TX, 1);
 
-	
 
 
-	
 
-	
+
+
+
 	gpio_set_value(PROTOU_GPIO_BT_WAKE, 0);
 
 	printk(KERN_INFO "[BT]== R OFF ==\n");}
@@ -272,9 +272,9 @@ static struct rfkill_ops protou_rfkill_ops = {
 static int protou_rfkill_probe(struct platform_device *pdev)
 {
 	int rc = 0;
-	bool default_state = true;  
+	bool default_state = true;
 
-	
+
 
 	bluetooth_set_power(NULL, default_state);
 
@@ -287,7 +287,7 @@ static int protou_rfkill_probe(struct platform_device *pdev)
 
 	rfkill_set_states(bt_rfk, default_state, false);
 
-	
+
 
 	rc = rfkill_register(bt_rfk);
 	if (rc)

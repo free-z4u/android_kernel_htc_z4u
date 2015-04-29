@@ -63,14 +63,14 @@ static void pm8029_led_control(struct pm8029_led_data *ldata)
 		LED_ERR_LOG("%s: Wrong LED data. brightness = %d, blink mode = %d\n",
 				__func__, brightness, blink);
 
-	
+
 	data1 = 0x2;
 	data2 = 0x0;
-	
+
 	data2 |= ldata->out_current;
-	
+
 	data2 |= (brightness << 8);
-	
+
 	data2 |= (ldata->bank << 16);
 	LED_INFO_LOG("%s: %s brightness=%d, data1=0x%x, data2=0x%x\n",
 			__func__, ldata->ldev.name, brightness, data1, data2);
@@ -78,7 +78,7 @@ static void pm8029_led_control(struct pm8029_led_data *ldata)
 	if (rc)
 		LED_ERR_LOG("%s: data2 0x%x, rc=%d\n", __func__, data2, rc);
 
-	
+
 	if (strcmp(ldata->ldev.name, "button-backlight")) {
 		data1 = 0x4;
 		data2 = 0X00;
@@ -128,9 +128,9 @@ static void pm8029_led_brightness_set(struct led_classdev *led_cdev,
 	if (brightness > 0 && (ldata->flag & FIX_BRIGHTNESS))
 		brightness = ldata->init_pwm_brightness;
 	atomic_set(&ldata->brightness, brightness);
-	
+
 	atomic_set(&ldata->blink, BLINK_DISABLE);
-	
+
 	pm8029_led_control(ldata);
 
 	LED_INFO_LOG("%s: brightness = %d\n",__func__, brightness);
@@ -300,12 +300,12 @@ static void led_work_func(struct work_struct *work)
 
 	ldata = container_of(work, struct pm8029_led_data, off_timer_work);
 	LED_ALM("%s led alarm led work +" , ldata->ldev.name);
-	
+
 	atomic_set(&ldata->brightness, 0);
 	atomic_set(&ldata->blink, 0);
 	atomic_set(&ldata->off_timer, 0);
 	pm8029_led_control(ldata);
-	
+
 }
 
 static void led_alarm_handler(struct alarm *alarm)
@@ -315,7 +315,7 @@ static void led_alarm_handler(struct alarm *alarm)
 	ldata = container_of(alarm, struct pm8029_led_data, off_timer_alarm);
 	LED_ALM("%s led alarm trigger +", ldata->ldev.name);
 	queue_work(led_wq, &ldata->off_timer_work);
-	
+
 }
 
 static int pm8029_led_probe(struct platform_device *pdev)
@@ -346,7 +346,7 @@ static int pm8029_led_probe(struct platform_device *pdev)
 	}
 
 
-	
+
 	for (i = 0; i < pdata->num_leds; i++) {
 		ldata[i].ldev.name = pdata->led_config[i].name;
 		ldata[i].bank = pdata->led_config[i].bank;
@@ -375,7 +375,7 @@ static int pm8029_led_probe(struct platform_device *pdev)
 		}
 	}
 
-	
+
 	for (i = 0; i < pdata->num_leds; i++) {
 		ret = device_create_file(ldata[i].ldev.dev, &dev_attr_blink);
 		if (ret < 0){
@@ -385,7 +385,7 @@ static int pm8029_led_probe(struct platform_device *pdev)
 		}
 	}
 
-	
+
         for (i = 0; i < pdata->num_leds; i++) {
                 ret = device_create_file(ldata[i].ldev.dev, &dev_attr_off_timer);
                 if (ret < 0){

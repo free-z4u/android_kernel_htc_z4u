@@ -173,7 +173,7 @@ struct diag_context {
 	int (*update_pid_and_serial_num)(uint32_t, const char *);
 	struct usb_diag_ch ch;
 
-	
+
 	unsigned long dpkts_tolaptop;
 	unsigned long dpkts_tomodem;
 	unsigned dpkts_tolaptop_pending;
@@ -181,7 +181,7 @@ struct diag_context {
 	spinlock_t req_lock;
 
 	struct mutex user_lock;
-#define ID_TABLE_SZ 20 
+#define ID_TABLE_SZ 20
 	struct list_head rx_req_idle;
 	struct list_head rx_req_user;
 	wait_queue_head_t read_wq;
@@ -189,10 +189,10 @@ struct diag_context {
 	uint32_t user_read_len;
 	char *user_readp;
 	bool opened;
-	
+
 	unsigned char id_table[ID_TABLE_SZ];
 
-	
+
 	int online;
 	int error;
 	struct list_head rx_arm9_idle;
@@ -207,10 +207,10 @@ struct diag_context {
 	unsigned char *read_arm9_buf;
 	wait_queue_head_t read_arm9_wq;
 	struct usb_request *read_arm9_req;
-	u64 tx_count; 
-	u64 rx_count; 
-	u64 usb_in_count; 
-	u64 usb_out_count; 
+	u64 tx_count;
+	u64 rx_count;
+	u64 usb_in_count;
+	u64 usb_out_count;
 	int ready;
 #endif
 };
@@ -241,7 +241,7 @@ static void usb_config_work_func(struct work_struct *work)
 	if (!ctxt->update_pid_and_serial_num)
 		return;
 
-	
+
 	if (!cdev->desc.iSerialNumber) {
 		ctxt->update_pid_and_serial_num(
 					cdev->desc.idProduct, 0);
@@ -273,7 +273,7 @@ static void diag_write_complete(struct usb_ep *ep,
 			req->length = 0;
 			d_req->actual = req->actual;
 			d_req->status = req->status;
-			
+
 			usb_ep_queue(ctxt->in, req, GFP_ATOMIC);
 			return;
 		}
@@ -353,7 +353,7 @@ struct usb_diag_ch *usb_diag_open(const char *name, void *priv,
 
 	printk(KERN_DEBUG "[USB] %s: name: %s\n", __func__, name);
 	spin_lock_irqsave(&ch_lock, flags);
-	
+
 	list_for_each_entry(ch, &usb_diag_ch_list, list) {
 		if (!strcmp(name, ch->name)) {
 			found = 1;
@@ -363,7 +363,7 @@ struct usb_diag_ch *usb_diag_open(const char *name, void *priv,
 	spin_unlock_irqrestore(&ch_lock, flags);
 
 	if (!found) {
-		
+
 		if (!strcmp(name, DIAG_LEGACY)) {
 			legacyctxt = ctxt = &_context;
 			legacych = ch = &legacyctxt->ch;
@@ -375,7 +375,7 @@ struct usb_diag_ch *usb_diag_open(const char *name, void *priv,
 #if DIAG_XPST
 		if (!xpst_initialized) {
 			misc_register(&htc_diag_device_fops);
-			
+
 			misc_register(&diag2arm9_device);
 			ctxt->usb_in_count = ctxt->usb_out_count = 0;
 			ctxt->tx_count = ctxt->rx_count = 0;
@@ -404,7 +404,7 @@ void usb_diag_close(struct usb_diag_ch *ch)
 	spin_lock_irqsave(&ch_lock, flags);
 	ch->priv = NULL;
 	ch->notify = NULL;
-	
+
 	if (!ch->priv_usb) {
 		list_del(&ch->list);
 		kfree(dev);
@@ -502,11 +502,11 @@ int usb_diag_read(struct usb_diag_ch *ch, struct diag_request *d_req)
 	req->length = d_req->length;
 	req->context = d_req;
 	if (usb_ep_queue(ctxt->out, req, GFP_ATOMIC)) {
-		
+
 		spin_lock_irqsave(&ctxt->lock, flags);
 		list_add_tail(&req->list, &ctxt->read_pool);
 		spin_unlock_irqrestore(&ctxt->lock, flags);
-		
+
 		if (__ratelimit(&rl))
 			ERROR(ctxt->cdev, "%s: cannot queue"
 				" read request\n", __func__);
@@ -548,11 +548,11 @@ int usb_diag_write(struct usb_diag_ch *ch, struct diag_request *d_req)
 	req->length = d_req->length;
 	req->context = d_req;
 	if (usb_ep_queue(ctxt->in, req, GFP_ATOMIC)) {
-		
+
 		spin_lock_irqsave(&ctxt->lock, flags);
 		list_add_tail(&req->list, &ctxt->write_pool);
 		spin_unlock_irqrestore(&ctxt->lock, flags);
-		
+
 		if (__ratelimit(&rl))
 			ERROR(ctxt->cdev, "%s: cannot queue"
 				" read request\n", __func__);
@@ -683,7 +683,7 @@ static int diag_function_bind(struct usb_configuration *c,
 	ctxt->out = ep;
 	ep->driver_data = ctxt;
 
-	
+
 	f->descriptors = usb_copy_descriptors(fs_diag_desc);
 	if (!f->descriptors)
 		goto fail;
@@ -694,7 +694,7 @@ static int diag_function_bind(struct usb_configuration *c,
 		hs_bulk_out_desc.bEndpointAddress =
 				fs_bulk_out_desc.bEndpointAddress;
 
-		
+
 		f->hs_descriptors = usb_copy_descriptors(hs_diag_desc);
 	}
 	return 0;
@@ -710,11 +710,11 @@ fail:
 static struct usb_string diag_string_defs[] = {
 	[0].s = "HTC DIAG",
 	[1].s = "HTC 9K DIAG",
-	{  } 
+	{  }
 };
 
 static struct usb_gadget_strings diag_string_table = {
-	.language =		0x0409,	
+	.language =		0x0409,
 	.strings =		diag_string_defs,
 };
 
@@ -744,7 +744,7 @@ int diag_function_add(struct usb_configuration *c, const char *name,
 	}
 
 	dev = container_of(_ch, struct diag_context, ch);
-	
+
 	_ch->priv_usb = dev;
 
 	dev->update_pid_and_serial_num = update_pid;
@@ -881,7 +881,7 @@ static void diag_cleanup(void)
 		dev = container_of(_ch, struct diag_context, ch);
 
 		spin_lock_irqsave(&ch_lock, flags);
-		
+
 		if (!_ch->priv) {
 			list_del(&_ch->list);
 			kfree(dev);

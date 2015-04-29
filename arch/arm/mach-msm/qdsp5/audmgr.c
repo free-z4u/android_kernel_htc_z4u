@@ -134,11 +134,11 @@ static void process_audmgr_callback(struct audmgr_global *amg,
 	int i = 0;
 	struct rpc_audmgr_cb_device_info *temp;
 
-	
+
 	if (len < MIN_RPC_DATA_LENGTH)
 		return;
 
-	
+
 	if (be32_to_cpu(((struct rpc_audmgr_cb_common *)args)->set_to_one) != 1)
 		return;
 
@@ -355,7 +355,7 @@ static int audmgr_rpc_thread(void *data)
 			} else {
 				MM_AUD_INFO("audmgr: rpc_reply denied!\n");
 			}
-			
+
 			continue;
 		}
 
@@ -398,10 +398,10 @@ static void get_current_session_info(struct audmgr *am,
 {
 	if (cfg->def_method == RPC_AUD_DEF_METHOD_PLAYBACK ||
 	   (cfg->def_method == RPC_AUD_DEF_METHOD_HOST_PCM && cfg->rx_rate)) {
-		am->evt.session_info = SESSION_PLAYBACK; 
+		am->evt.session_info = SESSION_PLAYBACK;
 		am->evt.sample_rate = convert_samp_index(cfg->rx_rate);
 	} else if (cfg->def_method == RPC_AUD_DEF_METHOD_RECORD) {
-		am->evt.session_info = SESSION_RECORDING; 
+		am->evt.session_info = SESSION_RECORDING;
 		am->evt.sample_rate = convert_samp_index(cfg->tx_rate);
 	} else
 		am->evt.session_info = SESSION_VOICE;
@@ -427,7 +427,7 @@ int audmgr_open(struct audmgr *am)
 
 	mutex_lock(amg->lock);
 
-	
+
 	if (amg->ept == NULL) {
 		audmgr_rpc_connect(amg);
 		if (IS_ERR(amg->ept)) {
@@ -447,7 +447,7 @@ int audmgr_open(struct audmgr *am)
 		}
 	}
 
-	
+
 	init_waitqueue_head(&am->wait);
 	am->state = STATE_DISABLED;
 	rc = 0;
@@ -522,7 +522,7 @@ int audmgr_disable(struct audmgr *am)
 	struct audmgr_disable_msg msg;
 	int rc;
 
-	
+
 	if (am->handle == 0xFFFF) {
 		MM_AUD_ERR("audmgr_disable: without handle\n");
 		return 0;

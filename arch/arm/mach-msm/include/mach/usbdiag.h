@@ -90,7 +90,7 @@ int usb_diag_write(struct usb_diag_ch *ch, struct diag_request *d_req);
 
 int diag_read_from_cb(unsigned char * , int);
 
-#if defined(CONFIG_MACH_MECHA) 
+#if defined(CONFIG_MACH_MECHA)
 extern  int sdio_diag_init_enable;
 #endif
 #if defined(CONFIG_ARCH_MSM8X60_LTE)

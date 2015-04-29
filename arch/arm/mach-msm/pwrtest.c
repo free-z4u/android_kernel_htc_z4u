@@ -31,7 +31,7 @@ enum CPLD_REG_ID {
 };
 
 typedef struct _tagSUSPEND_PIN_CONFIG {
-    unsigned char arGpio[200]; 
+    unsigned char arGpio[200];
 } SUSPEND_PIN_CONFIG, *PSUSPEND_PIN_CONFIG;
 
 void gpio_set_diag_gpio_table(unsigned long *dwMFG_gpio_table)
@@ -60,12 +60,12 @@ void gpio_set_diag_gpio_table(unsigned long *dwMFG_gpio_table)
 		unsigned char tempGpio = pSuspendPinConfig->arGpio[i];
 
 		if (tempGpio & 0x1) {
-			
+
 			unsigned long dwGpioKind, dwGpioConfig, dwOutputLevel;
-			if (tempGpio & 0x2) { 
+			if (tempGpio & 0x2) {
 				dwGpioKind = GPIO_INPUT;
 				dwOutputLevel = 0;
-			} else { 
+			} else {
 				dwGpioKind = GPIO_OUTPUT;
 				if (tempGpio & 0x4)
 					dwOutputLevel = 1;
@@ -73,7 +73,7 @@ void gpio_set_diag_gpio_table(unsigned long *dwMFG_gpio_table)
 					dwOutputLevel = 0;
 			}
 
-			
+
 			if ((tempGpio & 0x10) && (tempGpio & 0x08))
 				dwGpioConfig = GPIO_PULL_UP;
 			else if (tempGpio & 0x08)
@@ -90,7 +90,7 @@ void gpio_set_diag_gpio_table(unsigned long *dwMFG_gpio_table)
 			if (dwGpioKind == GPIO_OUTPUT)
 				gpio_direction_output(i, dwOutputLevel);
 		} else {
-			
+
 			continue;
 		}
 	}

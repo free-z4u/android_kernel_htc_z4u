@@ -292,7 +292,7 @@ static int snd_release(struct inode *inode, struct file *file)
 		if (rc < 0)
 			MM_AUD_ERR("msm_rpc_close failed\n");
 		snd->ept = NULL;
-		
+
 	}
 	mutex_unlock(&snd->lock);
 	return 0;
@@ -339,7 +339,7 @@ static int snd_open(struct inode *inode, struct file *file)
 		snd->opened = 1;
 	} else {
 		MM_AUD_DBG("snd already opened\n");
-		
+
 		file->private_data = snd;
 		snd->opened ++;
 	}

@@ -176,7 +176,7 @@
 
 #define DxODOP_af_strategy_7_0                              0x02a4
 #define DxODOP_mode_idle                                                        0x00
-#if 1 
+#if 1
 #define DxODOP_mode_still_preview                           0x01
 #define DxODOP_mode_video                                   0x02
 #define DxODOP_mode_edof_disabled                           0x04
@@ -192,7 +192,7 @@
 #define DxODOP_focus_strategy_SN                                                0x04
 #define DxODOP_focus_strategy_UF                                                0x08
 
-#if 1 
+#if 1
 #define DxODOP_dfltVal_ucode_id_7_0                         0x00
 #define DxODOP_dfltVal_ucode_id_15_8                        0x02
 #define DxODOP_dfltVal_hw_id_7_0                            0xed
@@ -355,7 +355,7 @@
 #define DxODOP_dfltVal_ROI_4_stats_confidence_31_24                             0x00
 #define DxODOP_dfltVal_frame_number_7_0                                         0xff
 #define DxODOP_dfltVal_frame_number_15_8                                        0xff
-#if 1 
+#if 1
 #define DxODOP_dfltVal_af_strategy_7_0                      0x11
 #endif
 
@@ -392,4 +392,4 @@
 #define DxODOP_error_code_ROI_x_order                                           0x2e
 #define DxODOP_error_code_ROI_y_order                                           0x2f
 
-#endif 
+#endif

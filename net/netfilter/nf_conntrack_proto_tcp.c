@@ -382,7 +382,7 @@ static void tcp_options(const struct sk_buff *skb,
 	unsigned char buff[(15 * 4) - sizeof(struct tcphdr)];
 	const unsigned char *ptr;
 	int length = (tcph->doff*4) - sizeof(struct tcphdr);
-	
+
 	if (!length)
 		return;
 

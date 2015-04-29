@@ -534,7 +534,7 @@ struct usb_gadget {
 	/* readonly to gadget driver */
 	const struct usb_gadget_ops	*ops;
 	struct usb_ep			*ep0;
-	struct list_head		ep_list;	
+	struct list_head		ep_list;
 	enum usb_device_speed		speed;
 	unsigned			is_dualspeed:1;
 	enum usb_device_speed		max_speed;

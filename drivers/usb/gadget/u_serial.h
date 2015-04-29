@@ -27,21 +27,21 @@ enum fserial_func_type {
 struct gserial {
 	struct usb_function		func;
 
-	
+
 	struct gs_port			*ioport;
 
 	struct usb_ep			*in;
 	struct usb_ep			*out;
 
-	
-	struct usb_cdc_line_coding port_line_coding;	
+
+	struct usb_cdc_line_coding port_line_coding;
 	u16				serial_state;
 
-	
+
 	unsigned int (*get_dtr)(struct gserial *p);
 	unsigned int (*get_rts)(struct gserial *p);
 
-	
+
 	void (*connect)(struct gserial *p);
 	void (*disconnect)(struct gserial *p);
 	int (*send_break)(struct gserial *p, int duration);
@@ -49,7 +49,7 @@ struct gserial {
 	unsigned int (*send_ring_indicator)(struct gserial *p, unsigned int);
 	int (*send_modem_ctrl_bits)(struct gserial *p, int ctrl_bits);
 
-	
+
 	void (*notify_modem)(void *gser, u8 portno, int ctrl_bits);
 };
 

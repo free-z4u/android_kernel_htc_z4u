@@ -392,7 +392,7 @@ EXPORT_SYMBOL(msm_dmov_enqueue_cmd_ext);
 
 void msm_dmov_enqueue_cmd(unsigned id, struct msm_dmov_cmd *cmd)
 {
-	
+
 	PRINT_IO("msm_dmov_enqueue_cmd%d\n", id);
 	cmd->exec_func = NULL;
 	INIT_WORK(&cmd->work, msm_dmov_enqueue_cmd_ext_work);
@@ -410,7 +410,7 @@ void msm_dmov_flush(unsigned int id, int graceful)
 	int i = 0;
 
 	spin_lock_irqsave(&dmov_conf[adm].list_lock, irq_flags);
-	
+
 	if (!list_empty(&dmov_conf[adm].active_commands[ch])) {
 		PRINT_IO("msm_dmov_flush(%d), inside active send flush cmd %d\n", id, graceful);
 		if(list_empty(&dmov_conf[adm].staged_commands[ch])) {
@@ -444,7 +444,7 @@ void msm_dmov_flush(unsigned int id, int graceful)
 			i++;
 		}
 	}
-	
+
 	spin_unlock_irqrestore(&dmov_conf[adm].list_lock, irq_flags);
 }
 EXPORT_SYMBOL(msm_dmov_flush);
@@ -522,7 +522,7 @@ static irqreturn_t msm_dmov_isr(int irq, void *dev_id)
 	int adm = DMOV_IRQ_TO_ADM(irq);
 
 	mutex_lock(&dmov_conf[adm].lock);
-	
+
 	int_status = readl_relaxed(DMOV_REG(DMOV_ISR, adm));
 	PRINT_FLOW("msm_datamover_irq_handler: DMOV_ISR %x\n", int_status);
 

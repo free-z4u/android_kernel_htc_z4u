@@ -151,7 +151,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 			kobject_name(kobj), kobj, __func__);
 	}
 
-	
+
 	top_kobj = kobj;
 	while (!top_kobj->kset && top_kobj->parent)
 		top_kobj = top_kobj->parent;
@@ -171,7 +171,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 	kset = top_kobj->kset;
 	uevent_ops = kset->uevent_ops;
 
-	
+
 	if (kobj->uevent_suppress) {
 		pr_debug("kobject: '%s' (%p): %s: uevent_suppress "
 				 "caused the event to drop!\n",
@@ -183,7 +183,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		}
 		return 0;
 	}
-	
+
 	if (uevent_ops && uevent_ops->filter)
 		if (!uevent_ops->filter(kset, kobj)) {
 			pr_debug("kobject: '%s' (%p): %s: filter function "
@@ -197,7 +197,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 			return 0;
 		}
 
-	
+
 	if (uevent_ops && uevent_ops->name)
 		subsystem = uevent_ops->name(kset, kobj);
 	else
@@ -214,19 +214,19 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		return 0;
 	}
 
-	
+
 	env = kzalloc(sizeof(struct kobj_uevent_env), GFP_KERNEL);
 	if (!env)
 		return -ENOMEM;
 
-	
+
 	devpath = kobject_get_path(kobj, GFP_KERNEL);
 	if (!devpath) {
 		retval = -ENOENT;
 		goto exit;
 	}
 
-	
+
 	retval = add_uevent_var(env, "ACTION=%s", action_string);
 	if (retval)
 		goto exit;
@@ -237,7 +237,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 	if (retval)
 		goto exit;
 
-	
+
 	if (envp_ext) {
 		for (i = 0; envp_ext[i]; i++) {
 			retval = add_uevent_var(env, "%s", envp_ext[i]);
@@ -246,7 +246,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		}
 	}
 
-	
+
 	if (uevent_ops && uevent_ops->uevent) {
 		retval = uevent_ops->uevent(kset, kobj, env);
 		if (retval) {

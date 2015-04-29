@@ -498,14 +498,14 @@ static void pfifo_fast_reset(struct Qdisc *qdisc)
 {
 	int prio;
 	struct pfifo_fast_priv *priv = NULL;
-	
+
 	if ((!qdisc) || (IS_ERR(qdisc))) {
 		printk("[NET] qdisc is NULL in %s\n", __func__);
 		return;
 	}
-	
+
 	priv = qdisc_priv(qdisc);
-	
+
 	if ((!priv) || (IS_ERR(priv))) {
 		printk("[NET] priv is NULL in %s\n", __func__);
 		return;

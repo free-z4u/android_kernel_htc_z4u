@@ -70,4 +70,4 @@ struct pm8029_led_data {
 	uint32_t flag;
 };
 
-#endif 
+#endif

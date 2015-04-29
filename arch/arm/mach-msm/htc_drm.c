@@ -25,7 +25,7 @@
 
 #if !defined(CONFIG_ARCH_MSM7X30) && !defined(CONFIG_ARCH_MSM7X27A)
 #include <mach/scm.h>
-#else	
+#else
 #include <linux/platform_device.h>
 #include <linux/types.h>
 #include <linux/errno.h>
@@ -46,7 +46,7 @@
 #define OEM_RAPI_STREAMING_FUNCTION_PROC          2
 
 #define OEM_RAPI_CLIENT_MAX_OUT_BUFF_SIZE 128
-#endif	
+#endif
 
 #define DEVICE_NAME "htcdrm"
 
@@ -201,12 +201,12 @@ static int oem_rapi_client_cb3(struct msm_rpc_client *client,
 	ret.out_len = NULL;
 	ret.output = NULL;
 
-	xdr_recv_uint32(xdr, &cb_id);                    
-	xdr_recv_uint32(xdr, &arg.event);                
-	xdr_recv_uint32(xdr, (uint32_t *)(&arg.handle)); 
-	xdr_recv_uint32(xdr, &arg.in_len);               
-	xdr_recv_bytes(xdr, (void **)&arg.input, &temp); 
-	xdr_recv_uint32(xdr, &arg.out_len_valid);        
+	xdr_recv_uint32(xdr, &cb_id);
+	xdr_recv_uint32(xdr, &arg.event);
+	xdr_recv_uint32(xdr, (uint32_t *)(&arg.handle));
+	xdr_recv_uint32(xdr, &arg.in_len);
+	xdr_recv_bytes(xdr, (void **)&arg.input, &temp);
+	xdr_recv_uint32(xdr, &arg.out_len_valid);
 	if (arg.out_len_valid) {
 		ret.out_len = kmalloc(sizeof(*ret.out_len), GFP_KERNEL);
 		if (!ret.out_len) {
@@ -215,9 +215,9 @@ static int oem_rapi_client_cb3(struct msm_rpc_client *client,
 		}
 	}
 
-	xdr_recv_uint32(xdr, &arg.output_valid);         
+	xdr_recv_uint32(xdr, &arg.output_valid);
 	if (arg.output_valid) {
-		xdr_recv_uint32(xdr, &arg.output_size);  
+		xdr_recv_uint32(xdr, &arg.output_size);
 
 		ret.output = kmalloc(arg.output_size, GFP_KERNEL);
 		if (!ret.output) {
@@ -246,7 +246,7 @@ static int oem_rapi_client_cb3(struct msm_rpc_client *client,
 		xdr_send_pointer(xdr, (void **)&(ret.out_len), temp,
 				 xdr_send_uint32);
 
-		
+
 		if (ret.output && ret.out_len)
 			xdr_send_bytes(xdr, (const void **)&ret.output,
 					     ret.out_len);
@@ -277,16 +277,16 @@ static int oem_rapi_client_streaming_function_arg(struct msm_rpc_client *client,
 	if ((cb_id < 0) && (cb_id != MSM_RPC_CLIENT_NULL_CB_ID))
 		return cb_id;
 
-	xdr_send_uint32(xdr, &arg->event);                
-	xdr_send_uint32(xdr, &cb_id);                     
-	xdr_send_uint32(xdr, (uint32_t *)(&arg->handle)); 
-	xdr_send_uint32(xdr, &arg->in_len);               
+	xdr_send_uint32(xdr, &arg->event);
+	xdr_send_uint32(xdr, &cb_id);
+	xdr_send_uint32(xdr, (uint32_t *)(&arg->handle));
+	xdr_send_uint32(xdr, &arg->in_len);
 	xdr_send_bytes(xdr, (const void **)&arg->input,
-			     &arg->in_len);                     
-	xdr_send_uint32(xdr, &arg->out_len_valid);        
-	xdr_send_uint32(xdr, &arg->output_valid);         
+			     &arg->in_len);
+	xdr_send_uint32(xdr, &arg->out_len_valid);
+	xdr_send_uint32(xdr, &arg->output_valid);
 
-	
+
 	if (arg->output_valid)
 		xdr_send_uint32(xdr, &arg->output_size);
 
@@ -300,11 +300,11 @@ static int oem_rapi_client_streaming_function_ret(struct msm_rpc_client *client,
 	struct oem_rapi_client_streaming_func_ret *ret = data;
 	uint32_t temp;
 
-	
+
 	xdr_recv_pointer(xdr, (void **)&(ret->out_len), sizeof(uint32_t),
 			 xdr_recv_uint32);
 
-	
+
 	if (ret->out_len && *ret->out_len)
 		xdr_recv_bytes(xdr, (void **)&ret->output, &temp);
 
@@ -351,7 +351,7 @@ struct msm_rpc_client *oem_rapi_client_init3(void)
 		if (!IS_ERR(rpc_client))
 			open_count++;
 	} else {
-		
+
 		open_count++;
 	}
 	mutex_unlock(&oem_rapi_client_lock);
@@ -444,7 +444,7 @@ static ssize_t htc_keybox_write(struct htc_keybox_dev *dev, const char *buf, siz
 	return 0;
 }
 static struct htc_keybox_dev *keybox_dev;
-#endif 
+#endif
 
 static unsigned char *htc_device_id;
 static unsigned char *htc_keybox;
@@ -481,7 +481,7 @@ static long htcdrm_discretix_cmd(unsigned int command, unsigned long arg)
 
 	PDEBUG("htcdrm_discretix_ioctl func: %x", hdix.func);
 
-	
+
 	switch (hdix.func) {
 	case TEE_FUNC_TA_OpenSession:
 		if (hdix.buf_len != sizeof(struct CMD_TA_OpenSession)) {
@@ -689,7 +689,7 @@ static long htcdrm_discretix_cmd(unsigned int command, unsigned long arg)
     PDEBUG("##### TZ DX");
 	ret = secure_3rd_party_syscall(0, (unsigned char *)&hdix, sizeof(hdix));
 
-	
+
 	if (ptr) {
 		start = (unsigned long)ptr;
 		end = start + hdix.buf_len;
@@ -721,7 +721,7 @@ static long htcdrm_discretix_cmd(unsigned int command, unsigned long arg)
 				case TEE_PARAM_TYPE_MEMREF_OUTPUT:
 				case TEE_PARAM_TYPE_MEMREF_INOUT:
 					if (s->params[i].memref.size != 0) {
-						
+
 						start = (unsigned long)kbuf[i];
 						end = start + s->params[i].memref.size;
 						scm_inv_range(start, end);
@@ -751,7 +751,7 @@ static long htcdrm_discretix_cmd(unsigned int command, unsigned long arg)
 				case TEE_PARAM_TYPE_MEMREF_OUTPUT:
 				case TEE_PARAM_TYPE_MEMREF_INOUT:
 					if (s->params[i].memref.size != 0) {
-						
+
 						start = (unsigned long)kbuf[i];
 						end = start + s->params[i].memref.size;
 						scm_inv_range(start, end);
@@ -784,7 +784,7 @@ static long htcdrm_discretix_cmd(unsigned int command, unsigned long arg)
 
 			s = (struct CMD_SECURE_STORAGE *)ptr;
 			s->image_base = image_u;
-			
+
 			start = (unsigned long)image;
 			end = start + s->image_size;
 			scm_inv_range(start, end);
@@ -890,7 +890,7 @@ static long htcdrm_ioctl(struct file *file, unsigned int command, unsigned long 
 			PERR("interrupt error");
 			return -EFAULT;
 		}
-#endif 
+#endif
 		PDEBUG("func = %x\n", hmsg.func);
 		switch (hmsg.func) {
 		case HTC_OEMCRYPTO_STORE_KEYBOX:
@@ -911,7 +911,7 @@ static long htcdrm_ioctl(struct file *file, unsigned int command, unsigned long 
 #else
 			ret = secure_access_item(1, ITEM_KEYBOX_PROVISION, hmsg.req_len,
 					htc_keybox);
-#endif	
+#endif
 			if (ret)
 				PERR("provision keybox failed (%d)\n", ret);
 			UP(&keybox_dev->sem);
@@ -930,7 +930,7 @@ static long htcdrm_ioctl(struct file *file, unsigned int command, unsigned long 
 #else
 			ret = secure_access_item(0, ITEM_KEYBOX_DATA, WIDEVINE_KEYBOX_LEN,
 					htc_keybox);
-#endif	
+#endif
 			if (ret)
 				PERR("get keybox failed (%d)\n", ret);
 			else {
@@ -956,7 +956,7 @@ static long htcdrm_ioctl(struct file *file, unsigned int command, unsigned long 
 #else
 			ret = secure_access_item(0, ITEM_DEVICE_ID, DEVICE_ID_LEN,
 					htc_device_id);
-#endif	
+#endif
 			if (ret)
 				PERR("get device ID failed (%d)\n", ret);
 			else {
@@ -985,7 +985,7 @@ static long htcdrm_ioctl(struct file *file, unsigned int command, unsigned long 
 			printk(KERN_INFO "[K] %s: Data get from random entropy ", __func__);
 #else
 			get_random_bytes(ptr, hmsg.resp_len);
-#endif	
+#endif
 			if (ret)
 				PERR("get random data failed (%d)\n", ret);
 			else {
@@ -1047,7 +1047,7 @@ static int htcdrm_mmap(struct file *filp, struct vm_area_struct *vma)
 
 	PDEBUG("htcdrm_mmap %lx", length);
 
-	
+
 	ret = remap_pfn_range(vma,
 			vma->vm_start,
 			virt_to_phys((void *)discretix_smem_area) >> PAGE_SHIFT,
@@ -1097,7 +1097,7 @@ static int __init htcdrm_init(void)
 		return -1;
 	}
 
-	
+
 	discretix_smem_area = (unsigned char *)((((unsigned long)discretix_smem_ptr) + PAGE_SIZE - 1) & PAGE_MASK);
 	discretix_smem_phy = (unsigned char *)virt_to_phys(discretix_smem_area);
 

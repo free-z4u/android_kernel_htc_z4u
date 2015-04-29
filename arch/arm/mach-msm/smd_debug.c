@@ -148,11 +148,11 @@ static int sleep_stat_suspend_notifier(struct notifier_block *nb,
 	unsigned long event, void *dummy)
 {
 	switch (event) {
-	
+
 	case PM_SUSPEND_PREPARE:
 		print_sleep_stat(F_SUSPEND);
 		return NOTIFY_OK;
-	
+
 	case PM_POST_SUSPEND:
 		print_sleep_stat(F_RESUME);
 		print_negate_client_stat();
@@ -531,7 +531,7 @@ static int debug_test_smsm(char *buf, int max)
 	int test_num = 0;
 	int ret;
 
-	
+
 	do {
 		test_num++;
 		SMSM_CB_TEST_INIT();
@@ -539,7 +539,7 @@ static int debug_test_smsm(char *buf, int max)
 				smsm_state_cb, (void *)0x1234);
 		UT_EQ_INT(ret, 0);
 
-		
+
 		UT_EQ_INT(smsm_cb_data.cb_count, 0);
 		INIT_COMPLETION(smsm_cb_completion);
 		smsm_change_state(SMSM_APPS_STATE, SMSM_SMDINIT, 0x0);
@@ -551,7 +551,7 @@ static int debug_test_smsm(char *buf, int max)
 		UT_EQ_INT(smsm_cb_data.new_state & SMSM_SMDINIT, 0x0);
 		UT_EQ_INT((int)smsm_cb_data.data, 0x1234);
 
-		
+
 		INIT_COMPLETION(smsm_cb_completion);
 		smsm_change_state(SMSM_APPS_STATE, 0x0, SMSM_SMDINIT);
 		UT_GT_INT((int)wait_for_completion_timeout(&smsm_cb_completion,
@@ -560,12 +560,12 @@ static int debug_test_smsm(char *buf, int max)
 		UT_EQ_INT(smsm_cb_data.old_state & SMSM_SMDINIT, 0x0);
 		UT_EQ_INT(smsm_cb_data.new_state & SMSM_SMDINIT, SMSM_SMDINIT);
 
-		
+
 		ret = smsm_state_cb_deregister(SMSM_APPS_STATE, SMSM_SMDINIT,
 				smsm_state_cb, (void *)0x1234);
 		UT_EQ_INT(ret, 2);
 
-		
+
 		INIT_COMPLETION(smsm_cb_completion);
 		smsm_change_state(SMSM_APPS_STATE, SMSM_SMDINIT, 0x0);
 		smsm_change_state(SMSM_APPS_STATE, 0x0, SMSM_SMDINIT);
@@ -576,7 +576,7 @@ static int debug_test_smsm(char *buf, int max)
 		i += scnprintf(buf + i, max - i, "Test %d - PASS\n", test_num);
 	} while (0);
 
-	
+
 	do {
 		test_num++;
 		SMSM_CB_TEST_INIT();
@@ -587,7 +587,7 @@ static int debug_test_smsm(char *buf, int max)
 				smsm_state_cb, (void *)0x1234);
 		UT_EQ_INT(ret, 1);
 
-		
+
 		INIT_COMPLETION(smsm_cb_completion);
 		UT_EQ_INT(smsm_cb_data.cb_count, 0);
 		smsm_change_state(SMSM_APPS_STATE, SMSM_SMDINIT, 0x0);
@@ -611,7 +611,7 @@ static int debug_test_smsm(char *buf, int max)
 					msecs_to_jiffies(20)), 0);
 		UT_EQ_INT(smsm_cb_data.cb_count, 4);
 
-		
+
 		ret = smsm_state_cb_deregister(SMSM_APPS_STATE, SMSM_SMDINIT,
 				smsm_state_cb, (void *)0x1234);
 		UT_EQ_INT(ret, 1);
@@ -633,12 +633,12 @@ static int debug_test_smsm(char *buf, int max)
 					msecs_to_jiffies(20)), 0);
 		UT_EQ_INT(smsm_cb_data.cb_count, 6);
 
-		
+
 		ret = smsm_state_cb_deregister(SMSM_APPS_STATE, SMSM_INIT,
 				smsm_state_cb, (void *)0x1234);
 		UT_EQ_INT(ret, 2);
 
-		
+
 		INIT_COMPLETION(smsm_cb_completion);
 		smsm_change_state(SMSM_APPS_STATE, SMSM_INIT, 0x0);
 		smsm_change_state(SMSM_APPS_STATE, 0x0, SMSM_INIT);
@@ -649,7 +649,7 @@ static int debug_test_smsm(char *buf, int max)
 		i += scnprintf(buf + i, max - i, "Test %d - PASS\n", test_num);
 	} while (0);
 
-	
+
 	do {
 		test_num++;
 		SMSM_CB_TEST_INIT();
@@ -660,7 +660,7 @@ static int debug_test_smsm(char *buf, int max)
 				smsm_state_cb, (void *)0x3456);
 		UT_EQ_INT(ret, 0);
 
-		
+
 		INIT_COMPLETION(smsm_cb_completion);
 		UT_EQ_INT(smsm_cb_data.cb_count, 0);
 		smsm_change_state(SMSM_APPS_STATE, SMSM_SMDINIT, 0x0);

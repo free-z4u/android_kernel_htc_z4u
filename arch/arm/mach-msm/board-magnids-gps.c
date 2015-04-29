@@ -1,23 +1,23 @@
 #include <linux/init.h>
 #include <linux/fs.h>
 #include <linux/types.h>
-#include <linux/cdev.h> 
+#include <linux/cdev.h>
 #include <linux/slab.h>
 #include <linux/uaccess.h>
-#include <linux/device.h> 
-#include <linux/io.h>     
+#include <linux/device.h>
+#include <linux/io.h>
 #include <linux/version.h>
 #include <linux/miscdevice.h>
 #include <linux/interrupt.h>
 #include <mach/irqs.h>
 #include <asm/bitops.h>
-#include <linux/semaphore.h> 
+#include <linux/semaphore.h>
 #include <linux/spinlock.h>
-#include <linux/wait.h>           
-#include <linux/sched.h>  
-#include <linux/kfifo.h>  
-#include <linux/timer.h>         
-#include <linux/input.h>      
+#include <linux/wait.h>
+#include <linux/sched.h>
+#include <linux/kfifo.h>
+#include <linux/timer.h>
+#include <linux/input.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <asm/uaccess.h>
@@ -28,9 +28,9 @@
 //for GPS_32K_IN
 #include <linux/mfd/pm8xxx/gpio.h>
 
-#include <mach/TCA6418_ioextender.h>   
+#include <mach/TCA6418_ioextender.h>
 
-#include <linux/miscdevice.h>                                                                                              
+#include <linux/miscdevice.h>
 #include <linux/platform_device.h>
 #include <linux/module.h>
 #include <linux/device.h>
@@ -42,7 +42,7 @@
 #include <linux/tty.h>
 #include <mach/msm_serial_hs.h>
 
-                                                                                
+
 
 #ifdef PRIMOU_REWORK
 #undef PRIMOU_REWORK
@@ -53,7 +53,7 @@
 #define GPSD(fmt, arg...) printk(KERN_DEBUG "[GPS].(DEBUG) "fmt"", ##arg)
 #define GPSE(fmt, arg...) printk(KERN_ERR "[GPS].(ERROR) "fmt"", ##arg)
 #else
-#define GPSD(...) 
+#define GPSD(...)
 #define GPSE(fmt, arg...) printk(KERN_ERR "[GPS].(ERROR) "fmt"", ##arg)
 #endif
 
@@ -137,12 +137,12 @@ static long gps_onoff_ioctl(
 static int gps_onoff_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_ops)
 {
 	char data[2];
-	
+
 	if( copy_from_user(data, buf, count) ) {
 		GPSE("write data error\n");
 		return -1;
 	}
-	
+
 	if ( data[0] == '1' ){
 		gps_onoff(1);
 		status = '1';
@@ -153,7 +153,7 @@ static int gps_onoff_write(struct file *filp, const char __user *buf, size_t cou
 		status = '0';
 		GPSD("reset GPIO OK!\n");
 	}
-	
+
 	return 1;
 }
 
@@ -163,7 +163,7 @@ static int gps_onoff_read(struct file *filp, char *buf, size_t count, loff_t *f_
 		GPSE("read data wrong\n");
 		return -1;
 	}
-	
+
 	return 1;
 }
 
@@ -173,16 +173,16 @@ struct file_operations gps_onoff_ops={
 	.write	= gps_onoff_write,
 	.read	= gps_onoff_read,
 #ifdef LINUX_3
-	.unlocked_ioctl = 
+	.unlocked_ioctl =
 #else
-	.ioctl	= 
+	.ioctl	=
 #endif
 	gps_onoff_ioctl,
 };
 
 static int gps_onoff_init(struct platform_device *platdev)
 {
-	
+
 	GPSD("In gps_onoff_init\n");
 
 	ioext_gpio_set_value(IOEXT_GPS_RESET, 1);
@@ -194,7 +194,7 @@ static int gps_onoff_init(struct platform_device *platdev)
 		goto err4;
 	}
 	GPSD(KERN_INFO "%s , major %d",DEVICE_NAME, gps_onoff_major);
-	
+
 	gps_onoff_class = class_create(THIS_MODULE, DEVICE_NAME);
 	if(gps_onoff_class == NULL){
 		GPSE("gps_onoff class create err\n");
@@ -215,7 +215,7 @@ err6:
 	class_destroy(gps_onoff_class);
 err5:
 	unregister_chrdev(gps_onoff_major, DEVICE_NAME);
-err4:	
+err4:
 	return -1;
 }
 
@@ -231,7 +231,7 @@ static int  gps_onoff_exit(struct platform_device *platdev )
 static int gps_suspend(struct platform_device *platdev, pm_message_t state)
 {
 	GPSD("In gps_suspend function\n");
-	
+
 	if(deconfig_gps_uart() < 0){
 		GPSE("error occured when deinit gps uart");
 		return -1;
@@ -243,7 +243,7 @@ static int gps_suspend(struct platform_device *platdev, pm_message_t state)
 static int gps_resume(struct platform_device *platdev)
 {
 	GPSD("In gps_resume function\n");
-	
+
 	if(config_gps_uart() < 0){
 		GPSE("resume to config to GPS uart err!\n ");
 		return -1;
@@ -287,7 +287,7 @@ static int __init gps_ctl_init(void)
 		platform_device_unregister(&gps_ctl_dev);
 		return ret;
 	}
-	
+
 	return 0;
 }
 

@@ -110,7 +110,7 @@ static struct platform_device msm8625_keypad_device = {
 	},
 };
 static struct keyreset_platform_data msm8625_reset_keys_pdata = {
-	
+
 	.keys_down = {
 		KEY_POWER,
 		KEY_VOLUMEDOWN,

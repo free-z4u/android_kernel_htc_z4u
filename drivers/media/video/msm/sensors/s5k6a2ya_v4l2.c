@@ -30,210 +30,210 @@ static struct msm_camera_i2c_reg_conf s5k6a2ya_groupoff_settings[] = {
 };
 
 static struct msm_camera_i2c_reg_conf s5k6a2ya_prev_settings[] = {
-	
-	{0x0340, 0x04}, 
-	{0x0341, 0xD6}, 
-	{0x0342, 0x06}, 
-	{0x0343, 0x7E}, 
 
-	
-	{0x0344, 0x00}, 
-	{0x0345, 0x00}, 
-	{0x0346, 0x00}, 
-	{0x0347, 0x00}, 
-	{0x0348, 0x05}, 
-	{0x0349, 0xBF}, 
-	{0x034A, 0x04}, 
-	{0x034B, 0x4F}, 
+	{0x0340, 0x04},
+	{0x0341, 0xD6},
+	{0x0342, 0x06},
+	{0x0343, 0x7E},
 
-	
-	{0x034C, 0x05}, 
-	{0x034D, 0xC0}, 
-	{0x034E, 0x04}, 
-	{0x034F, 0x50}, 
 
-	
-	{0x0381, 0x01}, 
-	{0x0383, 0x01}, 
-	{0x0385, 0x01}, 
-	{0x0387, 0x01}, 
+	{0x0344, 0x00},
+	{0x0345, 0x00},
+	{0x0346, 0x00},
+	{0x0347, 0x00},
+	{0x0348, 0x05},
+	{0x0349, 0xBF},
+	{0x034A, 0x04},
+	{0x034B, 0x4F},
 
-	
-	{0x0204, 0x00}, 
-	{0x0205, 0x20}, 
 
-	
-	{0x0220, 0x01}, 
+	{0x034C, 0x05},
+	{0x034D, 0xC0},
+	{0x034E, 0x04},
+	{0x034F, 0x50},
+
+
+	{0x0381, 0x01},
+	{0x0383, 0x01},
+	{0x0385, 0x01},
+	{0x0387, 0x01},
+
+
+	{0x0204, 0x00},
+	{0x0205, 0x20},
+
+
+	{0x0220, 0x01},
 	{0x0221, 0xF4},
-	{0x0222, 0x02}, 
+	{0x0222, 0x02},
 	{0x0223, 0x6F},
 };
 
 static struct msm_camera_i2c_reg_conf s5k6a2ya_snap_settings[] = {
-	
-	{0x0340, 0x04}, 
-	{0x0341, 0xD6}, 
-	{0x0342, 0x06}, 
-	{0x0343, 0x7E}, 
 
-	
-	{0x0344, 0x00}, 
-	{0x0345, 0x00}, 
-	{0x0346, 0x00}, 
-	{0x0347, 0x00}, 
-	{0x0348, 0x05}, 
-	{0x0349, 0xBF}, 
-	{0x034A, 0x04}, 
-	{0x034B, 0x4F}, 
+	{0x0340, 0x04},
+	{0x0341, 0xD6},
+	{0x0342, 0x06},
+	{0x0343, 0x7E},
 
-	
-	{0x034C, 0x05}, 
-	{0x034D, 0xC0}, 
-	{0x034E, 0x04}, 
-	{0x034F, 0x50}, 
 
-	
-	{0x0381, 0x01}, 
-	{0x0383, 0x01}, 
-	{0x0385, 0x01}, 
-	{0x0387, 0x01}, 
+	{0x0344, 0x00},
+	{0x0345, 0x00},
+	{0x0346, 0x00},
+	{0x0347, 0x00},
+	{0x0348, 0x05},
+	{0x0349, 0xBF},
+	{0x034A, 0x04},
+	{0x034B, 0x4F},
 
-	
-	{0x0204, 0x00}, 
-	{0x0205, 0x20}, 
 
-	
-	{0x0220, 0x01}, 
+	{0x034C, 0x05},
+	{0x034D, 0xC0},
+	{0x034E, 0x04},
+	{0x034F, 0x50},
+
+
+	{0x0381, 0x01},
+	{0x0383, 0x01},
+	{0x0385, 0x01},
+	{0x0387, 0x01},
+
+
+	{0x0204, 0x00},
+	{0x0205, 0x20},
+
+
+	{0x0220, 0x01},
 	{0x0221, 0xF4},
-	{0x0222, 0x02}, 
+	{0x0222, 0x02},
 	{0x0223, 0x6F},
 };
 static struct msm_camera_i2c_reg_conf s5k6a2ya_reserved_settings[] = {
-	
-	{0x0340, 0x06}, 
-	{0x0341, 0x46}, 
-	{0x0342, 0x06}, 
-	{0x0343, 0x7E}, 
 
-	
-	{0x0344, 0x00}, 
-	{0x0345, 0x00}, 
-	{0x0346, 0x00}, 
-	{0x0347, 0x00}, 
-	{0x0348, 0x05}, 
-	{0x0349, 0xBF}, 
-	{0x034A, 0x04}, 
-	{0x034B, 0x4F}, 
+	{0x0340, 0x06},
+	{0x0341, 0x46},
+	{0x0342, 0x06},
+	{0x0343, 0x7E},
 
-	
-	{0x034C, 0x05}, 
-	{0x034D, 0xC0}, 
-	{0x034E, 0x04}, 
-	{0x034F, 0x50}, 
 
-	
-	{0x0381, 0x01}, 
-	{0x0383, 0x01}, 
-	{0x0385, 0x01}, 
-	{0x0387, 0x01}, 
+	{0x0344, 0x00},
+	{0x0345, 0x00},
+	{0x0346, 0x00},
+	{0x0347, 0x00},
+	{0x0348, 0x05},
+	{0x0349, 0xBF},
+	{0x034A, 0x04},
+	{0x034B, 0x4F},
 
-	
-	{0x0204, 0x00}, 
-	{0x0205, 0x20}, 
 
-	
-	{0x0220, 0x01}, 
+	{0x034C, 0x05},
+	{0x034D, 0xC0},
+	{0x034E, 0x04},
+	{0x034F, 0x50},
+
+
+	{0x0381, 0x01},
+	{0x0383, 0x01},
+	{0x0385, 0x01},
+	{0x0387, 0x01},
+
+
+	{0x0204, 0x00},
+	{0x0205, 0x20},
+
+
+	{0x0220, 0x01},
 	{0x0221, 0xF4},
-	{0x0222, 0x02}, 
+	{0x0222, 0x02},
 	{0x0223, 0x6F},
 };
 static struct msm_camera_i2c_reg_conf s5k6a2ya_video_24fps_settings[] = {
-	
-	{0x0340, 0x06}, 
-	{0x0341, 0x46}, 
-	{0x0342, 0x06}, 
-	{0x0343, 0x7E}, 
 
-	
-	{0x0344, 0x00}, 
-	{0x0345, 0x00}, 
-	{0x0346, 0x00}, 
-	{0x0347, 0x00}, 
-	{0x0348, 0x05}, 
-	{0x0349, 0xBF}, 
-	{0x034A, 0x04}, 
-	{0x034B, 0x4F}, 
+	{0x0340, 0x06},
+	{0x0341, 0x46},
+	{0x0342, 0x06},
+	{0x0343, 0x7E},
 
-	
-	{0x034C, 0x05}, 
-	{0x034D, 0xC0}, 
-	{0x034E, 0x04}, 
-	{0x034F, 0x50}, 
 
-	
-	{0x0381, 0x01}, 
-	{0x0383, 0x01}, 
-	{0x0385, 0x01}, 
-	{0x0387, 0x01}, 
+	{0x0344, 0x00},
+	{0x0345, 0x00},
+	{0x0346, 0x00},
+	{0x0347, 0x00},
+	{0x0348, 0x05},
+	{0x0349, 0xBF},
+	{0x034A, 0x04},
+	{0x034B, 0x4F},
 
-	
-	{0x0204, 0x00}, 
-	{0x0205, 0x20}, 
 
-	
-	{0x0220, 0x01}, 
+	{0x034C, 0x05},
+	{0x034D, 0xC0},
+	{0x034E, 0x04},
+	{0x034F, 0x50},
+
+
+	{0x0381, 0x01},
+	{0x0383, 0x01},
+	{0x0385, 0x01},
+	{0x0387, 0x01},
+
+
+	{0x0204, 0x00},
+	{0x0205, 0x20},
+
+
+	{0x0220, 0x01},
 	{0x0221, 0xF4},
-	{0x0222, 0x02}, 
+	{0x0222, 0x02},
 	{0x0223, 0x6F},
 };
 
 static struct msm_camera_i2c_reg_conf s5k6a2ya_recommend_settings[] = {
-	
-	
-	
-	{0x303E, 0x20}, 
-	{0x303F, 0x10}, 
-	{0x3040, 0x40}, 
-	{0x3041, 0x10}, 
+
+
+
+	{0x303E, 0x20},
+	{0x303F, 0x10},
+	{0x3040, 0x40},
+	{0x3041, 0x10},
 	{0x3310, 0x0C}, /* [3:2] nop_flob : must be written before streaming on */
 	{0x3074, 0x0E}, /* [3] f_lob_read_opt : must be written before streaming on */
-	{0x3017, 0x01}, 
-	{0x3E33, 0x3C}, 
-	{0x3029, 0x0E}, 
-	{0x300D, 0x14}, 
-	{0x300E, 0x8E}, 
-	{0x301B, 0x08}, 
-	{0x305B, 0x9C}, 
-	{0x3315, 0x5B}, 
-	{0x3148, 0x00}, 
-	{0x3149, 0x00}, 
+	{0x3017, 0x01},
+	{0x3E33, 0x3C},
+	{0x3029, 0x0E},
+	{0x300D, 0x14},
+	{0x300E, 0x8E},
+	{0x301B, 0x08},
+	{0x305B, 0x9C},
+	{0x3315, 0x5B},
+	{0x3148, 0x00},
+	{0x3149, 0x00},
 
-	
-	{0x3E84, 0x18}, 
+
+	{0x3E84, 0x18},
 	{0x3E85, 0x00},
 
-	
-	
-	{0x0820, 0x06}, 
-	{0x0821, 0x00}, 
-	{0x0822, 0x9B}, 
-	{0x0823, 0x00}, 
 
-	
-	{0x082A, 0x0A}, 
-	{0x082B, 0x06}, 
 
-	
-	{0x0858, 0x02}, 
-	{0x0859, 0x6C}, 
-	{0x085A, 0x00}, 
-	{0x085B, 0x00}, 
+	{0x0820, 0x06},
+	{0x0821, 0x00},
+	{0x0822, 0x9B},
+	{0x0823, 0x00},
 
-	
-	{0x0216, 0x00}, 
 
-	
-	{0x0800, 0x00}, 
+	{0x082A, 0x0A},
+	{0x082B, 0x06},
+
+
+	{0x0858, 0x02},
+	{0x0859, 0x6C},
+	{0x085A, 0x00},
+	{0x085B, 0x00},
+
+
+	{0x0216, 0x00},
+
+
+	{0x0800, 0x00},
 };
 
 static struct v4l2_subdev_info s5k6a2ya_subdev_info[] = {
@@ -243,7 +243,7 @@ static struct v4l2_subdev_info s5k6a2ya_subdev_info[] = {
 	.fmt    = 1,
 	.order    = 0,
 	},
-	
+
 };
 
 static struct msm_camera_i2c_conf_array s5k6a2ya_init_conf[] = {
@@ -276,7 +276,7 @@ static struct msm_camera_i2c_conf_array s5k6a2ya_confs[] = {
 	ARRAY_SIZE(s5k6a2ya_video_24fps_settings), 0, MSM_CAMERA_I2C_BYTE_DATA},
 };
 static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -284,7 +284,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -295,7 +295,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -303,7 +303,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -314,7 +314,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -322,7 +322,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -333,7 +333,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -341,7 +341,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -352,7 +352,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -360,7 +360,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -371,7 +371,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -379,7 +379,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -390,7 +390,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -398,7 +398,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -409,7 +409,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -417,7 +417,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -428,7 +428,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -436,7 +436,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -447,7 +447,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -455,7 +455,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -466,7 +466,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	{	
+	{
 		.x_output = 0x5C0,
 		.y_output = 0x450,
 		.line_length_pclk = 0x067E,
@@ -474,7 +474,7 @@ static struct msm_sensor_output_info_t s5k6a2ya_dimensions[] = {
 		.vt_pixel_clk = 62000000,
 		.op_pixel_clk = 62000000,
 		.binning_factor = 1,
-		
+
 		.x_addr_start = 0,
 		.y_addr_start = 0,
 		.x_addr_end = 0x5BF,
@@ -549,7 +549,7 @@ static struct msm_sensor_exp_gain_info_t s5k6a2ya_exp_gain_info = {
 	.coarse_int_time_addr = 0x222,
 	.global_gain_addr = 0x204,
 	.vert_offset = 4,
-	.min_vert = 4,  
+	.min_vert = 4,
 	.sensor_max_linecount = 65531,
 };
 
@@ -564,11 +564,11 @@ static int s5k6a2ya_read_fuseid(struct sensor_cfg_data *cdata,
 
 	pr_info("%s: sensor OTP information:\n", __func__);
 
-	rc = msm_camera_i2c_write_b(s5k6a2ya_msm_camera_i2c_client, 0x3602, 0x00); 
+	rc = msm_camera_i2c_write_b(s5k6a2ya_msm_camera_i2c_client, 0x3602, 0x00);
 	if (rc < 0)
 		pr_info("%s: i2c_write_b 0x3602 fail\n", __func__);
 
-	rc = msm_camera_i2c_write_b(s5k6a2ya_msm_camera_i2c_client, 0x3600, 0x01); 
+	rc = msm_camera_i2c_write_b(s5k6a2ya_msm_camera_i2c_client, 0x3600, 0x01);
 	if (rc < 0)
 		pr_info("%s: i2c_write_b 0x3600 fail\n", __func__);
 
@@ -586,7 +586,7 @@ static int s5k6a2ya_read_fuseid(struct sensor_cfg_data *cdata,
 		}
 	}
 
-	rc = msm_camera_i2c_write_b(s5k6a2ya_msm_camera_i2c_client, 0x3600, 0x00); 
+	rc = msm_camera_i2c_write_b(s5k6a2ya_msm_camera_i2c_client, 0x3600, 0x00);
 	if (rc < 0)
 		pr_info("%s: i2c_write_b 0x3600 fail\n", __func__);
 
@@ -831,7 +831,7 @@ static struct v4l2_subdev_ops s5k6a2ya_subdev_ops = {
 };
 
 int32_t s5k6a2ya_write_exp_gain1_ex(struct msm_sensor_ctrl_t *s_ctrl,
-		int mode, uint16_t gain, uint16_t dig_gain, uint32_t line) 
+		int mode, uint16_t gain, uint16_t dig_gain, uint32_t line)
 {
 	uint32_t fl_lines;
 	uint8_t offset;
@@ -902,7 +902,7 @@ static struct msm_sensor_fn_t s5k6a2ya_func_tbl = {
 	.sensor_power_down = s5k6a2ya_power_down,
 	.sensor_config = msm_sensor_config,
 	.sensor_get_csi_params = msm_sensor_get_csi_params,
-	.sensor_i2c_read_fuseid = s5k6a2ya_read_fuseid, 
+	.sensor_i2c_read_fuseid = s5k6a2ya_read_fuseid,
 };
 
 static struct msm_sensor_reg_t s5k6a2ya_regs = {

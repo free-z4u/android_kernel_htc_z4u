@@ -28,7 +28,7 @@
 
 static inline void notify_other_proc_comm(void)
 {
-	
+
 	wmb();
 #if defined(CONFIG_ARCH_MSM7X30)
 	__raw_writel(1 << 6, MSM_APCS_GCC_BASE + 0x8);
@@ -90,7 +90,7 @@ static int msm_proc_comm_disable;
 static int proc_comm_wait_for(unsigned addr, unsigned value)
 {
 	while (1) {
-		
+
 		mb();
 		if (readl_relaxed(addr) == value)
 			return 0;
@@ -119,7 +119,7 @@ again:
 
 	spin_unlock_irqrestore(&proc_comm_lock, flags);
 
-	
+
 	wmb();
 	notify_other_proc_comm();
 
@@ -238,14 +238,14 @@ int msm_proc_comm(unsigned cmd, unsigned *data1, unsigned *data2)
 	}
 #endif
 
-        
+
         if(cmd == PCOM_FINAL_EFS_SYNC)
         {
                 printk(KERN_INFO "[HTC][EFS] update efs  magic number:%x\n", (data1 ? *data1 : 0));
                 writel_relaxed(data1 ? *data1 : 0, base + APP_EFS_MAGIC);
                 return 0;
         }
-        
+
 
 
 	spin_lock_irqsave(&proc_comm_lock, flags);
@@ -262,7 +262,7 @@ again:
 
 #if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
        if ((cmd == PCOM_CLKCTL_RPC_DISABLE) && (*data1 == 0x1F)) {
-               
+
                ret = 0;
                goto end;
        }
@@ -277,7 +277,7 @@ again:
 	writel_relaxed(data1 ? *data1 : 0, base + APP_DATA1);
 	writel_relaxed(data2 ? *data2 : 0, base + APP_DATA2);
 
-	
+
 	wmb();
 	notify_other_proc_comm();
 
@@ -301,7 +301,7 @@ again:
 	case PCOM_RESET_CHIP_IMM:
 	case PCOM_RESET_APPS:
 #if 1
-		
+
 #else
 		msm_proc_comm_disable = 1;
 		printk(KERN_ERR "msm: proc_comm: proc comm disabled\n");

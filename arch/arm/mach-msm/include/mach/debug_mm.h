@@ -40,4 +40,4 @@
 #define MM_AUD_ERR(fmt, args...) pr_err("[AUD][%s:%s] " fmt,\
 	       __MM_FILE__, __func__, ##args)
 
-#endif /* __ARCH_ARM_MACH_MSM_DEBUG_MM_H_ */ 
+#endif /* __ARCH_ARM_MACH_MSM_DEBUG_MM_H_ */

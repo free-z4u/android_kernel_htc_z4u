@@ -158,15 +158,15 @@
 #define HS_RPC_CLIENT_PROC_NULL		0
 #define HS_RPC_CLIENT_PROC_ADC		1
 
-#define HS_MGR_KEYCODE_END	KEY_END			
-#define HS_MGR_KEYCODE_MUTE	KEY_MUTE		
-#define HS_MGR_KEYCODE_VOLDOWN	KEY_VOLUMEDOWN		
-#define HS_MGR_KEYCODE_VOLUP	KEY_VOLUMEUP		
-#define HS_MGR_KEYCODE_FORWARD	KEY_NEXTSONG		
-#define HS_MGR_KEYCODE_PLAY	KEY_PLAYPAUSE		
-#define HS_MGR_KEYCODE_BACKWARD	KEY_PREVIOUSSONG	
-#define HS_MGR_KEYCODE_MEDIA	KEY_MEDIA		
-#define HS_MGR_KEYCODE_SEND	KEY_SEND		
+#define HS_MGR_KEYCODE_END	KEY_END
+#define HS_MGR_KEYCODE_MUTE	KEY_MUTE
+#define HS_MGR_KEYCODE_VOLDOWN	KEY_VOLUMEDOWN
+#define HS_MGR_KEYCODE_VOLUP	KEY_VOLUMEUP
+#define HS_MGR_KEYCODE_FORWARD	KEY_NEXTSONG
+#define HS_MGR_KEYCODE_PLAY	KEY_PLAYPAUSE
+#define HS_MGR_KEYCODE_BACKWARD	KEY_PREVIOUSSONG
+#define HS_MGR_KEYCODE_MEDIA	KEY_MEDIA
+#define HS_MGR_KEYCODE_SEND	KEY_SEND
 #define HS_MGR_KEYCODE_FF	KEY_FASTFORWARD
 #define HS_MGR_KEYCODE_RW	KEY_REWIND
 
@@ -352,17 +352,17 @@ struct htc_headset_mgr_info {
 
 	unsigned int irq_btn_35mm;
 
-	
+
 	int key_level_flag;
 	int hs_35mm_type;
 	int h2w_35mm_type;
 	int is_ext_insert;
 	int mic_bias_state;
 	int mic_detect_counter;
-	int metrico_status; 
+	int metrico_status;
 	int quick_boot_status;
 
-	
+
 	int driver_one_wire_exist;
 	int one_wire_mode;
 	int key_code_1wire[15];

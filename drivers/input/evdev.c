@@ -33,7 +33,7 @@ struct evdev {
 	wait_queue_head_t wait;
 	struct evdev_client __rcu *grab;
 	struct list_head client_list;
-	spinlock_t client_lock; 
+	spinlock_t client_lock;
 	struct mutex mutex;
 	struct device dev;
 	bool exist;
@@ -42,8 +42,8 @@ struct evdev {
 struct evdev_client {
 	unsigned int head;
 	unsigned int tail;
-	unsigned int packet_head; 
-	spinlock_t buffer_lock; 
+	unsigned int packet_head;
+	spinlock_t buffer_lock;
 	struct wake_lock wake_lock;
 	char name[28];
 	struct fasync_struct *fasync;
@@ -59,7 +59,7 @@ static DEFINE_MUTEX(evdev_table_mutex);
 static void evdev_pass_event(struct evdev_client *client,
 			     struct input_event *event)
 {
-	
+
 	spin_lock(&client->buffer_lock);
 
 	wake_lock_timeout(&client->wake_lock, 5 * HZ);
@@ -475,7 +475,7 @@ static int bits_to_user(unsigned long *bits, unsigned int maxbit,
 
 	return copy_to_user(p, bits, len) ? -EFAULT : len;
 }
-#endif 
+#endif
 
 #else
 
@@ -490,7 +490,7 @@ static int bits_to_user(unsigned long *bits, unsigned int maxbit,
 	return copy_to_user(p, bits, len) ? -EFAULT : len;
 }
 
-#endif 
+#endif
 
 static int str_to_user(const char *str, unsigned int maxlen, void __user *p)
 {
@@ -552,7 +552,7 @@ static int evdev_handle_get_keycode(struct input_dev *dev, void __user *p)
 	int __user *ip = (int __user *)p;
 	int error;
 
-	
+
 	if (copy_from_user(ke.scancode, p, sizeof(unsigned int)))
 		return -EFAULT;
 
@@ -627,7 +627,7 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 	unsigned int size;
 	int error;
 
-	
+
 	switch (cmd) {
 
 	case EVIOCGVERSION:
@@ -691,7 +691,7 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 
 	size = _IOC_SIZE(cmd);
 
-	
+
 #define EVIOC_MASK_SIZE(nr)	((nr) & ~(_IOC_SIZEMASK << _IOC_SIZESHIFT))
 	switch (EVIOC_MASK_SIZE(cmd)) {
 

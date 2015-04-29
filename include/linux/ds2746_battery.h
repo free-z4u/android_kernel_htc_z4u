@@ -26,15 +26,15 @@ enum ds2746_notify_evt_t {
 
 
 enum {
-	CHARGE_STATE_UNKNOWN,   		
-	CHARGE_STATE_PREDICTION,		
-	CHARGE_STATE_DISCHARGE, 		
-	CHARGE_STATE_CHARGING,  		
-	CHARGE_STATE_PENDING,   		
-	CHARGE_STATE_FULL_WAIT_STABLE,  
-	CHARGE_STATE_FULL_CHARGING, 	
-	CHARGE_STATE_FULL_PENDING,  	
-	CHARGE_STATE_FULL_RECHARGING,  	
+	CHARGE_STATE_UNKNOWN,
+	CHARGE_STATE_PREDICTION,
+	CHARGE_STATE_DISCHARGE,
+	CHARGE_STATE_CHARGING,
+	CHARGE_STATE_PENDING,
+	CHARGE_STATE_FULL_WAIT_STABLE,
+	CHARGE_STATE_FULL_CHARGING,
+	CHARGE_STATE_FULL_PENDING,
+	CHARGE_STATE_FULL_RECHARGING,
 };
 
 enum {
@@ -51,7 +51,7 @@ enum BATTERY_ID_ENUM {
 	BATTERY_ID_SAMSUNG_1230MAH = BATTERY_ID_TWS_SDI_1650MAH,
 	BATTERY_ID_LG_3260MAH,
 	BATTERY_ID_ATL_4000MAH,
-	BATTERY_ID_NUM, 
+	BATTERY_ID_NUM,
 };
 
 
@@ -88,13 +88,13 @@ struct poweralg_config_type
 {
 	INT32 full_charging_mv;
 	INT32 full_charging_ma;
-	INT32 full_pending_ma;			
-	INT32 full_charging_timeout_sec;	 
-	INT32 voltage_recharge_mv;  		 
-	INT32 capacity_recharge_p;  		 
-	INT32 voltage_exit_full_mv; 		 
-	INT32 min_taper_current_mv;		 
-	INT32 min_taper_current_ma; 		 
+	INT32 full_pending_ma;
+	INT32 full_charging_timeout_sec;
+	INT32 voltage_recharge_mv;
+	INT32 capacity_recharge_p;
+	INT32 voltage_exit_full_mv;
+	INT32 min_taper_current_mv;
+	INT32 min_taper_current_ma;
 	INT32 wait_votlage_statble_sec;
 	INT32 predict_timeout_sec;
 	INT32 polling_time_in_charging_sec;
@@ -102,30 +102,30 @@ struct poweralg_config_type
 
 	BOOL enable_full_calibration;
 	BOOL enable_weight_percentage;
-	INT32 software_charger_timeout_sec;   
-	INT32 superchg_software_charger_timeout_sec;   
-	INT32 charger_hw_safety_timer_watchdog_sec;  
+	INT32 software_charger_timeout_sec;
+	INT32 superchg_software_charger_timeout_sec;
+	INT32 charger_hw_safety_timer_watchdog_sec;
 
 	BOOL debug_disable_shutdown;
 	BOOL debug_fake_room_temp;
 	BOOL debug_disable_hw_timer;
 	BOOL debug_always_predict;
 	BOOL por_reset_fail;
-	INT32 full_level;                  
+	INT32 full_level;
 };
 
 struct battery_parameter {
 	UINT32* fl_25;
-	UINT32** pd_m_coef_tbl_boot;	
-	UINT32** pd_m_coef_tbl;		
-	UINT32** pd_m_resl_tbl_boot;	
-	UINT32** pd_m_resl_tbl;		
-	UINT32* capacity_deduction_tbl_01p;	
+	UINT32** pd_m_coef_tbl_boot;
+	UINT32** pd_m_coef_tbl;
+	UINT32** pd_m_resl_tbl_boot;
+	UINT32** pd_m_resl_tbl;
+	UINT32* capacity_deduction_tbl_01p;
 	UINT32* pd_t_coef;
-	INT32* padc;	
-	INT32* pw;	
+	INT32* padc;
+	INT32* pw;
 	UINT32* id_tbl;
-	INT32* temp_index_tbl;	
+	INT32* temp_index_tbl;
 	UINT32** m_param_tbl;
 	int m_param_tbl_size;
 	UINT32* capacity;
@@ -139,7 +139,7 @@ struct _ds2746_platform_data {
 	int (*func_update_charging_protect_flag)(int, int, int, BOOL*, BOOL*, BOOL*);
 	int r2_kohm;
 	void (*func_kick_charger_ic)(int);
-	
+
 };
 
 
@@ -147,9 +147,9 @@ struct _ds2746_platform_data {
 
 
 #define BATTERY_PERCENTAGE_UNKNOWN  0xFF
-#define BATTERY_LOW_PERCENTAGE	    10  	
-#define BATTERY_CRITICAL_PERCENTAGE 5   	
-#define BATTERY_EMPTY_PERCENTAGE    0   	
+#define BATTERY_LOW_PERCENTAGE	    10
+#define BATTERY_CRITICAL_PERCENTAGE 5
+#define BATTERY_EMPTY_PERCENTAGE    0
 
 #define REVERSE_PROTECTION_HAPPEND 1
 #define REVERSE_PROTECTION_CONTER_CLEAR 0

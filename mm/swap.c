@@ -195,7 +195,7 @@ void put_pages_list(struct list_head *pages)
 		struct page *victim;
 
 		if (pages->prev == NULL || pages->prev == LIST_POISON2) {
-			
+
 			WARN_ON(1);
 			break;
 		}

@@ -145,7 +145,7 @@ struct audio {
 
 	uint8_t out_head;
 	uint8_t out_tail;
-	uint8_t out_needed; 
+	uint8_t out_needed;
 
 	atomic_t out_bytes;
 
@@ -153,7 +153,7 @@ struct audio {
 	struct mutex write_lock;
 	wait_queue_head_t wait;
 
-	
+
 	uint32_t out_sample_rate;
 	uint32_t out_channel_mode;
 	uint32_t out_weight;
@@ -161,15 +161,15 @@ struct audio {
 
 	struct audmgr audmgr;
 
-	
+
 	char *data;
 	dma_addr_t phys;
 
-	int teos; 
+	int teos;
 	int opened;
 	int enabled;
 	int running;
-	int stopped; 
+	int stopped;
 
 	struct wake_lock wakelock;
 	struct pm_qos_request pm_qos_req;
@@ -250,9 +250,9 @@ static int audio_enable(struct audio *audio)
 	MM_AUD_INFO("audio_enable()\n");
 
 	if (audio->enabled)
-		return 0;	
+		return 0;
 
-	
+
 	if (!audio->out[0].used || !audio->out[1].used)
 		return -EIO;
 
@@ -265,7 +265,7 @@ static int audio_enable(struct audio *audio)
 	cfg.codec = RPC_AUD_DEF_CODEC_PCM;
 	cfg.snd_method = RPC_SND_METHOD_MIDI;
 
-	audio_prevent_sleep(audio);	
+	audio_prevent_sleep(audio);
 	rc = audmgr_enable(&audio->audmgr, &cfg);
 	if (rc < 0) {
 		audio_allow_sleep(audio);
@@ -286,7 +286,7 @@ static int audio_enable(struct audio *audio)
 
 static int audio_disable(struct audio *audio)
 {
-	MM_DBG("\n"); 
+	MM_DBG("\n");
 	if (audio->enabled) {
 		MM_AUD_INFO("audio_disable()\n");
 		audio->enabled = 0;
@@ -413,7 +413,7 @@ static void audio_dsp_event(void *private, unsigned id, uint16_t *msg)
 		unsigned idx = msg[3] - 1;
 		int rc;
 
-		
+
 		if (id != AUDPP_MSG_HOSTPCM_ID_ARM_RX) {
 			MM_AUD_ERR("bogus id\n");
 			break;
@@ -473,7 +473,7 @@ static int audio_dsp_out_enable(struct audio *audio, int yes)
 	audpp_cmd_pcm_intf cmd;
 
 	memset(&cmd, 0, sizeof(cmd));
-	cmd.cmd_id	= AUDPP_CMD_PCM_INTF_2; 
+	cmd.cmd_id	= AUDPP_CMD_PCM_INTF_2;
 	cmd.object_num	= AUDPP_CMD_PCM_INTF_OBJECT_NUM;
 	cmd.config	= AUDPP_CMD_PCM_INTF_CONFIG_CMD_V;
 	cmd.intf_type	= AUDPP_CMD_PCM_INTF_RX_ENA_ARMTODSP_V;
@@ -498,7 +498,7 @@ static int audio_dsp_out_enable(struct audio *audio, int yes)
 		cmd.sample_rate		= audio->out_sample_rate;
 		cmd.channel_mode	= audio->out_channel_mode;
 	}
-	
+
 	return audpp_send_queue2(&cmd, sizeof(cmd));
 }
 
@@ -506,7 +506,7 @@ static int audio_dsp_send_buffer(struct audio *audio,
 		unsigned idx, unsigned len)
 {
 	audpp_cmd_pcm_intf_send_buffer cmd;
-	
+
 	cmd.cmd_id		= AUDPP_CMD_PCM_INTF_2;
 	cmd.host_pcm_object	= AUDPP_CMD_PCM_INTF_OBJECT_NUM;
 	cmd.config		= AUDPP_CMD_PCM_INTF_BUFFER_CMD_V;
@@ -796,7 +796,7 @@ static ssize_t audio_write(struct file *file, const char __user *buf,
 
 	LOG(EV_WRITE, count | (audio->running << 28) | (audio->stopped << 24));
 
-	
+
 	if (!task_has_rt_policy(current)) {
 		struct cred *new = prepare_creds();
 		if (new != NULL) {
@@ -848,7 +848,7 @@ static ssize_t audio_write(struct file *file, const char __user *buf,
 
 	mutex_unlock(&audio->write_lock);
 
-	
+
 	if (!rt_policy(old_policy)) {
 		struct sched_param v = { .sched_priority = old_prio };
 		if ((sched_setscheduler(current, old_policy, &v)) < 0)
@@ -866,7 +866,7 @@ static ssize_t audio_write(struct file *file, const char __user *buf,
 	LOG(EV_RETURN,(buf > start) ? (buf - start) : rc);
 	if (buf > start)
 		return buf - start;
-	return rc;	
+	return rc;
 }
 
 static int audio_release(struct inode *inode, struct file *file)
@@ -898,7 +898,7 @@ static int audio_open(struct inode *inode, struct file *file)
 	}
 
 	if (!audio->data) {
-		audio->data = dma_alloc_coherent(NULL, DMASZ, 
+		audio->data = dma_alloc_coherent(NULL, DMASZ,
 						 &audio->phys, GFP_KERNEL);
 		if (!audio->data) {
 			MM_AUD_ERR("audio: could not allocate DMA buffers\n");
@@ -919,7 +919,7 @@ static int audio_open(struct inode *inode, struct file *file)
 	audio->out[0].data = audio->data + 0;
 	audio->out[0].addr = audio->phys + 0;
 	audio->out[0].size = BUFSZ;
-	
+
 	audio->out[1].data = audio->data + BUFSZ;
 	audio->out[1].addr = audio->phys + BUFSZ;
 	audio->out[1].size = BUFSZ;

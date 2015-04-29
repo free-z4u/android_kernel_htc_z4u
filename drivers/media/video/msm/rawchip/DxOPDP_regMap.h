@@ -73,7 +73,7 @@
 #define DxOPDP_mode_dead_pixels_disabled                                        0x10
 #define DxOPDP_mode_phase_repair_disabled                                       0x20
 
-#if 1 
+#if 1
 #define DxOPDP_dfltVal_ucode_id_7_0                                             0x07
 #define DxOPDP_dfltVal_ucode_id_15_8                                            0x01
 #define DxOPDP_dfltVal_hw_id_7_0                                                0x5b
@@ -146,4 +146,4 @@
 #define DxOPDP_error_code_invalid_orientation                                   0x1d
 #define DxOPDP_error_code_invalid_analogue_gain_code_greenR                     0x1f
 
-#endif 
+#endif

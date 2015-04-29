@@ -434,8 +434,8 @@ static inline int change_notify(struct amp_mgr *mgr, struct sk_buff *skb)
 		cl = (struct a2mp_cl *) skb_pull(skb, sizeof(*cl));
 	}
 
-	
-	
+
+
 	send_a2mp_cmd(mgr, hdr->ident, A2MP_CHANGE_RSP, 0, NULL);
 
 	return 0;
@@ -610,7 +610,7 @@ static u8 getampassoc_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 				rsp.status = 0;
 				goto gaa_finished;
 			}
-			
+
 			cp.phy_handle = 0;
 			cp.len_so_far = ctx->d.gaa.len_so_far;
 			cp.max_len = ctx->hdev->amp_assoc_size;
@@ -795,7 +795,7 @@ ps_finished:
 static u8 amp_next_handle;
 static inline u8 physlink_handle(struct hci_dev *hdev)
 {
-	
+
 	if (amp_next_handle == 0)
 		amp_next_handle = 1;
 	return amp_next_handle++;
@@ -813,7 +813,7 @@ static int createphyslink_req(struct amp_mgr *mgr, struct sk_buff *skb)
 	skb_pull(skb, sizeof(*req));
 	BT_DBG("local_id %d, remote_id %d", req->local_id, req->remote_id);
 
-	
+
 	ctx = create_ctx(AMP_ACCEPTPHYSLINK, AMP_APL_INIT);
 	if (!ctx)
 		return -ENOMEM;
@@ -821,7 +821,7 @@ static int createphyslink_req(struct amp_mgr *mgr, struct sk_buff *skb)
 	ctx->d.apl.remote_id = req->local_id;
 	ctx->id = req->remote_id;
 
-	
+
 	ctx->d.apl.remote_assoc = kmalloc(skb->len, GFP_ATOMIC);
 	if (ctx->d.apl.remote_assoc)
 		memcpy(ctx->d.apl.remote_assoc, skb->data, skb->len);
@@ -850,17 +850,17 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 
 	BT_DBG("state %d", ctx->state);
 	result = -EINVAL;
-	rsp.status = 1;        
+	rsp.status = 1;
 	if (!ctx->hdev || !test_bit(HCI_UP, &ctx->hdev->flags))
 		goto apl_finished;
 	if (evt_type == AMP_KILLED) {
 		result = -EAGAIN;
-		rsp.status = 4;        
+		rsp.status = 4;
 		goto apl_finished;
 	}
 	if (!ctx->d.apl.remote_assoc) {
 		result = -ENOMEM;
-		rsp.status = 2;        
+		rsp.status = 2;
 		goto apl_finished;
 	}
 
@@ -873,7 +873,7 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 					ctx->d.apl.remote_id);
 		if (conn) {
 			result = -EEXIST;
-			rsp.status = 5;   
+			rsp.status = 5;
 			goto apl_finished;
 		}
 
@@ -901,7 +901,7 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 			} else {
 				BT_DBG("COLLISION WINNER");
 				result = -EISCONN;
-				rsp.status = 3;    
+				rsp.status = 3;
 				goto apl_finished;
 			}
 		}
@@ -910,7 +910,7 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 						&acp.key_len, &acp.type);
 		if (result) {
 			BT_DBG("SECURITY");
-			rsp.status = 6;    
+			rsp.status = 6;
 			goto apl_finished;
 		}
 
@@ -925,14 +925,14 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 	case AMP_APL_APL_STATUS:
 		if (cs->status != 0)
 			goto apl_finished;
-		
+
 		rsp.local_id = ctx->id;
 		rsp.remote_id = ctx->d.apl.remote_id;
 		rsp.status = 0;
 		send_a2mp_cmd(ctx->mgr, ctx->d.apl.req_ident,
 				A2MP_CREATEPHYSLINK_RSP, sizeof(rsp), &rsp);
 
-		
+
 		wcp.phy_handle = ctx->d.apl.phy_handle;
 		wcp.len_so_far = cpu_to_le16(ctx->d.apl.len_so_far);
 		wcp.rem_len = cpu_to_le16(ctx->d.apl.rem_len);
@@ -945,19 +945,19 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		break;
 
 	case AMP_APL_WRA_COMPLETE:
-		
+
 		wrp = (struct hci_rp_write_remote_amp_assoc *) skb->data;
 		if (wrp->status != 0)
 			goto apl_finished;
 		if (wrp->phy_handle != ctx->d.apl.phy_handle)
 			goto apl_finished;
-		
+
 		frag_len = min_t(u16, 248, ctx->d.apl.rem_len);
 		ctx->d.apl.len_so_far += frag_len;
 		ctx->d.apl.rem_len -= frag_len;
 		if (ctx->d.apl.rem_len > 0) {
 			u8 *assoc;
-			
+
 			wcp.phy_handle = ctx->d.apl.phy_handle;
 			wcp.len_so_far = cpu_to_le16(ctx->d.apl.len_so_far);
 			wcp.rem_len = cpu_to_le16(ctx->d.apl.rem_len);
@@ -967,14 +967,14 @@ static u8 acceptphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 			hci_send_cmd(ctx->hdev, ctx->opcode, 5+frag_len, &wcp);
 			break;
 		}
-		
+
 		ctx->state = AMP_APL_PL_COMPLETE;
 		ctx->evt_type = AMP_HCI_EVENT;
 		ctx->evt_code = HCI_EV_PHYS_LINK_COMPLETE;
 		break;
 
 	case AMP_APL_PL_COMPLETE:
-		
+
 		if (skb->len < sizeof(*ev))
 			goto apl_finished;
 		ev = (struct hci_ev_phys_link_complete *) skb->data;
@@ -1159,10 +1159,10 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 
 		ctx->d.cpl.max_len = ctrl->max_assoc_size;
 
-		
+
 		areq.id = ctx->d.cpl.remote_id;
 
-		
+
 		ctx->state = AMP_CPL_GAA_RSP;
 		ctx->evt_type = AMP_A2MP_RSP;
 		ctx->rsp_ident = next_ident(ctx->mgr);
@@ -1178,7 +1178,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		if (arsp->status != 0)
 			goto cpl_finished;
 
-		
+
 		assoc = (u8 *) skb_pull(skb, sizeof(*arsp));
 		ctx->d.cpl.len_so_far = 0;
 		ctx->d.cpl.rem_len = hdr->len - sizeof(*arsp);
@@ -1189,7 +1189,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		memcpy(rassoc, assoc, ctx->d.cpl.rem_len);
 		ctx->d.cpl.remote_assoc = rassoc;
 
-		
+
 		ctx->d.cpl.phy_handle = physlink_handle(ctx->hdev);
 		cp.phy_handle = ctx->d.cpl.phy_handle;
 		if (physlink_security(ctx->mgr->l2cap_conn->hcon, cp.data,
@@ -1198,7 +1198,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 			goto cpl_finished;
 		}
 
-		
+
 		ctx->state = AMP_CPL_CPL_STATUS;
 		ctx->evt_type = AMP_HCI_CMD_STATUS;
 		ctx->opcode = HCI_OP_CREATE_PHYS_LINK;
@@ -1206,10 +1206,10 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		break;
 
 	case AMP_CPL_CPL_STATUS:
-		
+
 		if (cs->status != 0)
 			goto cpl_finished;
-		
+
 		wcp.phy_handle = ctx->d.cpl.phy_handle;
 		wcp.len_so_far = ctx->d.cpl.len_so_far;
 		wcp.rem_len = cpu_to_le16(ctx->d.cpl.rem_len);
@@ -1222,7 +1222,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		break;
 
 	case AMP_CPL_WRA_COMPLETE:
-		
+
 		if (skb->len < sizeof(*wrp))
 			goto cpl_finished;
 		wrp = (struct hci_rp_write_remote_amp_assoc *) skb->data;
@@ -1231,12 +1231,12 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		if (wrp->phy_handle != ctx->d.cpl.phy_handle)
 			goto cpl_finished;
 
-		
+
 		frag_len = min_t(u16, 248, ctx->d.cpl.rem_len);
 		ctx->d.cpl.len_so_far += frag_len;
 		ctx->d.cpl.rem_len -= frag_len;
 		if (ctx->d.cpl.rem_len > 0) {
-			
+
 			wcp.phy_handle = ctx->d.cpl.phy_handle;
 			wcp.len_so_far = cpu_to_le16(ctx->d.cpl.len_so_far);
 			wcp.rem_len = cpu_to_le16(ctx->d.cpl.rem_len);
@@ -1247,19 +1247,19 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 			hci_send_cmd(ctx->hdev, ctx->opcode, 5+frag_len, &wcp);
 			break;
 		}
-		
+
 		ctx->state = AMP_CPL_CHANNEL_SELECT;
 		ctx->evt_type = AMP_HCI_EVENT;
 		ctx->evt_code = HCI_EV_CHANNEL_SELECTED;
 		break;
 
 	case AMP_CPL_CHANNEL_SELECT:
-		
+
 		if (skb->len < sizeof(*cev))
 			goto cpl_finished;
 		cev = (void *) skb->data;
 
-		
+
 		rcp.phy_handle = ctx->d.cpl.phy_handle;
 		rcp.len_so_far = 0;
 		rcp.max_len = ctx->d.cpl.max_len;
@@ -1275,7 +1275,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		break;
 
 	case AMP_CPL_RLA_COMPLETE:
-		
+
 		if (skb->len < 4)
 			goto cpl_finished;
 		rrp = (struct hci_rp_read_local_amp_assoc *) skb->data;
@@ -1290,13 +1290,13 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		if (ctx->d.cpl.len_so_far + rem_len > ctx->d.cpl.max_len)
 			goto cpl_finished;
 
-		
+
 		lassoc = ctx->d.cpl.local_assoc + ctx->d.cpl.len_so_far;
 		memcpy(lassoc, rrp->frag, frag_len);
 		ctx->d.cpl.len_so_far += frag_len;
 		rem_len -= frag_len;
 		if (rem_len > 0) {
-			
+
 			rcp.phy_handle = ctx->d.cpl.phy_handle;
 			rcp.len_so_far = ctx->d.cpl.len_so_far;
 			rcp.max_len = ctx->d.cpl.max_len;
@@ -1304,7 +1304,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 		} else {
 			creq.local_id = ctx->id;
 			creq.remote_id = ctx->d.cpl.remote_id;
-			
+
 			ctx->state = AMP_CPL_PL_COMPLETE;
 			ctx->evt_type = AMP_A2MP_RSP | AMP_HCI_EVENT;
 			ctx->rsp_ident = next_ident(ctx->mgr);
@@ -1317,7 +1317,7 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 
 	case AMP_CPL_PL_COMPLETE:
 		if (evt_type == AMP_A2MP_RSP) {
-			
+
 			ctx->evt_type &= ~AMP_A2MP_RSP;
 			if (skb->len < sizeof(*crsp))
 				goto cpl_finished;
@@ -1329,14 +1329,14 @@ static u8 createphyslink_handler(struct amp_ctx *ctx, u8 evt_type, void *data)
 				break;
 			}
 
-			
+
 			if (ctx->hdev->manufacturer == 0x001d)
 				hci_send_cmd(ctx->hdev,
 					hci_opcode_pack(0x3f, 0x00), 0, NULL);
 		}
 		if (evt_type == AMP_HCI_EVENT) {
 			ctx->evt_type &= ~AMP_HCI_EVENT;
-			
+
 			if (skb->len < sizeof(*pev))
 				goto cpl_finished;
 			pev = (void *) skb->data;
@@ -1406,7 +1406,7 @@ static int disconnphyslink_req(struct amp_mgr *mgr, struct sk_buff *skb)
 		(int) rsp.local_id, (int) rsp.remote_id);
 	hdev = hci_dev_get(rsp.local_id);
 	if (!hdev) {
-		rsp.status = 1; 
+		rsp.status = 1;
 		goto dpl_finished;
 	}
 	BT_DBG("hdev %p", hdev);
@@ -1419,7 +1419,7 @@ static int disconnphyslink_req(struct amp_mgr *mgr, struct sk_buff *skb)
 			rsp.status = 0;
 			goto dpl_finished;
 		}
-		rsp.status = 2;  
+		rsp.status = 2;
 		goto dpl_finished;
 	}
 	BT_DBG("conn %p", conn);
@@ -1514,7 +1514,7 @@ static inline int a2mp_rsp(struct amp_mgr *mgr, struct sk_buff *skb)
 	struct a2mp_cmd_hdr *hdr = (struct a2mp_cmd_hdr *) skb->data;
 	u16 hdr_len = le16_to_cpu(hdr->len);
 
-	
+
 	BT_DBG("ident %d code %d", hdr->ident, hdr->code);
 	ctx = get_ctx_a2mp(mgr, hdr->ident);
 	if (ctx) {
@@ -1617,7 +1617,7 @@ static void data_ready_worker(struct work_struct *w)
 	struct sock *sk = work->sk;
 	struct sk_buff *skb;
 
-	
+
 	while ((skb = skb_dequeue(&sk->sk_receive_queue))) {
 		a2mp_receive(sk, skb);
 		kfree_skb(skb);
@@ -1648,7 +1648,7 @@ static void state_change_worker(struct work_struct *w)
 	struct amp_mgr *mgr;
 	switch (work->sk->sk_state) {
 	case BT_CONNECTED:
-		
+
 		BT_DBG("CONNECTED");
 		mgr = get_amp_mgr_sk(work->sk);
 		if (mgr) {
@@ -1662,7 +1662,7 @@ static void state_change_worker(struct work_struct *w)
 		break;
 
 	case BT_CLOSED:
-		
+
 		BT_DBG("CLOSED");
 		mgr = get_amp_mgr_sk(work->sk);
 		if (mgr) {
@@ -1674,7 +1674,7 @@ static void state_change_worker(struct work_struct *w)
 		break;
 
 	default:
-		
+
 		break;
 	}
 	sock_put(work->sk);

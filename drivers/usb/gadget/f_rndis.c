@@ -99,8 +99,8 @@ static unsigned int bitrate(struct usb_gadget *g)
 
 
 
-#define LOG2_STATUS_INTERVAL_MSEC	5	
-#define STATUS_BYTECOUNT		8	
+#define LOG2_STATUS_INTERVAL_MSEC	5
+#define STATUS_BYTECOUNT		8
 
 
 
@@ -108,13 +108,13 @@ static struct usb_interface_descriptor rndis_control_intf = {
 	.bLength =		sizeof rndis_control_intf,
 	.bDescriptorType =	USB_DT_INTERFACE,
 
-	
-	
+
+
 	.bNumEndpoints =	1,
 	.bInterfaceClass =	USB_CLASS_COMM,
 	.bInterfaceSubClass =   USB_CDC_SUBCLASS_ACM,
 	.bInterfaceProtocol =   USB_CDC_ACM_PROTO_VENDOR,
-	
+
 };
 
 static struct usb_cdc_header_desc header_desc = {
@@ -146,8 +146,8 @@ static struct usb_cdc_union_desc rndis_union_desc = {
 	.bLength =		sizeof(rndis_union_desc),
 	.bDescriptorType =	USB_DT_CS_INTERFACE,
 	.bDescriptorSubType =	USB_CDC_UNION_TYPE,
-	
-	
+
+
 };
 
 
@@ -155,12 +155,12 @@ static struct usb_interface_descriptor rndis_data_intf = {
 	.bLength =		sizeof rndis_data_intf,
 	.bDescriptorType =	USB_DT_INTERFACE,
 
-	
+
 	.bNumEndpoints =	2,
 	.bInterfaceClass =	USB_CLASS_CDC_DATA,
 	.bInterfaceSubClass =	0,
 	.bInterfaceProtocol =	0,
-	
+
 };
 
 
@@ -169,12 +169,12 @@ rndis_iad_descriptor = {
 	.bLength =		sizeof rndis_iad_descriptor,
 	.bDescriptorType =	USB_DT_INTERFACE_ASSOCIATION,
 
-	.bFirstInterface =	0, 
-	.bInterfaceCount = 	2,	
+	.bFirstInterface =	0,
+	.bInterfaceCount = 	2,
 	.bFunctionClass =	USB_CLASS_COMM,
 	.bFunctionSubClass =	USB_CDC_SUBCLASS_ETHERNET,
 	.bFunctionProtocol =	USB_CDC_PROTO_NONE,
-	
+
 };
 
 
@@ -207,7 +207,7 @@ static struct usb_endpoint_descriptor fs_out_desc = {
 static struct usb_descriptor_header *eth_fs_function[] = {
 	(struct usb_descriptor_header *) &rndis_iad_descriptor,
 
-	
+
 	(struct usb_descriptor_header *) &rndis_control_intf,
 	(struct usb_descriptor_header *) &header_desc,
 	(struct usb_descriptor_header *) &call_mgmt_descriptor,
@@ -215,7 +215,7 @@ static struct usb_descriptor_header *eth_fs_function[] = {
 	(struct usb_descriptor_header *) &rndis_union_desc,
 	(struct usb_descriptor_header *) &fs_notify_desc,
 
-	
+
 	(struct usb_descriptor_header *) &rndis_data_intf,
 	(struct usb_descriptor_header *) &fs_in_desc,
 	(struct usb_descriptor_header *) &fs_out_desc,
@@ -254,7 +254,7 @@ static struct usb_endpoint_descriptor hs_out_desc = {
 static struct usb_descriptor_header *eth_hs_function[] = {
 	(struct usb_descriptor_header *) &rndis_iad_descriptor,
 
-	
+
 	(struct usb_descriptor_header *) &rndis_control_intf,
 	(struct usb_descriptor_header *) &header_desc,
 	(struct usb_descriptor_header *) &call_mgmt_descriptor,
@@ -262,7 +262,7 @@ static struct usb_descriptor_header *eth_hs_function[] = {
 	(struct usb_descriptor_header *) &rndis_union_desc,
 	(struct usb_descriptor_header *) &hs_notify_desc,
 
-	
+
 	(struct usb_descriptor_header *) &rndis_data_intf,
 	(struct usb_descriptor_header *) &hs_in_desc,
 	(struct usb_descriptor_header *) &hs_out_desc,
@@ -284,9 +284,9 @@ static struct usb_ss_ep_comp_descriptor ss_intr_comp_desc = {
 	.bLength =		sizeof ss_intr_comp_desc,
 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
 
-	
-	
-	
+
+
+
 	.wBytesPerInterval =	cpu_to_le16(STATUS_BYTECOUNT),
 };
 
@@ -312,15 +312,15 @@ static struct usb_ss_ep_comp_descriptor ss_bulk_comp_desc = {
 	.bLength =		sizeof ss_bulk_comp_desc,
 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
 
-	
-	
-	
+
+
+
 };
 
 static struct usb_descriptor_header *eth_ss_function[] = {
 	(struct usb_descriptor_header *) &rndis_iad_descriptor,
 
-	
+
 	(struct usb_descriptor_header *) &rndis_control_intf,
 	(struct usb_descriptor_header *) &header_desc,
 	(struct usb_descriptor_header *) &call_mgmt_descriptor,
@@ -329,7 +329,7 @@ static struct usb_descriptor_header *eth_ss_function[] = {
 	(struct usb_descriptor_header *) &ss_notify_desc,
 	(struct usb_descriptor_header *) &ss_intr_comp_desc,
 
-	
+
 	(struct usb_descriptor_header *) &rndis_data_intf,
 	(struct usb_descriptor_header *) &ss_in_desc,
 	(struct usb_descriptor_header *) &ss_bulk_comp_desc,
@@ -343,11 +343,11 @@ static struct usb_string rndis_string_defs[] = {
 	[0].s = "RNDIS Communications Control",
 	[1].s = "RNDIS Ethernet Data",
 	[2].s = "RNDIS",
-	{  } 
+	{  }
 };
 
 static struct usb_gadget_strings rndis_string_table = {
-	.language =		0x0409,	
+	.language =		0x0409,
 	.strings =		rndis_string_defs,
 };
 
@@ -400,14 +400,14 @@ static void rndis_response_complete(struct usb_ep *ep, struct usb_request *req)
 	switch (status) {
 	case -ECONNRESET:
 	case -ESHUTDOWN:
-		
+
 		atomic_set(&rndis->notify_count, 0);
 		break;
 	default:
 		DBG(cdev, "RNDIS %s response error %d, %d/%d\n",
 			ep->name, status,
 			req->actual, req->length);
-		
+
 	case 0:
 		if (ep != rndis->notify)
 			break;
@@ -439,7 +439,7 @@ static void rndis_command_complete(struct usb_ep *ep, struct usb_request *req)
 		return;
 	}
 
-	
+
 	status = rndis_msg_parser(rndis->config, (u8 *) req->buf);
 	if (status < 0)
 		ERROR(cdev, "RNDIS command error %d, %d/%d\n",
@@ -469,11 +469,11 @@ rndis_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 			| USB_CDC_SEND_ENCAPSULATED_COMMAND:
 		if (w_value || w_index != rndis->ctrl_id)
 			goto invalid;
-		
+
 		value = w_length;
 		req->complete = rndis_command_complete;
 		req->context = rndis;
-		
+
 		break;
 
 	case ((USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8)
@@ -484,7 +484,7 @@ rndis_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 			u8 *buf;
 			u32 n;
 
-			
+
 			buf = rndis_get_next_response(rndis->config, &n);
 			if (buf) {
 				memcpy(req->buf, buf, n);
@@ -493,7 +493,7 @@ rndis_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
 				rndis_free_response(rndis->config, buf);
 				value = n;
 			}
-			
+
 		}
 		break;
 
@@ -504,7 +504,7 @@ invalid:
 			w_value, w_index, w_length);
 	}
 
-	
+
 	if (value >= 0) {
 		DBG(cdev, "rndis req%02x.%02x v%04x i%04x l%d\n",
 			ctrl->bRequestType, ctrl->bRequest,
@@ -516,7 +516,7 @@ invalid:
 			ERROR(cdev, "rndis response on err %d\n", value);
 	}
 
-	
+
 	return value;
 }
 
@@ -526,7 +526,7 @@ static int rndis_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 	struct f_rndis		*rndis = func_to_rndis(f);
 	struct usb_composite_dev *cdev = f->config->cdev;
 
-	
+
 
 	if (intf == rndis->ctrl_id) {
 		if (rndis->notify->driver_data) {
@@ -561,7 +561,7 @@ static int rndis_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 			}
 		}
 
-		
+
 		rndis->port.is_zlp_ok = false;
 
 		rndis->port.cdc_filter = 0;
@@ -646,7 +646,7 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 	int			status;
 	struct usb_ep		*ep;
 
-	
+
 	status = usb_interface_id(c, f);
 	if (status < 0)
 		goto fail;
@@ -666,28 +666,28 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 
 	status = -ENODEV;
 
-	
+
 	ep = usb_ep_autoconfig(cdev->gadget, &fs_in_desc);
 	if (!ep)
 		goto fail;
 	rndis->port.in_ep = ep;
-	ep->driver_data = cdev;	
+	ep->driver_data = cdev;
 
 	ep = usb_ep_autoconfig(cdev->gadget, &fs_out_desc);
 	if (!ep)
 		goto fail;
 	rndis->port.out_ep = ep;
-	ep->driver_data = cdev;	
+	ep->driver_data = cdev;
 
 	ep = usb_ep_autoconfig(cdev->gadget, &fs_notify_desc);
 	if (!ep)
 		goto fail;
 	rndis->notify = ep;
-	ep->driver_data = cdev;	
+	ep->driver_data = cdev;
 
 	status = -ENOMEM;
 
-	
+
 	rndis->notify_req = usb_ep_alloc_request(ep, GFP_KERNEL);
 	if (!rndis->notify_req)
 		goto fail;
@@ -698,7 +698,7 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 	rndis->notify_req->context = rndis;
 	rndis->notify_req->complete = rndis_response_complete;
 
-	
+
 	f->descriptors = usb_copy_descriptors(eth_fs_function);
 	if (!f->descriptors)
 		goto fail;
@@ -711,7 +711,7 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 		hs_notify_desc.bEndpointAddress =
 				fs_notify_desc.bEndpointAddress;
 
-		
+
 		f->hs_descriptors = usb_copy_descriptors(eth_hs_function);
 		if (!f->hs_descriptors)
 			goto fail;
@@ -725,7 +725,7 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
 		ss_notify_desc.bEndpointAddress =
 				fs_notify_desc.bEndpointAddress;
 
-		
+
 		f->ss_descriptors = usb_copy_descriptors(eth_ss_function);
 		if (!f->ss_descriptors)
 			goto fail;
@@ -768,7 +768,7 @@ fail:
 		usb_ep_free_request(rndis->notify, rndis->notify_req);
 	}
 
-	
+
 	if (rndis->notify)
 		rndis->notify->driver_data = NULL;
 	if (rndis->port.out_ep->desc)
@@ -804,7 +804,7 @@ rndis_unbind(struct usb_configuration *c, struct usb_function *f)
 
 static inline bool can_support_rndis(struct usb_configuration *c)
 {
-	
+
 	return true;
 }
 
@@ -818,29 +818,29 @@ rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 	if (!can_support_rndis(c) || !ethaddr)
 		return -EINVAL;
 
-	
+
 	status = rndis_init();
 	if (status < 0)
 		return status;
 
-	
+
 	if (rndis_string_defs[0].id == 0) {
 
-		
+
 		status = usb_string_id(c->cdev);
 		if (status < 0)
 			return status;
 		rndis_string_defs[0].id = status;
 		rndis_control_intf.iInterface = status;
 
-		
+
 		status = usb_string_id(c->cdev);
 		if (status < 0)
 			return status;
 		rndis_string_defs[1].id = status;
 		rndis_data_intf.iInterface = status;
 
-		
+
 		status = usb_string_id(c->cdev);
 		if (status < 0)
 			return status;
@@ -848,7 +848,7 @@ rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 		rndis_iad_descriptor.iFunction = status;
 	}
 
-	
+
 	status = -ENOMEM;
 	rndis = kzalloc(sizeof *rndis, GFP_KERNEL);
 	if (!rndis)
@@ -858,17 +858,17 @@ rndis_bind_config(struct usb_configuration *c, u8 ethaddr[ETH_ALEN],
 	rndis->vendorID = vendorID;
 	rndis->manufacturer = manufacturer;
 
-	
+
 	rndis->port.cdc_filter = 0;
 
-	
+
 	rndis->port.header_len = sizeof(struct rndis_packet_msg_type);
 	rndis->port.wrap = rndis_add_header;
 	rndis->port.unwrap = rndis_rm_hdr;
 
 	rndis->port.func.name = "rndis";
 	rndis->port.func.strings = rndis_strings;
-	
+
 	rndis->port.func.bind = rndis_bind;
 	rndis->port.func.unbind = rndis_unbind;
 	rndis->port.func.set_alt = rndis_set_alt;

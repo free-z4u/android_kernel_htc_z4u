@@ -260,7 +260,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_ov7692_data = {
 static struct gpio ov7695_cam_req_gpio_skud[] = {
 	{GPIO_SKUD_CAM_1MP_PWDN, GPIOF_DIR_OUT, "CAM_VGA_SHDN"},
 };
-*/ 
+*/
 
 static struct msm_gpio_set_tbl ov7695_cam_gpio_set_tbl_skud[] = {
 	{GPIO_SKUD_CAM_1MP_PWDN, GPIOF_OUT_INIT_LOW, 5000},
@@ -500,7 +500,7 @@ static void __init msm7x27a_init_cam(void)
 				|| machine_is_msm7627a_qrd1()
 				|| machine_is_msm8625q_evbd()
 				|| machine_is_msm8625q_skud()
-				|| machine_is_qrd_skud_prime() 
+				|| machine_is_qrd_skud_prime()
 				|| machine_is_msm8625_ffa())) {
 		sensor_board_info_s5k4e1.cam_vreg = NULL;
 		sensor_board_info_s5k4e1.num_vreg = 0;
@@ -1520,7 +1520,7 @@ void __init msm7627a_camera_init(void)
 		lcd_camera_power_init();
 #endif
 		evb_camera_gpio_cfg();
-	} 
+	}
 	if(machine_is_msm8625q_evbd())
 		evbd_camera_gpio_cfg();
 

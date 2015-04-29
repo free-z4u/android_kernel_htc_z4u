@@ -74,7 +74,7 @@ static int is_targeted(struct usb_device *dev)
 	if ((le16_to_cpu(dev->descriptor.idVendor) == 0x1a0a &&
 	     le16_to_cpu(dev->descriptor.idProduct) == 0x0200))
 		return 1;
-	
+
 	for (loop = 0; loop < dev->config->desc.bNumInterfaces;loop++)
 		printk("[USB] USB client interface %d class %d\n",loop,dev->config->intf_cache[loop]->altsetting[0].desc.bInterfaceClass);
 
@@ -109,14 +109,14 @@ static int is_targeted(struct usb_device *dev)
 		    (id->bDeviceProtocol != dev->descriptor.bDeviceProtocol))
 			continue;
 #if defined(CONFIG_USB_PEHCI_HCD) || defined(CONFIG_USB_PEHCI_HCD_MODULE)
-		
+
 		if (USB_CLASS_HUB == dev->descriptor.bDeviceClass) {
-			
+
 			unsigned char tier = 0;
 			struct usb_device *root_hub;
 
 			root_hub = dev->bus->root_hub;
-			while ((dev->parent != NULL) && 
+			while ((dev->parent != NULL) &&
 				(dev->parent != root_hub) &&
 				(tier != 6))  {
 				tier++;

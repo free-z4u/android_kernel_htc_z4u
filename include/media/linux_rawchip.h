@@ -59,22 +59,22 @@
 
 #define RAWCHIP_IOCTL_GET_DXOPRC_VER\
 	_IOW(RAWCHIP_IOCTL_MAGIC, 7, struct rawchip_stats_event_ctrl *)
-	
+
 #define RAWCHIP_IOCTL_GET_DXOPRC_FRAMESETTING\
 	_IOW(RAWCHIP_IOCTL_MAGIC, 8, struct rawchip_stats_event_ctrl *)
-	
+
 typedef struct
-{	
+{
 	uint8_t 	orientation;
 	uint16_t	xStart;
 	uint16_t	yStart;
 	uint16_t	xEnd;
 	uint16_t	yEnd;
-	uint16_t	xEvenInc;  
+	uint16_t	xEvenInc;
 	uint16_t	xOddInc;
-	uint16_t	yEvenInc;  
+	uint16_t	yEvenInc;
 	uint16_t	yOddInc;
-	uint8_t 	binning;	
+	uint8_t 	binning;
 } rawchip_dxo_frameSetting ;
 
 typedef struct {
@@ -85,7 +85,7 @@ typedef struct {
 	uint16_t 	udwDPPUcodeId;
 	uint16_t 	udwDPPHwId;
 	uint32_t 	udwDPPCalibId;
-	
+
 	uint16_t 	udwPDPUcodeId;
 	uint16_t 	udwPDPHwId;
 	uint32_t 	udwPDPCalibId;
@@ -98,5 +98,5 @@ struct rawchip_stats_event_ctrl {
 	void *data;
 };
 
-#endif 
+#endif
 

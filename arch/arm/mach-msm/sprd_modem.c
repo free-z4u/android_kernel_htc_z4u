@@ -96,7 +96,7 @@ struct workqueue_struct *sprd_uart_wq;
 extern int flashless_mode_get(void);
 extern void flashless_mode_set(int);
 extern int sprd_uart_write(void);
-int flashless_detect = 0;  
+int flashless_detect = 0;
 int bootmode = 0;
 ktime_t rx_q;
 #endif
@@ -271,7 +271,7 @@ static void sprd_cpld_mdpin_set(int mode)
 
 	if (mode & 0x8) {
 		SPRD_INFO("SWITCH USB to SPRD modem board_ver:%d\n",board_ver);
-		if (!board_ver) 
+		if (!board_ver)
 			ret = cpld_gpio_write(SPRD_MDM_DEBUG_SEL,0);
 		else
 			ret = cpld_gpio_write(SPRD_MDM_DEBUG_SEL,1);
@@ -287,23 +287,23 @@ static void sprd_bootmode_select(void)
 	int radio_flag = get_radio2_flag();
 	SPRD_INFO("%s: kernel boot mode %d\n", __func__,mode);
 
-	if (mode == 9) {	
+	if (mode == 9) {
 		sprd_cpld_mdpin_set(mdm_radio_router);
-	} else if (mode == 10 || mode == 11) {	
+	} else if (mode == 10 || mode == 11) {
 		sprd_cpld_mdpin_set(mdm_krouter1_cft);
-	} else if (mode == 12) {	
+	} else if (mode == 12) {
 		sprd_cpld_mdpin_set(mdm_krouter_adc);
-	} else if (mode == 13) {	
+	} else if (mode == 13) {
 		sprd_cpld_mdpin_set(mdm_krouter2);
-	} else if (radio_flag & 0x200) { 
+	} else if (radio_flag & 0x200) {
 		sprd_cpld_mdpin_set(mdm_online);
-	} else if (radio_flag & 0x400) { 
-		if (radio_flag & 0x4) {	
+	} else if (radio_flag & 0x400) {
+		if (radio_flag & 0x4) {
 			sprd_cpld_mdpin_set(mdm_offline_nsim);
 		} else {
 			sprd_cpld_mdpin_set(mdm_offline);
 		}
-	} else {	
+	} else {
 		sprd_cpld_mdpin_set(mdm_default);
 	}
 
@@ -352,7 +352,7 @@ static int sprd_flymode_pin_config(void)
 static void sprd_init_pin_pre(void)
 {
 	sprd_cpld_pin_init();
-	
+
 	gpio_tlmm_config(GPIO_CFG(SPRD_MDM_NBOOT, 0, GPIO_CFG_INPUT,
 		GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 		GPIO_CFG_ENABLE);
@@ -373,7 +373,7 @@ static int sprd_init_pin_config(void)
 	}
 
 	gpio_set_value(SPRD_MUX_FLOW_CONTROL, 0);
-	gpio_set_value(SPRD_AP_RDY, 1);	
+	gpio_set_value(SPRD_AP_RDY, 1);
 
 	sprd_bootmode_select();
 
@@ -587,7 +587,7 @@ static void mdm_sim_detect_uevent(struct work_struct *work)
 		return;
 	}
 #endif
-	if (value == !board_ver) { 
+	if (value == !board_ver) {
 		SPRD_INFO("uevent: SIM_PLUG_OUT\n");
 		kobject_uevent_env(sprd_notify_info.sprd_notify_kobj, KOBJ_CHANGE, envp_sim_off);
 	} else {
@@ -641,7 +641,7 @@ static ssize_t sim_switch_set(struct device *dev,
 				if (sprd_notify_info.msm_sim_detect_irq) {
 					sprd_irq_set(sprd_notify_info.msm_sim_detect_irq,irq_msm_sim_detect,0);
 					SPRD_INFO("%s: MSM sim irq disabled\n", __func__);
-					if (!board_ver) 
+					if (!board_ver)
 						cpld_gpio_write(SPRD_SIM_SWITCH_EVM,1);
 					else
 						gpio_set_value(SPRD_SIM_SWITCH,0);
@@ -656,7 +656,7 @@ static ssize_t sim_switch_set(struct device *dev,
 			case '1':
 				sprd_irq_set(sprd_notify_info.sim_detect_irq,irq_sim_detect,0);
 				SPRD_INFO("%s: SPRD sim irq disabled\n", __func__);
-				if (!board_ver) 
+				if (!board_ver)
 					cpld_gpio_write(SPRD_SIM_SWITCH_EVM,0);
 				else
 					gpio_set_value(SPRD_SIM_SWITCH,1);
@@ -728,21 +728,21 @@ static ssize_t sim_detect_get(struct device *dev,
 	int board_ver = htc_get_board_revision();
 
 #if (defined(CONFIG_MACH_DUMMY))
-	
+
 	if (sim_switch)
-		if (!board_ver) 
+		if (!board_ver)
 			value = !msm_sim_status;
 		else
 			value = msm_sim_status;
 	else {
-		if (!board_ver) 
+		if (!board_ver)
 			value = !sim_status;
 		else
 			value = sim_status;
 	}
 #else
-	
-	if (!board_ver) 
+
+	if (!board_ver)
 		value = !sim_status;
 	else
 		value = sim_status;
@@ -891,7 +891,7 @@ static int set_modem_power(int value)
 				return 0;
 		}
 
-		
+
 		gpio_tlmm_config(GPIO_CFG(SPRD_MDM_TO_AP2, 0, GPIO_CFG_INPUT,
 					GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 					GPIO_CFG_ENABLE);
@@ -906,7 +906,7 @@ static int set_modem_power(int value)
 		if (sprd_notify_info.power_status != SPRD_MODEM_POWER_OFF) {
 			sprd_notify_info.power_status = SPRD_MODEM_POWER_OFF_ONGOING;
 
-			
+
 			sprd_input_pin_config();
 
 			if (sprd_notify_info.cpoff == 1) {
@@ -918,7 +918,7 @@ static int set_modem_power(int value)
 				}
 			}
 		} else {
-			
+
 			sprd_input_pin_config();
 		}
 
@@ -926,7 +926,7 @@ static int set_modem_power(int value)
 #ifdef CONFIG_SDIO_TTY_SP6502COM
 		modem_detect(0,2000);
 #endif
-		
+
 		sprd_cpld_pin_init();
 		sprd_flymode_pin_config();
 #ifdef CONFIG_SPRD_FLASHLESS
@@ -977,7 +977,7 @@ static irqreturn_t sprd_mdm_flashless_irq_handler(int irq, void *dev)
 	if (SPRD_MODEM_POWER_ON_ONGOING == info->power_status) {
 		if (value == 1) {
 			SPRD_INFO("mdm_flashless pin is high\n");
-			if (flashless_detect == 1)	
+			if (flashless_detect == 1)
 				queue_delayed_work(sprd_detect_wq,
 						&sprd_detect_work, 0);
 			flashless_detect++;
@@ -1038,7 +1038,7 @@ static void mdm_alive_debounce(struct work_struct *work)
 			queue_delayed_work(sprd_detect_wq,
 							&sprd_cpld_work, 0);
 
-			
+
 			gpio_tlmm_config(GPIO_CFG(SPRD_MDM_ALIVE, 0, GPIO_CFG_INPUT,
 						GPIO_CFG_PULL_UP, GPIO_CFG_2MA),
 						GPIO_CFG_ENABLE);
@@ -1057,7 +1057,7 @@ static void mdm_alive_debounce(struct work_struct *work)
 			SPRD_INFO("alive pin is low\n");
 		}
 	} else if (SPRD_MODEM_POWER_ON == info->power_status) {
-		
+
 		if ((value == 0) && (sprd_notify_info.cpoff == 0)) {
 			SPRD_INFO("assert, alive pin = %d\n", value);
 			queue_delayed_work(sprd_notify_info.sprd_notify_wq,
@@ -1091,7 +1091,7 @@ static irqreturn_t sprd_mdm_to_ap_irq_handler(int irq, void *dev)
 	if ((SPRD_MODEM_POWER_OFF_ONGOING == info->power_status) || (sprd_notify_info.cpoff == 1)) {
 		if (value == 0) {
 			info->power_status = SPRD_MODEM_POWER_OFF;
-			sprd_set_modem_power(0); 
+			sprd_set_modem_power(0);
 			SPRD_INFO("mdm_to_ap pin is low\n");
 			if (list_empty(&(info->wait_power_off_wq.task_list))) {
 			return IRQ_HANDLED;
@@ -1166,7 +1166,7 @@ static int sprd_notify_driver_probe(struct platform_device *pdev)
 	set_bit(irq_mdm_alive,&sprd_notify_info.irq_state);
 	irq_set_irq_wake(sprd_notify_info.modem_alive_irq,1);
 	sprd_irq_set(sprd_notify_info.modem_alive_irq,irq_mdm_alive,0);
-	
+
 	sprd_notify_info.modem_to_ap_irq = gpio_to_irq(SPRD_MDM_TO_AP1);
 	ret = request_irq(sprd_notify_info.modem_to_ap_irq, sprd_mdm_to_ap_irq_handler,
 				 IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
@@ -1180,7 +1180,7 @@ static int sprd_notify_driver_probe(struct platform_device *pdev)
 	irq_set_irq_wake(sprd_notify_info.modem_to_ap_irq,1);
 
 #ifdef SIM_DETECT
-	
+
 	sprd_notify_info.sim_detect_irq = gpio_to_irq(SPRD_SIM_DETECT);
 	ret = request_irq(sprd_notify_info.sim_detect_irq, sprd_sim_detect_irq_handler,
 				 IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
@@ -1206,7 +1206,7 @@ static int sprd_notify_driver_probe(struct platform_device *pdev)
 		goto err_file_dev_attr_sim_switch;
 	}
 
-	if (!board_ver) 
+	if (!board_ver)
 		sim_switch = !cpld_gpio_read(SPRD_SIM_SWITCH_EVM);
 	else
 		sim_switch = gpio_get_value(SPRD_SIM_SWITCH);
@@ -1384,7 +1384,7 @@ static int __init sprd_notify_init(void)
 	ret = platform_driver_register(&sprd_notify_driver);
 
 	sprd_flymode_pin_config();
-	
+
 	gpio_tlmm_config(GPIO_CFG(SPRD_BB_VDD_EN, 0, GPIO_CFG_OUTPUT,
 		GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 		GPIO_CFG_ENABLE);

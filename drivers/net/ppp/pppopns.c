@@ -288,7 +288,7 @@ static int pppopns_connect(struct socket *sock, struct sockaddr *useraddr,
 		goto out;
 
 #ifndef PPP_MTU
-#define PPP_MTU 1500 
+#define PPP_MTU 1500
 #endif
 	po->chan.hdrlen = 14;
 	po->chan.private = sk_raw;

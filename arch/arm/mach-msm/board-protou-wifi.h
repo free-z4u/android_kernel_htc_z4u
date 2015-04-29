@@ -26,4 +26,4 @@ int protou_init_mmc(unsigned int sys_rev);
 int __init protou_wifi_init(void);
 
 
-#endif 
+#endif

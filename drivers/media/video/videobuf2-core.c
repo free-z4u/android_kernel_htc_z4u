@@ -47,21 +47,21 @@ static int __vb2_buf_mem_alloc(struct vb2_buffer *vb,
 	void *mem_priv;
 	int plane;
 
-	
+
 	for (plane = 0; plane < vb->num_planes; ++plane) {
 		mem_priv = call_memop(q, plane, alloc, q->alloc_ctx[plane],
 					plane_sizes[plane]);
 		if (IS_ERR_OR_NULL(mem_priv))
 			goto free;
 
-		
+
 		vb->planes[plane].mem_priv = mem_priv;
 		vb->v4l2_planes[plane].length = plane_sizes[plane];
 	}
 
 	return 0;
 free:
-	
+
 	for (; plane > 0; --plane)
 		call_memop(q, plane, put, vb->planes[plane - 1].mem_priv);
 
@@ -128,14 +128,14 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum v4l2_memory memory,
 	int ret;
 
 	for (buffer = 0; buffer < num_buffers; ++buffer) {
-		
+
 		vb = kzalloc(q->buf_struct_size, GFP_KERNEL);
 		if (!vb) {
 			dprintk(1, "Memory alloc for buffer struct failed\n");
 			break;
 		}
 
-		
+
 		if (V4L2_TYPE_IS_MULTIPLANAR(q->type))
 			vb->v4l2_buf.length = num_planes;
 
@@ -146,7 +146,7 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum v4l2_memory memory,
 		vb->v4l2_buf.type = q->type;
 		vb->v4l2_buf.memory = memory;
 
-		
+
 		if (memory == V4L2_MEMORY_MMAP) {
 			ret = __vb2_buf_mem_alloc(vb, plane_sizes);
 			if (ret) {
@@ -188,7 +188,7 @@ static void __vb2_free_mem(struct vb2_queue *q)
 		if (!vb)
 			continue;
 
-		
+
 		if (q->memory == V4L2_MEMORY_MMAP)
 			__vb2_buf_mem_free(vb);
 		else
@@ -200,7 +200,7 @@ static void __vb2_queue_free(struct vb2_queue *q)
 {
 	unsigned int buffer;
 
-	
+
 	if (q->ops->buf_cleanup) {
 		for (buffer = 0; buffer < q->num_buffers; ++buffer) {
 			if (NULL == q->bufs[buffer])
@@ -209,10 +209,10 @@ static void __vb2_queue_free(struct vb2_queue *q)
 		}
 	}
 
-	
+
 	__vb2_free_mem(q);
 
-	
+
 	for (buffer = 0; buffer < q->num_buffers; ++buffer) {
 		kfree(q->bufs[buffer]);
 		q->bufs[buffer] = NULL;
@@ -224,7 +224,7 @@ static void __vb2_queue_free(struct vb2_queue *q)
 
 static int __verify_planes_array(struct vb2_buffer *vb, struct v4l2_buffer *b)
 {
-	
+
 	if (NULL == b->m.planes) {
 		dprintk(1, "Multi-planar buffer passed but "
 			   "planes array not provided\n");
@@ -245,7 +245,7 @@ static int __fill_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b)
 	struct vb2_queue *q = vb->vb2_queue;
 	int ret = 0;
 
-	
+
 	memcpy(b, &vb->v4l2_buf, offsetof(struct v4l2_buffer, m));
 	b->input = vb->v4l2_buf.input;
 	b->reserved = vb->v4l2_buf.reserved;
@@ -275,12 +275,12 @@ static int __fill_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b)
 		break;
 	case VB2_BUF_STATE_ERROR:
 		b->flags |= V4L2_BUF_FLAG_ERROR;
-		
+
 	case VB2_BUF_STATE_DONE:
 		b->flags |= V4L2_BUF_FLAG_DONE;
 		break;
 	case VB2_BUF_STATE_DEQUEUED:
-		
+
 		break;
 	}
 
@@ -349,7 +349,7 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
 	unsigned int num_buffers, num_planes;
 	unsigned long plane_sizes[VIDEO_MAX_PLANES];
 	int ret = 0;
-	
+
 	num_buffers = 0;
 	num_planes = 0;
 
@@ -410,7 +410,7 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
 	if (ret)
 		return ret;
 
-	
+
 	ret = __vb2_queue_alloc(q, req->memory, num_buffers, num_planes,
 				plane_sizes);
 	if (ret == 0) {
@@ -482,14 +482,14 @@ void vb2_buffer_done(struct vb2_buffer *vb, enum vb2_buffer_state state)
 	dprintk(4, "Done processing on buffer %d, state: %d\n",
 			vb->v4l2_buf.index, vb->state);
 
-	
+
 	spin_lock_irqsave(&q->done_lock, flags);
 	vb->state = state;
 	list_add_tail(&vb->done_entry, &q->done_list);
 	atomic_dec(&q->queued_count);
 	spin_unlock_irqrestore(&q->done_lock, flags);
 
-	
+
 	wake_up(&q->done_wq);
 }
 EXPORT_SYMBOL_GPL(vb2_buffer_done);
@@ -505,7 +505,7 @@ static int __fill_vb2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b,
 		if (ret)
 			return ret;
 
-		
+
 		if (V4L2_TYPE_IS_OUTPUT(b->type)) {
 			for (plane = 0; plane < vb->num_planes; ++plane) {
 				v4l2_planes[plane].bytesused =
@@ -550,13 +550,13 @@ static int __qbuf_userptr(struct vb2_buffer *vb, struct v4l2_buffer *b)
 	int ret;
 	int write = !V4L2_TYPE_IS_OUTPUT(q->type);
 
-	
+
 	ret = __fill_vb2_buffer(vb, b, planes);
 	if (ret)
 		return ret;
 
 	for (plane = 0; plane < vb->num_planes; ++plane) {
-		
+
 		if (vb->v4l2_planes[plane].m.userptr == planes[plane].m.userptr
 		    && vb->v4l2_planes[plane].length == planes[plane].length)
 			continue;
@@ -564,14 +564,14 @@ static int __qbuf_userptr(struct vb2_buffer *vb, struct v4l2_buffer *b)
 		dprintk(3, "qbuf: userspace address for plane %d changed, "
 				"reacquiring memory\n", plane);
 
-		
+
 		if (vb->planes[plane].mem_priv)
 			call_memop(q, plane, put_userptr,
 					vb->planes[plane].mem_priv);
 
 		vb->planes[plane].mem_priv = NULL;
 
-		
+
 		if (q->mem_ops->get_userptr) {
 			mem_priv = q->mem_ops->get_userptr(q->alloc_ctx[plane],
 							planes[plane].m.userptr,
@@ -598,7 +598,7 @@ static int __qbuf_userptr(struct vb2_buffer *vb, struct v4l2_buffer *b)
 
 	return 0;
 err:
-	
+
 	for (plane = 0; plane < vb->num_planes; ++plane) {
 		if (vb->planes[plane].mem_priv)
 			call_memop(q, plane, put_userptr,
@@ -647,7 +647,7 @@ int vb2_qbuf(struct vb2_queue *q, struct v4l2_buffer *b)
 
 	vb = q->bufs[b->index];
 	if (NULL == vb) {
-		
+
 		dprintk(1, "qbuf: buffer is NULL\n");
 		return -EINVAL;
 	}
@@ -793,9 +793,9 @@ int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking)
 		return -EINVAL;
 	}
 
-	
+
 	__fill_v4l2_buffer(vb, b);
-	
+
 	list_del(&vb->queued_entry);
 
 	dprintk(1, "dqbuf of buffer %d, with state %d\n",

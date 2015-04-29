@@ -57,7 +57,7 @@ void __delete_from_page_cache(struct page *page)
 
 	radix_tree_delete(&mapping->page_tree, page->index);
 	page->mapping = NULL;
-	
+
 	mapping->nrpages--;
 	__dec_zone_page_state(page, NR_FILE_PAGES);
 	if (PageSwapBacked(page))
@@ -166,7 +166,7 @@ int filemap_fdatawait_range(struct address_space *mapping, loff_t start_byte,
 		for (i = 0; i < nr_pages; i++) {
 			struct page *page = pvec.pages[i];
 
-			
+
 			if (page->index > end)
 				continue;
 
@@ -178,7 +178,7 @@ int filemap_fdatawait_range(struct address_space *mapping, loff_t start_byte,
 		cond_resched();
 	}
 
-	
+
 	if (test_and_clear_bit(AS_ENOSPC, &mapping->flags))
 		ret = -ENOSPC;
 	if (test_and_clear_bit(AS_EIO, &mapping->flags))
@@ -240,7 +240,7 @@ int filemap_write_and_wait_range(struct address_space *mapping,
 	if (mapping->nrpages) {
 		err = __filemap_fdatawrite_range(mapping, lstart, lend,
 						 WB_SYNC_ALL);
-		
+
 		if (err != -EIO) {
 			int err2 = filemap_fdatawait_range(mapping,
 						lstart, lend);
@@ -281,7 +281,7 @@ int replace_page_cache_page(struct page *old, struct page *new, gfp_t gfp_mask)
 		if (PageSwapBacked(new))
 			__inc_zone_page_state(new, NR_SHMEM);
 		spin_unlock_irq(&mapping->tree_lock);
-		
+
 		mem_cgroup_replace_page_cache(old, new);
 		radix_tree_preload_end();
 		if (freepage)
@@ -320,7 +320,7 @@ int add_to_page_cache_locked(struct page *page, struct address_space *mapping,
 			spin_unlock_irq(&mapping->tree_lock);
 		} else {
 			page->mapping = NULL;
-			
+
 			spin_unlock_irq(&mapping->tree_lock);
 			mem_cgroup_uncharge_cache_page(page);
 			page_cache_release(page);
@@ -519,7 +519,7 @@ repeat:
 	page = find_get_page(mapping, offset);
 	if (page && !radix_tree_exception(page)) {
 		lock_page(page);
-		
+
 		if (unlikely(page->mapping != mapping)) {
 			unlock_page(page);
 			page_cache_release(page);
@@ -585,7 +585,7 @@ repeat:
 		if (!page_cache_get_speculative(page))
 			goto repeat;
 
-		
+
 		if (unlikely(page != *slot)) {
 			page_cache_release(page);
 			goto repeat;
@@ -616,7 +616,7 @@ restart:
 		struct page *page;
 repeat:
 		page = radix_tree_deref_slot(slot);
-		
+
 		if (unlikely(!page))
 			break;
 
@@ -630,7 +630,7 @@ repeat:
 		if (!page_cache_get_speculative(page))
 			goto repeat;
 
-		
+
 		if (unlikely(page != *slot)) {
 			page_cache_release(page);
 			goto repeat;
@@ -680,7 +680,7 @@ repeat:
 		if (!page_cache_get_speculative(page))
 			goto repeat;
 
-		
+
 		if (unlikely(page != *slot)) {
 			page_cache_release(page);
 			goto repeat;
@@ -735,7 +735,7 @@ static void do_generic_file_read(struct file *filp, loff_t *ppos,
 	pgoff_t index;
 	pgoff_t last_index;
 	pgoff_t prev_index;
-	unsigned long offset;      
+	unsigned long offset;
 	unsigned int prev_offset;
 	int error;
 	int trace = 0;
@@ -776,7 +776,7 @@ find_page:
 				goto page_not_up_to_date;
 			if (!trylock_page(page))
 				goto page_not_up_to_date;
-			
+
 			if (!page->mapping)
 				goto page_not_up_to_date_locked;
 			if (!mapping->a_ops->is_partially_uptodate(page,
@@ -793,7 +793,7 @@ page_ok:
 			goto out;
 		}
 
-		
+
 		nr = PAGE_CACHE_SIZE;
 		if (index == end_index) {
 			nr = ((isize - 1) & ~PAGE_CACHE_MASK) + 1;
@@ -823,20 +823,20 @@ page_ok:
 		goto out;
 
 page_not_up_to_date:
-		
+
 		error = lock_page_killable(page);
 		if (unlikely(error))
 			goto readpage_error;
 
 page_not_up_to_date_locked:
-		
+
 		if (!page->mapping) {
 			unlock_page(page);
 			page_cache_release(page);
 			continue;
 		}
 
-		
+
 		if (PageUptodate(page)) {
 			unlock_page(page);
 			goto page_ok;
@@ -844,7 +844,7 @@ page_not_up_to_date_locked:
 
 readpage:
 		ClearPageError(page);
-		
+
 		error = mapping->a_ops->readpage(filp, page);
 
 		if (unlikely(error)) {
@@ -876,7 +876,7 @@ readpage:
 		goto page_ok;
 
 readpage_error:
-		
+
 		desc->error = error;
 		page_cache_release(page);
 		goto out;
@@ -928,7 +928,7 @@ int file_read_actor(read_descriptor_t *desc, struct page *page,
 			goto success;
 	}
 
-	
+
 	kaddr = kmap(page);
 	left = __copy_to_user(desc->arg.buf, kaddr + offset, size);
 	kunmap(page);
@@ -960,7 +960,7 @@ int generic_segment_checks(const struct iovec *iov,
 		if (seg == 0)
 			return -EFAULT;
 		*nr_segs = seg;
-		cnt -= iv->iov_len;	
+		cnt -= iv->iov_len;
 		break;
 	}
 	*count = cnt;
@@ -983,7 +983,7 @@ generic_file_aio_read(struct kiocb *iocb, const struct iovec *iov,
 	if (retval)
 		return retval;
 
-	
+
 	if (filp->f_flags & O_DIRECT) {
 		loff_t size;
 		struct address_space *mapping;
@@ -992,7 +992,7 @@ generic_file_aio_read(struct kiocb *iocb, const struct iovec *iov,
 		mapping = filp->f_mapping;
 		inode = mapping->host;
 		if (!count)
-			goto out; 
+			goto out;
 		size = i_size_read(inode);
 		if (pos < size) {
 			retval = filemap_write_and_wait_range(mapping, pos,
@@ -1093,7 +1093,7 @@ SYSCALL_ALIAS(sys_readahead, SyS_readahead);
 static int page_cache_read(struct file *file, pgoff_t offset)
 {
 	struct address_space *mapping = file->f_mapping;
-	struct page *page; 
+	struct page *page;
 	int ret;
 
 	do {
@@ -1105,12 +1105,12 @@ static int page_cache_read(struct file *file, pgoff_t offset)
 		if (ret == 0)
 			ret = mapping->a_ops->readpage(file, page);
 		else if (ret == -EEXIST)
-			ret = 0; 
+			ret = 0;
 
 		page_cache_release(page);
 
 	} while (ret == AOP_TRUNCATED_PAGE);
-		
+
 	return ret;
 }
 
@@ -1124,7 +1124,7 @@ static void do_sync_mmap_readahead(struct vm_area_struct *vma,
 	unsigned long ra_pages;
 	struct address_space *mapping = file->f_mapping;
 
-	
+
 	if (VM_RandomReadHint(vma))
 		return;
 	if (!ra->ra_pages)
@@ -1136,7 +1136,7 @@ static void do_sync_mmap_readahead(struct vm_area_struct *vma,
 		return;
 	}
 
-	
+
 	if (ra->mmap_miss < MMAP_LOTSAMISS * 10)
 		ra->mmap_miss++;
 
@@ -1158,7 +1158,7 @@ static void do_async_mmap_readahead(struct vm_area_struct *vma,
 {
 	struct address_space *mapping = file->f_mapping;
 
-	
+
 	if (VM_RandomReadHint(vma))
 		return;
 	if (ra->mmap_miss > 0)
@@ -1188,7 +1188,7 @@ int filemap_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
 	if (likely(page)) {
 		do_async_mmap_readahead(vma, ra, file, page, offset);
 	} else {
-		
+
 		do_sync_mmap_readahead(vma, ra, file, offset);
 		count_vm_event(PGMAJFAULT);
 		mem_cgroup_count_vm_event(vma->vm_mm, PGMAJFAULT);
@@ -1206,7 +1206,7 @@ retry_find:
 	if (ret == VM_FAULT_MAJOR)
 		trace_readahead_exit(file);
 
-	
+
 	if (unlikely(page->mapping != mapping)) {
 		unlock_page(page);
 		put_page(page);
@@ -2000,7 +2000,7 @@ generic_file_buffered_write(struct kiocb *iocb, const struct iovec *iov,
 		written += status;
 		*ppos = pos + status;
   	}
-	
+
 	return written ? written : status;
 }
 EXPORT_SYMBOL(generic_file_buffered_write);

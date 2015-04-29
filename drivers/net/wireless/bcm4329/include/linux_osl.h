@@ -2,13 +2,13 @@
  * Linux OS Independent Layer
  *
  * Copyright (C) 1999-2010, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -41,8 +41,8 @@
 #else
 
 #define	ASSERT(exp)
-#endif 
-#endif 
+#endif
+#endif
 
 
 #define	OSL_DELAY(usec)		osl_delay(usec)
@@ -74,10 +74,10 @@ extern uint osl_pci_slot(osl_t *osh);
 
 typedef struct {
 	bool pkttag;
-	uint pktalloced; 	
-	bool mmbus;		
-	pktfree_cb_fn_t tx_fn;  
-	void *tx_ctx;		
+	uint pktalloced;
+	bool mmbus;
+	pktfree_cb_fn_t tx_fn;
+	void *tx_ctx;
 } osl_pubinfo_t;
 
 
@@ -116,8 +116,8 @@ extern void *osl_dma_alloc_consistent(osl_t *osh, uint size, ulong *pap);
 extern void osl_dma_free_consistent(osl_t *osh, void *va, uint size, ulong pa);
 
 
-#define	DMA_TX	1	
-#define	DMA_RX	2	
+#define	DMA_TX	1
+#define	DMA_RX	2
 
 
 #define	DMA_MAP(osh, va, size, direction, p, dmah) \
@@ -145,7 +145,7 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 
 #ifndef printf
 #define	printf(fmt, args...)	printk(fmt, ## args)
-#endif 
+#endif
 #include <linux/kernel.h>
 #include <linux/string.h>
 
@@ -165,7 +165,7 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 		}, \
 		(OSL_WRITE_REG(osh, r, v))); \
 	} while (0)
-#else	
+#else
 #define R_REG(osh, r) (\
 	SELECT_BUS_READ(osh, \
 		({ \
@@ -194,7 +194,7 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 		}, \
 		(OSL_WRITE_REG(osh, r, v))); \
 	} while (0)
-#endif 
+#endif
 
 #define	AND_REG(osh, r, v)		W_REG(osh, (r), R_REG(osh, r) & (v))
 #define	OR_REG(osh, r, v)		W_REG(osh, (r), R_REG(osh, r) | (v))
@@ -212,7 +212,7 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 #define	OSL_GETCYCLES(x)	rdtscl((x))
 #else
 #define OSL_GETCYCLES(x)	((x) = 0)
-#endif 
+#endif
 
 
 #define	BUSPROBE(val, addr)	({ (val) = R_REG(NULL, (addr)); 0; })
@@ -222,7 +222,7 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 #define	REG_MAP(pa, size)	ioremap_nocache((unsigned long)(pa), (unsigned long)(size))
 #else
 #define REG_MAP(pa, size)       (void *)(0)
-#endif 
+#endif
 #define	REG_UNMAP(va)		iounmap((va))
 
 
@@ -236,7 +236,7 @@ extern void osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction);
 #ifdef DHD_USE_STATIC_BUF
 #define	PKTGET_STATIC(osh, len, send)		osl_pktget_static((osh), (len))
 #define	PKTFREE_STATIC(osh, skb, send)		osl_pktfree_static((osh), (skb), (send))
-#endif 
+#endif
 #define	PKTDATA(osh, skb)		(((struct sk_buff*)(skb))->data)
 #define	PKTLEN(osh, skb)		(((struct sk_buff*)(skb))->len)
 #define PKTHEADROOM(osh, skb)		(PKTDATA(osh, skb)-(((struct sk_buff*)(skb))->head))
@@ -273,7 +273,7 @@ osl_pkt_frmnative(osl_pubinfo_t *osh, struct sk_buff *skb)
 	if (osh->pkttag)
 		bzero((void*)skb->cb, OSL_PKTTAG_SZ);
 
-	
+
 	for (nskb = skb; nskb; nskb = nskb->next) {
 		osh->pktalloced++;
 	}
@@ -291,7 +291,7 @@ osl_pkt_tonative(osl_pubinfo_t *osh, void *pkt)
 	if (osh->pkttag)
 		bzero(((struct sk_buff*)pkt)->cb, OSL_PKTTAG_SZ);
 
-	
+
 	for (nskb = (struct sk_buff *)pkt; nskb; nskb = nskb->next) {
 		osh->pktalloced--;
 	}
@@ -315,8 +315,8 @@ osl_pkt_tonative(osl_pubinfo_t *osh, void *pkt)
 extern int osl_error(int bcmerror);
 
 
-#define	PKTBUFSZ	2048   
+#define	PKTBUFSZ	2048
 
 
 #define OSL_SYSUPTIME()		((uint32)jiffies * (1000 / HZ))
-#endif	
+#endif

@@ -15,7 +15,7 @@
 #define ADC_RETRY 3
 #define ADC_DELAY HZ/8
 
-#define PM8058ADC_15BIT(adc) ((adc * 2200) / 32767) 
+#define PM8058ADC_15BIT(adc) ((adc * 2200) / 32767)
 
 #define CABLE_ERR(fmt, args...) \
 	printk(KERN_ERR "[CABLE:ERR] " fmt, ## args)
@@ -56,11 +56,11 @@ struct cable_detect_platform_data {
 	int vbus_mpp_irq;
 	int vbus_uevent;
 	void (*vbus_mpp_config)(void);
-	
+
 	void (*usb_uart_switch)(int);
 	void (*usb_dpdn_switch)(int);
 
-	
+
 	u8 accessory_type;
 	u8 mfg_usb_carkit_enable;
 	int usb_id_pin_gpio;

@@ -373,7 +373,7 @@ static void sprd_soft_reset(void)
 {
 	int ret = 0;
 
-	mutex_lock(&sdio_reset_lock); 
+	mutex_lock(&sdio_reset_lock);
 	probe_finish = SPRD_DETECT_ONGOING;
 	modem_sdio_reset(1);
 
@@ -509,7 +509,7 @@ static unsigned int sdio_read(struct sdio_func *func, void *dst,
 		if (ret != 0)
 			sp6502com_pr_err("read= %d,count = %d\n",ret,count);
 
-		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);	
+		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);
 		if (ret) {
 			sp6502com_pr_err("set block size failed with ret = %d\n",ret);
 			return ret;
@@ -518,7 +518,7 @@ static unsigned int sdio_read(struct sdio_func *func, void *dst,
 		return ret;
 	}
 
-	if ((count >= SDIO_BLOCK_SIZE) && (count % SDIO_BLOCK_SIZE) != 0) {	
+	if ((count >= SDIO_BLOCK_SIZE) && (count % SDIO_BLOCK_SIZE) != 0) {
 		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);
 		if (ret) {
 			sp6502com_pr_err("set block size %d failed with ret = %d\n",count,ret);
@@ -528,7 +528,7 @@ static unsigned int sdio_read(struct sdio_func *func, void *dst,
 		remain_cnt = count % SDIO_BLOCK_SIZE;
 		actual_cnt = count - remain_cnt;
 
-		ret = sdio_readsb(func, dst, addr, actual_cnt);		
+		ret = sdio_readsb(func, dst, addr, actual_cnt);
 		if (ret != 0)
 			sp6502com_pr_err("read= %d,count = %d\n",ret,actual_cnt);
 
@@ -540,11 +540,11 @@ static unsigned int sdio_read(struct sdio_func *func, void *dst,
 
 		msleep(1);
 
-		ret = sdio_readsb(func, dst+actual_cnt, addr, remain_cnt);	
+		ret = sdio_readsb(func, dst+actual_cnt, addr, remain_cnt);
 		if (ret != 0)
 			sp6502com_pr_err("read= %d,count = %d\n",ret,remain_cnt);
 
-		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);	
+		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);
 		if (ret) {
 			sp6502com_pr_err("set block size failed with ret = %d\n",ret);
 			return ret;
@@ -663,7 +663,7 @@ ssize_t sp6502com_sdio_tty_write(struct file *file, unsigned char *buf, size_t c
 		sp6502com_pr_info("enter block mode\n");
 		rc = wait_event_interruptible_timeout(sdio_dev->sdio_tty_write_wq,
 				(sp6502com_sdio_write_buf_length() == 0),msecs_to_jiffies(10000));
-		
+
 		if ((rc == 0) || (rc ==-ERESTARTSYS)) {
 			sp6502com_pr_err("sdio tty write quit rc = %d\n", rc);
 			sp6502com_pr_err("sdio write check mdm_rdy = %d,ap_rts =%d\n", bp_rdy(),bp_rts());
@@ -740,7 +740,7 @@ static void sdio_tty_read()
 
 	push_sdio_tty_fail = 0;
 	for (;;) {
-		
+
 		avail = sp6502com_sdio_tty_read_avail(port);
 		if (avail == 0) {
 			sp6502com_pr_info("tty read finished, no available\n");
@@ -753,7 +753,7 @@ static void sdio_tty_read()
 			break;
 		}
 
-		
+
 		avail = tty_prepare_flip_string(tty, &ptr, avail);
 		sp6502com_pr_info("apply available space = %d\n", avail);
 
@@ -840,7 +840,7 @@ static size_t sdio_sp6502com_process_data(void)
 	if (packet->header.head_tag != SDIO_SP6502COM_MODEM_PACKET_HEADER_TAG) {
 		sp6502com_pr_err("header = 0x%08x,0x%08x,0x%08d,0x%08x\n",
 					packet->header.head_tag,packet->header.packet_type,packet->header.len,packet->header.reserved);
-		
+
 		ret = -EIO;
 		FUNC_EXIT();
 		return ret;
@@ -880,7 +880,7 @@ static size_t sdio_sp6502com_process_data(void)
 
 	cal_checksum = 0;
 
-	
+
 #ifdef SDIO_TTY_DEBUG
 	data_rx_count++;
 	data_rx_size += sdio_dev->rx_data_len;
@@ -925,7 +925,7 @@ static void sdio_sp6502com_rx(void)
 				goto disable_func;
 			}
 
-			ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);	
+			ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);
 			if (ret) {
 				sp6502com_pr_err("set block size failed with ret = %d\n", ret);
 				goto disable_func;
@@ -973,7 +973,7 @@ static void sdio_sp6502com_rx(void)
 		}
 	}
 
-	
+
 	sdio_tty_release_func(sdio_dev);
 
 	sprd_set_status(SDIO_VALID);
@@ -988,8 +988,8 @@ static void sdio_sp6502com_rx(void)
 	return;
 
 disable_func:
-	
-	
+
+
 
 fail_enable:
 #ifdef SDIO_RX_RESEND_ENABLED
@@ -1099,10 +1099,10 @@ static size_t sdio_sp6502com_write_modem_data(void)
 	send_len = len;
 
 	packet = (struct sdio_sp6502com_modem_packet_t *)sdio_dev->tx_buf.buf_8;
-	packet->header.head_tag = SDIO_SP6502COM_MODEM_PACKET_HEADER_TAG; 
-	packet->header.packet_type = SDIO_SP6502COM_MODEM_PACKET_TYPE;    
+	packet->header.head_tag = SDIO_SP6502COM_MODEM_PACKET_HEADER_TAG;
+	packet->header.packet_type = SDIO_SP6502COM_MODEM_PACKET_TYPE;
 	packet->header.len = len;
-	packet->header.frame_num = tx_packet_count++;     
+	packet->header.frame_num = tx_packet_count++;
 	packet->header.reserved = 0;
 
 	copy_len = send_len;
@@ -1132,7 +1132,7 @@ static size_t sdio_sp6502com_write_modem_data(void)
 			goto disable_func;
 		}
 
-		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);	
+		ret = sdio_set_block_size(sdio_dev->func, SDIO_BLOCK_SIZE);
 		if (ret) {
 			sp6502com_pr_err("set block size failed with ret = %d\n", ret);
 			goto disable_func;
@@ -1166,8 +1166,8 @@ static size_t sdio_sp6502com_write_modem_data(void)
 	return ret;
 
 disable_func:
-	
-	
+
+
 
 fail_enable:
 	sdio_tty_release_func(sdio_dev);
@@ -1203,7 +1203,7 @@ static int sdio_sp6502com_tx(const unsigned char * buf, unsigned short len)
 	int ret = 0;
 	FUNC_ENTER();
 
-	
+
 	if (bp_rdy()) {
 		if (wait_event_interruptible_timeout(sdio_dev->sdio_write_wq,
 			   ((!bp_rdy()) || (sdio_dev->opened == 0)), msecs_to_jiffies(300)) == 0) {
@@ -1218,7 +1218,7 @@ static int sdio_sp6502com_tx(const unsigned char * buf, unsigned short len)
 		goto tx_done_no_lock;
 	}
 
-	ap_rts_set(1);	
+	ap_rts_set(1);
 	usleep(400);
 
 	if (bp_rts()) {
@@ -1230,7 +1230,7 @@ static int sdio_sp6502com_tx(const unsigned char * buf, unsigned short len)
 		}
 	}
 
-	if (!bp_rdy()) {	
+	if (!bp_rdy()) {
 #ifdef SDIO_SP6502_CONFLICT_METHOD
 		if (wait_event_interruptible_timeout(sdio_dev->sdio_write_wq,
 					  ((bp_rdy()) || (sdio_dev->opened == 0)),
@@ -1249,7 +1249,7 @@ static int sdio_sp6502com_tx(const unsigned char * buf, unsigned short len)
 		}
 #else
 		if (bp_rts()) {
-			
+
 			ret = -1;
 			goto tx_done_no_lock;
 		}
@@ -1297,7 +1297,7 @@ static int sdio_sp6502com_tx(const unsigned char * buf, unsigned short len)
 		ret = -2;
 	}
 
-	ap_rts_set(0);	
+	ap_rts_set(0);
 
 	sprd_set_status(SDIO_VALID);
 	if (sdio_dev->opened == 0) {
@@ -1350,7 +1350,7 @@ static ssize_t sdio_sp6502com_xmit_buf(unsigned char *buf, ssize_t len)
 			return ret;
 		}
 		if (ret == -2) {
-			begin_retry = 2; 
+			begin_retry = 2;
 		} else {
 			begin_retry = 1;
 		}
@@ -1440,8 +1440,8 @@ static void sdio_tty_dev_remove(struct sdio_tty_dev *port)
 	func = port->func;
 
 	port->func = NULL;
-	
-	
+
+
 
 	mutex_unlock(&port->func_lock);
 
@@ -1656,8 +1656,8 @@ static void sdio_tty_close(struct tty_struct *tty, struct file * filp)
 
 	if (--port->open_count == 0) {
 		mutex_lock(&sdio_tty_lock);
-		
-		
+
+
 		del_timer(&port->buf_req_timer);
 	} else {
 		sp6502com_pr_warn("still need close more time = %d\n", port->open_count);
@@ -2021,7 +2021,7 @@ static void sdio_sp6502com_remove(struct sdio_func *func)
 	probe_finish = SPRD_DETECT_REMOVED;
 	wake_up_interruptible(&(init_wq));
 
-#if 0	
+#if 0
 	struct sdio_tty_dev *port = sdio_get_drvdata(func);
 
 	sdio_dev->remove_pending = 1;
@@ -2070,7 +2070,7 @@ static int sdio_tty_init(void)
 	tty_drv->owner = THIS_MODULE;
 	tty_drv->driver_name = "sdio_tty";
 	tty_drv->name =   "ttyMux";
-	tty_drv->major = 0;  
+	tty_drv->major = 0;
 	tty_drv->minor_start = 0;
 	tty_drv->type = TTY_DRIVER_TYPE_SERIAL;
 	tty_drv->subtype = SERIAL_TYPE_NORMAL;
@@ -2261,7 +2261,7 @@ sdio_tty_dbg_state_write(struct file *file,
 
 	switch (buf[0]) {
 
-		case '1':				
+		case '1':
 			pr_info("Sdio_sp6502com:bp_rts() = %d\n", bp_rts());
 			sdio_dev->modem_rts = 1;
 			wake_up_interruptible(&(sdio_dev->sdio_read_wq));

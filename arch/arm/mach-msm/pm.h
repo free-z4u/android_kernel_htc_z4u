@@ -59,12 +59,12 @@ enum msm_pm_sleep_mode {
 #define MSM_PM_MODE(cpu, mode_nr)  ((cpu) * MSM_PM_SLEEP_MODE_NR + (mode_nr))
 
 struct msm_pm_platform_data {
-	u8 idle_supported;   
-	u8 suspend_supported; 
-	u8 suspend_enabled;  
-	u8 idle_enabled;     
-	u32 latency;         
-	u32 residency;       
+	u8 idle_supported;
+	u8 suspend_supported;
+	u8 suspend_enabled;
+	u8 idle_enabled;
+	u32 latency;
+	u32 residency;
 };
 
 extern struct msm_pm_platform_data msm_pm_sleep_modes[];

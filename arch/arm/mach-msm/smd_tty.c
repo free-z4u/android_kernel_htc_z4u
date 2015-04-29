@@ -43,8 +43,8 @@
 #define MAX_SMD_TTYS 37
 #define MAX_TTY_BUF_SIZE 2048
 
-#define SIOCREADSMD	0x435901		
-#define SIOCLASTAT	0x435902		
+#define SIOCREADSMD	0x435901
+#define SIOCLASTAT	0x435902
 static DEFINE_MUTEX(smd_tty_lock);
 
 static uint smd_tty_modem_wait;
@@ -131,7 +131,7 @@ static void smd_tty_read(unsigned long param)
 
 	for (;;) {
 		if (is_in_reset(info)) {
-			
+
 			tty_insert_flip_char(tty, 0x00, TTY_BREAK);
 			tty_flip_buffer_push(tty);
 			break;
@@ -154,7 +154,7 @@ static void smd_tty_read(unsigned long param)
 
 		if (smd_read(info->ch, ptr, avail) != avail) {
 			printk(KERN_ERR "OOPS - smd_tty_buffer mismatch?!");
-		
+
 		} else {
 			if (get_radio_flag() & 0x0008) {
 				int i = 0;
@@ -162,14 +162,14 @@ static void smd_tty_read(unsigned long param)
 				for (i = 0; i< avail; i++)
 					printk("%c", *(ptr+i));
 			}
-		
+
 		}
 
 		wake_lock_timeout(&info->wake_lock, HZ / 2);
 		tty_flip_buffer_push(tty);
 	}
 
-	
+
 	tty_wakeup(tty);
 }
 
@@ -210,7 +210,7 @@ static void smd_tty_notify(void *priv, unsigned event)
 		info->is_open = 0;
 		wake_up_interruptible(&info->ch_opened_wait_queue);
 		spin_unlock_irqrestore(&info->reset_lock, flags);
-		
+
 		tasklet_hi_schedule(&info->tty_tsklt);
 
 		if (info->tty->index == LOOPBACK_IDX)
@@ -437,7 +437,7 @@ static int smd_tty_ioctl(struct tty_struct *tty,
 {
 	struct smd_tty_info *info = tty->driver_data;
 	int ret = 0;
-	char textbuf[256]; 
+	char textbuf[256];
 
 	switch (cmd) {
 		case SIOCREADSMD:
@@ -465,7 +465,7 @@ static int smd_tty_ioctl(struct tty_struct *tty,
 
 static void loopback_probe_worker(struct work_struct *work)
 {
-	
+
 	if (!is_modem_smsm_inited())
 		schedule_delayed_work(&loopback_work, msecs_to_jiffies(1000));
 	else

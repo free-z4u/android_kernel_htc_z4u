@@ -1054,7 +1054,7 @@ uint8_t dppclib_u_ov5693[] =
 };
 
 uint8_t dopclib_u_ov5693[] =
-#if 1 
+#if 1
 {
 	0x01,
 	0x01,
@@ -3225,7 +3225,7 @@ struct yushan_reg_clib_t yushan_regs_clib_ov5693 = {
 	.dppclib = &dppclib_u_ov5693[0],
 	.dppclib_size = ARRAY_SIZE(dppclib_u_ov5693),
 
-#if 1 
+#if 1
 	.dopclib_first_addr = 0x3bcc,
 #else
 	.dopclib_first_addr = 0x3bcc,

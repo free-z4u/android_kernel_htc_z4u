@@ -54,12 +54,12 @@
 #define CM3629_ALS_AV_2		(1 << 4)
 #define CM3629_ALS_AV_4		(2 << 4)
 #define CM3629_ALS_AV_8		(3 << 4)
-#define CM3629_ALS_PERS_1 	(0 << 2) 
+#define CM3629_ALS_PERS_1 	(0 << 2)
 #define CM3629_ALS_PERS_2 	(1 << 2)
 #define CM3629_ALS_PERS_4 	(2 << 2)
 #define CM3629_ALS_PERS_8 	(3 << 2)
-#define CM3629_ALS_INT_EN	(1 << 1) 
-#define CM3629_ALS_SD		(1 << 0) 
+#define CM3629_ALS_INT_EN	(1 << 1)
+#define CM3629_ALS_SD		(1 << 0)
 
 #define CM3629_PS_63_STEPS 	(0 << 4)
 #define CM3629_PS_120_STEPS 	(1 << 4)
@@ -83,8 +83,8 @@
 #define CM3629_PS1_PERS_3 	(2 << 2)
 #define CM3629_PS1_PERS_4 	(3 << 2)
 
-#define CM3629_PS2_SD		(1 << 1) 
-#define CM3629_PS1_SD		(1 << 0) 
+#define CM3629_PS2_SD		(1 << 1)
+#define CM3629_PS1_SD		(1 << 0)
 
 #define CM3629_PS_ITB_1_2 	(0 << 6)
 #define CM3629_PS_ITB_1 	(1 << 6)
@@ -158,16 +158,16 @@ struct cm3629_platform_data {
 	int intr;
 	uint16_t levels[10];
 	uint16_t golden_adc;
-	int (*power)(int, uint8_t); 
-	int (*lpm_power)(uint8_t); 
+	int (*power)(int, uint8_t);
+	int (*lpm_power)(uint8_t);
 	uint16_t cm3629_slave_address;
 	uint8_t ps_select;
 	uint8_t ps1_thd_set;
 	uint8_t ps1_thh_diff;
 	uint8_t ps2_thd_set;
 	uint8_t inte_cancel_set;
-	
-	uint8_t ps_conf2_val; 
+
+	uint8_t ps_conf2_val;
 	uint8_t *mapping_table;
 	uint8_t mapping_size;
 	uint8_t ps_base_index;

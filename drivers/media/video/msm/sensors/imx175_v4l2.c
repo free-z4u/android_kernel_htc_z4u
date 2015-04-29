@@ -10,10 +10,10 @@
 #define imx175_obj imx175_##obj
 
 #define IMX175_REG_READ_MODE 0x0101
-#define IMX175_READ_NORMAL_MODE 0x0000	
-#define IMX175_READ_MIRROR 0x0001			
-#define IMX175_READ_FLIP 0x0002			
-#define IMX175_READ_MIRROR_FLIP 0x0003	
+#define IMX175_READ_NORMAL_MODE 0x0000
+#define IMX175_READ_MIRROR 0x0001
+#define IMX175_READ_FLIP 0x0002
+#define IMX175_READ_MIRROR_FLIP 0x0003
 
 
 #define REG_DIGITAL_GAIN_GREEN_R 0x020E
@@ -78,15 +78,15 @@ static struct msm_camera_i2c_reg_conf imx175_mipi_settings[] = {
 
 static struct msm_camera_i2c_reg_conf imx175_pll_settings[] = {
 
-	
-	{0x030C, 0x00}, 
-	{0x030D, 0xC7}, 
-	{0x0301, 0x0A}, 
-	{0x0303, 0x01}, 
-	{0x0305, 0x06}, 
-	{0x0309, 0x0A}, 
-	{0x030B, 0x01}, 
-	{0x3368, 0x18}, 
+
+	{0x030C, 0x00},
+	{0x030D, 0xC7},
+	{0x0301, 0x0A},
+	{0x0303, 0x01},
+	{0x0305, 0x06},
+	{0x0309, 0x0A},
+	{0x030B, 0x01},
+	{0x3368, 0x18},
 	{0x3369, 0x00},
 	{0x3344, 0x00},
 	{0x3345, 0x00},
@@ -116,23 +116,23 @@ static struct msm_camera_i2c_reg_conf imx175_prev_settings[] = {
 
     {0x030C, 0x00},
     {0x030D, 0xC7},
-    {0x0340, 0x04}, 	
+    {0x0340, 0x04},
     {0x0341, 0xF4},
-    {0x0342, 0x0D},   
+    {0x0342, 0x0D},
     {0x0343, 0x70},
-    {0x0344, 0x00}, 
+    {0x0344, 0x00},
     {0x0345, 0x00},
-    {0x0346, 0x00}, 
+    {0x0346, 0x00},
     {0x0347, 0x00},
-    {0x0348, 0x0C},   
+    {0x0348, 0x0C},
     {0x0349, 0xCF},
-    {0x034A, 0x09},  
+    {0x034A, 0x09},
     {0x034B, 0x9F},
-    {0x034C, 0x06},    
+    {0x034C, 0x06},
     {0x034D, 0x68},
-    {0x034E, 0x04},    
+    {0x034E, 0x04},
     {0x034F, 0xD0},
-    {0x0390, 0x01},	
+    {0x0390, 0x01},
 
     {0x3020, 0x10},
     {0x302D, 0x03},
@@ -165,9 +165,9 @@ static struct msm_camera_i2c_reg_conf imx175_prev_settings[] = {
     {0x3376, 0xBF},
     {0x3377, 0x3F},
     {0x33C8, 0x00},
-    {0x33D4, 0x06},     
+    {0x33D4, 0x06},
     {0x33D5, 0x68},
-    {0x33D6, 0x04},     
+    {0x33D6, 0x04},
     {0x33D7, 0xD0},
 
     {0x4100, 0x06},
@@ -180,7 +180,7 @@ static struct msm_camera_i2c_reg_conf imx175_prev_settings[] = {
 };
 
 static struct msm_camera_i2c_reg_conf imx175_video_settings[] = {
-		
+
 	    {0x41C0, 0x01},
 	    {0x0100, 0x00},
 	    {0x030E, 0x01},
@@ -194,21 +194,21 @@ static struct msm_camera_i2c_reg_conf imx175_video_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x06},  
+	    {0x0340, 0x06},
 	    {0x0341, 0x07},
-	    {0x0342, 0x0D},      
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00},  
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x00}, 
+	    {0x0346, 0x00},
 	    {0x0347, 0xF8},
-	    {0x0348, 0x0C},  
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08},  
+	    {0x034A, 0x08},
 	    {0x034B, 0xA7},
-	    {0x034C, 0x06},    
+	    {0x034C, 0x06},
 	    {0x034D, 0x68},
-	    {0x034E, 0x03},   
+	    {0x034E, 0x03},
 	    {0x034F, 0xD8},
 	    {0x0390, 0x01},
 
@@ -243,9 +243,9 @@ static struct msm_camera_i2c_reg_conf imx175_video_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x06},     
+	    {0x33D4, 0x06},
 	    {0x33D5, 0x68},
-	    {0x33D6, 0x03},     
+	    {0x33D6, 0x03},
 	    {0x33D7, 0xD8},
 
 	    {0x4100, 0x06},
@@ -260,7 +260,7 @@ static struct msm_camera_i2c_reg_conf imx175_video_settings[] = {
 
 static struct msm_camera_i2c_reg_conf imx175_fast_video_settings[] = {
 
-		
+
 	    {0x41C0, 0x01},
 	    {0x0100, 0x00},
 	    {0x030E, 0x01},
@@ -274,21 +274,21 @@ static struct msm_camera_i2c_reg_conf imx175_fast_video_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x03},  
+	    {0x0340, 0x03},
 	    {0x0341, 0xC6},
-	    {0x0342, 0x0D},      
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00},  
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x01}, 
+	    {0x0346, 0x01},
 	    {0x0347, 0x38},
-	    {0x0348, 0x0C},  
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08},  
+	    {0x034A, 0x08},
 	    {0x034B, 0x67},
-	    {0x034C, 0x06},    
+	    {0x034C, 0x06},
 	    {0x034D, 0x68},
-	    {0x034E, 0x03},   
+	    {0x034E, 0x03},
 	    {0x034F, 0x98},
 	    {0x0390, 0x01},
 
@@ -323,9 +323,9 @@ static struct msm_camera_i2c_reg_conf imx175_fast_video_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x06},     
+	    {0x33D4, 0x06},
 	    {0x33D5, 0x68},
-	    {0x33D6, 0x03},     
+	    {0x33D6, 0x03},
 	    {0x33D7, 0x98},
 
 	    {0x4100, 0x06},
@@ -352,21 +352,21 @@ static struct msm_camera_i2c_reg_conf imx175_snap_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x09},    
+	    {0x0340, 0x09},
 	    {0x0341, 0xC4},
-	    {0x0342, 0x0D},      
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00},  
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x00},  
+	    {0x0346, 0x00},
 	    {0x0347, 0x00},
-	    {0x0348, 0x0C},  
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x09},  
+	    {0x034A, 0x09},
 	    {0x034B, 0x9F},
-	    {0x034C, 0x0C},    
+	    {0x034C, 0x0C},
 	    {0x034D, 0xD0},
-	    {0x034E, 0x09},    
+	    {0x034E, 0x09},
 	    {0x034F, 0xA0},
 	    {0x0390, 0x00},
 
@@ -401,9 +401,9 @@ static struct msm_camera_i2c_reg_conf imx175_snap_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x0C},     
+	    {0x33D4, 0x0C},
 	    {0x33D5, 0xD0},
-	    {0x33D6, 0x09},     
+	    {0x33D6, 0x09},
 	    {0x33D7, 0xA0},
 
 	    {0x4100, 0x06},
@@ -433,17 +433,17 @@ static struct msm_camera_i2c_reg_conf imx175_snap_wide_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x07},    
+	    {0x0340, 0x07},
 	    {0x0341, 0x5A},
-	    {0x0342, 0x0D}, 
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00}, 
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x01}, 
+	    {0x0346, 0x01},
 	    {0x0347, 0x36},
-	    {0x0348, 0x0C}, 
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08}, 
+	    {0x034A, 0x08},
 	    {0x034B, 0x6B},
 	    {0x034C, 0x0C},
 	    {0x034D, 0xD0},
@@ -482,9 +482,9 @@ static struct msm_camera_i2c_reg_conf imx175_snap_wide_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x0C},     
+	    {0x33D4, 0x0C},
 	    {0x33D5, 0xD0},
-	    {0x33D6, 0x07},         
+	    {0x33D6, 0x07},
 	    {0x33D7, 0x36},
 
 	    {0x4100, 0x06},
@@ -514,21 +514,21 @@ static struct msm_camera_i2c_reg_conf imx175_5_3_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x07},    	
+	    {0x0340, 0x07},
 	    {0x0341, 0xD0},
-	    {0x0342, 0x0D}, 
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00}, 
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x00}, 
+	    {0x0346, 0x00},
 	    {0x0347, 0xF8},
-	    {0x0348, 0x0C}, 
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08}, 
+	    {0x034A, 0x08},
 	    {0x034B, 0xA7},
-	    {0x034C, 0x0C},	 
+	    {0x034C, 0x0C},
 	    {0x034D, 0xD0},
-	    {0x034E, 0x07},	 
+	    {0x034E, 0x07},
 	    {0x034F, 0xB0},
 	    {0x0390, 0x00},
 
@@ -563,9 +563,9 @@ static struct msm_camera_i2c_reg_conf imx175_5_3_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x0C},     
+	    {0x33D4, 0x0C},
 	    {0x33D5, 0xD0},
-	    {0x33D6, 0x07},     
+	    {0x33D6, 0x07},
 	    {0x33D7, 0xB0},
 
 	    {0x4100, 0x06},
@@ -581,7 +581,7 @@ static struct msm_camera_i2c_reg_conf imx175_video_60fps_settings[] = {
 };
 
 static struct msm_camera_i2c_reg_conf imx175_video_24fps_5_3_settings[] = {
-		
+
 	    {0x41C0, 0x01},
 	    {0x0100, 0x00},
 	    {0x030E, 0x01},
@@ -595,21 +595,21 @@ static struct msm_camera_i2c_reg_conf imx175_video_24fps_5_3_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x07},  
+	    {0x0340, 0x07},
 	    {0x0341, 0x8E},
-	    {0x0342, 0x0D},      
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00},  
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x00}, 
+	    {0x0346, 0x00},
 	    {0x0347, 0xF8},
-	    {0x0348, 0x0C},  
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08},  
+	    {0x034A, 0x08},
 	    {0x034B, 0xA7},
-	    {0x034C, 0x06},    
+	    {0x034C, 0x06},
 	    {0x034D, 0x68},
-	    {0x034E, 0x03},   
+	    {0x034E, 0x03},
 	    {0x034F, 0xD8},
 	    {0x0390, 0x01},
 
@@ -644,9 +644,9 @@ static struct msm_camera_i2c_reg_conf imx175_video_24fps_5_3_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x06},     
+	    {0x33D4, 0x06},
 	    {0x33D5, 0x68},
-	    {0x33D6, 0x03},     
+	    {0x33D6, 0x03},
 	    {0x33D7, 0xD8},
 
 	    {0x4100, 0x06},
@@ -718,9 +718,9 @@ static struct msm_camera_i2c_reg_conf imx175_video_16_9_settings[] = {
 		{0x3376, 0xBF},
 		{0x3377, 0x3F},
 		{0x33C8, 0x00},
-		{0x33D4, 0x06},	 
+		{0x33D4, 0x06},
 		{0x33D5, 0x68},
-		{0x33D6, 0x03},	 
+		{0x33D6, 0x03},
 		{0x33D7, 0x98},
 		{0x4100, 0x06},
 		{0x4104, 0x32},
@@ -733,7 +733,7 @@ static struct msm_camera_i2c_reg_conf imx175_video_16_9_settings[] = {
 };
 
 static struct msm_camera_i2c_reg_conf imx175_video_5_3_settings[] = {
-	
+
 	    {0x41C0, 0x01},
 	    {0x0100, 0x00},
 	    {0x030E, 0x01},
@@ -747,21 +747,21 @@ static struct msm_camera_i2c_reg_conf imx175_video_5_3_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x06},  
+	    {0x0340, 0x06},
 	    {0x0341, 0x07},
-	    {0x0342, 0x0D},      
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00},  
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x00}, 
+	    {0x0346, 0x00},
 	    {0x0347, 0xF8},
-	    {0x0348, 0x0C},  
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08},  
+	    {0x034A, 0x08},
 	    {0x034B, 0xA7},
-	    {0x034C, 0x06},    
+	    {0x034C, 0x06},
 	    {0x034D, 0x68},
-	    {0x034E, 0x03},   
+	    {0x034E, 0x03},
 	    {0x034F, 0xD8},
 	    {0x0390, 0x01},
 
@@ -796,9 +796,9 @@ static struct msm_camera_i2c_reg_conf imx175_video_5_3_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x06},     
+	    {0x33D4, 0x06},
 	    {0x33D5, 0x68},
-	    {0x33D6, 0x03},     
+	    {0x33D6, 0x03},
 	    {0x33D7, 0xD8},
 
 	    {0x4100, 0x06},
@@ -814,7 +814,7 @@ static struct msm_camera_i2c_reg_conf imx175_video_5_3_settings[] = {
 
 static struct msm_camera_i2c_reg_conf imx175_video_24fps_16_9_settings[] = {
 
-		
+
 	    {0x41C0, 0x01},
 	    {0x0100, 0x00},
 	    {0x030E, 0x01},
@@ -828,21 +828,21 @@ static struct msm_camera_i2c_reg_conf imx175_video_24fps_16_9_settings[] = {
 
 	    {0x030C, 0x00},
 	    {0x030D, 0xC7},
-	    {0x0340, 0x03},  
+	    {0x0340, 0x03},
 	    {0x0341, 0xC6},
-	    {0x0342, 0x0D},      
+	    {0x0342, 0x0D},
 	    {0x0343, 0x70},
-	    {0x0344, 0x00},  
+	    {0x0344, 0x00},
 	    {0x0345, 0x00},
-	    {0x0346, 0x01}, 
+	    {0x0346, 0x01},
 	    {0x0347, 0x38},
-	    {0x0348, 0x0C},  
+	    {0x0348, 0x0C},
 	    {0x0349, 0xCF},
-	    {0x034A, 0x08},  
+	    {0x034A, 0x08},
 	    {0x034B, 0x67},
-	    {0x034C, 0x06},    
+	    {0x034C, 0x06},
 	    {0x034D, 0x68},
-	    {0x034E, 0x03},   
+	    {0x034E, 0x03},
 	    {0x034F, 0x98},
 	    {0x0390, 0x01},
 
@@ -877,9 +877,9 @@ static struct msm_camera_i2c_reg_conf imx175_video_24fps_16_9_settings[] = {
 	    {0x3376, 0xBF},
 	    {0x3377, 0x3F},
 	    {0x33C8, 0x00},
-	    {0x33D4, 0x06},     
+	    {0x33D4, 0x06},
 	    {0x33D5, 0x68},
-	    {0x33D6, 0x03},     
+	    {0x33D6, 0x03},
 	    {0x33D7, 0x98},
 
 	    {0x4100, 0x06},
@@ -901,7 +901,7 @@ static struct v4l2_subdev_info imx175_subdev_info[] = {
 	.fmt    = 1,
 	.order    = 0,
 	},
-	
+
 };
 
 static struct msm_camera_i2c_conf_array imx175_init_conf[] = {
@@ -943,13 +943,13 @@ static struct msm_camera_i2c_conf_array imx175_confs[] = {
 };
 
 static struct msm_sensor_output_info_t imx175_dimensions[] = {
-	
+
 	{
-		.x_output = 0xCD0,	
-		.y_output = 0x9A0,	
+		.x_output = 0xCD0,
+		.y_output = 0x9A0,
 		.line_length_pclk = 0xD70,
 #ifdef CONFIG_RAWCHIP
-		.frame_length_lines = 0x9C4,	
+		.frame_length_lines = 0x9C4,
 #else
 		.frame_length_lines = 0x9B0,
 #endif
@@ -972,7 +972,7 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x4D0,
@@ -995,12 +995,12 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.x_addr_end = 0xCCF,
 		.y_addr_end = 0x99F,
 		.x_even_inc = 1,
-		.x_odd_inc = 3,	
+		.x_odd_inc = 3,
 		.y_even_inc = 1,
-		.y_odd_inc = 3,	
+		.y_odd_inc = 3,
 		.binning_rawchip = 0x22,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x3D8,
@@ -1029,12 +1029,12 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.binning_rawchip = 0x22,
 	},
 	{
-	
+
 		.x_output = 0x668,
 		.y_output = 0x398,
 		.line_length_pclk = 0xD70,
 #ifdef CONFIG_RAWCHIP
-		.frame_length_lines = 0x3C6,	
+		.frame_length_lines = 0x3C6,
 #else
 		.frame_length_lines = 0x600,
 #endif
@@ -1057,8 +1057,8 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.binning_rawchip = 0x22,
 	},
 	{
-		.x_output = 0xCD0,	
-		.y_output = 0x736,	
+		.x_output = 0xCD0,
+		.y_output = 0x736,
 		.line_length_pclk = 0xD70,
 #ifdef CONFIG_RAWCHIP
 		.frame_length_lines = 0x75A,
@@ -1123,8 +1123,8 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.binning_rawchip = 0x11,
 	},
 	{
-		.x_output = 0xCD0,	
-		.y_output = 0x7B0,	
+		.x_output = 0xCD0,
+		.y_output = 0x7B0,
 		.line_length_pclk = 0xD70,
 #ifdef CONFIG_RAWCHIP
 		.frame_length_lines = 0x7D0,
@@ -1144,7 +1144,7 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.y_odd_inc = 1,
 		.binning_rawchip = 0x11,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x398,
@@ -1172,7 +1172,7 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.y_odd_inc = 3,
 		.binning_rawchip = 0x22,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x4D0,
@@ -1200,13 +1200,13 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.y_odd_inc = 3,
 		.binning_rawchip = 0x22,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x3D8,
 		.line_length_pclk = 0xD70,
 #ifdef CONFIG_RAWCHIP
-		.frame_length_lines = 0x78E,	
+		.frame_length_lines = 0x78E,
 #else
 		.frame_length_lines = 0x600,
 #endif
@@ -1228,7 +1228,7 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.y_odd_inc = 3,
 		.binning_rawchip = 0x22,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x398,
@@ -1256,7 +1256,7 @@ static struct msm_sensor_output_info_t imx175_dimensions[] = {
 		.y_odd_inc = 3,
 		.binning_rawchip = 0x22,
 	},
-	
+
 	{
 		.x_output = 0x668,
 		.y_output = 0x3D8,
@@ -1355,8 +1355,8 @@ static struct msm_sensor_exp_gain_info_t imx175_exp_gain_info = {
 	.coarse_int_time_addr = 0x202,
 	.global_gain_addr = 0x204,
 	.vert_offset = 4,
-	.min_vert = 4,  
-	.sensor_max_linecount = 65531,  
+	.min_vert = 4,
+	.sensor_max_linecount = 65531,
 };
 
 static int imx175_read_fuseid(struct sensor_cfg_data *cdata,
@@ -1371,7 +1371,7 @@ static int imx175_read_fuseid(struct sensor_cfg_data *cdata,
 	if (rc < 0)
 		pr_err("%s: msm_camera_i2c_write 0x3400 failed\n", __func__);
 
-	
+
 	rc = msm_camera_i2c_write(s_ctrl->sensor_i2c_client, 0x3402, 0x01, MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0)
 		pr_err("%s: msm_camera_i2c_write 0x3402 failed\n", __func__);
@@ -1420,7 +1420,7 @@ static int imx175_mirror_flip_setting(void)
 
 	pr_info("[CAM] %s\n", __func__);
 
-	
+
 	if (imx175_s_ctrl.mirror_flip == CAMERA_SENSOR_MIRROR_FLIP)
 		value = IMX175_READ_MIRROR_FLIP;
 	else if (imx175_s_ctrl.mirror_flip == CAMERA_SENSOR_MIRROR)
@@ -1459,10 +1459,10 @@ static int imx175_sensor_open_init(const struct msm_camera_sensor_info *data)
 	int rc = 0;
 
 	pr_info("[CAM] %s\n", __func__);
-	
+
 	if (data->sensor_platform_info)
 		imx175_s_ctrl.mirror_flip = data->sensor_platform_info->mirror_flip;
-	
+
 
 	return rc;
 }
@@ -1681,7 +1681,7 @@ static struct v4l2_subdev_ops imx175_subdev_ops = {
 };
 
 int32_t imx175_write_exp_gain1_ex(struct msm_sensor_ctrl_t *s_ctrl,
-		int mode, uint16_t gain, uint16_t dig_gain, uint32_t line) 
+		int mode, uint16_t gain, uint16_t dig_gain, uint32_t line)
 {
 	uint32_t fl_lines;
 	uint8_t offset;
@@ -1747,9 +1747,9 @@ static struct msm_sensor_fn_t imx175_func_tbl = {
 	.sensor_set_fps = msm_sensor_set_fps,
 	.sensor_write_exp_gain = msm_sensor_write_exp_gain1,
 	.sensor_write_exp_gain_ex = imx175_write_exp_gain1_ex,
-	
+
 	.sensor_set_dig_gain = imx175_set_dig_gain,
-	
+
 	.sensor_write_snapshot_exp_gain = msm_sensor_write_exp_gain1,
 	.sensor_write_snapshot_exp_gain_ex = imx175_write_exp_gain1_ex,
 #if 0

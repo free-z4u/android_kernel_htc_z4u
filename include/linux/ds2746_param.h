@@ -46,7 +46,7 @@ struct protect_flags_type{
 		BOOL is_charging_enable_available;
 		BOOL is_charging_high_current_avaialble;
 		BOOL is_charging_indicator_available;
-		BOOL is_charging_reverse_protect; 
+		BOOL is_charging_reverse_protect;
 		BOOL is_battery_dead;
 		BOOL is_temperature_fault;
 #if 0
@@ -57,9 +57,9 @@ struct protect_flags_type{
 };
 
 
-#define DS2746_STATUS_PORF  (1 << 6)	
-#define DS2746_STATUS_SMOD  (1 << 5)	
-#define DS2746_STATUS_NBEN  (1 << 4)	
+#define DS2746_STATUS_PORF  (1 << 6)
+#define DS2746_STATUS_SMOD  (1 << 5)
+#define DS2746_STATUS_NBEN  (1 << 4)
 #define DS2746_STATUS_AIN0  (1 << 0)
 #define DS2746_STATUS_AIN1  (1 << 1)
 
@@ -69,4 +69,4 @@ BOOL battery_param_update(struct battery_type *battery, struct protect_flags_typ
 DWORD BAHW_MyGetMSecs(void);
 void battery_param_init(struct battery_type *battery);
 
-#endif 
+#endif

@@ -26,7 +26,7 @@ void __init msm_fb_add_devices(void);
 #define MSM_FB_BASE             0x2FB00000
 #define MSM_FB_SIZE             0x00500000
 #define MSM_PMEM_MDP_SIZE       0x2F00000
-#define MSM_PMEM_ADSP_SIZE      0x3300000 
+#define MSM_PMEM_ADSP_SIZE      0x3300000
 #define MSM_PMEM_ADSP2_SIZE     0x2C0000
 #define PMEM_KERNEL_EBI1_SIZE	0x3A000
 #define MSM_PMEM_AUDIO_SIZE		0x1F4000

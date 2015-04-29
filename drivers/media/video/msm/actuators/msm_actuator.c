@@ -27,7 +27,7 @@ int32_t msm_actuator_write_focus(
 	damping_code_step = damping_params->damping_step;
 	wait_time = damping_params->damping_delay;
 
-	
+
 	for (next_lens_pos =
 		curr_lens_pos + (sign_direction * damping_code_step);
 		(sign_direction * next_lens_pos) <=
@@ -72,7 +72,7 @@ int32_t msm_actuator_move_focus(
 		dir,
 		num_steps);
 
-	
+
 	if (dir == MOVE_NEAR)
 		sign_dir = 1;
 	else if (dir == MOVE_FAR)
@@ -83,7 +83,7 @@ int32_t msm_actuator_move_focus(
 		return rc;
 	}
 
-	
+
 	dest_step_pos = a_ctrl->curr_step_pos +
 		(sign_dir * num_steps);
 
@@ -95,7 +95,7 @@ int32_t msm_actuator_move_focus(
 	if (dest_step_pos == a_ctrl->curr_step_pos)
 		return rc;
 
-	
+
 	scenario_size = a_ctrl->scenario_size[dir];
 	for (index = 0; index < scenario_size; index++) {
 		if (num_steps <= a_ctrl->ringing_scenario[dir][index]) {
@@ -163,7 +163,7 @@ int32_t msm_actuator_init_table(
 	if (a_ctrl->func_tbl.actuator_set_params)
 		a_ctrl->func_tbl.actuator_set_params(a_ctrl);
 
-	
+
 	a_ctrl->step_position_table =
 		kmalloc(sizeof(uint16_t) * (a_ctrl->set_info.total_steps + 1),
 			GFP_KERNEL);
@@ -225,14 +225,14 @@ int32_t msm_actuator_af_power_down(struct msm_actuator_ctrl_t *a_ctrl)
 		LINFO("%s after msm_actuator_set_default_focus\n", __func__);
 	}
 	kfree(a_ctrl->step_position_table);
-	a_ctrl->step_position_table=NULL; 
+	a_ctrl->step_position_table=NULL;
 	return rc;
 }
 
 int32_t msm_actuator_config(
 	struct msm_actuator_ctrl_t *a_ctrl,
 	struct msm_actuator_info *board_info,
-	void __user *argp) 
+	void __user *argp)
 {
 	struct msm_actuator_cfg_data cdata;
 	int32_t rc = 0;
@@ -365,7 +365,7 @@ int32_t msm_actuator_config(
 			LINFO("%s ois is not supported\n", __func__);
 		}
 		break;
-	
+
     case CFG_SET_VCM_CALIBRATION:
         if (a_ctrl->actuator_ext_ctrl.is_cal_supported) {
             if (a_ctrl->func_tbl.actuator_do_cal) {
@@ -388,7 +388,7 @@ int32_t msm_actuator_config(
             LINFO("%s cal is not supported\n", __func__);
         }
         break;
-	
+
 	default:
 		break;
 	}
@@ -420,7 +420,7 @@ int32_t msm_actuator_i2c_probe(
 		act_ctrl_t->i2c_client.client->addr =
 			act_ctrl_t->i2c_addr;
 
-	
+
 	LINFO("%s succeeded\n", __func__);
 	return rc;
 
@@ -437,13 +437,13 @@ int32_t msm_actuator_create_subdevice(struct msm_actuator_ctrl_t *a_ctrl,
 
 	LINFO("%s called\n", __func__);
 
-	
+
 	a_ctrl->sdev = sdev;
 
-	
+
 	snprintf(sdev->name, sizeof(sdev->name), "%s", board_info->type);
 
-	
+
 	v4l2_i2c_subdev_init(sdev,
 		a_ctrl->i2c_client.client,
 		a_ctrl->act_v4l2_subdev_ops);

@@ -84,6 +84,6 @@ typedef UINT32 PHKEY;
 
 #define LOBYTE(w)           ((BYTE)(w))
 #define HIBYTE(w)           ((BYTE)(((WORD)(w) >> 8) & 0xFF))
-#define CEILING(n, precision)   ((n+precision-1)/precision)  
+#define CEILING(n, precision)   ((n+precision-1)/precision)
 
 #endif

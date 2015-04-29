@@ -51,8 +51,8 @@
 
 #define L2CAP_CONN_TIMEOUT	(40000) /* 40 seconds */
 #define L2CAP_INFO_TIMEOUT	(4000)  /*  4 seconds */
-#define L2CAP_MOVE_TIMEOUT		(2*HZ)  
-#define L2CAP_MOVE_ERTX_TIMEOUT		(60*HZ) 
+#define L2CAP_MOVE_TIMEOUT		(2*HZ)
+#define L2CAP_MOVE_ERTX_TIMEOUT		(60*HZ)
 
 struct sockaddr_l2 {
 	sa_family_t	l2_family;
@@ -128,7 +128,7 @@ struct l2cap_conninfo {
 #define L2CAP_CTRL_FINAL             0x0080
 #define L2CAP_CTRL_POLL              0x0010
 #define L2CAP_CTRL_SUPERVISE         0x000C
-#define L2CAP_CTRL_FRAME_TYPE        0x0001 
+#define L2CAP_CTRL_FRAME_TYPE        0x0001
 
 #define L2CAP_CTRL_TXSEQ_SHIFT      1
 #define L2CAP_CTRL_SUPERVISE_SHIFT  2
@@ -143,7 +143,7 @@ struct l2cap_conninfo {
 #define L2CAP_EXT_CTRL_FINAL         0x00000002
 #define L2CAP_EXT_CTRL_POLL          0x00040000
 #define L2CAP_EXT_CTRL_SUPERVISE     0x00030000
-#define L2CAP_EXT_CTRL_FRAME_TYPE    0x00000001 
+#define L2CAP_EXT_CTRL_FRAME_TYPE    0x00000001
 
 #define L2CAP_EXT_CTRL_FINAL_SHIFT      1
 #define L2CAP_EXT_CTRL_REQSEQ_SHIFT     2

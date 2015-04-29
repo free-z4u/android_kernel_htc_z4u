@@ -424,7 +424,7 @@ static void gpio_sdc1_config(void)
 		gpio_sdc1_hw_det = 94;
 	else if (machine_is_z4u())
 		gpio_sdc1_hw_det = 27;
-	else if (machine_is_protou() || machine_is_protodcg() 
+	else if (machine_is_protou() || machine_is_protodcg()
 					|| machine_is_protodug() || machine_is_magnids())
 		gpio_sdc1_hw_det = 38;
 }
@@ -441,7 +441,7 @@ static int msm_sdcc_setup_gpio(int dev_id, unsigned int enable)
 		curr = &sdcc_cfg_data_cp3dug[dev_id - 1];
 	else if (machine_is_cp3dcg())
 		curr = &sdcc_cfg_data_cp3dcg[dev_id - 1];
-	else if (machine_is_protou() || machine_is_protodug() 
+	else if (machine_is_protou() || machine_is_protodug()
 					|| machine_is_protodcg())
 		curr = &sdcc_cfg_data_protou[dev_id - 1];
 	else if (machine_is_magnids())
@@ -521,7 +521,7 @@ out:
 static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 {
 	int status;
-	if (machine_is_protou() || machine_is_protodcg() 
+	if (machine_is_protou() || machine_is_protodcg()
 				|| machine_is_protodug() || machine_is_magnids()) {
 		status = gpio_tlmm_config(GPIO_CFG(gpio_sdc1_hw_det, 2, GPIO_CFG_INPUT,
 					GPIO_CFG_PULL_UP, GPIO_CFG_8MA),
@@ -557,14 +557,14 @@ static unsigned int msm7627a_sdcc_slot_status(struct device *dev)
 					machine_is_msm8625_evb()  ||
 					machine_is_msm7627a_qrd3() ||
 					machine_is_msm8625_qrd7() ||
-					machine_is_protodcg() || 
+					machine_is_protodcg() ||
 					machine_is_magnids() ||
-					machine_is_protodug() || 
+					machine_is_protodug() ||
 					machine_is_protou() ||
-					machine_is_cp3dtg() || 
-					machine_is_cp3dcg() || 
-					machine_is_cp3dug() || 
-					machine_is_cp3u() || 
+					machine_is_cp3dtg() ||
+					machine_is_cp3dcg() ||
+					machine_is_cp3dug() ||
+					machine_is_cp3u() ||
 					machine_is_z4u() ||
 					machine_is_magnids())
 				status = !gpio_get_value(gpio_sdc1_hw_det);
@@ -693,7 +693,7 @@ static struct mmc_platform_data sdc2_plat_data_cp3_z4u = {
 	 * they can operate at 1.8V supply.
 	 */
 	.ocr_mask       = MMC_VDD_28_29 | MMC_VDD_165_195,
-	
+
 	.slot_type	= &atheros_wifislot_type_htc,
 	.mmc_bus_width  = MMC_CAP_4_BIT_DATA,
 	.sdiowakeup_irq = MSM_GPIO_TO_INT(66),
@@ -724,7 +724,7 @@ static struct mmc_platform_data sdc3_plat_data = {
 static unsigned int msm7627a_emmcslot_type_z4u = MMC_TYPE_MMC;
 static struct mmc_platform_data sdc3_plat_data_z4u = {
 	.ocr_mask       = MMC_VDD_28_29,
-	
+
 #ifdef CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT
 	.mmc_bus_width  = MMC_CAP_8_BIT_DATA,
 #else
@@ -816,24 +816,24 @@ void __init msm7627a_init_mmc(void)
 	/* 8x25 EVT do not use hw detector */
 	if (!((machine_is_msm8625_evt() || machine_is_qrd_skud_prime() ||
 				machine_is_msm8625q_evbd() || machine_is_msm8625q_skud()))) {
-		if (machine_is_protodcg() || machine_is_magnids() || 
+		if (machine_is_protodcg() || machine_is_magnids() ||
 			machine_is_protodug() || machine_is_protou() ||
-			machine_is_cp3dtg() || machine_is_cp3dcg() || 
-			machine_is_cp3dug() || machine_is_cp3u() || 
+			machine_is_cp3dtg() || machine_is_cp3dcg() ||
+			machine_is_cp3dug() || machine_is_cp3u() ||
 			machine_is_z4u())
 				sdc1_plat_data_htc.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
 			else
 				sdc1_plat_data.status_irq = MSM_GPIO_TO_INT(gpio_sdc1_hw_det);
 	}
-	
+
 	if (machine_is_msm8625_evt() || machine_is_qrd_skud_prime() ||
 				machine_is_msm8625q_evbd() || machine_is_msm8625q_skud())
 		sdc1_plat_data.status = NULL;
-		
-	if (machine_is_protodcg() || machine_is_magnids() || 
+
+	if (machine_is_protodcg() || machine_is_magnids() ||
 			machine_is_protodug() || machine_is_protou() ||
-			machine_is_cp3dtg() || machine_is_cp3dcg() || 
-			machine_is_cp3dug() || machine_is_cp3u() || 
+			machine_is_cp3dtg() || machine_is_cp3dcg() ||
+			machine_is_cp3dug() || machine_is_cp3u() ||
 			machine_is_z4u() || machine_is_magnids())
 		msm_add_sdcc(1, &sdc1_plat_data_htc);
 	else
@@ -843,12 +843,12 @@ void __init msm7627a_init_mmc(void)
 #ifdef CONFIG_MMC_MSM_SDC2_SUPPORT
 	if (mmc_regulator_init(2, "smps3", 1800000))
 		return;
-	if (machine_is_protodcg() || machine_is_magnids() || 
+	if (machine_is_protodcg() || machine_is_magnids() ||
 			machine_is_protodug() || machine_is_protou())
 		msm_add_sdcc(2, &bcm4330_wifi_data); /* BRCM WIFI */
-	else if (machine_is_cp3dtg() || machine_is_cp3dcg() || 
-					machine_is_cp3dug() || 
-					machine_is_cp3u() || 
+	else if (machine_is_cp3dtg() || machine_is_cp3dcg() ||
+					machine_is_cp3dug() ||
+					machine_is_cp3u() ||
 					machine_is_z4u())
 		msm_add_sdcc(2, &sdc2_plat_data_cp3_z4u);
 	else
@@ -859,7 +859,7 @@ void __init msm7627a_init_mmc(void)
 		&& !defined(CONFIG_MMC_MSM_SDC3_8_BIT_SUPPORT))
 	/* There is no SDC4 for QRD3/7 based devices */
 	if (!(machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7() ||
-			machine_is_cp3dtg() || machine_is_cp3dcg() || 
+			machine_is_cp3dtg() || machine_is_cp3dcg() ||
 			machine_is_cp3dug() || machine_is_cp3u())) {
 		if (mmc_regulator_init(4, "smps3", 1800000))
 			return;

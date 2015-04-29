@@ -138,26 +138,26 @@ static void __soft_restart(void *addr)
 {
 	phys_reset_t phys_reset;
 
-	
+
 	setup_mm_for_reboot();
 
-	
+
 	flush_cache_all();
 
-	
+
 	cpu_proc_fin();
 
-	
+
 	flush_cache_all();
 
-	
+
 	outer_disable();
 
-	
+
 	phys_reset = (phys_reset_t)(unsigned long)virt_to_phys(cpu_reset);
 	phys_reset((unsigned long)addr);
 
-	
+
 	BUG();
 }
 
@@ -165,21 +165,21 @@ void soft_restart(unsigned long addr)
 {
 	u64 *stack = soft_restart_stack + ARRAY_SIZE(soft_restart_stack);
 
-	
+
 	local_irq_disable();
 	local_fiq_disable();
 
-	
+
 	if (num_online_cpus() == 1)
 		outer_disable();
 
-	
+
 	call_with_stack(__soft_restart, (void *)addr, (void *)stack);
 
-	
+
 	BUG();
 }
-#if 0 
+#if 0
 static void null_restart(char mode, const char *cmd)
 {
 }
@@ -188,22 +188,22 @@ void arm_machine_restart(char mode, const char *cmd)
 {
 	arm_machine_flush_console();
 
-	
+
 	local_irq_disable();
 	local_fiq_disable();
 
 	setup_mm_for_reboot();
 
-	
+
 	flush_cache_all();
 
-	
+
 	cpu_proc_fin();
 
-	
+
 	flush_cache_all();
 
-	
+
 	outer_disable();
 
 	arch_reset(mode, cmd);

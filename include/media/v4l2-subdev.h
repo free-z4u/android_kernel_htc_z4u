@@ -249,36 +249,36 @@ struct v4l2_subdev_sensor_ops {
 
 
 enum v4l2_subdev_ir_mode {
-	V4L2_SUBDEV_IR_MODE_PULSE_WIDTH, 
+	V4L2_SUBDEV_IR_MODE_PULSE_WIDTH,
 };
 
 struct v4l2_subdev_ir_parameters {
-	
-	unsigned int bytes_per_data_element; 
+
+	unsigned int bytes_per_data_element;
 	enum v4l2_subdev_ir_mode mode;
 
 	bool enable;
 	bool interrupt_enable;
-	bool shutdown; 
+	bool shutdown;
 
-	bool modulation;           
-	u32 max_pulse_width;       
-	unsigned int carrier_freq; 
-	unsigned int duty_cycle;   
-	bool invert_level;	   
+	bool modulation;
+	u32 max_pulse_width;
+	unsigned int carrier_freq;
+	unsigned int duty_cycle;
+	bool invert_level;
 
-	
-	bool invert_carrier_sense; 
 
-	
-	u32 noise_filter_min_width;       
-	unsigned int carrier_range_lower; 
-	unsigned int carrier_range_upper; 
-	u32 resolution;                   
+	bool invert_carrier_sense;
+
+
+	u32 noise_filter_min_width;
+	unsigned int carrier_range_lower;
+	unsigned int carrier_range_upper;
+	u32 resolution;
 };
 
 struct v4l2_subdev_ir_ops {
-	
+
 	int (*rx_read)(struct v4l2_subdev *sd, u8 *buf, size_t count,
 				ssize_t *num);
 
@@ -287,7 +287,7 @@ struct v4l2_subdev_ir_ops {
 	int (*rx_s_parameters)(struct v4l2_subdev *sd,
 				struct v4l2_subdev_ir_parameters *params);
 
-	
+
 	int (*tx_write)(struct v4l2_subdev *sd, u8 *buf, size_t count,
 				ssize_t *num);
 
@@ -350,20 +350,20 @@ struct v4l2_subdev {
 	u32 flags;
 	struct v4l2_device *v4l2_dev;
 	const struct v4l2_subdev_ops *ops;
-	
+
 	const struct v4l2_subdev_internal_ops *internal_ops;
-	
+
 	struct v4l2_ctrl_handler *ctrl_handler;
-	
+
 	char name[V4L2_SUBDEV_NAME_SIZE];
-	
+
 	u32 grp_id;
-	
+
 	void *dev_priv;
 	void *host_priv;
-	
+
 	struct video_device devnode;
-	
+
 	unsigned int nevents;
 };
 

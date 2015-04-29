@@ -63,20 +63,20 @@ enum htc_batt_rt_attr {
 };
 
 struct battery_info_reply {
-	u32 batt_id;		
-	u32 batt_vol;		
-	s32 batt_temp;		
-	s32 batt_current;	
-	u32 level;		
-	u32 charging_source;	
-	u32 charging_enabled;	
-	u32 full_bat;		
-	u32 full_level;		
-	u32 over_vchg;		
-	s32 eval_current;	
-	u32 temp_fault;		
-	u32 overloading_charge; 
-	u32 thermal_temp; 
+	u32 batt_id;
+	u32 batt_vol;
+	s32 batt_temp;
+	s32 batt_current;
+	u32 level;
+	u32 charging_source;
+	u32 charging_enabled;
+	u32 full_bat;
+	u32 full_level;
+	u32 over_vchg;
+	s32 eval_current;
+	u32 temp_fault;
+	u32 overloading_charge;
+	u32 thermal_temp;
 	u32 batt_state;
 };
 
@@ -132,10 +132,10 @@ extern unsigned int batt_get_status(enum power_supply_property psp);
 #if (defined(CONFIG_BATTERY_DS2746) || defined(CONFIG_BATTERY_MAX17050))
 int htc_battery_update_change(int force_update);
 #if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_PROTOU) || defined(CONFIG_MACH_PROTODUG) || defined(CONFIG_MACH_PROTODCG) || defined(CONFIG_MACH_MAGNIDS) || defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_CP3DTG) || defined(CONFIG_MACH_CP3DCG) || defined(CONFIG_MACH_CP3U) || defined(CONFIG_MACH_Z4DUG) || defined(CONFIG_MACH_Z4DCG) || defined(CONFIG_MACH_Z4U))
-extern int get_batt_id(void); 
+extern int get_batt_id(void);
 extern void set_smem_chg_avalible(int chg_avalible);
 #endif
-extern int get_cable_type(void); 
+extern int get_cable_type(void);
 #endif
 #ifdef CONFIG_THERMAL_TEMPERATURE_READ
 extern int htc_get_thermal_adc_level(uint32_t *buffer);

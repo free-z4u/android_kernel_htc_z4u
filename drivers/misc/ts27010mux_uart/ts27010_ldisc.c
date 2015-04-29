@@ -20,8 +20,8 @@
 struct ts27010_ldisc_data {
 	struct ts27010_ringbuf		*rbuf;
 	struct delayed_work		recv_work;
-	spinlock_t			recv_lock; 
-	struct mutex			send_lock; 
+	spinlock_t			recv_lock;
+	struct mutex			send_lock;
 	atomic_t 			ref_count;
 };
 
@@ -64,7 +64,7 @@ static void ts27010_ldisc_recv_worker(struct work_struct *work)
 			msecs_to_jiffies(20));
 		return;
 	}
-	
+
 	ts27010_mux_uart_recv(s_ld->rbuf);
 
 	spin_lock_irqsave(&s_ld->recv_lock, flags);
@@ -103,7 +103,7 @@ int ts27010_ldisc_uart_send(struct tty_struct *tty, u8 *data, int len)
 	WARN_ON(tty->disc_data != s_ld);
 	WARN_ON(tty != ts27010mux_uart_tty);
 
-	
+
 #ifdef TS27010_NET
 	{
 		int i = 0;
@@ -120,13 +120,13 @@ int ts27010_ldisc_uart_send(struct tty_struct *tty, u8 *data, int len)
 		}
 	}
 #endif
-	
+
 
 	mutex_lock(&s_ld->send_lock);
 	while (sent < len && ts27010mux_uart_tty) {
-		
+
 		mux_print(MSG_DEBUG, " %d: tx %d byte to BP\n", ++i2, len - sent);
-		
+
 		n = tty_write(tty, data + sent, len - sent);
 		if (n == 0) {
 			mux_print(MSG_WARNING, "write uart return 0, there may"
@@ -155,7 +155,7 @@ int ts27010_ldisc_uart_send(struct tty_struct *tty, u8 *data, int len)
 		mux_print(MSG_ERROR, "sent = %d\n", sent);
 		mux_uart_hexdump(MSG_ERROR, "send frame failed",
 			__func__, __LINE__, data, len);
-		
+
 	}
 #ifdef PROC_DEBUG_MUX_STAT
 	if (g_nStatUARTDrvIO)
@@ -169,10 +169,10 @@ int ts27010_ldisc_uart_send(struct tty_struct *tty, u8 *data, int len)
 			sent, data[SEQUENCE_OFFSET]);
 #else
 		mux_print(MSG_INFO, "tx %d to BP\n", sent);
-#endif 
+#endif
 	else
 		mux_print(MSG_DEBUG, "tx %d to BP\n", sent);
-#endif 
+#endif
 	FUNC_EXIT();
 	return sent;
 }
@@ -199,7 +199,7 @@ static int ts27010_ldisc_open(struct tty_struct *tty)
 			(unsigned int)(tty ? tty->driver : NULL));
 		return -ENODEV;
 	}
-	
+
 
 	err = ts27010_mux_uart_mux_open();
 	if (err)
@@ -207,7 +207,7 @@ static int ts27010_ldisc_open(struct tty_struct *tty)
 	tty->disc_data = s_ld;
 	atomic_inc(&s_ld->ref_count);
 
-	
+
 	ts27010mux_uart_tty = tty;
 
 	FUNC_EXIT();
@@ -241,8 +241,8 @@ static void ts27010_ldisc_close(struct tty_struct *tty)
 			tty->driver->driver_name, tty->driver->name);
 	}
 
-	
-	
+
+
 	ts27010mux_uart_tty = NULL;
 	atomic_set(&s_ld->ref_count, 0);
 
@@ -251,14 +251,14 @@ static void ts27010_ldisc_close(struct tty_struct *tty)
 		current->comm, current->pid);
 
 	tty->disc_data = NULL;
-	
+
 	FUNC_EXIT();
 }
 
 static int ts27010_ldisc_hangup(struct tty_struct *tty)
 {
 	FUNC_ENTER();
-	
+
 	ts27010_ldisc_close(tty);
 	FUNC_EXIT();
 	return 0;
@@ -286,7 +286,7 @@ static int ts27010_ldisc_ioctl(struct tty_struct *tty, struct file *file,
 
 	switch (cmd) {
 	default:
-		
+
 		err = tty_mode_ioctl(tty, file, cmd, arg);
 	}
 
@@ -313,7 +313,7 @@ void ts27010_ldisc_uart_receive(struct tty_struct *tty,
 	int left;
 	unsigned long flags;
 	FUNC_ENTER();
-	
+
 #ifdef TS27010_NET
 	{
 		int i = 0;
@@ -330,7 +330,7 @@ void ts27010_ldisc_uart_receive(struct tty_struct *tty,
 		}
 	}
 #endif
-	
+
 
 	WARN_ON(count == 0);
 	if (count == 0) {
@@ -353,7 +353,7 @@ void ts27010_ldisc_uart_receive(struct tty_struct *tty,
 	if (g_nStatUARTDrvIO)
 		s_nUARTRecved += count;
 #endif
-	
+
 #ifdef DUMP_FRAME
 	if (g_mux_uart_dump_seq)
 		mux_print(MSG_INFO, "rx %d from BP\n", count);
@@ -371,7 +371,7 @@ void ts27010_ldisc_uart_receive(struct tty_struct *tty,
 	if (left <= MUX_UART_RESERVE_BUFFERSIZE) {
 		mux_print(MSG_WARNING, "MUX start flow control UART\n");
 		s_bFC_UART = 1;
-		
+
 		if (tty && tty->driver && tty->driver->ops
 			&& tty->driver->ops->throttle)
 			tty->driver->ops->throttle(tty);
@@ -383,7 +383,7 @@ void ts27010_ldisc_uart_receive(struct tty_struct *tty,
 			count, n, count - n);
 		mux_uart_hexdump(MSG_WARNING, "dump buf",
 			__func__, __LINE__, data, count);
-		
+
 	}
 
 #ifdef MUX_UART_LOGGER

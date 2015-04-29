@@ -31,7 +31,7 @@
 #ifndef __AIC3254_REG_H__
 #define __AIC3254_REG_H__
 static struct aic3254_cmd CODEC_POWER_OFF[] = {
-	
+
 	{'w', 0x00, 0x01},
 	{'w', 0x09, 0x00},
 	{'w', 0x3B, 0x00},
@@ -82,4 +82,4 @@ static struct aic3254_cmd CODEC_SET_VOLUME_R[] = {
 	{'w', 0x42, 0x00}
 };
 
-#endif 
+#endif

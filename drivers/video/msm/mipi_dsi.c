@@ -85,7 +85,7 @@ static int mipi_dsi_off(struct platform_device *pdev)
 
 	mipi_dsi_clk_cfg(1);
 
-	
+
 	mipi_dsi_cmd_mdp_busy();
 
 	mipi_dsi_op_mode_config(DSI_CMD_MODE);
@@ -110,7 +110,7 @@ static int mipi_dsi_off(struct platform_device *pdev)
 	spin_lock_bh(&dsi_clk_lock);
 	mipi_dsi_clk_disable();
 
-	
+
 	MIPI_OUTP(MIPI_DSI_BASE + 0x0000, 0);
 
 	mipi_dsi_phy_ctrl(0);
@@ -206,7 +206,7 @@ static int mipi_dsi_on(struct platform_device *pdev)
 					vfp - 1) << 16 | (hspw + hbp +
 					width + dummy_xres + hfp - 1));
 		} else {
-			
+
 			MIPI_OUTP(MIPI_DSI_BASE + 0x00ac,
 						mipi_dsi_pdata->dlane_swap);
 
@@ -223,7 +223,7 @@ static int mipi_dsi_on(struct platform_device *pdev)
 		MIPI_OUTP(MIPI_DSI_BASE + 0x30, 0);
 		MIPI_OUTP(MIPI_DSI_BASE + 0x34, (vspw << 16));
 
-	} else {		
+	} else {
 		if (mipi->dst_format == DSI_CMD_DST_FORMAT_RGB888)
 			bpp = 3;
 		else if (mipi->dst_format == DSI_CMD_DST_FORMAT_RGB666)
@@ -231,16 +231,16 @@ static int mipi_dsi_on(struct platform_device *pdev)
 		else if (mipi->dst_format == DSI_CMD_DST_FORMAT_RGB565)
 			bpp = 2;
 		else
-			bpp = 3;	
+			bpp = 3;
 
 		ystride = width * bpp + 1;
 
-		
+
 		data = (ystride << 16) | (mipi->vc << 8) | DTYPE_DCS_LWRITE;
 		MIPI_OUTP(MIPI_DSI_BASE + 0x5c, data);
 		MIPI_OUTP(MIPI_DSI_BASE + 0x54, data);
 
-		
+
 		data = height << 16 | width;
 		MIPI_OUTP(MIPI_DSI_BASE + 0x60, data);
 		MIPI_OUTP(MIPI_DSI_BASE + 0x58, data);

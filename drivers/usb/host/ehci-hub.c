@@ -1150,7 +1150,7 @@ static int ehci_hub_control (
 			if ((temp & PORT_PE) == 0
 					|| (temp & PORT_RESET) != 0)
 				goto error;
-			
+
 			if (!ehci->susp_sof_bug)
 				ehci_writel(ehci, temp | PORT_SUSPEND,
 						status_reg);

@@ -54,7 +54,7 @@
 #include <linux/i2c/cpld.h>
 #endif
 
-#define AUD_DBG(x...) 
+#define AUD_DBG(x...)
 #define AUD_INF(x...) printk(KERN_INFO "[AUD][aic3254] " x)
 #define AUD_ERR(x...) printk(KERN_ERR "[AUD][aic3254 ERR] " x)
 
@@ -97,14 +97,14 @@ static int aic3254_i2c_write(uint8_t *buf, uint8_t num)
 
 	mutex_lock(&aic3254_i2c_mutex);
 
-	
+
 	aic3254_i2c_msg[0].len = num;
 	aic3254_i2c_msg[0].flags = 0;
 	aic3254_i2c_msg[0].buf = buf;
 	ret = i2c_transfer(aic3254_client->adapter, aic3254_i2c_msg, 1);
 	mutex_unlock(&aic3254_i2c_mutex);
 
-	
+
 	if (ret >= 0)
 		return 0;
 	else {
@@ -128,19 +128,19 @@ static int aic3254_i2c_read(uint8_t reg, uint8_t *buf, uint8_t num)
 	uint8_t index;
 
 	mutex_lock(&(aic3254_i2c_mutex));
-	
+
 	aic3254_i2c_msg[0].len = 1;
-	aic3254_i2c_msg[0].flags = 0; 
+	aic3254_i2c_msg[0].flags = 0;
 	index = reg;
 	aic3254_i2c_msg[0].buf = &index;
-	
-	aic3254_i2c_msg[1].flags = I2C_M_RD;  
-	aic3254_i2c_msg[1].len = num;   
+
+	aic3254_i2c_msg[1].flags = I2C_M_RD;
+	aic3254_i2c_msg[1].len = num;
 	aic3254_i2c_msg[1].buf = buf;
 	ret = i2c_transfer(aic3254_client->adapter, aic3254_i2c_msg, 2);
 	mutex_unlock(&(aic3254_i2c_mutex));
 
-	
+
 	if (ret >= 0)
 		return 0;
 	else {
@@ -188,7 +188,7 @@ static ssize_t aic3254_proc_read(struct file *filp,
 					aic3254_dbg_array[aic3254_dbg_array_row][aic3254_dbg_array_col].act,
 					aic3254_dbg_array[aic3254_dbg_array_row][aic3254_dbg_array_col].reg,
 					aic3254_dbg_array[aic3254_dbg_array_row][aic3254_dbg_array_col].reg,
-					aic3254_dbg_array[aic3254_dbg_array_row][aic3254_dbg_array_col].data);	
+					aic3254_dbg_array[aic3254_dbg_array_row][aic3254_dbg_array_col].data);
 		}
 		break;
 	case AUD_DBG_REG_DUMP:
@@ -197,7 +197,7 @@ static ssize_t aic3254_proc_read(struct file *filp,
 			len = sprintf(buf, "Error! Range of aic3254 reg index: 0x00 ~ 0x0xFF.\n");
 		} else {
 			aic3254_i2c_read(aic3254_dbg_reg_index, &aic3254_dbg_reg_val[aic3254_dbg_reg_index], 1);
-			len = sprintf(buf, "register 0x%02x: 0x%02x\n", 
+			len = sprintf(buf, "register 0x%02x: 0x%02x\n",
 					aic3254_dbg_reg_index, aic3254_dbg_reg_val[aic3254_dbg_reg_index]);
 		}
 		break;
@@ -296,7 +296,7 @@ static ssize_t aic3254_proc_write(struct file *filp,
 
 	if ('*' == messages[0]) {
 		aic3254_dbg_mode = AUD_DBG_REG_DUMP;
-		
+
 		memcpy(val, messages+1, len-1);
 		aic3254_dbg_reg_index = (int) simple_strtoul(val, NULL, 16);
 		AUD_DBG("aic3254_proc_write:register # was set = 0x%x\n",
@@ -346,7 +346,7 @@ static ssize_t aic3254_proc_write(struct file *filp,
 		}
 
 	} else if (isdigit(messages[0]) && aic3254_dbg_mode == AUD_DBG_REG_DUMP) {
-		
+
 		buf[0] = aic3254_dbg_reg_index;
 		buf[1] = (uint8_t)(simple_strtoul(messages, NULL, 16) & 0xFF);
 		aic3254_i2c_write(buf, 2);
@@ -380,12 +380,12 @@ static void aic3254_create_proc_file(void)
 static void aic3254_prevent_sleep(void)
 {
 	wake_lock(&aic3254_wakelock);
-	
+
 }
 
 static void aic3254_allow_sleep(void)
 {
-	
+
 	wake_unlock(&aic3254_wakelock);
 }
 
@@ -430,8 +430,8 @@ static int aic3254_config(struct aic3254_cmd *cmds, int size)
 		return -EINVAL;
 	}
 
-	
-	
+
+
 	if (size < 1024) {
 		for (i = 0; i < size; i++) {
 			switch (cmds[i].act) {
@@ -462,7 +462,7 @@ static int aic3254_config(struct aic3254_cmd *cmds, int size)
 			}
 		}
 	} else {
-		
+
 		aic3254_write_table(cmds, size);
 	}
 	return 0;
@@ -470,7 +470,7 @@ static int aic3254_config(struct aic3254_cmd *cmds, int size)
 
 static void aic3254_tx_config(int mode)
 {
-	
+
 	if (aic3254_uplink == NULL) {
 		AUD_ERR("%s: aic3254_uplink is NULL\n", __func__);
 #if 0
@@ -483,7 +483,7 @@ static void aic3254_tx_config(int mode)
 	}
 
 	if (mode != UPLINK_OFF && mode != POWER_OFF) {
-		
+
 		AUD_INF("uplink wakeup len(%d)\n",
 			(aic3254_uplink[UPLINK_WAKEUP][0].data - 1));
 		aic3254_config(
@@ -491,7 +491,7 @@ static void aic3254_tx_config(int mode)
 			aic3254_uplink[UPLINK_WAKEUP][0].data - 1);
 	}
 
-	
+
 	AUD_INF("uplink TX %d len(%d)\n", mode,
 		(aic3254_uplink[mode][0].data - 1));
 	aic3254_config(&aic3254_uplink[mode][1],
@@ -501,7 +501,7 @@ static void aic3254_tx_config(int mode)
 #if 0
 static void aic3254_rx_config(int mode)
 {
-	
+
 	if (aic3254_downlink == NULL) {
 		if (mode == DOWNLINK_OFF)
 			route_rx_enable(mode, 0);
@@ -511,7 +511,7 @@ static void aic3254_rx_config(int mode)
 	}
 
 	if (mode != DOWNLINK_OFF && mode != POWER_OFF) {
-		
+
 		AUD_INF("downlink wakeup len(%d)\n",
 			(aic3254_downlink[DOWNLINK_WAKEUP][0].data-1));
 		aic3254_config(
@@ -519,7 +519,7 @@ static void aic3254_rx_config(int mode)
 			aic3254_downlink[DOWNLINK_WAKEUP][0].data);
 	}
 
-	
+
 	AUD_INF("downlink RX %d len(%d)\n", mode,
 		(aic3254_downlink[mode][0].data-1));
 	aic3254_config(&aic3254_downlink[mode][1],
@@ -566,28 +566,28 @@ static void aic3254_loopback(int mode)
 		return;
 	}
 
-	
+
 	aic3254_config(ctl_ops->lb_dsp_init->data, ctl_ops->lb_dsp_init->len);
 
 	AUD_INF("%s: set AIC3254 in LOOPBACK mode\n", __func__);
 	switch (mode) {
 	case 0:
-		
+
 		aic3254_config(ctl_ops->lb_receiver_imic->data,
 				ctl_ops->lb_receiver_imic->len);
 		break;
 	case 1:
-		
+
 		aic3254_config(ctl_ops->lb_speaker_imic->data,
 				ctl_ops->lb_speaker_imic->len);
 		break;
 	case 2:
-		
+
 		aic3254_config(ctl_ops->lb_headset_emic->data,
 				ctl_ops->lb_headset_emic->len);
 		break;
 	case 13:
-		
+
 		if (ctl_ops->lb_receiver_bmic)
 			aic3254_config(ctl_ops->lb_receiver_bmic->data,
 				ctl_ops->lb_receiver_bmic->len);
@@ -596,7 +596,7 @@ static void aic3254_loopback(int mode)
 		break;
 
 	case 14:
-		
+
 		if (ctl_ops->lb_speaker_bmic)
 			aic3254_config(ctl_ops->lb_speaker_bmic->data,
 				ctl_ops->lb_speaker_bmic->len);
@@ -605,7 +605,7 @@ static void aic3254_loopback(int mode)
 		break;
 
 	case 15:
-		
+
 		if (ctl_ops->lb_headset_bmic)
 			aic3254_config(ctl_ops->lb_headset_bmic->data,
 				ctl_ops->lb_headset_bmic->len);
@@ -623,33 +623,33 @@ int route_rx_enable(int path, int en)
 {
 	AUD_INF("%s: (%d,%d) uses 3254 default setting\n", __func__, path, en);
 	if (en) {
-		
+
 		aic3254_config(CODEC_DOWNLINK_ON,
 				ARRAY_SIZE(CODEC_DOWNLINK_ON));
-		
+
 		switch (path) {
 		case FM_OUT_HEADSET:
-			
+
 			aic3254_config(FM_In_Headphone,
 					ARRAY_SIZE(FM_In_Headphone));
 			aic3254_config(FM_Out_Headphone,
 					ARRAY_SIZE(FM_Out_Headphone));
 			break;
 		case FM_OUT_SPEAKER:
-			
+
 			aic3254_config(FM_In_SPK,
 					ARRAY_SIZE(FM_In_SPK));
 			aic3254_config(FM_Out_SPK,
 					ARRAY_SIZE(FM_Out_SPK));
 			break;
 		default:
-			
+
 			aic3254_config(Downlink_IMIC_Receiver,
 					ARRAY_SIZE(Downlink_IMIC_Receiver));
 			break;
 		}
 	} else {
-		
+
 		aic3254_config(CODEC_DOWNLINK_OFF,
 				ARRAY_SIZE(CODEC_DOWNLINK_OFF));
 	}
@@ -663,15 +663,15 @@ int route_tx_enable(int path, int en)
 {
 	AUD_INF("%s: (%d,%d) uses 3254 default setting\n", __func__, path, en);
 	if (en) {
-		
+
 		aic3254_config(CODEC_UPLINK_ON, ARRAY_SIZE(CODEC_UPLINK_ON));
-		
+
 		switch (path) {
 		case CALL_UPLINK_IMIC_RECEIVER:
 		case CALL_UPLINK_IMIC_HEADSET:
 		case CALL_UPLINK_IMIC_SPEAKER:
 		case VOICERECORD_IMIC:
-			
+
 			aic3254_config(MECHA_Uplink_IMIC,
 					ARRAY_SIZE(MECHA_Uplink_IMIC));
 			break;
@@ -682,7 +682,7 @@ int route_tx_enable(int path, int en)
 			break;
 		}
 	} else {
-		
+
 		aic3254_config(CODEC_UPLINK_OFF, ARRAY_SIZE(CODEC_UPLINK_OFF));
 	}
 
@@ -709,7 +709,7 @@ static int aic3254_set_config(int config_tbl, int idx, int en)
 
 	switch (config_tbl) {
 	case AIC3254_CONFIG_TX:
-		
+
 		AUD_INF("%s: enable tx\n", __func__);
 		if (en) {
 #if 0
@@ -730,7 +730,7 @@ static int aic3254_set_config(int config_tbl, int idx, int en)
 
 #if 0
 	case AIC3254_CONFIG_RX:
-		
+
 		AUD_INF("%s: enable rx\n", __func__);
 		if (en) {
 #if 0
@@ -769,14 +769,14 @@ static int aic3254_set_config(int config_tbl, int idx, int en)
 		if (ctl_ops->rx_amp_enable)
 			ctl_ops->rx_amp_enable(0);
 
-		
+
 		if (aic3254_rx_mode != DOWNLINK_OFF)
 			aic3254_rx_config(DOWNLINK_OFF);
 
-		
+
 		aic3254_config(&aic3254_minidsp[idx][1], len);
 
-		
+
 		if (aic3254_rx_mode != DOWNLINK_OFF)
 			aic3254_rx_config(aic3254_rx_mode);
 		if (aic3254_tx_mode != UPLINK_OFF)
@@ -856,7 +856,7 @@ void aic3254_set_mode(int config, int mode)
 	struct ecodec_aic3254_state *drv = &codec_clk;
 	AUD_INF("%s: try to enable MCLK: mclk enabled = %d\n", __func__, drv->enabled);
 		if (drv->enabled == 0) {
-			
+
 			clk_enable(drv->tx_mclk);
 			AUD_INF("%s: enable MCLK and delay 5ms\n", __func__);
 			drv->enabled = 1;
@@ -866,14 +866,14 @@ void aic3254_set_mode(int config, int mode)
 
 	switch (config) {
 	case AIC3254_CONFIG_TX:
-		
+
 		AUD_INF("%s: AIC3254_CONFIG_TX mode = %d\n",
 			__func__, mode);
 		aic3254_tx_config(mode);
 		aic3254_tx_mode = mode;
 		break;
 	case AIC3254_CONFIG_RX:
-		
+
 		AUD_INF("%s: AIC3254_CONFIG_RX mode = %d\n",
 			__func__, mode);
 		aic3254_rx_config(mode);
@@ -911,7 +911,7 @@ static long aic3254_ioctl(struct file *file, unsigned int cmd,
 
 	int table_num;
 
-	
+
 	AUD_DBG("aic3254 driver: %s -- %s\n", __FILE__ ,__func__);
 	AUD_DBG("%s: cmd %d\n", __func__, cmd);
 
@@ -940,7 +940,7 @@ static long aic3254_ioctl(struct file *file, unsigned int cmd,
 		else
 			table = aic3254_downlink[0];
 
-		
+
 		if (para.row_num > IO_CTL_ROW_MAX
 				|| para.col_num != IO_CTL_COL_MAX) {
 			AUD_ERR("%s: data size mismatch with allocated"
@@ -956,7 +956,7 @@ static long aic3254_ioctl(struct file *file, unsigned int cmd,
 		}
 
 #if 0
-		
+
 		if (cmd == AIC3254_SET_TX_PARAM)
 			aic3254_tx_config(INITIAL);
 #endif
@@ -999,7 +999,7 @@ static long aic3254_ioctl(struct file *file, unsigned int cmd,
 
 		table = aic3254_minidsp[0];
 
-		
+
 		if (para.row_num > MINIDSP_ROW_MAX
 				|| para.col_num != MINIDSP_COL_MAX) {
 			AUD_ERR("%s: data size mismatch with allocated"
@@ -1078,7 +1078,7 @@ static long aic3254_ioctl(struct file *file, unsigned int cmd,
 
 		AUD_INF("========== %s: dump page %d ==========\n",
 				__func__, i);
-		
+
 #if 0
 		if (ctl_ops->rx_amp_enable)
 			ctl_ops->rx_amp_enable(1);
@@ -1200,7 +1200,7 @@ static int aic3254_probe(struct i2c_client *client,
 {
 	uint8_t reg_data = 0xFF;
 	int retry = 0;
-	
+
 	AUD_DBG("aic3254 driver: %s -- %s\n", __FILE__ ,__func__);
 
 	aic3254_client = client;
@@ -1219,7 +1219,7 @@ static int aic3254_probe(struct i2c_client *client,
 
 #endif
 
-	
+
 	aic3254_uplink = init_2d_array(IO_CTL_ROW_MAX, IO_CTL_COL_MAX);
 	aic3254_downlink = init_2d_array(IO_CTL_ROW_MAX, IO_CTL_COL_MAX);
 	aic3254_minidsp = init_2d_array(MINIDSP_ROW_MAX, MINIDSP_COL_MAX);
@@ -1230,13 +1230,13 @@ static int aic3254_probe(struct i2c_client *client,
 
 	do {
 #if defined(CONFIG_CPLD) && (defined(CONFIG_MACH_CP3DUG) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
-		
+
 		cpld_gpio_write(CPLD_EXT_GPIO_AUD_A3254_RST, 0);
-		
-		mdelay(1); 
+
+		mdelay(1);
 		cpld_gpio_write(CPLD_EXT_GPIO_AUD_A3254_RST, 1);
-		
-		mdelay(12); 
+
+		mdelay(12);
 #endif
 
 		aic3254_i2c_read_1byte(0x00, &reg_data);
@@ -1247,7 +1247,7 @@ static int aic3254_probe(struct i2c_client *client,
 		} else {
 			aic3254_existed = false;
 			AUD_ERR("%s: AIC3254 doesn't exist. Retry %d\n", __func__, retry);
-			usleep(10000); 
+			usleep(10000);
 			retry++;
 		}
 	} while (retry < 10);
@@ -1316,7 +1316,7 @@ static struct i2c_driver aic3254_i2c_driver = {
 	.probe = aic3254_probe,
 	.remove = aic3254_remove,
 	.suspend = aic3254_suspend,
-	.resume = aic3254_resume,	
+	.resume = aic3254_resume,
 	.id_table = aic3254_id,
 	.driver = {
 		   .name = AIC3254_I2C_NAME,
@@ -1327,7 +1327,7 @@ static int __init aic3254_init(void)
 {
 	int ret = 0;
 	AUD_DBG("aic3254 driver: %s -- %s\n", __FILE__ ,__func__);
-	
+
 	mutex_init(&(aic3254_mutex));
 	mutex_init(&(aic3254_i2c_mutex));
 
@@ -1363,7 +1363,7 @@ static void __exit aic3254_exit(void)
 	misc_deregister(&aic3254_misc);
 
 	wake_lock_destroy(&(aic3254_wakelock));
-	
+
 
 	return;
 }

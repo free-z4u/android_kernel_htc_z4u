@@ -197,7 +197,7 @@ static struct timed_output_dev pmic_vibrator = {
 	.enable = vibrator_enable,
 };
 
-#if defined(CONFIG_DEBUG_BY_VIBRATOR)	 
+#if defined(CONFIG_DEBUG_BY_VIBRATOR)
 #define DEBUG_VIBRATOR_TIME	(3000)
 int debug_by_vibrator(int mode, const char *name)
 {
@@ -249,9 +249,9 @@ int get_vibrator_enabled(void)
 	return vibe_state;
 }
 EXPORT_SYMBOL_GPL(get_vibrator_enabled);
-#endif	
+#endif
 
-#if defined(CONFIG_DEBUG_BY_VIBRATOR)	
+#if defined(CONFIG_DEBUG_BY_VIBRATOR)
 static ssize_t debug_by_vibrator_store(
 		struct device *dev, struct device_attribute *attr,
 		const char *buf, size_t size)
@@ -292,7 +292,7 @@ static ssize_t debug_by_vibrator_show(struct device *dev,
 }
 
 static DEVICE_ATTR(debug_by_vibrator, 0644, debug_by_vibrator_show, debug_by_vibrator_store);
-#endif	
+#endif
 
 static ssize_t voltage_level_show(struct device *dev, struct device_attribute *attr,
 		char *buf)
@@ -331,13 +331,13 @@ void __init msm_init_pmic_vibrator(int level)
 	rc = device_create_file(pmic_vibrator.dev, &dev_attr_voltage_level);
 	if (rc < 0)
 		VIB_ERR_LOG("%s, create voltage_level fail\n", __func__);
-#if defined(CONFIG_DEBUG_BY_VIBRATOR)	
+#if defined(CONFIG_DEBUG_BY_VIBRATOR)
 
 	rc = device_create_file(pmic_vibrator.dev, &dev_attr_debug_by_vibrator);
 	if (rc < 0) {
 		VIB_ERR_LOG("%s, create debug sysfs fail\n", __func__);
 	}
-#endif	
+#endif
 	VIB_INFO_LOG("%s, init pmic vibrator!",__func__);
 	return;
 }

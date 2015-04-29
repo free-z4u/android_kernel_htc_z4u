@@ -324,10 +324,10 @@ static void qmi_process_unicast_wds_msg(struct qmi_ctxt *ctxt,
 		if (qmi_get_status(msg, &err)) {
 			printk(KERN_ERR
 			       "qmi: wds: network start failed (%04x)\n", err);
-			
+
 			ctxt->state = STATE_OFFLINE;
 			ctxt->state_dirty = 1;
-			
+
 			if (msg->size == 0x000c && (msg->tlv)[10] == 0x0b) {
 				printk(KERN_ERR "qmi: wds: pdp activation collided with CCFC\n");
 				ctxt->state = STATE_OFFLINE;
@@ -410,22 +410,22 @@ static void qmi_process_qmux(struct qmi_ctxt *ctxt,
 {
 	struct qmi_msg msg;
 
-	
+
 	if (sz < 5)
 		return;
 
-	
+
 	if (sz != (buf[0] | (buf[1] << 8)))
 		return;
 
-	
+
 	if (buf[2] != 0x80)
 		return;
 
 	msg.service = buf[3];
 	msg.client_id = buf[4];
 
-	
+
 	if (buf[3] == 0) {
 		if (sz < 7)
 			return;
@@ -440,7 +440,7 @@ static void qmi_process_qmux(struct qmi_ctxt *ctxt,
 		sz -= 8;
 	}
 
-	
+
 	if (sz < 4)
 		return;
 	sz -= 4;
@@ -496,7 +496,7 @@ static void qmi_read_work(struct work_struct *ws)
 			continue;
 		}
 
-		
+
 		if (buf[0] != 0x01)
 			continue;
 
@@ -517,7 +517,7 @@ static void qmi_open_work(struct work_struct *ws)
 static void qmi_notify(void *priv, unsigned event)
 {
 	struct qmi_ctxt *ctxt = priv;
-	
+
 	switch (event) {
 	case SMD_EVENT_DATA: {
 		int sz;
@@ -734,7 +734,7 @@ static ssize_t qmi_write(struct file *fp, const char __user *buf,
 
 	cmd[len] = 0;
 
-	
+
 	if (cmd[len-1] == '\n') {
 		cmd[len-1] = 0;
 		len--;

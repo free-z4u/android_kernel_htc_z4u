@@ -55,10 +55,10 @@ struct pn544_dev	{
 	void (*gpio_init) (void);
 	unsigned int 		ven_enable;
 	int boot_mode;
-	int (*set_ven_gpio)(int); 
-	int (*get_ven_gpio)(void); 
-	int (*set_firm_gpio)(int); 
-	int (*get_firm_gpio)(void); 
+	int (*set_ven_gpio)(int);
+	int (*get_ven_gpio)(void);
+	int (*set_firm_gpio)(int);
+	int (*get_firm_gpio)(void);
 	void (*gpio_deinit) (void);
 	int (*check_nfc_exist)(void);
 };
@@ -163,7 +163,7 @@ static irqreturn_t pn544_dev_irq_handler(int irq, void *dev_id)
 
 	pn544_disable_irq(pn544_dev);
 
-	
+
 	wake_up(&pn544_dev->read_wq);
 
 	return IRQ_HANDLED;
@@ -195,7 +195,7 @@ static void pn544_Disable(void)
 static int pn544_isEn(void)
 {
 	struct pn544_dev *pni = pn_info;
-	
+
 	return pni->ven_value;
 }
 uint8_t read_buffer[MAX_BUFFER_SIZE];
@@ -249,7 +249,7 @@ static ssize_t pn544_dev_read(struct file *filp, char __user *buf,
 	}
 
     wake_lock_timeout(&pni ->io_wake_lock, IO_WAKE_LOCK_TIMEOUT);
-	
+
 	memset(read_buffer, 0, MAX_BUFFER_SIZE);
 	ret = pn544_RxData(read_buffer, count);
 	mutex_unlock(&pni->read_mutex);
@@ -305,7 +305,7 @@ static ssize_t pn544_dev_write(struct file *filp, const char __user *buf,
 
 	DBUF(buffer, count);
 
-	
+
 	ret = pn544_TxData(buffer, count);
 	if (ret < 0) {
 		E("%s : i2c_master_send returned %d\n", __func__, ret);
@@ -340,29 +340,29 @@ static long pn544_dev_ioctl(struct file *filp,
 	switch (cmd) {
 	case PN544_SET_PWR:
 		if (arg == 3) {
-			
+
 			I("%s Software reset\n", __func__);
 			if (pn544_TxData(buffer, 6) < 0)
 				E("%s, SW-Reset TxData error!\n", __func__);
 		} else if (arg == 2) {
 			I("%s power on with firmware\n", __func__);
 			pn544_Enable();
-			pni->set_firm_gpio(1);	
+			pni->set_firm_gpio(1);
 			msleep(50);
 			pn544_Disable();
 			msleep(50);
 			pn544_Enable();
 			msleep(50);
 		} else if (arg == 1) {
-			
+
 			I("%s power on (delay50)\n", __func__);
-			pni->set_firm_gpio(0);	
+			pni->set_firm_gpio(0);
 			pn544_Enable();
 			msleep(50);
 		} else  if (arg == 0) {
-			
+
 			I("%s power off (delay50)\n", __func__);
-			pni->set_firm_gpio(0);	
+			pni->set_firm_gpio(0);
 			pn544_Disable();
 			msleep(50);
 		} else {
@@ -444,7 +444,7 @@ static ssize_t pn_temp1_store(struct device *dev,
 	int ret = -1;
 	struct pn544_dev *pni = pn_info;
 	uint8_t buffer[] = {0x05, 0xF9, 0x04, 0x00, 0xC3, 0xE5};
-	
+
 	uint8_t i2cw[i2cw_size];
 	uint32_t scan_data = 0;
 	int i2cw_len = 0;
@@ -475,18 +475,18 @@ static ssize_t pn_temp1_store(struct device *dev,
 			break;
 	case 4:
 			I("%s: case 4\n", __func__);
-			pni->set_firm_gpio(0);	
+			pni->set_firm_gpio(0);
 			break;
 	case 5:
 			I("%s: case 5\n", __func__);
-			pni->set_firm_gpio(1);	
+			pni->set_firm_gpio(1);
 			break;
 	case 6:
 			memset(i2cw, 0, i2cw_size);
 			sscanf(buf, "%d %d", &code, &i2cw_len);
 			I("%s: case 6 i2cw_len=%u\n", __func__, i2cw_len);
 
-			ptr = strpbrk(buf, " ");	
+			ptr = strpbrk(buf, " ");
 			if (ptr != NULL) {
 				for (i = 0 ; i <= i2cw_len ; i++) {
 					sscanf(ptr, "%x", &scan_data);
@@ -499,7 +499,7 @@ static ssize_t pn_temp1_store(struct device *dev,
 				}
 
 				ret = pn544_TxData(i2cw, i2cw_len+1);
-				
+
 
 				if (ret < 0)
 					E("%s, i2c Tx error!\n", __func__);
@@ -580,7 +580,7 @@ static int pn544_probe(struct i2c_client *client,
 		return  -ENODEV;
 	}
 
-	
+
 	ret = gpio_request(platform_data->irq_gpio, "nfc_int");
 	if (ret) {
 		E("%s : request gpio%d fail\n",
@@ -646,9 +646,9 @@ static int pn544_probe(struct i2c_client *client,
 	pni->ven_enable = !platform_data->ven_isinvert;
 	pni->boot_mode = board_mfg_mode();
 
-	
 
-	
+
+
 	init_waitqueue_head(&pni->read_wq);
 	mutex_init(&pni->read_mutex);
 	spin_lock_init(&pni->irq_enabled_lock);
@@ -698,7 +698,7 @@ static int pn544_probe(struct i2c_client *client,
 		goto err_create_pn_device;
 	}
 
-	
+
 	ret = device_create_file(pni->pn_dev, &dev_attr_pn_temp1);
 	if (ret) {
 		E("%s : device_create_file dev_attr_pn_temp1 failed\n", __func__);
@@ -711,7 +711,7 @@ static int pn544_probe(struct i2c_client *client,
 		goto err_create_pn_file;
 	}
 
-	
+
 	if ( is_alive && (pni->boot_mode != 5) ) {
 		I("%s: disable NFC by default (bootmode = %d)\n", __func__, pni->boot_mode);
 		pn544_Disable();

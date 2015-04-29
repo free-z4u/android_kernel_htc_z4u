@@ -10,14 +10,14 @@
 #include "ts27010_ringbuf.h"
 #include "ts27010_mux.h"
 
-#define NET_TX_TIMEOUT 10 
-#define NET_DATA_MTU 1500 
+#define NET_TX_TIMEOUT 10
+#define NET_DATA_MTU 1500
 
 struct ts27010_mux_net {
 #ifdef ENABLE_MUX_NET_KREF_FEATURE
 	struct kref					ref;
 #endif
-	struct dlci_struct*			dlci; 
+	struct dlci_struct*			dlci;
 	struct net_device_stats		stats;
 	struct workqueue_struct*	net_wq;
 	struct work_struct			net_work;
@@ -151,7 +151,7 @@ static void ts27010_mux_net_tx_work(struct work_struct * work)
 			mux_print(MSG_LIGHT, "[WQ] ts27010_mux_uart_line_write-, ret=[%d]\n", ret);
 		}
 
-		
+
 		net->trans_start = jiffies;
 		consume_skb(skb);
 #ifdef ENABLE_MUX_NET_KREF_FEATURE
@@ -195,7 +195,7 @@ static int ts27010_mux_net_start_xmit(struct sk_buff *skb,
 	if (MSG_MSGDUMP >= g_mux_uart_print_level)
 	{
 		int i = 0;
-		int j = 15; 
+		int j = 15;
 		if (skb->len < j)
 			j = (skb->len / 16) * 16 - 1;
 		for (i = 0; i <= j; i = i + 16) {
@@ -225,10 +225,10 @@ static int ts27010_mux_net_start_xmit(struct sk_buff *skb,
 
 static void ts27010_mux_net_tx_timeout(struct net_device *net)
 {
-	
+
 	dev_dbg(&net->dev, "Tx timed out.\n");
 
-	
+
 	STATS(net).tx_errors++;
 }
 
@@ -238,7 +238,7 @@ static __be16 ts27010net_ip_type_trans(struct sk_buff *skb, struct net_device *d
 
 	skb->dev = dev;
 
-	
+
 	switch (skb->data[0] & 0xf0) {
 	case 0x40:
 		protocol = htons(ETH_P_IP);
@@ -249,7 +249,7 @@ static __be16 ts27010net_ip_type_trans(struct sk_buff *skb, struct net_device *d
 	default:
 		mux_print(MSG_ERROR, "[%s] L3 protocol decode error: 0x%02x \n",
 					dev->name, skb->data[0] & 0xf0);
-		
+
 	}
 	return protocol;
 }
@@ -297,7 +297,7 @@ void ts27010_mux_rx_netchar(struct dlci_struct *dlci,
 
 	if (skb == NULL) {
 		mux_print(MSG_ERROR, "[%s] cannot allocate skb\n", net->name);
-		
+
 		STATS(net).rx_dropped++;
 	} else {
 		skb->dev = net;
@@ -305,14 +305,14 @@ void ts27010_mux_rx_netchar(struct dlci_struct *dlci,
 		dst  = skb_put(skb, size);
 		memcpy(dst, in_buf, size);
 
-		
+
 		skb->protocol = ts27010net_ip_type_trans(skb, net);
 		mux_print(MSG_MSGDUMP, "skb->protocol : %x \n" , skb->protocol);
-		
+
 		netif_rx(skb);
 	}
 
-	
+
 	STATS(net).rx_packets++;
 	STATS(net).rx_bytes += size;
 	if ( g_mux_uart_print_level != MSG_LIGHT && g_mux_uart_print_level != MSG_ERROR ) {
@@ -348,16 +348,16 @@ static void ts27010_mux_net_init(struct net_device *net)
 	};
 	net->netdev_ops = &ts27010_netdev_ops;
 
-	
+
 	ether_setup(net);
 
-	
+
 	random_ether_addr(net->dev_addr);
 
-	net->watchdog_timeo = 1000; 
+	net->watchdog_timeo = 1000;
 
-	
-	net->header_ops= 0;  
+
+	net->header_ops= 0;
 	net->type		= ARPHRD_RAWIP;
 	net->hard_header_len	= 0;
 	net->mtu		= NET_DATA_MTU;
@@ -434,7 +434,7 @@ int ts27010_create_network(struct dlci_struct *dlci, struct ts27010_netconfig *n
 #ifdef ENABLE_MUX_NET_KREF_FEATURE
 	kref_init(&mux_net->ref);
 #endif
-	strncpy(nc->if_name, net->name, IFNAMSIZ); 
+	strncpy(nc->if_name, net->name, IFNAMSIZ);
 
 	skb_queue_head_init(&mux_net->txhead);
 
@@ -450,7 +450,7 @@ int ts27010_create_network(struct dlci_struct *dlci, struct ts27010_netconfig *n
 	mux_print(MSG_LIGHT, "[WQ] INIT_WORK\n");
 	INIT_WORK(&mux_net->net_work, ts27010_mux_net_tx_work);
 
-	return net->ifindex;	
+	return net->ifindex;
 
 error_ret:
 	return retval;

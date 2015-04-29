@@ -143,7 +143,7 @@ static struct cpufreq_policy *__cpufreq_cpu_get(unsigned int cpu, int sysfs)
 	if (cpu >= nr_cpu_ids)
 		goto err_out;
 
-	
+
 	spin_lock_irqsave(&cpufreq_driver_lock, flags);
 
 	if (!cpufreq_driver)
@@ -153,7 +153,7 @@ static struct cpufreq_policy *__cpufreq_cpu_get(unsigned int cpu, int sysfs)
 		goto err_out_unlock;
 
 
-	
+
 	data = per_cpu(cpufreq_cpu_data, cpu);
 
 	if (!data)
@@ -682,12 +682,12 @@ static int cpufreq_add_dev_policy(unsigned int cpu,
 		managed_policy = cpufreq_cpu_get(j);
 		if (unlikely(managed_policy)) {
 
-			
+
 			unlock_policy_rwsem_write(cpu);
 			per_cpu(cpufreq_policy_cpu, cpu) = managed_policy->cpu;
 
 			if (lock_policy_rwsem_write(cpu) < 0) {
-				
+
 				if (cpufreq_driver->exit)
 					cpufreq_driver->exit(policy);
 				cpufreq_cpu_put(managed_policy);
@@ -757,13 +757,13 @@ static int cpufreq_add_dev_interface(unsigned int cpu,
 	int ret = 0;
 	unsigned int j;
 
-	
+
 	ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
 				   &dev->kobj, "cpufreq");
 	if (ret)
 		return ret;
 
-	
+
 	drv_attr = cpufreq_driver->attr;
 	while ((drv_attr) && (*drv_attr)) {
 		ret = sysfs_create_file(&policy->kobj, &((*drv_attr)->attr));
@@ -801,10 +801,10 @@ static int cpufreq_add_dev_interface(unsigned int cpu,
 		goto err_out_kobj_put;
 
 	memcpy(&new_policy, policy, sizeof(struct cpufreq_policy));
-	
+
 	policy->governor = NULL;
 
-	
+
 	ret = __cpufreq_set_policy(policy, &new_policy);
 	policy->user_policy.policy = policy->policy;
 	policy->user_policy.governor = policy->governor;
@@ -866,7 +866,7 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
 	policy->cpu = cpu;
 	cpumask_copy(policy->cpus, cpumask_of(cpu));
 
-	
+
 	per_cpu(cpufreq_policy_cpu, cpu) = cpu;
 	ret = (lock_policy_rwsem_write(cpu) < 0);
 	WARN_ON(ret);
@@ -874,7 +874,7 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
 	init_completion(&policy->kobj_unregister);
 	INIT_WORK(&policy->update, handle_update);
 
-	
+
 #ifdef CONFIG_HOTPLUG_CPU
 	for_each_online_cpu(sibling) {
 		struct cpufreq_policy *cp = per_cpu(cpufreq_cpu_data, sibling);

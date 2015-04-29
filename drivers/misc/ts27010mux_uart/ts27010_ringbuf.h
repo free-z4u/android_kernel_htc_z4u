@@ -145,9 +145,9 @@ static inline int ts27010_ringbuf_write(struct ts27010_ringbuf *rbuf,
 #if 1
 	int buf_room = ts27010_ringbuf_room(rbuf);
 	FUNC_ENTER();
-	
+
 	mux_print(MSG_DEBUG, "Data length: %d byte \n", len);
-	
+
 
 	count = (len <= buf_room) ? len : buf_room;
 	if (count == 0) {
@@ -213,9 +213,9 @@ static inline int ts27010_mux_log_write(struct ts27010_ringbuf *rbuf,
 	int rest = 0;
 	int lost = 0;
 	FUNC_ENTER();
-	
+
 	mux_print(MSG_DEBUG, "Data length: %d byte \n", len);
-	
+
 	count = len;
 	if (rbuf->head >= rbuf->tail) {
 		if ((count + rbuf->head) > rbuf->len) {
@@ -251,4 +251,4 @@ static inline int ts27010_mux_log_write(struct ts27010_ringbuf *rbuf,
 	return lost;
 }
 #endif
-#endif 
+#endif

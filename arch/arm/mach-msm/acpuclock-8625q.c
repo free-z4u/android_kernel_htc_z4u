@@ -96,10 +96,10 @@ static struct acpu_clk_src pll_clk[ACPU_PLL_END] = {
 };
 
 static struct pll_config pll4_cfg_tbl[] = {
-	[0] = {  36, 1, 2 }, 
-	[1] = {  52, 1, 2 }, 
-	[2] = {  63, 0, 1 }, 
-	[3] = {  73, 0, 1 }, 
+	[0] = {  36, 1, 2 },
+	[1] = {  52, 1, 2 },
+	[2] = {  63, 0, 1 },
+	[3] = {  73, 0, 1 },
 };
 
 struct clock_state {
@@ -195,12 +195,12 @@ static void __devinit cpufreq_table_init(void)
 			}
 		}
 
-		
+
 		BUG_ON(acpu_freq_tbl[i].a11clk_khz != 0);
 
 		freq_table[cpu][freq_cnt].index = freq_cnt;
 		freq_table[cpu][freq_cnt].frequency = CPUFREQ_TABLE_END;
-		
+
 		cpufreq_frequency_table_get_attr(freq_table[cpu], cpu);
 		pr_info("CPU%d: %d scaling frequencies supported.\n",
 			cpu, freq_cnt);
@@ -218,7 +218,7 @@ static void update_jiffies(int cpu, unsigned long loops)
 						loops;
 	}
 #endif
-	
+
 	loops_per_jiffy = loops;
 }
 
@@ -228,7 +228,7 @@ static void acpuclk_config_pll4(struct pll_config *pll)
 	writel_relaxed(pll->l, PLL4_L_VAL_ADDR);
 	writel_relaxed(pll->m, PLL4_M_VAL_ADDR);
 	writel_relaxed(pll->n, PLL4_N_VAL_ADDR);
-	
+
 	mb();
 }
 
@@ -238,9 +238,9 @@ static void acpuclk_set_div(const struct clkctl_acpu_speed *hunt_s)
 
 	reg_clksel = readl_relaxed(A11S_CLK_SEL_ADDR);
 
-	
+
 	clk_div = (reg_clksel >> 1) & 0x03;
-	
+
 	src_sel = reg_clksel & 1;
 
 	if (hunt_s->ahbclk_div > clk_div) {
@@ -251,22 +251,22 @@ static void acpuclk_set_div(const struct clkctl_acpu_speed *hunt_s)
 		writel_relaxed(reg_clksel, A11S_CLK_SEL_ADDR);
 	}
 
-	
+
 	reg_clkctl = readl_relaxed(A11S_CLK_CNTL_ADDR);
 	reg_clkctl &= ~(0xFF << (8 * src_sel));
 	reg_clkctl |= hunt_s->a11clk_src_sel << (4 + 8 * src_sel);
 	reg_clkctl |= hunt_s->a11clk_src_div << (0 + 8 * src_sel);
 	writel_relaxed(reg_clkctl, A11S_CLK_CNTL_ADDR);
 
-	
+
 	mb();
 	udelay(3);
 
-	
+
 	reg_clksel ^= 1;
 	writel_relaxed(reg_clksel, A11S_CLK_SEL_ADDR);
 
-	
+
 	mb();
 	udelay(50);
 
@@ -351,7 +351,7 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 		goto out;
 	}
 
-	
+
 	if (reason != SETRATE_CPUFREQ
 		&& tgt_s->a11clk_khz < cur_s->a11clk_khz) {
 		while (tgt_s->pll != ACPU_PLL_TCXO &&
@@ -365,7 +365,7 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 	if (strt_s->pll != ACPU_PLL_TCXO)
 		plls_enabled |= 1 << strt_s->pll;
 
-	
+
 	if (strt_s->axiclk_khz <= tgt_s->axiclk_khz) {
 		res = clk_set_rate(drv_state.ebi1_clk,
 				tgt_s->axiclk_khz * 1000);
@@ -376,7 +376,7 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 	}
 
 	if (reason == SETRATE_CPUFREQ) {
-		
+
 		if (tgt_s->vdd > cur_s->vdd) {
 			rc = acpuclk_set_vdd_level(tgt_s->vdd);
 			if (rc < 0) {
@@ -387,9 +387,9 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 		}
 	}
 
-	
+
 	reg_clkctl = readl_relaxed(A11S_CLK_CNTL_ADDR);
-	reg_clkctl |= (100 << 16); 
+	reg_clkctl |= (100 << 16);
 	writel_relaxed(reg_clkctl, A11S_CLK_CNTL_ADDR);
 
 	pr_debug("Switching from ACPU rate %u KHz -> %u KHz\n",
@@ -408,7 +408,7 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 			acpuclk_set_div(backup_s);
 			update_jiffies(cpu, backup_s->lpj);
 		}
-		
+
 		if ((plls_enabled & (1 << tgt_s->pll))) {
 			clk_disable(pll_clk[tgt_s->pll].clk);
 			plls_enabled &= ~(1 << tgt_s->pll);
@@ -452,20 +452,20 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 	drv_state.prev_speed = drv_state.current_speed;
 	drv_state.current_speed = tgt_s;
 	pr_debug("The new clock speed is %u\n", tgt_s->a11clk_khz);
-	
+
 	update_jiffies(cpu, tgt_s->lpj);
 
-	
+
 	if ((delta > drv_state.max_speed_delta_khz)
 			|| (strt_s->pll == ACPU_PLL_4 &&
 				tgt_s->pll == ACPU_PLL_4))
 		clk_disable(pll_clk[backup_s->pll].clk);
 
-	
+
 	if (reason == SETRATE_SWFI)
 		goto out;
 
-	
+
 	if (strt_s->axiclk_khz > tgt_s->axiclk_khz) {
 		res = clk_set_rate(drv_state.ebi1_clk,
 				tgt_s->axiclk_khz * 1000);
@@ -478,18 +478,18 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 #ifdef CONFIG_HTC_ACPU_DEBUG
 	msm_proc_comm(PCOM_BACKUP_CPU_AXI_RATE, (unsigned*)&tgt_s->a11clk_khz, (unsigned*)&tgt_s->axiclk_khz);
 #endif
-	
+
 	if (tgt_s->pll != ACPU_PLL_TCXO)
 		plls_enabled &= ~(1 << tgt_s->pll);
 	for (pll = ACPU_PLL_0; pll < ACPU_PLL_END; pll++)
 		if (plls_enabled & (1 << pll))
 			clk_disable(pll_clk[pll].clk);
 
-	
+
 	if (reason == SETRATE_PC)
 		goto out;
 
-	
+
 	if (tgt_s->vdd < strt_s->vdd) {
 		res = acpuclk_set_vdd_level(tgt_s->vdd);
 		if (res < 0)
@@ -535,15 +535,15 @@ static int __devinit acpuclk_hw_init(void)
 	BUG_ON(clk_prepare(drv_state.ebi1_clk));
 
 
-	if (!(readl_relaxed(A11S_CLK_SEL_ADDR) & 0x01)) { 
-		
+	if (!(readl_relaxed(A11S_CLK_SEL_ADDR) & 0x01)) {
+
 		sel = (readl_relaxed(A11S_CLK_CNTL_ADDR) >> 12) & 0x7;
-		
+
 		div = (readl_relaxed(A11S_CLK_CNTL_ADDR) >> 8) & 0x0f;
 	} else {
-		
+
 		sel = (readl_relaxed(A11S_CLK_CNTL_ADDR) >> 4) & 0x07;
-		
+
 		div = readl_relaxed(A11S_CLK_CNTL_ADDR) & 0x0f;
 	}
 
@@ -637,7 +637,7 @@ static void __devinit select_freq_plan(unsigned int pvs_voltage,
 	int delta[3] = {DELTA_LEVEL_1_UV, DELTA_LEVEL_2_UV, DELTA_LEVEL_3_UV};
 	struct clkctl_acpu_speed *tbl;
 
-	
+
 	for (i = 0; i < ACPU_PLL_END; i++) {
 		if (pll_clk[i].name) {
 			pll_clk[i].clk = clk_get_sys("acpu", pll_clk[i].name);
@@ -645,7 +645,7 @@ static void __devinit select_freq_plan(unsigned int pvs_voltage,
 				pll_mhz[i] = 0;
 				continue;
 			}
-			
+
 			pll_mhz[i] = clk_get_rate(pll_clk[i].clk)/MHZ;
 		}
 	}
@@ -653,15 +653,15 @@ static void __devinit select_freq_plan(unsigned int pvs_voltage,
 	memcpy(acpu_freq_tbl, acpu_freq_tbl_cmn, sizeof(acpu_freq_tbl_cmn));
 	size = ARRAY_SIZE(acpu_freq_tbl_cmn);
 
-	i = 0;		
-	
+	i = 0;
+
 	if (pll_mhz[ACPU_PLL_4] == 1209) {
 		memcpy(acpu_freq_tbl + size, acpu_freq_tbl_1209,
 						sizeof(acpu_freq_tbl_1209));
 		size += sizeof(acpu_freq_tbl_1209);
-		i = 1;		
+		i = 1;
 	}
-	
+
 	if (pll_mhz[ACPU_PLL_4] == 1401) {
 		memcpy(acpu_freq_tbl + size, acpu_freq_tbl_1209,
 						sizeof(acpu_freq_tbl_1209));
@@ -669,14 +669,14 @@ static void __devinit select_freq_plan(unsigned int pvs_voltage,
 		memcpy(acpu_freq_tbl + size, acpu_freq_tbl_1401,
 						sizeof(acpu_freq_tbl_1401));
 		size += ARRAY_SIZE(acpu_freq_tbl_1401);
-		i = 2;		
+		i = 2;
 	}
 
 	memcpy(acpu_freq_tbl + size, acpu_freq_tbl_null,
 						sizeof(acpu_freq_tbl_null));
 	size += sizeof(acpu_freq_tbl_null);
 
-	
+
 	if (pll_mhz[ACPU_PLL_1] == 196) {
 
 		for (tbl = acpu_freq_tbl; tbl->a11clk_khz; tbl++) {
@@ -701,7 +701,7 @@ static void __devinit select_freq_plan(unsigned int pvs_voltage,
 	}
 
 
-	
+
 	for (tbl = acpu_freq_tbl; tbl->a11clk_khz; tbl++) {
 		if (tbl->pll == ACPU_PLL_2 &&
 				tbl->a11clk_src_div == 1) {
@@ -865,7 +865,7 @@ static int __devinit acpuclk_8625q_probe(struct platform_device *pdev)
 	cpufreq_table_init();
 
 	dir = debugfs_create_dir("acpu_regulator", NULL);
-	
+
 	if (dir == NULL || IS_ERR(dir))
 		pr_err("acpuclk: debugfs_create_dir failed: rc=%ld\n",
 			PTR_ERR(dir));

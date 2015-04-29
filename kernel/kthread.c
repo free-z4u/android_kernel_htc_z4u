@@ -144,7 +144,7 @@ static void create_kthread(struct kthread_create_info *create)
 	/* We want our own signal handler (we take no signals by default). */
 	pid = kernel_thread(kthread, create, CLONE_FS | CLONE_FILES | SIGCHLD);
 	if (pid < 0) {
-		printk(KERN_ERR "[CPUHOTPLUG] %s: err(%x)\n", __func__, pid);		
+		printk(KERN_ERR "[CPUHOTPLUG] %s: err(%x)\n", __func__, pid);
 		create->result = ERR_PTR(pid);
 		complete(&create->done);
 	}

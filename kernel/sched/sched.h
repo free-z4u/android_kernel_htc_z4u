@@ -576,7 +576,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
 #endif
 }
 
-#else 
+#else
 
 static inline void set_task_rq(struct task_struct *p, unsigned int cpu) { }
 static inline struct task_group *task_group(struct task_struct *p)
@@ -584,7 +584,7 @@ static inline struct task_group *task_group(struct task_struct *p)
 	return NULL;
 }
 
-#endif 
+#endif
 
 static inline void __set_task_cpu(struct task_struct *p, unsigned int cpu)
 {
@@ -617,12 +617,12 @@ enum {
 #if defined(CONFIG_SCHED_DEBUG) && defined(HAVE_JUMP_LABEL)
 static __always_inline bool static_branch__true(struct static_key *key)
 {
-	return static_key_true(key); 
+	return static_key_true(key);
 }
 
 static __always_inline bool static_branch__false(struct static_key *key)
 {
-	return static_key_false(key); 
+	return static_key_false(key);
 }
 
 #define SCHED_FEAT(name, enabled)					\
@@ -637,9 +637,9 @@ static __always_inline bool static_branch_##name(struct static_key *key) \
 
 extern struct static_key sched_feat_keys[__SCHED_FEAT_NR];
 #define sched_feat(x) (static_branch_##x(&sched_feat_keys[__SCHED_FEAT_##x]))
-#else 
+#else
 #define sched_feat(x) (sysctl_sched_features & (1UL << __SCHED_FEAT_##x))
-#endif 
+#endif
 
 static inline u64 global_rt_period(void)
 {
@@ -696,7 +696,7 @@ static inline void finish_lock_switch(struct rq *rq, struct task_struct *prev)
 	prev->on_cpu = 0;
 #endif
 #ifdef CONFIG_DEBUG_SPINLOCK
-	
+
 	rq->lock.owner = current;
 #endif
 	spin_acquire(&rq->lock.dep_map, 0, 0, _THIS_IP_);
@@ -704,7 +704,7 @@ static inline void finish_lock_switch(struct rq *rq, struct task_struct *prev)
 	raw_spin_unlock_irq(&rq->lock);
 }
 
-#else 
+#else
 static inline void prepare_lock_switch(struct rq *rq, struct task_struct *next)
 {
 #ifdef CONFIG_SMP
@@ -727,7 +727,7 @@ static inline void finish_lock_switch(struct rq *rq, struct task_struct *prev)
 	local_irq_enable();
 #endif
 }
-#endif 
+#endif
 
 
 static inline void update_load_add(struct load_weight *lw, unsigned long inc)
@@ -775,8 +775,8 @@ static const u32 prio_to_wmult[40] = {
 };
 
 enum cpuacct_stat_index {
-	CPUACCT_STAT_USER,	
-	CPUACCT_STAT_SYSTEM,	
+	CPUACCT_STAT_USER,
+	CPUACCT_STAT_SYSTEM,
 
 	CPUACCT_STAT_NSTATS,
 };
@@ -797,7 +797,7 @@ extern const struct sched_class idle_sched_class;
 extern void trigger_load_balance(struct rq *rq, int cpu);
 extern void idle_balance(int this_cpu, struct rq *this_rq);
 
-#else	
+#else
 
 static inline void idle_balance(int cpu, struct rq *rq)
 {
@@ -825,7 +825,7 @@ extern void update_cpu_load(struct rq *this_rq);
 #include <linux/cgroup.h>
 struct cpuacct {
 	struct cgroup_subsys_state css;
-	
+
 	u64 __percpu *cpuusage;
 	struct kernel_cpustat __percpu *cpustat;
 };
@@ -902,7 +902,7 @@ static inline int hrtick_enabled(struct rq *rq)
 	return 0;
 }
 
-#endif 
+#endif
 
 #ifdef CONFIG_SMP
 extern void sched_avg_update(struct rq *rq);
@@ -956,12 +956,12 @@ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
 	return ret;
 }
 
-#endif 
+#endif
 
 static inline int double_lock_balance(struct rq *this_rq, struct rq *busiest)
 {
 	if (unlikely(!irqs_disabled())) {
-		
+
 		raw_spin_unlock(&this_rq->lock);
 		BUG_ON(1);
 	}
@@ -983,7 +983,7 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
 	BUG_ON(!irqs_disabled());
 	if (rq1 == rq2) {
 		raw_spin_lock(&rq1->lock);
-		__acquire(rq2->lock);	
+		__acquire(rq2->lock);
 	} else {
 		if (rq1 < rq2) {
 			raw_spin_lock(&rq1->lock);
@@ -1006,7 +1006,7 @@ static inline void double_rq_unlock(struct rq *rq1, struct rq *rq2)
 		__release(rq2->lock);
 }
 
-#else 
+#else
 
 static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
 	__acquires(rq1->lock)
@@ -1015,7 +1015,7 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
 	BUG_ON(!irqs_disabled());
 	BUG_ON(rq1 != rq2);
 	raw_spin_lock(&rq1->lock);
-	__acquire(rq2->lock);	
+	__acquire(rq2->lock);
 }
 
 static inline void double_rq_unlock(struct rq *rq1, struct rq *rq2)

@@ -65,8 +65,8 @@ static void add_quirk_for_sdio_devices(struct mmc_card *card, int data)
 }
 
 static const struct mmc_fixup mmc_fixup_methods[] = {
-	
-	
+
+
 	SDIO_FIXUP(SDIO_ANY_ID, SDIO_ANY_ID,
 		   add_quirk_for_sdio_devices,
 		   MMC_QUIRK_BROKEN_CLK_GATING),

@@ -32,9 +32,9 @@
 
 #define TS0710MUX_IO_FORCE_CLOSE 0x54F3
 
-#define EDISCONNECTED 900	
+#define EDISCONNECTED 900
 
-#define EREJECTED 901		
+#define EREJECTED 901
 
 extern struct tty_struct *ts27010mux_uart_tty;
 
@@ -107,4 +107,4 @@ void ts27010_tty_uart_remove(void);
 int ts27010_tty_uart_open(void);
 void ts27010_tty_uart_close(void);
 
-#endif 
+#endif

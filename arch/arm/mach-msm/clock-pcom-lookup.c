@@ -443,7 +443,7 @@ static void __init msm7627a_clock_pre_init(void)
 {
 	int size = ARRAY_SIZE(msm_cmn_clk_7625a_7627a);
 
-	
+
 	msm_shared_pll_control_init();
 
 	memcpy(&msm_clk_7627a_7625a, &msm_cmn_clk_7625a_7627a,

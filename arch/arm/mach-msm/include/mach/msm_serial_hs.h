@@ -38,14 +38,14 @@ struct msm_serial_hs_platform_data {
 	unsigned char inject_rx_on_wakeup;
 	char rx_to_inject;
 	int (*gpio_config)(int);
-	
+
 	unsigned char cpu_lock_supported;
 
-	
-	int rx_wakeup_irq; 
+
+	int rx_wakeup_irq;
 	unsigned char bt_wakeup_pin_supported;
-	unsigned char bt_wakeup_pin; 
-	unsigned char host_wakeup_pin; 
+	unsigned char bt_wakeup_pin;
+	unsigned char host_wakeup_pin;
 
 };
 

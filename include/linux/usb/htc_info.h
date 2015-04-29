@@ -31,7 +31,7 @@ struct usb_info {
 	int (*ldo_enable) (int enable);
 	void (*usb_mhl_switch)(bool);
 
-	
+
 	int connect_type_ready;
 	void (*usb_connected)(int);
 
@@ -119,5 +119,5 @@ extern void android_switch_htc_mode(void);
 #define pr_info(fmt, args...) \
 	printk(KERN_INFO "[USB] " pr_fmt(fmt), ## args)
 
-#endif 
+#endif
 

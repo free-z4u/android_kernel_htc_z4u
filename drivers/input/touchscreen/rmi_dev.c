@@ -59,7 +59,7 @@ static loff_t rmi_char_dev_llseek(struct file *filp, loff_t off, int whence)
 		newpos = REG_ADDR_LIMIT + off;
 		break;
 
-	default:		
+	default:
 		newpos = -EINVAL;
 		goto clean_up;
 	}
@@ -84,9 +84,9 @@ static ssize_t rmi_char_dev_read(struct file *filp, char __user *buf,
 	struct rmi_char_dev *my_char_dev = filp->private_data;
 	ssize_t ret_value  = 0;
 	unsigned char tmpbuf[count+1];
-	
 
-	
+
+
 	if (count > (REG_ADDR_LIMIT - *f_pos))
 		count = REG_ADDR_LIMIT - *f_pos;
 
@@ -101,9 +101,9 @@ static ssize_t rmi_char_dev_read(struct file *filp, char __user *buf,
 
 	mutex_lock(&(my_char_dev->mutex_file_op));
 
-	
 
-	
+
+
 	ret_value = i2c_rmi_read(*f_pos, tmpbuf, count);
 
 
@@ -139,9 +139,9 @@ static ssize_t rmi_char_dev_write(struct file *filp, const char __user *buf,
 	struct rmi_char_dev *my_char_dev = filp->private_data;
 	ssize_t ret_value  = 0;
 	unsigned char tmpbuf[count+1];
-	
 
-	
+
+
 	if (count > (REG_ADDR_LIMIT - *f_pos))
 		count = REG_ADDR_LIMIT - *f_pos;
 
@@ -161,9 +161,9 @@ static ssize_t rmi_char_dev_write(struct file *filp, const char __user *buf,
 
 	mutex_lock(&(my_char_dev->mutex_file_op));
 
-	
 
-	
+
+
 	ret_value = i2c_rmi_write(*f_pos, tmpbuf, count);
 
 	if (ret_value >= 0)
@@ -176,16 +176,16 @@ static ssize_t rmi_char_dev_write(struct file *filp, const char __user *buf,
 
 static int rmi_char_dev_open(struct inode *inp, struct file *filp)
 {
-	
+
 	struct rmi_char_dev *my_dev = container_of(inp->i_cdev,
 			struct rmi_char_dev, main_dev);
-	
+
 	int ret_value = 0;
 
 	filp->private_data = my_dev;
 
-	
-		
+
+
 
 	mutex_lock(&(my_dev->mutex_file_op));
 	if (my_dev->ref_count < 1)
@@ -228,7 +228,7 @@ static void rmi_char_dev_clean_up(struct rmi_char_dev *char_dev,
 {
 	dev_t devno;
 
-	
+
 	if (char_dev) {
 		devno = char_dev->main_dev.dev;
 
@@ -241,7 +241,7 @@ static void rmi_char_dev_clean_up(struct rmi_char_dev *char_dev,
 			class_destroy(char_device_class);
 		}
 
-		
+
 		unregister_chrdev_region(devno, 1);
 		pr_debug("%s: rmi_char_dev is removed\n", __func__);
 	}
@@ -251,8 +251,8 @@ static char *rmi_char_devnode(struct device *dev, mode_t *mode)
 {
 	if (!mode)
 		return NULL;
-	
-	
+
+
 	*mode = (S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 
 	return kasprintf(GFP_KERNEL, "rmi/%s", dev_name(dev));
@@ -272,7 +272,7 @@ int rmi_char_dev_register(void)
 		result = register_chrdev_region(dev_no, 1, CHAR_DEVICE_NAME);
 	} else {
 		result = alloc_chrdev_region(&dev_no, 0, 1, CHAR_DEVICE_NAME);
-		
+
 		rmi_char_dev_major_num = MAJOR(dev_no);
 		printk(KERN_ERR "Major number of rmi_char_dev: %d\n",
 				 rmi_char_dev_major_num);
@@ -283,7 +283,7 @@ int rmi_char_dev_register(void)
 	char_dev = kzalloc(sizeof(struct rmi_char_dev), GFP_KERNEL);
 	if (!char_dev) {
 		printk(KERN_ERR "Failed to allocate rmi_char_dev.\n");
-		
+
 		__unregister_chrdev(rmi_char_dev_major_num, MINOR(dev_no), 1,
 				CHAR_DEVICE_NAME);
 		return -ENOMEM;
@@ -297,12 +297,12 @@ int rmi_char_dev_register(void)
 	err = cdev_add(&char_dev->main_dev, dev_no, 1);
 	if (err) {
 		printk(KERN_ERR "Error %d adding rmi_char_dev.\n", err);
-		
-		
+
+
 		return err;
 	}
 
-	
+
 	rmi_char_device_class =
 		class_create(THIS_MODULE, CHAR_DEVICE_NAME);
 
@@ -313,10 +313,10 @@ int rmi_char_dev_register(void)
 				 rmi_char_device_class);
 		return -ENODEV;
 	}
-	
+
 	rmi_char_device_class->devnode = rmi_char_devnode;
 
-	
+
 	device_ptr = device_create(
 			rmi_char_device_class,
 			NULL, dev_no, NULL,
@@ -337,7 +337,7 @@ EXPORT_SYMBOL(rmi_char_dev_register);
 
 void rmi_char_dev_unregister(struct rmi_phys_device *phys)
 {
-	
+
 	if (phys)
 		rmi_char_dev_clean_up(phys->char_dev,
 				 phys->rmi_char_device_class);

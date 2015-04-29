@@ -89,7 +89,7 @@ static DEFINE_MUTEX(audpp_dec_lock);
 
 #define MAX_EVENT_CALLBACK_CLIENTS	2
 
-#define AUDPP_CONCURRENCY_DEFAULT 5	
+#define AUDPP_CONCURRENCY_DEFAULT 5
 #define AUDPP_MAX_DECODER_CNT 5
 #define AUDPP_CODEC_MASK 0x000000FF
 #define AUDPP_MODE_MASK 0x00000F00
@@ -108,17 +108,17 @@ struct audpp_state {
 	unsigned open_count;
 	unsigned enabled;
 
-	
+
 	struct mutex *lock_dec;
 	struct msm_adspdec_database *dec_database;
 	struct audpp_decoder_info dec_info_table[AUDPP_MAX_DECODER_CNT];
 	unsigned dec_inuse;
 	unsigned long concurrency;
 
-	
+
 	unsigned avsync_mask;
 
-	
+
 	uint16_t avsync[CH_COUNT * AUDPP_CLNT_MAX_COUNT + 1];
 	struct audpp_event_callback *cb_tbl[MAX_EVENT_CALLBACK_CLIENTS];
 
@@ -530,7 +530,7 @@ EXPORT_SYMBOL(audpp_avsync_byte_count);
 
 int audpp_set_volume_and_pan(unsigned id, unsigned volume, int pan)
 {
-	
+
 	uint16_t cmd[11];
 
 	if (id > 6)
@@ -567,7 +567,7 @@ int audpp_dsp_set_mbadrc(unsigned id, unsigned enable,
 	} else
 		cmd.enable = AUDPP_CMD_ADRC_FLAG_DIS;
 
-	
+
 	dma_coherent_pre_ops();
 	return audpp_send_queue3(&cmd, sizeof(cmd));
 }
@@ -768,7 +768,7 @@ EXPORT_SYMBOL(audpp_dsp_set_vol_pan);
 
 int audpp_pause(unsigned id, int pause)
 {
-	
+
 	u16 pause_cmd[AUDPP_CMD_DEC_CTRL_LEN / sizeof(unsigned short)];
 
 	if (id >= CH_COUNT)
@@ -812,10 +812,10 @@ int audpp_adec_alloc(unsigned dec_attrb, const char **module_name,
 	int codecs_supported, min_codecs_supported;
 	unsigned int *concurrency_entry;
 	mutex_lock(audpp->lock_dec);
-	
+
 	mode = ((dec_attrb & AUDPP_MODE_MASK) << 16);
 	codec = (1 << (dec_attrb & AUDPP_CODEC_MASK));
-	
+
 	concurrency_entry = ((audpp->dec_database->dec_concurrency_table +
 			      ((audpp->concurrency + 1) *
 			       (audpp->dec_database->num_dec))) - 1);
@@ -829,7 +829,7 @@ int audpp_adec_alloc(unsigned dec_attrb, const char **module_name,
 		if (!(audpp->dec_inuse & (1 << (idx - 1)))) {
 			if ((mode & *concurrency_entry) &&
 			    (codec & *concurrency_entry)) {
-				
+
 				codecs_supported =
 				    audpp->dec_database->dec_info_list[idx -
 								       1].
@@ -852,7 +852,7 @@ int audpp_adec_alloc(unsigned dec_attrb, const char **module_name,
 		audpp->dec_info_table[lidx].codec =
 		    (dec_attrb & AUDPP_CODEC_MASK);
 		audpp->dec_info_table[lidx].pid = current->pid;
-		
+
 		concurrency_entry =
 		    ((audpp->dec_database->dec_concurrency_table +
 		      ((audpp->concurrency) * (audpp->dec_database->num_dec))) +
@@ -941,7 +941,7 @@ static ssize_t decoder_info_show(struct device *dev,
 {
 	int cpy_sz = 0;
 	struct audpp_state *audpp = &the_audpp_state;
-	const ptrdiff_t off = attr - dev_attr_decoder;	
+	const ptrdiff_t off = attr - dev_attr_decoder;
 	mutex_lock(audpp->lock_dec);
 	cpy_sz += scnprintf(buf + cpy_sz, PAGE_SIZE - cpy_sz, "%d:",
 			    audpp->dec_info_table[off].codec);

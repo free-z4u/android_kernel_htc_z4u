@@ -322,7 +322,7 @@ static int adsp_verify_cmd(struct msm_adsp_module *module,
 			   unsigned int queue_id, void *cmd_data,
 			   size_t cmd_size)
 {
-	
+
 	if (module->verify_cmd)
 		return module->verify_cmd(module, queue_id, cmd_data,
 					     cmd_size);
@@ -362,7 +362,7 @@ static long adsp_write_cmd(struct adsp_device *adev, void __user *arg)
 		rc = -EINVAL;
 		goto end;
 	}
-	
+
 	wmb();
 	rc = msm_adsp_write(adev->module, cmd.queue, cmd_data, cmd.len);
 end:
@@ -422,7 +422,7 @@ int adsp_pmem_paddr_fixup(struct msm_adsp_module *module, void **addr)
 static int adsp_patch_event(struct msm_adsp_module *module,
 				struct adsp_event *event)
 {
-	
+
 	if (module->patch_event)
 		return module->patch_event(module, event);
 	return 0;
@@ -468,16 +468,16 @@ static long adsp_get_event(struct adsp_device *adev, void __user *arg)
 	if (!data)
 		return -EAGAIN;
 
-	
+
 	if (data->type == 0)
 		adsp_patch_event(adev->module, data);
 
-	
+
 	if (evt.len < data->size) {
 		rc = -ETOOSMALL;
 		goto end;
 	}
-	
+
 	rmb();
 	if (data->msg_id != EVENT_MSG_ID) {
 		if (copy_to_user((void *)(evt.data), data->data.msg16,
@@ -493,7 +493,7 @@ static long adsp_get_event(struct adsp_device *adev, void __user *arg)
 		}
 	}
 
-	evt.type = data->type; 
+	evt.type = data->type;
 	evt.msg_id = data->msg_id;
 	evt.flags = data->is16;
 	evt.len = data->size;
@@ -587,7 +587,7 @@ static int adsp_release(struct inode *inode, struct file *filp)
 
 	MM_INFO("adsp: release '%s'\n", adev->name);
 
-	
+
 	adev->module = NULL;
 
 	rc = adsp_ion_del(module);

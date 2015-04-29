@@ -162,7 +162,7 @@ SYSCALL_DEFINE3(setpriority, int, which, int, who, int, niceval)
 	if (which > PRIO_USER || which < PRIO_PROCESS)
 		goto out;
 
-	
+
 	error = -ESRCH;
 	if (niceval < -20)
 		niceval = -20;
@@ -195,14 +195,14 @@ SYSCALL_DEFINE3(setpriority, int, which, int, who, int, niceval)
 				who = cred->uid;
 			else if ((who != cred->uid) &&
 				 !(user = find_user(who)))
-				goto out_unlock;	
+				goto out_unlock;
 
 			do_each_thread(g, p) {
 				if (__task_cred(p)->uid == who)
 					error = set_one_prio(p, niceval, error);
 			} while_each_thread(g, p);
 			if (who != cred->uid)
-				free_uid(user);		
+				free_uid(user);
 			break;
 	}
 out_unlock:
@@ -254,7 +254,7 @@ SYSCALL_DEFINE2(getpriority, int, which, int, who)
 				who = cred->uid;
 			else if ((who != cred->uid) &&
 				 !(user = find_user(who)))
-				goto out_unlock;	
+				goto out_unlock;
 
 			do_each_thread(g, p) {
 				if (__task_cred(p)->uid == who) {
@@ -264,7 +264,7 @@ SYSCALL_DEFINE2(getpriority, int, which, int, who)
 				}
 			} while_each_thread(g, p);
 			if (who != cred->uid)
-				free_uid(user);		
+				free_uid(user);
 			break;
 	}
 out_unlock:
@@ -321,13 +321,13 @@ void set_ps_hold_en(void)
 
 #endif
 
-extern void msm_pm_indicate_restart(int restart); 
+extern void msm_pm_indicate_restart(int restart);
 
 void kernel_restart_prepare(char *cmd)
 {
-	msm_pm_indicate_restart(1); 
+	msm_pm_indicate_restart(1);
 
-	
+
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
 	set_ps_hold_en();
 #endif
@@ -365,10 +365,10 @@ EXPORT_SYMBOL_GPL(kernel_restart);
 
 static void kernel_shutdown_prepare(enum system_states state)
 {
-	msm_pm_indicate_restart(1); 
+	msm_pm_indicate_restart(1);
 
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
-        
+
         set_ps_hold_en();
 #endif
 	blocking_notifier_call_chain(&reboot_notifier_list,
@@ -422,12 +422,12 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 	mmput(mm);
 
 	if (!(!strcmp("/system/bin/reboot", path) && cmd == LINUX_REBOOT_CMD_RESTART2)) {
-		
+
 		if (!capable(CAP_SYS_BOOT))
 			return -EPERM;
 	}
 
-	
+
 	if (magic1 != LINUX_REBOOT_MAGIC1 ||
 	    (magic2 != LINUX_REBOOT_MAGIC2 &&
 	                magic2 != LINUX_REBOOT_MAGIC2A &&
@@ -472,7 +472,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 		kernel_power_off();
 		do_exit(0);
 		break;
-	
+
 	case LINUX_REBOOT_CMD_RESTART2:
 		if (strncpy_from_user(&buffer[0], arg, sizeof(buffer) - 1) < 0) {
 			ret = -EFAULT;
@@ -525,7 +525,7 @@ void ctrl_alt_del(void)
 	else
 		kill_cad_pid(SIGINT, 1);
 }
-	
+
 /*
  * Unprivileged users may change the real gid to the effective gid
  * or vice versa.  (BSD-style)
@@ -539,7 +539,7 @@ void ctrl_alt_del(void)
  *
  * The general idea is that a program which uses just setregid() will be
  * 100% compatible with BSD.  A program which uses just setgid() will be
- * 100% compatible with POSIX with saved IDs. 
+ * 100% compatible with POSIX with saved IDs.
  *
  * SMP: There are not races, the GIDs are checked only by filesystem
  *      operations (as far as semantic preservation is concerned).
@@ -587,7 +587,7 @@ error:
 }
 
 /*
- * setgid() is implemented like SysV w/ SAVED_IDS 
+ * setgid() is implemented like SysV w/ SAVED_IDS
  *
  * SMP: Same implicit races as above.
  */
@@ -659,7 +659,7 @@ static int set_user(struct cred *new)
  *
  * The general idea is that a program which uses just setreuid() will be
  * 100% compatible with BSD.  A program which uses just setuid() will be
- * 100% compatible with POSIX with saved IDs. 
+ * 100% compatible with POSIX with saved IDs.
  */
 SYSCALL_DEFINE2(setreuid, uid_t, ruid, uid_t, euid)
 {
@@ -710,17 +710,17 @@ error:
 	abort_creds(new);
 	return retval;
 }
-		
+
 /*
- * setuid() is implemented like SysV with SAVED_IDS 
- * 
+ * setuid() is implemented like SysV with SAVED_IDS
+ *
  * Note that SAVED_ID's is deficient in that a setuid root program
- * like sendmail, for example, cannot set its uid to be a normal 
+ * like sendmail, for example, cannot set its uid to be a normal
  * user and then switch back, because if you're root, setuid() sets
  * the saved uid too.  If you don't like this, blame the bright people
  * in the POSIX committee and/or USG.  Note that the BSD-style setreuid()
  * will allow a root program to temporarily drop privileges and be able to
- * regain them by swapping the real and effective uid.  
+ * regain them by swapping the real and effective uid.
  */
 SYSCALL_DEFINE1(setuid, uid_t, uid)
 {
@@ -1364,7 +1364,7 @@ SYSCALL_DEFINE2(getrlimit, unsigned int, resource, struct rlimit __user *, rlim)
 /*
  *	Back compatibility for getrlimit. Needed for some apps.
  */
- 
+
 SYSCALL_DEFINE2(old_getrlimit, unsigned int, resource,
 		struct rlimit __user *, rlim)
 {

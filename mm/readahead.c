@@ -94,7 +94,7 @@ static int read_pages(struct address_space *mapping, struct file *filp,
 
 	if (mapping->a_ops->readpages) {
 		ret = mapping->a_ops->readpages(filp, mapping, pages, nr_pages);
-		
+
 		put_pages_list(pages);
 		goto out;
 	}
@@ -123,7 +123,7 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 {
 	struct inode *inode = mapping->host;
 	struct page *page;
-	unsigned long end_index;	
+	unsigned long end_index;
 	LIST_HEAD(page_pool);
 	int page_idx;
 	int ret = 0;

@@ -42,13 +42,13 @@
 extern uint32_t ois_line;
 
 enum msm_sensor_reg_update {
-	
+
 	MSM_SENSOR_REG_INIT,
-	
+
 	MSM_SENSOR_UPDATE_PERIODIC,
-	
+
 	MSM_SENSOR_UPDATE_ALL,
-	
+
 	MSM_SENSOR_UPDATE_INVALID
 };
 
@@ -75,8 +75,8 @@ struct msm_sensor_exp_gain_info_t {
 	uint16_t coarse_int_time_addr;
 	uint16_t global_gain_addr;
 	uint16_t vert_offset;
-	uint16_t min_vert; 
-	uint32_t sensor_max_linecount; 
+	uint16_t min_vert;
+	uint32_t sensor_max_linecount;
 };
 
 struct msm_sensor_reg_t {
@@ -143,11 +143,11 @@ struct msm_sensor_fn_t {
 	int32_t (*sensor_write_snapshot_exp_gain) (struct msm_sensor_ctrl_t *,
 			uint16_t, uint32_t);
 	int32_t (*sensor_write_exp_gain_ex) (struct msm_sensor_ctrl_t *,
-			int, uint16_t, uint16_t, uint32_t); 
+			int, uint16_t, uint16_t, uint32_t);
 	int32_t (*sensor_write_hdr_exp_gain_ex) (struct msm_sensor_ctrl_t *,
-			int, uint16_t, uint16_t, uint32_t, uint32_t); 
+			int, uint16_t, uint16_t, uint32_t, uint32_t);
 	int32_t (*sensor_write_snapshot_exp_gain_ex) (struct msm_sensor_ctrl_t *,
-			int, uint16_t, uint16_t, uint32_t); 
+			int, uint16_t, uint16_t, uint32_t);
 	int32_t (*sensor_setting) (struct msm_sensor_ctrl_t *,
 			int update_type, int rt);
 	int32_t (*sensor_csi_setting) (struct msm_sensor_ctrl_t *,
@@ -162,19 +162,19 @@ struct msm_sensor_fn_t {
 	int (*sensor_power_down)
 		(struct msm_sensor_ctrl_t *);
 	int (*sensor_power_up) (struct msm_sensor_ctrl_t *);
-	
+
 	int (*sensor_i2c_read_fuseid)(struct sensor_cfg_data *cdata, struct msm_sensor_ctrl_t *s_ctrl);
-	
+
        int (*sensor_i2c_read_vcm_driver_ic)(struct msm_sensor_ctrl_t *s_ctrl);
 	int (*sensor_adjust_frame_lines)
 		(struct msm_sensor_ctrl_t *s_ctrl, uint16_t res);
 	int32_t (*sensor_get_csi_params)(struct msm_sensor_ctrl_t *,
 		struct csi_lane_params_t *);
-	int32_t (*sensor_set_dig_gain) (struct msm_sensor_ctrl_t *, uint16_t); 
-	
-	void (*sensor_ov2722_write_exp_line) (struct msm_sensor_ctrl_t *, uint16_t); 
+	int32_t (*sensor_set_dig_gain) (struct msm_sensor_ctrl_t *, uint16_t);
 
-	int (*sensor_write_output_settings_specific)(struct msm_sensor_ctrl_t *s_ctrl, uint16_t res); 
+	void (*sensor_ov2722_write_exp_line) (struct msm_sensor_ctrl_t *, uint16_t);
+
+	int (*sensor_write_output_settings_specific)(struct msm_sensor_ctrl_t *s_ctrl, uint16_t res);
 };
 
 struct msm_sensor_csi_info {
@@ -208,7 +208,7 @@ struct msm_sensor_ctrl_t {
 	uint32_t fps_divider;
 	enum msm_sensor_resolution_t curr_res;
 	enum msm_sensor_cam_mode_t cam_mode;
-	int mode; 
+	int mode;
 
 	struct mutex *msm_sensor_mutex;
 	struct msm_camera_csi2_params *curr_csi_params;
@@ -224,8 +224,8 @@ struct msm_sensor_ctrl_t {
 	struct regulator **reg_ptr;
 	struct clk *cam_clk;
 	long clk_rate;
-	int mirror_flip;	
-	struct mutex *sensor_first_mutex;  
+	int mirror_flip;
+	struct mutex *sensor_first_mutex;
 	int hdr_mode;
 };
 
@@ -245,7 +245,7 @@ int32_t msm_sensor_write_exp_gain1_ex(struct msm_sensor_ctrl_t *s_ctrl,
 int32_t msm_sensor_write_exp_gain2_ex(struct msm_sensor_ctrl_t *s_ctrl,
 		int mode, uint16_t gain, uint32_t line);
 int32_t msm_sensor_write_exp_gain_ov (struct msm_sensor_ctrl_t *s_ctrl,
-		int mode, uint16_t gain, uint16_t dig_gain, uint32_t line); 
+		int mode, uint16_t gain, uint16_t dig_gain, uint32_t line);
 int32_t msm_sensor_set_sensor_mode(struct msm_sensor_ctrl_t *s_ctrl,
 	int mode, int res);
 int32_t msm_sensor_mode_init(struct msm_sensor_ctrl_t *s_ctrl,
@@ -257,7 +257,7 @@ int32_t msm_sensor_config(struct msm_sensor_ctrl_t *s_ctrl,
 
 int32_t msm_sensor_power_up(struct msm_sensor_ctrl_t *s_ctrl);
 int32_t msm_sensor_power_down(struct msm_sensor_ctrl_t *s_ctrl);
-#if 1	
+#if 1
 int32_t msm_sensor_set_power_up(struct msm_sensor_ctrl_t *s_ctrl);
 int32_t msm_sensor_set_power_down(struct msm_sensor_ctrl_t *s_ctrl);
 
@@ -275,7 +275,7 @@ int msm_sensor_v4l2_probe(struct msm_sensor_ctrl_t *s_ctrl,
 	const struct msm_camera_sensor_info *info,
 	struct v4l2_subdev *sdev, struct msm_sensor_ctrl *s);
 
-#endif	
+#endif
 
 int32_t msm_sensor_match_id(struct msm_sensor_ctrl_t *s_ctrl);
 int msm_sensor_i2c_probe(struct i2c_client *client,

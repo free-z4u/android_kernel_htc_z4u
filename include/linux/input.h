@@ -468,9 +468,9 @@ struct input_keymap_entry {
 #define KEY_WIMAX		246
 #define KEY_RFKILL		247	/* Key that controls all radios */
 
-#define KEY_CAMCORDER		248	
-#define KEY_APP_SWITCH		249	
-#define KEY_WEIBO		250	
+#define KEY_CAMCORDER		248
+#define KEY_APP_SWITCH		249
+#define KEY_WEIBO		250
 
 #define BTN_MISC		0x100
 #define BTN_0			0x100
@@ -535,13 +535,13 @@ struct input_keymap_entry {
 #define BTN_TOOL_FINGER		0x145
 #define BTN_TOOL_MOUSE		0x146
 #define BTN_TOOL_LENS		0x147
-#define BTN_TOOL_QUINTTAP	0x148	
+#define BTN_TOOL_QUINTTAP	0x148
 #define BTN_TOUCH		0x14a
 #define BTN_STYLUS		0x14b
 #define BTN_STYLUS2		0x14c
 #define BTN_TOOL_DOUBLETAP	0x14d
 #define BTN_TOOL_TRIPLETAP	0x14e
-#define BTN_TOOL_QUADTAP	0x14f	
+#define BTN_TOOL_QUADTAP	0x14f
 
 #define BTN_WHEEL		0x150
 #define BTN_GEAR_DOWN		0x150
@@ -553,15 +553,15 @@ struct input_keymap_entry {
 #define KEY_CLEAR		0x163
 #define KEY_POWER2		0x164
 #define KEY_OPTION		0x165
-#define KEY_INFO		0x166	
+#define KEY_INFO		0x166
 #define KEY_TIME		0x167
 #define KEY_VENDOR		0x168
 #define KEY_ARCHIVE		0x169
-#define KEY_PROGRAM		0x16a	
+#define KEY_PROGRAM		0x16a
 #define KEY_CHANNEL		0x16b
 #define KEY_FAVORITES		0x16c
 #define KEY_EPG			0x16d
-#define KEY_PVR			0x16e	
+#define KEY_PVR			0x16e
 #define KEY_MHP			0x16f
 #define KEY_LANGUAGE		0x170
 #define KEY_TITLE		0x171
@@ -571,36 +571,36 @@ struct input_keymap_entry {
 #define KEY_MODE		0x175
 #define KEY_KEYBOARD		0x176
 #define KEY_SCREEN		0x177
-#define KEY_PC			0x178	
-#define KEY_TV			0x179	
-#define KEY_TV2			0x17a	
-#define KEY_VCR			0x17b	
-#define KEY_VCR2		0x17c	
-#define KEY_SAT			0x17d	
+#define KEY_PC			0x178
+#define KEY_TV			0x179
+#define KEY_TV2			0x17a
+#define KEY_VCR			0x17b
+#define KEY_VCR2		0x17c
+#define KEY_SAT			0x17d
 #define KEY_SAT2		0x17e
-#define KEY_CD			0x17f	
-#define KEY_TAPE		0x180	
+#define KEY_CD			0x17f
+#define KEY_TAPE		0x180
 #define KEY_RADIO		0x181
-#define KEY_TUNER		0x182	
+#define KEY_TUNER		0x182
 #define KEY_PLAYER		0x183
 #define KEY_TEXT		0x184
-#define KEY_DVD			0x185	
+#define KEY_DVD			0x185
 #define KEY_AUX			0x186
 #define KEY_MP3			0x187
-#define KEY_AUDIO		0x188	
-#define KEY_VIDEO		0x189	
+#define KEY_AUDIO		0x188
+#define KEY_VIDEO		0x189
 #define KEY_DIRECTORY		0x18a
 #define KEY_LIST		0x18b
-#define KEY_MEMO		0x18c	
+#define KEY_MEMO		0x18c
 #define KEY_CALENDAR		0x18d
 #define KEY_RED			0x18e
 #define KEY_GREEN		0x18f
 #define KEY_YELLOW		0x190
 #define KEY_BLUE		0x191
-#define KEY_CHANNELUP		0x192	
-#define KEY_CHANNELDOWN		0x193	
+#define KEY_CHANNELUP		0x192
+#define KEY_CHANNELDOWN		0x193
 #define KEY_FIRST		0x194
-#define KEY_LAST		0x195	
+#define KEY_LAST		0x195
 #define KEY_AB			0x196
 #define KEY_NEXT		0x197
 #define KEY_RESTART		0x198
@@ -611,35 +611,35 @@ struct input_keymap_entry {
 #define KEY_DIGITS		0x19d
 #define KEY_TEEN		0x19e
 #define KEY_TWEN		0x19f
-#define KEY_VIDEOPHONE		0x1a0	
-#define KEY_GAMES		0x1a1	
-#define KEY_ZOOMIN		0x1a2	
-#define KEY_ZOOMOUT		0x1a3	
-#define KEY_ZOOMRESET		0x1a4	
-#define KEY_WORDPROCESSOR	0x1a5	
-#define KEY_EDITOR		0x1a6	
-#define KEY_SPREADSHEET		0x1a7	
-#define KEY_GRAPHICSEDITOR	0x1a8	
-#define KEY_PRESENTATION	0x1a9	
-#define KEY_DATABASE		0x1aa	
-#define KEY_NEWS		0x1ab	
-#define KEY_VOICEMAIL		0x1ac	
-#define KEY_ADDRESSBOOK		0x1ad	
-#define KEY_MESSENGER		0x1ae	
-#define KEY_DISPLAYTOGGLE	0x1af	
-#define KEY_SPELLCHECK		0x1b0   
-#define KEY_LOGOFF		0x1b1   
+#define KEY_VIDEOPHONE		0x1a0
+#define KEY_GAMES		0x1a1
+#define KEY_ZOOMIN		0x1a2
+#define KEY_ZOOMOUT		0x1a3
+#define KEY_ZOOMRESET		0x1a4
+#define KEY_WORDPROCESSOR	0x1a5
+#define KEY_EDITOR		0x1a6
+#define KEY_SPREADSHEET		0x1a7
+#define KEY_GRAPHICSEDITOR	0x1a8
+#define KEY_PRESENTATION	0x1a9
+#define KEY_DATABASE		0x1aa
+#define KEY_NEWS		0x1ab
+#define KEY_VOICEMAIL		0x1ac
+#define KEY_ADDRESSBOOK		0x1ad
+#define KEY_MESSENGER		0x1ae
+#define KEY_DISPLAYTOGGLE	0x1af
+#define KEY_SPELLCHECK		0x1b0
+#define KEY_LOGOFF		0x1b1
 
 #define KEY_DOLLAR		0x1b2
 #define KEY_EURO		0x1b3
 
-#define KEY_FRAMEBACK		0x1b4	
+#define KEY_FRAMEBACK		0x1b4
 #define KEY_FRAMEFORWARD	0x1b5
-#define KEY_CONTEXT_MENU	0x1b6	
-#define KEY_MEDIA_REPEAT	0x1b7	
-#define KEY_10CHANNELSUP	0x1b8	
-#define KEY_10CHANNELSDOWN	0x1b9	
-#define KEY_IMAGES		0x1ba	
+#define KEY_CONTEXT_MENU	0x1b6
+#define KEY_MEDIA_REPEAT	0x1b7
+#define KEY_10CHANNELSUP	0x1b8
+#define KEY_10CHANNELSDOWN	0x1b9
+#define KEY_IMAGES		0x1ba
 
 #define KEY_DEL_EOL		0x1c0
 #define KEY_DEL_EOS		0x1c1
@@ -679,8 +679,8 @@ struct input_keymap_entry {
 #define KEY_BRL_DOT9		0x1f9
 #define KEY_BRL_DOT10		0x1fa
 
-#define KEY_NUMERIC_0		0x200	
-#define KEY_NUMERIC_1		0x201	
+#define KEY_NUMERIC_0		0x200
+#define KEY_NUMERIC_1		0x201
 #define KEY_NUMERIC_2		0x202
 #define KEY_NUMERIC_3		0x203
 #define KEY_NUMERIC_4		0x204
@@ -693,9 +693,9 @@ struct input_keymap_entry {
 #define KEY_NUMERIC_POUND	0x20b
 #define KEY_CAMERA_SNAPSHOT	0x2fe
 #define KEY_CAMERA_FOCUS	0x210
-#define KEY_WPS_BUTTON		0x211	
+#define KEY_WPS_BUTTON		0x211
 
-#define KEY_TOUCHPAD_TOGGLE	0x212	
+#define KEY_TOUCHPAD_TOGGLE	0x212
 #define KEY_TOUCHPAD_ON		0x213
 #define KEY_TOUCHPAD_OFF	0x214
 
@@ -796,8 +796,8 @@ struct input_keymap_entry {
 
 #define ABS_MISC		0x28
 
-#define ABS_MT_POSITION		0x2a    
-#define ABS_MT_AMPLITUDE	0x2b    
+#define ABS_MT_POSITION		0x2a
+#define ABS_MT_AMPLITUDE	0x2b
 #define ABS_MT_SLOT		0x2f	/* MT slot being modified */
 #define ABS_MT_TOUCH_MAJOR	0x30	/* Major axis of touching ellipse */
 #define ABS_MT_TOUCH_MINOR	0x31	/* Minor axis (omit if circular) */

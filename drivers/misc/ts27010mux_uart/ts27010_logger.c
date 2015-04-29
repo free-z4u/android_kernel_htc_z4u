@@ -84,7 +84,7 @@ struct mux_logger_list_t {
 };
 
 struct ts27010_mux_logger {
-	spinlock_t m_locker; 
+	spinlock_t m_locker;
 	struct task_struct *m_archiver_tsk;
 	struct list_head m_datalist;
 	struct semaphore m_sem;
@@ -192,7 +192,7 @@ static struct file *mux_logger_open_file(char *filename)
 
 	fp = filp_open(filename, O_RDONLY, 0);
 	if (!IS_ERR(fp)) {
-		
+
 		mux_print(MSG_WARNING, "log file exists, will lost!\n");
 		mux_backup_oldlogfile(fp, filename, MUX_OLD_LOG_FILE);
 		filp_close(fp, NULL);
@@ -257,7 +257,7 @@ static int mux_logger_archive_thread(void *data)
 	DAEMONIZE("mux_uart_logger");
 
 	while (down_interruptible(&mux_logger->m_sem) == 0) {
-		
+
 		fp = mux_logger_getfs(mux_logger);
 		if (!fp)
 			continue;
@@ -289,7 +289,7 @@ struct ts27010_mux_logger *ts27010_alloc_mux_logger(void)
 	mux_logger->m_locker = __SPIN_LOCK_UNLOCKED(mux_logger->m_locker);
 	mux_logger->m_fp = NULL;
 
-	
+
 	sema_init(&mux_logger->m_sem, 0);
 	mux_logger->m_archiver_tsk = kthread_create(
 		&mux_logger_archive_thread, mux_logger, "muxuart_logger");

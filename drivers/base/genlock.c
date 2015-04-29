@@ -55,7 +55,7 @@ struct genlock_handle {
 	struct genlock *lock;     /* Lock currently attached to the handle */
 	struct list_head entry;   /* List node for attaching to a lock */
 	struct file *file;        /* File structure associated with handle */
-	int active;		  
+	int active;
 	struct genlock_info info;
 };
 
@@ -122,7 +122,7 @@ struct genlock *genlock_create_lock(struct genlock_handle *handle)
 	lock->file = anon_inode_getfile("genlock", &genlock_fops,
 		lock, O_RDWR);
 
-	
+
 	handle->lock = lock;
 	kref_init(&lock->refcount);
 
@@ -214,9 +214,9 @@ static int handle_has_lock(struct genlock *lock, struct genlock_handle *handle)
 static void _genlock_signal(struct genlock *lock)
 {
 	if (list_empty(&lock->active)) {
-		
+
 		lock->state = _UNLOCKED;
-		
+
 		wake_up(&lock->queue);
 	}
 }
@@ -234,7 +234,7 @@ static int _genlock_unlock(struct genlock *lock, struct genlock_handle *handle)
 		goto done;
 	}
 
-	
+
 	if (!handle_has_lock(lock, handle)) {
 		GENLOCK_LOG_ERR("handle does not have lock attached to it\n");
 		goto done;
@@ -266,7 +266,7 @@ static int _genlock_lock(struct genlock *lock, struct genlock_handle *handle,
 	if (in_interrupt() && !(flags & GENLOCK_NOBLOCK))
 		BUG();
 
-	
+
 
 	if (lock->state == _UNLOCKED)
 		goto dolock;
@@ -345,7 +345,7 @@ static int _genlock_lock(struct genlock *lock, struct genlock_handle *handle,
 	}
 
 dolock:
-	
+
 
 	list_add_tail(&handle->entry, &lock->active);
 	lock->state = op;
@@ -385,11 +385,11 @@ int genlock_lock(struct genlock_handle *handle, int op, int flags,
 	case GENLOCK_RDLOCK:
 		spin_lock_irqsave(&lock->lock, irqflags);
 		if (handle_has_lock(lock, handle)) {
-			
+
 			flags |= GENLOCK_WRITE_TO_READ;
 		}
 		spin_unlock_irqrestore(&lock->lock, irqflags);
-		
+
 	case GENLOCK_WRLOCK:
 		ret = _genlock_lock(lock, handle, op, flags, timeout);
 		break;
@@ -501,7 +501,7 @@ static void genlock_release_lock(struct genlock_handle *handle)
 
 	spin_lock_irqsave(&handle->lock->lock, flags);
 
-	
+
 
 	if (handle_has_lock(handle->lock, handle)) {
 		list_del(&handle->entry);

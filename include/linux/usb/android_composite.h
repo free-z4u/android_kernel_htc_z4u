@@ -91,9 +91,9 @@ struct android_usb_platform_data {
 	unsigned char rmnet_init:1;
 	unsigned char reserved:5;
 
-	
 
-	
+
+
 	int nluns;
 	int cdrom_lun;
 	int cdrom_cttype;

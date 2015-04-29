@@ -139,7 +139,7 @@ struct msm_otg {
 	int (*set_clk)		(struct otg_transceiver *otg, int on);
 	/* Reset phy and link */
 	void (*reset)		(struct otg_transceiver *otg, int phy_reset);
-	
+
 	u8 pmic_vbus_notif_supp;
 	u8 pmic_id_notif_supp;
 	struct msm_otg_platform_data *pdata;
@@ -162,7 +162,7 @@ struct msm_otg {
 	struct timer_list	id_timer;	/* drives id_status polling */
 	unsigned		b_max_power;	/* ACA: max power of accessory*/
 #endif
-	struct mutex udc_lock;	
+	struct mutex udc_lock;
 	void (*vbus_notification_cb)(int online);
 
 	struct work_struct notifier_work;

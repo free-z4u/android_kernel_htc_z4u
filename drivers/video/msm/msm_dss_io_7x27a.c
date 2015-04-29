@@ -156,12 +156,12 @@ static void mipi_dsi_calibration(void)
 {
 	uint32 data;
 
-	MIPI_OUTP(MIPI_DSI_BASE + 0xf4, 0x0000ff11); 
+	MIPI_OUTP(MIPI_DSI_BASE + 0xf4, 0x0000ff11);
 	MIPI_OUTP(MIPI_DSI_BASE + 0xf8, 0x00a105a1); /* cal_hw_ctrl */
-	MIPI_OUTP(MIPI_DSI_BASE + 0xf0, 0x01); 
+	MIPI_OUTP(MIPI_DSI_BASE + 0xf0, 0x01);
 
 	while (1) {
-		data = MIPI_INP(MIPI_DSI_BASE + 0xfc); 
+		data = MIPI_INP(MIPI_DSI_BASE + 0xfc);
 		if ((data & 0x10000000) == 0)
 			break;
 

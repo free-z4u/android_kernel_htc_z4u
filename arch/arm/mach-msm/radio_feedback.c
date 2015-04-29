@@ -68,11 +68,11 @@ typedef struct {
 
 	uint32_t      	htc_smem_erase_efs_flag;
 	uint32_t    		htc_smem_flight_mode_flag;
-	uint8_t      		htc_radio_version_addr[16];	
-	uint8_t      		htc_protocol_version_addr[16]; 
+	uint8_t      		htc_radio_version_addr[16];
+	uint8_t      		htc_protocol_version_addr[16];
 	uint8_t      		reserve2[16];
 
-	htc_modem_request_type		htc_modem_request;		
+	htc_modem_request_type		htc_modem_request;
 
 	uint32_t      	htc_emmc_magic_flag;
 	uint32_t      	htc_emmc_buff_addr;
@@ -142,9 +142,9 @@ static long radio_feedback_ioctl(struct file *file, unsigned int cmd,
 		config.max_size = htc_smem_ram_addr->htc_cdlog_max_size_for_apps;
 #else
 		radio_feedback_addr = (uint32_t)ioremap(HTC_SMEM_PARAM_BASE_ADDR, HTC_SMEM_PARAM_SIZE);
-		
+
 		memcpy(&config.start_addr, (void *)(radio_feedback_addr + 0x118), 4);
-		
+
 		memcpy(&config.max_size, (void *)(radio_feedback_addr + 0x11c), 4);
 #endif
 		printk("start addr: 0x%x, max_size: 0x%x\n", config.start_addr, config.max_size);

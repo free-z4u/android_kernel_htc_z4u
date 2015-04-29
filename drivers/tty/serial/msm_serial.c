@@ -477,10 +477,10 @@ static void msm_set_baud_rate(struct uart_port *port, unsigned int baud)
 	watermark |= UART_IPR_STALE_TIMEOUT_MSB & (rxstale << 2);
 	msm_write(port, watermark, UART_IPR);
 
-	
+
 #ifdef CONFIG_GPS_1530
 	if (pdev->id == 2)
-		watermark = (port->fifosize ) / 2; 
+		watermark = (port->fifosize ) / 2;
 	else
 		watermark = (port->fifosize * 3) / 4;
 #else

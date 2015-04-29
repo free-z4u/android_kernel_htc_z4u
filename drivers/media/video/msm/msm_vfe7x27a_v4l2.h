@@ -116,7 +116,7 @@ struct vfe2x_ctrl_type {
 	uint32_t liveshot_enabled;
 	int32_t  camif_error;
 
-	
+
 	struct v4l2_subdev subdev;
 	struct platform_device *pdev;
 	struct clk *vfe_clk[3];

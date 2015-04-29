@@ -163,11 +163,11 @@ struct platform_device msm_device_adspdec = {
 
 #if !defined(CONFIG_MACH_DUMMY)
 #define SNDDEV_CAP_NONE 0x0
-#define SNDDEV_CAP_RX 0x1 
-#define SNDDEV_CAP_TX 0x2 
-#define SNDDEV_CAP_VOICE 0x4 
-#define SNDDEV_CAP_FM 0x10 
-#define SNDDEV_CAP_TTY 0x20 
+#define SNDDEV_CAP_RX 0x1
+#define SNDDEV_CAP_TX 0x2
+#define SNDDEV_CAP_VOICE 0x4
+#define SNDDEV_CAP_FM 0x10
+#define SNDDEV_CAP_TTY 0x20
 #define CAD(desc, num, cap) { .name = #desc, .id = num, .capability = cap, }
 static struct cad_endpoint cad_endpoints_list[] = {
 	CAD(NONE, 0, SNDDEV_CAP_NONE),
@@ -219,5 +219,5 @@ struct platform_device msm_device_cad = {
 		.platform_data = &msm_device_cad_endpoints
 	},
 };
-#endif 
+#endif
 

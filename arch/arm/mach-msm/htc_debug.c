@@ -15,23 +15,23 @@ int htc_debug_read(char *page, char **start, off_t off, int count, int *eof, voi
 
 
 	memset(R_Buffer,0,FLAG_LEN+3);
-	
 
-	
+
+
 
 	if (off > 0) {
 		len = 0;
 	} else {
 		memcpy(R_Buffer,"0x",2);
 		memcpy(R_Buffer+2,htc_debug_flag,FLAG_LEN);
-		
-		
+
+
 
 		memcpy(page,R_Buffer,FLAG_LEN+3);
-		
+
 
 	}
-	
+
 	return len;
 }
 
@@ -40,7 +40,7 @@ int htc_debug_write(struct file *file, const char *buffer, unsigned long count, 
 	char buf[FLAG_LEN+3];
 
 
-	
+
 
 	if (count != sizeof(buf))
 		return -EFAULT;
@@ -49,8 +49,8 @@ int htc_debug_write(struct file *file, const char *buffer, unsigned long count, 
 		return -EFAULT;
 
 	memcpy(htc_debug_flag,buf+2,FLAG_LEN);
-	
-	
+
+
 	return count;
 }
 
@@ -67,7 +67,7 @@ static int __init htc_debug_init(void)
 	entry->read_proc = htc_debug_read;
 	entry->write_proc = htc_debug_write;
 
-	
+
 
 	return 0;
 }
@@ -76,7 +76,7 @@ static void __exit htc_debug_exit(void)
 {
 	remove_proc_entry(PROCNAME, NULL);
 
-	
+
 }
 
 module_init(htc_debug_init);

@@ -28,7 +28,7 @@ struct ts27010_tty_channel_data {
 	atomic_t ref_count;
 	struct tty_struct *tty;
 #ifdef UART_QUEUE_RECV
-	struct mutex lock; 
+	struct mutex lock;
 #endif
 #ifdef PROC_DEBUG_MUX_STAT
 	int sent_size;
@@ -72,7 +72,7 @@ static const int dual_tty[TS0710_MAX_MUX] = {
 static const int tty2dual[TS0710_MAX_MUX + 1] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, PS_ORG_CHN,
 };
-#else 
+#else
 struct tty_struct *ts27010_uart_tty_table[TS0710_MAX_MUX];
 static const int dual_tty[TS0710_MAX_MUX] = {
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -80,7 +80,7 @@ static const int dual_tty[TS0710_MAX_MUX] = {
 static const int tty2dual[TS0710_MAX_MUX] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
 };
-#endif 
+#endif
 
 static struct tty_driver *driver;
 
@@ -129,7 +129,7 @@ void ts27010_tty_uart_dump_io(void)
 	mux_print(MSG_ERROR, "Total writen count: %d, recved: %d, back: %d\n",
 		s_nWriteCount, s_nRecvCount, s_nBackCount);
 }
-#endif 
+#endif
 
 static int tty_push(struct tty_struct *tty, u8 *buf, int len)
 {
@@ -142,8 +142,8 @@ static int tty_push(struct tty_struct *tty, u8 *buf, int len)
 			mux_print(MSG_WARNING,
 				"written size %d is not wanted %d\n",
 				count, len - sent);
-			
-			
+
+
 			msleep_interruptible(100);
 			if (signal_pending(current)) {
 				mux_print(MSG_ERROR, "but got signal, "
@@ -187,7 +187,7 @@ struct mux_data_list_t {
 };
 
 struct mux_recver_t {
-	spinlock_t m_locker; 
+	spinlock_t m_locker;
 	struct list_head m_datalist;
 	const char *m_name;
 
@@ -421,12 +421,12 @@ static int ts27010_uart_tty_queue_recv_data(struct mux_recver_t *recver,
 EXIT:
 	return ret;
 }
-#endif 
+#endif
 
 #ifdef UART_MUX_LOG
 void mux_log_recv_worker(struct work_struct *work)
 {
-	
+
 	u8 *buf;
 	int left;
 	int data_len;
@@ -586,7 +586,7 @@ int ts27010_tty_uart_send_rbuf(int line, struct ts27010_ringbuf *rbuf,
 #ifdef HAS_PS_IND
 	struct tty_struct *ps_ctrl_tty = NULL;
 #endif
-	
+
 #ifdef TS27010_NET
 	extern struct ts0710_con ts0710_connection;
 	u8 tty2dlci[TS0710_MAX_MUX] = {
@@ -596,7 +596,7 @@ int ts27010_tty_uart_send_rbuf(int line, struct ts27010_ringbuf *rbuf,
 	dlci = tty2dlci[line];
 	mux_print(MSG_MSGDUMP, "ts0710_connection Addrress %x \n", (unsigned int)&ts0710_connection);
 #endif
-	
+
 
 	FUNC_ENTER();
 	if ((line < 0) || (line >= TS0710_MAX_MUX)) {
@@ -615,14 +615,14 @@ int ts27010_tty_uart_send_rbuf(int line, struct ts27010_ringbuf *rbuf,
 #ifdef UART_QUEUE_RECV
 	ts27010_uart_tty_queue_recv_data(
 		s_mux_uart_recver, tty, line, rbuf, data_idx, len);
-#else 
+#else
 #ifdef PROC_DEBUG_MUX_STAT
 	td->chan[line].recv_size += len;
 	td->chan[line].recv += len;
 	s_nRecvCount++;
 	s_nReadTotal += len;
 #endif
-		
+
 #ifdef TS27010_NET
 	if (ts0710->dlci[dlci].net){
 		u8 *buf;
@@ -655,15 +655,15 @@ int ts27010_tty_uart_send_rbuf(int line, struct ts27010_ringbuf *rbuf,
 #else
 	tty_direct_push(tty, line, rbuf, data_idx, len);
 #endif
-		
+
 #ifdef PROC_DEBUG_MUX_STAT
 	td->chan[line].back_size += len;
 	s_nBackCount++;
 #endif
-#endif 
+#endif
 
 #ifdef HAS_PS_IND
-	
+
 	if (dual_tty[line] >= 0) {
 		ps_ctrl_tty = ts27010_uart_tty_table[dual_tty[line]];
 		if (ps_ctrl_tty) {
@@ -684,7 +684,7 @@ int ts27010_tty_uart_send_rbuf(int line, struct ts27010_ringbuf *rbuf,
 				dual_tty[line]);
 		}
 	}
-#endif 
+#endif
 
 	FUNC_EXIT();
 	return len;
@@ -706,7 +706,7 @@ static int ts27010_tty_open_ps_ind(int line, struct tty_struct *tty)
 	}
 	return 0;
 }
-#endif 
+#endif
 
 static int ts27010_tty_open(struct tty_struct *tty, struct file *filp)
 {
@@ -1007,9 +1007,9 @@ static int ts27010_tty_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned 
 		return -ENODEV;
 	}
 	line = tty2dual[line];
-	
+
 	mux_print(MSG_DEBUG, "ioctl cmd: %x \n", cmd);
-	
+
 	ret = ts27010_mux_uart_line_ioctl(cmd, arg, line);
 	FUNC_EXIT();
 	return ret;
@@ -1076,7 +1076,7 @@ int ts27010_tty_uart_init(void)
 #endif
 
 #ifdef HAS_PS_IND
-	
+
 	driver = alloc_tty_driver(TS0710_MAX_MUX + 1);
 #else
 	driver = alloc_tty_driver(TS0710_MAX_MUX);
@@ -1117,7 +1117,7 @@ int ts27010_tty_uart_init(void)
 	}
 
 #ifdef HAS_PS_IND
-	
+
 	ts27010_uart_tty_table[i] = NULL;
 #endif
 

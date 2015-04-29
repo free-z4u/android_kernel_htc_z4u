@@ -41,7 +41,7 @@
 
 #define MAIN_SENSOR_S5K3H2YX	0
 #define MAIN_SENSOR_IMX175		1
-static char cMainSensor = MAIN_SENSOR_S5K3H2YX;	
+static char cMainSensor = MAIN_SENSOR_S5K3H2YX;
 
 static int config_gpio_table(uint32_t *table, int len);
 
@@ -50,7 +50,7 @@ static int config_gpio_table(uint32_t *table, int len);
 #ifdef CONFIG_SPI_CPLD
 
 static uint32_t cpld_on_gpio_table[] = {
-#if 1 
+#if 1
 	GPIO_CFG(Z4U_GPIO_ADDR_0, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 	GPIO_CFG(Z4U_GPIO_ADDR_1, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
 	GPIO_CFG(Z4U_GPIO_ADDR_2, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),
@@ -68,7 +68,7 @@ static uint32_t cpld_on_gpio_table[] = {
 };
 
 static uint32_t cpld_off_gpio_table[] = {
-#if 1 
+#if 1
 	GPIO_CFG(Z4U_GPIO_ADDR_0, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 	GPIO_CFG(Z4U_GPIO_ADDR_1, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
 	GPIO_CFG(Z4U_GPIO_ADDR_2, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),
@@ -96,7 +96,7 @@ static void cpld_power(int on)
 	} else {
 		config_gpio_table(cpld_off_gpio_table, ARRAY_SIZE(cpld_off_gpio_table));
 
-	#if 1 
+	#if 1
 		gpio_set_value(Z4U_GPIO_ADDR_0, 0);
 		gpio_set_value(Z4U_GPIO_ADDR_1, 0);
 		gpio_set_value(Z4U_GPIO_ADDR_2, 0);
@@ -155,7 +155,7 @@ int z4u_rawchip_vreg_on(void)
 	int rc;
 	pr_info("[CAM]%s: rawchip vreg on\n", __func__);
 
-	
+
 	pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_VCM2V85_EN\n", __func__);
 	rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_VCM2V85_EN, 1);
 	if(rc < 0){
@@ -164,7 +164,7 @@ int z4u_rawchip_vreg_on(void)
 	}
 	udelay(100);
 
-	
+
 	pr_info("[CAM]%s: CPLD_EXT_GPIO_RAW_1V8_EN\n", __func__);
 	rc = cpld_gpio_write(CPLD_EXT_GPIO_RAW_1V8_EN, 1);
 	if(rc < 0){
@@ -174,14 +174,14 @@ int z4u_rawchip_vreg_on(void)
 	udelay(50);
 
 #if defined(CONFIG_IMX175)
-	
+
 	if (cMainSensor == MAIN_SENSOR_IMX175){
 		z4u_camera_vreg_config_imx175(1);
 	}
 	else
 #endif
 	{
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_RAW_1V2_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_RAW_1V2_EN, 1);
 		if(rc < 0){
@@ -201,7 +201,7 @@ static int z4u_rawchip_vreg_off(void)
 	int rc;
 	pr_info("[CAM]%s: rawchip vreg off\n", __func__);
 
-	
+
 	pr_info("[CAM]%s: CPLD_EXT_GPIO_RAW_1V2_EN\n", __func__);
 	rc = cpld_gpio_write(CPLD_EXT_GPIO_RAW_1V2_EN, 0);
 	if(rc < 0){
@@ -211,12 +211,12 @@ static int z4u_rawchip_vreg_off(void)
 	udelay(50);
 
 #if defined(CONFIG_IMX175)
-	
+
 	if (cMainSensor == MAIN_SENSOR_IMX175){
 		z4u_camera_vreg_config_imx175(0);
 	}
 #endif
-	
+
 	pr_info("[CAM]%s: CPLD_EXT_GPIO_RAW_1V8_EN\n", __func__);
 	rc = cpld_gpio_write(CPLD_EXT_GPIO_RAW_1V8_EN, 0);
 	if(rc < 0){
@@ -225,7 +225,7 @@ static int z4u_rawchip_vreg_off(void)
 	}
 	udelay(100);
 
-	
+
 	pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_VCM2V85_EN\n", __func__);
 	rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_VCM2V85_EN, 0);
 	if(rc < 0){
@@ -242,16 +242,16 @@ err:
 
 static uint32_t rawchip_on_gpio_table[] = {
 	GPIO_CFG(Z4U_GPIO_CAM_MCLK,   1, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
-	
-	
-	
+
+
+
 };
 
 static uint32_t rawchip_off_gpio_table[] = {
 	GPIO_CFG(Z4U_GPIO_CAM_MCLK,   0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA),
-	
-	
-	
+
+
+
 };
 
 static int config_rawchip_on_gpios(void)
@@ -277,9 +277,9 @@ static struct msm_camera_rawchip_info msm_rawchip_board_info = {
 	.rawchip_mclk_freq = 24, /* MHz, should be the same as cam csi0 mclk_clk_rate */
 	.camera_rawchip_power_on = z4u_rawchip_vreg_on,
 	.camera_rawchip_power_off = z4u_rawchip_vreg_off,
-	
-	
-	
+
+
+
 };
 
 static struct platform_device msm_rawchip_device = {
@@ -373,7 +373,7 @@ static struct msm_actuator_info s5k3h2yx_actuator_info = {
 #ifdef CONFIG_MSM_CAMERA_FLASH
 static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL2,
 		.current_ma = 200,
 		.lumen_value = 220,
@@ -381,7 +381,7 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.max_step = 92
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL3,
 		.current_ma = 300,
 		.lumen_value = 320,
@@ -389,7 +389,7 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.max_step = 58
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL4,
 		.current_ma = 400,
 		.lumen_value = 420,
@@ -397,7 +397,7 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.max_step = 49
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL6,
 		.current_ma = 600,
 		.lumen_value = 620,
@@ -405,15 +405,15 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.max_step = 46
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH,
 		.current_ma = 750,
 		.lumen_value = 750,
 		.min_step = 24,
-		.max_step = 40    
+		.max_step = 40
 	},
 		{
-		.enable = 0, 
+		.enable = 0,
 		.led_state = FL_MODE_FLASH_LEVEL2,
 		.current_ma = 200,
 		.lumen_value = 250,
@@ -437,12 +437,12 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.max_step = 0
 	},
 	{
-		.enable = 0, 
+		.enable = 0,
 		.led_state = FL_MODE_FLASH,
 		.current_ma = 750,
 		.lumen_value = 745,
 		.min_step = 271,
-		.max_step = 317    
+		.max_step = 317
 	},
 	{
 		.enable = 0,
@@ -453,7 +453,7 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 		.max_step = 26
 	},
 		{
-		.enable = 0, 
+		.enable = 0,
 		.led_state = FL_MODE_FLASH,
 		.current_ma = 750,
 		.lumen_value = 750,
@@ -474,7 +474,7 @@ static struct camera_led_est msm_camera_sensor_s5k3h2yx_led_table[] = {
 static struct camera_led_info msm_camera_sensor_s5k3h2yx_led_info = {
 	.enable = 1,
 	.low_limit_led_state = FL_MODE_TORCH,
-	.max_led_current_ma = 750,  
+	.max_led_current_ma = 750,
 	.num_led_est_table = ARRAY_SIZE(msm_camera_sensor_s5k3h2yx_led_table),
 };
 
@@ -545,7 +545,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_s5k3h2yx_data = {
 	.actuator_info = &s5k3h2yx_actuator_info,
 #endif
 #ifdef CONFIG_MSM_CAMERA_FLASH
-	.flash_cfg = &msm_camera_sensor_s5k3h2yx_flash_cfg, 
+	.flash_cfg = &msm_camera_sensor_s5k3h2yx_flash_cfg,
 #endif
 };
 
@@ -556,8 +556,8 @@ static void z4u_camera_vreg_config_s5k3h2yx(int vreg_en)
 	pr_info("[CAM]%s: vreg_en %d\n", __func__, vreg_en);
 
 	if (vreg_en) {
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_A2V85_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_A2V85_EN, 1);
 		if(rc < 0){
@@ -565,8 +565,8 @@ static void z4u_camera_vreg_config_s5k3h2yx(int vreg_en)
 			return;
 		}
 		udelay(50);
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAMIO_1V8_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAMIO_1V8_EN, 1);
 		if(rc < 0){
@@ -574,16 +574,16 @@ static void z4u_camera_vreg_config_s5k3h2yx(int vreg_en)
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_SEL\n", __func__);
-		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 0); 
+		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 0);
 		if(rc < 0){
 			pr_err("[CAM]%s: MIPI Switch fail\n", __func__);
 			return;
 		}
 		udelay(50);
 	}else{
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAMIO_1V8_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAMIO_1V8_EN, 0);
 		if(rc < 0){
@@ -591,8 +591,8 @@ static void z4u_camera_vreg_config_s5k3h2yx(int vreg_en)
 			return;
 		}
 		udelay(50);
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_A2V85_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_A2V85_EN, 0);
 		if(rc < 0){
@@ -600,7 +600,7 @@ static void z4u_camera_vreg_config_s5k3h2yx(int vreg_en)
 			return;
 		}
 		udelay(50);
-		 
+
 	}
 }
 
@@ -688,7 +688,7 @@ static struct msm_actuator_info ti201_actuator_info = {
 #ifdef CONFIG_MSM_CAMERA_FLASH
 static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL2,
 		.current_ma = 200,
 		.lumen_value = 220,
@@ -696,7 +696,7 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		.max_step = 92
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL3,
 		.current_ma = 300,
 		.lumen_value = 320,
@@ -704,7 +704,7 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		.max_step = 58
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL4,
 		.current_ma = 400,
 		.lumen_value = 420,
@@ -712,7 +712,7 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		.max_step = 49
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH_LEVEL6,
 		.current_ma = 600,
 		.lumen_value = 620,
@@ -720,15 +720,15 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		.max_step = 46
 	},
 		{
-		.enable = 1, 
+		.enable = 1,
 		.led_state = FL_MODE_FLASH,
 		.current_ma = 750,
 		.lumen_value = 750,
 		.min_step = 24,
-		.max_step = 40    
+		.max_step = 40
 	},
 		{
-		.enable = 0, 
+		.enable = 0,
 		.led_state = FL_MODE_FLASH_LEVEL2,
 		.current_ma = 200,
 		.lumen_value = 250,
@@ -752,12 +752,12 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		.max_step = 0
 	},
 	{
-		.enable = 0, 
+		.enable = 0,
 		.led_state = FL_MODE_FLASH,
 		.current_ma = 750,
 		.lumen_value = 745,
 		.min_step = 271,
-		.max_step = 317    
+		.max_step = 317
 	},
 	{
 		.enable = 0,
@@ -768,7 +768,7 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 		.max_step = 26
 	},
 		{
-		.enable = 0, 
+		.enable = 0,
 		.led_state = FL_MODE_FLASH,
 		.current_ma = 750,
 		.lumen_value = 750,
@@ -789,7 +789,7 @@ static struct camera_led_est msm_camera_sensor_imx175_led_table[] = {
 static struct camera_led_info msm_camera_sensor_imx175_led_info = {
 	.enable = 1,
 	.low_limit_led_state = FL_MODE_TORCH,
-	.max_led_current_ma = 750,  
+	.max_led_current_ma = 750,
 	.num_led_est_table = ARRAY_SIZE(msm_camera_sensor_imx175_led_table),
 };
 
@@ -856,7 +856,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_imx175 = {
 	.actuator_info = &ti201_actuator_info,
 #endif
 #ifdef CONFIG_MSM_CAMERA_FLASH
-	.flash_cfg = &msm_camera_sensor_imx175_flash_cfg, 
+	.flash_cfg = &msm_camera_sensor_imx175_flash_cfg,
 #endif
 };
 
@@ -867,8 +867,8 @@ static void z4u_camera_vreg_config_imx175(int vreg_en)
 	pr_info("[CAM]%s: vreg_en %d\n", __func__, vreg_en);
 
 	if (vreg_en) {
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_A2V85_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_A2V85_EN, 1);
 		if(rc < 0){
@@ -886,8 +886,8 @@ static void z4u_camera_vreg_config_imx175(int vreg_en)
 		udelay(50);
 
 #ifdef CONFIG_RAWCHIP
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_RAW_1V2_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_RAW_1V2_EN, 1);
 		if(rc < 0){
@@ -900,16 +900,16 @@ static void z4u_camera_vreg_config_imx175(int vreg_en)
 		udelay(100);
 #endif
 
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_SEL\n", __func__);
-		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 0); 
+		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 0);
 		if(rc < 0){
 			pr_err("[CAM]%s: MIPI Switch fail\n", __func__);
 			return;
 		}
 		udelay(50);
 	}else{
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAMIO_1V8_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAMIO_1V8_EN, 0);
 		if(rc < 0){
@@ -917,8 +917,8 @@ static void z4u_camera_vreg_config_imx175(int vreg_en)
 			return;
 		}
 		udelay(50);
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_A2V85_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_A2V85_EN, 0);
 		if(rc < 0){
@@ -926,7 +926,7 @@ static void z4u_camera_vreg_config_imx175(int vreg_en)
 			return;
 		}
 		udelay(50);
-		 
+
 	}
 }
 
@@ -1022,8 +1022,8 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 	pr_info("[CAM]%s: vreg_en %d\n", __func__, vreg_en);
 
 	if (vreg_en) {
-		 
-		
+
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_A2V85_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_A2V85_EN, 1);
 		if(rc < 0){
@@ -1031,7 +1031,7 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM2_D1V2_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM2_D1V2_EN, 1);
 		if(rc < 0){
@@ -1039,7 +1039,7 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAMIO_1V8_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAMIO_1V8_EN, 1);
 		if(rc < 0){
@@ -1047,24 +1047,24 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_SEL\n", __func__);
-		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 1); 
+		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 1);
 		if(rc < 0){
 			pr_err("[CAM]%s: MIPI Switch fail\n", __func__);
 			return;
 		}
 		udelay(50);
 	}else{
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_SEL\n", __func__);
-		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 0); 
+		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_SEL, 0);
 		if(rc < 0){
 			pr_err("[CAM]%s: MIPI Switch fail\n", __func__);
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAMIO_1V8_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAMIO_1V8_EN, 0);
 		if(rc < 0){
@@ -1072,7 +1072,7 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM2_D1V2_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM2_D1V2_EN, 0);
 		if(rc < 0){
@@ -1080,7 +1080,7 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 			return;
 		}
 		udelay(50);
-		
+
 		pr_info("[CAM]%s: CPLD_EXT_GPIO_CAM_A2V85_EN\n", __func__);
 		rc = cpld_gpio_write(CPLD_EXT_GPIO_CAM_A2V85_EN, 0);
 		if(rc < 0){
@@ -1088,7 +1088,7 @@ static void z4u_camera_vreg_config_s5k6a2ya(int vreg_en)
 			return;
 		}
 		udelay(50);
-		 
+
 	}
 }
 
@@ -1197,7 +1197,7 @@ void __init z4u_camera_init(void)
 {
 
 	int rc = 0;
-	int voltage = 0; 
+	int voltage = 0;
 
 #ifdef CONFIG_SPI_CPLD
 	spi_init();
@@ -1216,7 +1216,7 @@ void __init z4u_camera_init(void)
 			GPIO_CFG(Z4U_GPIO_CAM_ID, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),
 			GPIO_CFG_ENABLE);
 		msleep(1);
-		
+
 		voltage = gpio_get_value(Z4U_GPIO_CAM_ID);
 		pr_info("[CAM] CAM ID voltage: %d\n", voltage);
 		gpio_tlmm_config(
@@ -1227,7 +1227,7 @@ void __init z4u_camera_init(void)
 
 	pr_info("[CAM]%s: i2c_register_board_info\n", __func__);
 
-	
+
 	if (htc_get_board_revision() == BOARD_EVM) {
 		printk(KERN_INFO "[CAM]: Use EVM layout\n");
 		pr_info("[CAM] use s5k3h2yx\n");
@@ -1236,12 +1236,12 @@ void __init z4u_camera_init(void)
 	}
 	else
 	{
-		if (voltage == 0) { 
+		if (voltage == 0) {
 			pr_info("[CAM] use s5k3h2yx\n");
 			i2c_register_board_info(MSM_GSBI0_QUP_I2C_BUS_ID,
 					i2c_camera_devices_main_source, ARRAY_SIZE(i2c_camera_devices_main_source));
 			cMainSensor = MAIN_SENSOR_S5K3H2YX;
-		} else { 
+		} else {
 			pr_info("[CAM] use imx175\n");
 			i2c_register_board_info(MSM_GSBI0_QUP_I2C_BUS_ID,
 					i2c_camera_devices_2nd_source, ARRAY_SIZE(i2c_camera_devices_2nd_source));

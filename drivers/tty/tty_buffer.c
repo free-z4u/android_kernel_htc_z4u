@@ -417,7 +417,7 @@ static void flush_to_ldisc(struct work_struct *work)
 	struct tty_ldisc *disc;
 
 	disc = tty_ldisc_ref(tty);
-	if (disc == NULL)	
+	if (disc == NULL)
 		return;
 
 	spin_lock_irqsave(&tty->buf.lock, flags);
@@ -442,7 +442,7 @@ static void flush_to_ldisc(struct work_struct *work)
 			if (test_bit(TTY_FLUSHPENDING, &tty->flags))
 				break;
 
-			
+
 			spin_lock(&tty->read_lock);
 			if (tty->update_room_in_ldisc) {
 				if ((tty->read_cnt == N_TTY_BUF_SIZE - 1) &&

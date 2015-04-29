@@ -32,7 +32,7 @@
 
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z3DUG) || defined(CONFIG_MACH_Z3DCG)
 #include <linux/gpio.h>
-#endif 
+#endif
 
 #include <mach/msm_smd.h>
 #include <mach/msm_rpcrouter.h>
@@ -70,7 +70,7 @@
 #endif
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
 #define ACOUSTIC_ENABLE_EXTMOD_SPK		_IOW(ACOUSTIC_IOCTL_MAGIC, 53, unsigned)
-#define ACOUSTIC_SET_AMP		_IOW(ACOUSTIC_IOCTL_MAGIC, 55, unsigned)  
+#define ACOUSTIC_SET_AMP		_IOW(ACOUSTIC_IOCTL_MAGIC, 55, unsigned)
 #endif
 
 #if defined(CONFIG_MACH_DUMMY)
@@ -79,7 +79,7 @@
 
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z3DUG) || defined(CONFIG_MACH_Z3DCG)
 #define ACOUSTIC_ENABLE_TPA2081    _IOW(ACOUSTIC_IOCTL_MAGIC, 70, int)
-#endif 
+#endif
 
 #define HTCRPOG 0x30100002
 #define HTCVERS 0
@@ -190,7 +190,7 @@ int enable_mic_bias(int on)
 
 int enable_mos_test(int enable)
 {
-	
+
 	return 0;
 	}
 EXPORT_SYMBOL(enable_mos_test);
@@ -306,8 +306,8 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 	int rc = -1, reply_value;
 	int vr_arg, hac_arg, mute_arg, beats_arg, sh_arg;
 #if defined(CONFIG_CPLD) && (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
-	int extspk_arg; 
-	int setamp_arg; 
+	int extspk_arg;
+	int setamp_arg;
 #endif
 	int cdma_mute_arg, beats_cfg_arg;
 	uint32_t level, headset_type;
@@ -338,7 +338,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 		int enable;
 	} beats_req, sh_req;
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
-	struct enable_req extmodspk_req; 
+	struct enable_req extmodspk_req;
 #endif
 
 	struct cfg_req {
@@ -446,7 +446,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 			rc = the_ops->enable_beats(beats_arg);
 			pr_aud_info("the_ops->enable_beats rc is %d\n",rc);
 		}
-		
+
 		if (rc < 0) {
 			beats_req.enable = cpu_to_be32(beats_arg);
 			pr_aud_info("htc_acoustic enable_beats: %d\n", beats_arg);
@@ -458,7 +458,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 		if (rc < 0)
 			pr_aud_err("ONCRPC_ENABLE_BEATS_PROC failed %d.\n", rc);
 		break;
-	
+
 	case ACOUSTIC_UPDATE_BEATS_STATUS: {
 		int new_state = -1;
 
@@ -478,7 +478,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 		rc = 0;
 		break;
 	}
-	
+
 	case ACOUSTIC_UPDATE_LISTEN_NOTIFICATION: {
 		int new_state = -1;
 
@@ -572,7 +572,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 		break;
 #if defined(CONFIG_CPLD) && (defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
 	case ACOUSTIC_SW_SPKL_RECVR:
-		
+
 		if (copy_from_user(&dev_sw, (void *)arg, sizeof(dev_sw))) {
 			rc = -EFAULT;
 			break;
@@ -616,7 +616,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 		rc = 0;
 		break;
 	case ACOUSTIC_SW_MIC:
-		
+
 		if (copy_from_user(&dev_sw, (void *)arg, sizeof(dev_sw))) {
 			rc = -EFAULT;
 			break;
@@ -646,7 +646,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 			pr_aud_err("ONCRPC_ENABLE_EXTMOD_SPK_PROC failed %d.\n", rc);
 		break;
 	case ACOUSTIC_SET_AMP:
-		
+
 		if (copy_from_user(&setamp_arg, (void *)arg, sizeof(setamp_arg))) {
 			rc = -EFAULT;
 			break;
@@ -695,7 +695,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 			}
 		}
 		break;
-#endif 
+#endif
 	default:
 		rc = -EINVAL;
 	}
@@ -815,7 +815,7 @@ static int __init acoustic_init(void)
 	}
 #endif
 
-	
+
 	sdev_beats.name = "Beats";
 	sdev_beats.print_name = beats_print_name;
 
@@ -824,7 +824,7 @@ static int __init acoustic_init(void)
 		pr_err("failed to register beats switch device!\n");
 		goto err_create_class_device_file;
 	}
-	
+
 
 	sdev_listen_notification.name = "Listen_notification";
 	sdev_listen_notification.print_name = listen_notification_print_name;

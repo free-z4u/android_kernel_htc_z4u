@@ -312,7 +312,7 @@ static inline void skb_dst_force(struct sk_buff *skb)
 		printk("[NET] skb is NULL in %s\n", __func__);
 		return;
 	}
-	
+
 	if (skb_dst_is_noref(skb)) {
 		WARN_ON(!rcu_read_lock_held());
 		skb->_skb_refdst &= ~SKB_DST_NOREF;
@@ -467,7 +467,7 @@ static inline struct dst_entry *xfrm_lookup(struct net *net,
 					    int flags)
 {
 	return dst_orig;
-} 
+}
 #else
 extern struct dst_entry *xfrm_lookup(struct net *net, struct dst_entry *dst_orig,
 				     const struct flowi *fl, struct sock *sk,

@@ -135,7 +135,7 @@ int v4l2_event_dequeue(struct v4l2_fh *fh, struct v4l2_event *event,
 	if (nonblocking)
 		return __v4l2_event_dequeue(fh, event);
 
-	
+
 	if (fh->vdev->lock)
 		mutex_unlock(fh->vdev->lock);
 
@@ -185,20 +185,20 @@ void v4l2_event_queue(struct video_device *vdev, const struct v4l2_event *ev)
 		struct v4l2_events *events = fh->events;
 		struct v4l2_kevent *kev;
 
-		
+
 		if (!v4l2_event_subscribed(fh, ev->type))
 			continue;
 
-		
+
 		events->sequence++;
 
-		
+
 		if (list_empty(&events->free)) {
-			
+
 			pr_err("%s, no free event queues", __func__);
 			continue;
 		}
-		
+
 		kev = list_first_entry(&events->free, struct v4l2_kevent, list);
 		kev->event.type = ev->type;
 		kev->event.u = ev->u;

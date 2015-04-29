@@ -64,7 +64,7 @@ module_param_array_named(offalarm_snooze, offalarm_snooze, uint, &offalarm_snooz
 	ANDROID_ALARM_RTC_WAKEUP_MASK | \
 	ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP_MASK)
 
-#define ANDROID_ALARM_SET_OLD               _IOW('a', 2, time_t) 
+#define ANDROID_ALARM_SET_OLD               _IOW('a', 2, time_t)
 #define ANDROID_ALARM_SET_AND_WAIT_OLD      _IOW('a', 3, time_t)
 
 struct alarm_queue {
@@ -589,7 +589,7 @@ static int __init alarm_late_init(void)
 	unsigned long   flags;
 	struct timespec tmp_time, system_time;
 
-	
+
 	spin_lock_irqsave(&alarm_slock, flags);
 	getnstimeofday(&tmp_time);
 	ktime_get_ts(&system_time);

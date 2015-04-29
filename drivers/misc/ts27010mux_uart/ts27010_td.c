@@ -86,7 +86,7 @@ struct sequence_number_t *g_ap_send_sn;
 static struct sequence_number_t *s_ap_received_sn;
 static struct ts27010_slide_window_t *s_slide_window;
 static struct ts27010_timer_para_t *s_timer_para;
-#endif 
+#endif
 
 #ifdef MUX_UART_LOGGER
 struct ts27010_mux_logger *g_mux_uart_logger;
@@ -114,17 +114,17 @@ static int ts27010_uart_control_send_loop(struct ts0710_con *ts0710,
 			};
 			ts27010_sequence_number_lock(s_ap_received_sn);
 			frame[3] = ts27010_sequence_number_get(
-				s_ap_received_sn); 
+				s_ap_received_sn);
 			ts27010_sequence_number_unlock(s_ap_received_sn);
 			frame[5] = ts0710_uart_crc_data(
-				frame + ADDRESS_OFFSET, 4); 
+				frame + ADDRESS_OFFSET, 4);
 #else
 			u8 frame[TS0710_FRAME_SIZE(0)] = {
 				0xf9, 0x03, 0x73, 0x01, 0x35, 0xf9,
 			};
-			frame[1] = data[ADDRESS_OFFSET]; 
+			frame[1] = data[ADDRESS_OFFSET];
 #endif
-			
+
 			ts27010_ldisc_uart_receive(ts27010mux_uart_tty,
 				frame, NULL, TS0710_FRAME_SIZE(0));
 		}
@@ -241,7 +241,7 @@ static void ts27010_uart_retran_worker(struct work_struct *work)
 	FUNC_ENTER();
 
 	memset(para, 0, sizeof(u8) * SLIDE_WINDOWS_SIZE_AP);
-	
+
 	ts27010_get_timer_para(s_timer_para, para);
 
 	ts27010_slidewindow_lock(s_slide_window);
@@ -249,7 +249,7 @@ static void ts27010_uart_retran_worker(struct work_struct *work)
 	for (j = 0; j < SLIDE_WINDOWS_SIZE_AP; j++) {
 		if (para[j] && ts27010_slidewindow_is_idx_in(
 			s_slide_window, j)) {
-			
+
 			retran_info = ts27010_slidewindow_peek(
 				s_slide_window, j);
 			mux_print(MSG_INFO,
@@ -264,7 +264,7 @@ static void ts27010_uart_retran_worker(struct work_struct *work)
 			ts27010_mod_retran_timer(retran_info);
 
 			if (ret == ts27010_get_retran_len(retran_info)) {
-				
+
 				mux_print(MSG_INFO,
 					"frame %x retransfered successful, "
 					"length=%d\n",
@@ -275,7 +275,7 @@ static void ts27010_uart_retran_worker(struct work_struct *work)
 #endif
 				if (ts27010_inc_retran_count(retran_info)
 					== MAX_RETRAN_TIMES) {
-					
+
 					mux_print(MSG_ERROR,
 						"retrans frame %x(index %d) "
 						"failed more than 10 times!\n",
@@ -288,7 +288,7 @@ static void ts27010_uart_retran_worker(struct work_struct *work)
 							retran_info),
 						ts27010_get_retran_len(
 							retran_info));
-					
+
 				}
 			} else {
 				mux_print(MSG_ERROR,
@@ -340,7 +340,7 @@ int ts27010_uart_uih_send(struct ts0710_con *ts0710, u8 *data, u32 len)
 	ts27010_mux_uart_logger_logdata(g_mux_uart_logger, data, len, 1);
 #endif
 
-	
+
 	dlci = *(data + ADDRESS_OFFSET) >> 2;
 	if (ts0710->dlci[dlci].state == FLOW_STOPPED) {
 		mux_print(MSG_WARNING, "Flow stopped on DLCI: %d\n", dlci);
@@ -353,7 +353,7 @@ int ts27010_uart_uih_send(struct ts0710_con *ts0710, u8 *data, u32 len)
 #ifdef TS27010_UART_RETRAN
 	index = ts27010_slidewindo_store(s_slide_window, data, len);
 	if (0xFF == index) {
-		
+
 		mux_print(MSG_ERROR, "slide window is full, block sending... "
 			"should I report a panic?\n");
 		return -EBUSY;
@@ -414,7 +414,7 @@ int ts27010_uart_process_ack(struct ts0710_con *ts0710, u8 sn)
 {
 	u8 error = sn >> 7;
 	u8 number = sn & INDIFFERENT_SN;
-	u8 index = 0xFF; 
+	u8 index = 0xFF;
 	FUNC_ENTER();
 
 #ifdef DUMP_FRAME
@@ -446,7 +446,7 @@ int ts27010_uart_process_ack(struct ts0710_con *ts0710, u8 sn)
 				sn, ts27010_sequence_number_get(g_ap_send_sn));
 		}
 	} else {
-		
+
 		if (error) {
 			u8 sn_head = ts27010_get_retran_sn(
 				ts27010_slidewindow_peek(s_slide_window,
@@ -496,7 +496,7 @@ static int send_ack(struct ts0710_con *ts0710, u8 seq_num, u8 error)
 
 	ack = (struct short_frame *)(buf + ADDRESS_OFFSET);
 	ack->h.addr.ea = 1;
-	
+
 	ack->h.addr.cr = ((ts0710->initiator) & 0x1);
 	ack->h.addr.dlci = 0;
 	ack->h.control = ACK;
@@ -583,7 +583,7 @@ int ts27010_uart_td_init(void)
 	FUNC_ENTER();
 
 #ifdef CONFIG_WAKELOCK
-	
+
 	wake_lock_init(&s_mux_suspend_lock, WAKE_LOCK_SUSPEND, "mux_dispatch");
 #ifdef TS27010_UART_RETRAN
 	wake_lock_init(&s_mux_resend_lock, WAKE_LOCK_SUSPEND, "mux_resend");
@@ -647,7 +647,7 @@ void ts27010_uart_td_remove(void)
 		ts27010_uart_proc_free(s_proc_mux, "muxuart");
 #endif
 #ifdef CONFIG_WAKELOCK
-	
+
 #ifdef TS27010_UART_RETRAN
 	wake_lock_destroy(&s_mux_resend_lock);
 #endif

@@ -22,7 +22,7 @@ static int i2c_transfer_retry(struct i2c_adapter *adap,
 			int len)
 {
 	int i2c_retry = 0;
-	int ns; 
+	int ns;
 
 	while (i2c_retry++ < MAX_I2C_RETRIES) {
 		ns = i2c_transfer(adap, msgs, len);
@@ -176,7 +176,7 @@ int32_t msm_camera_i2c_write(struct msm_camera_i2c_client *client,
   msleep(data);
   return 0;
  }
-  
+
 	rc = msm_camera_i2c_txdata(client, buf, len);
 	if (rc < 0)
 		pr_err("%s fail\n", __func__);
@@ -361,17 +361,17 @@ int32_t msm_camera_i2c_poll2(struct msm_camera_i2c_client *client,
 	uint16_t mask = reg_conf_tbl->mask;
 	uint16_t readValue=0;
 
-	
+
 	for (i=0;i<20 && !done ;++i)
 	{
-		rc = msm_camera_i2c_read (client, addr, &readValue, 2); 
+		rc = msm_camera_i2c_read (client, addr, &readValue, 2);
 		if (rc < 0) {
 			pr_err("i2c read error\n");
-			
+
 			return rc;
 		}
-		
-		
+
+
 
 		switch (reg_conf_tbl->cmd_type)
 		{
@@ -386,7 +386,7 @@ int32_t msm_camera_i2c_poll2(struct msm_camera_i2c_client *client,
 			case MSM_CAMERA_I2C_CMD_POLL_LESS:
 				done = !((readValue&mask) < value);
 				break;
-				
+
 			default:
 				break;
 		}
@@ -409,13 +409,13 @@ int32_t msm_camera_i2c_write_tbl(struct msm_camera_i2c_client *client,
 		if (reg_conf_tbl->cmd_type == MSM_CAMERA_I2C_CMD_POLL) {
 			rc = msm_camera_i2c_poll(client, reg_conf_tbl->reg_addr,
 				reg_conf_tbl->reg_data, reg_conf_tbl->dt);
-		} 
+		}
 		else if (reg_conf_tbl->cmd_type == MSM_CAMERA_I2C_CMD_POLL_EQUAL ||
 				 reg_conf_tbl->cmd_type == MSM_CAMERA_I2C_CMD_POLL_NOT_EQUAL ||
 				 reg_conf_tbl->cmd_type == MSM_CAMERA_I2C_CMD_POLL_LESS) {
-		
+
 			rc = msm_camera_i2c_poll2(client, reg_conf_tbl);
-		
+
 		}
 
 		else {
@@ -710,7 +710,7 @@ int32_t msm_camera_i2c_txdata_rumbas(struct msm_camera_i2c_client *dev_client, u
 
 	if (rc < 0)
 		pr_err("[OIS2] msm_camera_i2c_txdata faild 0x%x, 0x%x, %d\n", saddr, txdata[0], rc);
-	
+
 	return rc;
 }
 

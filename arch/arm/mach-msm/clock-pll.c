@@ -73,7 +73,7 @@ int pll_vote_clk_enable(struct clk *c)
 
 	mb();
 
-	
+
 	for (count = ENABLE_WAIT_MAX_LOOPS; count > 0; count--) {
 		if (readl_relaxed(PLL_STATUS_REG(pllv)) & pllv->status_mask)
 			return 0;
@@ -129,26 +129,26 @@ struct clk_ops clk_ops_pll_vote = {
 static void __pll_clk_enable_reg(void __iomem *mode_reg)
 {
 	u32 mode = readl_relaxed(mode_reg);
-	
+
 	mode |= PLL_BYPASSNL;
 	writel_relaxed(mode, mode_reg);
 
 	mb();
 	udelay(10);
 
-	
+
 	mode |= PLL_RESET_N;
 	writel_relaxed(mode, mode_reg);
 
-	
+
 	mb();
 	udelay(50);
 
-	
+
 	mode |= PLL_OUTCTRL;
 	writel_relaxed(mode, mode_reg);
 
-	
+
 	mb();
 }
 
@@ -206,26 +206,26 @@ int sr_pll_clk_enable(struct clk *c)
 
 	spin_lock_irqsave(&pll_reg_lock, flags);
 	mode = readl_relaxed(PLL_MODE_REG(pll));
-	
+
 	mode |= PLL_RESET_N;
 	writel_relaxed(mode, PLL_MODE_REG(pll));
 
 	mb();
 	udelay(10);
 
-	
+
 	mode |= PLL_BYPASSNL;
 	writel_relaxed(mode, PLL_MODE_REG(pll));
 
-	
+
 	mb();
 	udelay(60);
 
-	
+
 	mode |= PLL_OUTCTRL;
 	writel_relaxed(mode, PLL_MODE_REG(pll));
 
-	
+
 	mb();
 
 	spin_unlock_irqrestore(&pll_reg_lock, flags);
@@ -244,18 +244,18 @@ int msm8974_pll_clk_enable(struct clk *c)
 
 	spin_lock_irqsave(&pll_reg_lock, flags);
 	mode = readl_relaxed(PLL_MODE_REG(pll));
-	
+
 	mode |= PLL_BYPASSNL;
 	writel_relaxed(mode, PLL_MODE_REG(pll));
 
 	mb();
 	udelay(10);
 
-	
+
 	mode |= PLL_RESET_N;
 	writel_relaxed(mode, PLL_MODE_REG(pll));
 
-	
+
 	for (count = ENABLE_WAIT_MAX_LOOPS; count > 0; count--) {
 		if (readl_relaxed(PLL_STATUS_REG(pll)) & PLL_LOCKED_BIT)
 			break;
@@ -268,11 +268,11 @@ int msm8974_pll_clk_enable(struct clk *c)
 		goto out;
 	}
 
-	
+
 	mode |= PLL_OUTCTRL;
 	writel_relaxed(mode, PLL_MODE_REG(pll));
 
-	
+
 	mb();
 
 out:

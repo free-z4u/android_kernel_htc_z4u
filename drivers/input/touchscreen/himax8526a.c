@@ -267,7 +267,7 @@ start:
 		CC(type3_selected->c49); CC(type3_selected->c50);
 		msleep(1);
 	}
-	
+
 	cmd[0] = 0x42; cmd[1] = 0x02;
 	result = i2c_himax_master_write(client, cmd , 2, firstRetry);
 
@@ -275,7 +275,7 @@ start:
 		printk(KERN_INFO "[TP]No Himax chip inside\n");
 		return -EIO;
 	} else {
-		
+
 		cmd[0] = 0xF3;
 		cmd[1] = 0x40;
 		i2c_himax_master_write(client, cmd , 2, normalRetry);
@@ -417,10 +417,10 @@ start:
 		}
 
 		if (type1_checksum || type2_checksum || type3_checksum) {
-			
+
 			cmd[0] = 0xAB; cmd[1] = 0x00;
 			i2c_himax_master_write(client, cmd , 2, normalRetry);
-			
+
 			cmd[1] = 0x01;
 			i2c_himax_master_write(client, cmd , 2, normalRetry);
 		}
@@ -470,11 +470,11 @@ start:
 		printk(KERN_INFO "[TP]myCheckSum: 0x%X, 0x%X\n", myCheckSum%0x100, (myCheckSum%0x10000)/0x100);
 
 		if (type1_checksum || type2_checksum || type3_checksum) {
-		
+
 			cmd[0] = 0xAB; cmd[1] = 0x10;
 			i2c_himax_master_write(client, cmd , 2, normalRetry);
 
-			
+
 			if (type1_checksum) {
 				printk(KERN_INFO "[TP]Check type 1 checksum, 0x%X, 0x%X.\n", type1_selected->checksum[1], type1_selected->checksum[2]);
 				i2c_himax_master_write(client, type1_selected->checksum, sizeof(type1_selected->checksum), normalRetry);
@@ -486,15 +486,15 @@ start:
 				i2c_himax_master_write(client, type3_selected->checksum, sizeof(type3_selected->checksum), normalRetry);
 			}
 
-			
+
 			i2c_himax_read(client, 0xAB, &Data, 1, normalRetry);
 		}
 
 		++retryTimes;
-	
+
 	} while (Data != 0x10 && ((uint32_t)type1_checksum ^ (uint32_t)type2_checksum ^ (uint32_t)type3_checksum));
 
-	
+
 	cmd[0] = 0x42; cmd[1] = 0x02;
 	i2c_himax_master_write(client, cmd , 2, normalRetry);
 
@@ -1186,7 +1186,7 @@ inline void himax_ts_work(struct himax_ts_data *ts)
 	if (ts->diag_command >= 1 && ts->diag_command <= 6) {
 		int mul_num, self_num;
 		int index = 0;
-		
+
 		mul_num = ts->x_channel * ts->y_channel;
 		self_num = ts->x_channel + ts->y_channel;
 
@@ -1195,7 +1195,7 @@ inline void himax_ts_work(struct himax_ts_data *ts)
 			index = (buf[24] - 1) * 50;
 
 			for (loop_i = 0; loop_i < 50; loop_i++) {
-				if (index < mul_num) { 
+				if (index < mul_num) {
 					if ((buf[loop_i * 2 + 28] & 0x80) == 0x80)
 						ts->diag_mutual[index + loop_i] = 0 -
 							((buf[loop_i * 2 + 28] << 8 | buf[loop_i * 2 + 29]) & 0x4FFF);
@@ -1218,7 +1218,7 @@ inline void himax_ts_work(struct himax_ts_data *ts)
 	}
 
 	if (buf[20] == 0xFF && buf[21] == 0xFF) {
-		
+
 		finger_on = 0;
 		if (ts->event_htc_enable_type) {
 			input_report_abs(ts->input_dev, ABS_MT_AMPLITUDE, 0);

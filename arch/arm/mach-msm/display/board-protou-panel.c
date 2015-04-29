@@ -349,68 +349,68 @@ static int protou_mdp_gamma(void)
 	return 0;
 }
 
-static unsigned char led_pwm1[] = {0x51, 0xFF}; 
+static unsigned char led_pwm1[] = {0x51, 0xFF};
 static unsigned char bkl_enable_cmds[] = {0x53, 0x24};
 static unsigned char bkl_disable_cmds[] = {0x53, 0x00};
-static char enable_cabc[] = {0x55, 0x01}; 
-static char write_cabc_minimum_brightness[] = {0x5E, 0xB3}; 
+static char enable_cabc[] = {0x55, 0x01};
+static char write_cabc_minimum_brightness[] = {0x5E, 0xB3};
 
-static char sleep_out[] = {0x11, 0x00}; 
-static char display_on[] = {0x29, 0x00}; 
+static char sleep_out[] = {0x11, 0x00};
+static char display_on[] = {0x29, 0x00};
 
-static char display_off[2] = {0x28, 0x00}; 
-static char sleep_in[2] = {0x10, 0x00}; 
+static char display_off[2] = {0x28, 0x00};
+static char sleep_in[2] = {0x10, 0x00};
 
-static char display_inv[] = {0x20, 0x00}; 
+static char display_inv[] = {0x20, 0x00};
 
-static char set_address_mode[] = {0x36, 0x00}; 
-static char interface_pixel_format[] = {0x3A, 0x70}; 
+static char set_address_mode[] = {0x36, 0x00};
+static char interface_pixel_format[] = {0x3A, 0x70};
 
 static char panel_characteristics_setting[] = {
-	0xB2, 0x20, 0xC8}; 
-static char panel_drive_setting[] = {0xB3, 0x00}; 
-static char display_mode_control[] = {0xB4, 0x04}; 
-static char display_control1[] = {0xB5, 0x20, 0x10, 0x10}; 
+	0xB2, 0x20, 0xC8};
+static char panel_drive_setting[] = {0xB3, 0x00};
+static char display_mode_control[] = {0xB4, 0x04};
+static char display_control1[] = {0xB5, 0x20, 0x10, 0x10};
 static char display_control2[] = {
-	0xB6, 0x03, 0x0F, 0x02, 0x40, 0x10, 0xE8}; 
+	0xB6, 0x03, 0x0F, 0x02, 0x40, 0x10, 0xE8};
 static char internal_oscillator_setting[] = {
-	0xC0, 0x01, 0x1A}; 
-static char power_control2[] = {0xC2, 0x00}; 
+	0xC0, 0x01, 0x1A};
+static char power_control2[] = {0xC2, 0x00};
 static char power_control3[] = {
-	0xC3, 0x07, 0x05, 0x05, 0x05, 0x07}; 
+	0xC3, 0x07, 0x05, 0x05, 0x05, 0x07};
 static char power_control4[] = {
-	0xC4, 0x12, 0x24, 0x12, 0x12, 0x05, 0x4c}; 
-static char mtp_vocm[] = {0xF9, 0x40}; 
+	0xC4, 0x12, 0x24, 0x12, 0x12, 0x05, 0x4c};
+static char mtp_vocm[] = {0xF9, 0x40};
 static char power_control6[] = {
-	0xC6, 0x41, 0x63, 0x03}; 
+	0xC6, 0x41, 0x63, 0x03};
 
 static char positive_gamma_red[] = {
 	0xD0, 0x03, 0x10, 0x73, 0x07, 0x00, 0x01, 0x50,
-	0x13, 0x02}; 
+	0x13, 0x02};
 
 static char negative_gamma_red[] = {
 	0xD1, 0x03, 0x10, 0x73, 0x07, 0x00, 0x02, 0x50,
-	0x13, 0x02}; 
+	0x13, 0x02};
 
 static char positive_gamma_green[] = {
 	0xD2, 0x03, 0x10, 0x73, 0x07, 0x00, 0x01, 0x50,
-	0x13, 0x02}; 
+	0x13, 0x02};
 
 static char negative_gamma_green[] = {
 	0xD3, 0x03, 0x10, 0x73, 0x07, 0x00, 0x02, 0x50,
-	0x13, 0x02}; 
+	0x13, 0x02};
 
 static char positive_gamma_blue[] = {
 	0xD4, 0x03, 0x10, 0x73, 0x07, 0x00, 0x01, 0x50,
-	0x13, 0x02}; 
+	0x13, 0x02};
 
 static char negative_gamma_blue[] = {
 	0xD5, 0x03, 0x10, 0x73, 0x07, 0x00, 0x02, 0x50,
-	0x13, 0x02}; 
+	0x13, 0x02};
 
-static char disable_high_speed_timeout[] = {0x03, 0x00}; 
+static char disable_high_speed_timeout[] = {0x03, 0x00};
 static char backlight_control[] = {
-	0xC8, 0x11, 0x03}; 
+	0xC8, 0x11, 0x03};
 
 static char pro_001[] = {0xff, 0x80, 0x09, 0x01, 0x01};
 static char pro_002[] = {0x00, 0x80};
@@ -716,7 +716,7 @@ static unsigned char protou_shrink_pwm(int val)
 	} else if (val > BRI_SETTING_MAX)
 			shrink_br = pwm_max;
 
-	
+
 
 	return shrink_br;
 }
@@ -827,7 +827,7 @@ static void protou_set_backlight(struct msm_fb_data_type *mfd)
 {
 	PR_DISP_INFO("%s\n", __func__);
 
-	
+
 
 	if (mipi_status == 0 || bl_level_prevset == mfd->bl_level) {
 		PR_DISP_DEBUG("Skip the backlight setting > mipi_status : %d, bl_level_prevset : %d, bl_level : %d\n",
@@ -843,11 +843,11 @@ static void protou_set_backlight(struct msm_fb_data_type *mfd)
 
 	htc_mdp_sem_down(current, &mfd->dma->mutex);
 	if (panel_type == PANEL_ID_PROTOU_LG) {
-		
+
 		MIPI_OUTP(MIPI_DSI_BASE + 0xA8, 0x10000000);
 		mipi_dsi_cmd_bta_sw_trigger();
 
-		
+
 		if (led_pwm1[1] == 0) {
 				mipi_dsi_cmds_tx(&protou_panel_tx_buf, lg_bkl_disable_cmds,1 );
 		} else if (bl_level_prevset == 0) {
@@ -859,7 +859,7 @@ static void protou_set_backlight(struct msm_fb_data_type *mfd)
 	bl_level_prevset = mfd->bl_level;
 	htc_mdp_sem_up(&mfd->dma->mutex);
 
-	
+
 	if (mfd->bl_level >= BRI_SETTING_MIN)
 		last_brightness = mfd->bl_level;
 
@@ -986,17 +986,17 @@ err_device_put:
 static struct msm_panel_info pinfo;
 
 static struct mipi_dsi_phy_ctrl mipi_dsi_protou_phy_ctrl = {
-	
-	
+
+
 	{0x03, 0x01, 0x01, 0x00},
-	
+
 	{0xa4, 0x89, 0x14, 0x00, 0x16, 0x8e, 0x18, 0x8b,
 	0x16, 0x03, 0x04},
-	
+
 	{0x7f, 0x00, 0x00, 0x00},
-	
+
 	{0xff, 0x02, 0x06, 0x00},
-	
+
 	{0x00, 0x66, 0x31, 0xd2, 0x00, 0x40, 0x37, 0x62,
 	0x01, 0x0f, 0x07,
 	0x05, 0x14, 0x03, 0x0, 0x0, 0x0, 0x20, 0x0, 0x02, 0x0},
@@ -1020,8 +1020,8 @@ static int mipi_video_lg_wvga_pt_init(void)
 	pinfo.lcdc.v_back_porch = 64;
 	pinfo.lcdc.v_front_porch = 38;
 	pinfo.lcdc.v_pulse_width = 8;
-	pinfo.lcdc.border_clr = 0;	
-	pinfo.lcdc.underflow_clr = 0x00;	
+	pinfo.lcdc.border_clr = 0;
+	pinfo.lcdc.underflow_clr = 0x00;
 	pinfo.lcdc.hsync_skew = 0;
 	pinfo.bl_max = 255;
 	pinfo.bl_min = 1;
@@ -1043,12 +1043,12 @@ static int mipi_video_lg_wvga_pt_init(void)
 	pinfo.mipi.data_lane1 = TRUE;
 	pinfo.mipi.t_clk_post = 0x20;
 	pinfo.mipi.t_clk_pre = 0x2F;
-	pinfo.mipi.stream = 0; 
+	pinfo.mipi.stream = 0;
 	pinfo.mipi.mdp_trigger = DSI_CMD_TRIGGER_NONE;
 	pinfo.mipi.dma_trigger = DSI_CMD_TRIGGER_SW;
 	pinfo.mipi.frame_rate = 58;
 	pinfo.mipi.dsi_phy_db = &mipi_dsi_protou_phy_ctrl;
-	
+
 	pinfo.mipi.tx_eot_append = 0x01;
 
 	ret = mipi_protou_device_register(&pinfo, MIPI_DSI_PRIM,
@@ -1087,8 +1087,8 @@ static int mipi_video_orise_wvga_pt_init(void)
 	pinfo.lcdc.v_back_porch = 64;
 	pinfo.lcdc.v_front_porch = 38;
 	pinfo.lcdc.v_pulse_width = 8;
-	pinfo.lcdc.border_clr = 0;	
-	pinfo.lcdc.underflow_clr = 0x00;	
+	pinfo.lcdc.border_clr = 0;
+	pinfo.lcdc.underflow_clr = 0x00;
 	pinfo.lcdc.hsync_skew = 0;
 	pinfo.bl_max = 255;
 	pinfo.bl_min = 1;
@@ -1110,12 +1110,12 @@ static int mipi_video_orise_wvga_pt_init(void)
 	pinfo.mipi.data_lane1 = TRUE;
 	pinfo.mipi.t_clk_post = 0x20;
 	pinfo.mipi.t_clk_pre = 0x2F;
-	pinfo.mipi.stream = 0; 
+	pinfo.mipi.stream = 0;
 	pinfo.mipi.mdp_trigger = DSI_CMD_TRIGGER_NONE;
 	pinfo.mipi.dma_trigger = DSI_CMD_TRIGGER_SW;
 	pinfo.mipi.frame_rate = 59;
 	pinfo.mipi.dsi_phy_db = &mipi_dsi_protou_phy_ctrl;
-	
+
 	pinfo.mipi.tx_eot_append = 0x01;
 
 

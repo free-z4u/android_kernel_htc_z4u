@@ -16,7 +16,7 @@
 #include <mach/gpio.h>
 
 #define	OV5693_TOTAL_STEPS_NEAR_TO_FAR			52
-#define	OV5693_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF			256 
+#define	OV5693_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF			256
 
 #define REG_VCM_NEW_CODE			0x30F2
 #define REG_VCM_I2C_ADDR			0x1C
@@ -24,7 +24,7 @@
 #define REG_VCM_CODE_LSB			0x04
 #define REG_VCM_MODE			0x06
 #define REG_VCM_FREQ			0x07
-#define REG_VCM_RING_CTRL		0x02 
+#define REG_VCM_RING_CTRL		0x02
 
 #define DIV_CEIL(x, y) (x/y + (x%y) ? 1 : 0)
 #if 0
@@ -35,7 +35,7 @@ DEFINE_MUTEX(ov5693_act_mutex);
 static struct msm_actuator_ctrl_t ov5693_act_t;
 
 static struct region_params_t g_regions[] = {
-	
+
 	{
 		.step_bound = {OV5693_TOTAL_STEPS_NEAR_TO_FAR, 0},
 		.code_per_step = 2,
@@ -43,13 +43,13 @@ static struct region_params_t g_regions[] = {
 };
 
 static uint16_t g_scenario[] = {
-	
+
 	OV5693_TOTAL_STEPS_NEAR_TO_FAR,
 };
 
 static struct damping_params_t g_damping[] = {
-	
-	
+
+
 	{
 		.damping_step = 2,
 		.damping_delay = 0,
@@ -57,8 +57,8 @@ static struct damping_params_t g_damping[] = {
 };
 
 static struct damping_t g_damping_params[] = {
-	
-	
+
+
 	{
 		.ringing_params = g_damping,
 	},
@@ -120,8 +120,8 @@ int32_t ov5693_msm_actuator_init_table(
 	else
 		a_ctrl->set_info.total_steps = OV5693_TOTAL_STEPS_NEAR_TO_FAR;
 
-    
-	
+
+
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_RING_CTRL,
 		0x02,
@@ -131,25 +131,25 @@ int32_t ov5693_msm_actuator_init_table(
 		return rc;
 	}
 
-	
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_MODE,
-		0x03, 
+		0x03,
 		MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0) {
 		pr_err("%s REG_VCM_MODE i2c write failed (%d)\n", __func__, rc);
 		return rc;
 	}
-	
-	
-	
-	
+
+
+
+
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_FREQ,
 		0xAF,
@@ -158,9 +158,9 @@ int32_t ov5693_msm_actuator_init_table(
 		pr_err("%s REG_VCM_FREQ i2c write failed (%d)\n", __func__, rc);
 		return rc;
 	}
-    
 
-	
+
+
 	if (a_ctrl->step_position_table != NULL) {
 		kfree(a_ctrl->step_position_table);
 		a_ctrl->step_position_table = NULL;
@@ -179,7 +179,7 @@ int32_t ov5693_msm_actuator_init_table(
 		a_ctrl->step_position_table[0] = a_ctrl->initial_code;
 
 		for (i = 1; i <= a_ctrl->set_info.total_steps; i++) {
-			if (ov5693_msm_actuator_info->use_rawchip_af && a_ctrl->af_algo == AF_ALGO_RAWCHIP) 
+			if (ov5693_msm_actuator_info->use_rawchip_af && a_ctrl->af_algo == AF_ALGO_RAWCHIP)
 				a_ctrl->step_position_table[i] =
 					a_ctrl->step_position_table[i-1] + 4;
 			else
@@ -222,7 +222,7 @@ int32_t ov5693_msm_actuator_move_focus(
 		dir,
 		num_steps);
 
-	
+
 	if (dir == MOVE_NEAR)
 		sign_dir = 1;
 	else if (dir == MOVE_FAR)
@@ -233,7 +233,7 @@ int32_t ov5693_msm_actuator_move_focus(
 		return rc;
 	}
 
-	
+
 	dest_step_pos = a_ctrl->curr_step_pos +
 		(sign_dir * num_steps);
 
@@ -275,7 +275,7 @@ static int32_t ov5693_wrapper_i2c_write(struct msm_actuator_ctrl_t *a_ctrl,
 
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_CODE_MSB,
-		((next_lens_position & 0x0300) >> 8),	
+		((next_lens_position & 0x0300) >> 8),
 		MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0) {
 		pr_err("%s VCM_CODE_MSB i2c write failed (%d)\n", __func__, rc);
@@ -284,7 +284,7 @@ static int32_t ov5693_wrapper_i2c_write(struct msm_actuator_ctrl_t *a_ctrl,
 
 	rc = msm_camera_i2c_write(&a_ctrl->i2c_client,
 		REG_VCM_CODE_LSB,
-		(next_lens_position & 0x00FF),	
+		(next_lens_position & 0x00FF),
 		MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0) {
 		pr_err("%s VCM_CODE_LSB i2c write failed (%d)\n", __func__, rc);
@@ -347,7 +347,7 @@ static int ov5693_act_config(
 {
 	LINFO("%s called\n", __func__);
 	return (int) msm_actuator_config(&ov5693_act_t,
-		ov5693_msm_actuator_info, argp); 
+		ov5693_msm_actuator_info, argp);
 }
 
 static int ov5693_i2c_add_driver_table(
@@ -363,26 +363,26 @@ static int ov5693_i2c_add_driver_table(
 		return (int) rc;
 	}
 
-	
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
 	rc = msm_camera_i2c_write(&ov5693_act_t.i2c_client,
 		REG_VCM_MODE,
-		03, 
+		03,
 		MSM_CAMERA_I2C_BYTE_DATA);
 	if (rc < 0) {
 		pr_err("%s REG_VCM_MODE i2c write failed (%d)\n", __func__, rc);
 		return rc;
 	}
 
-	
-	
-	
-	
+
+
+
+
 	rc = msm_camera_i2c_write(&ov5693_act_t.i2c_client,
 		REG_VCM_FREQ,
 		0xAF,
@@ -461,16 +461,16 @@ static struct msm_actuator_ctrl_t ov5693_act_t = {
 	},
 
 	.set_info = {
-		.total_steps = OV5693_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF, 
-		.gross_steps = 3,	
-		.fine_steps = 1,	
+		.total_steps = OV5693_TOTAL_STEPS_NEAR_TO_FAR_RAWCHIP_AF,
+		.gross_steps = 3,
+		.fine_steps = 1,
 	},
 
 	.curr_step_pos = 0,
 	.curr_region_index = 0,
-	.initial_code = 0,	
+	.initial_code = 0,
 	.actuator_mutex = &ov5693_act_mutex,
-	.af_algo = AF_ALGO_RAWCHIP, 
+	.af_algo = AF_ALGO_RAWCHIP,
 
 	.func_tbl = {
 		.actuator_init_table = ov5693_msm_actuator_init_table,
@@ -481,7 +481,7 @@ static struct msm_actuator_ctrl_t ov5693_act_t = {
 		.actuator_i2c_write = ov5693_wrapper_i2c_write,
 	},
 
-	.get_info = {	
+	.get_info = {
 		.focal_length_num = 46,
 		.focal_length_den = 10,
 		.f_number_num = 265,
@@ -492,17 +492,17 @@ static struct msm_actuator_ctrl_t ov5693_act_t = {
 		.total_f_dist_den = 1000,
 	},
 
-	
+
 	.ringing_scenario[MOVE_NEAR] = g_scenario,
 	.scenario_size[MOVE_NEAR] = ARRAY_SIZE(g_scenario),
 	.ringing_scenario[MOVE_FAR] = g_scenario,
 	.scenario_size[MOVE_FAR] = ARRAY_SIZE(g_scenario),
 
-	
+
 	.region_params = g_regions,
 	.region_size = ARRAY_SIZE(g_regions),
 
-	
+
 	.damping[MOVE_NEAR] = g_damping_params,
 	.damping[MOVE_FAR] = g_damping_params,
 };

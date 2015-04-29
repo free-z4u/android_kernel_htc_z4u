@@ -108,8 +108,8 @@ EXPORT_SYMBOL(video_device_release);
 
 void video_device_release_empty(struct video_device *vdev)
 {
-	
-	
+
+
 }
 EXPORT_SYMBOL(video_device_release_empty);
 
@@ -131,19 +131,19 @@ static void v4l2_device_release(struct device *cd)
 	mutex_lock(&videodev_lock);
 	if (video_device[vdev->minor] != vdev) {
 		mutex_unlock(&videodev_lock);
-		
+
 		WARN_ON(1);
 		return;
 	}
 
-	
+
 	video_device[vdev->minor] = NULL;
 
-	
+
 	cdev_del(vdev->cdev);
 	vdev->cdev = NULL;
 
-	
+
 	devnode_clear(vdev);
 
 	mutex_unlock(&videodev_lock);
@@ -156,7 +156,7 @@ static void v4l2_device_release(struct device *cd)
 
 	vdev->release(vdev);
 
-	
+
 	if (v4l2_dev)
 		v4l2_device_put(v4l2_dev);
 }
@@ -170,9 +170,9 @@ struct video_device *video_devdata(struct file *file)
 {
     struct video_device *vdev = NULL;
     int index;
-    
+
 	index = iminor(file->f_path.dentry->d_inode);
-	
+
     if(index < VIDEO_NUM_DEVICES)
 		vdev = video_device[index];
 
@@ -360,15 +360,15 @@ static int v4l2_open(struct inode *inode, struct file *filp)
 	struct video_device *vdev;
 	int ret = 0;
 
-	
+
 	mutex_lock(&videodev_lock);
 	vdev = video_devdata(filp);
-	
+
 	if (vdev == NULL || !video_is_registered(vdev)) {
 		mutex_unlock(&videodev_lock);
 		return -ENODEV;
 	}
-	
+
 	video_get(vdev);
 	mutex_unlock(&videodev_lock);
 	if (vdev->fops->open) {
@@ -385,7 +385,7 @@ static int v4l2_open(struct inode *inode, struct file *filp)
 	}
 
 err:
-	
+
 	if (ret)
 		video_put(vdev);
 	return ret;
@@ -428,7 +428,7 @@ static int get_index(struct video_device *vdev)
 	static DECLARE_BITMAP(used, VIDEO_NUM_DEVICES);
 	int i;
 
-	
+
 	if (vdev->parent == NULL)
 		return 0;
 
@@ -455,16 +455,16 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 
 	vdev->minor = -1;
 
-	
+
 	WARN_ON(!vdev->release);
 	if (!vdev->release)
 		return -EINVAL;
 
-	
+
 	spin_lock_init(&vdev->fh_lock);
 	INIT_LIST_HEAD(&vdev->fh_list);
 
-	
+
 	switch (type) {
 	case VFL_TYPE_GRABBER:
 		name_base = "video";
@@ -495,7 +495,7 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 			vdev->prio = &vdev->v4l2_dev->prio;
 	}
 
-	
+
 #ifdef CONFIG_VIDEO_FIXED_MINOR_RANGES
 	switch (type) {
 	case VFL_TYPE_GRABBER:
@@ -517,7 +517,7 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 	}
 #endif
 
-	
+
 	mutex_lock(&videodev_lock);
 	nr = devnode_find(vdev, nr == -1 ? 0 : nr, minor_cnt);
 	if (nr == minor_cnt)
@@ -528,7 +528,7 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 		return -ENFILE;
 	}
 #ifdef CONFIG_VIDEO_FIXED_MINOR_RANGES
-	
+
 	i = nr;
 #else
 	for (i = 0; i < VIDEO_NUM_DEVICES; i++)
@@ -544,12 +544,12 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 	vdev->num = nr;
 	devnode_set(vdev);
 
-	
+
 	WARN_ON(video_device[vdev->minor] != NULL);
 	vdev->index = get_index(vdev);
 	mutex_unlock(&videodev_lock);
 
-	
+
 	vdev->cdev = cdev_alloc();
 	if (vdev->cdev == NULL) {
 		ret = -ENOMEM;
@@ -565,7 +565,7 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 		goto cleanup;
 	}
 
-	
+
 	vdev->dev.class = &video_class;
 	vdev->dev.devt = MKDEV(VIDEO_MAJOR, vdev->minor);
 	if (vdev->parent)
@@ -582,12 +582,12 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 		printk(KERN_WARNING "%s: requested %s%d, got %s\n", __func__,
 			name_base, nr, video_device_node_name(vdev));
 
-	
+
 	if (vdev->v4l2_dev)
 		v4l2_device_get(vdev->v4l2_dev);
 
 #if defined(CONFIG_MEDIA_CONTROLLER)
-	
+
 	if (vdev->v4l2_dev && vdev->v4l2_dev->mdev &&
 	    vdev->vfl_type != VFL_TYPE_SUBDEV) {
 		vdev->entity.type = MEDIA_ENT_T_DEVNODE_V4L;
@@ -602,7 +602,7 @@ int __video_register_device(struct video_device *vdev, int type, int nr,
 			       __func__);
 	}
 #endif
-	
+
 	set_bit(V4L2_FL_REGISTERED, &vdev->flags);
 	mutex_lock(&videodev_lock);
 	video_device[vdev->minor] = vdev;
@@ -616,7 +616,7 @@ cleanup:
 		cdev_del(vdev->cdev);
 	devnode_clear(vdev);
 	mutex_unlock(&videodev_lock);
-	
+
 	vdev->minor = -1;
 	return ret;
 }
@@ -624,7 +624,7 @@ EXPORT_SYMBOL(__video_register_device);
 
 void video_unregister_device(struct video_device *vdev)
 {
-	
+
 	if (!vdev || !video_is_registered(vdev))
 		return;
 

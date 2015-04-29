@@ -59,7 +59,7 @@
 #define MSG_ID_OUTPUT_PRIMARY           40
 #define MSG_ID_OUTPUT_SECONDARY         41
 #define MSG_ID_STATS_COMPOSITE          42
-#define MSG_ID_HDR_SOF_ACK              43 
+#define MSG_ID_HDR_SOF_ACK              43
 #define MSG_ID_STATS_BG                 44
 #define MSG_ID_STATS_BF                 45
 #define MSG_ID_STATS_BHIST              46
@@ -233,14 +233,14 @@ struct msm_isp_cmd {
 #define VPE_CMD_ZOOM                                    13
 #define VPE_CMD_MAX                                     14
 
-#define MSM_PP_CMD_TYPE_NOT_USED        0  
-#define MSM_PP_CMD_TYPE_VPE             1  
-#define MSM_PP_CMD_TYPE_MCTL            2  
+#define MSM_PP_CMD_TYPE_NOT_USED        0
+#define MSM_PP_CMD_TYPE_VPE             1
+#define MSM_PP_CMD_TYPE_MCTL            2
 
-#define MCTL_CMD_DUMMY_0                0  
-#define MCTL_CMD_GET_FRAME_BUFFER       1  
-#define MCTL_CMD_PUT_FRAME_BUFFER       2  
-#define MCTL_CMD_DIVERT_FRAME_PP_PATH   3  
+#define MCTL_CMD_DUMMY_0                0
+#define MCTL_CMD_GET_FRAME_BUFFER       1
+#define MCTL_CMD_PUT_FRAME_BUFFER       2
+#define MCTL_CMD_DIVERT_FRAME_PP_PATH   3
 
 #define MCTL_PP_EVENT_NOTUSED           0
 #define MCTL_PP_EVENT_CMD_ACK           1
@@ -322,7 +322,7 @@ struct msm_mctl_pp_frame_cmd {
 	uint32_t dest_buf_handle;
 	struct msm_pp_crop crop;
 	int path;
-	
+
 };
 
 #define VFE_OUTPUTS_MAIN_AND_PREVIEW	BIT(0)

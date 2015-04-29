@@ -16,7 +16,7 @@
 #include <linux/delay.h>
 #endif
 
-#if 1 
+#if 1
 #define CDBG(fmt, args...) pr_info(fmt, ##args)
 #else
 #define CDBG(fmt, args...) do { } while (0)
@@ -68,7 +68,7 @@ yushan_spi_sync_write_then_read(uint8_t *txbuf, size_t n_tx,
 	spi_message_add_tail(&rx_t, &m);
 #endif
 
-	return spi_sync(yushan_spi_ctrl->spi, &m); 
+	return spi_sync(yushan_spi_ctrl->spi, &m);
 }
 int yushan_spi_read(uint16_t reg, uint8_t *rval)
 {
@@ -79,7 +79,7 @@ int yushan_spi_read(uint16_t reg, uint8_t *rval)
 	rx[2] = reg & 0x00ff;
 	rx[3] = 0x61;
 	rx[4] = 0;
-	
+
 
 	rc = yushan_spi_sync_write_then_read(&rx[0], 3,
 		&rx[3], 2);
@@ -89,7 +89,7 @@ int yushan_spi_read(uint16_t reg, uint8_t *rval)
 		rx[3], rx[4], rx[5]);
 #endif
 	if (rc >= 0)
-		
+
 		*rval = rx[4];
 	else {
 		pr_err("yushan_spi_sync_write_then_read failed\n");
@@ -109,7 +109,7 @@ int SPI_Read( uint16_t uwIndex , uint16_t uwCount , uint8_t * pData)
 	for (i=0; i<uwCount; i++)
 	{
 		reg = uwIndex+i;
-		
+
 		rc = rawchip_spi_read_2B1B(reg,&val);
 		if (rc==0)
 		{
@@ -349,7 +349,7 @@ int rawchip_spi_write_2B1B(uint16_t addr, unsigned char data)
 {
 	unsigned char buffer[4];
 	int rc;
-	
+
 
 	if (!rawchip_dev)
 		return -1;
@@ -455,7 +455,7 @@ int spi_rawchip_probe(struct spi_device *rawchip)
 
 	rawchip_dev = rawchip;
 
-	
+
 	yushan_spi_ctrl = kzalloc(sizeof(*yushan_spi_ctrl), GFP_KERNEL);
 	if (!yushan_spi_ctrl)
 		return -ENOMEM;
@@ -507,7 +507,7 @@ static int spi_flag = 1;
 static char rspi_buf[yushan_MAX_TRANSFER_SIZE+3];
 int rawchip_spi_init(void)
 {
-	
+
 	pr_info("rawchip_spi_init\n");
 	spi_set_route(1);
 	return 0;
@@ -515,12 +515,12 @@ int rawchip_spi_init(void)
 
 int rawchip_read(int l, unsigned char* buf)
 {
-#if 1 
+#if 1
 	if(spi_flag)
 		return cpld_spi_read(l, buf);
 	else
 		return gpio_spi_read(l, buf);
-#else 
+#else
 	dd_gpio_spi_read(l, buf);
 #endif
 	return SUCCESS;
@@ -528,7 +528,7 @@ int rawchip_read(int l, unsigned char* buf)
 
 int rawchip_write(int l, unsigned char* buf)
 {
-#if 1 
+#if 1
 	if(spi_flag)
 		return cpld_spi_write(l, buf);
 	else
@@ -542,42 +542,42 @@ int rawchip_write(int l, unsigned char* buf)
 int SPI_Read(uint16_t uwIndex , uint16_t uwCount , uint8_t *pData)
 {
 	int rc;
-	
+
 	rspi_buf[0] = 0x60;
 	rspi_buf[1] = uwIndex >> 8;
 	rspi_buf[2] = uwIndex & 0xff;
 	rspi_buf[3] = 0x61;
 	rc = rawchip_read(uwCount + 4, rspi_buf);
 	memcpy(pData, rspi_buf + 4, uwCount);
-	
+
 	return SUCCESS;
-	
+
 }
 
 int SPI_Write(uint16_t uwIndex , uint16_t uwCount , uint8_t *pData)
 {
-	
+
 	rspi_buf[0] = 0x60;
 	rspi_buf[1] = uwIndex >> 8;
 	rspi_buf[2] = uwIndex & 0xff;
 	memcpy(rspi_buf + 3, pData, uwCount);
-	
+
 	rawchip_write(uwCount + 3, rspi_buf);
-	
+
 	return SUCCESS;
 }
 int rawchip_spi_read_2B2B(uint16_t addr, uint16_t *data)
 {
 	int rc = 0;
-	
+
 	rspi_buf[0] = 0x60;
 	rspi_buf[1] = addr >> 8;
 	rspi_buf[2] = addr & 0xff;
 	rspi_buf[3] = 0x61;
 	rc = rawchip_read(2 + 4, rspi_buf);
 	memcpy(data, rspi_buf + 4, 2);
-	
-	
+
+
 	return SUCCESS;
 }
 int SPI_Write_4thByte(uint16_t uwIndex , uint16_t uwCount , uint8_t *pData)
@@ -585,7 +585,7 @@ int SPI_Write_4thByte(uint16_t uwIndex , uint16_t uwCount , uint8_t *pData)
 	int i, status;
 	uint16_t transferedIndex = 0;
 
-	
+
 
 	while (transferedIndex < uwCount) {
 		rspi_buf[0] = 0x60;
@@ -606,20 +606,20 @@ int SPI_Write_4thByte(uint16_t uwIndex , uint16_t uwCount , uint8_t *pData)
 int yushan_spi_write(uint16_t reg, uint8_t val)
 {
 	int rc = 0;
-	
+
 	rspi_buf[0] = 0x60;
 	rspi_buf[1] = reg >> 8;
 	rspi_buf[2] = reg & 0xff;
 	rspi_buf[3] = val;
 	rc = rawchip_write(4, rspi_buf);
-	
+
 	return SUCCESS;
 }
 int rawchip_spi_write_2B1B(uint16_t addr, unsigned char data)
 {
-	
+
 	yushan_spi_write(addr, data);
-	
+
 	return SUCCESS;
 }
 #endif

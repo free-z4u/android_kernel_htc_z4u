@@ -65,7 +65,7 @@ static void cpld_power(int on)
 			pr_err("[CAM]%s: VCM 2V85 set_level failed (%d)\n", __func__, rc);
 		}
 	}
-	
+
     if (on) {
 		/* sensor VCM power on with CPLD power */
 		rc = vreg_enable(vreg_wlan1p2c150);// VCM 2V85
@@ -84,7 +84,7 @@ static void cpld_power(int on)
 		mdelay(1);
 		pr_info("[CAM]%s: MAGNIDS_GPIO_CPLD_SPI_CS as Low\n", __func__);
 		gpio_set_value(MAGNIDS_GPIO_CPLD_SPI_CS, 0);
-		
+
 	} else {
 		pr_info("[CAM]%s: MAGNIDS_GPIO_CPLD_SPI_CS as Low\n", __func__);
 		gpio_set_value(MAGNIDS_GPIO_CPLD_SPI_CS, 0);
@@ -104,7 +104,7 @@ static void cpld_power(int on)
 	}
 }
 
-static void cpld_init_clk_pin(int on) //pull high SDMC4_CLK_CPLD CLK 
+static void cpld_init_clk_pin(int on) //pull high SDMC4_CLK_CPLD CLK
 {
 	int rc = 0;
 	static uint32_t SDMC4_CLK_CPLD_ON[] = {
@@ -179,7 +179,7 @@ static struct spi_board_info spi_devices[] = {
 		.bus_num	= 0,
 		.chip_select	= 0,
 		.mode		= SPI_MODE_0,
-		.controller_data = (void *)MAGNIDS_GPIO_CPLD_SPI_CS,	
+		.controller_data = (void *)MAGNIDS_GPIO_CPLD_SPI_CS,
 	},
 };
 

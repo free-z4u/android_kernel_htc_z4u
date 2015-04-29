@@ -138,7 +138,7 @@ static struct st_dev_parm {
    mode counts */
 static const char *st_formats[] = {
 	"",  "r", "k", "s", "l", "t", "o", "u",
-	"m", "v", "p", "x", "a", "y", "q", "z"}; 
+	"m", "v", "p", "x", "a", "y", "q", "z"};
 
 /* The default definitions have been moved to st_options.h */
 
@@ -1981,7 +1981,7 @@ static long read_tape(struct scsi_tape *STp, long count,
                                                     name, STbp->buffer_bytes));
 				}
 			}
-			/* end of EOF, EOM, ILI test */ 
+			/* end of EOF, EOM, ILI test */
 			else {	/* nonzero sense key */
                                 DEBC(printk(ST_DEB_MSG
                                             "%s: Tape error while reading.\n", name));
@@ -1999,13 +1999,13 @@ static long read_tape(struct scsi_tape *STp, long count,
 			if (STbp->buffer_bytes < 0)  /* Caused by bogus sense data */
 				STbp->buffer_bytes = 0;
 		}
-		/* End of extended sense test */ 
+		/* End of extended sense test */
 		else {		/* Non-extended sense */
 			retval = STbp->syscall_result;
 		}
 
 	}
-	/* End of error handling */ 
+	/* End of error handling */
 	else {			/* Read successful */
 		STbp->buffer_bytes = bytes;
 		if (STp->sili) /* In fixed block mode residual is always zero here */
@@ -3683,7 +3683,7 @@ static long st_compat_ioctl(struct file *file, unsigned int cmd, unsigned long a
 	struct scsi_tape *STp = file->private_data;
 	struct scsi_device *sdev = STp->device;
 	int ret = -ENOIOCTLCMD;
-	if (sdev->host->hostt->compat_ioctl) { 
+	if (sdev->host->hostt->compat_ioctl) {
 
 		ret = sdev->host->hostt->compat_ioctl(sdev, cmd, (void __user *)arg);
 

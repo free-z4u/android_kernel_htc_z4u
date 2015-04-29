@@ -228,7 +228,7 @@ static inline void __dma_unmap_page(struct device *dev, dma_addr_t handle,
 	__dma_page_dev_to_cpu(pfn_to_page(dma_to_pfn(dev, handle)),
 		handle & ~PAGE_MASK, size, dir);
 }
-#endif 
+#endif
 
 /**
  * dma_map_single - map a single buffer for streaming DMA

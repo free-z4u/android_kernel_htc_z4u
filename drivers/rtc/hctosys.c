@@ -54,13 +54,13 @@ static void htc_rtc_sync_work(struct work_struct *work)
         rtc_tm_to_time(&tm, &tv.tv_sec);
 
 	do_gettimeofday(&utc_tv);
-	
+
 	printk(KERN_INFO "[TIME] %s: UTC.tv_sec:%ld, RTC.tv_sec:%ld\n", __func__, utc_tv.tv_sec, tv.tv_sec);
 	if(((utc_tv.tv_sec - tv.tv_sec) > 60) || ((tv.tv_sec - utc_tv.tv_sec) > 60)){
 		printk(KERN_INFO "[TIME] %s: go to sync time.\n", __func__);
-		
+
         	do_settimeofday(&tv);
-	
+
         	dev_info(rtc->dev.parent,
                 	"HTC_RTC_SYNC: setting system clock to "
                 	"%d-%02d-%02d %02d:%02d:%02d UTC (%u)\n",
@@ -75,8 +75,8 @@ err_read:
 
 err_open:
 
-        
-        schedule_delayed_work(&sync_work, 120 * HZ); 
+
+        schedule_delayed_work(&sync_work, 120 * HZ);
 
 }
 #endif
@@ -92,7 +92,7 @@ int rtc_hctosys(void)
 	};
 	struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
 #if HTC_RTC_SYNC_ENABLE
-	static int rtc_sync_enable = 0; 
+	static int rtc_sync_enable = 0;
 #endif
 
 	printk(KERN_INFO "[TIME] %s ++\n", __func__);
@@ -136,18 +136,18 @@ err_read:
 err_open:
 	rtc_hctosys_ret = err;
 
-        
+
 #if HTC_RTC_SYNC_ENABLE
 	if(!rtc_sync_enable){
         	INIT_DELAYED_WORK_DEFERRABLE(&sync_work, htc_rtc_sync_work);
 
-        	
+
         	schedule_delayed_work(&sync_work, 60 * HZ);
 
 		rtc_sync_enable = 1;
 	}
 #endif
-        
+
 
 	printk(KERN_INFO "[TIME] %s --\n", __func__);
 

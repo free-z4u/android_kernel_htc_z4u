@@ -4693,8 +4693,8 @@ const struct powerpc_opcode powerpc_opcodes[] = {
 { "dctfix",  XRC(59,290,0), X_MASK,	POWER6,		{ FRT, FRB } },
 { "dctfix.", XRC(59,290,1), X_MASK,	POWER6,		{ FRT, FRB } },
 
-{ "ddedpd",  XRC(59,322,0), X_MASK,	POWER6,		{ SP, FRT, FRB } }, 
-{ "ddedpd.", XRC(59,322,1), X_MASK,	POWER6,		{ SP, FRT, FRB } }, 
+{ "ddedpd",  XRC(59,322,0), X_MASK,	POWER6,		{ SP, FRT, FRB } },
+{ "ddedpd.", XRC(59,322,1), X_MASK,	POWER6,		{ SP, FRT, FRB } },
 
 { "dxex",    XRC(59,354,0), X_MASK,	POWER6,		{ FRT, FRB } },
 { "dxex.",   XRC(59,354,1), X_MASK,	POWER6,		{ FRT, FRB } },

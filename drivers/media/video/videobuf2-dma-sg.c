@@ -155,7 +155,7 @@ static void *vb2_dma_sg_get_userptr(void *alloc_ctx, unsigned long vaddr,
 					     vaddr & PAGE_MASK,
 					     buf->sg_desc.num_pages,
 					     write,
-					     1, 
+					     1,
 					     buf->pages,
 					     NULL);
 	up_read(&current->mm->mmap_sem);

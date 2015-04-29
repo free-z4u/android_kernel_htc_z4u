@@ -223,7 +223,7 @@ static ssize_t rmnet_store(struct device *dev, struct device_attribute *attr, co
 
 	switch (value) {
 	case 0:
-		
+
 		del_timer_sync (&tx_throttle_timer);
 		tx_throttle_level = 0;
 		tx_throttle_counter = 0;
@@ -231,7 +231,7 @@ static ssize_t rmnet_store(struct device *dev, struct device_attribute *attr, co
 		netif_wake_queue(ndev);
 		break;
 	case 1:
-		
+
 		tx_throttle_level = 0;
 		tx_throttle_counter = 0;
 		current_tx_bytes = 0;
@@ -735,7 +735,7 @@ static int rmnet_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	_rmnet_xmit(skb, dev);
 
-	
+
 	if ( enable_trottle == true )
 	{
 		current_tx_bytes += skb->len;
@@ -744,7 +744,7 @@ static int rmnet_xmit(struct sk_buff *skb, struct net_device *dev)
 			DBG0("%s: stopping queue, current_tx_bytes=%lu, throttle enable\n",    __func__, current_tx_bytes);
 		}
 	}
-	
+
 
 	return 0;
 }
@@ -933,10 +933,10 @@ static int __init rmnet_init(void)
 	struct rmnet_private *p;
 	unsigned n;
 
-	
+
 	if (get_kernel_flag() & KERNEL_FLAG_RIL_DBG_RMNET)
 		ril_debug_flag = 1;
-	
+
 
 	pr_info("%s: SMD devices[%d]\n", __func__, RMNET_DEVICE_COUNT);
 
@@ -988,10 +988,10 @@ static int __init rmnet_init(void)
 			return ret;
 		}
 
-		
+
 		if (device_create_file(d, &dev_attr_throttle))
 			continue;
-		
+
 
 #ifdef CONFIG_MSM_RMNET_DEBUG
 		if (device_create_file(d, &dev_attr_timeout))

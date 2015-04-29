@@ -68,14 +68,14 @@ int android_readwrite_file(const char *filename,
 		if (wbuf) {
 			ret = filp->f_op->write(filp, wbuf, length, &filp->f_pos);
 			if (ret < 0) {
-				ath6kl_dbg(ATH6KL_DBG_BOOT, 
+				ath6kl_dbg(ATH6KL_DBG_BOOT,
 				       "android_readwrite_file: Error 3\n");
 				break;
 			}
 		} else {
 			ret = filp->f_op->read(filp, rbuf, length, &filp->f_pos);
 			if (ret < 0) {
-				ath6kl_dbg(ATH6KL_DBG_BOOT, 
+				ath6kl_dbg(ATH6KL_DBG_BOOT,
 				       "android_readwrite_file: Error 4\n");
 				break;
 			}

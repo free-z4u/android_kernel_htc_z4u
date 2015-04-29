@@ -461,7 +461,7 @@ int mmc_add_host(struct mmc_host *host)
 	if (err)
 		return err;
 
-	
+
 
 #ifdef CONFIG_DEBUG_FS
 	mmc_add_host_debugfs(host);
@@ -497,7 +497,7 @@ void mmc_remove_host(struct mmc_host *host)
 
 	device_del(&host->class_dev);
 
-	
+
 
 	mmc_host_clk_exit(host);
 }

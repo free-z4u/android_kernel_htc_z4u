@@ -404,7 +404,7 @@ static void rx_fill(struct eth_dev *dev, gfp_t gfp_flags)
 	/* fill unused rxq slots with some skb */
 	spin_lock_irqsave(&dev->req_lock, flags);
 	while (!list_empty(&dev->rx_reqs)) {
-		
+
 		if (++req_cnt > qlen(dev->gadget))
 			break;
 

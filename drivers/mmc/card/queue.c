@@ -65,7 +65,7 @@ static int sd_queue_thread(void *d)
 	down(&mq->thread_sem);
 	do {
 		struct mmc_queue_req *tmp;
-		req = NULL;	
+		req = NULL;
 
 		spin_lock_irq(q->queue_lock);
 		set_current_state(TASK_INTERRUPTIBLE);
@@ -91,7 +91,7 @@ static int sd_queue_thread(void *d)
 			down(&mq->thread_sem);
 		}
 
-		
+
 		mq->mqrq_prev->brq.mrq.data = NULL;
 		mq->mqrq_prev->req = NULL;
 		tmp = mq->mqrq_prev;
@@ -114,7 +114,7 @@ static int mmc_queue_thread(void *d)
 	down(&mq->thread_sem);
 	do {
 		struct mmc_queue_req *tmp;
-		req = NULL;	
+		req = NULL;
 
 		spin_lock_irq(q->queue_lock);
 		set_current_state(TASK_INTERRUPTIBLE);
@@ -140,7 +140,7 @@ static int mmc_queue_thread(void *d)
 			down(&mq->thread_sem);
 		}
 
-		
+
 		mq->mqrq_prev->brq.mrq.data = NULL;
 		mq->mqrq_prev->req = NULL;
 		tmp = mq->mqrq_prev;
@@ -198,7 +198,7 @@ static void mmc_queue_setup_discard(struct request_queue *q,
 	if (card->erased_byte == 0 && !mmc_can_discard(card))
 		q->limits.discard_zeroes_data = 1;
 	q->limits.discard_granularity = card->pref_erase << 9;
-	
+
 	if (card->pref_erase > max_discard)
 		q->limits.discard_granularity = 0;
 	if (mmc_can_secure_erase_trim(card))

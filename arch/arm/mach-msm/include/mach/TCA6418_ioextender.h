@@ -48,7 +48,7 @@
 #define TCA6418E_Reg_GPIO_DIR1        0x23  //(H)GPIO0~GPIO7(L)      0/1: input/output
 #define TCA6418E_Reg_GPIO_DIR2        0x24  //(H)GPIO15~GPIO8(L)     0/1: input/output
 #define TCA6418E_Reg_GPIO_DIR3        0x25  //(H)GPIO17~GPIO16(L)    0/1: input/output
-#define TCA6418E_GPIO_NUM             18 
+#define TCA6418E_GPIO_NUM             18
 //---------------------//
 
 struct ioext_i2c_platform_data {

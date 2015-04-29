@@ -53,7 +53,7 @@ static const char Logstr[6] = {
 } while (0)
 
 
-#else 
+#else
 
 #define sdio_print(level, fmt, args...) do { } while (0)
 
@@ -69,7 +69,7 @@ static const char Logstr[6] = {
 
 #define FUNC_EXIT() do { } while (0)
 
-#endif 
+#endif
 
 int sdio_platform_tty_throttle_status(void);
 
@@ -118,7 +118,7 @@ void modem_sdio_reset(int on);
 #define	SDIO_RECEIVING_DATA		(0x04)
 #define	SDIO_IO_SENDING			(0x08)
 
-#define UART_NR			1	
+#define UART_NR			1
 
 #define	SPRD_DETECT_NONE  		(0x00)
 #define	SPRD_DETECT_ONGOING 		(0x01)
@@ -126,7 +126,7 @@ void modem_sdio_reset(int on);
 #define	SPRD_DETECT_TIMEOUT 		(0x03)
 #define	SPRD_DETECT_REMOVED 		(0x04)
 
-#define SPRD_CARD_REMOVED	(1<<7)	
+#define SPRD_CARD_REMOVED	(1<<7)
 #define sprd_set_removed(c) ((c)->state |= SPRD_CARD_REMOVED)
 
 struct sprd_wakelock {
@@ -199,8 +199,8 @@ struct sdio_tty_dev {
 };
 
 struct sdio_sp6502com_modem_packet_header_t {
-	unsigned short head_tag;		
-	unsigned short packet_type;		
+	unsigned short head_tag;
+	unsigned short packet_type;
 	unsigned int   len;
 	unsigned int   frame_num;
 	unsigned int   reserved;
@@ -210,4 +210,4 @@ struct sdio_sp6502com_modem_packet_t {
 	struct sdio_sp6502com_modem_packet_header_t header;
 };
 
-#endif  
+#endif

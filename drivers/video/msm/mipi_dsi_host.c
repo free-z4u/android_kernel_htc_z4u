@@ -1088,7 +1088,7 @@ int mipi_dsi_cmd_bta_sw_trigger_special(void)
 	int cnt = 100000;
 	int status = 0;
 
-	MIPI_OUTP(MIPI_DSI_BASE + 0x094, 0x01);	
+	MIPI_OUTP(MIPI_DSI_BASE + 0x094, 0x01);
 	wmb();
 
 	while (cnt--) {
@@ -1507,7 +1507,7 @@ int mipi_dsi_cmd_dma_tx(struct dsi_buf *tp)
 	wmb();
 	spin_unlock_irqrestore(&dsi_mdp_lock, flags);
 
-	
+
 	wait_for_completion_timeout(&dsi_dma_comp, msecs_to_jiffies(30));
 
 	dma_unmap_single(&dsi_dev, tp->dmap, tp->len, DMA_TO_DEVICE);

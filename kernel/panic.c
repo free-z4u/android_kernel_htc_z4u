@@ -136,7 +136,7 @@ void panic(const char *fmt, ...)
 	if (!panic_blink)
 		panic_blink = no_blink;
 
-	
+
 	dump_mem("dump", "virt_start_ptr ", (unsigned int)virt_start_ptr, 0x200);
 
 	if (panic_timeout > 0) {

@@ -109,37 +109,37 @@ struct otg_transceiver {
 	u16			port_status;
 	u16			port_change;
 
-	
+
 	int	(*init)(struct otg_transceiver *otg);
 	void	(*shutdown)(struct otg_transceiver *otg);
 
-	
+
 	int	(*set_host)(struct otg_transceiver *otg,
 				struct usb_bus *host);
 
-	
+
 	int	(*set_peripheral)(struct otg_transceiver *otg,
 				struct usb_gadget *gadget);
 
-	
+
 	int	(*set_power)(struct otg_transceiver *otg,
 				unsigned mA);
 
-	
+
 	int	(*set_vbus)(struct otg_transceiver *otg,
 				bool enabled);
 
-	
+
 	int	(*set_suspend)(struct otg_transceiver *otg,
 				int suspend);
 
-	
+
 	int	(*start_srp)(struct otg_transceiver *otg);
 
-	
+
 	int	(*start_hnp)(struct otg_transceiver *otg);
 
-	
+
 	int	(*send_event)(struct otg_transceiver *otg,
 			enum usb_otg_event event);
 

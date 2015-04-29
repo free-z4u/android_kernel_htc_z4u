@@ -22,33 +22,33 @@
 #define CPU_ARCH_ARMv6		8
 #define CPU_ARCH_ARMv7		9
 
-#define CR_M	(1 << 0)	
-#define CR_A	(1 << 1)	
-#define CR_C	(1 << 2)	
-#define CR_W	(1 << 3)	
-#define CR_P	(1 << 4)	
-#define CR_D	(1 << 5)	
-#define CR_L	(1 << 6)	
-#define CR_B	(1 << 7)	
-#define CR_S	(1 << 8)	
-#define CR_R	(1 << 9)	
-#define CR_F	(1 << 10)	
-#define CR_Z	(1 << 11)	
-#define CR_I	(1 << 12)	
-#define CR_V	(1 << 13)	
-#define CR_RR	(1 << 14)	
-#define CR_L4	(1 << 15)	
+#define CR_M	(1 << 0)
+#define CR_A	(1 << 1)
+#define CR_C	(1 << 2)
+#define CR_W	(1 << 3)
+#define CR_P	(1 << 4)
+#define CR_D	(1 << 5)
+#define CR_L	(1 << 6)
+#define CR_B	(1 << 7)
+#define CR_S	(1 << 8)
+#define CR_R	(1 << 9)
+#define CR_F	(1 << 10)
+#define CR_Z	(1 << 11)
+#define CR_I	(1 << 12)
+#define CR_V	(1 << 13)
+#define CR_RR	(1 << 14)
+#define CR_L4	(1 << 15)
 #define CR_DT	(1 << 16)
 #define CR_IT	(1 << 18)
 #define CR_ST	(1 << 19)
-#define CR_FI	(1 << 21)	
-#define CR_U	(1 << 22)	
-#define CR_XP	(1 << 23)	
-#define CR_VE	(1 << 24)	
-#define CR_EE	(1 << 25)	
-#define CR_TRE	(1 << 28)	
-#define CR_AFE	(1 << 29)	
-#define CR_TE	(1 << 30)	
+#define CR_FI	(1 << 21)
+#define CR_U	(1 << 22)
+#define CR_XP	(1 << 23)
+#define CR_VE	(1 << 24)
+#define CR_EE	(1 << 25)
+#define CR_TRE	(1 << 28)
+#define CR_AFE	(1 << 29)
+#define CR_TE	(1 << 30)
 
 #define __asmeq(x, y)  ".ifnc " x "," y " ; .err ; .endif\n\t"
 
@@ -174,8 +174,8 @@ extern unsigned int user_debug;
 #define set_mb(var, value)	do { var = value; smp_mb(); } while (0)
 #define nop() __asm__ __volatile__("mov\tr0,r0\t@ nop\n\t");
 
-extern unsigned long cr_no_alignment;	
-extern unsigned long cr_alignment;	
+extern unsigned long cr_no_alignment;
+extern unsigned long cr_alignment;
 
 #ifndef __ASM_ARM_CP15_H
 static inline unsigned int get_cr(void)
@@ -214,7 +214,7 @@ static inline void set_copro_access(unsigned int val)
 	  : : "r" (val) : "cc");
 	isb();
 }
-#endif 
+#endif
 
 #define __ARCH_WANT_INTERRUPTS_ON_CTXSW
 
@@ -236,10 +236,10 @@ void cpu_idle_wait(void);
 
 #include <asm-generic/cmpxchg-local.h>
 
-#endif 
+#endif
 
 #define arch_align_stack(x) (x)
 
-#endif 
+#endif
 
 #endif

@@ -1463,7 +1463,7 @@ int gpio_direction_input_array(unsigned *gpio)
 		if (status < 0)
 			goto fail;
 
-		
+
 	}
 	spin_unlock_irqrestore(&gpio_lock, flags);
 

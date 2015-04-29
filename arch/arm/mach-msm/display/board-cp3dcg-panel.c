@@ -63,21 +63,21 @@ static char ptype[60] = "Panel Type = ";
 #define DEFAULT_BRIGHTNESS_DCG 166
 static unsigned int last_brightness = DEFAULT_BRIGHTNESS_DCG;
 
-static unsigned char led_pwm1[] = {0x51, 0xFF}; 
+static unsigned char led_pwm1[] = {0x51, 0xFF};
 
-static char sleep_out[] = {0x11, 0x00}; 
-static char display_on[] = {0x29, 0x00}; 
+static char sleep_out[] = {0x11, 0x00};
+static char display_on[] = {0x29, 0x00};
 
-static char display_off[2] = {0x28, 0x00}; 
-static char sleep_in[2] = {0x10, 0x00}; 
+static char display_off[2] = {0x28, 0x00};
+static char sleep_in[2] = {0x10, 0x00};
 static struct dsi_cmd_desc backlight_cmds[] = {
         {DTYPE_DCS_LWRITE, 1, 0, 0, 0,
                 sizeof(led_pwm1), led_pwm1},
 };
-static char sony_orise_001[] ={0x00, 0x00}; 
+static char sony_orise_001[] ={0x00, 0x00};
 static char sony_orise_002[] = {
-        0xFF, 0x96, 0x01, 0x01}; 
-static char sony_orise_003[] ={0x00, 0x80}; 
+        0xFF, 0x96, 0x01, 0x01};
+static char sony_orise_003[] ={0x00, 0x80};
 static char sony_orise_004[] = {
         0xFF, 0x96, 0x01};
 static char sony_inv_01[] = {0x00, 0xB3};
@@ -95,65 +95,65 @@ static char sony_pwrctl3_02[] = {
 	0xC5, 0x04, 0x3A, 0x56,
 	0x44, 0x44, 0x44, 0x44};
 
-static char sony_gamma28_00[] ={0x00, 0x00}; 
+static char sony_gamma28_00[] ={0x00, 0x00};
 static char sony_gamma28_01[] = {
 	0xe1, 0x07, 0x10, 0x16,
 	0x0F, 0x08, 0x0F, 0x0D,
 	0x0C, 0x02, 0x06, 0x0F,
 	0x0B, 0x11, 0x0D, 0x07,
 	0x00
-}; 
+};
 
-static char sony_gamma28_02[] ={0x00, 0x00}; 
+static char sony_gamma28_02[] ={0x00, 0x00};
 static char sony_gamma28_03[] = {
 	0xe2, 0x07, 0x10, 0x16,
 	0x0F, 0x08, 0x0F, 0x0D,
 	0x0C, 0x02, 0x06, 0x0F,
 	0x0B, 0x11, 0x0D, 0x07,
 	0x00
-}; 
+};
 
-static char sony_gamma28_04[] ={0x00, 0x00}; 
+static char sony_gamma28_04[] ={0x00, 0x00};
 static unsigned char sony_gamma28_05[] = {
 	0xe3, 0x19, 0x1D, 0x20,
 	0x0C, 0x04, 0x0B, 0x0B,
 	0x0A, 0x03, 0x07, 0x12,
 	0x0B, 0x11, 0x0D, 0x07,
 	0x00
-}; 
+};
 
-static char sony_gamma28_06[] ={0x00, 0x00}; 
+static char sony_gamma28_06[] ={0x00, 0x00};
 static char sony_gamma28_07[] = {
 	0xe4, 0x19, 0x1D, 0x20,
 	0x0C, 0x04, 0x0B, 0x0B,
 	0x0A, 0x03, 0x07, 0x12,
 	0x0B, 0x11, 0x0D, 0x07,
 	0x00
-}; 
+};
 
-static char sony_gamma28_08[] ={0x00, 0x00}; 
+static char sony_gamma28_08[] ={0x00, 0x00};
 static char sony_gamma28_09[] = {
 	0xe5, 0x07, 0x0F, 0x15,
 	0x0D, 0x06, 0x0E, 0x0D,
 	0x0C, 0x02, 0x06, 0x0F,
 	0x09, 0x0D, 0x0D, 0x06,
 	0x00
-}; 
+};
 
-static char sony_gamma28_10[] ={0x00, 0x00}; 
+static char sony_gamma28_10[] ={0x00, 0x00};
 static char sony_gamma28_11[] = {
 	0xe6, 0x07, 0x0F, 0x15,
 	0x0D, 0x06, 0x0E, 0x0D,
 	0x0C, 0x02, 0x06, 0x0F,
 	0x09, 0x0D, 0x0D, 0x06,
 	0x00
-}; 
+};
 
-static char pwm_freq_sel_cmds1[] = {0x00, 0xB4}; 
-static char pwm_freq_sel_cmds2[] = {0xC6, 0x00}; 
+static char pwm_freq_sel_cmds1[] = {0x00, 0xB4};
+static char pwm_freq_sel_cmds2[] = {0xC6, 0x00};
 
-static char pwm_dbf_cmds1[] = {0x00, 0xB1}; 
-static char pwm_dbf_cmds2[] = {0xC6, 0x04}; 
+static char pwm_dbf_cmds1[] = {0x00, 0xB1};
+static char pwm_dbf_cmds2[] = {0xC6, 0x04};
 
 static char sony_ce_table1[] = {
 	0xD4, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -630,7 +630,7 @@ static struct dsi_cmd_desc lg_novatek_video_on_cmds[] = {
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(set_para_idx), set_para_idx},
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(pwr_blk_sel), pwr_blk_sel},
 
-	
+
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(idx_13), idx_13},
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(val_80), val_80},
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(idx_14), idx_14},
@@ -710,7 +710,7 @@ static struct dsi_cmd_desc jdi_novatek_video_on_cmds[] = {
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 1, sizeof(skin_tone_setting2), skin_tone_setting2},
 
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(pwr_blk_enable), pwr_blk_enable},
-	
+
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(idx_13), idx_13},
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(val_80), val_80},
 	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(idx_14), idx_14},
@@ -975,7 +975,7 @@ static unsigned char uranus_shrink_pwm(int val)
 	} else if (val > BRI_SETTING_MAX)
 			shrink_br = pwm_max;
 
-	
+
 
 	return shrink_br;
 }
@@ -1075,7 +1075,7 @@ static void uranus_dim_off(struct msm_fb_data_type *mfd)
 static void uranus_set_backlight(struct msm_fb_data_type *mfd)
 {
 	PR_DISP_INFO("%s\n", __func__);
-	
+
 
 	if (mipi_status == 0 || bl_level_prevset == mfd->bl_level) {
 		PR_DISP_DEBUG("Skip the backlight setting > mipi_status : %d, bl_level_prevset : %d, bl_level : %d\n",
@@ -1100,7 +1100,7 @@ static void uranus_set_backlight(struct msm_fb_data_type *mfd)
 	htc_mdp_sem_up(&mfd->dma->mutex);
 	bl_level_prevset = mfd->bl_level;
 
-	
+
 	if (mfd->bl_level >= BRI_SETTING_MIN)
 		last_brightness = mfd->bl_level;
 
@@ -1236,33 +1236,33 @@ err_device_put:
 static struct msm_panel_info pinfo;
 
 static struct mipi_dsi_phy_ctrl mipi_dsi_cp3dcg_phy_ctrl = {
-	
-	
+
+
 	{0x03, 0x01, 0x01, 0x00},
-	
+
 	{0xAE, 0x8B, 0x19, 0x00, 0x93, 0x96, 0x1D, 0x8D,
 	0x13, 0x03, 0x04},
-	
+
 	{0x7f, 0x00, 0x00, 0x00},
-	
+
 	{0xbb, 0x02, 0x06, 0x00},
-	
+
 	{0x00, 0x92, 0x31, 0xd2, 0x00, 0x40, 0x37, 0x62,
 	0x01, 0x0f, 0x07,
 	0x05, 0x14, 0x03, 0x0, 0x0, 0x0, 0x20, 0x0, 0x02, 0x0},
 };
 static struct mipi_dsi_phy_ctrl mipi_dsi_lg_novatek_phy_ctrl = {
-	
-	
+
+
 	{0x03, 0x01, 0x01, 0x00},
-	
+
 	{0xb3, 0x30, 0x1c, 0x00, 0x95, 0x9f, 0x1f,
 	0x30, 0x15, 0x03, 0x04},
-	
+
 	{0x7f, 0x00, 0x00, 0x00},
-	
-	{0xff, 0x02, 0x06, 0x00}, 
-	
+
+	{0xff, 0x02, 0x06, 0x00},
+
 	{0x00, 0xbb, 0x31, 0xd2, 0x00, 0x40, 0x37, 0x62,
 	0x01, 0x0f, 0x07,
 	0x05, 0x14, 0x03, 0x0, 0x0, 0x0, 0x20, 0x0, 0x02, 0x0},
@@ -1284,8 +1284,8 @@ static int __init mipi_cmd_sony_orise_init(void)
 	pinfo.lcdc.v_back_porch = 64;
 	pinfo.lcdc.v_front_porch = 38;
 	pinfo.lcdc.v_pulse_width = 8;
-	pinfo.lcdc.border_clr = 0;	
-	pinfo.lcdc.underflow_clr = 0x00;	
+	pinfo.lcdc.border_clr = 0;
+	pinfo.lcdc.underflow_clr = 0x00;
 	pinfo.lcdc.hsync_skew = 0;
 	pinfo.bl_max = 255;
 	pinfo.bl_min = 1;
@@ -1307,7 +1307,7 @@ static int __init mipi_cmd_sony_orise_init(void)
 	pinfo.mipi.data_lane1 = TRUE;
 	pinfo.mipi.t_clk_post = 0x20;
 	pinfo.mipi.t_clk_pre = 0x2F;
-	pinfo.mipi.stream = 0; 
+	pinfo.mipi.stream = 0;
 	pinfo.mipi.mdp_trigger = DSI_CMD_TRIGGER_NONE;
 	pinfo.mipi.dma_trigger = DSI_CMD_TRIGGER_SW;
 	pinfo.mipi.frame_rate = 58;
@@ -1347,8 +1347,8 @@ static int __init mipi_cmd_lg_novatek_init(void)
 	pinfo.lcdc.v_back_porch = 20;
 	pinfo.lcdc.v_front_porch = 20;
 	pinfo.lcdc.v_pulse_width = 2;
-	pinfo.lcdc.border_clr = 0;	
-	pinfo.lcdc.underflow_clr = 0x00;	
+	pinfo.lcdc.border_clr = 0;
+	pinfo.lcdc.underflow_clr = 0x00;
 	pinfo.lcdc.hsync_skew = 0;
 	pinfo.bl_max = 255;
 	pinfo.bl_min = 1;
@@ -1370,7 +1370,7 @@ static int __init mipi_cmd_lg_novatek_init(void)
 	pinfo.mipi.data_lane1 = TRUE;
 	pinfo.mipi.t_clk_post = 0x20;
 	pinfo.mipi.t_clk_pre = 0x30;
-	pinfo.mipi.stream = 0; 
+	pinfo.mipi.stream = 0;
 	pinfo.mipi.mdp_trigger = DSI_CMD_TRIGGER_NONE;
 	pinfo.mipi.dma_trigger = DSI_CMD_TRIGGER_SW;
 	pinfo.mipi.frame_rate = 58;
@@ -1410,8 +1410,8 @@ static int __init mipi_cmd_jdi_novatek_init(void)
 	pinfo.lcdc.v_back_porch = 20;
 	pinfo.lcdc.v_front_porch = 20;
 	pinfo.lcdc.v_pulse_width = 2;
-	pinfo.lcdc.border_clr = 0;	
-	pinfo.lcdc.underflow_clr = 0xff;	
+	pinfo.lcdc.border_clr = 0;
+	pinfo.lcdc.underflow_clr = 0xff;
 	pinfo.lcdc.hsync_skew = 0;
 	pinfo.bl_max = 255;
 	pinfo.bl_min = 1;
@@ -1433,7 +1433,7 @@ static int __init mipi_cmd_jdi_novatek_init(void)
 	pinfo.mipi.data_lane1 = TRUE;
 	pinfo.mipi.t_clk_post = 0x20;
 	pinfo.mipi.t_clk_pre = 0x30;
-	pinfo.mipi.stream = 0; 
+	pinfo.mipi.stream = 0;
 	pinfo.mipi.mdp_trigger = DSI_CMD_TRIGGER_NONE;
 	pinfo.mipi.dma_trigger = DSI_CMD_TRIGGER_SW;
 	pinfo.mipi.frame_rate = 60;

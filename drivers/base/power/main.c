@@ -114,26 +114,26 @@ void device_pm_add(struct device *dev)
 	if (dev->parent && dev->parent->power.is_prepared)
 		dev_warn(dev, "parent %s should not be sleeping\n",
 			dev_name(dev->parent));
-	
 
-	
+
+
 #ifdef CONFIG_I2C_CPLD
 	if(!strcmp(dev_name(dev), "1-0033"))
-	{	
+	{
 		dev_tps61310 = dev;
 		list_add_tail(&dev->power.entry, &dpm_list);
 	}
 	else if(!strcmp(dev_name(dev), "3-0070"))
 	{
 		dev_cpld = dev;
-		if(dev_tps61310)  
+		if(dev_tps61310)
 			list_move_tail(&dev_cpld->power.entry, &dev_tps61310->power.entry);
 		else
 			list_add_tail(&dev->power.entry, &dpm_list);
-	}else 
+	}else
 #endif
 		list_add_tail(&dev->power.entry, &dpm_list);
-	
+
 	dev_pm_qos_constraints_init(dev);
 	mutex_unlock(&dpm_list_mtx);
 }

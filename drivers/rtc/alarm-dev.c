@@ -137,7 +137,7 @@ from_old_alarm_set:
 		if (ANDROID_ALARM_BASE_CMD(cmd) != ANDROID_ALARM_SET_AND_WAIT(0)
 		    && cmd != ANDROID_ALARM_SET_AND_WAIT_OLD)
 			break;
-		
+
 	case ANDROID_ALARM_WAIT:
 		spin_lock_irqsave(&alarm_slock, flags);
 		pr_alarm(IO, "alarm wait\n");
@@ -166,7 +166,7 @@ from_old_alarm_set:
 		break;
 #endif
 	case ANDROID_ALARM_SET_RTC:
-		
+
 		printk("[TIME][ALARM] RTC set called  process %s\n", current->comm);
 		if (copy_from_user(&new_rtc_time, (void __user *)arg,
 		    sizeof(new_rtc_time))) {

@@ -226,10 +226,10 @@ int msm_camera_flash(
 			return -EINVAL;
 		}
     } else {
-        
+
         pr_err("flash_src->camera_flash == NULL");
         return -EINVAL;
-        
+
     }
 
 	return flash_src->camera_flash(flash_level);
@@ -248,7 +248,7 @@ int msm_camera_flash_current_driver(
 
 	CDBG("%s: led_state = %d\n", __func__, led_state);
 
-	
+
 	switch (led_state) {
 	case MSM_CAMERA_LED_OFF:
 		for (idx = 0; idx < num_leds; ++idx) {
@@ -299,7 +299,7 @@ int msm_camera_flash_current_driver(
 		break;
 	}
 	CDBG("msm_camera_flash_led_pmic8058: return %d\n", rc);
-#endif 
+#endif
 	return rc;
 }
 
@@ -625,11 +625,11 @@ int32_t msm_camera_flash_set_led_state(
 		break;
 
 	case MSM_CAMERA_FLASH_SRC_CURRENT_DRIVER:
-		
+
 		if (fdata->flash_src->camera_flash)
 			rc = msm_camera_flash(fdata->flash_src, led_state);
 		else
-		
+
 			rc = msm_camera_flash_current_driver(
 			&fdata->flash_src->_fsrc.current_driver_src,
 			led_state);

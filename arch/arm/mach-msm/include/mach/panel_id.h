@@ -164,4 +164,4 @@ extern int panel_type;
 #define PANEL_ID_LUPUS_AUO_NT_C2 (0x7C | BL_MIPI | IF_MIPI | DEPTH_RGB888 | MIPI_VIDEO_ONLY | REV_1)
 #define PANEL_ID_END            0xFFFF
 
-#endif	
+#endif

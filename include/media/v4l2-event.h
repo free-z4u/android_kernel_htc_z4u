@@ -78,11 +78,11 @@ struct v4l2_subscribed_event {
 
 struct v4l2_events {
 	wait_queue_head_t	wait;
-	struct list_head	subscribed; 
-	struct list_head	free; 
-	struct list_head	available; 
+	struct list_head	subscribed;
+	struct list_head	free;
+	struct list_head	available;
 	unsigned int		navailable;
-	unsigned int		nallocated; 
+	unsigned int		nallocated;
 	u32			sequence;
 };
 

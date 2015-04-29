@@ -69,7 +69,7 @@ static	uint16_t PRL7Konly_table[PRL_TABLE_SZ];
 static	uint16_t PRL7K9Kdiff_table[PRL_TABLE_SZ];
 static	uint16_t PRL9Konly_table[PRL_TABLE_SZ];
 
-static int radio_initialized; 
+static int radio_initialized;
 static int diag2arm9query;
 #define XPST_SMD	0
 #define XPST_SDIO	1
@@ -283,7 +283,7 @@ int checkcmd_modem_epst(unsigned char *buf)
 			DIAG_INFO("%s:id = 0x%x no default routing path\n", __func__, *(buf+1));
 		return NO_DEF_ID;
 	} else {
-		
+
 		return NO_PST;
 	}
 
@@ -340,7 +340,7 @@ int modem_to_userspace(void *buf, int r, int type, int is9k)
 				decode_encode_hdlc(buf, &r, req->buf, 0, 3);
 		}
 	} else if (type == NO_DEF_ID) {
-		
+
 		value = *((uint8_t *)req->buf+2);
 		DIAG_INFO("%s:check error cmd=0x%x message=ox%x\n", __func__
 				, value, *((uint8_t *)req->buf+1));
@@ -363,7 +363,7 @@ int modem_to_userspace(void *buf, int r, int type, int is9k)
 	if (driver->hsic_ch)
 		queue_work(driver->diag_hsic_wq, &driver->diag_read_hsic_work);
 #endif
-	
+
 	req->actual = r;
 	xpst_req_put(ctxt, &ctxt->rx_arm9_done, req);
 	wake_up(&ctxt->read_arm9_wq);
@@ -395,19 +395,19 @@ static long htc_diag_ioctl(struct file *file, unsigned int cmd, unsigned long ar
 #if defined(CONFIG_MACH_VIGOR) || defined(CONFIG_ARCH_APQ8064)
 		htc_usb_enable_function(DIAG_MDM, tmp_value);
 #endif
-		
+
 		htc_usb_enable_function("acm", 0);
 		htc_usb_enable_function(DIAG_LEGACY, tmp_value);
 
 		if (tmp_value) {
-			
+
 			diag_smd_enable(driver->ch, "diag_ioctl", tmp_value);
 		}
 #if defined(CONFIG_MACH_MECHA)
-		
+
 		smsc251x_mdm_port_sw(tmp_value);
 #endif
-		
+
 		if (tmp_value == 0)
 			ctxt->error = 1;
 		wake_up(&ctxt->read_wq);
@@ -433,7 +433,7 @@ static long htc_diag_ioctl(struct file *file, unsigned int cmd, unsigned long ar
 		DIAG_INFO("diag: fix me USB_DIAG_FUNC_IOC_AMR_SET\n");
 		break;
 	case USB_DIAG_FUNC_IOC_LOGTYPE_GET:
-		
+
 		tmp_value = (driver->logging_mode == 1)?1:0;
 		if (copy_to_user(argp, &tmp_value, sizeof(tmp_value)))
 			return -EFAULT;
@@ -457,7 +457,7 @@ static ssize_t htc_diag_read(struct file *fp, char __user *buf,
 	DIAG_INFO("%s:%s(parent:%s): tgid=%d\n", __func__,
 			current->comm, current->parent->comm, current->tgid);
 
-	
+
 	if (!ctxt->online) {
 		ret = wait_event_interruptible(ctxt->read_wq, (ctxt->online || ctxt->error));
 		if (ret < 0 || ctxt->error)
@@ -633,7 +633,7 @@ static int htc_diag_open(struct inode *ip, struct file *fp)
 		}
 	}
 
-	
+
 	while ((req = xpst_req_get(ctxt, &ctxt->rx_req_idle)))
 		diag_req_free(req);
 
@@ -649,7 +649,7 @@ static int htc_diag_open(struct inode *ip, struct file *fp)
 	}
 
 	ctxt->opened = true;
-	
+
 	ctxt->error = 0;
 
 done:
@@ -720,7 +720,7 @@ static int if_route_to_userspace(struct diag_context *ctxt, unsigned int cmd)
 
 	if (!ctxt->opened || cmd_id == 0)
 		return 0;
-	
+
 	if (cmd_id >= 0xfb && cmd_id <= 0xff)
 		return 1;
 
@@ -927,7 +927,7 @@ static int diag2arm9_open(struct inode *ip, struct file *fp)
 		rc = -EBUSY;
 		goto done;
 	}
-	
+
 	while ((req = xpst_req_get(ctxt, &ctxt->rx_arm9_done)))
 		diag_req_free(req);
 
@@ -952,7 +952,7 @@ static int diag2arm9_open(struct inode *ip, struct file *fp)
 	diag_smd_enable(driver->ch, "diag2arm9_open", SMD_FUNC_OPEN_DIAG);
 #endif
 
-	
+
 	driver->in_busy_1 = 0;
 	driver->in_busy_2 = 0;
 #if defined(CONFIG_MACH_VIGOR)
@@ -981,7 +981,7 @@ static int diag2arm9_release(struct inode *ip, struct file *fp)
 		diag_req_free(ctxt->read_arm9_req);
 	mutex_unlock(&ctxt->diag2arm9_read_lock);
 
-	
+
 	mutex_unlock(&ctxt->diag2arm9_lock);
 #if defined(CONFIG_MACH_VIGOR)
 	kfree(diag2arm9_buf_9k);
@@ -1039,7 +1039,7 @@ static ssize_t diag2arm9_write(struct file *fp, const char __user *buf,
 		switch (path) {
 		case DM7K9K:
 			DIAG_INFO("%s:above date to DM7K9K\n", __func__);
-			
+
 #if defined(CONFIG_MACH_MECHA)
 			if (sdio_diag_initialized) {
 				buf_9k = kzalloc(writed, GFP_KERNEL);
@@ -1061,7 +1061,7 @@ static ssize_t diag2arm9_write(struct file *fp, const char __user *buf,
 				DIAG_INFO("%s: sdio ch fails\n", __func__);
 			}
 #endif
-			
+
 			hdlc.dest_ptr = ctxt->toARM9_buf;
 			hdlc.dest_size = SMD_MAX;
 			hdlc.src_ptr = ctxt->DM_buf;
@@ -1117,7 +1117,7 @@ static ssize_t diag2arm9_write(struct file *fp, const char __user *buf,
 			break;
 		case DM7K9KDIFF:
 			DIAG_INFO("%s:above data to DM7K9KDIFF\n", __func__);
-			
+
 			if ((ctxt->DM_buf[3] & 0x80) == 0x80) {
 				DIAG_INFO("%s:DM7K9KDIFF to 9K\n", __func__);
 #if defined(CONFIG_MACH_MECHA)
@@ -1155,7 +1155,7 @@ static ssize_t diag2arm9_write(struct file *fp, const char __user *buf,
 				smd_write(driver->ch, ctxt->DM_buf, writed);
 #endif
 #if defined(CONFIG_MACH_VIGOR)
-				
+
 				hdlc.dest_ptr = ctxt->toARM9_buf;
 				hdlc.dest_size = SMD_MAX;
 				hdlc.src_ptr = ctxt->DM_buf;
@@ -1180,7 +1180,7 @@ static ssize_t diag2arm9_write(struct file *fp, const char __user *buf,
 #if !defined(CONFIG_MACH_VIGOR)
 			smd_write(driver->ch, ctxt->DM_buf, writed);
 #else
-			
+
 			hdlc.dest_ptr = ctxt->toARM9_buf;
 			hdlc.dest_size = SMD_MAX;
 			hdlc.src_ptr = ctxt->DM_buf;
@@ -1229,12 +1229,12 @@ static ssize_t diag2arm9_read(struct file *fp, char __user *buf,
 	DIAG_INFO("%s\n", __func__);
 	mutex_lock(&ctxt->diag2arm9_read_lock);
 
-	
+
 	if (ctxt->read_arm9_count > 0)
 		req = ctxt->read_arm9_req;
 	else {
 retry:
-		
+
 		req = 0;
 		ret = wait_event_interruptible(ctxt->read_arm9_wq,
 				((req = xpst_req_get(ctxt, &ctxt->rx_arm9_done)) ||
@@ -1265,7 +1265,7 @@ retry:
 	ctxt->read_arm9_buf += xfer;
 	ctxt->read_arm9_count -= xfer;
 	r += xfer;
-	
+
 	if (ctxt->read_arm9_count == 0) {
 		print_hex_dump(KERN_DEBUG, "DM Packet Data"
 				" read from radio ", DUMP_PREFIX_ADDRESS, 16, 1, req->buf, req->actual, 1);

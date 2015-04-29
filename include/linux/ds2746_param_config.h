@@ -92,7 +92,7 @@ UINT32 *TEMP_MAP = TEMP_MAP_300K_100_4360;
 
 UINT32 M_PARAMETER_DEFAULT[] =
 {
-  
+
   10000, 4135, 7500, 3960, 4700, 3800, 1700, 3727, 900, 3674, 300, 3640, 0, 3420,
 };
 
@@ -108,12 +108,12 @@ static INT32 acr_adc_to_mv_coef = 625;
 static INT32 acr_adc_to_mv_resl = 1450;
 static INT32 charge_counter_zero_base_mAh = 500;
 
-static INT32 id_adc_overflow = 3067; 
+static INT32 id_adc_overflow = 3067;
 static INT32 id_adc_resl = 2047;
 static INT32 temp_adc_resl = 2047;
 
 
-static INT32 pd_m_bias_mA;    
+static INT32 pd_m_bias_mA;
 
 
 static INT32 over_high_temp_lock_01c = 600;
@@ -122,7 +122,7 @@ static INT32 over_low_temp_lock_01c = 0;
 static INT32 over_low_temp_release_01c = 30;
 
 
-static BOOL is_allow_batt_id_change = TRUE;	
+static BOOL is_allow_batt_id_change = TRUE;
 extern BOOL is_need_battery_id_detection;
 
 

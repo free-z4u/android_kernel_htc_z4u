@@ -121,8 +121,8 @@
 #define VFE_TESTGEN_START  35
 #define VFE_STATS_MA  0xFFFFFFFF
 
-extern int Block_IN_VFE_RESET; 
-extern int Print_csic_irq_cnt; 
+extern int Block_IN_VFE_RESET;
+extern int Print_csic_irq_cnt;
 struct msg_id_map msgs_map[] = {
 	{MSG_RESET_ACK, MSG_ID_RESET_ACK},
 	{MSG_STOP_ACK, MSG_ID_STOP_ACK},
@@ -396,7 +396,7 @@ void msm_vfe_timeout(void)
 	pr_info("Send IMMEDIATE STOP\n");
 	cmd_data = data;
 	*(uint32_t *)cmd_data = VFE_IMMEDIATE_STOP;
-	
+
 	len = 4;
 	msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 			cmd_data, len);
@@ -443,11 +443,11 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 		}
 	}
 	if (id == VFE_ADSP_EVENT) {
-		
+
 		getevent(evt_buf, sizeof(evt_buf));
 		CDBG("%s:event:msg_id=%d\n", __func__, id);
 	} else {
-		
+
 		getevent(data, len);
 		CDBG("%s:messages:msg_id=%d\n", __func__, id);
 		switch (id) {
@@ -465,7 +465,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 			if (vfe2x_ctrl->stop_pending) {
 				cmd_data = buf;
 				*(uint32_t *)cmd_data = VFE_STOP;
-				
+
 				len  = 4;
 				msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 						cmd_data, len);
@@ -565,10 +565,10 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 					len = sizeof(fack);
 					msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 						cmd_data, len);
-					
+
 						kfree(data);
 						return;
-					
+
 				}
 			}
 			y_phy = ((struct vfe_endframe *)data)->y_address;
@@ -660,12 +660,12 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 					msm_adsp_write(vfe_mod,
 							QDSP_CMDQUEUE,
 							cmd_data, len);
-					
+
 						kfree(data);
 						return;
-					
+
 				}
-			} else { 
+			} else {
 				spin_unlock_irqrestore(
 						&vfe2x_ctrl->
 						liveshot_enabled_lock,
@@ -768,7 +768,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 				frame_id;
 
 			if (!vfe2x_ctrl->liveshot_enabled) {
-				
+
 				vfe_send_outmsg(&vfe2x_ctrl->subdev,
 						MSG_ID_OUTPUT_PRIMARY,
 						y_phy, cbcr_phy);
@@ -843,11 +843,11 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 		case MSG_SOF:
 			vfe2x_ctrl->vfeFrameId++;
 			if (vfe2x_ctrl->vfeFrameId == 0)
-				vfe2x_ctrl->vfeFrameId = 1; 
-			
+				vfe2x_ctrl->vfeFrameId = 1;
+
 			if((vfe2x_ctrl->vfeFrameId % 30) == 0)
 				pr_info("%s: vfeFrameId %d", __FUNCTION__, vfe2x_ctrl->vfeFrameId);
-			
+
 			if ((op_mode & SNAPSHOT_MASK_MODE) && !raw_mode
 				&& (vfe2x_ctrl->num_snap <= 1)) {
 				pr_info("Ignore SOF for snapshot\n");
@@ -865,7 +865,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 			vfe2x_ctrl->vfe_started = 0;
 			wake_up(&stopevent.wait);
 
-			
+
 			if(vfe_recover_flag) {
 				vfe_recover_flag = 0;
 				return;
@@ -896,7 +896,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 				memcpy(((char *)cmd_data) + 4,
 					&vfe2x_ctrl->start_cmd,
 					sizeof(vfe2x_ctrl->start_cmd));
-				
+
 				len  = sizeof(vfe2x_ctrl->start_cmd) + 4;
 				msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 						cmd_data, len);
@@ -905,7 +905,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 				CDBG("Send STOP\n");
 				cmd_data = buf;
 				*(uint32_t *)cmd_data = VFE_STOP;
-				
+
 				len  = 4;
 				msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 						cmd_data, len);
@@ -914,7 +914,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 				CDBG("Send Update\n");
 				cmd_data = buf;
 				*(uint32_t *)cmd_data = VFE_UPDATE;
-				
+
 				len  = 4;
 				msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 						cmd_data, len);
@@ -966,7 +966,7 @@ static int vfe_7x_config_axi(int mode,
 	if ((o_mode == SNAPSHOT_MASK_MODE) && (vfe2x_ctrl->num_snap > 1)) {
 		CDBG("%s: BURST mode freebuf cnt %d", __func__,
 			ad->free_buf_cnt);
-		
+
 		if (mode == OUTPUT_SEC) {
 			ao->output1buffer1_y_phy = ad->ping.ch_paddr[0];
 			ao->output1buffer1_cbcr_phy = ad->ping.ch_paddr[1];
@@ -999,7 +999,7 @@ static int vfe_7x_config_axi(int mode,
 				(unsigned int)ao->output1buffer6_cbcr_phy);
 			CDBG("%x %x\n", (unsigned int)ao->output1buffer7_y_phy,
 				(unsigned int)ao->output1buffer7_cbcr_phy);
-		} else { 
+		} else {
 			ao->output2buffer1_y_phy = ad->ping.ch_paddr[0];
 			ao->output2buffer1_cbcr_phy = ad->ping.ch_paddr[1];
 			ao->output2buffer2_y_phy = ad->pong.ch_paddr[0];
@@ -1033,7 +1033,7 @@ static int vfe_7x_config_axi(int mode,
 				(unsigned int)ao->output2buffer7_cbcr_phy);
 		}
 	} else if (mode == OUTPUT_SEC) {
-		
+
 		if (vfe2x_ctrl->zsl_mode) {
 			ao->output1buffer1_y_phy = ad->ping.ch_paddr[0];
 			ao->output1buffer1_cbcr_phy = ad->ping.ch_paddr[1];
@@ -1062,14 +1062,14 @@ static int vfe_7x_config_axi(int mode,
 			}
 		}
 	} else if (mode == OUTPUT_PRIM && o_mode != SNAPSHOT_MASK_MODE) {
-		
+
 		ao->output2buffer1_y_phy = ad->ping.ch_paddr[0];
 		ao->output2buffer1_cbcr_phy = ad->ping.ch_paddr[1];
 		ao->output2buffer2_y_phy = ad->pong.ch_paddr[0];
 		ao->output2buffer2_cbcr_phy = ad->pong.ch_paddr[1];
 		spin_lock_irqsave(&vfe2x_ctrl->liveshot_enabled_lock,
 				flags);
-		if (vfe2x_ctrl->liveshot_enabled) { 
+		if (vfe2x_ctrl->liveshot_enabled) {
 			ao->output2buffer3_y_phy = ad->pong.ch_paddr[0];
 			ao->output2buffer3_cbcr_phy = ad->pong.ch_paddr[1];
 		} else {
@@ -1193,7 +1193,7 @@ static int vfe2x_configure_pingpong_buffers(int id, int path)
 			outch = &vfe2x_ctrl->zsl_sec;
 	}
 	if (outch->ping.ch_paddr[0] && outch->pong.ch_paddr[0]) {
-		
+
 		CDBG("%s Configure ping/pong address for %d",
 						__func__, path);
 	} else {
@@ -1208,7 +1208,7 @@ static struct buf_info *vfe2x_get_ch(int path)
 	struct buf_info *ch = NULL;
 
 	CDBG("path = %d op_mode = %d\n", path, op_mode);
-	
+
 	if (op_mode & SNAPSHOT_MASK_MODE) {
 		if (path == VFE_MSG_OUTPUT_SECONDARY)
 			ch = &vfe2x_ctrl->thumb;
@@ -1638,7 +1638,7 @@ static long msm_vfe_subdev_ioctl(struct v4l2_subdev *sd,
 			default:
 				break;
 			}
-		} 
+		}
 	}
 		break;
 	case CMD_AXI_CFG_SEC: {
@@ -2054,7 +2054,7 @@ int msm_vfe_subdev_init(struct v4l2_subdev *sd,
 
 	msm_camio_set_perf_lvl(S_INIT);
 
-	
+
 	extlen = sizeof(struct vfe_frame_extra);
 
 	extdata = kmalloc(extlen, GFP_ATOMIC);
@@ -2111,7 +2111,7 @@ void msm_vfe_recover_stop(void)
 	pr_info("Send IMMEDIATE STOP\n");
 	cmd_data = data;
 	*(uint32_t *)cmd_data = VFE_IMMEDIATE_STOP;
-	
+
 	len  = 4;
 	msm_adsp_write(vfe_mod, QDSP_CMDQUEUE,
 		cmd_data, len);

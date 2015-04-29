@@ -102,7 +102,7 @@ struct ktermios hs_wire_termios={
 
 static void setup_hs_tty(struct file *tty_fp)
 {
-	
+
 	#if 0
 	struct termios hs_termios;
 	mm_segment_t old_fs;
@@ -183,7 +183,7 @@ static int hs_read_aid(void)
 
 static int hs_1wire_query(int type)
 {
-	return 0; 
+	return 0;
 }
 
 static int hs_1wire_read_key(void)
@@ -254,11 +254,11 @@ static int hs_1wire_init(void)
 	setup_hs_tty(fp);
 	HS_LOG("Setup HS tty");
 	if (hi->pdata.tx_level_shift_en) {
-		gpio_set_value_cansleep(hi->pdata.tx_level_shift_en, 0); 
+		gpio_set_value_cansleep(hi->pdata.tx_level_shift_en, 0);
 		HS_LOG("[HS]set tx_level_shift_en to 0");
 	}
 	if (hi->pdata.uart_sw) {
-		gpio_set_value_cansleep(hi->pdata.uart_sw, 1); 
+		gpio_set_value_cansleep(hi->pdata.uart_sw, 1);
 		HS_LOG("[HS]Set uart sw = 1");
 	}
 	hi->aid = 0;
@@ -299,7 +299,7 @@ static void hs_1wire_deinit(void)
 
 static int hs_1wire_report_type(char **string)
 {
-	const int type_num = 3; 
+	const int type_num = 3;
 	char *hs_type[] = {
 		"headset_beats_20",
 		"headset_mic_midtier",

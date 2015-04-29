@@ -6,7 +6,7 @@
  *  GK 2/5/95  -  Changed to support mounting root fs via NFS
  *  Added initrd & change_root: Werner Almesberger & Hans Lermen, Feb '96
  *  Moan early if gcc is old, avoiding bogus kernels - Paul Gortmaker, May '96
- *  Simplified starting of init:  Michael A. Griffith <grif@acm.org> 
+ *  Simplified starting of init:  Michael A. Griffith <grif@acm.org>
  */
 
 #include <linux/types.h>
@@ -206,7 +206,7 @@ early_param("loglevel", loglevel);
 static int __init repair_env_string(char *param, char *val)
 {
 	if (val) {
-		
+
 		if (val == param+strlen(param)+1)
 			val[-1] = '=';
 		else if (val == param+strlen(param)+2) {
@@ -223,11 +223,11 @@ static int __init unknown_bootoption(char *param, char *val)
 {
 	repair_env_string(param, val);
 
-	
+
 	if (obsolete_checksetup(param))
 		return 0;
 
-	
+
 	if (strchr(param, '.') && (!val || strchr(param, '.') < val))
 		return 0;
 
@@ -235,7 +235,7 @@ static int __init unknown_bootoption(char *param, char *val)
 		return 0;
 
 	if (val) {
-		
+
 		unsigned int i;
 		for (i = 0; envp_init[i]; i++) {
 			if (i == MAX_INIT_ENVS) {
@@ -247,7 +247,7 @@ static int __init unknown_bootoption(char *param, char *val)
 		}
 		envp_init[i] = param;
 	} else {
-		
+
 		unsigned int i;
 		for (i = 0; argv_init[i]; i++) {
 			if (i == MAX_INIT_ARGS) {
@@ -276,7 +276,7 @@ static int __init rdinit_setup(char *str)
 	unsigned int i;
 
 	ramdisk_execute_command = str;
-	
+
 	for (i = 1; i < MAX_INIT_ARGS; i++)
 		argv_init[i] = NULL;
 	return 1;
@@ -307,7 +307,7 @@ static void __init setup_command_line(char *command_line)
 	strcpy (static_command_line, command_line);
 	strcpy(print_command_line, boot_command_line);
 
-	
+
 	do {
 		char *str = 0;
 		int sn_patten_len = strlen("androidboot.serialno=");
@@ -315,7 +315,7 @@ static void __init setup_command_line(char *command_line)
 		int remove_sn = 0;
 
 
-		
+
 		for ( str = print_command_line; str < print_command_line + strlen(print_command_line) - td_sf_len; str++ ) {
 			if ( 0 == strncmp( str, "td.sf=", td_sf_len ) ) {
 				str += td_sf_len;
@@ -328,7 +328,7 @@ static void __init setup_command_line(char *command_line)
 		}
 
 		if (remove_sn) {
-			
+
 			for ( str = print_command_line; str < print_command_line + strlen(print_command_line) - sn_patten_len; str++ ) {
 				if ( 0 == strncmp( str, "androidboot.serialno=", sn_patten_len ) ) {
 					str += sn_patten_len;
@@ -361,7 +361,7 @@ static noinline void __init_refok rest_init(void)
 
 	init_idle_bootup_task(current);
 	schedule_preempt_disabled();
-	
+
 	cpu_idle();
 }
 
@@ -379,7 +379,7 @@ static int __init do_early_param(char *param, char *val)
 				       "Malformed early option '%s'\n", param);
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -396,7 +396,7 @@ void __init parse_early_param(void)
 	if (done)
 		return;
 
-	
+
 	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
 	parse_early_options(tmp_cmdline);
 	done = 1;
@@ -406,7 +406,7 @@ void __init parse_early_param(void)
 static void __init boot_cpu_init(void)
 {
 	int cpu = smp_processor_id();
-	
+
 	set_cpu_online(cpu, true);
 	set_cpu_active(cpu, true);
 	set_cpu_present(cpu, true);
@@ -457,7 +457,7 @@ asmlinkage void __init start_kernel(void)
 	setup_command_line(command_line);
 	setup_nr_cpu_ids();
 	setup_per_cpu_areas();
-	smp_prepare_boot_cpu();	
+	smp_prepare_boot_cpu();
 
 	build_all_zonelists(NULL);
 	page_alloc_init();

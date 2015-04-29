@@ -1,6 +1,6 @@
 /*
  *  linux/mm/oom_kill.c
- * 
+ *
  *  Copyright (C)  1998,2000  Rik van Riel
  *	Thanks go out to Claus Fischer for some serious inspiration and
  *	for goading me into coding this file...
@@ -766,11 +766,11 @@ void out_of_memory(struct zonelist *zonelist, gfp_t gfp_mask,
 out:
 	read_unlock(&tasklist_lock);
 
-        
+
 #ifdef CONFIG_DEBUG_HTC_OOM
         wake_up_kmemeleak();
 #endif
-        
+
 
 	/*
 	 * Give "p" a good chance of killing itself before we

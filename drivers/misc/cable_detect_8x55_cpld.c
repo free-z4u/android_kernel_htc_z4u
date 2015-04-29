@@ -67,7 +67,7 @@ struct cable_detect_info {
 	int vbus_mpp_irq;
 	int vbus_uevent;
 	enum usb_connect_type connect_type;
-	
+
 	int usb_id_pin_gpio;
 	__u8 detect_type;
 	__u8 accessory_type;
@@ -157,8 +157,8 @@ static void send_cable_connect_notify(int cable_type)
 			if (notifier->func != NULL) {
 				CABLE_INFO("Send to: %s, type %d\n",
 						notifier->name, cable_type);
-				
-				
+
+
 				notifier->func(cable_type);
 			}
 		}
@@ -191,8 +191,8 @@ static void send_usb_host_connect_notify(int cable_in)
 		if (notifier->func != NULL) {
 			CABLE_INFO("[HostNotify] Send to: %s: %d\n",
 					notifier->name, cable_in);
-			
-			
+
+
 			notifier->func(cable_in);
 		}
 	}
@@ -387,7 +387,7 @@ static void cable_detect_handler(struct work_struct *w)
 		return;
 #ifdef CONFIG_FB_MSM_HDMI_MHL_SII9234
 	if (pInfo->mhl_reset_gpio != 0)
-		gpio_set_value(pInfo->mhl_reset_gpio, 0); 
+		gpio_set_value(pInfo->mhl_reset_gpio, 0);
 #endif
 	if (pInfo->detect_type == CABLE_TYPE_PMIC_ADC) {
 		accessory_type = cable_detect_get_type(pInfo);
@@ -403,7 +403,7 @@ static void cable_detect_handler(struct work_struct *w)
 
 #ifdef CONFIG_FB_MSM_HDMI_MHL_SII9234
 	if (pInfo->mhl_reset_gpio != 0)
-		gpio_set_value(pInfo->mhl_reset_gpio, 1); 
+		gpio_set_value(pInfo->mhl_reset_gpio, 1);
 
 	if (accessory_type != DOCK_STATE_MHL)
 		D2ToD3();
@@ -519,7 +519,7 @@ static void cable_detect_handler(struct work_struct *w)
 		if (pInfo->accessory_type == DOCK_STATE_UNDOCKED) {
 			atomic_set(&cpld_irqen,1);
 		} else {
-			if (value > 0) 
+			if (value > 0)
 				queue_delayed_work(pInfo->cable_detect_wq,
 						&pInfo->cable_detect_work, 0);
 			else
@@ -646,7 +646,7 @@ static ssize_t dock_status_show(struct device *dev,
 
 	if (pInfo->accessory_type == 1)
 		return sprintf(buf, "online\n");
-	else if (pInfo->accessory_type == 3) 
+	else if (pInfo->accessory_type == 3)
 		return sprintf(buf, "online\n");
 	else
 		return sprintf(buf, "offline\n");
@@ -698,7 +698,7 @@ static void usb_id_detect_init(struct cable_detect_info *pInfo)
 		return;
 
 	if (pInfo->usb_id_pin_gpio == ID_PIN_CPLD) {
-		
+
 		if(cpld_request_irq(CPLD_IRQ_USB_ID, &cpid_usbid_interrupt, pInfo)) {
 			printk(KERN_ERR "[CPLD] request CPLD_IRQ_USB_ID:%d IRQ fail!\n", CPLD_IRQ_USB_ID);
 			return;
@@ -706,7 +706,7 @@ static void usb_id_detect_init(struct cable_detect_info *pInfo)
 		atomic_set(&cpld_irqen,1);
 
 	} else {
-		
+
 		ret = gpio_request(pInfo->usb_id_pin_gpio, "USBID_GPIO");
 		if (ret) {
 			CABLE_ERR("%s: request id gpio failed\n", __func__);
@@ -813,8 +813,8 @@ static struct t_mhl_status_notifier mhl_status_notifier = {
 	.name = "mhl_detect",
 	.func = mhl_status_notifier_func,
 };
-#endif 
-#endif 
+#endif
+#endif
 
 #ifdef CONFIG_CABLE_DETECT_GPIO_DOCK
 static irqreturn_t dock_interrupt(int irq, void *data)
@@ -1140,7 +1140,7 @@ static irqreturn_t vbus_irq_handler(int irq, void *dev_id)
 
 struct platform_driver cable_detect_driver = {
 	.probe = cable_detect_probe,
-	
+
 	.driver = {
 		.name	= "cable_detect",
 		.owner = THIS_MODULE,
@@ -1159,11 +1159,11 @@ static void usb_status_notifier_func(int cable_type)
 	} else if (pInfo->accessory_adc > 0 && pInfo->accessory_adc < 150) {
 		pInfo->connect_type = cable_type;
 		send_cable_connect_notify(cable_type);
-		
+
 		gpio_set_value(pInfo->mhl_usb_sel_gpio, 1);
 		gpio_set_value(pInfo->mhl_reset_gpio, 1);
 	} else if (cable_type == CONNECT_TYPE_NONE) {
-		
+
 		gpio_set_value(pInfo->mhl_usb_sel_gpio, 0);
 		gpio_set_value(pInfo->mhl_reset_gpio, 0);
 		pInfo->connect_type = cable_type;

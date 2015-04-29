@@ -102,7 +102,7 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 	csicbase = csic_dev->base;
 	csic_params = cfg_params->parms;
 
-	
+
 	msm_io_w(0x4, csicbase + MIPI_PHY_CONTROL);
 
 	msm_io_w(MIPI_PROTOCOL_CONTROL_SW_RST_BMSK,
@@ -116,7 +116,7 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 	val |= csic_params->dpcm_scheme <<
 		MIPI_PROTOCOL_CONTROL_DPCM_SCHEME_SHFT;
 	pr_info("%s MIPI_PROTOCOL_CONTROL val=0x%x\n", __func__, val);
-	
+
 	for (count = 1; count <= 10; count++) {
 		rc = msm_io_r(csicbase + MIPI_PROTOCOL_CONTROL) & MIPI_PROTOCOL_CONTROL_SW_RST_BMSK;
 		if (rc == 0)
@@ -130,7 +130,7 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 	}
 	msm_io_w(val, csicbase + MIPI_PROTOCOL_CONTROL);
 
-	
+
 
 	val = (csic_params->settle_cnt <<
 		MIPI_PHY_D0_CONTROL2_SETTLE_COUNT_SHFT) |
@@ -139,7 +139,7 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 		(0x1 << MIPI_PHY_D0_CONTROL2_ERR_SOT_HS_EN_SHFT);
 	pr_info("%s MIPI_PHY_D0_CONTROL2 val=0x%x\n", __func__, val);
 
-	
+
 	for(i=0;i < csic_params->lane_cnt;i++)
 		msm_io_w(val, csicbase + MIPI_PHY_D0_CONTROL2 + i*4);
 
@@ -160,7 +160,7 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 	msm_io_w(0x00000000, csicbase + MIPI_PHY_D2_CONTROL);
 	msm_io_w(0x00000000, csicbase + MIPI_PHY_D3_CONTROL);
 
-	
+
 	switch (csic_params->lane_cnt) {
 	case 1:
 		msm_io_w(csic_params->lane_assign << 8 | 0x4,
@@ -181,7 +181,7 @@ static int msm_csic_config(struct csic_cfg_params *cfg_params)
 	}
 
 	msm_io_w(0xF077F3C0, csicbase + MIPI_INTERRUPT_MASK);
-	
+
 	msm_io_w(0xF077F3C0, csicbase + MIPI_INTERRUPT_STATUS);
 
 	return rc;
@@ -215,7 +215,7 @@ static irqreturn_t msm_csic_irq(int irq_num, void *data)
 
 	msm_io_w(irq, csic_dev->base + MIPI_INTERRUPT_STATUS);
 
-	
+
 	if ((irq >> 19) & 0x1)
 		pr_info("Unsupported packet format is received\n");
 	return IRQ_HANDLED;

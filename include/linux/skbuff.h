@@ -325,7 +325,7 @@ typedef unsigned char *sk_buff_data_t;
 #define NET_SKBUFF_NF_DEFRAG_NEEDED 1
 #endif
 
-/** 
+/**
  *	struct sk_buff - socket buffer
  *	@next: Next buffer in list
  *	@prev: Previous buffer in list
@@ -519,7 +519,7 @@ struct sk_buff {
  */
 static inline struct dst_entry *skb_dst(const struct sk_buff *skb)
 {
-	/* If refdst was not refcounted, check we still are in a 
+	/* If refdst was not refcounted, check we still are in a
 	 * rcu_read_lock section
 	 */
 	WARN_ON((skb->_skb_refdst & SKB_DST_NOREF) &&
@@ -753,7 +753,7 @@ static inline struct sk_buff *skb_unshare(struct sk_buff *skb,
 	might_sleep_if(pri & __GFP_WAIT);
 	if (skb_cloned(skb)) {
 		struct sk_buff *nskb = skb_copy(skb, pri);
-		kfree_skb(skb);	
+		kfree_skb(skb);
 		skb = nskb;
 	}
 	return skb;
@@ -919,12 +919,12 @@ extern struct sk_buff *skb_dequeue(struct sk_buff_head *list);
 static inline struct sk_buff *__skb_dequeue(struct sk_buff_head *list)
 {
 	struct sk_buff *skb = NULL;
-	
+
 	if ((!list) || (IS_ERR(list))) {
 		printk("[NET] list is NULL in %s\n", __func__);
 		return NULL;
 	}
-	
+
 	skb = skb_peek(list);
 	if ((skb) && (!IS_ERR(skb)))
 		__skb_unlink(skb, list);
@@ -1000,7 +1000,7 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
 	skb_reset_tail_pointer(skb);
 	skb->tail += offset;
 }
-#else 
+#else
 static inline unsigned char *skb_tail_pointer(const struct sk_buff *skb)
 {
 	return skb->tail;
@@ -1016,7 +1016,7 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
 	skb->tail = skb->data + offset;
 }
 
-#endif 
+#endif
 
 extern unsigned char *skb_put(struct sk_buff *skb, unsigned int len);
 static inline unsigned char *__skb_put(struct sk_buff *skb, unsigned int len)
@@ -1155,7 +1155,7 @@ static inline void skb_set_mac_header(struct sk_buff *skb, const int offset)
 	skb->mac_header += offset;
 }
 
-#else 
+#else
 
 static inline unsigned char *skb_transport_header(const struct sk_buff *skb)
 {
@@ -1207,7 +1207,7 @@ static inline void skb_set_mac_header(struct sk_buff *skb, const int offset)
 {
 	skb->mac_header = skb->data + offset;
 }
-#endif 
+#endif
 
 static inline void skb_mac_header_rebuild(struct sk_buff *skb)
 {
@@ -1297,7 +1297,7 @@ extern void skb_queue_purge(struct sk_buff_head *list);
 static inline void __skb_queue_purge(struct sk_buff_head *list)
 {
 	struct sk_buff *skb;
-	
+
 	if ((!list) || (IS_ERR(list))) {
 		printk("[NET] list is NULL in %s\n", __func__);
 		return;
@@ -1578,7 +1578,7 @@ static inline int skb_cow_head(struct sk_buff *skb, unsigned int headroom)
  *	is untouched. Otherwise it is extended. Returns zero on
  *	success. The skb is freed on error.
  */
- 
+
 static inline int skb_padto(struct sk_buff *skb, unsigned int len)
 {
 	unsigned int size = skb->len;

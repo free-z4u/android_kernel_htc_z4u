@@ -13,4 +13,4 @@
 extern int debug_by_vibrator(int mode, const char *name);
 extern int get_vibrator_enabled(void);
 
-#endif 
+#endif

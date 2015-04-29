@@ -227,7 +227,7 @@ power_attr(mp_util_low_and);
 define_string_show(mp_util_low_or, mp_util_low_or_arg);
 define_string_store(mp_util_low_or, mp_util_low_or_arg, null_cb);
 power_attr(mp_util_low_or);
-#endif 
+#endif
 
 #ifdef CONFIG_PERFLOCK
 extern ssize_t
@@ -407,7 +407,7 @@ static struct attribute_group battery_attr_group = {
 static int __cpuinit cpu_hotplug_callback(struct notifier_block *nfb, unsigned long action, void *hcpu)
 {
 	switch (action) {
-		
+
 		case CPU_ONLINE:
 		case CPU_ONLINE_FROZEN:
 			sysfs_notify(hotplug_kobj, NULL, "cpu_hotplug");
@@ -421,7 +421,7 @@ static int __cpuinit cpu_hotplug_callback(struct notifier_block *nfb, unsigned l
 
 static struct notifier_block __refdata cpu_hotplug_notifier = {
 	.notifier_call = cpu_hotplug_callback,
-	.priority = -10, 
+	.priority = -10,
 };
 #endif
 

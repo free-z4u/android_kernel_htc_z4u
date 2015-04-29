@@ -248,7 +248,7 @@ void __init msm_map_msm8930_io(void)
 {
 	msm_map_io(msm8930_io_desc, ARRAY_SIZE(msm8930_io_desc));
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_APQ8064
 static struct map_desc apq8064_io_desc[] __initdata = {
@@ -291,7 +291,7 @@ void __init msm_map_apq8064_io(void)
 {
 	msm_map_io(apq8064_io_desc, ARRAY_SIZE(apq8064_io_desc));
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_MSM8974
 static struct map_desc msm_8974_io_desc[] __initdata = {
@@ -314,7 +314,7 @@ void __init msm_map_8974_io(void)
 	msm_shared_ram_phys = MSM8974_MSM_SHARED_RAM_PHYS;
 	msm_map_io(msm_8974_io_desc, ARRAY_SIZE(msm_8974_io_desc));
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_MSM7X30
 static struct map_desc msm7x30_io_desc[] __initdata = {
@@ -346,7 +346,7 @@ void __init msm_map_msm7x30_io(void)
 {
 	msm_map_io(msm7x30_io_desc, ARRAY_SIZE(msm7x30_io_desc));
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_FSM9XXX
 static struct map_desc fsm9xxx_io_desc[] __initdata = {
@@ -377,7 +377,7 @@ void __init msm_map_fsm9xxx_io(void)
 {
 	msm_map_io(fsm9xxx_io_desc, ARRAY_SIZE(fsm9xxx_io_desc));
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_MSM9615
 static struct map_desc msm9615_io_desc[] __initdata = {
@@ -408,7 +408,7 @@ void __init msm_map_msm9615_io(void)
 {
 	msm_map_io(msm9615_io_desc, ARRAY_SIZE(msm9615_io_desc));
 }
-#endif 
+#endif
 
 #ifdef CONFIG_ARCH_MSM8625
 static struct map_desc msm8625_io_desc[] __initdata = {

@@ -112,7 +112,7 @@ int32_t msm_camera_i2c_compare(struct msm_camera_i2c_client *client,
 int32_t msm_camera_i2c_poll(struct msm_camera_i2c_client *client,
 	uint16_t addr, uint16_t data,
 	enum msm_camera_i2c_data_type data_type);
-	
+
 int32_t msm_camera_i2c_poll2(struct msm_camera_i2c_client *client,
 	struct msm_camera_i2c_reg_conf *reg_conf_tbl);
 

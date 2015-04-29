@@ -879,9 +879,9 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
 	 */
 	masked_status = status & (INTR_MASK | STS_FLR);
 
-	
 
-	
+
+
 	ehci_writel(ehci, masked_status, &ehci->regs->status);
 	cmd = ehci_readl(ehci, &ehci->regs->command);
 	bh = 0;

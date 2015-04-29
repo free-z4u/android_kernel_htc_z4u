@@ -674,7 +674,7 @@ void del_gendisk_async(struct gendisk *disk)
 
 	disk_del_events(disk);
 
-	
+
 	disk_part_iter_init(&piter, disk,
 			     DISK_PITER_INCL_EMPTY | DISK_PITER_REVERSE);
 	while ((part = disk_part_iter_next(&piter))) {

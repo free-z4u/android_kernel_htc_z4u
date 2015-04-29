@@ -58,15 +58,15 @@ static char ptype[60] = "Panel Type = ";
 #define DEFAULT_BRIGHTNESS_DCG 166
 static unsigned int last_brightness = DEFAULT_BRIGHTNESS_DCG;
 
-static unsigned char led_pwm1[] = {0x51, 0xFF}; 
+static unsigned char led_pwm1[] = {0x51, 0xFF};
 static struct dsi_cmd_desc backlight_cmds[] = {
         {DTYPE_DCS_LWRITE, 1, 0, 0, 0,
                 sizeof(led_pwm1), led_pwm1},
 };
-static char sleep_out[] = {0x11, 0x00}; 
-static char display_on[] = {0x29, 0x00}; 
-static char display_off[] = {0x28, 0x00}; 
-static char sleep_in[] = {0x10, 0x00}; 
+static char sleep_out[] = {0x11, 0x00};
+static char display_on[] = {0x29, 0x00};
+static char display_off[] = {0x28, 0x00};
+static char sleep_in[] = {0x10, 0x00};
 
 static char MAUCCTR0[] = {
         0xF0, 0x55, 0xAA, 0x52,
@@ -146,8 +146,8 @@ static char BT4CTR[] = {0xB9, 0x37};
 static char BT5CTR[] = {0xBA, 0x15};
 static char STBCTR[] = {0xCC, 0x64};
 static char write_ctrl_display[] = {0x53, 0x24};
-static char peripheral_on[] = {0x00, 0x00}; 
-static char peripheral_off[] = {0x00, 0x00}; 
+static char peripheral_on[] = {0x00, 0x00};
+static char peripheral_off[] = {0x00, 0x00};
 
 static struct dsi_cmd_desc jdi_nt_on_cmds[] = {
         {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(MAUCCTR0), MAUCCTR0},
@@ -198,27 +198,27 @@ static struct dsi_cmd_desc jdi_nt_off_cmds[] = {
 
 static char auo_f0_1[] = {
     0xF0, 0x55, 0xAA, 0x52,
-    0x08, 0x01}; 
-static char auo_b0_1[] = {0xB0, 0x05}; 
-static char auo_b1_1[] = {0xB1, 0x05}; 
-static char auo_b2[] = {0xB2, 0x00}; 
-static char auo_b3[] = {0xB3, 0x09}; 
-static char auo_b6_1[] = {0xB6, 0x14}; 
-static char auo_b7_1[] = {0xB7, 0x15}; 
-static char auo_b8_1[] = {0xB8, 0x24}; 
-static char auo_b9[] = {0xB9, 0x36}; 
-static char auo_ba[] = {0xBA, 0x24}; 
-static char auo_bf[] = {0xBF, 0x01}; 
-static char auo_c3[] = {0xC3, 0x11}; 
-static char auo_c2[] = {0xC2, 0x00}; 
-static char auo_c0[] = {0xC0, 0x00, 0x00}; 
-static char auo_bc_1[] = {0xBC, 0x00, 0x88, 0x00}; 
-static char auo_bd[] = {0xBD, 0x00, 0x88, 0x00}; 
+    0x08, 0x01};
+static char auo_b0_1[] = {0xB0, 0x05};
+static char auo_b1_1[] = {0xB1, 0x05};
+static char auo_b2[] = {0xB2, 0x00};
+static char auo_b3[] = {0xB3, 0x09};
+static char auo_b6_1[] = {0xB6, 0x14};
+static char auo_b7_1[] = {0xB7, 0x15};
+static char auo_b8_1[] = {0xB8, 0x24};
+static char auo_b9[] = {0xB9, 0x36};
+static char auo_ba[] = {0xBA, 0x24};
+static char auo_bf[] = {0xBF, 0x01};
+static char auo_c3[] = {0xC3, 0x11};
+static char auo_c2[] = {0xC2, 0x00};
+static char auo_c0[] = {0xC0, 0x00, 0x00};
+static char auo_bc_1[] = {0xBC, 0x00, 0x88, 0x00};
+static char auo_bd[] = {0xBD, 0x00, 0x88, 0x00};
 static char auo_f0_2[] = {
     0xF0, 0x55, 0xAA, 0x52,
-    0x08, 0x00}; 
-static char auo_b6_2[] = {0xB6, 0x03}; 
-static char auo_b7_2[] = {0xB7, 0x70, 0x70}; 
+    0x08, 0x00};
+static char auo_b6_2[] = {0xB6, 0x03};
+static char auo_b7_2[] = {0xB7, 0x70, 0x70};
 static char GOA_timing[] = {
 	0xC8, 0x01, 0x00, 0x46,
 	0x64, 0x46, 0x64, 0x46,
@@ -228,19 +228,19 @@ static char GOA_timing[] = {
 };
 static char auo_b8_2[] = {
     0xB8, 0x00, 0x02, 0x02,
-    0x02}; 
-static char auo_bc_2[] = {0xBC, 0x00}; 
+    0x02};
+static char auo_bc_2[] = {0xBC, 0x00};
 static char auo_b0_2[] = {
     0xB0, 0x00, 0x0A, 0x0E,
-    0x09, 0x04}; 
+    0x09, 0x04};
 static char auo_b1_2[] = {
-    0xB1, 0x60, 0x00, 0x01}; 
+    0xB1, 0x60, 0x00, 0x01};
 static char auo_ff_2[] = {
     0xFF, 0xAA, 0x55, 0xA5,
-    0x00}; 
-static char auo_b0_c2[] = {0xB0, 0x0F}; 
-static char auo_b1_c2[] = {0xB1, 0x0F}; 
-static char auo_b3_c2[] = {0xB3, 0x07}; 
+    0x00};
+static char auo_b0_c2[] = {0xB0, 0x0F};
+static char auo_b1_c2[] = {0xB1, 0x0F};
+static char auo_b3_c2[] = {0xB3, 0x07};
 
 static struct dsi_cmd_desc auo_nt_on_cmds[] = {
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(auo_f0_1), auo_f0_1},
@@ -269,7 +269,7 @@ static struct dsi_cmd_desc auo_nt_on_cmds[] = {
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(auo_b0_2), auo_b0_2},
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(auo_b1_2), auo_b1_2},
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 0, sizeof(PWMFRCTR), PWMFRCTR},
-	
+
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 0, sizeof(cmd_e3), cmd_e3},
 	{DTYPE_GEN_WRITE2, 1, 0, 0, 0, sizeof(cmd_5e), cmd_5e},
 	{DTYPE_GEN_WRITE2, 1, 0, 0, 0, sizeof(cmd_55), cmd_55},
@@ -314,7 +314,7 @@ static struct dsi_cmd_desc auo_nt_on_cmds_c2[] = {
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(auo_b0_2), auo_b0_2},
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(auo_b1_2), auo_b1_2},
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 0, sizeof(PWMFRCTR), PWMFRCTR},
-	
+
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 0, sizeof(cmd_e3), cmd_e3},
 	{DTYPE_GEN_WRITE2, 1, 0, 0, 0, sizeof(cmd_5e), cmd_5e},
 	{DTYPE_GEN_WRITE2, 1, 0, 0, 0, sizeof(cmd_55), cmd_55},
@@ -475,7 +475,7 @@ static unsigned char z4_shrink_pwm(int val)
 	} else if (val > BRI_SETTING_MAX)
 			shrink_br = pwm_max;
 
-	
+
 
 	return shrink_br;
 }
@@ -608,7 +608,7 @@ static void z4_set_cabc_lvl(struct msm_fb_data_type *mfd, int mode)
 static void z4_set_backlight(struct msm_fb_data_type *mfd)
 {
 	PR_DISP_INFO("%s\n", __func__);
-	
+
 
 	if (mipi_status == 0 || bl_level_prevset == mfd->bl_level) {
 		PR_DISP_DEBUG("Skip the backlight setting > mipi_status : %d, bl_level_prevset : %d, bl_level : %d\n",
@@ -630,7 +630,7 @@ static void z4_set_backlight(struct msm_fb_data_type *mfd)
 	htc_mdp_sem_up(&mfd->dma->mutex);
 	bl_level_prevset = mfd->bl_level;
 
-	
+
 	if (mfd->bl_level >= BRI_SETTING_MIN)
 		last_brightness = mfd->bl_level;
 
@@ -799,8 +799,8 @@ static int __init mipi_jdi_nt_init(void)
 		pinfo.lcdc.v_front_porch = 12;
 		pinfo.lcdc.v_pulse_width = 4;
 	}
-	pinfo.lcdc.border_clr = 0;	
-	pinfo.lcdc.underflow_clr = 0x00;	
+	pinfo.lcdc.border_clr = 0;
+	pinfo.lcdc.underflow_clr = 0x00;
 	pinfo.lcdc.hsync_skew = 0;
 	pinfo.bl_max = 255;
 	pinfo.bl_min = 1;
@@ -822,7 +822,7 @@ static int __init mipi_jdi_nt_init(void)
 	pinfo.mipi.data_lane1 = TRUE;
 	pinfo.mipi.t_clk_post = 0x20;
 	pinfo.mipi.t_clk_pre = 0x2F;
-	pinfo.mipi.stream = 0; 
+	pinfo.mipi.stream = 0;
 	pinfo.mipi.mdp_trigger = DSI_CMD_TRIGGER_NONE;
 	pinfo.mipi.dma_trigger = DSI_CMD_TRIGGER_SW;
 	pinfo.mipi.frame_rate = 60;

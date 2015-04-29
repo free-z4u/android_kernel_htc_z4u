@@ -12,10 +12,10 @@ struct pn544_i2c_platform_data {
 	void (*gpio_init) (void);
 	unsigned int irq_gpio;
 	unsigned int ven_isinvert;
-	int (*set_ven_gpio)(int); 
-	int (*get_ven_gpio)(void); 
-	int (*set_firm_gpio)(int); 
-	int (*get_firm_gpio)(void); 
+	int (*set_ven_gpio)(int);
+	int (*get_ven_gpio)(void);
+	int (*set_firm_gpio)(int);
+	int (*get_firm_gpio)(void);
 	void (*gpio_deinit) (void);
 	int (*check_nfc_exist)(void);
 };

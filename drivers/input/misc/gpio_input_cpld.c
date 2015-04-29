@@ -96,11 +96,11 @@ static ssize_t vol_wakeup_show(struct device *dev,
 static DEVICE_ATTR(vol_wakeup, 0664, vol_wakeup_show, vol_wakeup_store);
 
 enum {
-	DEBOUNCE_UNSTABLE     = BIT(0),	
+	DEBOUNCE_UNSTABLE     = BIT(0),
 	DEBOUNCE_PRESSED      = BIT(1),
 	DEBOUNCE_NOTPRESSED   = BIT(2),
-	DEBOUNCE_WAIT_IRQ     = BIT(3),	
-	DEBOUNCE_POLL         = BIT(4),	
+	DEBOUNCE_WAIT_IRQ     = BIT(3),
+	DEBOUNCE_POLL         = BIT(4),
 
 	DEBOUNCE_UNKNOWN =
 		DEBOUNCE_PRESSED | DEBOUNCE_NOTPRESSED,
@@ -287,7 +287,7 @@ static enum hrtimer_restart gpio_event_input_timer_func(struct hrtimer *timer)
 			key_state->debounce = DEBOUNCE_NOTPRESSED;
 			continue;
 		}
-		
+
 		ds->debounce_count--;
 		if (ds->use_irq)
 			key_state->debounce |= DEBOUNCE_WAIT_IRQ;
@@ -426,7 +426,7 @@ static void gpio_event_input_delayed_func(struct work_struct *key_work)
 			key_state->need_queue = 1;
 			continue;
 		}
-		
+
 		ds->debounce_count--;
 		if (ds->use_irq)
 			key_state->debounce |= DEBOUNCE_WAIT_IRQ;

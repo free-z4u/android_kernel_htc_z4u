@@ -67,7 +67,7 @@ static int msm_mctl_pp_buf_divert(
 	v4l2_evt.type = V4L2_EVENT_PRIVATE_START +
 			MSM_CAM_RESP_DIV_FRAME_EVT_MSG;
 	*((uint32_t *)v4l2_evt.u.data) = (uint32_t)isp_event;
-	
+
 	isp_event->isp_data.div_frame = *div;
 
 	D("%s inst=%p, img_mode=%d, frame_id=%d\n", __func__,
@@ -201,7 +201,7 @@ int msm_mctl_do_pp_divert(
 {
 	struct msm_cam_v4l2_dev_inst *pcam_inst;
 	int rc = 0, i, buf_idx;
-	int del_buf = 0; 
+	int del_buf = 0;
 	struct msm_cam_evt_divert_frame div;
 	struct msm_frame_buffer *vb = NULL;
 	struct videobuf2_contig_pmem *mem;
@@ -712,7 +712,7 @@ int msm_mctl_pp_ioctl(struct msm_cam_media_controller *p_mctl,
 		break;
 	}
 	if (!rc) {
-		
+
 		if (copy_to_user((void *)arg,
 			&pp_cmd,
 			sizeof(struct msm_mctl_post_proc_cmd))) {
@@ -765,7 +765,7 @@ int msm_mctl_pp_notify(struct msm_cam_media_controller *p_mctl,
 			memset(&v4l2_evt, 0, sizeof(v4l2_evt));
 			*((uint32_t *)v4l2_evt.u.data) = (uint32_t)isp_event;
 
-			
+
 			pp_event_info = &(isp_event->isp_data.pp_event_info);
 
 			pp_event_info->event = MCTL_PP_EVENT_CMD_ACK;
@@ -783,7 +783,7 @@ int msm_mctl_pp_notify(struct msm_cam_media_controller *p_mctl,
 				__func__, pp_frame_info->pp_frame_cmd.cookie,
 				v4l2_evt.type);
 		}
-		kfree(pp_frame_info); 
+		kfree(pp_frame_info);
 		return 0;
 }
 
@@ -806,7 +806,7 @@ int msm_mctl_pp_reserve_free_frame(
 		pr_err("%s Invalid image mode %d", __func__, image_mode);
 		return -EINVAL;
 	}
-	
+
 	pcam_inst = p_mctl->pcam_ptr->dev_inst[image_mode];
 	if (!pcam_inst) {
 		pr_err("%s Instance already closed ", __func__);

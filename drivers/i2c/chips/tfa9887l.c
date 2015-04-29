@@ -41,7 +41,7 @@
 #define TPA9887_WRITE_CONFIG	_IOW(TPA9887_IOCTL_MAGIC, 0x01, unsigned int)
 #define TPA9887_READ_CONFIG	_IOW(TPA9887_IOCTL_MAGIC, 0x02, unsigned int)
 #define TPA9887_ENABLE_DSP	_IOW(TPA9887_IOCTL_MAGIC, 0x03, unsigned int)
-#define TPA9887_KERNEL_LOCK    _IOW(TPA9887_IOCTL_MAGIC, 0x06, unsigned int)  
+#define TPA9887_KERNEL_LOCK    _IOW(TPA9887_IOCTL_MAGIC, 0x06, unsigned int)
 #define DEBUG (0)
 
 static struct i2c_client *this_client;
@@ -117,7 +117,7 @@ static ssize_t codec_debug_write(struct file *filp,
 	lbuf[cnt] = '\0';
 
 	if (!strcmp(access_str, "poke")) {
-		
+
 		rc = get_parameters(lbuf, param, 2);
 		if ((param[0] <= 0xFF) && (param[1] <= 0xFF) &&
 			(rc == 0)) {
@@ -127,7 +127,7 @@ static ssize_t codec_debug_write(struct file *filp,
 		} else
 			rc = -EINVAL;
 	} else if (!strcmp(access_str, "peek")) {
-		
+
 		rc = get_parameters(lbuf, param, 1);
 		if ((param[0] <= 0xFF) && (rc == 0)) {
 			reg_idx[0] = param[0];
@@ -252,10 +252,10 @@ int tfa9887_l_read(char *rxData, int length) {
 void set_tfa9887l_spkamp(int en, int dsp_mode)
 {
 	int i =0;
-    
-    
-    
-    
+
+
+
+
     unsigned char mute_reg[1] = {0x06};
 	unsigned char mute_data[3] = {0, 0, 0};
     unsigned char power_reg[1] = {0x09};
@@ -266,28 +266,28 @@ void set_tfa9887l_spkamp(int en, int dsp_mode)
 	mutex_lock(&spk_ampl_lock);
 	if (en && !last_spkampl_state) {
 		last_spkampl_state = 1;
-		
+
 		if (dspl_enabled == 0) {
 			for (i=0; i <3 ; i++)
 				tfa9887_i2c_write(cf_dspl_bypass[i], 3);
-                
+
 				tfa9887_i2c_write(SPK_CR,1);
 				tfa9887_i2c_read(SPK_CR+1,2);
-				SPK_CR[1] |= 0x4; 
+				SPK_CR[1] |= 0x4;
 				tfa9887_i2c_write(SPK_CR,3);
 		} else {
-            
-			
-			
-			
+
+
+
+
 			tfa9887_i2c_write(power_reg, 1);
 			tfa9887_i2c_read(power_data + 1, 2);
 			tfa9887_i2c_write(mute_reg, 1);
 			tfa9887_i2c_read(mute_data + 1, 2);
 			mute_data[0] = 0x6;
-			mute_data[2] &= 0xdf;  
+			mute_data[2] &= 0xdf;
 			power_data[0] = 0x9;
-			power_data[2] &= 0xfe; 
+			power_data[2] &= 0xfe;
 			tfa9887_i2c_write(power_data, 3);
 			tfa9887_i2c_write(mute_data, 3);
 		}
@@ -296,18 +296,18 @@ void set_tfa9887l_spkamp(int en, int dsp_mode)
 		if (dspl_enabled == 0) {
 			tfa9887_i2c_write(ampl_off[0], 3);
 		} else {
-            
-			
-			
-			
+
+
+
+
 			tfa9887_i2c_write(power_reg, 1);
 			tfa9887_i2c_read(power_data + 1, 2);
 			tfa9887_i2c_write(mute_reg, 1);
 			tfa9887_i2c_read(mute_data + 1, 2);
 			mute_data[0] = 0x6;
-			mute_data[2] |= 0x20; 
+			mute_data[2] |= 0x20;
 			power_data[0] = 0x9;
-			power_data[2] |= 0x1;  
+			power_data[2] |= 0x1;
 			tfa9887_i2c_write(mute_data, 3);
 			tfa9887_i2c_write(power_data, 3);
 		}
@@ -368,7 +368,7 @@ static long tfa9887l_ioctl(struct file *file, unsigned int cmd,
 		len = reg_value[0];
 		dspl_enabled = reg_value[1];
 		break;
-	
+
 	case TPA9887_KERNEL_LOCK:
 		rc = copy_from_user(reg_value, argp, sizeof(reg_value));;
 		if (rc) {
@@ -377,14 +377,14 @@ static long tfa9887l_ioctl(struct file *file, unsigned int cmd,
 		}
 
 		len = reg_value[0];
-		
+
 		pr_info("TPA9887_KLOCK2 %d\n", reg_value[1]);
 		if (reg_value[1])
 		   mutex_lock(&spk_ampl_lock);
 		else
 		   mutex_unlock(&spk_ampl_lock);
 		break;
-	
+
 	}
 err:
 	return rc;

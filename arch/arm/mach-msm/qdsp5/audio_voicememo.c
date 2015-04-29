@@ -339,7 +339,7 @@ static int audvoicememo_enable(struct audio_voicememo *audio)
 	}
 
 
-	
+
 	msg.args.param_status = cpu_to_be32(0x00000001);
 	msg.args.rec_type = cpu_to_be32(audio->voicememo_cfg.rec_type);
 	msg.args.rec_interval_ms =
@@ -405,7 +405,7 @@ static void rpc_reply(struct msm_rpc_endpoint *ept, uint32_t xid)
 
 	MM_AUD_DBG("inside\n");
 	reply->xid = cpu_to_be32(xid);
-	reply->type = cpu_to_be32(RPC_TYPE_REPLY); 
+	reply->type = cpu_to_be32(RPC_TYPE_REPLY);
 	reply->reply_stat = cpu_to_be32(RPCMSG_REPLYSTAT_ACCEPTED);
 
 	reply->data.acc_hdr.accept_stat = cpu_to_be32(RPC_ACCEPTSTAT_SUCCESS);
@@ -447,7 +447,7 @@ static void process_rpc_request(uint32_t proc, uint32_t xid,
 			be32_to_cpu(datacb_data->status),\
 			be32_to_cpu(datacb_data->rec_status));
 
-		
+
 		if ((rec_status == RPC_VOC_REC_STAT_DATA) ||
 		(rec_status == RPC_VOC_REC_STAT_DONE)) {
 			if (datacb_data->pkt.fw_data.fw_ptr_status &&
@@ -511,7 +511,7 @@ static void process_rpc_request(uint32_t proc, uint32_t xid,
 				datacb_data->pkt.fw_data.rec_length));
 			}
 			if (rec_status != RPC_VOC_REC_STAT_DONE) {
-				
+
 				bmsg.args.buf = \
 				(uint32_t) audio->in[audio->fill_next].data;
 				bmsg.args.num_bytes = \
@@ -528,7 +528,7 @@ static void process_rpc_request(uint32_t proc, uint32_t xid,
 
 				wake_up(&audio->read_wait);
 			} else {
-				
+
 				MM_AUD_DBG("End Of Voice Record\n");
 				audio->stopped = 1;
 				wake_up(&audio->wait);
@@ -597,7 +597,7 @@ static int voicememo_rpc_thread(void *data)
 				status =
 				be32_to_cpu(rep->data.acc_hdr.accept_stat);
 
-				
+
 				if ((audio->enabled == 0) &&
 					(status == RPC_ACCEPTSTAT_SUCCESS) &&
 					(audio->rpc_xid == rep->xid)) {
@@ -609,7 +609,7 @@ static int voicememo_rpc_thread(void *data)
 			} else {
 				MM_AUD_ERR("rpc_reply denied!\n");
 			}
-			
+
 			continue;
 		} else if (type == RPC_TYPE_REQUEST) {
 			if (len < RPC_REQUEST_HDR_SZ)
@@ -672,7 +672,7 @@ static long audio_voicememo_ioctl(struct file *file,
 			MM_AUD_DBG("AUDIO_GET_CONFIG\n");
 			cfg.buffer_size = audio->rec_buf_size;
 			cfg.buffer_count = MAX_REC_BUF_COUNT;
-			cfg.sample_rate = 8000; 
+			cfg.sample_rate = 8000;
 			cfg.channel_count = 1;
 			cfg.type = 0;
 			cfg.unused[0] = 0;
@@ -787,7 +787,7 @@ static ssize_t audio_voicememo_read(struct file *file,
 			if ((++audio->read_next) == MAX_REC_BUF_COUNT)
 				audio->read_next = 0;
 			if (audio->in[audio->read_next].used == 0)
-				break;  
+				break;
 		}
 	}
 	mutex_unlock(&audio->read_lock);
@@ -832,7 +832,7 @@ static int audio_voicememo_open(struct inode *inode, struct file *file)
 	if (rc)
 		goto done;
 
-	
+
 	memset(&audio->voicememo_cfg, 0, sizeof(audio->voicememo_cfg));
 
 	file->private_data = audio;

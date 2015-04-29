@@ -521,10 +521,10 @@ static inline int page_is_buddy(struct page *page, struct page *buddy,
  * free pages of length of (1 << order) and marked with _mapcount -2. Page's
  * order is recorded in page_private(page) field.
  * So when we are allocating or freeing one, we can derive the state of the
- * other.  That is, if we allocate a small block, and both were   
- * free, the remainder of the region must be split into blocks.   
+ * other.  That is, if we allocate a small block, and both were
+ * free, the remainder of the region must be split into blocks.
  * If a block is freed, and its buddy is also free, then this
- * triggers coalescing into a block of larger size.            
+ * triggers coalescing into a block of larger size.
  *
  * -- wli
  */
@@ -839,14 +839,14 @@ static inline int check_new_page(struct page *page)
 	return 0;
 }
 #ifdef HTC_DEBUG
-#include <asm/sections.h>	
+#include <asm/sections.h>
 #endif
 
 static int prep_new_page(struct page *page, int order, gfp_t gfp_flags)
 {
 	int i;
 #ifdef HTC_DEBUG
-	void *addr; 
+	void *addr;
 #endif
 	for (i = 0; i < (1 << order); i++) {
 		struct page *p = page + i;
@@ -855,22 +855,22 @@ static int prep_new_page(struct page *page, int order, gfp_t gfp_flags)
 	}
 
 #ifdef HTC_DEBUG
-	
+
 	addr = kmap_atomic(page);
 
-	
-	if(((unsigned long)addr >= (unsigned long)__init_begin) && 
+
+	if(((unsigned long)addr >= (unsigned long)__init_begin) &&
 			((unsigned long)addr <= (unsigned long)__init_end)){
 		kunmap_atomic(addr);
-		printk(KERN_ERR "__init_begin:%08lx - __init_end:%08lx\n", 
-					(unsigned long)__init_begin, 
+		printk(KERN_ERR "__init_begin:%08lx - __init_end:%08lx\n",
+					(unsigned long)__init_begin,
 					(unsigned long)__init_end);
-		printk(KERN_ERR "[memory corruption] should we reject page request?:%x, %d, %s\n", 
+		printk(KERN_ERR "[memory corruption] should we reject page request?:%x, %d, %s\n",
 					(unsigned int)addr, current->pid, current->comm);
 		return 1;
 	}
 	kunmap_atomic(addr);
-	
+
 #endif
 
 	set_page_private(page, 0);
@@ -928,12 +928,12 @@ static int fallbacks[MIGRATE_TYPES][4] = {
 	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE,     MIGRATE_RESERVE },
 #ifdef CONFIG_CMA
 	[MIGRATE_MOVABLE]     = { MIGRATE_CMA,         MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE, MIGRATE_RESERVE },
-	[MIGRATE_CMA]         = { MIGRATE_RESERVE }, 
+	[MIGRATE_CMA]         = { MIGRATE_RESERVE },
 #else
 	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE,   MIGRATE_RESERVE },
 #endif
-	[MIGRATE_RESERVE]     = { MIGRATE_RESERVE }, 
-	[MIGRATE_ISOLATE]     = { MIGRATE_RESERVE }, 
+	[MIGRATE_RESERVE]     = { MIGRATE_RESERVE },
+	[MIGRATE_ISOLATE]     = { MIGRATE_RESERVE },
 };
 
 /*
@@ -1031,7 +1031,7 @@ __rmqueue_fallback(struct zone *zone, int order, int start_migratetype)
 		for (i = 0;; i++) {
 			migratetype = fallbacks[start_migratetype][i];
 
-			
+
 			if (migratetype == MIGRATE_RESERVE)
 				break;
 
@@ -1120,12 +1120,12 @@ retry_reserve:
 	return page;
 }
 
-/* 
+/*
  * Obtain a specified number of elements from the buddy allocator, all under
  * a single hold of the lock, for efficiency.  Add them to the supplied list.
  * Returns the number of new pages which were placed at *list.
  */
-static int rmqueue_bulk(struct zone *zone, unsigned int order, 
+static int rmqueue_bulk(struct zone *zone, unsigned int order,
 			unsigned long count, struct list_head *list,
 			int migratetype, int cold)
 {
@@ -2164,7 +2164,7 @@ __perform_reclaim(gfp_t gfp_mask, unsigned int order, struct zonelist *zonelist,
 
 	cond_resched();
 
-	
+
 	cpuset_memory_pressure_bump();
 	current->flags |= PF_MEMALLOC;
 	lockdep_set_current_reclaim_state(gfp_mask);
@@ -4380,7 +4380,7 @@ static void __paginginit free_area_init_core(struct pglist_data *pgdat,
 	init_waitqueue_head(&pgdat->kswapd_wait);
 	pgdat->kswapd_max_order = 0;
 	pgdat_page_cgroup_init(pgdat);
-	
+
 	for (j = 0; j < MAX_NR_ZONES; j++) {
 		struct zone *zone = pgdat->node_zones + j;
 		unsigned long size, realsize, memmap_pages;
@@ -5219,11 +5219,11 @@ int __meminit init_per_zone_wmark_min(void)
 module_init(init_per_zone_wmark_min)
 
 /*
- * min_free_kbytes_sysctl_handler - just a wrapper around proc_dointvec() so 
+ * min_free_kbytes_sysctl_handler - just a wrapper around proc_dointvec() so
  *	that we can call two helper functions whenever min_free_kbytes
  *	changes.
  */
-int min_free_kbytes_sysctl_handler(ctl_table *table, int write, 
+int min_free_kbytes_sysctl_handler(ctl_table *table, int write,
 	void __user *buffer, size_t *length, loff_t *ppos)
 {
 	proc_dointvec(table, write, buffer, length, ppos);
@@ -5668,7 +5668,7 @@ __alloc_contig_migrate_alloc(struct page *page, unsigned long private,
 
 static int __alloc_contig_migrate_range(unsigned long start, unsigned long end)
 {
-	
+
 
 	unsigned long pfn = start;
 	unsigned int tries = 0;

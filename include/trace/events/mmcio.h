@@ -338,6 +338,6 @@ TRACE_EVENT(file_write_done,
 	TP_printk("%s [%s]", __get_str(name), __entry->comm)
 );
 #endif
-#endif 
+#endif
 
 #include <trace/define_trace.h>

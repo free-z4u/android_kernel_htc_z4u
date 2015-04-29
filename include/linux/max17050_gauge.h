@@ -11,9 +11,9 @@
 #define MAXIM_BATTERY_FG_LOG_DEBUG 1
 #define MAXIM_BATTERY_DEBUG 0
 
-#define MAX17050_STATUS_PORF  (1 << 6)	
-#define MAX17050_STATUS_SMOD  (1 << 5)	
-#define MAX17050_STATUS_NBEN  (1 << 4)	
+#define MAX17050_STATUS_PORF  (1 << 6)
+#define MAX17050_STATUS_SMOD  (1 << 5)
+#define MAX17050_STATUS_NBEN  (1 << 4)
 #define MAX17050_STATUS_AIN0  (1 << 0)
 #define MAX17050_STATUS_AIN1  (1 << 1)
 
@@ -63,7 +63,7 @@ struct protect_flags_type{
 		BOOL is_charging_enable_available;
 		BOOL is_charging_high_current_avaialble;
 		BOOL is_charging_indicator_available;
-		BOOL is_charging_reverse_protect; 
+		BOOL is_charging_reverse_protect;
 		BOOL is_battery_dead;
 		BOOL is_temperature_fault;
 #if 0
@@ -196,4 +196,4 @@ int max17050_get_temperature(int *val);
 
 extern void max17050_adjust_qrtable_by_temp(u16* batt_qrtable_param, s32 tempdc);
 
-#endif 
+#endif

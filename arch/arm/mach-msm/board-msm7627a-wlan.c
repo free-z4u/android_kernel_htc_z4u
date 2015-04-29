@@ -70,7 +70,7 @@ static void gpio_wlan_config(void)
 		gpio_wlan_sys_rest_en = 124;
 	else if (0 || machine_is_msm8625q_evbd()
 			|| machine_is_msm8625q_skud())
-		gpio_wlan_sys_rest_en = 38;		
+		gpio_wlan_sys_rest_en = 38;
 }
 
 static unsigned int qrf6285_init_regs(void)
@@ -122,11 +122,11 @@ static unsigned int setup_wlan_clock(bool on)
 	int rc = 0;
 
 	if (on) {
-		
+
 		rc = pmapp_clock_vote(id, PMAPP_CLOCK_ID_A0,
 					PMAPP_CLOCK_VOTE_ON);
 	} else {
-		
+
 		rc = pmapp_clock_vote(id, PMAPP_CLOCK_ID_A0,
 					 PMAPP_CLOCK_VOTE_OFF);
 	}
@@ -220,7 +220,7 @@ reg_disable:
 }
 
 #ifndef QCA_ORIGINAL
-int atheros_wifi_power(int on);  
+int atheros_wifi_power(int on);
 #endif
 
 static unsigned int msm_AR600X_setup_power(bool on)
@@ -255,7 +255,7 @@ static unsigned int msm_AR600X_setup_power(bool on)
 #endif
 
 #ifdef QCA_ORIGINAL
-	
+
 	if (machine_is_msm7627a_qrd1()) {
 		rc = gpio_tlmm_config(GPIO_CFG(GPIO_WLAN_3V3_EN, 0,
 					GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL,
@@ -299,14 +299,14 @@ static unsigned int msm_AR600X_setup_power(bool on)
 		}
 	}
 
-	
+
 	rc = setup_wlan_clock(on);
 	if (rc) {
 		pr_err("%s: setup_wlan_clock = %d\n", __func__, rc);
 		goto set_gpio_fail;
 	}
 
-	
+
 	rc = pmapp_clock_vote(id, PMAPP_CLOCK_ID_A0,
 				 PMAPP_CLOCK_VOTE_PIN_CTRL);
 	if (rc) {
@@ -330,7 +330,7 @@ gpio_fail:
 	    machine_is_msm7627a_qrd3() || machine_is_msm8625_qrd7()))
 			gpio_free(gpio_wlan_sys_rest_en);
 qrd_gpio_fail:
-	
+
 	if (machine_is_msm7627a_qrd1())
 		gpio_free(GPIO_WLAN_3V3_EN);
 reg_disable:
@@ -356,7 +356,7 @@ static unsigned int msm_AR600X_shutdown_power(bool on)
 	udelay(20);
 #endif
 #ifdef QCA_ORIGINAL
-	
+
 	rc = setup_wlan_clock(on);
 	if (rc) {
 		pr_err("%s: setup_wlan_clock = %d\n", __func__, rc);

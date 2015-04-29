@@ -367,9 +367,9 @@ struct usb_composite_dev {
 	/* protects deactivations and delayed_status counts*/
 	spinlock_t			lock;
 
-	
+
 	struct switch_dev		sw_connect2pc;
-	
+
 	bool				connected;
 
 	struct work_struct switch_work;

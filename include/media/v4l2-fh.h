@@ -34,7 +34,7 @@ struct v4l2_events;
 struct v4l2_fh {
 	struct list_head	list;
 	struct video_device	*vdev;
-	struct v4l2_events      *events; 
+	struct v4l2_events      *events;
 	enum v4l2_priority	prio;
 };
 

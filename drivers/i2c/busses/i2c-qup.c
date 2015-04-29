@@ -146,8 +146,8 @@ static struct gpiomux_setting recovery_config = {
 #endif
 struct qup_i2c_dev {
 	struct device                *dev;
-	void __iomem                 *base;		
-	void __iomem                 *gsbi;		
+	void __iomem                 *base;
+	void __iomem                 *gsbi;
 	int                          in_irq;
 	int                          out_irq;
 	int                          err_irq;
@@ -205,7 +205,7 @@ qup_i2c_interrupt(int irq, void *devid)
 	int err = 0;
 
 	if (!dev->msg || !dev->complete) {
-		
+
 		if (dev->num_irqs == 1) {
 			writel_relaxed(QUP_RESET_STATE, dev->base+QUP_STATE);
 			/* Ensure that state is written before ISR exits */
@@ -218,7 +218,7 @@ qup_i2c_interrupt(int irq, void *devid)
 		dev_info(dev->dev, "QUP: I2C status flags :0x%x, irq:%d\n",
 			status, irq);
 		err = status;
-		
+
 		if (dev->num_irqs == 1) {
 			writel_relaxed(QUP_RESET_STATE, dev->base+QUP_STATE);
 			/* Ensure that state is written before ISR exits */
@@ -230,7 +230,7 @@ qup_i2c_interrupt(int irq, void *devid)
 	if (status1 & 0x7F) {
 		dev_info(dev->dev, "QUP: QUP status flags :0x%x\n", status1);
 		err = -status1;
-		
+
 		if (dev->num_irqs == 1) {
 			writel_relaxed((status1 & QUP_STATUS_ERROR_FLAGS),
 				dev->base + QUP_ERROR_FLAGS);
@@ -244,7 +244,7 @@ qup_i2c_interrupt(int irq, void *devid)
 		return IRQ_HANDLED;
 	if (op_flgs & QUP_OUT_SVC_FLAG) {
 		writel_relaxed(QUP_OUT_SVC_FLAG, dev->base + QUP_OPERATIONAL);
-		
+
 		mb();
 	}
 	if (dev->msg->flags == I2C_M_RD) {
@@ -311,7 +311,7 @@ qup_config_core_on_en(struct qup_i2c_dev *dev)
 	status = readl_relaxed(dev->base + QUP_CONFIG);
 	status |= BIT(13);
 	writel_relaxed(status, dev->base + QUP_CONFIG);
-	
+
 	mb();
 }
 
@@ -353,7 +353,7 @@ qup_i2c_poll_writeready(struct qup_i2c_dev *dev, int rem)
 				return 0;
 			else if ((dev->msg->flags == 0) && (rem > 0))
 				return 0;
-			else 
+			else
 				udelay(dev->one_bit_t);
 		}
 		if (retries++ == 1000) {
@@ -377,7 +377,7 @@ static int qup_i2c_poll_clock_ready(struct qup_i2c_dev *dev)
 		if (clk_state == I2C_CLK_RESET_BUSIDLE_STATE ||
 				clk_state == I2C_CLK_FORCED_LOW_STATE)
 			return 0;
-		
+
 		udelay(dev->one_bit_t);
 	}
 
@@ -523,7 +523,7 @@ qup_issue_write(struct qup_i2c_dev *dev, struct i2c_msg *msg, int rem,
 	}
 	if (dev->pos < (msg->len - 1))
 		last_entry = QUP_OUT_DATA;
-	else if (rem > 1) 
+	else if (rem > 1)
 		last_entry = QUP_OUT_DATA;
 	else
 		last_entry = QUP_OUT_STOP;
@@ -546,7 +546,7 @@ qup_issue_write(struct qup_i2c_dev *dev, struct i2c_msg *msg, int rem,
 			} else if (next->flags == 0 && dev->pos == msg->len - 1
 					&& *idx < (dev->wr_sz*2) &&
 					(next->addr != msg->addr)) {
-				
+
 				writel_relaxed((QUP_OUT_STOP |
 						msg->buf[dev->pos]),
 					dev->base + QUP_OUT_FIFO_BASE);
@@ -628,7 +628,7 @@ qup_set_wr_mode(struct qup_i2c_dev *dev, int rem)
 		if (next->addr == dev->msg->addr &&
 			next->flags == I2C_M_RD) {
 			qup_set_read_mode(dev, next->len);
-			
+
 			if ((total_len % dev->out_blk_sz) ==
 				(dev->out_blk_sz - 1))
 				total_len += 3;
@@ -636,7 +636,7 @@ qup_set_wr_mode(struct qup_i2c_dev *dev, int rem)
 				total_len += 2;
 		}
 	}
-	
+
 	if (dev->wr_sz == dev->out_blk_sz)
 		writel_relaxed(total_len, dev->base + QUP_MX_WR_CNT);
 	return ret;
@@ -650,9 +650,9 @@ static void qup_i2c_recover_bus_busy(struct qup_i2c_dev *dev)
 	int gpio_dat;
 	bool gpio_clk_status = false;
 	uint32_t status = readl_relaxed(dev->base + QUP_I2C_STATUS);
-	
-	
-	
+
+
+
 
 	if (!(status & (I2C_STATUS_BUS_ACTIVE)) ||
 	    (status & (I2C_STATUS_BUS_MASTER))) {
@@ -682,7 +682,7 @@ static void qup_i2c_recover_bus_busy(struct qup_i2c_dev *dev)
 
 	disable_irq(dev->err_irq);
 
-	
+
 	if (dev->pdata->msm_i2c_config_gpio)
 		dev->pdata->msm_i2c_config_gpio(dev->adapter.nr, 0);
 #if 0
@@ -715,7 +715,7 @@ static void qup_i2c_recover_bus_busy(struct qup_i2c_dev *dev)
 		udelay(5);
 	}
 
-	
+
 #if 0
 	for (i = 0; i < ARRAY_SIZE(i2c_rsrcs); ++i) {
 		msm_gpiomux_write(dev->i2c_gpios[i], GPIOMUX_ACTIVE,
@@ -757,7 +757,7 @@ recovery_end:
 
 #ifdef TEST_RECOVERY
 int test_recovery[13];
-#endif 
+#endif
 
 static int
 qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
@@ -780,7 +780,7 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 	if (dev->clk_state == 0)
 		qup_i2c_pwr_mgmt(dev, 1);
 
-	
+
 #ifdef TEST_RECOVERY
 	if ((dev->adapter.nr <= 12) &&
 	    (test_recovery[dev->adapter.nr] == 1)) {
@@ -791,9 +791,9 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 
 		test_recovery[dev->adapter.nr] = 0;
 	}
-#endif 
+#endif
 
-	
+
 	if (dev->clk_ctl == 0) {
 		int fs_div;
 		int hs_div;
@@ -845,14 +845,14 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 	}
 	enable_irq(dev->err_irq);
 
-	
+
 	writel_relaxed(0, dev->base + QUP_CONFIG);
 	writel_relaxed(QUP_OPERATIONAL_RESET, dev->base + QUP_OPERATIONAL);
 	writel_relaxed(QUP_STATUS_ERROR_FLAGS, dev->base + QUP_ERROR_FLAGS_EN);
 
 	writel_relaxed(I2C_MINI_CORE | I2C_N_VAL, dev->base + QUP_CONFIG);
 
-	
+
 	writel_relaxed(0, dev->base + QUP_I2C_CLK_CTL);
 	writel_relaxed(QUP_I2C_STATUS_RESET, dev->base + QUP_I2C_STATUS);
 
@@ -872,7 +872,7 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 		}
 
 		qup_print_status(dev);
-		
+
 		if (dev->msg->flags & I2C_M_RD) {
 			qup_set_read_mode(dev, dev->cnt);
 			if (dev->cnt > 256)
@@ -881,7 +881,7 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 			ret = qup_set_wr_mode(dev, rem);
 			if (ret != 0)
 				goto out_err;
-			
+
 			if (dev->wr_sz == dev->out_blk_sz)
 				filled = true;
 		}
@@ -904,7 +904,7 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 			int idx = 0;
 			uint32_t carry_over = 0;
 
-			
+
 			err = qup_update_state(dev, QUP_PAUSE_STATE);
 			if (err < 0) {
 				ret = err;
@@ -921,7 +921,7 @@ qup_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
 							&carry_over);
 				if (idx >= (dev->wr_sz << 1))
 					filled = true;
-				
+
 				if (filled == false) {
 					if (msgs->flags & I2C_M_RD)
 							filled = true;
@@ -1024,7 +1024,7 @@ timeout_err:
 				}
 				dev->cnt -= i;
 			} else
-				filled = false; 
+				filled = false;
 			dev_dbg(dev->dev, "pos:%d, len:%d, cnt:%d\n",
 					dev->pos, msgs->len, dev->cnt);
 		} while (dev->cnt > 0);
@@ -1047,7 +1047,7 @@ timeout_err:
 				}
 			}
 		}
-		
+
 		ret = qup_i2c_poll_writeready(dev, rem);
 		if (ret) {
 			dev_info(dev->dev,
@@ -1114,7 +1114,7 @@ qup_i2c_probe(struct platform_device *pdev)
 		ret = of_property_read_u32(node, "cell-index", &pdev->id);
 		if (ret)
 			goto get_res_failed;
-		
+
 		of_property_read_u32(node, "qcom,i2c-src-freq",
 					&pdata->src_clk_rate);
 	} else
@@ -1186,7 +1186,7 @@ blsp_core_init:
 		goto err_clk_get_failed;
 	}
 
-	
+
 	if (pdata->clk_freq <= 0 ||
 			pdata->clk_freq > 400000) {
 		dev_err(&pdev->dev, "clock frequency not supported\n");
@@ -1218,7 +1218,7 @@ blsp_core_init:
 		goto err_ioremap_failed;
 	}
 
-	
+
 	if (gsbi_mem) {
 		dev->gsbi = ioremap(gsbi_mem->start, resource_size(gsbi_mem));
 		if (!dev->gsbi) {
@@ -1314,7 +1314,7 @@ blsp_core_init:
 #ifdef TEST_RECOVERY
 	for (i = 0; i < 13; i++)
 		test_recovery[i] = 1;
-#endif 
+#endif
 	ret = i2c_add_numbered_adapter(&dev->adapter);
 	if (ret) {
 		dev_err(&pdev->dev, "i2c_add_adapter failed\n");
@@ -1363,7 +1363,7 @@ qup_i2c_remove(struct platform_device *pdev)
 	struct qup_i2c_dev	*dev = platform_get_drvdata(pdev);
 	struct resource		*qup_mem, *gsbi_mem;
 
-	
+
 	mutex_lock(&dev->mlock);
 	dev->suspended = 1;
 	mutex_unlock(&dev->mlock);

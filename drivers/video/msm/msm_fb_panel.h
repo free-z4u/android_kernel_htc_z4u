@@ -200,7 +200,7 @@ struct msm_fb_panel_data {
 	void (*set_vsync_notifier) (msm_fb_vsync_handler_type, void *arg);
 	void (*set_backlight) (struct msm_fb_data_type *);
 
-	
+
 	void (*display_on) (struct msm_fb_data_type *);
 	void (*display_off) (struct msm_fb_data_type *);
 	void (*bklswitch) (struct msm_fb_data_type *, bool on);

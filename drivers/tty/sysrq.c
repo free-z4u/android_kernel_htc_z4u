@@ -219,7 +219,7 @@ static void showacpu(void *dummy)
 {
 	unsigned long flags;
 
-	
+
 	if (idle_cpu(smp_processor_id()))
 		return;
 
@@ -406,26 +406,26 @@ static struct sysrq_key_op sysrq_unrt_op = {
 static DEFINE_SPINLOCK(sysrq_key_table_lock);
 
 static struct sysrq_key_op *sysrq_key_table[36] = {
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
-	&sysrq_loglevel_op,		
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
+	&sysrq_loglevel_op,
 
-	NULL,				
-	&sysrq_reboot_op,		
-	&sysrq_crash_op,		
-	&sysrq_showlocks_op,		
-	&sysrq_term_op,			
-	&sysrq_moom_op,			
-	
-	NULL,				
-	&sysrq_cfun_zero_op,		
+	NULL,
+	&sysrq_reboot_op,
+	&sysrq_crash_op,
+	&sysrq_showlocks_op,
+	&sysrq_term_op,
+	&sysrq_moom_op,
+
+	NULL,
+	&sysrq_cfun_zero_op,
 	&sysrq_kill_op,			/* i */
 #ifdef CONFIG_BLOCK
 	&sysrq_thaw_op,			/* j */

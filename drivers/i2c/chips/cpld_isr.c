@@ -18,16 +18,16 @@
 #include "cpld_char.h"
 
 
- 
+
 
 
 static struct tasklet_struct cpld_irq_desc[CPLD_IRQ_NUM];
 
 
-static DEFINE_MUTEX(cpld_gpio_mtx); 
-static DEFINE_MUTEX(cpld_irq_req_mtx); 
-static DEFINE_MUTEX(cpld_irq_mask_mtx); 
-				    
+static DEFINE_MUTEX(cpld_gpio_mtx);
+static DEFINE_MUTEX(cpld_irq_req_mtx);
+static DEFINE_MUTEX(cpld_irq_mask_mtx);
+
 
 extern int CPLD_I2C_Write_Byte(uint16_t SlaveAddress, uint8_t data);
 extern int CPLD_I2C_Read_Byte(uint16_t slaveAddr, uint8_t *pdata);
@@ -44,7 +44,7 @@ void level_1_wq_fn(void)
 
 	pr_info("[CPLD]%s: CPLD interrupt processing...\n", __func__);
 
-	
+
 	ret = CPLD_I2C_Read_Byte(CPLD_REG_INTR_STATUS, &reg_int_st);
 	if(ret < 0) goto failed_I2C;
 
@@ -54,13 +54,13 @@ void level_1_wq_fn(void)
 	reg_int_st = stress_mode ? simulated_reg_int_st : reg_int_st;
 #endif
 
-        
+
         ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &rdata);
         if(ret < 0) goto failed_I2C;
 
         pr_info("[CPLD]%s: CPLD GPI_LEVEL=0x%X...\n", __func__, rdata);
 
-		
+
 	for(i=0; i<CPLD_IRQ_NUM; i++){
 		if(reg_int_st & (1 << i)){
 			if( cpld_irq_desc[i].func ){
@@ -71,7 +71,7 @@ void level_1_wq_fn(void)
 			}
 		}
 	}
-	
+
 
 	return;
 
@@ -93,10 +93,10 @@ int cpld_gpio_config(cpld_gpio_pin_t gpio_num, cpld_dir_t dir)
 
 	mutex_lock(&cpld_gpio_mtx);
 	if(gpio_num == CPLD_EXT_GPIO_EXT_USB_ID_OUTPUT)
-	{	
-         	
-         	
-         	
+	{
+
+
+
          	ret = CPLD_I2C_Read_Byte(CPLD_REG_6, &reg_val);
         	if(ret < 0 ) goto i2c_fail;
 
@@ -104,7 +104,7 @@ int cpld_gpio_config(cpld_gpio_pin_t gpio_num, cpld_dir_t dir)
 
                 ret = CPLD_I2C_Write_Byte(CPLD_REG_6, reg_val);
                 if(ret < 0 ) goto i2c_fail;
-		
+
 		if(dir == CPLD_GPIO_OUT)
 			flag_usb_output = 1;
 		else
@@ -113,9 +113,9 @@ int cpld_gpio_config(cpld_gpio_pin_t gpio_num, cpld_dir_t dir)
 		mutex_unlock(&cpld_gpio_mtx);
 		return 0;
 	}
-	
+
 i2c_fail:
-	mutex_unlock(&cpld_gpio_mtx);	
+	mutex_unlock(&cpld_gpio_mtx);
 	printk(KERN_ERR "[CPLD] %s: only for USB_ID pin. %d.\n", __func__, gpio_num);
 	return -1;
 }
@@ -126,12 +126,12 @@ int cpld_gpio_read(cpld_gpio_pin_t gpio_num)
 	int ret;
 	uint8_t reg_val = 0x0;
 
-	if(!is_cpld_ready()){ 
+	if(!is_cpld_ready()){
 		printk(KERN_ERR "cpld isn't ready.\n");
 		return -1;
 	}
 
-	
+
 	if(gpio_num <= 0 || gpio_num >= CPLD_EXT_GPIO_MAX){
 		printk(KERN_ERR "[CPLD] %s: beyond the min gpio num:%d\n",
 			    __func__, gpio_num);
@@ -140,34 +140,34 @@ int cpld_gpio_read(cpld_gpio_pin_t gpio_num)
 
 	mutex_lock(&cpld_gpio_mtx);
 
-	if(gpio_num <= 8){   
+	if(gpio_num <= 8){
                 ret = CPLD_I2C_Read_Byte(CPLD_REG_1, &reg_val);
                 if(ret < 0 ) goto i2c_fail;
-		
+
 		reg_val = (reg_val >> (gpio_num-1)) & 1;
         }
-	else if(gpio_num <= 16){ 
+	else if(gpio_num <= 16){
 		gpio_num -= 8;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_2, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
 
 		reg_val = (reg_val >> (gpio_num-1)) & 1;
 	}
-	else if(gpio_num <= 24){ 
+	else if(gpio_num <= 24){
 		gpio_num -= 8*2;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_3, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
-		
+
 		reg_val = (reg_val >> (gpio_num-1)) & 1;
 	}
-	else if(gpio_num <= 32){ 
+	else if(gpio_num <= 32){
 		gpio_num -= 8*3;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_4, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
-		
+
 		reg_val = (reg_val >> (gpio_num-1)) & 1;
 	}
-	else if(gpio_num <= 40){ 
+	else if(gpio_num <= 40){
 		gpio_num -= 8*4;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_5, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
@@ -216,7 +216,7 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 		return -1;
         }
 
-	
+
 	if(gpio_num <= 0 || gpio_num >= CPLD_EXT_GPIO_MAX){
 		printk(KERN_ERR "[CPLD] %s: out of gpio num:%d\n",
 			   __func__, gpio_num);
@@ -225,36 +225,36 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 
     	mutex_lock(&cpld_gpio_mtx);
 
-	if(gpio_num <= 8){   
+	if(gpio_num <= 8){
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_1, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
-				
+
 		reg_val = (reg_val & ~(1 << (gpio_num-1))) | (lv << (gpio_num-1));
 
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_1, reg_val);
 		if(ret < 0 ) goto i2c_fail;
 	}
-	else if(gpio_num <= 16){ 
+	else if(gpio_num <= 16){
 		gpio_num -= 8;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_2, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
 
-		reg_val = (reg_val & ~(1 << (gpio_num-1))) | (lv << (gpio_num-1));		
+		reg_val = (reg_val & ~(1 << (gpio_num-1))) | (lv << (gpio_num-1));
 
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_2, reg_val);
 		if(ret < 0 ) goto i2c_fail;
 	}
-	else if(gpio_num <= 24){ 
+	else if(gpio_num <= 24){
 		gpio_num -= 8*2;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_3, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
-		
+
 		reg_val = (reg_val & ~(1 << (gpio_num-1))) | (lv << (gpio_num-1));
-		
+
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_3, reg_val);
 		if(ret < 0 ) goto i2c_fail;
 	}
-	else if(gpio_num <= 32){ 
+	else if(gpio_num <= 32){
 		gpio_num -= 8*3;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_4, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
@@ -264,29 +264,29 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
                 ret = CPLD_I2C_Write_Byte(CPLD_REG_4, reg_val);
 		if(ret < 0 ) goto i2c_fail;
 	}
-	else if(gpio_num <= 40){ 
+	else if(gpio_num <= 40){
 		gpio_num -= 8*4;
 
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_5, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
 
 		reg_val = (reg_val & ~(1 << (gpio_num-1))) | (lv << (gpio_num-1));
-		
+
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_5, reg_val);
-		if(ret < 0 ) goto i2c_fail;	
+		if(ret < 0 ) goto i2c_fail;
 	}
 	else if(gpio_num == CPLD_EXT_GPIO_EXT_GPS_LNA_EN){
-		
-		
-		
+
+
+
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_6, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
 
 		reg_val = (reg_val & ~(1 << 6)) | (lv << 6);
-		
+
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_6, reg_val);
 		if(ret < 0 ) goto i2c_fail;
-		
+
                 if(lv == CPLD_GPIO_OUT)
                         flag_usb_output = 1;
                 else
@@ -294,8 +294,8 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 
 	}
 	else if(gpio_num == CPLD_EXT_GPIO_GPS_2V85_EN){
-		
-		
+
+
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_6, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
 
@@ -305,7 +305,7 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 		if(ret < 0 ) goto i2c_fail;
 	}
 	else if(gpio_num == CPLD_EXT_GPIO_USB_ID_INPUT_LEVEL){
-		
+
 		if(!flag_usb_output){
 			printk(KERN_ERR "[CPLD] %s: GPIO_USB_ID_INPUT not yet be configured as output.\n", __func__);
 			goto conf_fail;
@@ -314,17 +314,17 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 			printk(KERN_ERR "[CPLD] %s: GPIO_USB_ID_INPUT can't be pull low.\n", __func__);
 			goto conf_fail;
 		}
-		
+
 		ret = 0;
 #if 0
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &reg_val);
 		if(ret < 0 ) goto i2c_fail;
-		
+
 		reg_val = (reg_val & ~(1 << 7)) | (lv << 7);
 
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_6, reg_val);
 		if(ret < 0 ) goto i2c_fail;
-#endif			
+#endif
 	}
 
 	mutex_unlock(&cpld_gpio_mtx);
@@ -340,7 +340,7 @@ conf_fail:
 
 int cpld_irq_mask(cpld_irq_t cpld_irq_num)
 {
-	int ret = 0;	
+	int ret = 0;
 	uint8_t reg_val;
 
         if(!is_cpld_ready()){
@@ -351,24 +351,24 @@ int cpld_irq_mask(cpld_irq_t cpld_irq_num)
 	if(cpld_irq_num >= CPLD_IRQ_NUM || cpld_irq_num < 0)
 		return -1;
 
-	
-	
+
+
 	mutex_lock(&cpld_irq_mask_mtx);
 
 	ret = CPLD_I2C_Read_Byte(CPLD_REG_INTR_MASK, &reg_val);
 	if(ret < 0) goto i2c_fail;
-	
+
 	reg_val = (reg_val | (1 << (cpld_irq_num)));
 	printk(KERN_DEBUG "[CPLD] %s irq:%d reg_val:%x\n", __func__, cpld_irq_num, reg_val);
 	ret = CPLD_I2C_Write_Byte(CPLD_REG_INTR_MASK, reg_val);
 	if(ret < 0) goto i2c_fail;
 
-	
+
 	mutex_unlock(&cpld_irq_mask_mtx);
 	return ret;
 
 i2c_fail:
-	
+
 	mutex_unlock(&cpld_irq_mask_mtx);
 	return -1;
 
@@ -387,23 +387,23 @@ int cpld_irq_unmask(cpld_irq_t cpld_irq_num)
 	if(cpld_irq_num >= CPLD_IRQ_NUM || cpld_irq_num < 0)
                 return -1;
 
-	
-	
+
+
 	mutex_lock(&cpld_irq_mask_mtx);
 
         ret = CPLD_I2C_Read_Byte(CPLD_REG_INTR_MASK, &reg_val);
         if(ret < 0) goto i2c_fail;
-	
+
 	reg_val = (reg_val & ~(1 << (cpld_irq_num)));
 	printk(KERN_DEBUG "[CPLD] %s irq:%d reg_val:%x\n", __func__, cpld_irq_num, reg_val);
         ret = CPLD_I2C_Write_Byte(CPLD_REG_INTR_MASK, reg_val);
         if(ret < 0) goto i2c_fail;
 
-	
+
 	mutex_unlock(&cpld_irq_mask_mtx);
         return ret;
 i2c_fail:
-	
+
 	mutex_unlock(&cpld_irq_mask_mtx);
 	return -1;
 }
@@ -458,12 +458,12 @@ static int __init cpld_init(void)
         printk(KERN_INFO "[CPLD] i2c driver: init\n");
 	lp_wq = create_singlethread_workqueue("cpld_wq");
 
-	
+
 	test_irq_num = CPLD_IRQ_CHARGE_INT;
 	if(!cpld_request_irq(CPLD_IRQ_CHARGE_INT, &charge_int_isr, &test_irq_num ))
 		printk(KERN_INFO "[CPLD] request %d IRQ success!\n", CPLD_IRQ_CHARGE_INT);
 
-	
+
 	if(lp_wq){
 		queue_work(lp_wq, &level_1_wq);
 	}
@@ -482,28 +482,28 @@ static void __exit cpld_exit(void)
 int cpld_release_irq(enum cpld_irq irq_from_CPLD)
 {
   int ret=0;
- 
+
   if(!is_cpld_ready()){
         printk(KERN_ERR "cpld isn't ready.\n");
         return -1;
   }
- 
+
   mutex_lock(&cpld_irq_req_mtx);
 
-  
+
 
   tasklet_kill( &cpld_irq_desc[irq_from_CPLD] );
-  
+
   cpld_irq_desc[irq_from_CPLD].func = NULL;
-  
+
 #if 0
-  
 
-  
-  
-  
 
-  
+
+
+
+
+
 #endif
   mutex_unlock(&cpld_irq_req_mtx);
 
@@ -523,10 +523,10 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
   if(!handler)
 	return error_num;
 
-  
+
    mutex_lock(&cpld_irq_req_mtx);
-            
-  
+
+
 
   switch( cpld_irq_num ){
   case CPLD_IRQ_VOL_UP:
@@ -534,7 +534,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_VOL_UP],
                    handler, (unsigned long) dev);
-      
+
     }
     break;
   case CPLD_IRQ_VOL_DW:
@@ -542,7 +542,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_VOL_DW],
                    handler, (unsigned long) dev);
-      
+
     }
     break;
   case CPLD_IRQ_HP:
@@ -550,7 +550,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_HP],
                    handler, (unsigned long) dev);
-      
+
     }
     break;
   case CPLD_IRQ_USB_ID:
@@ -558,7 +558,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_USB_ID],
                    handler, (unsigned long) dev);
-      
+
     }
     break;
   case CPLD_IRQ_CHARGE_STATE:
@@ -566,7 +566,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_CHARGE_STATE],
                    handler, (unsigned long) dev);
-      
+
     }
     break;
   case CPLD_IRQ_CHARGE_INT:
@@ -574,18 +574,18 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_CHARGE_INT],
                    handler, (unsigned long) dev);
-      
+
     }
     break;
   default:
     printk(KERN_ERR "[CPLD] %s Error irq number %d!\n", __func__,  cpld_irq_num);
     break;
   }
- 
+
   error_num = 0;
 
   mutex_unlock(&cpld_irq_req_mtx);
-  
+
   return error_num;
 }
 

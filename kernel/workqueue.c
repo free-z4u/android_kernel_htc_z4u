@@ -604,7 +604,7 @@ static bool need_to_manage_workers(struct global_cwq *gcwq)
 static bool too_many_workers(struct global_cwq *gcwq)
 {
 	bool managing = gcwq->flags & GCWQ_MANAGING_WORKERS;
-	int nr_idle = gcwq->nr_idle + managing; 
+	int nr_idle = gcwq->nr_idle + managing;
 	int nr_busy = gcwq->nr_workers - nr_idle;
 
 	return nr_idle > 2 && (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy;
@@ -645,7 +645,7 @@ struct task_struct *wq_worker_sleeping(struct task_struct *task,
 	if (worker->flags & WORKER_NOT_RUNNING)
 		return NULL;
 
-	
+
 	if (WARN_ON_ONCE(cpu != raw_smp_processor_id()))
 		return NULL;
 
@@ -696,7 +696,7 @@ static struct hlist_head *busy_worker_head(struct global_cwq *gcwq,
 	const int base_shift = ilog2(sizeof(struct work_struct));
 	unsigned long v = (unsigned long)work;
 
-	
+
 	v >>= base_shift;
 	v += v >> BUSY_WORKER_HASH_ORDER;
 	v &= BUSY_WORKER_HASH_MASK;
@@ -749,7 +749,7 @@ static void insert_work(struct cpu_workqueue_struct *cwq,
 {
 	struct global_cwq *gcwq = cwq->gcwq;
 
-	
+
 	set_work_cwq(work, cwq, extra_flags);
 
 	smp_wmb();
@@ -796,12 +796,12 @@ static void __queue_work(unsigned int cpu, struct workqueue_struct *wq,
 
 	debug_work_activate(work);
 
-	
+
 	if (unlikely(wq->flags & WQ_DRAINING) &&
 	    WARN_ON_ONCE(!is_chained_work(wq)))
 		return;
 
-	
+
 	if (!(wq->flags & WQ_UNBOUND)) {
 		struct global_cwq *last_gcwq;
 
@@ -820,7 +820,7 @@ static void __queue_work(unsigned int cpu, struct workqueue_struct *wq,
 			if (worker && worker->current_cwq->wq == wq)
 				gcwq = last_gcwq;
 			else {
-				
+
 				spin_unlock_irqrestore(&last_gcwq->lock, flags);
 				spin_lock_irqsave(&gcwq->lock, flags);
 			}
@@ -831,7 +831,7 @@ static void __queue_work(unsigned int cpu, struct workqueue_struct *wq,
 		spin_lock_irqsave(&gcwq->lock, flags);
 	}
 
-	
+
 	cwq = get_cwq(gcwq->cpu, wq);
 	trace_workqueue_queue_work(cpu, cwq, work);
 
@@ -946,12 +946,12 @@ static void worker_enter_idle(struct worker *worker)
 		(worker->hentry.next || worker->hentry.pprev)))
 		return;
 
-	
+
 	worker->flags |= WORKER_IDLE;
 	gcwq->nr_idle++;
 	worker->last_active = jiffies;
 
-	
+
 	list_add(&worker->entry, &gcwq->idle_list);
 
 	if (likely(!(worker->flags & WORKER_ROGUE))) {
@@ -961,7 +961,7 @@ static void worker_enter_idle(struct worker *worker)
 	} else
 		wake_up_all(&gcwq->trustee_wait);
 
-	
+
 	WARN_ON_ONCE(gcwq->nr_workers == gcwq->nr_idle &&
 		     atomic_read(get_gcwq_nr_running(gcwq->cpu)));
 }
@@ -1022,7 +1022,7 @@ static struct worker *alloc_worker(void)
 		INIT_LIST_HEAD(&worker->entry);
 		INIT_LIST_HEAD(&worker->scheduled);
 		INIT_WORK(&worker->rebind_work, worker_rebind_fn);
-		
+
 		worker->flags = WORKER_PREP;
 	}
 	return worker;
@@ -1038,8 +1038,8 @@ static struct worker *create_worker(struct global_cwq *gcwq, bool bind)
 	while (ida_get_new(&gcwq->worker_ida, &id)) {
 		spin_unlock_irq(&gcwq->lock);
 		if (!ida_pre_get(&gcwq->worker_ida, GFP_KERNEL)){
-			
-			printk(KERN_ERR "[CPUHOTPLUG] %s: ida_pre_get failed in create_worker\n", __func__); 
+
+			printk(KERN_ERR "[CPUHOTPLUG] %s: ida_pre_get failed in create_worker\n", __func__);
 			goto fail;
 		}
 		spin_lock_irq(&gcwq->lock);
@@ -1048,7 +1048,7 @@ static struct worker *create_worker(struct global_cwq *gcwq, bool bind)
 
 	worker = alloc_worker();
 	if (!worker){
-		
+
 		printk(KERN_ERR "[CPUHOTPLUG] %s: alloc_worker failed.\n", __func__);
 		goto fail;
 	}
@@ -1065,7 +1065,7 @@ static struct worker *create_worker(struct global_cwq *gcwq, bool bind)
 		worker->task = kthread_create(worker_thread, worker,
 					      "kworker/u:%d", id);
 	if (IS_ERR(worker->task)){
-		
+
 		printk(KERN_ERR "[CPUHOTPLUG] %s: kthread_create failed.\n", __func__);
 		goto fail;
 	}
@@ -1101,7 +1101,7 @@ static void destroy_worker(struct worker *worker)
 	struct global_cwq *gcwq = worker->gcwq;
 	int id = worker->id;
 
-	
+
 	if (WARN_ON(worker->current_work) ||
 		WARN_ON(!list_empty(&worker->scheduled)))
 		return;
@@ -1133,14 +1133,14 @@ static void idle_worker_timeout(unsigned long __gcwq)
 		struct worker *worker;
 		unsigned long expires;
 
-		
+
 		worker = list_entry(gcwq->idle_list.prev, struct worker, entry);
 		expires = worker->last_active + IDLE_WORKER_TIMEOUT;
 
 		if (time_before(jiffies, expires))
 			mod_timer(&gcwq->idle_timer, expires);
 		else {
-			
+
 			gcwq->flags |= GCWQ_MANAGE_WORKERS;
 			wake_up_worker(gcwq);
 		}
@@ -1158,9 +1158,9 @@ static bool send_mayday(struct work_struct *work)
 	if (!(wq->flags & WQ_RESCUER))
 		return false;
 
-	
+
 	cpu = cwq->gcwq->cpu;
-	
+
 	if (cpu == WORK_CPU_UNBOUND)
 		cpu = 0;
 	if (!mayday_test_and_set_cpu(cpu, wq->mayday_mask))
@@ -1194,7 +1194,7 @@ __acquires(&gcwq->lock)
 restart:
 	spin_unlock_irq(&gcwq->lock);
 
-	
+
 	mod_timer(&gcwq->mayday_timer, jiffies + MAYDAY_INITIAL_TIMEOUT);
 
 	while (true) {
@@ -1302,7 +1302,7 @@ static void cwq_activate_first_delayed(struct cpu_workqueue_struct *cwq)
 static void cwq_dec_nr_in_flight(struct cpu_workqueue_struct *cwq, int color,
 				 bool delayed)
 {
-	
+
 	if (color == WORK_NO_COLOR)
 		return;
 
@@ -1311,21 +1311,21 @@ static void cwq_dec_nr_in_flight(struct cpu_workqueue_struct *cwq, int color,
 	if (!delayed) {
 		cwq->nr_active--;
 		if (!list_empty(&cwq->delayed_works)) {
-			
+
 			if (cwq->nr_active < cwq->max_active)
 				cwq_activate_first_delayed(cwq);
 		}
 	}
 
-	
+
 	if (likely(cwq->flush_color != color))
 		return;
 
-	
+
 	if (cwq->nr_in_flight[color])
 		return;
 
-	
+
 	cwq->flush_color = -1;
 
 	if (atomic_dec_and_test(&cwq->wq->nr_cwqs_to_flush))
@@ -1352,14 +1352,14 @@ __acquires(&gcwq->lock)
 		return;
 	}
 
-	
+
 	debug_work_deactivate(work);
 	hlist_add_head(&worker->hentry, bwh);
 	worker->current_work = work;
 	worker->current_cwq = cwq;
 	work_color = get_work_color(work);
 
-	
+
 	set_work_cpu(work, gcwq->cpu);
 	list_del_init(&work->entry);
 
@@ -1400,11 +1400,11 @@ __acquires(&gcwq->lock)
 
 	spin_lock_irq(&gcwq->lock);
 
-	
+
 	if (unlikely(cpu_intensive))
 		worker_clr_flags(worker, WORKER_CPU_INTENSIVE);
 
-	
+
 	hlist_del_init(&worker->hentry);
 	worker->current_work = NULL;
 	worker->current_cwq = NULL;
@@ -1425,12 +1425,12 @@ static int worker_thread(void *__worker)
 	struct worker *worker = __worker;
 	struct global_cwq *gcwq = worker->gcwq;
 
-	
+
 	worker->task->flags |= PF_WQ_WORKER;
 woke_up:
 	spin_lock_irq(&gcwq->lock);
 
-	
+
 	if (worker->flags & WORKER_DIE) {
 		spin_unlock_irq(&gcwq->lock);
 		worker->task->flags &= ~PF_WQ_WORKER;
@@ -1439,11 +1439,11 @@ woke_up:
 
 	worker_leave_idle(worker);
 recheck:
-	
+
 	if (!need_more_worker(gcwq))
 		goto sleep;
 
-	
+
 	if (unlikely(!may_start_working(gcwq)) && manage_workers(worker))
 		goto recheck;
 
@@ -1457,7 +1457,7 @@ recheck:
 					 struct work_struct, entry);
 
 		if (likely(!(*work_data_bits(work) & WORK_STRUCT_LINKED))) {
-			
+
 			process_one_work(worker, work);
 			if (unlikely(!list_empty(&worker->scheduled)))
 				process_scheduled_works(worker);
@@ -1503,7 +1503,7 @@ repeat:
 		__set_current_state(TASK_RUNNING);
 		mayday_clear_cpu(cpu, wq->mayday_mask);
 
-		
+
 		rescuer->gcwq = gcwq;
 		worker_maybe_bind_and_lock(rescuer);
 
@@ -1552,7 +1552,7 @@ static void insert_wq_barrier(struct cpu_workqueue_struct *cwq,
 		unsigned long *bits = work_data_bits(target);
 
 		head = target->entry.next;
-		
+
 		linked = *bits & WORK_STRUCT_LINKED;
 		__set_bit(WORK_STRUCT_LINKED_BIT, bits);
 	}
@@ -1625,20 +1625,20 @@ void flush_workqueue(struct workqueue_struct *wq)
 		wq->work_color = next_color;
 
 		if (!wq->first_flusher) {
-			
+
 			WARN_ON_ONCE(wq->flush_color != this_flusher.flush_color);
 
 			wq->first_flusher = &this_flusher;
 
 			if (!flush_workqueue_prep_cwqs(wq, wq->flush_color,
 						       wq->work_color)) {
-				
+
 				wq->flush_color = next_color;
 				wq->first_flusher = NULL;
 				goto out_unlock;
 			}
 		} else {
-			
+
 			WARN_ON_ONCE(wq->flush_color == this_flusher.flush_color);
 			list_add_tail(&this_flusher.list, &wq->flusher_queue);
 			flush_workqueue_prep_cwqs(wq, -1, wq->work_color);
@@ -1656,7 +1656,7 @@ void flush_workqueue(struct workqueue_struct *wq)
 
 	mutex_lock(&wq->flush_mutex);
 
-	
+
 	if (wq->first_flusher != &this_flusher)
 		goto out_unlock;
 
@@ -1668,7 +1668,7 @@ void flush_workqueue(struct workqueue_struct *wq)
 	while (true) {
 		struct wq_flusher *next, *tmp;
 
-		
+
 		list_for_each_entry_safe(next, tmp, &wq->flusher_queue, list) {
 			if (next->flush_color != wq->flush_color)
 				break;
@@ -1679,10 +1679,10 @@ void flush_workqueue(struct workqueue_struct *wq)
 		WARN_ON_ONCE(!list_empty(&wq->flusher_overflow) &&
 		       wq->flush_color != work_next_color(wq->work_color));
 
-		
+
 		wq->flush_color = work_next_color(wq->flush_color);
 
-		
+
 		if (!list_empty(&wq->flusher_overflow)) {
 			list_for_each_entry(tmp, &wq->flusher_overflow, list)
 				tmp->flush_color = wq->work_color;
@@ -1848,13 +1848,13 @@ bool flush_work_sync(struct work_struct *work)
 	struct wq_barrier barr;
 	bool pending, waited;
 
-	
+
 	pending = start_flush_work(work, &barr, false);
 
-	
+
 	waited = wait_on_work(work);
 
-	
+
 	if (pending) {
 		wait_for_completion(&barr.done);
 		destroy_work_on_stack(&barr.work);
@@ -2034,7 +2034,7 @@ static int alloc_cwqs(struct workqueue_struct *wq)
 		}
 	}
 
-	
+
 	BUG_ON(!IS_ALIGNED(wq->cpu_wq.v, align));
 	return wq->cpu_wq.v ? 0 : -ENOMEM;
 }
@@ -2044,7 +2044,7 @@ static void free_cwqs(struct workqueue_struct *wq)
 	if (!(wq->flags & WQ_UNBOUND))
 		free_percpu(wq->cpu_wq.pcpu);
 	else if (wq->cpu_wq.single) {
-		
+
 		kfree(*(void **)(wq->cpu_wq.single + 1));
 	}
 }
@@ -2073,7 +2073,7 @@ struct workqueue_struct *__alloc_workqueue_key(const char *fmt,
 	unsigned int cpu;
 	size_t namelen;
 
-	
+
 	va_start(args, lock_name);
 	va_copy(args1, args);
 	namelen = vsnprintf(NULL, 0, fmt, args) + 1;
@@ -2095,7 +2095,7 @@ struct workqueue_struct *__alloc_workqueue_key(const char *fmt,
 	max_active = max_active ?: WQ_DFL_ACTIVE;
 	max_active = wq_clamp_max_active(max_active, flags, wq->name);
 
-	
+
 	wq->flags = flags;
 	wq->saved_max_active = max_active;
 	mutex_init(&wq->flush_mutex);
@@ -2166,10 +2166,10 @@ void destroy_workqueue(struct workqueue_struct *wq)
 {
 	unsigned int cpu;
 
-	
+
 	drain_workqueue(wq);
 
-	
+
 	for_each_cwq_cpu(cpu, wq) {
 		struct cpu_workqueue_struct *cwq = get_cwq(cpu, wq);
 		int i;
@@ -2342,7 +2342,7 @@ static int __cpuinit trustee_thread(void *__gcwq)
 			}
 		}
 
-		
+
 		if (trustee_wait_event_timeout(false, TRUSTEE_COOLDOWN) < 0)
 			break;
 	}
@@ -2362,7 +2362,7 @@ static int __cpuinit trustee_thread(void *__gcwq)
 		worker->flags |= WORKER_REBIND;
 		worker->flags &= ~WORKER_ROGUE;
 
-		
+
 		if (test_and_set_bit(WORK_STRUCT_PENDING_BIT,
 				     work_data_bits(rebind_work)))
 			continue;
@@ -2373,10 +2373,10 @@ static int __cpuinit trustee_thread(void *__gcwq)
 			    work_color_to_flags(WORK_NO_COLOR));
 	}
 
-	
+
 	gcwq->flags &= ~GCWQ_MANAGING_WORKERS;
 
-	
+
 	gcwq->trustee = NULL;
 	gcwq->trustee_state = TRUSTEE_DONE;
 	wake_up_all(&gcwq->trustee_wait);
@@ -2415,17 +2415,17 @@ static int __devinit workqueue_cpu_callback(struct notifier_block *nfb,
 		new_trustee = kthread_create(trustee_thread, gcwq,
 					     "workqueue_trustee/%d\n", cpu);
 		if (IS_ERR(new_trustee)){
-			
+
 			printk(KERN_ERR "[CPUHOTPLUG] create new_trustee failed.\n");
 			return notifier_from_errno(PTR_ERR(new_trustee));
 		}
 		kthread_bind(new_trustee, cpu);
-		
+
 	case CPU_UP_PREPARE:
 		BUG_ON(gcwq->first_idle);
 		new_worker = create_worker(gcwq, false);
 		if (!new_worker) {
-			
+
 			printk(KERN_ERR "[CPUHOTPLUG] create_worker failed.\n");
 			if (new_trustee)
 				kthread_stop(new_trustee);
@@ -2433,18 +2433,18 @@ static int __devinit workqueue_cpu_callback(struct notifier_block *nfb,
 		}
 	}
 
-	
+
 	spin_lock_irqsave(&gcwq->lock, flags);
 
 	switch (action) {
 	case CPU_DOWN_PREPARE:
-		
+
 		BUG_ON(gcwq->trustee || gcwq->trustee_state != TRUSTEE_DONE);
 		gcwq->trustee = new_trustee;
 		gcwq->trustee_state = TRUSTEE_START;
 		wake_up_process(gcwq->trustee);
 		wait_trustee_state(gcwq, TRUSTEE_IN_CHARGE);
-		
+
 	case CPU_UP_PREPARE:
 		BUG_ON(gcwq->first_idle);
 		gcwq->first_idle = new_worker;
@@ -2456,7 +2456,7 @@ static int __devinit workqueue_cpu_callback(struct notifier_block *nfb,
 
 	case CPU_POST_DEAD:
 		gcwq->trustee_state = TRUSTEE_BUTCHER;
-		
+
 	case CPU_UP_CANCELED:
 		destroy_worker(gcwq->first_idle);
 		gcwq->first_idle = NULL;
@@ -2466,7 +2466,7 @@ static int __devinit workqueue_cpu_callback(struct notifier_block *nfb,
                 if(!gcwq->first_idle){
                         printk(KERN_ERR "[CPUHOTPLUG] CPU_DOWN_FAILED, gcwq->flags:%08x\n",
                                                                        gcwq->flags);
-                        
+
 			show_mem(SHOW_MEM_FILTER_NODES);
                        	break;
 		}
@@ -2554,7 +2554,7 @@ long work_on_cpu(unsigned int cpu, long (*fn)(void *), void *arg)
 	return wfc.ret;
 }
 EXPORT_SYMBOL_GPL(work_on_cpu);
-#endif 
+#endif
 
 #ifdef CONFIG_FREEZER
 
@@ -2642,7 +2642,7 @@ void thaw_workqueues(void)
 			if (!cwq || !(wq->flags & WQ_FREEZABLE))
 				continue;
 
-			
+
 			cwq->max_active = wq->saved_max_active;
 
 			while (!list_empty(&cwq->delayed_works) &&
@@ -2659,7 +2659,7 @@ void thaw_workqueues(void)
 out_unlock:
 	spin_unlock(&workqueue_lock);
 }
-#endif 
+#endif
 
 unsigned long get_work_func_of_task_struct(struct task_struct *tsk)
 {

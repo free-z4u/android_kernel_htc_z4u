@@ -155,10 +155,10 @@ extern void mux_log_throttle(int on);
 #define IC 0x40
 #define DV 0x80
 
-#define CTRL_CHAN 0		
+#define CTRL_CHAN 0
 #define MCC_CR 0x2
-#define MCC_CMD 1		
-#define MCC_RSP 0		
+#define MCC_CMD 1
+#define MCC_RSP 0
 
 static inline int mcc_is_cmd(u8 type)
 {
@@ -317,7 +317,7 @@ enum {
 
 struct dlci_struct {
 	int clients;
-	struct mutex lock; 
+	struct mutex lock;
 	wait_queue_head_t open_wait;
 	wait_queue_head_t close_wait;
 	wait_queue_head_t mux_write_wait;
@@ -328,16 +328,16 @@ struct dlci_struct {
 	u8 dummy;
 	u16 mtu;
 	u16 dummy2;
-	
+
 #ifdef TS27010_NET
-	struct net_device *net; 
+	struct net_device *net;
 	int line_no;
 #endif
-	
+
 };
 
 struct chan_struct {
-	struct mutex	write_lock; 
+	struct mutex	write_lock;
 	u8		buf[TS0710MUX_SEND_BUF_SIZE];
 };
 
@@ -389,12 +389,12 @@ static const char strLog[7] = {
 void mux_uart_hexdump(int level, const char *title,
 			const char *function, u32 line,
 			const u8 *buf, u32 len);
-#else 
+#else
 #define mux_print(level, fmt, args...) do { } while (0)
 #define mux_uart_hexdump(lev, t, f, line, buf, len) do { } while (0)
 #define kassert(cond) do { } while (0)
 #define FUNC_ENTER() do { } while (0)
 #define FUNC_EXIT() do { } while (0)
-#endif 
+#endif
 
-#endif 
+#endif

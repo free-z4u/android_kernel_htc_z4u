@@ -381,14 +381,14 @@ static inline int check_ext_ctrls(struct v4l2_ext_controls *c, int allow_priv)
 {
 	__u32 i;
 
-	
+
 	c->reserved[0] = c->reserved[1] = 0;
 	for (i = 0; i < c->count; i++)
 		c->controls[i].reserved2[0] = 0;
 
 	if (!allow_priv && c->ctrl_class == V4L2_CID_PRIVATE_BASE)
 		return 0;
-	
+
 	for (i = 0; i < c->count; i++) {
 		if (V4L2_CTRL_ID2CLASS(c->controls[i].id) != c->ctrl_class) {
 			c->error_idx = i;
@@ -567,7 +567,7 @@ static long __video_do_ioctl(struct file *file,
 
 	switch (cmd) {
 
-	
+
 	case VIDIOC_QUERYCAP:
 	{
 		struct v4l2_capability *cap = (struct v4l2_capability *)arg;
@@ -586,7 +586,7 @@ static long __video_do_ioctl(struct file *file,
 		break;
 	}
 
-	
+
 	case VIDIOC_G_PRIORITY:
 	{
 		enum v4l2_priority *p = arg;
@@ -615,7 +615,7 @@ static long __video_do_ioctl(struct file *file,
 		break;
 	}
 
-	
+
 	case VIDIOC_ENUM_FMT:
 	{
 		struct v4l2_fmtdesc *f = arg;
@@ -667,7 +667,7 @@ static long __video_do_ioctl(struct file *file,
 	{
 		struct v4l2_format *f = (struct v4l2_format *)arg;
 
-		
+
 		dbgarg(cmd, "type=%s\n", prt_names(f->type, v4l2_type_names));
 
 		switch (f->type) {
@@ -788,7 +788,7 @@ static long __video_do_ioctl(struct file *file,
 	{
 		struct v4l2_format *f = (struct v4l2_format *)arg;
 
-		
+
 		dbgarg(cmd, "type=%s\n", prt_names(f->type, v4l2_type_names));
 
 		switch (f->type) {
@@ -907,7 +907,7 @@ static long __video_do_ioctl(struct file *file,
 									fh, f);
 			break;
 		case V4L2_BUF_TYPE_PRIVATE:
-			
+
 			if (ops->vidioc_s_fmt_type_private)
 				ret = ops->vidioc_s_fmt_type_private(file,
 								fh, f);
@@ -919,7 +919,7 @@ static long __video_do_ioctl(struct file *file,
 	{
 		struct v4l2_format *f = (struct v4l2_format *)arg;
 
-		
+
 		dbgarg(cmd, "type=%s\n", prt_names(f->type,
 						v4l2_type_names));
 		switch (f->type) {
@@ -1040,7 +1040,7 @@ static long __video_do_ioctl(struct file *file,
 								fh, f);
 			break;
 		case V4L2_BUF_TYPE_PRIVATE:
-			
+
 			if (ops->vidioc_try_fmt_type_private)
 				ret = ops->vidioc_try_fmt_type_private(file,
 								fh, f);
@@ -1171,7 +1171,7 @@ static long __video_do_ioctl(struct file *file,
 		ret = ops->vidioc_streamoff(file, fh, i);
 		break;
 	}
-	
+
 	case VIDIOC_ENUMSTD:
 	{
 		struct v4l2_standard *p = arg;
@@ -1179,7 +1179,7 @@ static long __video_do_ioctl(struct file *file,
 		unsigned int index = p->index, i, j = 0;
 		const char *descr = "";
 
-		
+
 		for (i = 0; i <= index && id; i++) {
 			while ((id & standards[j].std) != standards[j].std)
 				j++;
@@ -1213,7 +1213,7 @@ static long __video_do_ioctl(struct file *file,
 		v4l2_std_id *id = arg;
 
 		ret = 0;
-		
+
 		if (ops->vidioc_g_std)
 			ret = ops->vidioc_g_std(file, fh, id);
 		else if (vfd->current_norm)
@@ -1232,16 +1232,16 @@ static long __video_do_ioctl(struct file *file,
 		dbgarg(cmd, "std=%08Lx\n", (long long unsigned)*id);
 
 		norm = (*id) & vfd->tvnorms;
-		if (vfd->tvnorms && !norm)	
+		if (vfd->tvnorms && !norm)
 			break;
 
-		
+
 		if (ops->vidioc_s_std)
 			ret = ops->vidioc_s_std(file, fh, &norm);
 		else
 			ret = -EINVAL;
 
-		
+
 		if (ret >= 0)
 			vfd->current_norm = norm;
 		break;
@@ -1258,8 +1258,8 @@ static long __video_do_ioctl(struct file *file,
 						(unsigned long long)*p);
 		break;
 	}
-	
-	
+
+
 	case VIDIOC_ENUMINPUT:
 	{
 		struct v4l2_input *p = arg;
@@ -1307,7 +1307,7 @@ static long __video_do_ioctl(struct file *file,
 		break;
 	}
 
-	
+
 	case VIDIOC_ENUMOUTPUT:
 	{
 		struct v4l2_output *p = arg;
@@ -1353,7 +1353,7 @@ static long __video_do_ioctl(struct file *file,
 		break;
 	}
 
-	
+
 	case VIDIOC_QUERYCTRL:
 	{
 		struct v4l2_queryctrl *p = arg;
@@ -1496,7 +1496,7 @@ static long __video_do_ioctl(struct file *file,
 				p->id, p->index);
 		break;
 	}
-	
+
 	case VIDIOC_ENUMAUDIO:
 	{
 		struct v4l2_audio *p = arg;
@@ -1638,7 +1638,7 @@ static long __video_do_ioctl(struct file *file,
 	{
 		struct v4l2_cropcap *p = arg;
 
-		
+
 		if (!ops->vidioc_cropcap)
 			break;
 
@@ -1828,7 +1828,7 @@ static long __video_do_ioctl(struct file *file,
 		if (!ops->vidioc_g_sliced_vbi_cap)
 			break;
 
-		
+
 		memset(p, 0, offsetof(struct v4l2_sliced_vbi_cap, type));
 
 		dbgarg(cmd, "type=%s\n", prt_names(p->type, v4l2_type_names));
@@ -2147,7 +2147,7 @@ static long __video_do_ioctl(struct file *file,
 		ret = ops->vidioc_default(file, fh, valid_prio, cmd, arg);
 		break;
 	}
-	} 
+	}
 
 exit_prio:
 	if (vfd->debug & V4L2_DEBUG_IOCTL_ARG) {
@@ -2162,7 +2162,7 @@ exit_prio:
 
 static unsigned long cmd_input_size(unsigned int cmd)
 {
-	
+
 #define CMDINSIZE(cmd, type, field) 				\
 	case VIDIOC_##cmd: 					\
 		return offsetof(struct v4l2_##type, field) + 	\
@@ -2256,12 +2256,12 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
 	void __user *user_ptr = NULL;
 	void	**kernel_ptr = NULL;
 
-	
+
 	if (_IOC_DIR(cmd) != _IOC_NONE) {
 		if (_IOC_SIZE(cmd) <= sizeof(sbuf)) {
 			parg = sbuf;
 		} else {
-			
+
 			mbuf = kmalloc(_IOC_SIZE(cmd), GFP_KERNEL);
 			if (NULL == mbuf)
 				return -ENOMEM;
@@ -2275,11 +2275,11 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
 			if (copy_from_user(parg, (void __user *)arg, n))
 				goto out;
 
-			
+
 			if (n < _IOC_SIZE(cmd))
 				memset((u8 *)parg + n, 0, _IOC_SIZE(cmd) - n);
 		} else {
-			
+
 			memset(parg, 0, _IOC_SIZE(cmd));
 		}
 	}
@@ -2300,7 +2300,7 @@ video_usercopy(struct file *file, unsigned int cmd, unsigned long arg,
 		*kernel_ptr = mbuf;
 	}
 
-	
+
 	err = func(file, cmd, parg);
 	if (err == -ENOIOCTLCMD)
 		err = -EINVAL;

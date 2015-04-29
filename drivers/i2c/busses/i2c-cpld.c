@@ -159,14 +159,14 @@ static int __devinit i2c_cpld_probe(struct platform_device *pdev)
 	if (pdata->udelay)
 		bit_data->udelay = pdata->udelay;
 	else if (pdata->scl_is_output_only)
-		bit_data->udelay = 50;			
+		bit_data->udelay = 50;
 	else
-		bit_data->udelay = 5;			
+		bit_data->udelay = 5;
 
 	if (pdata->timeout)
 		bit_data->timeout = pdata->timeout;
 	else
-		bit_data->timeout = HZ / 10;		
+		bit_data->timeout = HZ / 10;
 
 	bit_data->data = pdata;
 

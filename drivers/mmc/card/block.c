@@ -100,7 +100,7 @@ unsigned int get_mmc0_write_protection_type(void)
 	return mmc0_write_prot_type;
 }
 EXPORT_SYMBOL(get_mmc0_write_protection_type);
-#endif	
+#endif
 
 /*
  * The defaults come from config options but can be overriden by module
@@ -949,10 +949,10 @@ static int mmc_blk_issue_secdiscard_rq(struct mmc_queue *mq,
 	nr = blk_rq_sectors(req);
 
 	if (mmc_can_trim(card) && !mmc_erase_group_aligned(card, from, nr))
-		
+
 		arg = MMC_TRIM_ARG;
 	else
-		
+
 		arg = MMC_ERASE_ARG;
 retry:
 
@@ -1757,11 +1757,11 @@ static void mmc_blk_packed_hdr_wrq_prep(struct mmc_queue_req *mqrq,
 
 	list_for_each_entry(prq, &mqrq->packed_list, queuelist) {
 		do_rel_wr = mmc_req_rel_wr(prq) && (md->flags & MMC_BLK_REL_WR);
-		
+
 		packed_cmd_hdr[(i * 2)] =
 			(do_rel_wr ? MMC_CMD23_ARG_REL_WR : 0) |
 			blk_rq_sectors(prq);
-		
+
 		packed_cmd_hdr[((i * 2)) + 1] =
 			mmc_card_blockaddr(card) ?
 			blk_rq_pos(prq) : blk_rq_pos(prq) << 9;
@@ -1851,7 +1851,7 @@ static int mmc_blk_end_packed_req(struct mmc_queue *mq,
 	while (!list_empty(&mq_rq->packed_list)) {
 		prq = list_entry_rq(mq_rq->packed_list.next);
 		if (idx == i) {
-			
+
 			mq_rq->packed_num -= idx;
 			mq_rq->req = prq;
 			ret = 1;
@@ -1932,7 +1932,7 @@ static int sd_blk_issue_rw_rq(struct mmc_queue *mq, struct request *rqc)
 		mmc_queue_bounce_post(mq_rq);
 
 #if 0
-		
+
 		if (mmc_card_mmc(card) &&
 			(brq->cmd.resp[0] & R1_EXCEPTION_EVENT))
 			mmc_card_set_check_bkops(card);
@@ -1972,7 +1972,7 @@ static int sd_blk_issue_rw_rq(struct mmc_queue *mq, struct request *rqc)
 		case MMC_BLK_RETRY:
 			if (retry++ < 2 && card->do_remove == 0)
 				break;
-			
+
 			try_recovery++;
 			if (try_recovery < 2 && card->do_remove == 0) {
 				do_reinit = 1;
@@ -1986,7 +1986,7 @@ static int sd_blk_issue_rw_rq(struct mmc_queue *mq, struct request *rqc)
 		case MMC_BLK_DATA_ERR: {
 			int err;
 			err = mmc_blk_reset(md, card->host, type);
-			
+
 			try_recovery++;
 			if (try_recovery < 2 && card->do_remove == 0) {
 				do_reinit = 1;
@@ -1998,13 +1998,13 @@ static int sd_blk_issue_rw_rq(struct mmc_queue *mq, struct request *rqc)
 		}
 		case MMC_BLK_ECC_ERR:
 			if (brq->data.blocks > 1 && card->do_remove == 0) {
-				
+
 				pr_warning("%s: retrying using single block read\n",
 					   req->rq_disk->disk_name);
 				disable_multi = 1;
 				break;
 			}
-			
+
 			try_recovery++;
 			if (try_recovery < 2 && card->do_remove == 0) {
 				do_reinit = 1;
@@ -2321,7 +2321,7 @@ static int mmc_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 	mmc_blk_write_packing_control(mq, req);
 
 	if (req && req->cmd_flags & REQ_SANITIZE) {
-		
+
 		if (card->host && card->host->areq)
 			mmc_blk_issue_rw_rq(mq, NULL);
 		ret = mmc_blk_issue_sanitize_rq(mq, req);
@@ -2359,7 +2359,7 @@ static int sd_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 #endif
 
 	if (req && !mq->mqrq_prev->req)
-		
+
 		mmc_claim_host(card->host);
 
 #ifdef CONFIG_MMC_BLOCK_DEFERRED_RESUME
@@ -2411,12 +2411,12 @@ static int sd_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 	mmc_blk_write_packing_control(mq, req);
 
 	if (req && req->cmd_flags & REQ_SANITIZE) {
-		
+
 		if (card->host && card->host->areq)
 			sd_blk_issue_rw_rq(mq, NULL);
 		ret = mmc_blk_issue_sanitize_rq(mq, req);
 	} else if (req && req->cmd_flags & REQ_DISCARD) {
-		
+
 		if (card->host->areq)
 			sd_blk_issue_rw_rq(mq, NULL);
 		if (req->cmd_flags & REQ_SECURE)
@@ -2424,7 +2424,7 @@ static int sd_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 		else
 			ret = mmc_blk_issue_discard_rq(mq, req);
 	} else if (req && req->cmd_flags & REQ_FLUSH) {
-		
+
 		if (card->host->areq)
 			sd_blk_issue_rw_rq(mq, NULL);
 		ret = mmc_blk_issue_flush(mq, req);
@@ -2434,7 +2434,7 @@ static int sd_blk_issue_rq(struct mmc_queue *mq, struct request *req)
 
 out:
 	if (!req)
-		
+
 		mmc_release_host(card->host);
 	return ret;
 }
@@ -2780,7 +2780,7 @@ static const struct mmc_fixup blk_fixups[] =
 	MMC_FIXUP(CID_NAME_ANY, CID_MANFID_MICRON, 0x200, add_quirk_mmc,
 		  MMC_QUIRK_LONG_READ_TIME),
 
-	
+
 	MMC_FIXUP("SEM08G", 0x45, CID_OEMID_ANY, add_quirk_mmc,
 		  MMC_QUIRK_INAND_DATA_TIMEOUT),
 	MMC_FIXUP("SEM04G", 0x45, CID_OEMID_ANY, add_quirk_mmc,

@@ -204,7 +204,7 @@ struct rmi_device_platform_data {
 
 	struct rmi_device_platform_data_spi spi_v2;
 
-	
+
 	struct rmi_f11_2d_ctrl *f11_ctrl;
 	struct rmi_f11_2d_axis_alignment axis_align;
 	struct rmi_f19_button_map *button_map;
@@ -269,18 +269,18 @@ struct rmi_function_container {
 #define RMI_REG_ADDR_PAGE_SELECT 0xFF
 
 struct rmi_char_dev {
-	
+
 	struct mutex mutex_file_op;
-	
+
 	struct cdev main_dev;
 
-	
-	
 
-	
-	
+
+
+
+
 	struct rmi_phys_device *phys;
-	
+
 	int ref_count;
 };
 
@@ -340,7 +340,7 @@ struct rmi_phys_device {
 
 	struct rmi_phys_info info;
 
-	
+
 	struct rmi_char_dev *char_dev;
 	struct class *rmi_char_device_class;
 };

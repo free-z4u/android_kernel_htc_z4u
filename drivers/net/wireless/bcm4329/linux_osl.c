@@ -2,13 +2,13 @@
  * Linux OS Independent Layer
  *
  * Copyright (C) 1999-2010, Broadcom Corporation
- * 
+ *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- * 
+ *
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- * 
+ *
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -39,8 +39,8 @@
 
 #define PCI_CFG_RETRY 		10
 
-#define OS_HANDLE_MAGIC		0x1234abcd	
-#define BCM_MEM_FILENAME_LEN 	24		
+#define OS_HANDLE_MAGIC		0x1234abcd
+#define BCM_MEM_FILENAME_LEN 	24
 
 #ifdef DHD_USE_STATIC_BUF
 #define MAX_STATIC_BUF_NUM 16
@@ -63,7 +63,7 @@ typedef struct bcm_static_pkt {
 } bcm_static_pkt_t;
 static bcm_static_pkt_t *bcm_static_skb = 0;
 
-#endif 
+#endif
 typedef struct bcm_mem_link {
 	struct bcm_mem_link *prev;
 	struct bcm_mem_link *next;
@@ -83,55 +83,55 @@ struct osl_info {
 };
 
 static int16 linuxbcmerrormap[] =
-{	0, 			
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL,		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-E2BIG,			
-	-E2BIG,			
-	-EBUSY, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EFAULT, 		
-	-ENOMEM, 		
-	-EOPNOTSUPP,		
-	-EMSGSIZE,		
-	-EINVAL,		
-	-EPERM,			
-	-ENOMEM, 		
-	-EINVAL, 		
-	-ERANGE, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EINVAL, 		
-	-EINVAL,		
-	-EIO,			
-	-ENODEV,		
-	-EINVAL,		
-	-EIO,			
-	-EIO,			
-	-EINVAL,		
-	-EINVAL,		
+{	0,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-E2BIG,
+	-E2BIG,
+	-EBUSY,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EFAULT,
+	-ENOMEM,
+	-EOPNOTSUPP,
+	-EMSGSIZE,
+	-EINVAL,
+	-EPERM,
+	-ENOMEM,
+	-EINVAL,
+	-ERANGE,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EINVAL,
+	-EIO,
+	-ENODEV,
+	-EINVAL,
+	-EIO,
+	-EIO,
+	-EINVAL,
+	-EINVAL,
 
 
 
 #if BCME_LAST != -41
 #error "You need to add a OS error translation in the linuxbcmerrormap \
 	for new error code defined in bcmutils.h"
-#endif 
+#endif
 };
 
 
@@ -143,7 +143,7 @@ osl_error(int bcmerror)
 	else if (bcmerror < BCME_LAST)
 		bcmerror = BCME_ERROR;
 
-	
+
 	return linuxbcmerrormap[-bcmerror];
 }
 
@@ -160,7 +160,7 @@ osl_attach(void *pdev, uint bustype, bool pkttag)
 
 	bzero(osh, sizeof(osl_t));
 
-	
+
 	ASSERT(ABS(BCME_LAST) == (ARRAYSIZE(linuxbcmerrormap) - 1));
 
 	osh->magic = OS_HANDLE_MAGIC;
@@ -199,14 +199,14 @@ osl_attach(void *pdev, uint bustype, bool pkttag)
 		else {
 			/* printk("alloc static buf at %x!\n", (unsigned int)bcm_static_buf); */
 		}
-		
+
 		mutex_init(&bcm_static_buf->static_sem);
 
-		
+
 		bcm_static_buf->buf_ptr = (unsigned char *)bcm_static_buf + STATIC_BUF_SIZE;
 
 	}
-	
+
 	if (!bcm_static_skb)
 	{
 		int i;
@@ -220,7 +220,7 @@ osl_attach(void *pdev, uint bustype, bool pkttag)
 
 		mutex_init(&bcm_static_skb->osl_pkt_sem);
 	}
-#endif 
+#endif
 	return osh;
 }
 
@@ -237,7 +237,7 @@ osl_detach(osl_t *osh)
 	if (bcm_static_skb) {
 		bcm_static_skb = 0;
 	}
-#endif 
+#endif
 	ASSERT(osh->magic == OS_HANDLE_MAGIC);
 	kfree(osh);
 }
@@ -272,17 +272,17 @@ osl_pktfree(osl_t *osh, void *p, bool send)
 	if (send && osh->pub.tx_fn)
 		osh->pub.tx_fn(osh->pub.tx_ctx, p, 0);
 
-	
+
 	while (skb) {
 		nskb = skb->next;
 		skb->next = NULL;
 
 
 		if (skb->destructor) {
-			
+
 			dev_kfree_skb_any(skb);
 		} else {
-			
+
 			dev_kfree_skb(skb);
 		}
 
@@ -299,18 +299,18 @@ osl_pktget_static(osl_t *osh, uint len)
 	int i = 0;
 	struct sk_buff *skb;
 
-	
+
 	if (len > (PAGE_SIZE*2))
 	{
 		printk("Do we really need this big skb??\n");
 		return osl_pktget(osh, len);
 	}
 
-	
+
 	mutex_lock(&bcm_static_skb->osl_pkt_sem);
 	if (len <= PAGE_SIZE)
 	{
-		
+
 		for (i = 0; i < MAX_STATIC_PKT_NUM; i++)
 		{
 			if (bcm_static_skb->pkt_use[i] == 0)
@@ -325,12 +325,12 @@ osl_pktget_static(osl_t *osh, uint len)
 			skb = bcm_static_skb->skb_4k[i];
 			skb->tail = skb->data + len;
 			skb->len = len;
-			
+
 			return skb;
 		}
 	}
 
-	
+
 	for (i = 0; i < MAX_STATIC_PKT_NUM; i++)
 	{
 		if (bcm_static_skb->pkt_use[i+MAX_STATIC_PKT_NUM] == 0)
@@ -344,12 +344,12 @@ osl_pktget_static(osl_t *osh, uint len)
 		skb = bcm_static_skb->skb_8k[i];
 		skb->tail = skb->data + len;
 		skb->len = len;
-		
+
 		return skb;
 	}
 
 
-	
+
 	mutex_unlock(&bcm_static_skb->osl_pkt_sem);
 	printk("all static pkt in use!\n");
 	return osl_pktget(osh, len);
@@ -360,7 +360,7 @@ void
 osl_pktfree_static(osl_t *osh, void *p, bool send)
 {
 	int i;
-	
+
 	for (i = 0; i < MAX_STATIC_PKT_NUM*2; i++)
 	{
 		if (p == bcm_static_skb->skb_4k[i])
@@ -369,13 +369,13 @@ osl_pktfree_static(osl_t *osh, void *p, bool send)
 			bcm_static_skb->pkt_use[i] = 0;
 			mutex_unlock(&bcm_static_skb->osl_pkt_sem);
 
-			
+
 			return;
 		}
 	}
 	return osl_pktfree(osh, p, send);
 }
-#endif 
+#endif
 uint32
 osl_pci_read_config(osl_t *osh, uint offset, uint size)
 {
@@ -384,7 +384,7 @@ osl_pci_read_config(osl_t *osh, uint offset, uint size)
 
 	ASSERT((osh && (osh->magic == OS_HANDLE_MAGIC)));
 
-	
+
 	ASSERT(size == 4);
 
 	do {
@@ -404,7 +404,7 @@ osl_pci_write_config(osl_t *osh, uint offset, uint size, uint val)
 
 	ASSERT((osh && (osh->magic == OS_HANDLE_MAGIC)));
 
-	
+
 	ASSERT(size == 4);
 
 	do {
@@ -470,20 +470,20 @@ osl_malloc(osl_t *osh, uint size)
 		if ((size >= PAGE_SIZE)&&(size <= STATIC_BUF_SIZE))
 		{
 			mutex_lock(&bcm_static_buf->static_sem);
-			
+
 			for (i = 0; i < MAX_STATIC_BUF_NUM; i++)
 			{
 				if (bcm_static_buf->buf_use[i] == 0)
 					break;
 			}
-			
+
 			if (i == MAX_STATIC_BUF_NUM)
 			{
 				mutex_unlock(&bcm_static_buf->static_sem);
 				printk("all static buff in use!\n");
 				goto original;
 			}
-			
+
 			bcm_static_buf->buf_use[i] = 1;
 			mutex_unlock(&bcm_static_buf->static_sem);
 
@@ -495,7 +495,7 @@ osl_malloc(osl_t *osh, uint size)
 		}
 	}
 original:
-#endif 
+#endif
 	flags = (in_atomic()) ? GFP_ATOMIC : GFP_KERNEL;
 	if ((addr = kmalloc(size, flags)) == NULL) {
 		if (osh)
@@ -518,9 +518,9 @@ osl_mfree(osl_t *osh, void *addr, uint size)
 			<= ((unsigned char *)bcm_static_buf + STATIC_BUF_TOTAL_LEN)))
 		{
 			int buf_idx = 0;
-			
+
 			buf_idx = ((unsigned char *)addr - bcm_static_buf->buf_ptr)/STATIC_BUF_SIZE;
-			
+
 			mutex_lock(&bcm_static_buf->static_sem);
 			bcm_static_buf->buf_use[buf_idx] = 0;
 			mutex_unlock(&bcm_static_buf->static_sem);
@@ -532,7 +532,7 @@ osl_mfree(osl_t *osh, void *addr, uint size)
 			return;
 		}
 	}
-#endif 
+#endif
 	if (osh) {
 		ASSERT(osh->magic == OS_HANDLE_MAGIC);
 		osh->malloced -= size;
@@ -615,11 +615,11 @@ osl_pktdup(osl_t *osh, void *skb)
 	if ((p = skb_clone((struct sk_buff*)skb, flags)) == NULL)
 		return NULL;
 
-	
+
 	if (osh->pub.pkttag)
 		bzero((void*)((struct sk_buff *)p)->cb, OSL_PKTTAG_SZ);
 
-	
+
 	osh->pub.pktalloced++;
 	return (p);
 }

@@ -1022,7 +1022,7 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 			}
 
 			if (printk_cpu_id) {
-				
+
 				char tbuf[10], *tp;
 				unsigned tlen;
 
@@ -1034,7 +1034,7 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 			}
 
 			if (printk_pid) {
-				
+
 				char tbuf[10], *tp;
 				unsigned tlen;
 
@@ -1058,7 +1058,7 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 	 * Try to acquire and then immediately release the
 	 * console semaphore. The release will do all the
 	 * actual magic (print out buffers, wake up klogd,
-	 * etc). 
+	 * etc).
 	 *
 	 * The console_trylock_for_printk() function
 	 * will release 'logbuf_lock' regardless of whether it
@@ -1274,7 +1274,7 @@ static int __cpuinit console_cpu_notify(struct notifier_block *self,
 		console_unlock();
 		break;
 	case CPU_DYING:
-		
+
 		if (!console_trylock())
 			schedule_work(&console_cpu_notify_work);
 		else

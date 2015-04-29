@@ -172,8 +172,8 @@
 
 #define OTG_STATUS_SELECTOR		0xF000
 #define HOST_REQUEST_FLAG		0
-#define THOST_REQ_POLL			1500    
-#define OTG_TTST_SUSP			70	
+#define THOST_REQ_POLL			1500
+#define OTG_TTST_SUSP			70
 
 #define OTG_TTST_VBUS_OFF               1
 

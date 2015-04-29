@@ -113,7 +113,7 @@ struct bt_power {
 #define PR_BT_DEBUG(fmt, arg...)    printk(KERN_DEBUG   "[BT] %s: " fmt "\n" , __func__ , ## arg)
 
 enum {
-	BT_CONNECTED = 1, 
+	BT_CONNECTED = 1,
 	BT_OPEN,
 	BT_BOUND,
 	BT_LISTEN,

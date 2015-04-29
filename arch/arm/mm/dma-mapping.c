@@ -109,10 +109,10 @@ void __init init_consistent_dma_size(unsigned long size)
 {
 	unsigned long base = CONSISTENT_END - ALIGN(size, SZ_2M);
 
-	BUG_ON(consistent_pte); 
+	BUG_ON(consistent_pte);
 	BUG_ON(base < VMALLOC_END);
 
-	
+
 	if (base < consistent_base)
 		consistent_base = base;
 }
@@ -479,7 +479,7 @@ static void __free_from_contiguous(struct device *dev, struct page *page,
 
 #define nommu() 0
 
-#else	
+#else
 
 #define nommu() 1
 
@@ -490,7 +490,7 @@ static void __free_from_contiguous(struct device *dev, struct page *page,
 #define __free_from_contiguous(dev, page, size)			do { } while (0)
 #define __dma_free_remap(cpu_addr, size)			do { } while (0)
 
-#endif	
+#endif
 
 static void *__alloc_simple_buffer(struct device *dev, size_t size, gfp_t gfp,
 				   struct page **ret_page)
@@ -581,7 +581,7 @@ static int dma_mmap(struct device *dev, struct vm_area_struct *vma,
 			      pfn + vma->vm_pgoff,
 			      vma->vm_end - vma->vm_start,
 			      vma->vm_page_prot);
-#endif	
+#endif
 
 	return ret;
 }
@@ -645,7 +645,7 @@ void ___dma_single_cpu_to_dev(const void *kaddr, size_t size,
 		outer_clean_range(paddr, paddr + size);
 	}
 #endif
-	
+
 }
 EXPORT_SYMBOL(___dma_single_cpu_to_dev);
 
@@ -655,8 +655,8 @@ void ___dma_single_dev_to_cpu(const void *kaddr, size_t size,
 #ifdef CONFIG_OUTER_CACHE
 	BUG_ON(!virt_addr_valid(kaddr) || !virt_addr_valid(kaddr + size - 1));
 
-	
-	
+
+
 	if (dir != DMA_TO_DEVICE) {
 		unsigned long paddr = __pa(kaddr);
 		outer_inv_range(paddr, paddr + size);

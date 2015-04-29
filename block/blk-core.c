@@ -37,7 +37,7 @@
 #include <linux/mmc/card.h>
 #include <mach/board.h>
 #include <mach/board_htc.h>
-#endif	
+#endif
 
 #include "blk.h"
 
@@ -153,7 +153,7 @@ static void req_bio_endio(struct request *rq, struct bio *bio,
 	if (bio_integrity(bio))
 		bio_integrity_advance(bio, nbytes);
 
-	
+
 	if (bio->bi_size == 0 && !(rq->cmd_flags & REQ_FLUSH_SEQ))
 		bio_endio(bio, error);
 }
@@ -293,7 +293,7 @@ void blk_cleanup_queue(struct request_queue *q)
 {
 	spinlock_t *lock = q->queue_lock;
 
-	
+
 	mutex_lock(&q->sysfs_lock);
 	queue_flag_set_unlocked(QUEUE_FLAG_DEAD, q);
 
@@ -311,11 +311,11 @@ void blk_cleanup_queue(struct request_queue *q)
 	if (q->elevator)
 		blk_drain_queue(q, true);
 
-	
+
 	del_timer_sync(&q->backing_dev_info.laptop_mode_wb_timer);
 	blk_sync_queue(q);
 
-	
+
 	blk_put_queue(q);
 }
 EXPORT_SYMBOL(blk_cleanup_queue);
@@ -442,7 +442,7 @@ blk_init_allocated_queue(struct request_queue *q, request_fn_proc *rfn,
 	q->unprep_rq_fn		= NULL;
 	q->queue_flags		= QUEUE_FLAG_DEFAULT;
 
-	
+
 	if (lock)
 		q->queue_lock		= lock;
 
@@ -500,7 +500,7 @@ blk_alloc_request(struct request_queue *q, struct io_cq *icq,
 			mempool_free(rq, q->rq.rq_pool);
 			return NULL;
 		}
-		
+
 		if (icq)
 			get_io_context(icq->ioc);
 	}
@@ -631,7 +631,7 @@ retry:
 		rw_flags |= REQ_IO_STAT;
 	spin_unlock_irq(q->queue_lock);
 
-	
+
 	if ((rw_flags & REQ_ELVPRIV) && unlikely(et->icq_cache && !icq)) {
 		icq = ioc_create_icq(q, gfp_mask);
 		if (!icq)
@@ -705,7 +705,7 @@ struct request *blk_get_request(struct request_queue *q, int rw, gfp_t gfp_mask)
 		rq = get_request(q, rw, NULL, gfp_mask);
 	if (!rq)
 		spin_unlock_irq(q->queue_lock);
-	
+
 
 	return rq;
 }
@@ -790,7 +790,7 @@ void __blk_put_request(struct request_queue *q, struct request *req)
 
 	elv_completed_request(q, req);
 
-	
+
 	WARN_ON(req->bio != NULL);
 
 	if (req->cmd_flags & REQ_ALLOCED) {
@@ -978,7 +978,7 @@ get_rq:
 
 	req = get_request_wait(q, rw_flags, bio);
 	if (unlikely(!req)) {
-		bio_endio(bio, -ENODEV);	
+		bio_endio(bio, -ENODEV);
 		goto out_unlock;
 	}
 
@@ -1014,7 +1014,7 @@ out_unlock:
 		spin_unlock_irq(q->queue_lock);
 	}
 }
-EXPORT_SYMBOL_GPL(blk_queue_bio);	
+EXPORT_SYMBOL_GPL(blk_queue_bio);
 
 static inline void blk_partition_remap(struct bio *bio)
 {
@@ -1071,7 +1071,7 @@ static int __init fail_make_request_debugfs(void)
 
 late_initcall(fail_make_request_debugfs);
 
-#else 
+#else
 
 static inline bool should_fail_request(struct hd_struct *part,
 					unsigned int bytes)
@@ -1079,7 +1079,7 @@ static inline bool should_fail_request(struct hd_struct *part,
 	return false;
 }
 
-#endif 
+#endif
 
 static inline int bio_check_eod(struct bio *bio, unsigned int nr_sectors)
 {
@@ -1088,7 +1088,7 @@ static inline int bio_check_eod(struct bio *bio, unsigned int nr_sectors)
 	if (!nr_sectors)
 		return 0;
 
-	
+
 	maxsector = i_size_read(bio->bi_bdev->bd_inode) >> 9;
 	if (maxsector) {
 		sector_t sector = bio->bi_sector;
@@ -1122,9 +1122,9 @@ generic_make_request_checks(struct bio *bio)
 			get_mmc0_write_protection_type() && (bio->bi_rw & WRITE)) {
 			pr_info("%s: Attempt to write protected eMMC, %s block %Lu \n", __func__,
 				bdevname(bio->bi_bdev, b), (unsigned long long)bio->bi_sector);
-			
-			
-			
+
+
+
 			err = 0;
 			goto wp_end_io;
 		} else if (atomic_read(&emmc_reboot) && (bio->bi_rw & WRITE)) {
@@ -1196,7 +1196,7 @@ generic_make_request_checks(struct bio *bio)
 	}
 
 	if (blk_throtl_bio(q, bio))
-		return false;	
+		return false;
 
 	trace_block_bio_queue(q, bio);
 	return true;

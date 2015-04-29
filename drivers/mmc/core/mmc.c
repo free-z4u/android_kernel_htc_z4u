@@ -490,7 +490,7 @@ static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
 			}
 		}
 
-		
+
 		if (ext_csd[EXT_CSD_HPI_FEATURES] & 0x1) {
 			card->ext_csd.hpi = 1;
 			if (ext_csd[EXT_CSD_HPI_FEATURES] & 0x2)
@@ -1063,46 +1063,46 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	}
 
 	if (card->cid.manfid == 0x45) {
-		
+
 		if ((card->ext_csd.sectors == 31105024) && !strcmp(card->cid.prod_name, "SEM16G"))
 			card->wr_perf = 12;
-		
+
 		else if ((card->ext_csd.sectors == 62324736) && !strcmp(card->cid.prod_name, "SEM32G"))
 			card->wr_perf = 12;
-		
+
 		else if ((card->ext_csd.sectors == 122617856) && !strcmp(card->cid.prod_name, "SEM64G"))
 			card->wr_perf = 12;
-		
+
 		else if ((card->ext_csd.sectors == 30777344) && !strcmp(card->cid.prod_name, "SEM16G"))
 			card->wr_perf = 14;
-		
+
 		else if ((card->ext_csd.sectors == 61071360) && !strcmp(card->cid.prod_name, "SEM32G"))
 			card->wr_perf = 14;
 		else
 			card->wr_perf = 11;
 	} else if (card->cid.manfid == 0x15) {
-		
+
 		if ((card->ext_csd.sectors == 30777344) && !strcmp(card->cid.prod_name, "KYL00M"))
 			card->wr_perf = 11;
-		
+
 		else if ((card->ext_csd.sectors == 62521344) && !strcmp(card->cid.prod_name, "MBG8FA"))
 			card->wr_perf = 11;
-		
+
 		else if ((card->ext_csd.sectors == 30535680) && !strcmp(card->cid.prod_name, "MAG2GA"))
 			card->wr_perf = 14;
-		
+
 		else if (card->ext_csd.sectors == 122142720)
 			card->wr_perf = 14;
 		else
 			card->wr_perf = 11;
 	} else if (card->cid.manfid == 0x90) {
-		
+
 		if ((card->ext_csd.sectors == 30785536) && !strncmp(card->cid.prod_name, "HAG4d", 5))
 			card->wr_perf = 12;
-		
+
 		else if ((card->ext_csd.sectors == 61079552) && !strncmp(card->cid.prod_name, "HAG4d", 5))
 			card->wr_perf = 12;
-		
+
 		else if ((card->ext_csd.sectors == 122159104) && !strncmp(card->cid.prod_name, "HAG4d", 5))
 			card->wr_perf = 12;
 		else
@@ -1671,7 +1671,7 @@ static int mmc_awake(struct mmc_host *host)
 			for (; idx < ARRAY_SIZE(bus_widths); idx++) {
 				bus_width = bus_widths[idx];
 				if (bus_width == MMC_BUS_WIDTH_1)
-					ddr = 0; 
+					ddr = 0;
 				err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 						EXT_CSD_BUS_WIDTH,
 						ext_csd_bits[idx][0],

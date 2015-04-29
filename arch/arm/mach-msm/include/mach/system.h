@@ -22,7 +22,7 @@ void arch_reset(char mode, const char *cmd);
 #else
 static inline void arch_reset(char mode, const char *cmd)
 {
-	for (;;) ;  
+	for (;;) ;
 }
 #endif
 

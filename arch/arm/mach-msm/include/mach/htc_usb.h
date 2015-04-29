@@ -1022,13 +1022,13 @@ static char *usb_functions_all[] = {
 static struct android_usb_product usb_products[] = {
 #ifdef CONFIG_SENSE_4_PLUS
 	{
-		.product_id = 0x0f90, 
+		.product_id = 0x0f90,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_adb),
 		.functions	= usb_functions_mtp_ums_adb,
 	},
 #endif
 	{
-		.product_id = 0x0c02, 
+		.product_id = 0x0c02,
 		.num_functions	= ARRAY_SIZE(usb_functions_adb),
 		.functions	= usb_functions_adb,
 	},
@@ -1418,127 +1418,127 @@ static struct android_usb_product usb_products[] = {
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_mtp_ums),
 		.functions	= usb_functions_rndis_mtp_ums,
 	},
-	
+
 	{
 		.product_id	= 0x0f5f,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_mtp_adb_ums_acm),
 		.functions	= usb_functions_rndis_mtp_adb_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f60,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_mtp_ums_acm),
 		.functions	= usb_functions_rndis_mtp_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f61,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_adb_ums_acm),
 		.functions	= usb_functions_rndis_adb_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f62,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_ums_acm),
 		.functions	= usb_functions_rndis_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f63,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_adb_ums_acm),
 		.functions	= usb_functions_mtp_adb_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f64,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_acm),
 		.functions	= usb_functions_mtp_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f65,
 		.num_functions	= ARRAY_SIZE(usb_functions_ums_acm),
 		.functions	= usb_functions_ums_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f39,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_mtp_adb_ums_modem_acm),
 		.functions	= usb_functions_rndis_mtp_adb_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f3e,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_mtp_ums_modem_acm),
 		.functions	= usb_functions_rndis_mtp_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f43,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_adb_ums_modem_acm),
 		.functions	= usb_functions_mtp_adb_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f48,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_modem_acm),
 		.functions	= usb_functions_mtp_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f4d,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_adb_ums_modem_acm),
 		.functions	= usb_functions_rndis_adb_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f52,
 		.num_functions	= ARRAY_SIZE(usb_functions_rndis_ums_modem_acm),
 		.functions	= usb_functions_rndis_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f57,
 		.num_functions	= ARRAY_SIZE(usb_functions_adb_ums_modem_acm),
 		.functions	= usb_functions_adb_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f5c,
 		.num_functions	= ARRAY_SIZE(usb_functions_ums_modem_acm),
 		.functions	= usb_functions_ums_modem_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f2f,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_adb_ums_modem_serial_acm),
 		.functions	= usb_functions_mtp_adb_ums_modem_serial_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f34,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_modem_serial_acm),
 		.functions	= usb_functions_mtp_ums_modem_serial_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f2c,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_projector_acm),
 		.functions	= usb_functions_mtp_ums_projector_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f2b,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_adb_projector_acm),
 		.functions	= usb_functions_mtp_ums_adb_projector_acm,
 	},
-	
+
 	{
 		.product_id	= 0x0f29,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_adb_acm_rmnet),
 		.functions	= usb_functions_mtp_ums_adb_acm_rmnet,
 	},
-	
+
 	{
 		.product_id	= 0x0f2a,
 		.num_functions	= ARRAY_SIZE(usb_functions_mtp_ums_acm_rmnet),
@@ -1981,100 +1981,100 @@ static struct android_usb_product usb_products[] = {
 #ifdef CONFIG_USB_GADGET_VERIZON_PRODUCT_ID
 #ifdef CONFIG_MACH_VIGOR
 static int vigor_usb_product_id_match_array[] = {
-	0x0c93, 0x0e05, 
-	0x0ca8, 0x0e06, 
-	0x0fda, 0x0e07, 
-	0x0fdb, 0x0e08, 
-	0x0c07, 0x0e0b, 
-	0x0c08, 0x0e0c, 
-	0x0ff8, 0x0e0d, 
-	0x0fd5, 0x0e0e, 
-	0x0fd4, 0x0e0f, 
-	0x0ff9, 0x0e73, 
-	0x0fa4, 0x0e8f, 
-	0x0fa5, 0x0e90, 
-	0x0f99, 0x0e91, 
-	0x0f9a, 0x0e92, 
-	0x0fc0, 0x0e93, 
-	0x0fbf, 0x0e94, 
+	0x0c93, 0x0e05,
+	0x0ca8, 0x0e06,
+	0x0fda, 0x0e07,
+	0x0fdb, 0x0e08,
+	0x0c07, 0x0e0b,
+	0x0c08, 0x0e0c,
+	0x0ff8, 0x0e0d,
+	0x0fd5, 0x0e0e,
+	0x0fd4, 0x0e0f,
+	0x0ff9, 0x0e73,
+	0x0fa4, 0x0e8f,
+	0x0fa5, 0x0e90,
+	0x0f99, 0x0e91,
+	0x0f9a, 0x0e92,
+	0x0fc0, 0x0e93,
+	0x0fbf, 0x0e94,
 	-1,
 };
 
 static int vigor_usb_product_id_rndis[] = {
 	0x0e09, 0x0e0a,
 };
-#endif 
+#endif
 
 #ifdef CONFIG_MACH_VIVOW
 static int vivow_usb_product_id_match_array[] = {
-	0x0c93, 0x0e10, 
-	0x0ca8, 0x0e11, 
-	0x0fda, 0x0e12, 
-	0x0fdb, 0x0e13, 
-	0x0c07, 0x0e16, 
-	0x0c08, 0x0e17, 
-	0x0ff8, 0x0e18, 
-	0x0ff9, 0x0e74, 
-	0x0fa4, 0x0e87, 
-	0x0fa5, 0x0e88, 
-	0x0f99, 0x0e89, 
-	0x0f9a, 0x0e8a, 
+	0x0c93, 0x0e10,
+	0x0ca8, 0x0e11,
+	0x0fda, 0x0e12,
+	0x0fdb, 0x0e13,
+	0x0c07, 0x0e16,
+	0x0c08, 0x0e17,
+	0x0ff8, 0x0e18,
+	0x0ff9, 0x0e74,
+	0x0fa4, 0x0e87,
+	0x0fa5, 0x0e88,
+	0x0f99, 0x0e89,
+	0x0f9a, 0x0e8a,
 	-1,
 };
 
 static int vivow_usb_product_id_rndis[] = {
 	0x0e14, 0x0e15,
 };
-#endif 
+#endif
 
 #ifdef CONFIG_MACH_MECHA
 static int mecha_usb_product_id_match_array[] = {
-	0x0c93, 0x0e1b, 
-	0x0ca8, 0x0e1c, 
-	0x0fda, 0x0e1d, 
-	0x0fdb, 0x0e1e, 
-	0x0c07, 0x0e21, 
-	0x0c08, 0x0e22, 
-	0x0ff8, 0x0e23, 
-	0x0fd5, 0x0e24, 
-	0x0fd4, 0x0e25, 
-	0x0ff9, 0x0e75, 
-	0x0fa4, 0x0e95, 
-	0x0fa5, 0x0e96, 
-	0x0f99, 0x0e97, 
-	0x0f9a, 0x0e98, 
-	0x0fc0, 0x0e99, 
-	0x0fbf, 0x0e9a, 
+	0x0c93, 0x0e1b,
+	0x0ca8, 0x0e1c,
+	0x0fda, 0x0e1d,
+	0x0fdb, 0x0e1e,
+	0x0c07, 0x0e21,
+	0x0c08, 0x0e22,
+	0x0ff8, 0x0e23,
+	0x0fd5, 0x0e24,
+	0x0fd4, 0x0e25,
+	0x0ff9, 0x0e75,
+	0x0fa4, 0x0e95,
+	0x0fa5, 0x0e96,
+	0x0f99, 0x0e97,
+	0x0f9a, 0x0e98,
+	0x0fc0, 0x0e99,
+	0x0fbf, 0x0e9a,
 	-1,
 };
 
 static int mecha_usb_product_id_rndis[] = {
 	0x0e1f, 0x0e20,
 };
-#endif 
+#endif
 
 #ifdef CONFIG_MACH_BLISSC
 static int blissc_usb_product_id_match_array[] = {
-	0x0c93, 0x0e26, 
-	0x0ca8, 0x0e27, 
-	0x0fda, 0x0e28, 
-	0x0fdb, 0x0e29, 
-	0x0c07, 0x0e2c, 
-	0x0c08, 0x0e2d, 
-	0x0ff8, 0x0e2e, 
-	0x0ff9, 0x0ccb, 
-	0x0ffc, 0x0e7d, 
-	0x0fa4, 0x0e9b, 
-	0x0fa5, 0x0e9c, 
-	0x0f99, 0x0e9d, 
-	0x0f9a, 0x0e9e, 
+	0x0c93, 0x0e26,
+	0x0ca8, 0x0e27,
+	0x0fda, 0x0e28,
+	0x0fdb, 0x0e29,
+	0x0c07, 0x0e2c,
+	0x0c08, 0x0e2d,
+	0x0ff8, 0x0e2e,
+	0x0ff9, 0x0ccb,
+	0x0ffc, 0x0e7d,
+	0x0fa4, 0x0e9b,
+	0x0fa5, 0x0e9c,
+	0x0f99, 0x0e9d,
+	0x0f9a, 0x0e9e,
 	-1,
 };
 
 static int blissc_usb_product_id_rndis[] = {
 	0x0e2a, 0x0e2b,
 };
-#endif 
-#endif 
+#endif
+#endif
 
 #endif
