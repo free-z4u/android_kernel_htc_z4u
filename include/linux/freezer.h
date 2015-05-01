@@ -211,7 +211,7 @@ static inline void set_freezable(void) {}
 #define wait_event_freezable_exclusive(wq, condition)			\
 		wait_event_interruptible_exclusive(wq, condition)
 
-#define wait_event_freezekillable(wq, condition)		\
+#define wait_event_freezekillable(wq, condition)			\
 		wait_event_killable(wq, condition)
 
 #endif /* !CONFIG_FREEZER */

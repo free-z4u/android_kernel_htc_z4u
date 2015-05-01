@@ -406,6 +406,7 @@ struct evergreen_mc_save {
 	u32 vga_hdp_control;
 	u32 crtc_control[6];
 };
+
 void evergreen_pcie_gart_tlb_flush(struct radeon_device *rdev);
 int evergreen_init(struct radeon_device *rdev);
 void evergreen_fini(struct radeon_device *rdev);
