@@ -65,7 +65,7 @@ void __weak panic_smp_self_stop(void)
 }
 
 static void dump_mem(const char *str, const char *log_lvl,
-                     unsigned int bottom, unsigned int size)
+	     unsigned int bottom, unsigned int size)
 {
         unsigned int p;
         int i;
@@ -78,20 +78,20 @@ static void dump_mem(const char *str, const char *log_lvl,
         printk("%s%s(0x%08x to 0x%08x)\n", log_lvl, str, bottom, top);
 
         for (p = bottom & ~31; p < top; ) {
-                printk("%s%04x: ", log_lvl, p & 0xffff);
+	printk("%s%04x: ", log_lvl, p & 0xffff);
 
-                for (i = 0; i < 4; i++, p += 4) {
-                        unsigned int val;
+	for (i = 0; i < 4; i++, p += 4) {
+	        unsigned int val;
 
 			val = *(unsigned int*)((void __iomem *)p);
 
-                        if (p < bottom || p >= top)
-                                printk("         ");
-                        else {
-                                printk("%08x ", val);
-                        }
-                }
-                printk("\n");
+	        if (p < bottom || p >= top)
+	                printk("         ");
+	        else {
+	                printk("%08x ", val);
+	        }
+	}
+	printk("\n");
         }
 
 out:
@@ -127,7 +127,14 @@ void panic(const char *fmt, ...)
 
 	kmsg_dump(KMSG_DUMP_PANIC);
 
+	/*
+	 * Note smp_send_stop is the usual smp shutdown function, which
+	 * unfortunately means it may not be hardened to work in a panic
+	 * situation.
+	 */
 	smp_send_stop();
+
+	kmsg_dump(KMSG_DUMP_PANIC);
 
 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
 

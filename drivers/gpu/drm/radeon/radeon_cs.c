@@ -254,22 +254,23 @@ int radeon_cs_parser_init(struct radeon_cs_parser *p, void *data)
 	}
 
 	/* these are KMS only */
-	if ((p->cs_flags & RADEON_CS_USE_VM) &&
-	    !p->rdev->vm_manager.enabled) {
-		DRM_ERROR("VM not active on asic!\n");
-		return -EINVAL;
+	if (p->rdev) {
+		if ((p->cs_flags & RADEON_CS_USE_VM) &&
+		    !p->rdev->vm_manager.enabled) {
+			DRM_ERROR("VM not active on asic!\n");
+			return -EINVAL;
+		}
+
+		/* we only support VM on SI+ */
+		if ((p->rdev->family >= CHIP_TAHITI) &&
+		    ((p->cs_flags & RADEON_CS_USE_VM) == 0)) {
+			DRM_ERROR("VM required on SI+!\n");
+			return -EINVAL;
+		}
+
+		if (radeon_cs_get_ring(p, ring, priority))
+			return -EINVAL;
 	}
-
-	/* we only support VM on SI+ */
-	if ((p->rdev->family >= CHIP_TAHITI) &&
-	    ((p->cs_flags & RADEON_CS_USE_VM) == 0)) {
-		DRM_ERROR("VM required on SI+!\n");
-		return -EINVAL;
-	}
-
-	if (radeon_cs_get_ring(p, ring, priority))
-		return -EINVAL;
-
 
 	/* deal with non-vm */
 	if ((p->chunk_ib_idx != -1) &&

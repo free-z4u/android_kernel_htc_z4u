@@ -692,6 +692,25 @@ EXPORT_SYMBOL_GPL(usb_unpoison_urb);
  * particular, when a driver calls this routine, it must insure that the
  * completion handler cannot deallocate the URB.
  */
+void usb_block_urb(struct urb *urb)
+{
+	if (!urb)
+		return;
+
+	atomic_inc(&urb->reject);
+}
+EXPORT_SYMBOL_GPL(usb_block_urb);
+
+/**
+ * usb_kill_anchored_urbs - cancel transfer requests en masse
+ * @anchor: anchor the requests are bound to
+ *
+ * this allows all outstanding URBs to be killed starting
+ * from the back of the queue
+ *
+ * This routine should not be called by a driver after its disconnect
+ * method has returned.
+ */
 void usb_kill_anchored_urbs(struct usb_anchor *anchor)
 {
 	struct urb *victim;

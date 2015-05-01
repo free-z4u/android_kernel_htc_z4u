@@ -966,6 +966,9 @@ void ath_hw_pll_work(struct work_struct *work)
 	 * beaconing had started in interfaces that
 	 * uses beacons.
 	 */
+	if (!(sc->sc_flags & SC_OP_BEACONS))
+		return;
+
 	if (AR_SREV_9485(sc->sc_ah)) {
 
 		ath9k_ps_wakeup(sc);
@@ -1423,15 +1426,6 @@ static int ath9k_add_interface(struct ieee80211_hw *hw,
 			ret = -ENOBUFS;
 			goto out;
 		}
-	}
-
-	if ((ah->opmode == NL80211_IFTYPE_ADHOC) ||
-	    ((vif->type == NL80211_IFTYPE_ADHOC) &&
-	     sc->nvifs > 0)) {
-		ath_err(common, "Cannot create ADHOC interface when other"
-			" interfaces already exist.\n");
-		ret = -EINVAL;
-		goto out;
 	}
 
 	ath_dbg(common, CONFIG, "Attach a VIF of type: %d\n", vif->type);

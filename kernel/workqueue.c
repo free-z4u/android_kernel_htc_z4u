@@ -961,8 +961,13 @@ static void worker_enter_idle(struct worker *worker)
 	} else
 		wake_up_all(&gcwq->trustee_wait);
 
-
-	WARN_ON_ONCE(gcwq->nr_workers == gcwq->nr_idle &&
+	/*
+	 * Sanity check nr_running.  Because trustee releases gcwq->lock
+	 * between setting %WORKER_ROGUE and zapping nr_running, the
+	 * warning may trigger spuriously.  Check iff trustee is idle.
+	 */
+	WARN_ON_ONCE(gcwq->trustee_state == TRUSTEE_DONE &&
+		     gcwq->nr_workers == gcwq->nr_idle &&
 		     atomic_read(get_gcwq_nr_running(gcwq->cpu)));
 }
 
@@ -2463,12 +2468,12 @@ static int __devinit workqueue_cpu_callback(struct notifier_block *nfb,
 		break;
 
 	case CPU_DOWN_FAILED:
-                if(!gcwq->first_idle){
-                        printk(KERN_ERR "[CPUHOTPLUG] CPU_DOWN_FAILED, gcwq->flags:%08x\n",
-                                                                       gcwq->flags);
+	if(!gcwq->first_idle){
+	        printk(KERN_ERR "[CPUHOTPLUG] CPU_DOWN_FAILED, gcwq->flags:%08x\n",
+	                                                       gcwq->flags);
 
 			show_mem(SHOW_MEM_FILTER_NODES);
-                       	break;
+	       	break;
 		}
 	case CPU_ONLINE:
 		gcwq->flags &= ~GCWQ_DISASSOCIATED;
