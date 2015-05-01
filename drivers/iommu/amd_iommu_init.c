@@ -1002,10 +1002,9 @@ static void __init free_iommu_all(void)
 }
 
 /*
- * Family15h Model 10h-1fh erratum 746 (IOMMU Logging May Stall Translations)
- * Workaround:
- *     BIOS should disable L2B micellaneous clock gating by setting
- *     L2_L2B_CK_GATE_CONTROL[CKGateL2BMiscDisable](D0F2xF4_x90[2]) = 1b
+ * This function clues the initialization function for one IOMMU
+ * together and also allocates the command buffer and programs the
+ * hardware. It does NOT enable the IOMMU. This is done afterwards.
  */
 static int __init init_iommu_one(struct amd_iommu *iommu, struct ivhd_header *h)
 {

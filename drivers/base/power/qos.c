@@ -352,9 +352,6 @@ EXPORT_SYMBOL_GPL(dev_pm_qos_remove_request);
  *
  * Will register the notifier into a notification chain that gets called
  * upon changes to the target value for the device.
- *
- * If the device's constraints object doesn't exist when this routine is called,
- * it will be created (or error code will be returned if that fails).
  */
 int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier)
 {

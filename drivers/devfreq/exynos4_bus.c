@@ -73,11 +73,6 @@ enum busclk_level_idx {
 #define EX4210_LV_NUM	(LV_2 + 1)
 #define EX4x12_LV_NUM	(LV_4 + 1)
 
-/**
- * struct busfreq_opp_info - opp information for bus
- * @rate:	Frequency in hertz
- * @volt:	Voltage in microvolts corresponding to this OPP
- */
 struct busfreq_data {
 	enum exynos4_busf_type type;
 	struct device *dev;

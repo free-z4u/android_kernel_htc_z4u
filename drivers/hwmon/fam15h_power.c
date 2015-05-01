@@ -31,7 +31,7 @@ MODULE_DESCRIPTION("AMD Family 15h CPU processor power monitor");
 MODULE_AUTHOR("Andreas Herrmann <andreas.herrmann3@amd.com>");
 MODULE_LICENSE("GPL");
 
-/* Family 16h Northbridge's function 4 PCI ID */
+/* D18F3 */
 #define REG_NORTHBRIDGE_CAP		0xe8
 
 /* D18F4 */

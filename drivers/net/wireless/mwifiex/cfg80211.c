@@ -544,7 +544,7 @@ mwifiex_dump_station_info(struct mwifiex_private *priv,
 
 	/*
 	 * Bit 0 in tx_htinfo indicates that current Tx rate is 11n rate. Valid
-	 * MCS index values for us are 0 to 15.
+	 * MCS index values for us are 0 to 7.
 	 */
 	if ((priv->tx_htinfo & BIT(0)) && (priv->tx_rate < 8)) {
 		sinfo->txrate.mcs = priv->tx_rate;

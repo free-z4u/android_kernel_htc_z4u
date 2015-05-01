@@ -5,24 +5,7 @@
 #include <asm/setup.h>
 #include <asm/bios_ebda.h>
 
-/*
- * The BIOS places the EBDA/XBDA at the top of conventional
- * memory, and usually decreases the reported amount of
- * conventional memory (int 0x12) too. This also contains a
- * workaround for Dell systems that neglect to reserve EBDA.
- * The same workaround also avoids a problem with the AMD768MPX
- * chipset: reserve a page before VGA to prevent PCI prefetch
- * into it (errata #56). Usually the page is reserved anyways,
- * unless you have no PS/2 mouse plugged in.
- *
- * This functions is deliberately very conservative.  Losing
- * memory in the bottom megabyte is rarely a problem, as long
- * as we have enough memory to install the trampoline.  Using
- * memory that is in use by the BIOS or by some DMA device
- * the BIOS didn't shut down *is* a big problem.
- */
-
-#define BIOS_LOWMEM_KILOBYTES	0x413
+#define BIOS_LOWMEM_KILOBYTES 0x413
 
 /*
  * The BIOS places the EBDA/XBDA at the top of conventional

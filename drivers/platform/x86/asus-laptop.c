@@ -860,10 +860,8 @@ static ssize_t show_infos(struct device *dev,
 	/*
 	 * The HWRS method return informations about the hardware.
 	 * 0x80 bit is for WLAN, 0x100 for Bluetooth.
-	 * 0x40 for WWAN, 0x10 for WIMAX.
 	 * The significance of others is yet to be found.
-	 * We don't currently use this for device detection, and it
-	 * takes several seconds to run on some systems.
+	 * If we don't find the method, we assume the device are present.
 	 */
 	rv = acpi_evaluate_integer(asus->handle, "HRWS", NULL, &temp);
 	if (!ACPI_FAILURE(rv))

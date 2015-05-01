@@ -301,14 +301,8 @@ extern const char gfar_driver_version[];
 #define TCTRL_TFCPAUSE		0x00000008
 #define TCTRL_TXSCHED_MASK	0x00000006
 #define TCTRL_TXSCHED_INIT	0x00000000
-/* priority scheduling */
 #define TCTRL_TXSCHED_PRIO	0x00000002
-/* weighted round-robin scheduling (WRRS) */
 #define TCTRL_TXSCHED_WRRS	0x00000004
-/* default WRRS weight and policy setting,
- * tailored to the tr03wt and tr47wt registers:
- * equal weight for all Tx Qs, measured in 64byte units
- */
 #define TCTRL_INIT_CSUM		(TCTRL_TUCSEN | TCTRL_IPCSEN)
 
 #define IEVENT_INIT_CLEAR	0xffffffff

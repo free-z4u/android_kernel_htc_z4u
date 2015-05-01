@@ -353,7 +353,6 @@ static int __devinit pcistub_init_device(struct pci_dev *dev)
 	if (err)
 		goto config_release;
 
-	/* We need the device active to save the state. */
 	dev_dbg(&dev->dev, "reseting (FLR, D3, etc) the device\n");
 	__pci_reset_function_locked(dev);
 

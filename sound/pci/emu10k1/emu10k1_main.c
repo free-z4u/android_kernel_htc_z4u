@@ -1416,8 +1416,8 @@ static struct snd_emu_chip_details emu_chip_details[] = {
 	 .ca0108_chip = 1,
 	 .spk71 = 1,
 	 .emu_model = EMU_MODEL_EMU1010B}, /* EMU 1010 new revision */
-	/* Tested by Maxim Kachur <mcdebugger@duganet.ru> 17th Oct 2012. */
-	/* This is MAEM8986, 0202 is MAEM8980 */
+	/* Tested by James@superbug.co.uk 8th July 2005. */
+	/* This is MAEM8810, 0202 is MAEM8820 */
 	{.vendor = 0x1102, .device = 0x0004, .subsystem = 0x40011102,
 	 .driver = "Audigy2", .name = "E-mu 1010 [MAEM8810]",
 	 .id = "EMU1010",

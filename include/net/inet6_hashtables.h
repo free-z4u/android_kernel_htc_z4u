@@ -37,8 +37,7 @@ static inline unsigned int inet6_ehashfn(struct net *net,
 
 	return jhash_3words((__force u32)laddr->s6_addr32[3],
 			    (__force u32)faddr->s6_addr32[3],
-			    ports,
-			    inet_ehash_secret + net_hash_mix(net));
+			    ports, inet_ehash_secret + net_hash_mix(net));
 }
 
 static inline int inet6_sk_ehashfn(const struct sock *sk)

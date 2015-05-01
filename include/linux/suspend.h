@@ -405,7 +405,7 @@ static inline bool pm_wakeup_pending(void) { return false; }
 static inline void lock_system_sleep(void) {}
 static inline void unlock_system_sleep(void) {}
 
-#endif /* !CONFIG_PM_AUTOSLEEP */
+#endif /* !CONFIG_PM_SLEEP */
 
 #ifdef CONFIG_ARCH_SAVE_PAGE_KEYS
 /*

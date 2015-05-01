@@ -6,18 +6,6 @@
  *
  * This file is released under GPL v2.
  *
- * **** WARNING ****
- *
- * This driver never worked properly and unfortunately data corruption is
- * relatively common.  There isn't anyone working on the driver and there's
- * no support from the vendor.  Do not use this driver in any production
- * environment.
- *
- * http://thread.gmane.org/gmane.linux.debian.devel.bugs.rc/378525/focus=54491
- * https://bugzilla.kernel.org/show_bug.cgi?id=60565
- *
- * *****************
- *
  * This controller is eccentric and easily locks up if something isn't
  * right.  Documentation is available at initio's website but it only
  * documents registers (not programming model).

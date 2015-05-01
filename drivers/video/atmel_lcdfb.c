@@ -422,7 +422,6 @@ static int atmel_lcdfb_check_var(struct fb_var_screeninfo *var,
 			= var->bits_per_pixel;
 		break;
 	case 16:
-		/* Older SOCs use IBGR:555 rather than BGR:565. */
 		if (sinfo->lcd_wiring_mode == ATMEL_LCDC_WIRING_RGB) {
 			/* RGB:565 mode */
 			var->red.offset = 11;

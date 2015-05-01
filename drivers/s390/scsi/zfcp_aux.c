@@ -3,7 +3,7 @@
  *
  * Module interface and handling of zfcp data structures.
  *
- * Copyright IBM Corp. 2002, 2013
+ * Copyright IBM Corporation 2002, 2010
  */
 
 /*
@@ -23,7 +23,6 @@
  *            Christof Schmitt
  *            Martin Petermann
  *            Sven Schuetz
- *            Steffen Maier
  */
 
 #define KMSG_COMPONENT "zfcp"

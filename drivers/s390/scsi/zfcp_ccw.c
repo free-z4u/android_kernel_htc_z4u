@@ -39,12 +39,6 @@ void zfcp_ccw_adapter_put(struct zfcp_adapter *adapter)
 	spin_unlock_irqrestore(&zfcp_ccw_adapter_ref_lock, flags);
 }
 
-/**
- * zfcp_ccw_activate - activate adapter and wait for it to finish
- * @cdev: pointer to belonging ccw device
- * @clear: Status flags to clear.
- * @tag: s390dbf trace record tag
- */
 static int zfcp_ccw_activate(struct ccw_device *cdev)
 
 {

@@ -103,10 +103,10 @@ int cpuidle_play_dead(void)
 }
 
 /**
- * cpuidle_enter_state - enter the state and update stats
- * @dev: cpuidle device for this cpu
- * @drv: cpuidle driver for this cpu
- * @next_state: index into drv->states of the state to enter
+ * cpuidle_idle_call - the main idle loop
+ *
+ * NOTE: no locks or semaphores should be used here
+ * return non-zero on failure
  */
 int cpuidle_idle_call(void)
 {

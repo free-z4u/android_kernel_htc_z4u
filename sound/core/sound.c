@@ -99,10 +99,6 @@ static void snd_request_other(int minor)
  *
  * Checks that a minor device with the specified type is registered, and returns
  * its user data pointer.
- *
- * This function increments the reference counter of the card instance
- * if an associated instance with the given minor number and type is found.
- * The caller must call snd_card_unref() appropriately later.
  */
 void *snd_lookup_minor_data(unsigned int minor, int type)
 {

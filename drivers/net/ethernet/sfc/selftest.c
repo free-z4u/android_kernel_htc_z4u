@@ -120,13 +120,6 @@ static int efx_test_nvram(struct efx_nic *efx, struct efx_self_tests *tests)
 	return rc;
 }
 
-/**************************************************************************
- *
- * Interrupt and event queue testing
- *
- **************************************************************************/
-
-/* Test generation and receipt of interrupts */
 static int efx_test_chip(struct efx_nic *efx, struct efx_self_tests *tests)
 {
 	int rc = 0;
