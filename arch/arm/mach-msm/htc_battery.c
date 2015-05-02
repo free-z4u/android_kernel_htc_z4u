@@ -22,7 +22,9 @@
 #include <linux/platform_device.h>
 #include <linux/debugfs.h>
 #include <linux/wakelock.h>
+#ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
+#endif
 #include <asm/gpio.h>
 #include <mach/msm_rpcrouter.h>
 #include <mach/board.h>
@@ -185,7 +187,9 @@ static int chg_limit_active_mask;
 
 static int suspend_highfreq_check_reason;
 static int htc_batt_phone_call;
+#ifdef CONFIG_HAS_EARLYSUSPEND
 static int is_phone_call_set;
+#endif
 static unsigned int phone_call_stat;
 
 static int test_power_monitor;
@@ -2122,7 +2126,7 @@ int htc_battery_core_update(enum power_supplies_type supply)
 }
 #endif
 
-#if CONFIG_HAS_EARLYSUSPEND
+#ifdef CONFIG_HAS_EARLYSUSPEND
 static void htc_battery_early_suspend(struct early_suspend * h)
 {
 	int rc;
@@ -2529,7 +2533,7 @@ static int htc_battery_core_probe(struct platform_device *pdev)
 
 	if (htc_batt_info.charger == SWITCH_CHARGER_TPS65200)
 		tps_register_notifier(&tps_int_notifier);
-#if CONFIG_HAS_EARLYSUSPEND
+#ifdef CONFIG_HAS_EARLYSUSPEND
 	register_early_suspend(&htc_battery_suspend);
 #endif
 

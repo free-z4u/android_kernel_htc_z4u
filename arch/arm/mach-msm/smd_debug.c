@@ -18,7 +18,9 @@
 #include <linux/debugfs.h>
 #include <linux/list.h>
 #include <linux/io.h>
+#ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
+#endif
 #include <linux/rtc.h>
 #include <linux/suspend.h>
 #include <linux/ctype.h>
@@ -166,6 +168,7 @@ static struct notifier_block sleep_stat_notif_block = {
 	.notifier_call = sleep_stat_suspend_notifier,
 };
 
+#ifdef CONFIG_HAS_EARLYSUSPEND
 static void sleep_stat_early_suspend(struct early_suspend *handler)
 {
 	print_sleep_stat(F_SCREEN_OFF);
@@ -180,6 +183,7 @@ static struct early_suspend sleep_stat_screen_hdl = {
 	.suspend = sleep_stat_early_suspend,
 	.resume = sleep_stat_late_resume,
 };
+#endif
 
 #if defined(CONFIG_DEBUG_FS)
 
@@ -1066,7 +1070,9 @@ static int __init smd_debugfs_init(void)
 #if CONFIG_SMD_OFFSET_TCXO_STAT
 	sleep_stat = get_smem_sleep_stat();
 	negate_client_stat = get_smem_negate_client_stat();
+#ifdef CONFIG_HAS_EARLYSUSPEND
 	register_early_suspend(&sleep_stat_screen_hdl);
+#endif
 	register_pm_notifier(&sleep_stat_notif_block);
 
 	mutex_init(&mem_sleep_stat_lock);

@@ -65,12 +65,6 @@ static struct kernel_param_ops param_ops_str = {
 
 module_param_cb(debug_mask, &param_ops_str, &debug_mask, S_IWUSR | S_IRUGO);
 
-#ifdef CONFIG_HTC_PNPMGR
-static int legacy_mode = 1;
-module_param_cb(legacy_mode, &param_ops_str, &legacy_mode, S_IWUSR | S_IRUGO);
-extern struct kobject *cpufreq_kobj;
-#endif
-
 static unsigned int get_perflock_speed(void);
 static unsigned int get_cpufreq_ceiling_speed(void);
 static void print_active_locks(void);
@@ -90,6 +84,7 @@ if(perflock && is_perf_lock_active(perflock))	\
 	perf_unlock(perflock);			\
 }						\
 
+#ifdef CONFIG_HAS_EARLYSUSPEND
 static void perflock_early_suspend(struct early_suspend *handler)
 {
 
@@ -109,6 +104,7 @@ static struct early_suspend perflock_power_suspend = {
 	.resume = perflock_late_resume,
 	.level = EARLY_SUSPEND_LEVEL_DISABLE_FB + 1,
 };
+#endif
 
 #if defined(CONFIG_HTC_ONMODE_CHARGING) && \
 	(defined(CONFIG_ARCH_MSM7225) || \
@@ -126,7 +122,10 @@ void __init perflock_screen_policy_init(struct perflock_screen_policy *policy)
 	if (!policy)
 		return;
 
+#ifdef CONFIG_HAS_EARLYSUSPEND
 	register_early_suspend(&perflock_power_suspend);
+#endif
+
 #if defined(CONFIG_HTC_ONMODE_CHARGING) && \
 	(defined(CONFIG_ARCH_MSM7225) || \
 	defined(CONFIG_ARCH_MSM7227) || \
@@ -189,10 +188,6 @@ int perflock_override(const struct cpufreq_policy *policy, const unsigned int ne
 	unsigned int policy_min;
 	unsigned int policy_max;
 
-#ifdef CONFIG_HTC_PNPMGR
-	if (!legacy_mode)
-		return 0;
-#endif
 	if (policy != NULL) {
 
 		if (strncmp("ondemand", policy->governor->name, 8) != 0)
@@ -437,15 +432,6 @@ void perf_lock(struct perf_lock *lock)
 		list_add(&lock->link, &active_cpufreq_ceiling_locks);
 	spin_unlock_irqrestore(&list_lock, irqflags);
 
-#ifdef CONFIG_HTC_PNPMGR
-	if (!legacy_mode) {
-		if (lock->type == TYPE_PERF_LOCK)
-			sysfs_notify(cpufreq_kobj, NULL, "perflock_scaling_min");
-		else if (lock->type == TYPE_CPUFREQ_CEILING)
-			sysfs_notify(cpufreq_kobj, NULL, "perflock_scaling_max");
-		return;
-	}
-#endif
 	for_each_online_cpu(cpu) {
 		queue_work_on(cpu, perflock_setrate_workqueue, &do_setrate_work);
 	}
@@ -491,14 +477,6 @@ void perf_unlock(struct perf_lock *lock)
 	else if (lock->type == TYPE_CPUFREQ_CEILING)
 		list_add(&lock->link, &inactive_cpufreq_ceiling_locks);
 	spin_unlock_irqrestore(&list_lock, irqflags);
-#ifdef CONFIG_HTC_PNPMGR
-	if (!legacy_mode) {
-		if (lock->type == TYPE_PERF_LOCK)
-			sysfs_notify(cpufreq_kobj, NULL, "perflock_scaling_min");
-		else if (lock->type == TYPE_CPUFREQ_CEILING)
-			sysfs_notify(cpufreq_kobj, NULL, "perflock_scaling_max");
-	}
-#endif
 }
 EXPORT_SYMBOL(perf_unlock);
 
@@ -772,38 +750,3 @@ static int init_perf_lock(void)
 }
 
 late_initcall(init_perf_lock);
-
-
-#ifdef CONFIG_HTC_PNPMGR
-ssize_t
-perflock_scaling_max_show(struct kobject *kobj, struct kobj_attribute *attr,
-		char *buf)
-{
-	int ret = 0;
-
-	ret = sprintf(buf, "%u", get_cpufreq_ceiling_speed() / 1000);
-	return ret;
-}
-ssize_t
-perflock_scaling_max_store(struct kobject *kobj, struct kobj_attribute *attr,
-		const char *buf, size_t n)
-{
-	return 0;
-}
-ssize_t
-perflock_scaling_min_show(struct kobject *kobj, struct kobj_attribute *attr,
-		char *buf)
-{
-	int ret = 0;
-
-	ret = sprintf(buf, "%u", get_perflock_speed() / 1000);
-	return ret;
-}
-
-ssize_t
-perflock_scaling_min_store(struct kobject *kobj, struct kobj_attribute *attr,
-		const char *buf, size_t n)
-{
-	return 0;
-}
-#endif

@@ -775,6 +775,7 @@ power_attr(cpunum_floor);
 power_attr(cpunum_ceiling);
 #endif
 
+#ifdef CONFIG_EARLYSUSPEND
 #ifdef CONFIG_HTC_ONMODE_CHARGING
 static ssize_t state_onchg_show(struct kobject *kobj, struct kobj_attribute *attr,
                              char *buf)
@@ -814,6 +815,7 @@ state_onchg_store(struct kobject *kobj, struct kobj_attribute *attr,
 
 power_attr(state_onchg);
 #endif
+#endif
 
 static struct attribute *g[] = {
         &state_attr.attr,
@@ -834,8 +836,10 @@ static struct attribute *g[] = {
         &wake_unlock_attr.attr,
 #endif
 #endif
+#ifdef CONFIG_EARLYSUSPEND
 #ifdef CONFIG_HTC_ONMODE_CHARGING
         &state_onchg_attr.attr,
+#endif
 #endif
 #ifdef CONFIG_PERFLOCK
         &perflock_attr.attr,
