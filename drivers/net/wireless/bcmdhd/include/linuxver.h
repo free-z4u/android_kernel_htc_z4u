@@ -609,6 +609,6 @@ do {									\
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 0))
 #define netdev_priv(dev) dev->priv
-#endif
+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0) */
 
-#endif
+#endif /* _linuxver_h_ */

@@ -95,6 +95,7 @@
 #define DHD_ISCAN_ON()		0
 #define DHD_ARPOE_ON()		0
 #define DHD_REORDER_ON()	0
+
 #endif
 
 #define DHD_LOG(args)

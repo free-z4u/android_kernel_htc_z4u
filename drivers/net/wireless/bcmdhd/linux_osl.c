@@ -1,7 +1,7 @@
 /*
  * Linux OS Independent Layer
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: linux_osl.c 311099 2012-01-27 14:46:59Z $
+ * $Id: linux_osl.c 412994 2013-07-17 12:38:03Z $
  */
 
 #define LINUX_PORT
@@ -34,6 +34,8 @@
 #include <bcmutils.h>
 #include <linux/delay.h>
 #include <pcicfg.h>
+
+
 
 #ifdef BCMASSERT_LOG
 #include <bcm_assert_log.h>
@@ -1051,3 +1053,5 @@ osl_os_close_image(void *image)
 	if (image)
 		filp_close((struct file *)image, NULL);
 }
+
+/* Linux Kernel: File Operations: end */

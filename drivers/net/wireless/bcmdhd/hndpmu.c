@@ -2,7 +2,7 @@
  * Misc utility routines for accessing PMU corerev specific features
  * of the SiliconBackplane-based Broadcom chips.
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +22,16 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: hndpmu.c 324060 2012-03-27 23:26:47Z $
+ * $Id: hndpmu.c 414368 2013-07-24 15:00:23Z $
+ */
+
+/*
+ * Note: this file contains PLL/FLL related functions. A chip can contain multiple PLLs/FLLs.
+ * However, in the context of this file the baseband ('BB') PLL/FLL is referred to.
+ *
+ * Throughout this code, the prefixes 'pmu0_', 'pmu1_' and 'pmu2_' are used.
+ * They refer to different revisions of the PMU (which is at revision 18 @ Apr 25, 2012)
+ * pmu2_ marks the transition from PLL to ADFLL (Digital Frequency Locked Loop)
  */
 
 #include <bcm_cfg.h>
@@ -194,4 +203,4 @@ si_sdiod_drive_strength_init(si_t *sih, osl_t *osh, uint32 drivestrength)
 
 	/* Return to original core */
 	si_restore_core(sih, origidx, intr_val);
-}
+} /* si_sdiod_drive_strength_init */

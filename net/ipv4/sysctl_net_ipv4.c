@@ -123,6 +123,7 @@ static int ipv4_ping_group_range(ctl_table *table, int write,
 	return ret;
 }
 
+/* Validate changes from /proc interface. */
 static int proc_tcp_congestion_control(ctl_table *ctl, int write,
 				       void __user *buffer, size_t *lenp, loff_t *ppos)
 {

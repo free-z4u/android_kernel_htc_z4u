@@ -1,7 +1,7 @@
 /*
  * Linux OS Independent Layer
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: linux_osl.h 326751 2012-04-10 20:13:19Z $
+ * $Id: linux_osl.h 411126 2013-07-05 01:22:09Z $
  */
 
 #ifndef _linux_osl_h_
@@ -29,23 +29,23 @@
 
 #include <typedefs.h>
 
-
+/* Linux Kernel: File Operations: start */
 extern void * osl_os_open_image(char * filename);
 extern int osl_os_get_image_block(char * buf, int len, void * image);
 extern void osl_os_close_image(void * image);
 extern int osl_os_image_size(void *image);
-
+/* Linux Kernel: File Operations: end */
 
 #ifdef BCMDRIVER
 
-
+/* OSL initialization */
 extern osl_t *osl_attach(void *pdev, uint bustype, bool pkttag);
 extern void osl_detach(osl_t *osh);
 
-
+/* Global ASSERT type */
 extern uint32 g_assert_type;
 
-
+/* ASSERT */
 #if defined(BCMASSERT_LOG)
 	#define ASSERT(exp) \
 	  do { if (!(exp)) osl_assert(#exp, __FILE__, __LINE__); } while (0)
@@ -57,17 +57,17 @@ extern void osl_assert(const char *exp, const char *file, int line);
 		#if GCC_VERSION > 30100
 			#define ASSERT(exp)	do {} while (0)
 		#else
-
+			/* ASSERT could cause segmentation fault on GCC3.1, use empty instead */
 			#define ASSERT(exp)
-		#endif
-	#endif
+		#endif /* GCC_VERSION > 30100 */
+	#endif /* __GNUC__ */
 #endif
 
-
+/* microsecond delay */
 #define	OSL_DELAY(usec)		osl_delay(usec)
 extern void osl_delay(uint usec);
 
-#define	OSL_PCMCIA_READ_ATTR(osh, offset, buf, size) \
+#define OSL_PCMCIA_READ_ATTR(osh, offset, buf, size) \
 	osl_pcmcia_read_attr((osh), (offset), (buf), (size))
 #define	OSL_PCMCIA_WRITE_ATTR(osh, offset, buf, size) \
 	osl_pcmcia_write_attr((osh), (offset), (buf), (size))
@@ -394,29 +394,29 @@ do { \
 		PKTFREE((osh), (skb), (send)); \
 	} \
 } while (0)
-#endif
+#endif /* PKTC */
 
-#else
+#else /* ! BCMDRIVER */
 
 
-
+/* ASSERT */
 	#define ASSERT(exp)	do {} while (0)
 
-
+/* MALLOC and MFREE */
 #define MALLOC(o, l) malloc(l)
 #define MFREE(o, p, l) free(p)
 #include <stdlib.h>
 
-
+/* str* and mem* functions */
 #include <string.h>
 
-
+/* *printf functions */
 #include <stdio.h>
 
-
+/* bcopy, bcmp, and bzero */
 extern void bcopy(const void *src, void *dst, size_t len);
 extern int bcmp(const void *b1, const void *b2, size_t len);
 extern void bzero(void *b, size_t len);
-#endif
+#endif /* ! BCMDRIVER */
 
-#endif
+#endif	/* _linux_osl_h_ */

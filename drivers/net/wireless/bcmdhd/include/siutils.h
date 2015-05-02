@@ -2,7 +2,7 @@
  * Misc utility routines for accessing the SOC Interconnects
  * of Broadcom HNBU chips.
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,89 +22,100 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: siutils.h 321982 2012-03-19 06:58:08Z $
+ * $Id: siutils.h 385510 2013-02-15 21:02:07Z $
  */
 
 #ifndef	_siutils_h_
 #define	_siutils_h_
 
-
+/*
+ * Data structure to export all chip specific common variables
+ *   public (read-only) portion of siutils handle returned by si_attach()/si_kattach()
+ */
 struct si_pub {
-	uint	socitype;
+	uint	socitype;		/* SOCI_SB, SOCI_AI */
 
-	uint	bustype;
-	uint	buscoretype;
-	uint	buscorerev;
-	uint	buscoreidx;
-	int	ccrev;
-	uint32	cccaps;
-	uint32  cccaps_ext;
-	int	pmurev;
-	uint32	pmucaps;
-	uint	boardtype;
-	uint    boardrev;
-	uint	boardvendor;
-	uint	boardflags;
-	uint	boardflags2;
-	uint	chip;
-	uint	chiprev;
-	uint	chippkg;
-	uint32	chipst;
-	bool	issim;
-	uint    socirev;
+	uint	bustype;		/* SI_BUS, PCI_BUS */
+	uint	buscoretype;		/* PCI_CORE_ID, PCIE_CORE_ID, PCMCIA_CORE_ID */
+	uint	buscorerev;		/* buscore rev */
+	uint	buscoreidx;		/* buscore index */
+	int	ccrev;			/* chip common core rev */
+	uint32	cccaps;			/* chip common capabilities */
+	uint32  cccaps_ext;			/* chip common capabilities extension */
+	int	pmurev;			/* pmu core rev */
+	uint32	pmucaps;		/* pmu capabilities */
+	uint	boardtype;		/* board type */
+	uint    boardrev;               /* board rev */
+	uint	boardvendor;		/* board vendor */
+	uint	boardflags;		/* board flags */
+	uint	boardflags2;		/* board flags2 */
+	uint	chip;			/* chip number */
+	uint	chiprev;		/* chip revision */
+	uint	chippkg;		/* chip package option */
+	uint32	chipst;			/* chip status */
+	bool	issim;			/* chip is in simulation or emulation */
+	uint    socirev;		/* SOC interconnect rev */
 	bool	pci_pr32414;
 
 };
 
-
+/* for HIGH_ONLY driver, the si_t must be writable to allow states sync from BMAC to HIGH driver
+ * for monolithic driver, it is readonly to prevent accident change
+ */
 typedef const struct si_pub si_t;
 
 
-
-#define	SI_OSH		NULL
+/*
+ * Many of the routines below take an 'sih' handle as their first arg.
+ * Allocate this by calling si_attach().  Free it by calling si_detach().
+ * At any one time, the sih is logically focused on one particular si core
+ * (the "current core").
+ * Use si_setcore() or si_setcoreidx() to change the association to another core.
+ */
+#define	SI_OSH		NULL	/* Use for si_kattach when no osh is available */
 
 #define	BADIDX		(SI_MAXCORES + 1)
 
+/* clkctl xtal what flags */
+#define	XTAL			0x1	/* primary crystal oscillator (2050) */
+#define	PLL			0x2	/* main chip pll */
 
-#define	XTAL			0x1
-#define	PLL			0x2
+/* clkctl clk mode */
+#define	CLK_FAST		0	/* force fast (pll) clock */
+#define	CLK_DYNAMIC		2	/* enable dynamic clock control */
 
+/* GPIO usage priorities */
+#define GPIO_DRV_PRIORITY	0	/* Driver */
+#define GPIO_APP_PRIORITY	1	/* Application */
+#define GPIO_HI_PRIORITY	2	/* Highest priority. Ignore GPIO reservation */
 
-#define	CLK_FAST		0
-#define	CLK_DYNAMIC		2
-
-
-#define GPIO_DRV_PRIORITY	0
-#define GPIO_APP_PRIORITY	1
-#define GPIO_HI_PRIORITY	2
-
-
+/* GPIO pull up/down */
 #define GPIO_PULLUP		0
 #define GPIO_PULLDN		1
 
+/* GPIO event regtype */
+#define GPIO_REGEVT		0	/* GPIO register event */
+#define GPIO_REGEVT_INTMSK	1	/* GPIO register event int mask */
+#define GPIO_REGEVT_INTPOL	2	/* GPIO register event int polarity */
 
-#define GPIO_REGEVT		0
-#define GPIO_REGEVT_INTMSK	1
-#define GPIO_REGEVT_INTPOL	2
+/* device path */
+#define SI_DEVPATH_BUFSZ	16	/* min buffer size in bytes */
 
-
-#define SI_DEVPATH_BUFSZ	16
-
-
+/* SI routine enumeration: to be used by update function with multiple hooks */
 #define	SI_DOATTACH	1
 #define SI_PCIDOWN	2
 #define SI_PCIUP	3
 
 #define	ISSIM_ENAB(sih)	0
 
-
+/* PMU clock/power control */
 #if defined(BCMPMUCTL)
 #define PMUCTL_ENAB(sih)	(BCMPMUCTL)
 #else
 #define PMUCTL_ENAB(sih)	((sih)->cccaps & CC_CAP_PMU)
 #endif
 
-
+/* chipcommon clock/power control (exclusive with PMU's) */
 #if defined(BCMPMUCTL) && BCMPMUCTL
 #define CCCTL_ENAB(sih)		(0)
 #define CCPLL_ENAB(sih)		(0)
@@ -114,11 +125,11 @@ typedef const struct si_pub si_t;
 #endif
 
 typedef void (*gpio_handler_t)(uint32 stat, void *arg);
-
+/* External BT Coex enable mask */
 #define CC_BTCOEX_EN_MASK  0x01
-
+/* External PA enable mask */
 #define GPIO_CTRL_EPA_EN_MASK 0x40
-
+/* WL/BT control enable mask */
 #define GPIO_CTRL_5_6_EN_MASK 0x60
 #define GPIO_CTRL_7_6_EN_MASK 0xC0
 #define GPIO_OUT_7_EN_MASK 0x80
@@ -310,4 +321,4 @@ extern int si_pcie_configspace_get(si_t *sih, uint8 *buf, uint size);
 char *si_getnvramflvar(si_t *sih, const char *name);
 
 
-#endif
+#endif	/* _siutils_h_ */

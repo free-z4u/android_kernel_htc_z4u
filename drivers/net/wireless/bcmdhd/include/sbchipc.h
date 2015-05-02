@@ -5,9 +5,9 @@
  * JTAG, 0/1/2 UARTs, clock frequency control, a watchdog interrupt timer,
  * GPIO interface, extbus, and support for serial and parallel flashes.
  *
- * $Id: sbchipc.h 328358 2012-04-18 23:14:31Z $
+ * $Id: sbchipc.h 385540 2013-02-15 23:14:50Z $
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -33,12 +33,12 @@
 
 #ifndef _LANGUAGE_ASSEMBLY
 
-
+/* cpp contortions to concatenate w/arg prescan */
 #ifndef PAD
 #define	_PADLINE(line)	pad ## line
 #define	_XSTR(line)	_PADLINE(line)
 #define	PAD		_XSTR(__LINE__)
-#endif
+#endif	/* PAD */
 
 typedef struct eci_prerev35 {
 	uint32	eci_output;
@@ -86,113 +86,113 @@ typedef struct eci_rev35 {
 
 typedef struct flash_config {
 	uint32	PAD[19];
-
+	/* Flash struct configuration registers (0x18c) for BCM4706 (corerev = 31) */
 	uint32 flashstrconfig;
 } flash_config_t;
 
 typedef volatile struct {
-	uint32	chipid;
+	uint32	chipid;			/* 0x0 */
 	uint32	capabilities;
-	uint32	corecontrol;
+	uint32	corecontrol;		/* corerev >= 1 */
 	uint32	bist;
 
-
-	uint32	otpstatus;
+	/* OTP */
+	uint32	otpstatus;		/* 0x10, corerev >= 10 */
 	uint32	otpcontrol;
 	uint32	otpprog;
-	uint32	otplayout;
+	uint32	otplayout;		/* corerev >= 23 */
 
-
-	uint32	intstatus;
+	/* Interrupt control */
+	uint32	intstatus;		/* 0x20 */
 	uint32	intmask;
 
+	/* Chip specific regs */
+	uint32	chipcontrol;		/* 0x28, rev >= 11 */
+	uint32	chipstatus;		/* 0x2c, rev >= 11 */
 
-	uint32	chipcontrol;
-	uint32	chipstatus;
-
-
-	uint32	jtagcmd;
+	/* Jtag Master */
+	uint32	jtagcmd;		/* 0x30, rev >= 10 */
 	uint32	jtagir;
 	uint32	jtagdr;
 	uint32	jtagctrl;
 
-
-	uint32	flashcontrol;
+	/* serial flash interface registers */
+	uint32	flashcontrol;		/* 0x40 */
 	uint32	flashaddress;
 	uint32	flashdata;
-	uint32	otplayoutextension;
+	uint32	otplayoutextension;	/* rev >= 35 */
 
-
-	uint32	broadcastaddress;
+	/* Silicon backplane configuration broadcast control */
+	uint32	broadcastaddress;	/* 0x50 */
 	uint32	broadcastdata;
 
+	/* gpio - cleared only by power-on-reset */
+	uint32	gpiopullup;		/* 0x58, corerev >= 20 */
+	uint32	gpiopulldown;		/* 0x5c, corerev >= 20 */
+	uint32	gpioin;			/* 0x60 */
+	uint32	gpioout;		/* 0x64 */
+	uint32	gpioouten;		/* 0x68 */
+	uint32	gpiocontrol;		/* 0x6C */
+	uint32	gpiointpolarity;	/* 0x70 */
+	uint32	gpiointmask;		/* 0x74 */
 
-	uint32	gpiopullup;
-	uint32	gpiopulldown;
-	uint32	gpioin;
-	uint32	gpioout;
-	uint32	gpioouten;
-	uint32	gpiocontrol;
-	uint32	gpiointpolarity;
-	uint32	gpiointmask;
-
-
+	/* GPIO events corerev >= 11 */
 	uint32	gpioevent;
 	uint32	gpioeventintmask;
 
+	/* Watchdog timer */
+	uint32	watchdog;		/* 0x80 */
 
-	uint32	watchdog;
-
-
+	/* GPIO events corerev >= 11 */
 	uint32	gpioeventintpolarity;
 
-
-	uint32  gpiotimerval;
+	/* GPIO based LED powersave registers corerev >= 16 */
+	uint32  gpiotimerval;		/* 0x88 */
 	uint32  gpiotimeroutmask;
 
+	/* clock control */
+	uint32	clockcontrol_n;		/* 0x90 */
+	uint32	clockcontrol_sb;	/* aka m0 */
+	uint32	clockcontrol_pci;	/* aka m1 */
+	uint32	clockcontrol_m2;	/* mii/uart/mipsref */
+	uint32	clockcontrol_m3;	/* cpu */
+	uint32	clkdiv;			/* corerev >= 3 */
+	uint32	gpiodebugsel;		/* corerev >= 28 */
+	uint32	capabilities_ext;               	/* 0xac  */
 
-	uint32	clockcontrol_n;
-	uint32	clockcontrol_sb;
-	uint32	clockcontrol_pci;
-	uint32	clockcontrol_m2;
-	uint32	clockcontrol_m3;
-	uint32	clkdiv;
-	uint32	gpiodebugsel;
-	uint32	capabilities_ext;
-
-
-	uint32	pll_on_delay;
+	/* pll delay registers (corerev >= 4) */
+	uint32	pll_on_delay;		/* 0xb0 */
 	uint32	fref_sel_delay;
-	uint32	slow_clk_ctl;
+	uint32	slow_clk_ctl;		/* 5 < corerev < 10 */
 	uint32	PAD;
 
-
-	uint32	system_clk_ctl;
+	/* Instaclock registers (corerev >= 10) */
+	uint32	system_clk_ctl;		/* 0xc0 */
 	uint32	clkstatestretch;
 	uint32	PAD[2];
 
-
-	uint32	bp_addrlow;
+	/* Indirect backplane access (corerev >= 22) */
+	uint32	bp_addrlow;		/* 0xd0 */
 	uint32	bp_addrhigh;
 	uint32	bp_data;
 	uint32	PAD;
 	uint32	bp_indaccess;
-
+	/* SPI registers, corerev >= 37 */
 	uint32	gsioctrl;
 	uint32	gsioaddress;
 	uint32	gsiodata;
 
-
+	/* More clock dividers (corerev >= 32) */
 	uint32	clkdiv2;
-
+	/* FAB ID (corerev >= 40) */
 	uint32	otpcontrol1;
-	uint32	fabid;
+	uint32	fabid;			/* 0xf8 */
 
+	/* In AI chips, pointer to erom */
+	uint32	eromptr;		/* 0xfc */
 
-	uint32	eromptr;
-
-
-	uint32	pcmcia_config;
+	/* ExtBus control registers (corerev >= 3) */
+	uint32	pcmcia_config;		/* 0x100 */
 	uint32	pcmcia_memwait;
 	uint32	pcmcia_attrwait;
 	uint32	pcmcia_iowait;
@@ -204,28 +204,28 @@ typedef volatile struct {
 	uint32	prog_waitcount;
 	uint32	flash_config;
 	uint32	flash_waitcount;
-	uint32  SECI_config;
+	uint32  SECI_config;		/* 0x130 SECI configuration */
 	uint32	SECI_status;
 	uint32	SECI_statusmask;
 	uint32	SECI_rxnibchanged;
 
 	uint32	PAD[20];
 
-
-	uint32	sromcontrol;
+	/* SROM interface (corerev >= 32) */
+	uint32	sromcontrol;		/* 0x190 */
 	uint32	sromaddress;
 	uint32	sromdata;
-	uint32	PAD[1];
-
-    uint32  nflashctrl;
+	uint32	PAD[1];				/* 0x19C */
+	/* NAND flash registers for BCM4706 (corerev = 31) */
+    uint32  nflashctrl;         /* 0x1a0 */
     uint32  nflashconf;
     uint32  nflashcoladdr;
     uint32  nflashrowaddr;
     uint32  nflashdata;
-    uint32  nflashwaitcnt0;
+    uint32  nflashwaitcnt0;		/* 0x1b4 */
     uint32  PAD[2];
 
-	uint32  seci_uart_data;
+	uint32  seci_uart_data;		/* 0x1C0 */
 	uint32  seci_uart_bauddiv;
 	uint32  seci_uart_fcr;
 	uint32  seci_uart_lcr;
@@ -233,13 +233,13 @@ typedef volatile struct {
 	uint32  seci_uart_lsr;
 	uint32  seci_uart_msr;
 	uint32  seci_uart_baudadj;
-
-	uint32	clk_ctl_st;
+	/* Clock control and hardware workarounds (corerev >= 20) */
+	uint32	clk_ctl_st;		/* 0x1e0 */
 	uint32	hw_war;
 	uint32	PAD[70];
 
-
-	uint8	uart0data;
+	/* UARTs */
+	uint8	uart0data;		/* 0x300 */
 	uint8	uart0imr;
 	uint8	uart0fcr;
 	uint8	uart0lcr;
@@ -247,9 +247,9 @@ typedef volatile struct {
 	uint8	uart0lsr;
 	uint8	uart0msr;
 	uint8	uart0scratch;
-	uint8	PAD[248];
+	uint8	PAD[248];		/* corerev >= 1 */
 
-	uint8	uart1data;
+	uint8	uart1data;		/* 0x400 */
 	uint8	uart1imr;
 	uint8	uart1fcr;
 	uint8	uart1lcr;
@@ -259,9 +259,11 @@ typedef volatile struct {
 	uint8	uart1scratch;
 	uint32	PAD[126];
 
-
-
-	uint32	pmucontrol;
+	/* PMU registers (corerev >= 20) */
+	/* Note: all timers driven by ILP clock are updated asynchronously to HT/ALP.
+	 * The CPU must read them twice, compare, and retry if different.
+	 */
+	uint32	pmucontrol;		/* 0x600 */
 	uint32	pmucapabilities;
 	uint32	pmustatus;
 	uint32	res_state;
@@ -275,20 +277,20 @@ typedef volatile struct {
 	uint32	res_timer;
 	uint32	clkstretch;
 	uint32	pmuwatchdog;
-	uint32	gpiosel;
-	uint32	gpioenable;
+	uint32	gpiosel;		/* 0x638, rev >= 1 */
+	uint32	gpioenable;		/* 0x63c, rev >= 1 */
 	uint32	res_req_timer_sel;
 	uint32	res_req_timer;
 	uint32	res_req_mask;
 	uint32	PAD;
-	uint32	chipcontrol_addr;
-	uint32	chipcontrol_data;
+	uint32	chipcontrol_addr;	/* 0x650 */
+	uint32	chipcontrol_data;	/* 0x654 */
 	uint32	regcontrol_addr;
 	uint32	regcontrol_data;
 	uint32	pllcontrol_addr;
 	uint32	pllcontrol_data;
-	uint32	pmustrapopt;
-	uint32	pmu_xtalfreq;
+	uint32	pmustrapopt;		/* 0x668, corerev >= 28 */
+	uint32	pmu_xtalfreq;		/* 0x66C, pmurev >= 10 */
 	uint32	PAD[100];
 	uint16	sromotp[512];
 
@@ -2156,14 +2158,17 @@ typedef volatile struct {
 
 #define CHIP_HOSTIF_USB(sih)	(si_chip_hostif(sih) & CST4360_MODE_USB)
 
-
+/*
+* Maximum delay for the PMU state transition in us.
+* This is an upper bound intended for spinwaits etc.
+*/
 #define PMU_MAX_TRANSITION_DLY	15000
 
-
+/* PMU resource up transition time in ILP cycles */
 #define PMURES_UP_TRANSITION	2
 
 
-
+/* SECI configuration */
 #define SECI_MODE_UART			0x0
 #define SECI_MODE_SECI			0x1
 #define SECI_MODE_LEGACY_3WIRE_BT	0x2
@@ -2175,13 +2180,13 @@ typedef volatile struct {
 #define SECI_ENAB_SECI_ECI	(1 << 2)
 #define SECI_ENAB_SECIOUT_DIS	(1 << 3)
 #define SECI_MODE_MASK		0x7
-#define SECI_MODE_SHIFT		4
+#define SECI_MODE_SHIFT		4 /* (bits 5, 6, 7) */
 #define SECI_UPD_SECI		(1 << 7)
 
 #define SECI_SIGNOFF_0     0xDB
 #define SECI_SIGNOFF_1     0
 
-
+/* seci clk_ctl_st bits */
 #define CLKCTL_STS_SECI_CLK_REQ		(1 << 8)
 #define CLKCTL_STS_SECI_CLK_AVAIL	(1 << 24)
 
@@ -2190,12 +2195,12 @@ typedef volatile struct {
 #define SECI_UART_SECI_IN_STATE		(1 << 2)
 #define SECI_UART_SECI_IN2_STATE	(1 << 3)
 
-
-#define SECI_UART_LCR_STOP_BITS		(1 << 0)
+/* SECI UART LCR/MCR register bits */
+#define SECI_UART_LCR_STOP_BITS		(1 << 0) /* 0 - 1bit, 1 - 2bits */
 #define SECI_UART_LCR_PARITY_EN		(1 << 1)
-#define SECI_UART_LCR_PARITY		(1 << 2)
+#define SECI_UART_LCR_PARITY		(1 << 2) /* 0 - odd, 1 - even */
 #define SECI_UART_LCR_RX_EN		(1 << 3)
-#define SECI_UART_LCR_LBRK_CTRL		(1 << 4)
+#define SECI_UART_LCR_LBRK_CTRL		(1 << 4) /* 1 => SECI_OUT held low */
 #define SECI_UART_LCR_TXO_EN		(1 << 5)
 #define SECI_UART_LCR_RTSO_EN		(1 << 6)
 #define SECI_UART_LCR_SLIPMODE_EN	(1 << 7)
@@ -2214,9 +2219,9 @@ typedef volatile struct {
 #define SECI_UART_MCR_BAUD_ADJ_EN	(1 << 7)
 #define SECI_UART_MCR_XONOFF_RPT	(1 << 9)
 
+/* WLAN channel numbers - used from wifi.h */
 
-
-
+/* WLAN BW */
 #define ECI_BW_20   0x0
 #define ECI_BW_25   0x1
 #define ECI_BW_30   0x2
@@ -2226,8 +2231,8 @@ typedef volatile struct {
 #define ECI_BW_50   0x6
 #define ECI_BW_ALL  0x7
 
-
+/* WLAN - number of antenna */
 #define WLAN_NUM_ANT1 TXANT_0
 #define WLAN_NUM_ANT2 TXANT_1
 
-#endif
+#endif	/* _SBCHIPC_H */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -19,7 +19,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: epivers.h.in,v 13.33 2010-09-08 22:08:53 $
+ * $Id: epivers.h.in,v 13.33 2010-09-08 22:08:53 csm Exp $
  *
 */
 
@@ -45,4 +45,4 @@
 
 #define	EPI_VERSION_STR		"1.27 (r329705)"
 
-#endif
+#endif /* _epivers_h_ */

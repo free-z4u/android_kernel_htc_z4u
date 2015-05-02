@@ -1,7 +1,7 @@
 /*
  * Misc useful os-independent macros and functions.
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmutils.h 328848 2012-04-21 00:43:57Z $
+ * $Id: bcmutils.h 412804 2013-07-16 16:26:39Z $
  */
 
 #ifndef	_bcmutils_h_
@@ -39,15 +39,15 @@ extern "C" {
 #include <wlioctl.h>
 #endif
 
-
-#define _BCM_U	0x01
-#define _BCM_L	0x02
-#define _BCM_D	0x04
-#define _BCM_C	0x08
-#define _BCM_P	0x10
-#define _BCM_S	0x20
-#define _BCM_X	0x40
-#define _BCM_SP	0x80
+/* ctype replacement */
+#define _BCM_U	0x01	/* upper */
+#define _BCM_L	0x02	/* lower */
+#define _BCM_D	0x04	/* digit */
+#define _BCM_C	0x08	/* cntrl */
+#define _BCM_P	0x10	/* punct */
+#define _BCM_S	0x20	/* white space (space/lf/tab) */
+#define _BCM_X	0x40	/* hex digit */
+#define _BCM_SP	0x80	/* hard space (0x20) */
 
 extern const unsigned char bcm_ctype[];
 #define bcm_ismask(x)	(bcm_ctype[(int)(unsigned char)(x)])
@@ -66,22 +66,29 @@ extern const unsigned char bcm_ctype[];
 #define bcm_tolower(c)	(bcm_isupper((c)) ? ((c) + 'a' - 'A') : (c))
 #define bcm_toupper(c)	(bcm_islower((c)) ? ((c) + 'A' - 'a') : (c))
 
-
+/* Buffer structure for collecting string-formatted data
+* using bcm_bprintf() API.
+* Use bcm_binit() to initialize before use
+*/
 
 struct bcmstrbuf {
-	char *buf;
-	unsigned int size;
-	char *origbuf;
-	unsigned int origsize;
+	char *buf;	/* pointer to current position in origbuf */
+	unsigned int size;	/* current (residual) size in bytes */
+	char *origbuf;	/* unmodified pointer to orignal buffer */
+	unsigned int origsize;	/* unmodified orignal buffer size in bytes */
 };
 
-
+/* ** driver-only section ** */
 #ifdef BCMDRIVER
 #include <osl.h>
 
-#define GPIO_PIN_NOTDEFINED 	0x20
+#define GPIO_PIN_NOTDEFINED 	0x20	/* Pin not defined */
 
-
+/*
+ * Spin at most 'us' microseconds while 'exp' is true.
+ * Caller should explicitly test 'exp' when this completes
+ * and take appropriate error action if 'exp' is still true.
+ */
 #define SPINWAIT(exp, us) { \
 	uint countdown = (us) + 9; \
 	while ((exp) && (countdown >= 10)) {\
@@ -90,36 +97,48 @@ struct bcmstrbuf {
 	} \
 }
 
-
+/* osl multi-precedence packet queue */
 #ifndef PKTQ_LEN_DEFAULT
-#define PKTQ_LEN_DEFAULT        128
+#define PKTQ_LEN_DEFAULT        128	/* Max 128 packets */
 #endif
 #ifndef PKTQ_MAX_PREC
-#define PKTQ_MAX_PREC           16
+#define PKTQ_MAX_PREC           16	/* Maximum precedence levels */
 #endif
 
 typedef struct pktq_prec {
-	void *head;
-	void *tail;
-	uint16 len;
-	uint16 max;
+	void *head;     /* first packet to dequeue */
+	void *tail;     /* last packet to dequeue */
+	uint16 len;     /* number of queued packets */
+	uint16 max;     /* maximum number of queued packets */
 } pktq_prec_t;
 
 #ifdef PKTQ_LOG
 typedef struct {
-	uint32 requested;
-	uint32 stored;
-	uint32 saved;
-	uint32 selfsaved;
-	uint32 full_dropped;
-	uint32 dropped;
-	uint32 sacrificed;
-	uint32 busy;
-	uint32 retry;
-	uint32 ps_retry;
-	uint32 retry_drop;
-	uint32 max_avail;
-	uint32 max_used;
+	uint32 requested;    /* packets requested to be stored */
+	uint32 stored;	     /* packets stored */
+	uint32 saved;	     /* packets saved,
+	                            because a lowest priority queue has given away one packet
+	                      */
+	uint32 selfsaved;    /* packets saved,
+	                            because an older packet from the same queue has been dropped
+	                      */
+	uint32 full_dropped; /* packets dropped,
+	                            because pktq is full with higher precedence packets
+	                      */
+	uint32 dropped;      /* packets dropped because pktq per that precedence is full */
+	uint32 sacrificed;   /* packets dropped,
+	                            in order to save one from a queue of a highest priority
+	                      */
+	uint32 busy;         /* packets droped because of hardware/transmission error */
+	uint32 retry;        /* packets re-sent because they were not received */
+	uint32 ps_retry;     /* packets retried again prior to moving power save mode */
+	uint32 retry_drop;   /* packets finally dropped after retry limit */
+	uint32 max_avail;    /* the high-water mark of the queue capacity for packets -
+	                            goes to zero as queue fills
+	                      */
+	uint32 max_used;     /* the high-water mark of the queue utilisation for packets -
+						        increases with use ('inverse' of max_avail)
+				          */
 	uint32 queue_capacity;
 } pktq_counters_t;
 #endif
@@ -772,4 +791,4 @@ unsigned int process_nvram_vars(char *varbuf, unsigned int len);
 	}
 #endif
 
-#endif
+#endif	/* _bcmutils_h_ */

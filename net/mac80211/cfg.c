@@ -994,7 +994,7 @@ static int ieee80211_change_station(struct wiphy *wiphy,
 		return -ENOENT;
 	}
 
-	/* in station mode, some updates are only valid with TDLS */
+	/* in station mode, supported rates are only valid with TDLS */
 	if (sdata->vif.type == NL80211_IFTYPE_STATION &&
 	    (params->supported_rates || params->ht_capa || params->vht_capa ||
 	     params->sta_modify_mask ||
