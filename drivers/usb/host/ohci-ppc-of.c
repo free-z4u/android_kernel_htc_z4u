@@ -204,8 +204,8 @@ static void ohci_hcd_ppc_of_shutdown(struct platform_device *op)
 {
 	struct usb_hcd *hcd = dev_get_drvdata(&op->dev);
 
-        if (hcd->driver->shutdown)
-                hcd->driver->shutdown(hcd);
+	if (hcd->driver->shutdown)
+		hcd->driver->shutdown(hcd);
 }
 
 

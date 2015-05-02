@@ -135,9 +135,9 @@ machine_device_initcall(sbc8548, mpc85xx_common_publish_devices);
  */
 static int __init sbc8548_probe(void)
 {
-        unsigned long root = of_get_flat_dt_root();
+	unsigned long root = of_get_flat_dt_root();
 
-        return of_flat_dt_is_compatible(root, "SBC8548");
+	return of_flat_dt_is_compatible(root, "SBC8548");
 }
 
 define_machine(sbc8548) {

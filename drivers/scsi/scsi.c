@@ -800,17 +800,17 @@ void scsi_finish_command(struct scsi_cmnd *cmd)
 
 	scsi_device_unbusy(sdev);
 
-        /*
-         * Clear the flags which say that the device/host is no longer
-         * capable of accepting new commands.  These are set in scsi_queue.c
-         * for both the queue full condition on a device, and for a
-         * host full condition on the host.
+	/*
+	 * Clear the flags which say that the device/host is no longer
+	 * capable of accepting new commands.  These are set in scsi_queue.c
+	 * for both the queue full condition on a device, and for a
+	 * host full condition on the host.
 	 *
 	 * XXX(hch): What about locking?
-         */
-        shost->host_blocked = 0;
+	 */
+	shost->host_blocked = 0;
 	starget->target_blocked = 0;
-        sdev->device_blocked = 0;
+	sdev->device_blocked = 0;
 
 	/*
 	 * If we have valid sense information, then some kind of recovery
@@ -824,7 +824,7 @@ void scsi_finish_command(struct scsi_cmnd *cmd)
 				"(result %x)\n", cmd->result));
 
 	good_bytes = scsi_bufflen(cmd);
-        if (cmd->request->cmd_type != REQ_TYPE_BLOCK_PC) {
+	if (cmd->request->cmd_type != REQ_TYPE_BLOCK_PC) {
 		int old_good_bytes = good_bytes;
 		drv = scsi_cmd_to_driver(cmd);
 		if (drv->done)

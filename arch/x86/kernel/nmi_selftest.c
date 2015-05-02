@@ -51,12 +51,12 @@ static void __init cleanup_nmi_testsuite(void)
 
 static int __init test_nmi_ipi_callback(unsigned int val, struct pt_regs *regs)
 {
-        int cpu = raw_smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
-        if (cpumask_test_and_clear_cpu(cpu, to_cpumask(nmi_ipi_mask)))
-                return NMI_HANDLED;
+	if (cpumask_test_and_clear_cpu(cpu, to_cpumask(nmi_ipi_mask)))
+		return NMI_HANDLED;
 
-        return NMI_DONE;
+	return NMI_DONE;
 }
 
 static void __init test_nmi_ipi(struct cpumask *mask)
@@ -141,7 +141,7 @@ void __init nmi_selftest(void)
 {
 	init_nmi_testsuite();
 
-        /*
+	/*
 	 * Run the testsuite:
 	 */
 	printk("----------------\n");

@@ -144,24 +144,24 @@ struct  srcobj_fmt {
  */
 static __inline__ int dn_before(__u16 seq1, __u16 seq2)
 {
-        seq1 &= 0x0fff;
-        seq2 &= 0x0fff;
+	seq1 &= 0x0fff;
+	seq2 &= 0x0fff;
 
-        return (int)((seq1 - seq2) & 0x0fff) > 2048;
+	return (int)((seq1 - seq2) & 0x0fff) > 2048;
 }
 
 
 static __inline__ int dn_after(__u16 seq1, __u16 seq2)
 {
-        seq1 &= 0x0fff;
-        seq2 &= 0x0fff;
+	seq1 &= 0x0fff;
+	seq2 &= 0x0fff;
 
-        return (int)((seq2 - seq1) & 0x0fff) > 2048;
+	return (int)((seq2 - seq1) & 0x0fff) > 2048;
 }
 
 static __inline__ int dn_equal(__u16 seq1, __u16 seq2)
 {
-        return ((seq1 ^ seq2) & 0x0fff) == 0;
+	return ((seq1 ^ seq2) & 0x0fff) == 0;
 }
 
 static __inline__ int dn_before_or_equal(__u16 seq1, __u16 seq2)
@@ -171,8 +171,8 @@ static __inline__ int dn_before_or_equal(__u16 seq1, __u16 seq2)
 
 static __inline__ void seq_add(__u16 *seq, __u16 off)
 {
-        (*seq) += off;
-        (*seq) &= 0x0fff;
+	(*seq) += off;
+	(*seq) &= 0x0fff;
 }
 
 static __inline__ int seq_next(__u16 seq1, __u16 seq2)
@@ -185,7 +185,7 @@ static __inline__ int seq_next(__u16 seq1, __u16 seq2)
  */
 static __inline__ int sendack(__u16 seq)
 {
-        return (int)((seq & 0x1000) ? 0 : 1);
+	return (int)((seq & 0x1000) ? 0 : 1);
 }
 
 /*
@@ -193,7 +193,7 @@ static __inline__ int sendack(__u16 seq)
  */
 static __inline__ int dn_congested(struct sock *sk)
 {
-        return atomic_read(&sk->sk_rmem_alloc) > (sk->sk_rcvbuf >> 1);
+	return atomic_read(&sk->sk_rmem_alloc) > (sk->sk_rcvbuf >> 1);
 }
 
 #define DN_MAX_NSP_DATA_HEADER (11)

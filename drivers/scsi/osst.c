@@ -622,7 +622,7 @@ static int osst_verify_frame(struct osst_tape * STp, int frame_seq_number, int q
 				memset(page_address(sg_page(&STp->buffer->sg[i])),
 				       0, STp->buffer->sg[i].length);
 			strcpy(STp->buffer->b_data, "READ ERROR ON FRAME");
-                } else
+		} else
 			STp->buffer->buffer_bytes = OS_FRAME_SIZE;
 		return 1;
 	}
@@ -683,7 +683,7 @@ static int osst_verify_frame(struct osst_tape * STp, int frame_seq_number, int q
 				 STp->first_frame_position);
 		goto err_out;
 	}
-        if (frame_seq_number != -1 && ntohl(aux->frame_seq_num) != frame_seq_number) {
+	if (frame_seq_number != -1 && ntohl(aux->frame_seq_num) != frame_seq_number) {
 		if (!quiet) {
 #if DEBUG
 			printk(OSST_DEB_MSG "%s:D: Skipping frame, sequence number %u (expected %d)\n",
@@ -713,7 +713,7 @@ static int osst_verify_frame(struct osst_tape * STp, int frame_seq_number, int q
 		STp->frame_in_buffer = 1;
 	}
 	if (aux->frame_type == OS_FRAME_TYPE_DATA) {
-                blk_cnt = ntohs(aux->dat.dat_list[0].blk_cnt);
+		blk_cnt = ntohs(aux->dat.dat_list[0].blk_cnt);
 		blk_sz  = ntohl(aux->dat.dat_list[0].blk_sz);
 		STp->buffer->buffer_bytes = blk_cnt * blk_sz;
 		STp->buffer->read_pointer = 0;
@@ -731,7 +731,7 @@ static int osst_verify_frame(struct osst_tape * STp, int frame_seq_number, int q
 		}
 		STps->eof = ST_NOEOF;
 	}
-        STp->frame_seq_number = ntohl(aux->frame_seq_num);
+	STp->frame_seq_number = ntohl(aux->frame_seq_num);
 	STp->logical_blk_num  = ntohl(aux->logical_blk_num);
 	return 1;
 
@@ -973,7 +973,7 @@ static int osst_recover_wait_frame(struct osst_tape * STp, struct osst_request *
 	unsigned char		cmd[MAX_COMMAND_SIZE];
 	unsigned long   	startwait = jiffies;
 	int			retval    = 1;
-        char		      * name      = tape_name(STp);
+	char		      * name      = tape_name(STp);
 
 	if (writing) {
 		char	mybuf[24];
@@ -1107,7 +1107,7 @@ static int osst_initiate_read(struct osst_tape * STp, struct osst_request ** aSR
 	if (STps->rw != ST_READING) {         /* Initialize read operation */
 		if (STps->rw == ST_WRITING || STp->dirty) {
 			STp->write_type = OS_WRITE_DATA;
-                        osst_flush_write_buffer(STp, aSRpnt);
+			osst_flush_write_buffer(STp, aSRpnt);
 			osst_flush_drive_buffer(STp, aSRpnt);
 		}
 		STps->rw = ST_READING;
@@ -1115,7 +1115,7 @@ static int osst_initiate_read(struct osst_tape * STp, struct osst_request ** aSR
 
 		/*
 		 *      Issue a read 0 command to get the OnStream drive
-                 *      read frames into its buffer.
+		 *      read frames into its buffer.
 		 */
 		memset(cmd, 0, MAX_COMMAND_SIZE);
 		cmd[0] = READ_6;
@@ -1154,16 +1154,16 @@ static int osst_get_logical_frame(struct osst_tape * STp, struct osst_request **
 		return (STps->eof);
 	}
 	/*
-         * Search and wait for the next logical tape frame
+	 * Search and wait for the next logical tape frame
 	 */
 	while (1) {
 		if (cnt++ > 400) {
-                        printk(KERN_ERR "%s:E: Couldn't find logical frame %d, aborting\n",
+			printk(KERN_ERR "%s:E: Couldn't find logical frame %d, aborting\n",
 					    name, frame_seq_number);
 			if (STp->read_error_frame) {
 				osst_set_frame_position(STp, aSRpnt, STp->read_error_frame, 0);
 #if DEBUG
-                        	printk(OSST_DEB_MSG "%s:D: Repositioning tape to bad frame %d\n",
+				printk(OSST_DEB_MSG "%s:D: Repositioning tape to bad frame %d\n",
 						    name, STp->read_error_frame);
 #endif
 				STp->read_error_frame = 0;
@@ -1177,7 +1177,7 @@ static int osst_get_logical_frame(struct osst_tape * STp, struct osst_request **
 					  name, frame_seq_number, cnt);
 #endif
 		if ( osst_initiate_read(STp, aSRpnt)
-                || ( (!STp->frame_in_buffer) && osst_read_frame(STp, aSRpnt, 30) ) ) {
+		|| ( (!STp->frame_in_buffer) && osst_read_frame(STp, aSRpnt, 30) ) ) {
 			if (STp->raw)
 				return (-EIO);
 			position = osst_get_frame_position(STp, aSRpnt);
@@ -1223,12 +1223,12 @@ static int osst_get_logical_frame(struct osst_tape * STp, struct osst_request **
 						position -= 10;
 				}
 #if DEBUG
-                                printk(OSST_DEB_MSG
+				printk(OSST_DEB_MSG
 				       "%s:D: Found logical frame %d while looking for %d: back up %d\n",
 						name, x, frame_seq_number,
 					       	STp->first_frame_position - position);
 #endif
-                        	osst_set_frame_position(STp, aSRpnt, position, 0);
+				osst_set_frame_position(STp, aSRpnt, position, 0);
 				cnt += 10;
 			}
 			else
@@ -1264,7 +1264,7 @@ static int osst_get_logical_frame(struct osst_tape * STp, struct osst_request **
 
 static int osst_seek_logical_blk(struct osst_tape * STp, struct osst_request ** aSRpnt, int logical_blk_num)
 {
-        struct st_partstat * STps = &(STp->ps[STp->partition]);
+	struct st_partstat * STps = &(STp->ps[STp->partition]);
 	char		   * name = tape_name(STp);
 	int	retries    = 0;
 	int	frame_seq_estimate, ppos_estimate, move;
@@ -1403,7 +1403,7 @@ static int osst_get_sector(struct osst_tape * STp, struct osst_request ** aSRpnt
 
 static int osst_seek_sector(struct osst_tape * STp, struct osst_request ** aSRpnt, int sector)
 {
-        struct st_partstat * STps   = &(STp->ps[STp->partition]);
+	struct st_partstat * STps   = &(STp->ps[STp->partition]);
 	int		     frame  = sector >> OSST_FRAME_SHIFT,
 			     offset = (sector & OSST_SECTOR_MASK) << OSST_SECTOR_SHIFT,
 			     r;
@@ -2703,7 +2703,7 @@ static int osst_configure_onstream(struct osst_tape *STp, struct osst_request **
 
 	/*
 	 * Configure 32.5KB (data+aux) frame size.
-         * Get the current frame size from the block size mode page
+	 * Get the current frame size from the block size mode page
 	 */
 	memset(cmd, 0, MAX_COMMAND_SIZE);
 	cmd[0] = MODE_SENSE;
@@ -4475,7 +4475,7 @@ static int __os_scsi_tape_open(struct inode * inode, struct file * filp)
 	if (scsi_device_get(STp->device)) {
 		write_unlock(&os_scsi_tapes_lock);
 #if DEBUG
-                printk(OSST_DEB_MSG "%s:D: Failed scsi_device_get.\n", name);
+		printk(OSST_DEB_MSG "%s:D: Failed scsi_device_get.\n", name);
 #endif
 		return (-ENXIO);
 	}
@@ -4561,7 +4561,7 @@ static int __os_scsi_tape_open(struct inode * inode, struct file * filp)
 		}
 		if (SRpnt->sense[13] == 2) {	/* initialize command required (LOAD) */
 			memset (cmd, 0, MAX_COMMAND_SIZE);
-        		cmd[0] = START_STOP;
+			cmd[0] = START_STOP;
 			cmd[1] = 1;
 			cmd[4] = 1;
 			SRpnt = osst_do_scsi(SRpnt, STp, cmd, 0, DMA_NONE,
@@ -5991,8 +5991,8 @@ out_free_sysfs1:
 out_free_buffer:
 	kfree(buffer);
 out_put_disk:
-        put_disk(drive);
-        return err;
+	put_disk(drive);
+	return err;
 };
 
 static int osst_remove(struct device *dev)

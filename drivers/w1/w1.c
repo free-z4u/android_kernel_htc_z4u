@@ -153,8 +153,8 @@ static ssize_t w1_default_read(struct file *filp, struct kobject *kobj,
 
 static struct bin_attribute w1_default_attr = {
       .attr = {
-              .name = "rw",
-              .mode = S_IRUGO | S_IWUSR,
+	      .name = "rw",
+	      .mode = S_IRUGO | S_IWUSR,
       },
       .size = PAGE_SIZE,
       .read = w1_default_read,

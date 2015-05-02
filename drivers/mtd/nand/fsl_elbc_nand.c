@@ -304,7 +304,7 @@ static void fsl_elbc_do_read(struct nand_chip *chip, int oob)
 
 /* cmdfunc send commands to the FCM */
 static void fsl_elbc_cmdfunc(struct mtd_info *mtd, unsigned int command,
-                             int column, int page_addr)
+			     int column, int page_addr)
 {
 	struct nand_chip *chip = mtd->priv;
 	struct fsl_elbc_mtd *priv = chip->priv;
@@ -739,7 +739,7 @@ static int fsl_elbc_chip_init_tail(struct mtd_info *mtd)
 }
 
 static int fsl_elbc_read_page(struct mtd_info *mtd,
-                              struct nand_chip *chip,
+			      struct nand_chip *chip,
 			      uint8_t *buf,
 			      int page)
 {
@@ -756,8 +756,8 @@ static int fsl_elbc_read_page(struct mtd_info *mtd,
  * waitfunc.
  */
 static void fsl_elbc_write_page(struct mtd_info *mtd,
-                                struct nand_chip *chip,
-                                const uint8_t *buf)
+				struct nand_chip *chip,
+				const uint8_t *buf)
 {
 	fsl_elbc_write_buf(mtd, buf, mtd->writesize);
 	fsl_elbc_write_buf(mtd, chip->oob_poi, mtd->oobsize);

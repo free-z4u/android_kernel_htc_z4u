@@ -1353,7 +1353,7 @@ static int snd_ens1373_spdif_info(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_ens1373_spdif_default_get(struct snd_kcontrol *kcontrol,
-                                         struct snd_ctl_elem_value *ucontrol)
+					 struct snd_ctl_elem_value *ucontrol)
 {
 	struct ensoniq *ensoniq = snd_kcontrol_chip(kcontrol);
 	spin_lock_irq(&ensoniq->reg_lock);
@@ -1366,7 +1366,7 @@ static int snd_ens1373_spdif_default_get(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_ens1373_spdif_default_put(struct snd_kcontrol *kcontrol,
-                                         struct snd_ctl_elem_value *ucontrol)
+					 struct snd_ctl_elem_value *ucontrol)
 {
 	struct ensoniq *ensoniq = snd_kcontrol_chip(kcontrol);
 	unsigned int val;
@@ -1410,7 +1410,7 @@ static int snd_ens1373_spdif_stream_get(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_ens1373_spdif_stream_put(struct snd_kcontrol *kcontrol,
-                                        struct snd_ctl_elem_value *ucontrol)
+					struct snd_ctl_elem_value *ucontrol)
 {
 	struct ensoniq *ensoniq = snd_kcontrol_chip(kcontrol);
 	unsigned int val;

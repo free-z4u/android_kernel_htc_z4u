@@ -142,15 +142,15 @@ static void scan_tree      (deflate_state *s, ct_data *tree, int max_code);
 static void send_tree      (deflate_state *s, ct_data *tree, int max_code);
 static int  build_bl_tree  (deflate_state *s);
 static void send_all_trees (deflate_state *s, int lcodes, int dcodes,
-                           int blcodes);
+			   int blcodes);
 static void compress_block (deflate_state *s, ct_data *ltree,
-                           ct_data *dtree);
+			   ct_data *dtree);
 static void set_data_type  (deflate_state *s);
 static unsigned bi_reverse (unsigned value, int length);
 static void bi_windup      (deflate_state *s);
 static void bi_flush       (deflate_state *s);
 static void copy_block     (deflate_state *s, char *buf, unsigned len,
-                           int header);
+			   int header);
 
 #ifndef DEBUG_ZLIB
 #  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
@@ -191,13 +191,13 @@ static void send_bits(
      * unused bits in value.
      */
     if (s->bi_valid > (int)Buf_size - length) {
-        s->bi_buf |= (value << s->bi_valid);
-        put_short(s, s->bi_buf);
-        s->bi_buf = (ush)value >> (Buf_size - s->bi_valid);
-        s->bi_valid += length - Buf_size;
+	s->bi_buf |= (value << s->bi_valid);
+	put_short(s, s->bi_buf);
+	s->bi_buf = (ush)value >> (Buf_size - s->bi_valid);
+	s->bi_valid += length - Buf_size;
     } else {
-        s->bi_buf |= value << s->bi_valid;
-        s->bi_valid += length;
+	s->bi_buf |= value << s->bi_valid;
+	s->bi_valid += length;
     }
 }
 #else /* !DEBUG_ZLIB */
@@ -238,10 +238,10 @@ static void tr_static_init(void)
     /* Initialize the mapping length (0..255) -> length code (0..28) */
     length = 0;
     for (code = 0; code < LENGTH_CODES-1; code++) {
-        base_length[code] = length;
-        for (n = 0; n < (1<<extra_lbits[code]); n++) {
-            length_code[length++] = (uch)code;
-        }
+	base_length[code] = length;
+	for (n = 0; n < (1<<extra_lbits[code]); n++) {
+	    length_code[length++] = (uch)code;
+	}
     }
     Assert (length == 256, "tr_static_init: length != 256");
     /* Note that the length 255 (match length 258) can be represented
@@ -253,18 +253,18 @@ static void tr_static_init(void)
     /* Initialize the mapping dist (0..32K) -> dist code (0..29) */
     dist = 0;
     for (code = 0 ; code < 16; code++) {
-        base_dist[code] = dist;
-        for (n = 0; n < (1<<extra_dbits[code]); n++) {
-            dist_code[dist++] = (uch)code;
-        }
+	base_dist[code] = dist;
+	for (n = 0; n < (1<<extra_dbits[code]); n++) {
+	    dist_code[dist++] = (uch)code;
+	}
     }
     Assert (dist == 256, "tr_static_init: dist != 256");
     dist >>= 7; /* from now on, all distances are divided by 128 */
     for ( ; code < D_CODES; code++) {
-        base_dist[code] = dist << 7;
-        for (n = 0; n < (1<<(extra_dbits[code]-7)); n++) {
-            dist_code[256 + dist++] = (uch)code;
-        }
+	base_dist[code] = dist << 7;
+	for (n = 0; n < (1<<(extra_dbits[code]-7)); n++) {
+	    dist_code[256 + dist++] = (uch)code;
+	}
     }
     Assert (dist == 256, "tr_static_init: 256+dist != 512");
 
@@ -283,8 +283,8 @@ static void tr_static_init(void)
 
     /* The static distance tree is trivial: */
     for (n = 0; n < D_CODES; n++) {
-        static_dtree[n].Len = 5;
-        static_dtree[n].Code = bi_reverse((unsigned)n, 5);
+	static_dtree[n].Len = 5;
+	static_dtree[n].Code = bi_reverse((unsigned)n, 5);
     }
     static_init_done = 1;
 }
@@ -377,19 +377,19 @@ static void pqdownheap(
     int v = s->heap[k];
     int j = k << 1;  /* left son of k */
     while (j <= s->heap_len) {
-        /* Set j to the smallest of the two sons: */
-        if (j < s->heap_len &&
-            smaller(tree, s->heap[j+1], s->heap[j], s->depth)) {
-            j++;
-        }
-        /* Exit if v is smaller than both sons */
-        if (smaller(tree, v, s->heap[j], s->depth)) break;
+	/* Set j to the smallest of the two sons: */
+	if (j < s->heap_len &&
+	    smaller(tree, s->heap[j+1], s->heap[j], s->depth)) {
+	    j++;
+	}
+	/* Exit if v is smaller than both sons */
+	if (smaller(tree, v, s->heap[j], s->depth)) break;
 
-        /* Exchange v with the smallest son */
-        s->heap[k] = s->heap[j];  k = j;
+	/* Exchange v with the smallest son */
+	s->heap[k] = s->heap[j];  k = j;
 
-        /* And continue down the tree, setting j to the left son of k */
-        j <<= 1;
+	/* And continue down the tree, setting j to the left son of k */
+	j <<= 1;
     }
     s->heap[k] = v;
 }
@@ -430,20 +430,20 @@ static void gen_bitlen(
     tree[s->heap[s->heap_max]].Len = 0; /* root of the heap */
 
     for (h = s->heap_max+1; h < HEAP_SIZE; h++) {
-        n = s->heap[h];
-        bits = tree[tree[n].Dad].Len + 1;
-        if (bits > max_length) bits = max_length, overflow++;
-        tree[n].Len = (ush)bits;
-        /* We overwrite tree[n].Dad which is no longer needed */
+	n = s->heap[h];
+	bits = tree[tree[n].Dad].Len + 1;
+	if (bits > max_length) bits = max_length, overflow++;
+	tree[n].Len = (ush)bits;
+	/* We overwrite tree[n].Dad which is no longer needed */
 
-        if (n > max_code) continue; /* not a leaf node */
+	if (n > max_code) continue; /* not a leaf node */
 
-        s->bl_count[bits]++;
-        xbits = 0;
-        if (n >= base) xbits = extra[n-base];
-        f = tree[n].Freq;
-        s->opt_len += (ulg)f * (bits + xbits);
-        if (stree) s->static_len += (ulg)f * (stree[n].Len + xbits);
+	s->bl_count[bits]++;
+	xbits = 0;
+	if (n >= base) xbits = extra[n-base];
+	f = tree[n].Freq;
+	s->opt_len += (ulg)f * (bits + xbits);
+	if (stree) s->static_len += (ulg)f * (stree[n].Len + xbits);
     }
     if (overflow == 0) return;
 
@@ -452,15 +452,15 @@ static void gen_bitlen(
 
     /* Find the first bit length which could increase: */
     do {
-        bits = max_length-1;
-        while (s->bl_count[bits] == 0) bits--;
-        s->bl_count[bits]--;      /* move one leaf down the tree */
-        s->bl_count[bits+1] += 2; /* move one overflow item as its brother */
-        s->bl_count[max_length]--;
-        /* The brother of the overflow item also moves one step up,
-         * but this does not affect bl_count[max_length]
-         */
-        overflow -= 2;
+	bits = max_length-1;
+	while (s->bl_count[bits] == 0) bits--;
+	s->bl_count[bits]--;      /* move one leaf down the tree */
+	s->bl_count[bits+1] += 2; /* move one overflow item as its brother */
+	s->bl_count[max_length]--;
+	/* The brother of the overflow item also moves one step up,
+	 * but this does not affect bl_count[max_length]
+	 */
+	overflow -= 2;
     } while (overflow > 0);
 
     /* Now recompute all bit lengths, scanning in increasing frequency.
@@ -469,18 +469,18 @@ static void gen_bitlen(
      * from 'ar' written by Haruhiko Okumura.)
      */
     for (bits = max_length; bits != 0; bits--) {
-        n = s->bl_count[bits];
-        while (n != 0) {
-            m = s->heap[--h];
-            if (m > max_code) continue;
-            if (tree[m].Len != (unsigned) bits) {
-                Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
-                s->opt_len += ((long)bits - (long)tree[m].Len)
-                              *(long)tree[m].Freq;
-                tree[m].Len = (ush)bits;
-            }
-            n--;
-        }
+	n = s->bl_count[bits];
+	while (n != 0) {
+	    m = s->heap[--h];
+	    if (m > max_code) continue;
+	    if (tree[m].Len != (unsigned) bits) {
+		Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
+		s->opt_len += ((long)bits - (long)tree[m].Len)
+			      *(long)tree[m].Freq;
+		tree[m].Len = (ush)bits;
+	    }
+	    n--;
+	}
     }
 }
 
@@ -507,23 +507,23 @@ static void gen_codes(
      * without bit reversal.
      */
     for (bits = 1; bits <= MAX_BITS; bits++) {
-        next_code[bits] = code = (code + bl_count[bits-1]) << 1;
+	next_code[bits] = code = (code + bl_count[bits-1]) << 1;
     }
     /* Check that the bit counts in bl_count are consistent. The last code
      * must be all ones.
      */
     Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
-            "inconsistent bit counts");
+	    "inconsistent bit counts");
     Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
 
     for (n = 0;  n <= max_code; n++) {
-        int len = tree[n].Len;
-        if (len == 0) continue;
-        /* Now reverse the bits */
-        tree[n].Code = bi_reverse(next_code[len]++, len);
+	int len = tree[n].Len;
+	if (len == 0) continue;
+	/* Now reverse the bits */
+	tree[n].Code = bi_reverse(next_code[len]++, len);
 
-        Tracecv(tree != static_ltree, (stderr,"\nn %3d %c l %2d c %4x (%x) ",
-             n, (isgraph(n) ? n : ' '), len, tree[n].Code, next_code[len]-1));
+	Tracecv(tree != static_ltree, (stderr,"\nn %3d %c l %2d c %4x (%x) ",
+	     n, (isgraph(n) ? n : ' '), len, tree[n].Code, next_code[len]-1));
     }
 }
 
@@ -554,12 +554,12 @@ static void build_tree(
     s->heap_len = 0, s->heap_max = HEAP_SIZE;
 
     for (n = 0; n < elems; n++) {
-        if (tree[n].Freq != 0) {
-            s->heap[++(s->heap_len)] = max_code = n;
-            s->depth[n] = 0;
-        } else {
-            tree[n].Len = 0;
-        }
+	if (tree[n].Freq != 0) {
+	    s->heap[++(s->heap_len)] = max_code = n;
+	    s->depth[n] = 0;
+	} else {
+	    tree[n].Len = 0;
+	}
     }
 
     /* The pkzip format requires that at least one distance code exists,
@@ -568,11 +568,11 @@ static void build_tree(
      * two codes of non zero frequency.
      */
     while (s->heap_len < 2) {
-        node = s->heap[++(s->heap_len)] = (max_code < 2 ? ++max_code : 0);
-        tree[node].Freq = 1;
-        s->depth[node] = 0;
-        s->opt_len--; if (stree) s->static_len -= stree[node].Len;
-        /* node is 0 or 1 so it does not have extra bits */
+	node = s->heap[++(s->heap_len)] = (max_code < 2 ? ++max_code : 0);
+	tree[node].Freq = 1;
+	s->depth[node] = 0;
+	s->opt_len--; if (stree) s->static_len -= stree[node].Len;
+	/* node is 0 or 1 so it does not have extra bits */
     }
     desc->max_code = max_code;
 
@@ -586,25 +586,25 @@ static void build_tree(
      */
     node = elems;              /* next internal node of the tree */
     do {
-        pqremove(s, tree, n);  /* n = node of least frequency */
-        m = s->heap[SMALLEST]; /* m = node of next least frequency */
+	pqremove(s, tree, n);  /* n = node of least frequency */
+	m = s->heap[SMALLEST]; /* m = node of next least frequency */
 
-        s->heap[--(s->heap_max)] = n; /* keep the nodes sorted by frequency */
-        s->heap[--(s->heap_max)] = m;
+	s->heap[--(s->heap_max)] = n; /* keep the nodes sorted by frequency */
+	s->heap[--(s->heap_max)] = m;
 
-        /* Create a new node father of n and m */
-        tree[node].Freq = tree[n].Freq + tree[m].Freq;
-        s->depth[node] = (uch) (max(s->depth[n], s->depth[m]) + 1);
-        tree[n].Dad = tree[m].Dad = (ush)node;
+	/* Create a new node father of n and m */
+	tree[node].Freq = tree[n].Freq + tree[m].Freq;
+	s->depth[node] = (uch) (max(s->depth[n], s->depth[m]) + 1);
+	tree[n].Dad = tree[m].Dad = (ush)node;
 #ifdef DUMP_BL_TREE
-        if (tree == s->bl_tree) {
-            fprintf(stderr,"\nnode %d(%d), sons %d(%d) %d(%d)",
-                    node, tree[node].Freq, n, tree[n].Freq, m, tree[m].Freq);
-        }
+	if (tree == s->bl_tree) {
+	    fprintf(stderr,"\nnode %d(%d), sons %d(%d) %d(%d)",
+		    node, tree[node].Freq, n, tree[n].Freq, m, tree[m].Freq);
+	}
 #endif
-        /* and insert the new node in the heap */
-        s->heap[SMALLEST] = node++;
-        pqdownheap(s, tree, SMALLEST);
+	/* and insert the new node in the heap */
+	s->heap[SMALLEST] = node++;
+	pqdownheap(s, tree, SMALLEST);
 
     } while (s->heap_len >= 2);
 
@@ -641,27 +641,27 @@ static void scan_tree(
     tree[max_code+1].Len = (ush)0xffff; /* guard */
 
     for (n = 0; n <= max_code; n++) {
-        curlen = nextlen; nextlen = tree[n+1].Len;
-        if (++count < max_count && curlen == nextlen) {
-            continue;
-        } else if (count < min_count) {
-            s->bl_tree[curlen].Freq += count;
-        } else if (curlen != 0) {
-            if (curlen != prevlen) s->bl_tree[curlen].Freq++;
-            s->bl_tree[REP_3_6].Freq++;
-        } else if (count <= 10) {
-            s->bl_tree[REPZ_3_10].Freq++;
-        } else {
-            s->bl_tree[REPZ_11_138].Freq++;
-        }
-        count = 0; prevlen = curlen;
-        if (nextlen == 0) {
-            max_count = 138, min_count = 3;
-        } else if (curlen == nextlen) {
-            max_count = 6, min_count = 3;
-        } else {
-            max_count = 7, min_count = 4;
-        }
+	curlen = nextlen; nextlen = tree[n+1].Len;
+	if (++count < max_count && curlen == nextlen) {
+	    continue;
+	} else if (count < min_count) {
+	    s->bl_tree[curlen].Freq += count;
+	} else if (curlen != 0) {
+	    if (curlen != prevlen) s->bl_tree[curlen].Freq++;
+	    s->bl_tree[REP_3_6].Freq++;
+	} else if (count <= 10) {
+	    s->bl_tree[REPZ_3_10].Freq++;
+	} else {
+	    s->bl_tree[REPZ_11_138].Freq++;
+	}
+	count = 0; prevlen = curlen;
+	if (nextlen == 0) {
+	    max_count = 138, min_count = 3;
+	} else if (curlen == nextlen) {
+	    max_count = 6, min_count = 3;
+	} else {
+	    max_count = 7, min_count = 4;
+	}
     }
 }
 
@@ -687,33 +687,33 @@ static void send_tree(
     if (nextlen == 0) max_count = 138, min_count = 3;
 
     for (n = 0; n <= max_code; n++) {
-        curlen = nextlen; nextlen = tree[n+1].Len;
-        if (++count < max_count && curlen == nextlen) {
-            continue;
-        } else if (count < min_count) {
-            do { send_code(s, curlen, s->bl_tree); } while (--count != 0);
+	curlen = nextlen; nextlen = tree[n+1].Len;
+	if (++count < max_count && curlen == nextlen) {
+	    continue;
+	} else if (count < min_count) {
+	    do { send_code(s, curlen, s->bl_tree); } while (--count != 0);
 
-        } else if (curlen != 0) {
-            if (curlen != prevlen) {
-                send_code(s, curlen, s->bl_tree); count--;
-            }
-            Assert(count >= 3 && count <= 6, " 3_6?");
-            send_code(s, REP_3_6, s->bl_tree); send_bits(s, count-3, 2);
+	} else if (curlen != 0) {
+	    if (curlen != prevlen) {
+		send_code(s, curlen, s->bl_tree); count--;
+	    }
+	    Assert(count >= 3 && count <= 6, " 3_6?");
+	    send_code(s, REP_3_6, s->bl_tree); send_bits(s, count-3, 2);
 
-        } else if (count <= 10) {
-            send_code(s, REPZ_3_10, s->bl_tree); send_bits(s, count-3, 3);
+	} else if (count <= 10) {
+	    send_code(s, REPZ_3_10, s->bl_tree); send_bits(s, count-3, 3);
 
-        } else {
-            send_code(s, REPZ_11_138, s->bl_tree); send_bits(s, count-11, 7);
-        }
-        count = 0; prevlen = curlen;
-        if (nextlen == 0) {
-            max_count = 138, min_count = 3;
-        } else if (curlen == nextlen) {
-            max_count = 6, min_count = 3;
-        } else {
-            max_count = 7, min_count = 4;
-        }
+	} else {
+	    send_code(s, REPZ_11_138, s->bl_tree); send_bits(s, count-11, 7);
+	}
+	count = 0; prevlen = curlen;
+	if (nextlen == 0) {
+	    max_count = 138, min_count = 3;
+	} else if (curlen == nextlen) {
+	    max_count = 6, min_count = 3;
+	} else {
+	    max_count = 7, min_count = 4;
+	}
     }
 }
 
@@ -742,12 +742,12 @@ static int build_bl_tree(
      * 3 but the actual value used is 4.)
      */
     for (max_blindex = BL_CODES-1; max_blindex >= 3; max_blindex--) {
-        if (s->bl_tree[bl_order[max_blindex]].Len != 0) break;
+	if (s->bl_tree[bl_order[max_blindex]].Len != 0) break;
     }
     /* Update opt_len to include the bit length tree and counts */
     s->opt_len += 3*(max_blindex+1) + 5+5+4;
     Tracev((stderr, "\ndyn trees: dyn %ld, stat %ld",
-            s->opt_len, s->static_len));
+	    s->opt_len, s->static_len));
 
     return max_blindex;
 }
@@ -768,14 +768,14 @@ static void send_all_trees(
 
     Assert (lcodes >= 257 && dcodes >= 1 && blcodes >= 4, "not enough codes");
     Assert (lcodes <= L_CODES && dcodes <= D_CODES && blcodes <= BL_CODES,
-            "too many codes");
+	    "too many codes");
     Tracev((stderr, "\nbl counts: "));
     send_bits(s, lcodes-257, 5); /* not +255 as stated in appnote.txt */
     send_bits(s, dcodes-1,   5);
     send_bits(s, blcodes-4,  4); /* not -3 as stated in appnote.txt */
     for (rank = 0; rank < blcodes; rank++) {
-        Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
-        send_bits(s, s->bl_tree[bl_order[rank]].Len, 3);
+	Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
+	send_bits(s, s->bl_tree[bl_order[rank]].Len, 3);
     }
     Tracev((stderr, "\nbl tree: sent %ld", s->bits_sent));
 
@@ -840,10 +840,10 @@ void zlib_tr_align(
      * of the EOB plus what we have just sent of the empty static block.
      */
     if (1 + s->last_eob_len + 10 - s->bi_valid < 9) {
-        send_bits(s, STATIC_TREES<<1, 3);
-        send_code(s, END_BLOCK, static_ltree);
-        s->compressed_len += 10L;
-        bi_flush(s);
+	send_bits(s, STATIC_TREES<<1, 3);
+	send_code(s, END_BLOCK, static_ltree);
+	s->compressed_len += 10L;
+	bi_flush(s);
     }
     s->last_eob_len = 7;
 }
@@ -897,7 +897,7 @@ ulg zlib_tr_flush_block(
 	if (static_lenb <= opt_lenb) opt_lenb = static_lenb;
 
     } else {
-        Assert(buf != (char*)0, "lost buf");
+	Assert(buf != (char*)0, "lost buf");
 	opt_lenb = static_lenb = stored_len + 5; /* force a stored block */
     }
 
@@ -911,12 +911,12 @@ ulg zlib_tr_flush_block(
 #  else
     if (stored_len <= opt_lenb && eof && s->compressed_len==0L && seekable()) {
 #  endif
-        /* Since LIT_BUFSIZE <= 2*WSIZE, the input data must be there: */
-        if (buf == (char*)0) error ("block vanished");
+	/* Since LIT_BUFSIZE <= 2*WSIZE, the input data must be there: */
+	if (buf == (char*)0) error ("block vanished");
 
-        copy_block(s, buf, (unsigned)stored_len, 0); /* without header */
-        s->compressed_len = stored_len << 3;
-        s->method = STORED;
+	copy_block(s, buf, (unsigned)stored_len, 0); /* without header */
+	s->compressed_len = stored_len << 3;
+	s->method = STORED;
     } else
 #endif /* STORED_FILE_OK */
 
@@ -924,40 +924,40 @@ ulg zlib_tr_flush_block(
     if (buf != (char*)0) { /* force stored block */
 #else
     if (stored_len+4 <= opt_lenb && buf != (char*)0) {
-                       /* 4: two words for the lengths */
+		       /* 4: two words for the lengths */
 #endif
-        /* The test buf != NULL is only necessary if LIT_BUFSIZE > WSIZE.
-         * Otherwise we can't have processed more than WSIZE input bytes since
-         * the last block flush, because compression would have been
-         * successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
-         * transform a block into a stored block.
-         */
-        zlib_tr_stored_block(s, buf, stored_len, eof);
+	/* The test buf != NULL is only necessary if LIT_BUFSIZE > WSIZE.
+	 * Otherwise we can't have processed more than WSIZE input bytes since
+	 * the last block flush, because compression would have been
+	 * successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
+	 * transform a block into a stored block.
+	 */
+	zlib_tr_stored_block(s, buf, stored_len, eof);
 
 #ifdef FORCE_STATIC
     } else if (static_lenb >= 0) { /* force static trees */
 #else
     } else if (static_lenb == opt_lenb) {
 #endif
-        send_bits(s, (STATIC_TREES<<1)+eof, 3);
-        compress_block(s, (ct_data *)static_ltree, (ct_data *)static_dtree);
-        s->compressed_len += 3 + s->static_len;
+	send_bits(s, (STATIC_TREES<<1)+eof, 3);
+	compress_block(s, (ct_data *)static_ltree, (ct_data *)static_dtree);
+	s->compressed_len += 3 + s->static_len;
     } else {
-        send_bits(s, (DYN_TREES<<1)+eof, 3);
-        send_all_trees(s, s->l_desc.max_code+1, s->d_desc.max_code+1,
-                       max_blindex+1);
-        compress_block(s, (ct_data *)s->dyn_ltree, (ct_data *)s->dyn_dtree);
-        s->compressed_len += 3 + s->opt_len;
+	send_bits(s, (DYN_TREES<<1)+eof, 3);
+	send_all_trees(s, s->l_desc.max_code+1, s->d_desc.max_code+1,
+		       max_blindex+1);
+	compress_block(s, (ct_data *)s->dyn_ltree, (ct_data *)s->dyn_dtree);
+	s->compressed_len += 3 + s->opt_len;
     }
     Assert (s->compressed_len == s->bits_sent, "bad compressed size");
     init_block(s);
 
     if (eof) {
-        bi_windup(s);
-        s->compressed_len += 7;  /* align on byte boundary */
+	bi_windup(s);
+	s->compressed_len += 7;  /* align on byte boundary */
     }
     Tracev((stderr,"\ncomprlen %lu(%lu) ", s->compressed_len>>3,
-           s->compressed_len-7*eof));
+	   s->compressed_len-7*eof));
 
     return s->compressed_len >> 3;
 }
@@ -975,35 +975,35 @@ int zlib_tr_tally(
     s->d_buf[s->last_lit] = (ush)dist;
     s->l_buf[s->last_lit++] = (uch)lc;
     if (dist == 0) {
-        /* lc is the unmatched char */
-        s->dyn_ltree[lc].Freq++;
+	/* lc is the unmatched char */
+	s->dyn_ltree[lc].Freq++;
     } else {
-        s->matches++;
-        /* Here, lc is the match length - MIN_MATCH */
-        dist--;             /* dist = match distance - 1 */
-        Assert((ush)dist < (ush)MAX_DIST(s) &&
-               (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
-               (ush)d_code(dist) < (ush)D_CODES,  "zlib_tr_tally: bad match");
+	s->matches++;
+	/* Here, lc is the match length - MIN_MATCH */
+	dist--;             /* dist = match distance - 1 */
+	Assert((ush)dist < (ush)MAX_DIST(s) &&
+	       (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
+	       (ush)d_code(dist) < (ush)D_CODES,  "zlib_tr_tally: bad match");
 
-        s->dyn_ltree[length_code[lc]+LITERALS+1].Freq++;
-        s->dyn_dtree[d_code(dist)].Freq++;
+	s->dyn_ltree[length_code[lc]+LITERALS+1].Freq++;
+	s->dyn_dtree[d_code(dist)].Freq++;
     }
 
     /* Try to guess if it is profitable to stop the current block here */
     if ((s->last_lit & 0xfff) == 0 && s->level > 2) {
-        /* Compute an upper bound for the compressed length */
-        ulg out_length = (ulg)s->last_lit*8L;
-        ulg in_length = (ulg)((long)s->strstart - s->block_start);
-        int dcode;
-        for (dcode = 0; dcode < D_CODES; dcode++) {
-            out_length += (ulg)s->dyn_dtree[dcode].Freq *
-                (5L+extra_dbits[dcode]);
-        }
-        out_length >>= 3;
-        Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%%) ",
-               s->last_lit, in_length, out_length,
-               100L - out_length*100L/in_length));
-        if (s->matches < s->last_lit/2 && out_length < in_length/2) return 1;
+	/* Compute an upper bound for the compressed length */
+	ulg out_length = (ulg)s->last_lit*8L;
+	ulg in_length = (ulg)((long)s->strstart - s->block_start);
+	int dcode;
+	for (dcode = 0; dcode < D_CODES; dcode++) {
+	    out_length += (ulg)s->dyn_dtree[dcode].Freq *
+		(5L+extra_dbits[dcode]);
+	}
+	out_length >>= 3;
+	Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%%) ",
+	       s->last_lit, in_length, out_length,
+	       100L - out_length*100L/in_length));
+	if (s->matches < s->last_lit/2 && out_length < in_length/2) return 1;
     }
     return (s->last_lit == s->lit_bufsize-1);
     /* We avoid equality with lit_bufsize because of wraparound at 64K
@@ -1028,34 +1028,34 @@ static void compress_block(
     int extra;          /* number of extra bits to send */
 
     if (s->last_lit != 0) do {
-        dist = s->d_buf[lx];
-        lc = s->l_buf[lx++];
-        if (dist == 0) {
-            send_code(s, lc, ltree); /* send a literal byte */
-            Tracecv(isgraph(lc), (stderr," '%c' ", lc));
-        } else {
-            /* Here, lc is the match length - MIN_MATCH */
-            code = length_code[lc];
-            send_code(s, code+LITERALS+1, ltree); /* send the length code */
-            extra = extra_lbits[code];
-            if (extra != 0) {
-                lc -= base_length[code];
-                send_bits(s, lc, extra);       /* send the extra length bits */
-            }
-            dist--; /* dist is now the match distance - 1 */
-            code = d_code(dist);
-            Assert (code < D_CODES, "bad d_code");
+	dist = s->d_buf[lx];
+	lc = s->l_buf[lx++];
+	if (dist == 0) {
+	    send_code(s, lc, ltree); /* send a literal byte */
+	    Tracecv(isgraph(lc), (stderr," '%c' ", lc));
+	} else {
+	    /* Here, lc is the match length - MIN_MATCH */
+	    code = length_code[lc];
+	    send_code(s, code+LITERALS+1, ltree); /* send the length code */
+	    extra = extra_lbits[code];
+	    if (extra != 0) {
+		lc -= base_length[code];
+		send_bits(s, lc, extra);       /* send the extra length bits */
+	    }
+	    dist--; /* dist is now the match distance - 1 */
+	    code = d_code(dist);
+	    Assert (code < D_CODES, "bad d_code");
 
-            send_code(s, code, dtree);       /* send the distance code */
-            extra = extra_dbits[code];
-            if (extra != 0) {
-                dist -= base_dist[code];
-                send_bits(s, dist, extra);   /* send the extra distance bits */
-            }
-        } /* literal or match pair ? */
+	    send_code(s, code, dtree);       /* send the distance code */
+	    extra = extra_dbits[code];
+	    if (extra != 0) {
+		dist -= base_dist[code];
+		send_bits(s, dist, extra);   /* send the extra distance bits */
+	    }
+	} /* literal or match pair ? */
 
-        /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
-        Assert(s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
+	/* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
+	Assert(s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
 
     } while (lx < s->last_lit);
 
@@ -1097,10 +1097,10 @@ static void copy_block(
     s->last_eob_len = 8; /* enough lookahead for inflate */
 
     if (header) {
-        put_short(s, (ush)len);
-        put_short(s, (ush)~len);
+	put_short(s, (ush)len);
+	put_short(s, (ush)~len);
 #ifdef DEBUG_ZLIB
-        s->bits_sent += 2*16;
+	s->bits_sent += 2*16;
 #endif
     }
 #ifdef DEBUG_ZLIB

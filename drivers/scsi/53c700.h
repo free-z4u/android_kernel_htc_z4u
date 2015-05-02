@@ -210,7 +210,7 @@ struct NCR_700_Host_Parameters {
 
 	/* NOTHING BELOW HERE NEEDS ALTERING */
 	__u32	fast:1;		/* if we can alter the SCSI bus clock
-                                   speed (so can negiotiate sync) */
+				   speed (so can negiotiate sync) */
 	int	sync_clock;	/* The speed of the SYNC core */
 
 	__u32	*script;		/* pointer to script location */

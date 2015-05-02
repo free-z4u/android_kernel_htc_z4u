@@ -123,7 +123,7 @@ static const char *space_names[] = {
 
 void die_if_kernel(char *,struct pt_regs *,int);
 asmlinkage int do_page_fault(struct pt_regs *regs, unsigned long address,
-                             unsigned long error_code);
+			     unsigned long error_code);
 int send_fault_sig(struct pt_regs *regs);
 
 asmlinkage void trap_c(struct frame *fp);
@@ -304,7 +304,7 @@ static inline void access_error040(struct frame *fp)
 
 #ifdef DEBUG
 	printk("ssw=%#x, fa=%#lx\n", ssw, fp->un.fmt7.faddr);
-        printk("wb1s=%#x, wb2s=%#x, wb3s=%#x\n", fp->un.fmt7.wb1s,
+	printk("wb1s=%#x, wb2s=%#x, wb3s=%#x\n", fp->un.fmt7.wb1s,
 		fp->un.fmt7.wb2s, fp->un.fmt7.wb3s);
 	printk ("wb2a=%lx, wb3a=%lx, wb2d=%lx, wb3d=%lx\n",
 		fp->un.fmt7.wb2a, fp->un.fmt7.wb3a,
@@ -352,7 +352,7 @@ static inline void access_error040(struct frame *fp)
 			}
 			/* disable writeback into user space from kernel
 			 * (if do_page_fault didn't fix the mapping,
-                         * the writeback won't do good)
+			 * the writeback won't do good)
 			 */
 disable_wb:
 #ifdef DEBUG

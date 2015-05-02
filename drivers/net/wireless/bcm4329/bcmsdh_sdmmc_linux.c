@@ -84,7 +84,7 @@ extern int bcmsdh_probe(struct device *dev);
 extern int bcmsdh_remove(struct device *dev);
 
 static int bcmsdh_sdmmc_probe(struct sdio_func *func,
-                              const struct sdio_device_id *id)
+			      const struct sdio_device_id *id)
 {
 	int ret = 0;
 	static struct sdio_func sdio_func_0;

@@ -294,9 +294,9 @@ extern pgprot_t pgprot_writecombine(pgprot_t prot);
 #define __HAVE_PHYS_MEM_ACCESS_PROT
 struct file;
 pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-                              unsigned long size, pgprot_t vma_prot);
+			      unsigned long size, pgprot_t vma_prot);
 int phys_mem_access_prot_allowed(struct file *file, unsigned long pfn,
-                              unsigned long size, pgprot_t *vma_prot);
+			      unsigned long size, pgprot_t *vma_prot);
 
 /* Install a pte for a particular vaddr in kernel space. */
 void set_pte_vaddr(unsigned long vaddr, pte_t pte);

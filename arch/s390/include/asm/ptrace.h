@@ -190,7 +190,7 @@ typedef union
 {
 	float   f;
 	double  d;
-        __u64   ui;
+	__u64   ui;
 	struct
 	{
 		__u32 hi;
@@ -213,8 +213,8 @@ typedef struct
 /* this typedef defines how a Program Status Word looks like */
 typedef struct
 {
-        unsigned long mask;
-        unsigned long addr;
+	unsigned long mask;
+	unsigned long addr;
 } __attribute__ ((aligned(8))) psw_t;
 
 typedef struct

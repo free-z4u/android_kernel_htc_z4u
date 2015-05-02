@@ -315,15 +315,15 @@ struct sigmatel_spec {
 };
 
 static const hda_nid_t stac9200_adc_nids[1] = {
-        0x03,
+	0x03,
 };
 
 static const hda_nid_t stac9200_mux_nids[1] = {
-        0x0c,
+	0x0c,
 };
 
 static const hda_nid_t stac9200_dac_nids[1] = {
-        0x02,
+	0x02,
 };
 
 static const hda_nid_t stac92hd73xx_pwr_nids[8] = {
@@ -421,15 +421,15 @@ static const unsigned long stac92hd71bxx_capvols[] = {
 #define stac92hd71bxx_capsws	stac92hd71bxx_capvols
 
 static const hda_nid_t stac925x_adc_nids[1] = {
-        0x03,
+	0x03,
 };
 
 static const hda_nid_t stac925x_mux_nids[1] = {
-        0x0f,
+	0x0f,
 };
 
 static const hda_nid_t stac925x_dac_nids[1] = {
-        0x02,
+	0x02,
 };
 
 #define STAC925X_NUM_DMICS	1
@@ -449,11 +449,11 @@ static const unsigned long stac925x_capsws[] = {
 };
 
 static const hda_nid_t stac922x_adc_nids[2] = {
-        0x06, 0x07,
+	0x06, 0x07,
 };
 
 static const hda_nid_t stac922x_mux_nids[2] = {
-        0x12, 0x13,
+	0x12, 0x13,
 };
 
 #define STAC922X_NUM_CAPS	2
@@ -468,11 +468,11 @@ static const hda_nid_t stac927x_slave_dig_outs[2] = {
 };
 
 static const hda_nid_t stac927x_adc_nids[3] = {
-        0x07, 0x08, 0x09
+	0x07, 0x08, 0x09
 };
 
 static const hda_nid_t stac927x_mux_nids[3] = {
-        0x15, 0x16, 0x17
+	0x15, 0x16, 0x17
 };
 
 static const hda_nid_t stac927x_smux_nids[1] = {
@@ -510,11 +510,11 @@ static const char * const stac927x_spdif_labels[5] = {
 };
 
 static const hda_nid_t stac9205_adc_nids[2] = {
-        0x12, 0x13
+	0x12, 0x13
 };
 
 static const hda_nid_t stac9205_mux_nids[2] = {
-        0x19, 0x1a
+	0x19, 0x1a
 };
 
 static const hda_nid_t stac9205_dmux_nids[1] = {
@@ -527,7 +527,7 @@ static const hda_nid_t stac9205_smux_nids[1] = {
 
 #define STAC9205_NUM_DMICS	2
 static const hda_nid_t stac9205_dmic_nids[STAC9205_NUM_DMICS + 1] = {
-        0x17, 0x18, 0
+	0x17, 0x18, 0
 };
 
 #define STAC9205_NUM_CAPS	2
@@ -2666,7 +2666,7 @@ static int stac92xx_io_switch_get(struct snd_kcontrol *kcontrol, struct snd_ctl_
 
 static int stac92xx_io_switch_put(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
-        struct hda_codec *codec = snd_kcontrol_chip(kcontrol);
+	struct hda_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct sigmatel_spec *spec = codec->spec;
 	hda_nid_t nid = kcontrol->private_value;
 	int io_idx = (nid == spec->mic_switch) ? 1 : 0;
@@ -2689,7 +2689,7 @@ static int stac92xx_io_switch_put(struct snd_kcontrol *kcontrol, struct snd_ctl_
 	if (spec->hp_detect)
 		stac_issue_unsol_event(codec, nid);
 
-        return 1;
+	return 1;
 }
 
 #define stac92xx_clfe_switch_info snd_ctl_boolean_mono_info
@@ -2736,10 +2736,10 @@ static int stac92xx_clfe_switch_put(struct snd_kcontrol *kcontrol,
 	{ .iface = SNDRV_CTL_ELEM_IFACE_MIXER, \
 	  .name = xname, \
 	  .index = 0, \
-          .info = stac92xx_io_switch_info, \
-          .get = stac92xx_io_switch_get, \
-          .put = stac92xx_io_switch_put, \
-          .private_value = xpval, \
+	  .info = stac92xx_io_switch_info, \
+	  .get = stac92xx_io_switch_get, \
+	  .put = stac92xx_io_switch_put, \
+	  .private_value = xpval, \
 	}
 
 #define STAC_CODEC_CLFE_SWITCH(xname, xpval) \

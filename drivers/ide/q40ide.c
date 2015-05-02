@@ -39,7 +39,7 @@ static const unsigned long pcide_bases[Q40IDE_NUM_HWIFS] = {
 
 static int q40ide_default_irq(unsigned long base)
 {
-           switch (base) {
+	   switch (base) {
 	            case 0x1f0: return 14;
 		    case 0x170: return 15;
 		    case 0x1e8: return 11;

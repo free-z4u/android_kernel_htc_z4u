@@ -177,7 +177,7 @@ takara_map_irq_srm(const struct pci_dev *dev, u8 slot, u8 pin)
 		{16+ 0, 16+0, 16+1, 16+2, 16+3},   /* slot 20= device 1 */
 	};
 	const long min_idsel = 6, max_idsel = 20, irqs_per_slot = 5;
-        int irq = COMMON_TABLE_LOOKUP;
+	int irq = COMMON_TABLE_LOOKUP;
 	if (irq >= 0 && irq < 16) {
 		/* Guess that we are behind a bridge.  */
 		unsigned int busslot = PCI_SLOT(dev->bus->self->devfn);

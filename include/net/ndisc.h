@@ -58,8 +58,8 @@ struct sk_buff;
 extern struct neigh_table nd_tbl;
 
 struct nd_msg {
-        struct icmp6hdr	icmph;
-        struct in6_addr	target;
+	struct icmp6hdr	icmph;
+	struct in6_addr	target;
 	__u8		opt[0];
 };
 
@@ -69,7 +69,7 @@ struct rs_msg {
 };
 
 struct ra_msg {
-        struct icmp6hdr		icmph;
+	struct icmp6hdr		icmph;
 	__be32			reachable_time;
 	__be32			retrans_timer;
 };

@@ -37,7 +37,7 @@ config S5PV210_SETUP_IDE
 config S5PV210_SETUP_FB_24BPP
 	bool
 	help
-          Common setup code for S5PV210 with an 24bpp RGB display helper.
+	  Common setup code for S5PV210 with an 24bpp RGB display helper.
 
 config S5PV210_SETUP_KEYPAD
 	bool
@@ -45,10 +45,10 @@ config S5PV210_SETUP_KEYPAD
 	  Common setup code for keypad.
 
 config S5PV210_SETUP_SDHCI
-        bool
-        select S5PV210_SETUP_SDHCI_GPIO
-        help
-          Internal helper functions for S5PV210 based SDHCI systems
+	bool
+	select S5PV210_SETUP_SDHCI_GPIO
+	help
+	  Internal helper functions for S5PV210 based SDHCI systems
 
 config S5PV210_SETUP_SDHCI_GPIO
 	bool

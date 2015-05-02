@@ -141,7 +141,7 @@ extern void init_debug_traps(struct task_struct *);
 extern void withdraw_debug_trap(struct pt_regs *regs);
 
 #define task_pt_regs(task) \
-        ((struct pt_regs *)(task_stack_page(task) + THREAD_SIZE) - 1)
+	((struct pt_regs *)(task_stack_page(task) + THREAD_SIZE) - 1)
 
 #endif /* __KERNEL */
 

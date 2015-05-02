@@ -61,36 +61,36 @@
 
 #define E1000_WRITE_REG_ARRAY(a, reg, offset, value) ( \
     writel((value), ((a)->hw_addr + \
-        (((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
-        ((offset) << 2))))
+	(((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
+	((offset) << 2))))
 
 #define E1000_READ_REG_ARRAY(a, reg, offset) ( \
     readl((a)->hw_addr + \
-        (((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
-        ((offset) << 2)))
+	(((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
+	((offset) << 2)))
 
 #define E1000_READ_REG_ARRAY_DWORD E1000_READ_REG_ARRAY
 #define E1000_WRITE_REG_ARRAY_DWORD E1000_WRITE_REG_ARRAY
 
 #define E1000_WRITE_REG_ARRAY_WORD(a, reg, offset, value) ( \
     writew((value), ((a)->hw_addr + \
-        (((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
-        ((offset) << 1))))
+	(((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
+	((offset) << 1))))
 
 #define E1000_READ_REG_ARRAY_WORD(a, reg, offset) ( \
     readw((a)->hw_addr + \
-        (((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
-        ((offset) << 1)))
+	(((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
+	((offset) << 1)))
 
 #define E1000_WRITE_REG_ARRAY_BYTE(a, reg, offset, value) ( \
     writeb((value), ((a)->hw_addr + \
-        (((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
-        (offset))))
+	(((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
+	(offset))))
 
 #define E1000_READ_REG_ARRAY_BYTE(a, reg, offset) ( \
     readb((a)->hw_addr + \
-        (((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
-        (offset)))
+	(((a)->mac_type >= e1000_82543) ? E1000_##reg : E1000_82542_##reg) + \
+	(offset)))
 
 #define E1000_WRITE_FLUSH() er32(STATUS)
 

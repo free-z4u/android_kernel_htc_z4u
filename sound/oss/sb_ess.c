@@ -1188,16 +1188,16 @@ FKS_test (devc);
 		};
 
 	    printk ( KERN_INFO "ESS chip %s %s%s\n"
-               , chip
-               , ( devc->sbmo.esstype == ESSTYPE_DETECT || devc->sbmo.esstype == ESSTYPE_LIKE20
-                 ? "detected"
-                 : "specified"
-                 )
-               , ( devc->sbmo.esstype == ESSTYPE_LIKE20
-                 ? " (kernel 2.0 compatible)"
-                 : ""
-                 )
-               );
+	       , chip
+	       , ( devc->sbmo.esstype == ESSTYPE_DETECT || devc->sbmo.esstype == ESSTYPE_LIKE20
+		 ? "detected"
+		 : "specified"
+		 )
+	       , ( devc->sbmo.esstype == ESSTYPE_LIKE20
+		 ? " (kernel 2.0 compatible)"
+		 : ""
+		 )
+	       );
 
 		sprintf(name,"ESS %s AudioDrive (rev %d)", chip, ess_minor & 0x0f);
 	} else {

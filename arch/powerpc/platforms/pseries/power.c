@@ -31,7 +31,7 @@ unsigned long rtas_poweron_auto; /* default and normal state is 0 */
 static ssize_t auto_poweron_show(struct kobject *kobj,
 				 struct kobj_attribute *attr, char *buf)
 {
-        return sprintf(buf, "%lu\n", rtas_poweron_auto);
+	return sprintf(buf, "%lu\n", rtas_poweron_auto);
 }
 
 static ssize_t auto_poweron_store(struct kobject *kobj,
@@ -56,12 +56,12 @@ static struct kobj_attribute auto_poweron_attr =
 struct kobject *power_kobj;
 
 static struct attribute *g[] = {
-        &auto_poweron_attr.attr,
-        NULL,
+	&auto_poweron_attr.attr,
+	NULL,
 };
 
 static struct attribute_group attr_group = {
-        .attrs = g,
+	.attrs = g,
 };
 
 static int __init pm_init(void)

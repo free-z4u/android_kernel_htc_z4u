@@ -59,22 +59,22 @@ static struct platform_device pcit_cplus_serial8250_device = {
 };
 
 static struct resource pcit_cmos_rsrc[] = {
-        {
-                .start = 0x70,
-                .end   = 0x71,
-                .flags = IORESOURCE_IO
-        },
-        {
-                .start = 8,
-                .end   = 8,
-                .flags = IORESOURCE_IRQ
-        }
+	{
+		.start = 0x70,
+		.end   = 0x71,
+		.flags = IORESOURCE_IO
+	},
+	{
+		.start = 8,
+		.end   = 8,
+		.flags = IORESOURCE_IRQ
+	}
 };
 
 static struct platform_device pcit_cmos_device = {
-        .name           = "rtc_cmos",
-        .num_resources  = ARRAY_SIZE(pcit_cmos_rsrc),
-        .resource       = pcit_cmos_rsrc
+	.name           = "rtc_cmos",
+	.num_resources  = ARRAY_SIZE(pcit_cmos_rsrc),
+	.resource       = pcit_cmos_rsrc
 };
 
 static struct platform_device pcit_pcspeaker_pdev = {

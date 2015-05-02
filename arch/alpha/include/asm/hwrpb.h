@@ -210,9 +210,9 @@ static inline void
 hwrpb_update_checksum(struct hwrpb_struct *h)
 {
 	unsigned long sum = 0, *l;
-        for (l = (unsigned long *) h; l < (unsigned long *) &h->chksum; ++l)
-                sum += *l;
-        h->chksum = sum;
+	for (l = (unsigned long *) h; l < (unsigned long *) &h->chksum; ++l)
+		sum += *l;
+	h->chksum = sum;
 }
 
 #endif /* __KERNEL__ */

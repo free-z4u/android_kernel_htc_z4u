@@ -174,7 +174,7 @@ static ssize_t read_vmcore(struct file *file, char __user *buffer,
 
 	start = map_offset_to_paddr(*fpos, &vmcore_list, &curr_m);
 	if (!curr_m)
-        	return -EINVAL;
+		return -EINVAL;
 	if ((tsz = (PAGE_SIZE - (start & ~PAGE_MASK))) > buflen)
 		tsz = buflen;
 

@@ -331,7 +331,7 @@ struct toshoboe_cb
   int stopped;                  /*Stopped by some or other APM stuff */
 
   int filter;                   /*In SIR mode do we want to receive
-                                   frames or byte ranges */
+				   frames or byte ranges */
 
   void *ringbuf;                /*The ring buffer */
   struct OboeRing *ring;        /*The ring */

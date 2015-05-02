@@ -544,7 +544,7 @@ int autofs4_do_expire_multi(struct super_block *sb, struct vfsmount *mnt,
 		struct autofs_info *ino = autofs4_dentry_ino(dentry);
 
 		/* This is synchronous because it makes the daemon a
-                   little easier */
+		   little easier */
 		ret = autofs4_wait(sbi, dentry, NFY_EXPIRE);
 
 		spin_lock(&sbi->fs_lock);

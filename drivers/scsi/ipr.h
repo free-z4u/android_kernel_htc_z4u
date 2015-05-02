@@ -151,7 +151,7 @@
 
 /* We need resources for HCAMS, IOA reset, IOA bringdown, and ERP */
 #define IPR_NUM_INTERNAL_CMD_BLKS	(IPR_NUM_HCAMS + \
-                                     ((IPR_NUM_RESET_RELOAD_RETRIES + 1) * 2) + 4)
+				     ((IPR_NUM_RESET_RELOAD_RETRIES + 1) * 2) + 4)
 
 #define IPR_MAX_COMMANDS		100
 #define IPR_NUM_CMD_BLKS		(IPR_NUM_BASE_CMD_BLKS + \
@@ -1890,8 +1890,8 @@ static inline int ipr_sdt_is_fmt2(u32 sdt_word)
 #ifndef writeq
 static inline void writeq(u64 val, void __iomem *addr)
 {
-        writel(((u32) (val >> 32)), addr);
-        writel(((u32) (val)), (addr + 4));
+	writel(((u32) (val >> 32)), addr);
+	writel(((u32) (val)), (addr + 4));
 }
 #endif
 

@@ -42,8 +42,8 @@ struct cpld_info {
 };
 
 struct cpld_platform_data {
-        int intr;
-        uint16_t ALS_slave_address;
+	int intr;
+	uint16_t ALS_slave_address;
 };
 
 static int i2c_debug_flag;
@@ -71,131 +71,131 @@ int is_cpld_ready(void)
 
 static int I2C_TxData(uint16_t slaveAddr, uint8_t *txData, int length)
 {
-        uint8_t loop_i;
+	uint8_t loop_i;
 
 	int ret =0;
 
-        struct i2c_msg msg[] = {
-                {
-                 .addr = slaveAddr,
-                 .flags = 0,
-                 .len = length,
-                 .buf = txData,
-                 },
-        };
+	struct i2c_msg msg[] = {
+		{
+		 .addr = slaveAddr,
+		 .flags = 0,
+		 .len = length,
+		 .buf = txData,
+		 },
+	};
 
-        for (loop_i = 0; loop_i < 10; loop_i++) {
-                if ((ret=i2c_transfer(mcpld_info->i2c_client->adapter, msg, 1)) > 0)
-                        break;
+	for (loop_i = 0; loop_i < 10; loop_i++) {
+		if ((ret=i2c_transfer(mcpld_info->i2c_client->adapter, msg, 1)) > 0)
+			break;
 #ifdef CPLD_I2C_DEBUG
 		printk(KERN_INFO "%s: cpld ret is %d\n", __func__, ret);
 #endif
 
-                if (loop_i == 0 || loop_i == I2C_RETRY_COUNT - 1)
-                        E("[I2C CPLD] %s, i2c err, slaveAddr 0x%x, register 0x%x,loop i =%d , \n",
-                                __func__, slaveAddr, txData[0],loop_i);
+		if (loop_i == 0 || loop_i == I2C_RETRY_COUNT - 1)
+			E("[I2C CPLD] %s, i2c err, slaveAddr 0x%x, register 0x%x,loop i =%d , \n",
+				__func__, slaveAddr, txData[0],loop_i);
 
-                msleep(10);
-        }
+		msleep(10);
+	}
 
-        if (loop_i >= I2C_RETRY_COUNT) {
-                printk(KERN_ERR "[I2C CPLD] %s retry over %d\n",
-                        __func__, I2C_RETRY_COUNT);
-                return -EIO;
-        }
+	if (loop_i >= I2C_RETRY_COUNT) {
+		printk(KERN_ERR "[I2C CPLD] %s retry over %d\n",
+			__func__, I2C_RETRY_COUNT);
+		return -EIO;
+	}
 
-        return 0;
+	return 0;
 }
 
 static int I2C_RxData(uint16_t slaveAddr, uint8_t *rxData, int length)
 {
-        uint8_t loop_i;
+	uint8_t loop_i;
 
 	int ret=0;
 
 
-        struct i2c_msg msgs[] = {
-                {
-                 .addr = slaveAddr,
-                 .flags = I2C_M_RD,
-                 .len = length,
-                 .buf = rxData,
-                 },
-        };
+	struct i2c_msg msgs[] = {
+		{
+		 .addr = slaveAddr,
+		 .flags = I2C_M_RD,
+		 .len = length,
+		 .buf = rxData,
+		 },
+	};
 
-        for (loop_i = 0; loop_i < 10; loop_i++) {
-                if ((ret=i2c_transfer(mcpld_info->i2c_client->adapter, msgs, 1)) > 0)
-                        break;
+	for (loop_i = 0; loop_i < 10; loop_i++) {
+		if ((ret=i2c_transfer(mcpld_info->i2c_client->adapter, msgs, 1)) > 0)
+			break;
 #ifdef CPLD_I2C_DEBUG
 		printk(KERN_INFO "%s: cpld ret is %d\n", __func__, ret);
 #endif
 
-                if (loop_i == 0 || loop_i == I2C_RETRY_COUNT - 1)
-                        E("[I2C CPLD] %s, i2c err, slaveAddr 0x%x loop_i =%d \n",
-                                __func__, slaveAddr,loop_i);
+		if (loop_i == 0 || loop_i == I2C_RETRY_COUNT - 1)
+			E("[I2C CPLD] %s, i2c err, slaveAddr 0x%x loop_i =%d \n",
+				__func__, slaveAddr,loop_i);
 
-                msleep(10);
-        }
-        if (loop_i >= I2C_RETRY_COUNT) {
-                printk(KERN_ERR "[I2C CPLD] %s retry over %d\n",
-                        __func__, I2C_RETRY_COUNT);
-                return -EIO;
-        }
+		msleep(10);
+	}
+	if (loop_i >= I2C_RETRY_COUNT) {
+		printk(KERN_ERR "[I2C CPLD] %s retry over %d\n",
+			__func__, I2C_RETRY_COUNT);
+		return -EIO;
+	}
 
-        return 0;
+	return 0;
 }
 
 int CPLD_I2C_Write_Byte(uint16_t SlaveAddress,
-                                uint8_t data)
+				uint8_t data)
 {
-        char buffer[2];
-        int ret = 0;
+	char buffer[2];
+	int ret = 0;
 #if 0
 
-        printk(KERN_DEBUG
-        "[CM3628] %s: _cm3628_I2C_Write_Byte[0x%x, 0x%x, 0x%x]\n",
-                __func__, SlaveAddress, cmd, data);
+	printk(KERN_DEBUG
+	"[CM3628] %s: _cm3628_I2C_Write_Byte[0x%x, 0x%x, 0x%x]\n",
+		__func__, SlaveAddress, cmd, data);
 
 /       buffer[0] = cmd;
-        buffer[1] = data;
+	buffer[1] = data;
 #endif
 	buffer[0] = data;
-        ret = I2C_TxData(SlaveAddress, buffer, 1);
-        if (ret < 0) {
-                pr_err("[CCPLD]%s: I2C_TxData fail\n", __func__);
-                return -EIO;
-        }
+	ret = I2C_TxData(SlaveAddress, buffer, 1);
+	if (ret < 0) {
+		pr_err("[CCPLD]%s: I2C_TxData fail\n", __func__);
+		return -EIO;
+	}
 #ifdef CPLD_I2C_DEBUG
 	printk("CPLD I2c slave is 0x%x ,Write data is 0x%x\n",SlaveAddress,buffer[0]);
 #endif
-        return ret;
+	return ret;
 }
 
 int CPLD_I2C_Read_Byte(uint16_t slaveAddr, uint8_t *pdata)
 {
-        uint8_t buffer = 0;
-        int ret = 0;
+	uint8_t buffer = 0;
+	int ret = 0;
 
-        if (pdata == NULL)
-                return -EFAULT;
+	if (pdata == NULL)
+		return -EFAULT;
 
-        ret = I2C_RxData(slaveAddr, &buffer, 1);
-        if (ret < 0) {
-                pr_err(
-                        "[CCPLD]%s: I2C_RxData fail, slave addr: 0x%x\n",
-                        __func__, slaveAddr);
-                return ret;
-        }
-        *pdata = buffer;
+	ret = I2C_RxData(slaveAddr, &buffer, 1);
+	if (ret < 0) {
+		pr_err(
+			"[CCPLD]%s: I2C_RxData fail, slave addr: 0x%x\n",
+			__func__, slaveAddr);
+		return ret;
+	}
+	*pdata = buffer;
 #ifdef CPLD_I2C_DEBUG
 	 printk("CPLD I2c slaveAddr is 0x%x Read data is 0x%x\n",slaveAddr,pdata[0]);
 #endif
 #if 0
 
-        printk(KERN_DEBUG "[CM3628] %s: I2C_RxData[0x%x] = 0x%x\n",
-                __func__, slaveAddr, buffer);
+	printk(KERN_DEBUG "[CM3628] %s: I2C_RxData[0x%x] = 0x%x\n",
+		__func__, slaveAddr, buffer);
 #endif
-        return ret;
+	return ret;
 }
 
 
@@ -213,8 +213,8 @@ struct bma250_data {
 static void report_near_do_work(struct work_struct *w)
 {
 	struct cpld_info *lpi = mcpld_info;
-        uint8_t cdata[1];
-        uint8_t ccdata =0;
+	uint8_t cdata[1];
+	uint8_t ccdata =0;
 	int i=0;
 	int slave_cpld[6] = {0x70,0x61,0x52,0x43,0x3C,0x25};
 	int data_i2c[6] = {0x11,0x22,0x33,0x44,0x55,0x04};
@@ -275,27 +275,27 @@ static void handle_i2c_cpld_int_fn(struct work_struct *work)
 
 static ssize_t i2c_debug_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
-        char *s = buf;
-        s += sprintf(s, "i2c_debug_flag = 0x%x i2c_data = 0x%x\n", i2c_debug_flag,i2c_data);
-        return s - buf;
+	char *s = buf;
+	s += sprintf(s, "i2c_debug_flag = 0x%x i2c_data = 0x%x\n", i2c_debug_flag,i2c_data);
+	return s - buf;
 }
 
 static ssize_t i2c_debug_store(struct device *dev,struct device_attribute *attr,const char *buf, size_t count)
 {
 	struct cpld_info *lpi = mcpld_info;
-        uint8_t cdata[1];
-        uint8_t ccdata = 0;
+	uint8_t cdata[1];
+	uint8_t ccdata = 0;
 	int i2c_data = 0;
-        i2c_debug_flag = -1;
-        sscanf(buf, "%d 0x%x", &i2c_debug_flag,&i2c_data);
-        pr_info("%s: i2c_debug_flag = %d i2c_data = 0x%x\n", __func__, i2c_debug_flag,i2c_data);
-        if(i2c_debug_flag ==1){
-                CPLD_I2C_Write_Byte(cpld_slave,i2c_data);
-        }
-        if(i2c_debug_flag ==2){
-                cdata[0]=ccdata;
-                CPLD_I2C_Read_Byte(cpld_slave,cdata);
-        }
+	i2c_debug_flag = -1;
+	sscanf(buf, "%d 0x%x", &i2c_debug_flag,&i2c_data);
+	pr_info("%s: i2c_debug_flag = %d i2c_data = 0x%x\n", __func__, i2c_debug_flag,i2c_data);
+	if(i2c_debug_flag ==1){
+		CPLD_I2C_Write_Byte(cpld_slave,i2c_data);
+	}
+	if(i2c_debug_flag ==2){
+		cdata[0]=ccdata;
+		CPLD_I2C_Read_Byte(cpld_slave,cdata);
+	}
 	if(i2c_debug_flag ==3){
 		queue_delayed_work(lpi->lp_wq, &report_near_work,
 					msecs_to_jiffies(20));
@@ -307,62 +307,62 @@ static ssize_t i2c_debug_store(struct device *dev,struct device_attribute *attr,
 		cancel_delayed_work(&report_near_work);
 	}
 
-        return count;
+	return count;
 }
 
 static DEVICE_ATTR(debug_en, 0664, i2c_debug_show, i2c_debug_store);
 
 static ssize_t cpld_slave_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
-        char *s = buf;
-        s += sprintf(s, "cpld slave is = 0x%x\n", cpld_slave);
-        return s - buf;
+	char *s = buf;
+	s += sprintf(s, "cpld slave is = 0x%x\n", cpld_slave);
+	return s - buf;
 }
 
 static ssize_t cpld_slave_store(struct device *dev,struct device_attribute *attr,const char *buf, size_t count)
 {
 
-        sscanf(buf, "%x", &cpld_slave);
-        pr_info("%s: cpld slave is = %x\n", __func__, cpld_slave);
+	sscanf(buf, "%x", &cpld_slave);
+	pr_info("%s: cpld slave is = %x\n", __func__, cpld_slave);
 
-        return count;
+	return count;
 }
 
 static DEVICE_ATTR(cpld_s, 0664, cpld_slave_show, cpld_slave_store);
 
 
 int i2c_registerAttr(void){
-        int ret;
-        struct class *htc_i2c_class;
-        struct device *i2c_dev;
-        htc_i2c_class = class_create(THIS_MODULE,"cpld_i2c");
-        if (IS_ERR(htc_i2c_class)) {
-                ret = PTR_ERR(htc_i2c_class);
-                htc_i2c_class = NULL;
-                goto err_create_class;
-        }
-        i2c_dev = device_create(htc_i2c_class,NULL, 0, "%s", "i2c");
-        if (unlikely(IS_ERR(i2c_dev))) {
-                ret = PTR_ERR(i2c_dev);
-                i2c_dev = NULL;
-                goto err_create_i2c_device;
-        }
-
-        ret = device_create_file(i2c_dev, &dev_attr_debug_en);
-        if (ret){
-                        goto err_create_i2c_device;
+	int ret;
+	struct class *htc_i2c_class;
+	struct device *i2c_dev;
+	htc_i2c_class = class_create(THIS_MODULE,"cpld_i2c");
+	if (IS_ERR(htc_i2c_class)) {
+		ret = PTR_ERR(htc_i2c_class);
+		htc_i2c_class = NULL;
+		goto err_create_class;
 	}
-        ret = device_create_file(i2c_dev, &dev_attr_cpld_s);
-        if (ret){
-                        goto err_create_i2c_device;
-        }
+	i2c_dev = device_create(htc_i2c_class,NULL, 0, "%s", "i2c");
+	if (unlikely(IS_ERR(i2c_dev))) {
+		ret = PTR_ERR(i2c_dev);
+		i2c_dev = NULL;
+		goto err_create_i2c_device;
+	}
+
+	ret = device_create_file(i2c_dev, &dev_attr_debug_en);
+	if (ret){
+			goto err_create_i2c_device;
+	}
+	ret = device_create_file(i2c_dev, &dev_attr_cpld_s);
+	if (ret){
+			goto err_create_i2c_device;
+	}
 
 
-        return 0;
+	return 0;
 err_create_i2c_device:
-        class_destroy(htc_i2c_class);
+	class_destroy(htc_i2c_class);
 err_create_class:
-        return ret;
+	return ret;
 }
 
 
@@ -419,12 +419,12 @@ static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
 #endif
 
 
-        ret = gpio_request(GPIO_CPLD_CLK, "CPLD_CLK");
-        if (ret < 0) {
-                pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
-                        __func__, GPIO_CPLD_CLK, ret);
+	ret = gpio_request(GPIO_CPLD_CLK, "CPLD_CLK");
+	if (ret < 0) {
+		pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
+			__func__, GPIO_CPLD_CLK, ret);
 
-        }
+	}
 
 	if(htc_get_board_revision() == BOARD_EVM) {
 		#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
@@ -442,15 +442,15 @@ static int cpld_suspend(struct i2c_client *client, pm_message_t mesg)
 
 
 
-        ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD_I2C_SCL");
-        if(!gpio_direction_input(GPIO_CPLD_I2C_SCL))
-                printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SCL);
-        if(!ret) gpio_free(GPIO_CPLD_I2C_SCL);
+	ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD_I2C_SCL");
+	if(!gpio_direction_input(GPIO_CPLD_I2C_SCL))
+		printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SCL);
+	if(!ret) gpio_free(GPIO_CPLD_I2C_SCL);
 
-        ret = gpio_request(GPIO_CPLD_I2C_SDA, "CPLD_I2C_SDA");
-        if(!gpio_direction_input(GPIO_CPLD_I2C_SDA))
-                printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SDA);
-        if(!ret) gpio_free(GPIO_CPLD_I2C_SDA);
+	ret = gpio_request(GPIO_CPLD_I2C_SDA, "CPLD_I2C_SDA");
+	if(!gpio_direction_input(GPIO_CPLD_I2C_SDA))
+		printk(KERN_INFO "[I2C CPLD] set GPIO:%d as input.\n", GPIO_CPLD_I2C_SDA);
+	if(!ret) gpio_free(GPIO_CPLD_I2C_SDA);
 
 	return 0;
 }
@@ -460,11 +460,11 @@ static int cpld_resume(struct i2c_client *client)
 	int ret;
 	printk(KERN_INFO "[I2C CPLD ]%s\n", __func__);
 	ret = gpio_request(GPIO_CPLD_CLK, "CPLD_CLK");
-        if (ret < 0) {
-                pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
-                        		__func__, GPIO_CPLD_CLK, ret);
+	if (ret < 0) {
+		pr_err("[I2C CPLD][GPIO]%s: gpio %d request failed (%d)\n",
+					__func__, GPIO_CPLD_CLK, ret);
 
-        }
+	}
 
 	if(htc_get_board_revision() == BOARD_EVM) {
 		#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY)
@@ -481,15 +481,15 @@ static int cpld_resume(struct i2c_client *client)
 #if 1
 
 
-        ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD I2C_SCL");
-        if(!gpio_direction_output(GPIO_CPLD_I2C_SCL, 1))
-                printk(KERN_INFO "[I2C CPLD] set GPIO:%d as output, high.\n", GPIO_CPLD_I2C_SCL);
+	ret = gpio_request(GPIO_CPLD_I2C_SCL, "CPLD I2C_SCL");
+	if(!gpio_direction_output(GPIO_CPLD_I2C_SCL, 1))
+		printk(KERN_INFO "[I2C CPLD] set GPIO:%d as output, high.\n", GPIO_CPLD_I2C_SCL);
 	if(!ret) gpio_free(GPIO_CPLD_I2C_SCL);
 
 	ret = gpio_request(GPIO_CPLD_I2C_SDA, "CPLD_I2C_SDA");
 	if(!gpio_direction_output(GPIO_CPLD_I2C_SDA, 1))
 		printk(KERN_INFO "[I2C CPLD] set GPIO:%d as output, high.\n", GPIO_CPLD_I2C_SDA);
-        if (!ret) gpio_free(GPIO_CPLD_I2C_SDA);
+	if (!ret) gpio_free(GPIO_CPLD_I2C_SDA);
 
 #endif
 
@@ -498,10 +498,10 @@ static int cpld_resume(struct i2c_client *client)
 
 
 #if 0
-        cpld_gpio_write(CPLD_EXT_GPIO_LCD_RST, 1);
-        cpld_gpio_write(CPLD_EXT_GPIO_AUD_SPK_RCV_SEL, 1);
-        cpld_gpio_write(CPLD_EXT_GPIO_AUD_REV_EN, 1);
-        cpld_gpio_write(CPLD_EXT_GPIO_BT_SHUTDOWN, 1);
+	cpld_gpio_write(CPLD_EXT_GPIO_LCD_RST, 1);
+	cpld_gpio_write(CPLD_EXT_GPIO_AUD_SPK_RCV_SEL, 1);
+	cpld_gpio_write(CPLD_EXT_GPIO_AUD_REV_EN, 1);
+	cpld_gpio_write(CPLD_EXT_GPIO_BT_SHUTDOWN, 1);
 #endif
 	return 0;
 }
@@ -549,25 +549,25 @@ static int cpld_probe(struct i2c_client *client,
 	printk(KERN_INFO "[I2C CPLD] %s\n", __func__);
 
 
-        ret = gpio_request(4, "CPLD_CLK");
-        if (ret < 0) {
-                pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
-                        __func__, 4, ret);
-                return ret;
-        }
+	ret = gpio_request(4, "CPLD_CLK");
+	if (ret < 0) {
+		pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
+			__func__, 4, ret);
+		return ret;
+	}
 
-        ret = gpio_request(49, "CPLD_RST");
-        if (ret < 0) {
-                pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
-                        __func__, 49, ret);
-                return ret;
-        }
-        ret = gpio_request(116, "CPLD_I2C_EN");
-        if (ret < 0) {
-                pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
-                        __func__, 116, ret);
-                return ret;
-        }
+	ret = gpio_request(49, "CPLD_RST");
+	if (ret < 0) {
+		pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
+			__func__, 49, ret);
+		return ret;
+	}
+	ret = gpio_request(116, "CPLD_I2C_EN");
+	if (ret < 0) {
+		pr_err("[CPLD][GPIO]%s: gpio %d request failed (%d)\n",
+			__func__, 116, ret);
+		return ret;
+	}
 
 
 	printk(KERN_INFO "gpio_CPLD_CLK:%d\n", gpio_get_value(4));
@@ -600,17 +600,17 @@ static int cpld_probe(struct i2c_client *client,
 	cpld_slave =0x70;
 
 	cpldi= kzalloc(sizeof(struct cpld_info), GFP_KERNEL);
-        if (!cpldi)
-                return -ENOMEM;
+	if (!cpldi)
+		return -ENOMEM;
 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
 		printk(KERN_ERR "i2c_exit_check_functionality failed. \n");
 	}
-        cpldi->i2c_client = client;
-        pdata = client->dev.platform_data;
-        if (!pdata) {
-                pr_err("[I2C CPLD ]%s: Assign platform_data error!!\n",
-                        __func__);
-        }
+	cpldi->i2c_client = client;
+	pdata = client->dev.platform_data;
+	if (!pdata) {
+		pr_err("[I2C CPLD ]%s: Assign platform_data error!!\n",
+			__func__);
+	}
 	ret = i2c_registerAttr();
 	if (ret){
 			printk("%s: set cpld_i2c_registerAttr fail!\n", __func__);
@@ -618,10 +618,10 @@ static int cpld_probe(struct i2c_client *client,
 
 	i2c_set_clientdata(client, cpldi);
 	mcpld_info = cpldi;
-        cpldi->lp_wq = create_singlethread_workqueue("cpld_wq");
-        if (!cpldi->lp_wq) {
-                pr_err("[I2C CPLD]%s: can't create workqueue\n", __func__);
-        }
+	cpldi->lp_wq = create_singlethread_workqueue("cpld_wq");
+	if (!cpldi->lp_wq) {
+		pr_err("[I2C CPLD]%s: can't create workqueue\n", __func__);
+	}
 
 
 

@@ -243,9 +243,9 @@ extern void ia64_sal_init (struct ia64_sal_systab *sal_systab);
 /* SAL information type encodings */
 enum {
 	SAL_INFO_TYPE_MCA  = 0,		/* Machine check abort information */
-        SAL_INFO_TYPE_INIT = 1,		/* Init information */
-        SAL_INFO_TYPE_CMC  = 2,		/* Corrected machine check information */
-        SAL_INFO_TYPE_CPE  = 3		/* Corrected platform error information */
+	SAL_INFO_TYPE_INIT = 1,		/* Init information */
+	SAL_INFO_TYPE_CMC  = 2,		/* Corrected machine check information */
+	SAL_INFO_TYPE_CPE  = 3		/* Corrected platform error information */
 };
 
 /* Encodings for machine check parameter types */

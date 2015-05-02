@@ -378,7 +378,7 @@ int suni_init(struct atm_dev *dev)
 	PUT(mri | SUNI_MRI_RESET,MRI);
 	PUT(mri,MRI);
 	PUT((GET(MT) & SUNI_MT_DS27_53),MT); /* disable all tests */
-        set_sonet(dev);
+	set_sonet(dev);
 	REG_CHANGE(SUNI_TACP_IUCHP_CLP,0,SUNI_TACP_IUCHP_CLP,
 	    TACP_IUCHP); /* idle cells */
 	PUT(SUNI_IDLE_PATTERN,TACP_IUCPOP);

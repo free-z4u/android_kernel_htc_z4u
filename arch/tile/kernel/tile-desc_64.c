@@ -2157,9 +2157,9 @@ find_opcode(tilegx_bundle_bits bits, const unsigned short *table)
 
 int
 parse_insn_tilegx(tilegx_bundle_bits bits,
-                  unsigned long long pc,
-                  struct tilegx_decoded_instruction
-                  decoded[TILEGX_MAX_INSTRUCTIONS_PER_BUNDLE])
+		  unsigned long long pc,
+		  struct tilegx_decoded_instruction
+		  decoded[TILEGX_MAX_INSTRUCTIONS_PER_BUNDLE])
 {
   int num_instructions = 0;
   int pipe;
@@ -2191,22 +2191,22 @@ parse_insn_tilegx(tilegx_bundle_bits bits,
     for (i = 0; i < opc->num_operands; i++)
     {
       const struct tilegx_operand *op =
-        &tilegx_operands[opc->operands[pipe][i]];
+	&tilegx_operands[opc->operands[pipe][i]];
       int raw_opval = op->extract (bits);
       long long opval;
 
       if (op->is_signed)
       {
-        /* Sign-extend the operand. */
-        int shift = (int)((sizeof(int) * 8) - op->num_bits);
-        raw_opval = (raw_opval << shift) >> shift;
+	/* Sign-extend the operand. */
+	int shift = (int)((sizeof(int) * 8) - op->num_bits);
+	raw_opval = (raw_opval << shift) >> shift;
       }
 
       /* Adjust PC-relative scaled branch offsets. */
       if (op->type == TILEGX_OP_TYPE_ADDRESS)
-        opval = (raw_opval * TILEGX_BUNDLE_SIZE_IN_BYTES) + pc;
+	opval = (raw_opval * TILEGX_BUNDLE_SIZE_IN_BYTES) + pc;
       else
-        opval = raw_opval;
+	opval = raw_opval;
 
       /* Record the final value. */
       d->operands[i] = op;

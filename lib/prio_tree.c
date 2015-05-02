@@ -195,7 +195,7 @@ struct prio_tree_node *prio_tree_insert(struct prio_tree_root *root,
 		if (r_index == radix_index && h_index == heap_index)
 			return cur;
 
-                if (h_index < heap_index ||
+		if (h_index < heap_index ||
 		    (h_index == heap_index && r_index > radix_index)) {
 			struct prio_tree_node *tmp = node;
 			node = prio_tree_replace(root, cur, node);

@@ -1,5 +1,5 @@
 /* sbc_gxx.c -- MTD map driver for Arcom Control Systems SBC-MediaGX,
-                SBC-GXm and SBC-GX1 series boards.
+		SBC-GXm and SBC-GX1 series boards.
 
    Copyright (C) 2001 Arcom Control System Ltd
 
@@ -33,13 +33,13 @@ The flash is accessed as follows:
    0x259
        bit 0-1: address bit 22-23
        bit 7:   0 - reset/powered down
-                1 - device enabled
+		1 - device enabled
 
 The single flash device is divided into 3 partition which appear as
 separate MTD devices.
 
 25/04/2001 AJL (Arcom)  Modified signon strings and partition sizes
-                        (to support bzImages up to 638KiB-ish)
+			(to support bzImages up to 638KiB-ish)
 */
 
 // Includes

@@ -104,8 +104,8 @@ __attribute__((externally_visible)) void c_main(void **stack)
 asm (
 	".text\n"
 	".global _start\n"
-        ".type _start,@function\n"
-        "_start:\n\t"
-        "mov %rsp,%rdi\n\t"
-        "jmp c_main"
+	".type _start,@function\n"
+	"_start:\n\t"
+	"mov %rsp,%rdi\n\t"
+	"jmp c_main"
 	);

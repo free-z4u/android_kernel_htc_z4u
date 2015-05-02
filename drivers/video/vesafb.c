@@ -59,21 +59,21 @@ static int   vga_compat __read_mostly;
 /* --------------------------------------------------------------------- */
 
 static int vesafb_pan_display(struct fb_var_screeninfo *var,
-                              struct fb_info *info)
+			      struct fb_info *info)
 {
 #ifdef __i386__
 	int offset;
 
 	offset = (var->yoffset * info->fix.line_length + var->xoffset) / 4;
 
-        __asm__ __volatile__(
-                "call *(%%edi)"
-                : /* no return value */
-                : "a" (0x4f07),         /* EAX */
-                  "b" (0),              /* EBX */
-                  "c" (offset),         /* ECX */
-                  "d" (offset >> 16),   /* EDX */
-                  "D" (&pmi_start));    /* EDI */
+	__asm__ __volatile__(
+		"call *(%%edi)"
+		: /* no return value */
+		: "a" (0x4f07),         /* EAX */
+		  "b" (0),              /* EBX */
+		  "c" (offset),         /* ECX */
+		  "d" (offset >> 16),   /* EDX */
+		  "D" (&pmi_start));    /* EDI */
 #endif
 	return 0;
 }
@@ -107,14 +107,14 @@ static int vesa_setpalette(int regno, unsigned red, unsigned green,
 		entry.blue  = blue  >> shift;
 		entry.pad   = 0;
 	        __asm__ __volatile__(
-                "call *(%%esi)"
-                : /* no return value */
-                : "a" (0x4f09),         /* EAX */
-                  "b" (0),              /* EBX */
-                  "c" (1),              /* ECX */
-                  "d" (regno),          /* EDX */
-                  "D" (&entry),         /* EDI */
-                  "S" (&pmi_pal));      /* ESI */
+		"call *(%%esi)"
+		: /* no return value */
+		: "a" (0x4f09),         /* EAX */
+		  "b" (0),              /* EBX */
+		  "c" (1),              /* ECX */
+		  "d" (regno),          /* EDX */
+		  "D" (&entry),         /* EDI */
+		  "S" (&pmi_pal));      /* ESI */
 		err = 0;
 	}
 #endif

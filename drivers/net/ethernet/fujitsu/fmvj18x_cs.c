@@ -190,7 +190,7 @@ typedef struct local_info_t {
 		   | ENA_ALG_ERR | ENA_CRC_ERR | ENA_OVR_FLO )
 #define TX_STAT_M  ( F_TMT_RDY )
 #define RX_STAT_M  ( F_PKT_RDY | F_LEN_ERR \
-                   | F_ALG_ERR | F_CRC_ERR | F_OVR_FLO )
+		   | F_ALG_ERR | F_CRC_ERR | F_OVR_FLO )
 
 /* commands */
 #define D_TX_MODE            0x06 /* no tests, detect carrier */
@@ -381,8 +381,8 @@ static int fmvj18x_config(struct pcmcia_device *link)
 	    if (link->config_base == 0x0fe0)
 		cardtype = MBH10302;
 	    else if (link->card_id == PRODID_FUJITSU_MBH10302)
-                /* RATOC REX-5588/9822/4886's PRODID are 0004(=MBH10302),
-                   but these are MBH10304 based card. */
+		/* RATOC REX-5588/9822/4886's PRODID are 0004(=MBH10302),
+		   but these are MBH10304 based card. */
 		cardtype = MBH10304;
 	    else if (link->card_id == PRODID_FUJITSU_MBH10304)
 		cardtype = MBH10304;
@@ -753,7 +753,7 @@ static irqreturn_t fjn_interrupt(int dummy, void *dev_id)
     }
     if (tx_stat & F_TMT_RDY) {
 	dev->stats.tx_packets += lp->sent ;
-        lp->sent = 0 ;
+	lp->sent = 0 ;
 	if (lp->tx_queue) {
 	    outb(DO_TX | lp->tx_queue, ioaddr + TX_START);
 	    lp->sent = lp->tx_queue ;
@@ -912,7 +912,7 @@ static void fjn_reset(struct net_device *dev)
 
     /* Set hardware address */
     for (i = 0; i < 6; i++)
-        outb(dev->dev_addr[i], ioaddr + NODE_ID + i);
+	outb(dev->dev_addr[i], ioaddr + NODE_ID + i);
 
     /* (re)initialize the multicast table */
     set_rx_mode(dev);
@@ -925,9 +925,9 @@ static void fjn_reset(struct net_device *dev)
 
     /* set 16col ctrl bits */
     if( lp->cardtype == TDK || lp->cardtype == CONTEC)
-        outb(TDK_AUTO_MODE, ioaddr + COL_CTRL);
+	outb(TDK_AUTO_MODE, ioaddr + COL_CTRL);
     else
-        outb(AUTO_MODE, ioaddr + COL_CTRL);
+	outb(AUTO_MODE, ioaddr + COL_CTRL);
 
     /* clear Reserved Regs */
     outb(0x00, ioaddr + BMPR12);

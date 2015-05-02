@@ -587,7 +587,7 @@ static int scc_wait_after_reset(struct ata_link *link, unsigned int devmask,
  */
 
 static unsigned int scc_bus_softreset(struct ata_port *ap, unsigned int devmask,
-                                      unsigned long deadline)
+				      unsigned long deadline)
 {
 	struct ata_ioports *ioaddr = &ap->ioaddr;
 

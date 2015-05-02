@@ -116,7 +116,7 @@ struct ctlr_info
 	dma_addr_t		cmd_pool_dhandle;
 	ErrorInfo_struct 	*errinfo_pool;
 	dma_addr_t		errinfo_pool_dhandle;
-        unsigned long  		*cmd_pool_bits;
+	unsigned long  		*cmd_pool_bits;
 	int			nr_allocs;
 	int			nr_frees;
 	int			busy_configuring;
@@ -223,7 +223,7 @@ static void SA5_submit_command( ctlr_info_t *h, CommandList_struct *c)
 	printk(KERN_WARNING "cciss%d: Sending %08x - down to controller\n",
 			h->ctlr, c->busaddr);
 #endif /* CCISS_DEBUG */
-         writel(c->busaddr, h->vaddr + SA5_REQUEST_PORT_OFFSET);
+	 writel(c->busaddr, h->vaddr + SA5_REQUEST_PORT_OFFSET);
 	readl(h->vaddr + SA5_SCRATCHPAD_OFFSET);
 	 h->commands_outstanding++;
 	 if ( h->commands_outstanding > h->max_outstanding)
@@ -245,7 +245,7 @@ static void SA5_intr_mask(ctlr_info_t *h, unsigned long val)
 	} else /* Turn them off */
 	{
 		h->interrupts_enabled = 0;
-        	writel( SA5_INTR_OFF,
+		writel( SA5_INTR_OFF,
 			h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
 		(void) readl(h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
 	}
@@ -257,18 +257,18 @@ static void SA5_intr_mask(ctlr_info_t *h, unsigned long val)
  */
 static void SA5B_intr_mask(ctlr_info_t *h, unsigned long val)
 {
-        if (val)
-        { /* Turn interrupts on */
+	if (val)
+	{ /* Turn interrupts on */
 		h->interrupts_enabled = 1;
-                writel(0, h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
+		writel(0, h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
 		(void) readl(h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
-        } else /* Turn them off */
-        {
+	} else /* Turn them off */
+	{
 		h->interrupts_enabled = 0;
-                writel( SA5B_INTR_OFF,
-                        h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
+		writel( SA5B_INTR_OFF,
+			h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
 		(void) readl(h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
-        }
+	}
 }
 
 /* Performant mode intr_mask */
@@ -376,14 +376,14 @@ static bool SA5_intr_pending(ctlr_info_t *h)
  */
 static bool SA5B_intr_pending(ctlr_info_t *h)
 {
-        unsigned long register_value  =
-                readl(h->vaddr + SA5_INTR_STATUS);
+	unsigned long register_value  =
+		readl(h->vaddr + SA5_INTR_STATUS);
 #ifdef CCISS_DEBUG
-        printk("cciss: intr_pending %lx\n", register_value);
+	printk("cciss: intr_pending %lx\n", register_value);
 #endif  /* CCISS_DEBUG */
-        if( register_value &  SA5B_INTR_PENDING)
-                return  1;
-        return 0 ;
+	if( register_value &  SA5B_INTR_PENDING)
+		return  1;
+	return 0 ;
 }
 
 static bool SA5_performant_intr_pending(ctlr_info_t *h)
@@ -410,11 +410,11 @@ static struct access_method SA5_access = {
 };
 
 static struct access_method SA5B_access = {
-        SA5_submit_command,
-        SA5B_intr_mask,
-        SA5_fifo_full,
-        SA5B_intr_pending,
-        SA5_completed,
+	SA5_submit_command,
+	SA5B_intr_mask,
+	SA5_fifo_full,
+	SA5B_intr_pending,
+	SA5_completed,
 };
 
 static struct access_method SA5_performant_access = {

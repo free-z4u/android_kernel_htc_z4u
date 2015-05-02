@@ -187,7 +187,7 @@ static int ath_ahb_probe(struct platform_device *pdev)
 	ieee80211_free_hw(hw);
 	platform_set_drvdata(pdev, NULL);
  err_iounmap:
-        iounmap(mem);
+	iounmap(mem);
  err_out:
 	return ret;
 }

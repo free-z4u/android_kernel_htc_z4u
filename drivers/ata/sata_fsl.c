@@ -1131,7 +1131,7 @@ static void sata_fsl_error_intr(struct ata_port *ap)
 				qc = ata_qc_from_tag(ap, link->active_tag);
 				/*
 				 * We should consider this as non fatal error,
-                                 * and TF must be updated as done below.
+				 * and TF must be updated as done below.
 		                 */
 
 				err_mask |= AC_ERR_DEV;
@@ -1149,7 +1149,7 @@ static void sata_fsl_error_intr(struct ata_port *ap)
 			qc = ata_qc_from_tag(ap, link->active_tag);
 			/*
 			 * We should consider this as non fatal error,
-                         * and TF must be updated as done below.
+			 * and TF must be updated as done below.
 	                */
 			err_mask |= AC_ERR_DEV;
 		}

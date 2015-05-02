@@ -234,7 +234,7 @@ static int vmlogrdr_get_recording_class_AB(void)
 	 * expect comma separated list of classes here, if one of them
 	 * is A or B return 1 otherwise 0
 	 */
-        for (i=tail-cp_response; i<len; i++)
+	for (i=tail-cp_response; i<len; i++)
 		if ( cp_response[i]=='A' || cp_response[i]=='B' )
 			return 1;
 	return 0;
@@ -427,7 +427,7 @@ static int vmlogrdr_receive_data(struct vmlogrdr_priv_t *priv)
 		} else {
 			/* receive a new record:
 			 * We need to return the total length of the record
-                         * + size of FENCE in the first 4 bytes of the buffer.
+			 * + size of FENCE in the first 4 bytes of the buffer.
 		         */
 			iucv_data_count = priv->local_interrupt_buffer.length;
 			user_data_count = sizeof(int);
@@ -558,7 +558,7 @@ static ssize_t vmlogrdr_purge_store(struct device * dev,
 	memset(cp_command, 0x00, sizeof(cp_command));
 	memset(cp_response, 0x00, sizeof(cp_response));
 
-        /*
+	/*
 	 * The recording command needs to be called with option QID
 	 * for guests that have previlege classes A or B.
 	 * Other guests will not recognize the command and we have to
@@ -835,7 +835,7 @@ static int vmlogrdr_register_cdev(dev_t dev)
 
 static void vmlogrdr_cleanup(void)
 {
-        int i;
+	int i;
 
 	if (vmlogrdr_cdev) {
 		cdev_del(vmlogrdr_cdev);
@@ -864,7 +864,7 @@ static int __init vmlogrdr_init(void)
 		return -ENODEV;
 	}
 
-        recording_class_AB = vmlogrdr_get_recording_class_AB();
+	recording_class_AB = vmlogrdr_get_recording_class_AB();
 
 	rc = alloc_chrdev_region(&dev, 0, MAXMINOR, "vmlogrdr");
 	if (rc)

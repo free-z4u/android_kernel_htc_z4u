@@ -62,8 +62,8 @@ void free_thread_info(struct thread_info *ti)
 
 void arch_task_cache_init(void)
 {
-        task_xstate_cachep =
-        	kmem_cache_create("task_xstate", xstate_size,
+	task_xstate_cachep =
+		kmem_cache_create("task_xstate", xstate_size,
 				  __alignof__(union thread_xstate),
 				  SLAB_PANIC | SLAB_NOTRACK, NULL);
 }
@@ -327,8 +327,8 @@ long sys_execve(const char __user *name,
 #ifdef CONFIG_X86_32
 	if (error == 0) {
 		/* Make sure we don't return using sysenter.. */
-                set_thread_flag(TIF_IRET);
-        }
+		set_thread_flag(TIF_IRET);
+	}
 #endif
 
 	putname(filename);

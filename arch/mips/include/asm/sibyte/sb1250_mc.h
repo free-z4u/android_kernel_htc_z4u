@@ -128,7 +128,7 @@
 #define V_MC_CONFIG_DEFAULT     V_MC_WR_LIMIT_DEFAULT | V_MC_AGE_LIMIT_DEFAULT | \
 				V_MC_BANK0_MAP_DEFAULT | V_MC_BANK1_MAP_DEFAULT | \
 				V_MC_BANK2_MAP_DEFAULT | V_MC_BANK3_MAP_DEFAULT | V_MC_CHANNEL_SEL(0) | \
-                                M_MC_IOB1HIGHPRIORITY | V_MC_QUEUE_SIZE_DEFAULT
+				M_MC_IOB1HIGHPRIORITY | V_MC_QUEUE_SIZE_DEFAULT
 
 
 /*
@@ -220,13 +220,13 @@
 #define V_MC_DLL_DEFAULT_DEFAULT     V_MC_DLL_DEFAULT(0x10)
 
 #define V_MC_CLKCONFIG_DEFAULT       V_MC_DLL_DEFAULT_DEFAULT |  \
-                                     V_MC_ADDR_SKEW_DEFAULT | \
-                                     V_MC_DQO_SKEW_DEFAULT | \
-                                     V_MC_DQI_SKEW_DEFAULT | \
-                                     V_MC_ADDR_DRIVE_DEFAULT | \
-                                     V_MC_DATA_DRIVE_DEFAULT | \
-                                     V_MC_CLOCK_DRIVE_DEFAULT | \
-                                     V_MC_REF_RATE_DEFAULT
+				     V_MC_ADDR_SKEW_DEFAULT | \
+				     V_MC_DQO_SKEW_DEFAULT | \
+				     V_MC_DQI_SKEW_DEFAULT | \
+				     V_MC_ADDR_DRIVE_DEFAULT | \
+				     V_MC_DATA_DRIVE_DEFAULT | \
+				     V_MC_CLOCK_DRIVE_DEFAULT | \
+				     V_MC_REF_RATE_DEFAULT
 
 
 
@@ -386,16 +386,16 @@
 #define V_MC_tRCD_DEFAULT         V_MC_tRCD(K_MC_tRCD_DEFAULT)
 
 #define V_MC_TIMING_DEFAULT     V_MC_tFIFO(K_MC_tFIFO_DEFAULT) | \
-                                V_MC_tRFC(K_MC_tRFC_DEFAULT) | \
-                                V_MC_tCwCr(K_MC_tCwCr_DEFAULT) | \
-                                V_MC_tRCr(K_MC_tRCr_DEFAULT) | \
-                                V_MC_tRCw(K_MC_tRCw_DEFAULT) | \
-                                V_MC_tRRD(K_MC_tRRD_DEFAULT) | \
-                                V_MC_tRP(K_MC_tRP_DEFAULT) | \
-                                V_MC_tCwD(K_MC_tCwD_DEFAULT) | \
-                                V_MC_tCrD(K_MC_tCrD_DEFAULT) | \
-                                V_MC_tRCD(K_MC_tRCD_DEFAULT) | \
-                                M_MC_r2rIDLE_TWOCYCLES
+				V_MC_tRFC(K_MC_tRFC_DEFAULT) | \
+				V_MC_tCwCr(K_MC_tCwCr_DEFAULT) | \
+				V_MC_tRCr(K_MC_tRCr_DEFAULT) | \
+				V_MC_tRCw(K_MC_tRCw_DEFAULT) | \
+				V_MC_tRRD(K_MC_tRRD_DEFAULT) | \
+				V_MC_tRP(K_MC_tRP_DEFAULT) | \
+				V_MC_tCwD(K_MC_tCwD_DEFAULT) | \
+				V_MC_tCrD(K_MC_tCrD_DEFAULT) | \
+				V_MC_tRCD(K_MC_tRCD_DEFAULT) | \
+				M_MC_r2rIDLE_TWOCYCLES
 
 /*
  * Errata says these are not the default

@@ -557,7 +557,7 @@ int i_APCI1564_ReadDigitalOutput(struct comedi_device *dev, struct comedi_subdev
 |					  data[3]			 : Reload Value			     |
 |					  data[4]            : Timer Mode             	 |
 |					  data[5]			 : Timer Counter Watchdog Number|
-                              data[6]            :  Counter Direction
+			      data[6]            :  Counter Direction
 +----------------------------------------------------------------------------+
 | Output Parameters :	--													 |
 +----------------------------------------------------------------------------+

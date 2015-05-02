@@ -1754,11 +1754,11 @@ static int onenand_panic_write(struct mtd_info *mtd, loff_t to, size_t len,
 			(int)len);
 
 	/* Reject writes, which are not page aligned */
-        if (unlikely(NOTALIGNED(to) || NOTALIGNED(len))) {
+	if (unlikely(NOTALIGNED(to) || NOTALIGNED(len))) {
 		printk(KERN_ERR "%s: Attempt to write not page aligned data\n",
 			__func__);
-                return -EINVAL;
-        }
+		return -EINVAL;
+	}
 
 	column = to & (mtd->writesize - 1);
 
@@ -1881,11 +1881,11 @@ static int onenand_write_ops_nolock(struct mtd_info *mtd, loff_t to,
 	ops->oobretlen = 0;
 
 	/* Reject writes, which are not page aligned */
-        if (unlikely(NOTALIGNED(to) || NOTALIGNED(len))) {
+	if (unlikely(NOTALIGNED(to) || NOTALIGNED(len))) {
 		printk(KERN_ERR "%s: Attempt to write not page aligned data\n",
 			__func__);
-                return -EINVAL;
-        }
+		return -EINVAL;
+	}
 
 	/* Check zero length */
 	if (!len)
@@ -2587,11 +2587,11 @@ static int onenand_default_block_markbad(struct mtd_info *mtd, loff_t ofs)
 
 	/* Get block number */
 	block = onenand_block(this, ofs);
-        if (bbm->bbt)
-                bbm->bbt[block >> 2] |= 0x01 << ((block & 0x03) << 1);
+	if (bbm->bbt)
+		bbm->bbt[block >> 2] |= 0x01 << ((block & 0x03) << 1);
 
-        /* We write two bytes, so we don't have to mess with 16-bit access */
-        ofs += mtd->oobsize + (bbm->badblockpos & ~0x01);
+	/* We write two bytes, so we don't have to mess with 16-bit access */
+	ofs += mtd->oobsize + (bbm->badblockpos & ~0x01);
 	/* FIXME : What to do when marking SLC block in partition
 	 * 	   with MLC erasesize? For now, it is not advisable to
 	 *	   create partitions containing both SLC and MLC regions.
@@ -3473,23 +3473,23 @@ static void onenand_print_device_info(int device, int version)
 {
 	int vcc, demuxed, ddp, density, flexonenand;
 
-        vcc = device & ONENAND_DEVICE_VCC_MASK;
-        demuxed = device & ONENAND_DEVICE_IS_DEMUX;
-        ddp = device & ONENAND_DEVICE_IS_DDP;
-        density = onenand_get_density(device);
+	vcc = device & ONENAND_DEVICE_VCC_MASK;
+	demuxed = device & ONENAND_DEVICE_IS_DEMUX;
+	ddp = device & ONENAND_DEVICE_IS_DDP;
+	density = onenand_get_density(device);
 	flexonenand = device & DEVICE_IS_FLEXONENAND;
 	printk(KERN_INFO "%s%sOneNAND%s %dMB %sV 16-bit (0x%02x)\n",
 		demuxed ? "" : "Muxed ",
 		flexonenand ? "Flex-" : "",
-                ddp ? "(DDP)" : "",
-                (16 << density),
-                vcc ? "2.65/3.3" : "1.8",
-                device);
+		ddp ? "(DDP)" : "",
+		(16 << density),
+		vcc ? "2.65/3.3" : "1.8",
+		device);
 	printk(KERN_INFO "OneNAND version = 0x%04x\n", version);
 }
 
 static const struct onenand_manufacturers onenand_manuf_ids[] = {
-        {ONENAND_MFR_SAMSUNG, "Samsung"},
+	{ONENAND_MFR_SAMSUNG, "Samsung"},
 	{ONENAND_MFR_NUMONYX, "Numonyx"},
 };
 
@@ -3503,11 +3503,11 @@ static int onenand_check_maf(int manuf)
 {
 	int size = ARRAY_SIZE(onenand_manuf_ids);
 	char *name;
-        int i;
+	int i;
 
 	for (i = 0; i < size; i++)
-                if (manuf == onenand_manuf_ids[i].id)
-                        break;
+		if (manuf == onenand_manuf_ids[i].id)
+			break;
 
 	if (i < size)
 		name = onenand_manuf_ids[i].name;

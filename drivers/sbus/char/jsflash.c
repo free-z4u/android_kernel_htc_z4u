@@ -81,7 +81,7 @@ static unsigned int jsf_inl(unsigned long addr)
 	__asm__ __volatile__("lda [%1] %2, %0\n\t" :
 				"=r" (retval) :
 				"r" (addr), "i" (ASI_M_BYPASS));
-        return retval;
+	return retval;
 }
 
 static void jsf_outl(unsigned long addr, __u32 data)

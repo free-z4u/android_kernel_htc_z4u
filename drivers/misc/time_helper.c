@@ -56,27 +56,27 @@ static long time_helper_ioctl(struct file *filp, unsigned int cmd, unsigned long
 
     switch (cmd) {
     case TIME_HELPER_IOCRESET:
-        break;
+	break;
     case TIME_HELPER_IOCXMONOTONIC2REALTIME:
-        {
-            struct timespec mono_ts;
-            struct timespec boot_time;
+	{
+	    struct timespec mono_ts;
+	    struct timespec boot_time;
 
-            if (copy_from_user(&mono_ts, (struct timespec __user *)arg, sizeof(struct timespec))) {
-                printk(KERN_ALERT "copy_from_user fail\n");
-                return -EFAULT;
-            }
-            getboottime(&boot_time);
-            monotonic_to_bootbased(&mono_ts);
-            mono_ts = timespec_add(mono_ts, boot_time);
-            if (copy_to_user((struct timespec __user *)arg, &mono_ts, sizeof(struct timespec))) {
-                printk(KERN_ALERT "copy_to_user fail\n");
-                return -EFAULT;
-            }
-        }
-        break;
+	    if (copy_from_user(&mono_ts, (struct timespec __user *)arg, sizeof(struct timespec))) {
+		printk(KERN_ALERT "copy_from_user fail\n");
+		return -EFAULT;
+	    }
+	    getboottime(&boot_time);
+	    monotonic_to_bootbased(&mono_ts);
+	    mono_ts = timespec_add(mono_ts, boot_time);
+	    if (copy_to_user((struct timespec __user *)arg, &mono_ts, sizeof(struct timespec))) {
+		printk(KERN_ALERT "copy_to_user fail\n");
+		return -EFAULT;
+	    }
+	}
+	break;
     default:
-        return -ENOTTY;
+	return -ENOTTY;
     }
 
     return retval;
@@ -95,7 +95,7 @@ static int  __time_helper_setup_dev(struct time_helper* dev)
 
     err = cdev_add(&(dev->dev), devno, 1);
     if(err) {
-        return err;
+	return err;
     }
     return 0;
 }
@@ -106,46 +106,46 @@ static int time_helper_init(void)
     dev_t dev=0;
 
     if (time_helper_major) {
-        dev = MKDEV(time_helper_major, time_helper_minor);
-        err = register_chrdev_region(dev, time_helper_nr_devs, "time_helper");
+	dev = MKDEV(time_helper_major, time_helper_minor);
+	err = register_chrdev_region(dev, time_helper_nr_devs, "time_helper");
     } else {
-        err = alloc_chrdev_region(&dev, time_helper_minor, time_helper_nr_devs, "time_helper");
-        time_helper_major = MAJOR(dev);
+	err = alloc_chrdev_region(&dev, time_helper_minor, time_helper_nr_devs, "time_helper");
+	time_helper_major = MAJOR(dev);
     }
     if (err < 0) {
-        printk(KERN_WARNING "time_helper: can't get major %d\n", time_helper_major);
-        goto fail;
+	printk(KERN_WARNING "time_helper: can't get major %d\n", time_helper_major);
+	goto fail;
     }
 
     time_helper_dev = (struct time_helper *)kmalloc(sizeof(struct time_helper), GFP_KERNEL);
     if(!time_helper_dev) {
-        err = -ENOMEM;
-        printk(KERN_ALERT"Failed to alloc hello_dev.\n");
-        goto unregister;
+	err = -ENOMEM;
+	printk(KERN_ALERT"Failed to alloc hello_dev.\n");
+	goto unregister;
     }
 
     err = __time_helper_setup_dev(time_helper_dev);
     if(err) {
-        printk(KERN_ALERT"Failed to setup dev: %d.\n", err);
-        goto cleanup;
+	printk(KERN_ALERT"Failed to setup dev: %d.\n", err);
+	goto cleanup;
     }
 
     time_helper_class = class_create(THIS_MODULE, TIME_HELPER_DEVICE_CLASS_NAME);
     if(IS_ERR(time_helper_class)) {
-        err = PTR_ERR(time_helper_class);
-        printk(KERN_ALERT"Failed to create time_helper class.\n");
-        goto destroy_cdev;
+	err = PTR_ERR(time_helper_class);
+	printk(KERN_ALERT"Failed to create time_helper class.\n");
+	goto destroy_cdev;
     }
 
     {
-        struct device* temp = NULL;
+	struct device* temp = NULL;
 
-        temp = device_create(time_helper_class, NULL, dev, "%s", TIME_HELPER_DEVICE_FILE_NAME);
-        if(IS_ERR(temp)) {
-            err = PTR_ERR(temp);
-            printk(KERN_ALERT"Failed to create time_helper device.");
-            goto destroy_class;
-        }
+	temp = device_create(time_helper_class, NULL, dev, "%s", TIME_HELPER_DEVICE_FILE_NAME);
+	if(IS_ERR(temp)) {
+	    err = PTR_ERR(temp);
+	    printk(KERN_ALERT"Failed to create time_helper device.");
+	    goto destroy_class;
+	}
     }
 
     return 0;
@@ -167,13 +167,13 @@ static void time_helper_exit(void)
     dev_t devno = MKDEV(time_helper_major, time_helper_minor);
 
     if(time_helper_class) {
-        device_destroy(time_helper_class, MKDEV(time_helper_major, time_helper_minor));
-        class_destroy(time_helper_class);
+	device_destroy(time_helper_class, MKDEV(time_helper_major, time_helper_minor));
+	class_destroy(time_helper_class);
     }
 
     if(time_helper_dev) {
-        cdev_del(&(time_helper_dev->dev));
-        kfree(time_helper_dev);
+	cdev_del(&(time_helper_dev->dev));
+	kfree(time_helper_dev);
     }
 
     unregister_chrdev_region(devno, time_helper_nr_devs);

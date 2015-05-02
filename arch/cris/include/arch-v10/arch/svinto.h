@@ -51,7 +51,7 @@ typedef struct etrax_dma_descr {
 /* Use this for constant numbers only */
 #define WAIT_DMA_NUM( n ) \
   while( (*R_DMA_CH##n##_CMD & IO_MASK( R_DMA_CH0_CMD, cmd )) != \
-         IO_STATE( R_DMA_CH0_CMD, cmd, hold ) )
+	 IO_STATE( R_DMA_CH0_CMD, cmd, hold ) )
 
 /* Use this for constant numbers or symbols
  * having two macros makes it possible to use constant expressions.

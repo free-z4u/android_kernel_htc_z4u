@@ -157,7 +157,7 @@ VNTWIFIpGetCurrentChannel (
 {
     PSMgmtObject        pMgmt = (PSMgmtObject)pMgmtHandle;
     if (pMgmtHandle != NULL) {
-        return (pMgmt->uCurrChannel);
+	return (pMgmt->uCurrChannel);
     }
     return 0;
 }
@@ -213,20 +213,20 @@ VNTWIFIbyGetMaxSupportRate (
     unsigned int ii = 0;
 
     if (pSupportRateIEs) {
-        for (ii = 0; ii < pSupportRateIEs->len; ii++) {
-            bySupportRate = DATARATEbyGetRateIdx(pSupportRateIEs->abyRates[ii]);
-            if (bySupportRate > byMaxSupportRate) {
-                byMaxSupportRate = bySupportRate;
-            }
-        }
+	for (ii = 0; ii < pSupportRateIEs->len; ii++) {
+	    bySupportRate = DATARATEbyGetRateIdx(pSupportRateIEs->abyRates[ii]);
+	    if (bySupportRate > byMaxSupportRate) {
+		byMaxSupportRate = bySupportRate;
+	    }
+	}
     }
     if (pExtSupportRateIEs) {
-        for (ii = 0; ii < pExtSupportRateIEs->len; ii++) {
-            bySupportRate = DATARATEbyGetRateIdx(pExtSupportRateIEs->abyRates[ii]);
-            if (bySupportRate > byMaxSupportRate) {
-                byMaxSupportRate = bySupportRate;
-            }
-        }
+	for (ii = 0; ii < pExtSupportRateIEs->len; ii++) {
+	    bySupportRate = DATARATEbyGetRateIdx(pExtSupportRateIEs->abyRates[ii]);
+	    if (bySupportRate > byMaxSupportRate) {
+		byMaxSupportRate = bySupportRate;
+	    }
+	}
     }
 
     return byMaxSupportRate;
@@ -260,32 +260,32 @@ VNTWIFIbyGetACKTxRate (
     unsigned int ii;
 
     if (byRxDataRate <= RATE_11M) {
-        byMaxAckRate = RATE_1M;
+	byMaxAckRate = RATE_1M;
     } else  {
-        // 24M is mandatory for 802.11a and 802.11g
-        byMaxAckRate = RATE_24M;
+	// 24M is mandatory for 802.11a and 802.11g
+	byMaxAckRate = RATE_24M;
     }
     if (pSupportRateIEs) {
-        for (ii = 0; ii < pSupportRateIEs->len; ii++) {
-            if (pSupportRateIEs->abyRates[ii] & 0x80) {
-                byBasicRate = DATARATEbyGetRateIdx(pSupportRateIEs->abyRates[ii]);
-                if ((byBasicRate <= byRxDataRate) &&
-                    (byBasicRate > byMaxAckRate))  {
-                    byMaxAckRate = byBasicRate;
-                }
-            }
-        }
+	for (ii = 0; ii < pSupportRateIEs->len; ii++) {
+	    if (pSupportRateIEs->abyRates[ii] & 0x80) {
+		byBasicRate = DATARATEbyGetRateIdx(pSupportRateIEs->abyRates[ii]);
+		if ((byBasicRate <= byRxDataRate) &&
+		    (byBasicRate > byMaxAckRate))  {
+		    byMaxAckRate = byBasicRate;
+		}
+	    }
+	}
     }
     if (pExtSupportRateIEs) {
-        for (ii = 0; ii < pExtSupportRateIEs->len; ii++) {
-            if (pExtSupportRateIEs->abyRates[ii] & 0x80) {
-                byBasicRate = DATARATEbyGetRateIdx(pExtSupportRateIEs->abyRates[ii]);
-                if ((byBasicRate <= byRxDataRate) &&
-                    (byBasicRate > byMaxAckRate))  {
-                    byMaxAckRate = byBasicRate;
-                }
-            }
-        }
+	for (ii = 0; ii < pExtSupportRateIEs->len; ii++) {
+	    if (pExtSupportRateIEs->abyRates[ii] & 0x80) {
+		byBasicRate = DATARATEbyGetRateIdx(pExtSupportRateIEs->abyRates[ii]);
+		if ((byBasicRate <= byRxDataRate) &&
+		    (byBasicRate > byMaxAckRate))  {
+		    byMaxAckRate = byBasicRate;
+		}
+	    }
+	}
     }
 
     return byMaxAckRate;
@@ -316,10 +316,10 @@ VNTWIFIvSetAuthenticationMode (
 
     pMgmt->eAuthenMode = eAuthMode;
     if ((eAuthMode == WMAC_AUTH_SHAREKEY) ||
-        (eAuthMode == WMAC_AUTH_AUTO)) {
-        pMgmt->bShareKeyAlgorithm = true;
+	(eAuthMode == WMAC_AUTH_AUTO)) {
+	pMgmt->bShareKeyAlgorithm = true;
     } else {
-        pMgmt->bShareKeyAlgorithm = false;
+	pMgmt->bShareKeyAlgorithm = false;
     }
 }
 
@@ -348,11 +348,11 @@ VNTWIFIvSetEncryptionMode (
 
     pMgmt->eEncryptionMode = eEncryptionMode;
     if ((eEncryptionMode == WMAC_ENCRYPTION_WEPEnabled) ||
-        (eEncryptionMode == WMAC_ENCRYPTION_TKIPEnabled) ||
-        (eEncryptionMode == WMAC_ENCRYPTION_AESEnabled) ) {
-        pMgmt->bPrivacyInvoked = true;
+	(eEncryptionMode == WMAC_ENCRYPTION_TKIPEnabled) ||
+	(eEncryptionMode == WMAC_ENCRYPTION_AESEnabled) ) {
+	pMgmt->bPrivacyInvoked = true;
     } else {
-        pMgmt->bPrivacyInvoked = false;
+	pMgmt->bPrivacyInvoked = false;
     }
 }
 
@@ -367,12 +367,12 @@ VNTWIFIbConfigPhyMode (
     PSMgmtObject        pMgmt = (PSMgmtObject)pMgmtHandle;
 
     if ((ePhyType != PHY_TYPE_AUTO) &&
-        (ePhyType != pMgmt->eCurrentPHYMode)) {
-        if (CARDbSetPhyParameter(pMgmt->pAdapter, ePhyType, 0, 0, NULL, NULL)==true) {
-            pMgmt->eCurrentPHYMode = ePhyType;
-        } else {
-            return(false);
-        }
+	(ePhyType != pMgmt->eCurrentPHYMode)) {
+	if (CARDbSetPhyParameter(pMgmt->pAdapter, ePhyType, 0, 0, NULL, NULL)==true) {
+	    pMgmt->eCurrentPHYMode = ePhyType;
+	} else {
+	    return(false);
+	}
     }
     pMgmt->eConfigPHYMode = ePhyType;
     return(true);
@@ -388,7 +388,7 @@ VNTWIFIbGetConfigPhyMode (
     PSMgmtObject        pMgmt = (PSMgmtObject)pMgmtHandle;
 
     if ((pMgmt != NULL) && (pePhyType != NULL)) {
-        *(PCARD_PHY_TYPE)pePhyType = pMgmt->eConfigPHYMode;
+	*(PCARD_PHY_TYPE)pePhyType = pMgmt->eConfigPHYMode;
     }
 }
 
@@ -435,14 +435,14 @@ VNTWIFIvQueryBSSList(void *pMgmtHandle, unsigned int *puBSSCount, void **pvFirst
     *pvFirstBSS = NULL;
 
     for (ii = 0; ii < MAX_BSS_NUM; ii++) {
-        pBSS = &(pMgmt->sBSSList[ii]);
-        if (!pBSS->bActive) {
-            continue;
-        }
-        if (*pvFirstBSS == NULL) {
-            *pvFirstBSS = &(pMgmt->sBSSList[ii]);
-        }
-        uCount++;
+	pBSS = &(pMgmt->sBSSList[ii]);
+	if (!pBSS->bActive) {
+	    continue;
+	}
+	if (*pvFirstBSS == NULL) {
+	    *pvFirstBSS = &(pMgmt->sBSSList[ii]);
+	}
+	uCount++;
     }
     *puBSSCount = uCount;
 }
@@ -463,14 +463,14 @@ VNTWIFIvGetNextBSS (
     *pvNextBSS = NULL;
 
     while (*pvNextBSS == NULL) {
-        pBSS++;
-        if (pBSS > &(pMgmt->sBSSList[MAX_BSS_NUM])) {
-            return;
-        }
-        if (pBSS->bActive == true) {
-            *pvNextBSS = pBSS;
-            return;
-        }
+	pBSS++;
+	if (pBSS > &(pMgmt->sBSSList[MAX_BSS_NUM])) {
+	    return;
+	}
+	if (pBSS->bActive == true) {
+	    *pvNextBSS = pBSS;
+	    return;
+	}
     }
 }
 
@@ -504,22 +504,22 @@ VNTWIFIvUpdateNodeTxCounter(
     unsigned int ii;
 
     if ((pMgmt->eCurrMode == WMAC_MODE_IBSS_STA) ||
-        (pMgmt->eCurrMode == WMAC_MODE_ESS_AP)) {
-        if (BSSDBbIsSTAInNodeDB(pMgmt, pbyDestAddress, &uNodeIndex) == false) {
-            return;
-        }
+	(pMgmt->eCurrMode == WMAC_MODE_ESS_AP)) {
+	if (BSSDBbIsSTAInNodeDB(pMgmt, pbyDestAddress, &uNodeIndex) == false) {
+	    return;
+	}
     }
     pMgmt->sNodeDBTable[uNodeIndex].uTxAttempts++;
     if (bTxOk == true) {
-        // transmit success, TxAttempts at least plus one
-        pMgmt->sNodeDBTable[uNodeIndex].uTxOk[MAX_RATE]++;
-        pMgmt->sNodeDBTable[uNodeIndex].uTxOk[wRate]++;
+	// transmit success, TxAttempts at least plus one
+	pMgmt->sNodeDBTable[uNodeIndex].uTxOk[MAX_RATE]++;
+	pMgmt->sNodeDBTable[uNodeIndex].uTxOk[wRate]++;
     } else {
-        pMgmt->sNodeDBTable[uNodeIndex].uTxFailures++;
+	pMgmt->sNodeDBTable[uNodeIndex].uTxFailures++;
     }
     pMgmt->sNodeDBTable[uNodeIndex].uTxRetry += pbyTxFailCount[MAX_RATE];
     for(ii=0;ii<MAX_RATE;ii++) {
-        pMgmt->sNodeDBTable[uNodeIndex].uTxFail[ii] += pbyTxFailCount[ii];
+	pMgmt->sNodeDBTable[uNodeIndex].uTxFail[ii] += pbyTxFailCount[ii];
     }
     return;
 }
@@ -546,21 +546,21 @@ VNTWIFIvGetTxRate(
 
 
     if ((pMgmt->eCurrMode == WMAC_MODE_IBSS_STA) ||
-        (pMgmt->eCurrMode == WMAC_MODE_ESS_AP)) {
-        // Adhoc Tx rate decided from node DB
-        if(BSSDBbIsSTAInNodeDB(pMgmt, pbyDestAddress, &uNodeIndex)) {
-            wTxDataRate = (pMgmt->sNodeDBTable[uNodeIndex].wTxDataRate);
-            pSupportRateIEs = (PWLAN_IE_SUPP_RATES) (pMgmt->sNodeDBTable[uNodeIndex].abyCurrSuppRates);
-            pExtSupportRateIEs = (PWLAN_IE_SUPP_RATES) (pMgmt->sNodeDBTable[uNodeIndex].abyCurrExtSuppRates);
-        } else {
-            if (pMgmt->eCurrentPHYMode != PHY_TYPE_11A) {
-                wTxDataRate = RATE_2M;
-            } else {
-                wTxDataRate = RATE_24M;
-            }
-            pSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrSuppRates;
-            pExtSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrExtSuppRates;
-        }
+	(pMgmt->eCurrMode == WMAC_MODE_ESS_AP)) {
+	// Adhoc Tx rate decided from node DB
+	if(BSSDBbIsSTAInNodeDB(pMgmt, pbyDestAddress, &uNodeIndex)) {
+	    wTxDataRate = (pMgmt->sNodeDBTable[uNodeIndex].wTxDataRate);
+	    pSupportRateIEs = (PWLAN_IE_SUPP_RATES) (pMgmt->sNodeDBTable[uNodeIndex].abyCurrSuppRates);
+	    pExtSupportRateIEs = (PWLAN_IE_SUPP_RATES) (pMgmt->sNodeDBTable[uNodeIndex].abyCurrExtSuppRates);
+	} else {
+	    if (pMgmt->eCurrentPHYMode != PHY_TYPE_11A) {
+		wTxDataRate = RATE_2M;
+	    } else {
+		wTxDataRate = RATE_24M;
+	    }
+	    pSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrSuppRates;
+	    pExtSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrExtSuppRates;
+	}
     } else { // Infrastructure: rate decided from AP Node, index = 0
 
 		wTxDataRate = (pMgmt->sNodeDBTable[0].wTxDataRate);
@@ -570,24 +570,24 @@ VNTWIFIvGetTxRate(
 #endif
 
 
-        pSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrSuppRates;
-        pExtSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrExtSuppRates;
+	pSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrSuppRates;
+	pExtSupportRateIEs = (PWLAN_IE_SUPP_RATES) pMgmt->abyCurrExtSuppRates;
     }
     byACKRate = VNTWIFIbyGetACKTxRate(  (unsigned char) wTxDataRate,
-                                        pSupportRateIEs,
-                                        pExtSupportRateIEs
-                                        );
+					pSupportRateIEs,
+					pExtSupportRateIEs
+					);
     if (byACKRate > (unsigned char) wTxDataRate) {
-        byACKRate = (unsigned char) wTxDataRate;
+	byACKRate = (unsigned char) wTxDataRate;
     }
     byCCKBasicRate = VNTWIFIbyGetACKTxRate( RATE_11M,
-                                            pSupportRateIEs,
-                                            pExtSupportRateIEs
-                                            );
+					    pSupportRateIEs,
+					    pExtSupportRateIEs
+					    );
     byOFDMBasicRate = VNTWIFIbyGetACKTxRate(RATE_54M,
-                                            pSupportRateIEs,
-                                            pExtSupportRateIEs
-                                            );
+					    pSupportRateIEs,
+					    pExtSupportRateIEs
+					    );
     *pwTxDataRate = wTxDataRate;
     *pbyACKRate = byACKRate;
     *pbyCCKBasicRate = byCCKBasicRate;
@@ -604,9 +604,9 @@ VNTWIFIbyGetKeyCypher(
     PSMgmtObject    pMgmt = (PSMgmtObject)pMgmtHandle;
 
     if (bGroupKey == true) {
-        return (pMgmt->byCSSGK);
+	return (pMgmt->byCSSGK);
     } else {
-        return (pMgmt->byCSSPK);
+	return (pMgmt->byCSSPK);
     }
 }
 
@@ -625,8 +625,8 @@ VNTWIFIbInit(
 
     pMgmt = (PSMgmtObject)kmalloc(sizeof(SMgmtObject), (int)GFP_ATOMIC);
     if (pMgmt == NULL) {
-        *pMgmtHandler = NULL;
-        return false;
+	*pMgmtHandler = NULL;
+	return false;
     }
 
     memset(pMgmt, 0, sizeof(SMgmtObject));
@@ -634,7 +634,7 @@ VNTWIFIbInit(
 
     // should initial MAC address abyMACAddr
     for(ii=0;ii<WLAN_BSSID_LEN;ii++) {
-        pMgmt->abyDesireBSSID[ii] = 0xFF;
+	pMgmt->abyDesireBSSID[ii] = 0xFF;
     }
     pMgmt->pbyPSPacketPool = &pMgmt->byPSPacketPool[0];
     pMgmt->pbyMgmtPacketPool = &pMgmt->byMgmtPacketPool[0];
@@ -666,7 +666,7 @@ VNTWIFIbSetPMKIDCache (
     PSMgmtObject    pMgmt = (PSMgmtObject) pMgmtObject;
 
     if (ulCount > MAX_PMKID_CACHE) {
-        return (false);
+	return (false);
     }
     pMgmt->gsPMKIDCache.BSSIDInfoCount = ulCount;
     memcpy(pMgmt->gsPMKIDCache.BSSIDInfo, pPMKIDInfo, (ulCount*sizeof(PMKIDInfo)));
@@ -684,14 +684,14 @@ VNTWIFIwGetMaxSupportRate(
     PSMgmtObject    pMgmt = (PSMgmtObject) pMgmtObject;
 
     for(wRate = RATE_54M; wRate > RATE_1M; wRate--) {
-        if (pMgmt->sNodeDBTable[0].wSuppRate & (1<<wRate)) {
-            return (wRate);
-        }
+	if (pMgmt->sNodeDBTable[0].wSuppRate & (1<<wRate)) {
+	    return (wRate);
+	}
     }
     if (pMgmt->eCurrentPHYMode == PHY_TYPE_11A) {
-        return (RATE_6M);
+	return (RATE_6M);
     } else {
-        return (RATE_1M);
+	return (RATE_1M);
     }
 }
 
@@ -723,44 +723,44 @@ VNTWIFIbMeasureReport(
 
     //spin_lock_irq(&pDevice->lock);
     if ((pvMeasureEID != NULL) &&
-        (pMgmt->uLengthOfRepEIDs < (WLAN_A3FR_MAXLEN - sizeof(MEASEURE_REP) - sizeof(WLAN_80211HDR_A3) - 3))
-        ) {
-        pMgmt->pCurrMeasureEIDRep->byElementID = WLAN_EID_MEASURE_REP;
-        pMgmt->pCurrMeasureEIDRep->len = 3;
-        pMgmt->pCurrMeasureEIDRep->byToken = ((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->byToken;
-        pMgmt->pCurrMeasureEIDRep->byMode = byReportMode;
-        pMgmt->pCurrMeasureEIDRep->byType = ((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->byType;
-        switch (pMgmt->pCurrMeasureEIDRep->byType) {
-            case MEASURE_TYPE_BASIC :
-                pMgmt->pCurrMeasureEIDRep->len += sizeof(MEASEURE_REP_BASIC);
-                memcpy(   &(pMgmt->pCurrMeasureEIDRep->sRep.sBasic),
-                            &(((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->sReq),
-                            sizeof(MEASEURE_REQ));
-                pMgmt->pCurrMeasureEIDRep->sRep.sBasic.byMap = byBasicMap;
-                break;
-            case MEASURE_TYPE_CCA :
-                pMgmt->pCurrMeasureEIDRep->len += sizeof(MEASEURE_REP_CCA);
-                memcpy(   &(pMgmt->pCurrMeasureEIDRep->sRep.sCCA),
-                            &(((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->sReq),
-                            sizeof(MEASEURE_REQ));
-                pMgmt->pCurrMeasureEIDRep->sRep.sCCA.byCCABusyFraction = byCCAFraction;
-                break;
-            case MEASURE_TYPE_RPI :
-                pMgmt->pCurrMeasureEIDRep->len += sizeof(MEASEURE_REP_RPI);
-                memcpy(   &(pMgmt->pCurrMeasureEIDRep->sRep.sRPI),
-                            &(((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->sReq),
-                            sizeof(MEASEURE_REQ));
-                memcpy(pMgmt->pCurrMeasureEIDRep->sRep.sRPI.abyRPIdensity, pbyRPIs, 8);
-                break;
-            default :
-                break;
-        }
-        pbyCurrentEID += (2 + pMgmt->pCurrMeasureEIDRep->len);
-        pMgmt->uLengthOfRepEIDs += (2 + pMgmt->pCurrMeasureEIDRep->len);
-        pMgmt->pCurrMeasureEIDRep = (PWLAN_IE_MEASURE_REP) pbyCurrentEID;
+	(pMgmt->uLengthOfRepEIDs < (WLAN_A3FR_MAXLEN - sizeof(MEASEURE_REP) - sizeof(WLAN_80211HDR_A3) - 3))
+	) {
+	pMgmt->pCurrMeasureEIDRep->byElementID = WLAN_EID_MEASURE_REP;
+	pMgmt->pCurrMeasureEIDRep->len = 3;
+	pMgmt->pCurrMeasureEIDRep->byToken = ((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->byToken;
+	pMgmt->pCurrMeasureEIDRep->byMode = byReportMode;
+	pMgmt->pCurrMeasureEIDRep->byType = ((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->byType;
+	switch (pMgmt->pCurrMeasureEIDRep->byType) {
+	    case MEASURE_TYPE_BASIC :
+		pMgmt->pCurrMeasureEIDRep->len += sizeof(MEASEURE_REP_BASIC);
+		memcpy(   &(pMgmt->pCurrMeasureEIDRep->sRep.sBasic),
+			    &(((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->sReq),
+			    sizeof(MEASEURE_REQ));
+		pMgmt->pCurrMeasureEIDRep->sRep.sBasic.byMap = byBasicMap;
+		break;
+	    case MEASURE_TYPE_CCA :
+		pMgmt->pCurrMeasureEIDRep->len += sizeof(MEASEURE_REP_CCA);
+		memcpy(   &(pMgmt->pCurrMeasureEIDRep->sRep.sCCA),
+			    &(((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->sReq),
+			    sizeof(MEASEURE_REQ));
+		pMgmt->pCurrMeasureEIDRep->sRep.sCCA.byCCABusyFraction = byCCAFraction;
+		break;
+	    case MEASURE_TYPE_RPI :
+		pMgmt->pCurrMeasureEIDRep->len += sizeof(MEASEURE_REP_RPI);
+		memcpy(   &(pMgmt->pCurrMeasureEIDRep->sRep.sRPI),
+			    &(((PWLAN_IE_MEASURE_REQ) pvMeasureEID)->sReq),
+			    sizeof(MEASEURE_REQ));
+		memcpy(pMgmt->pCurrMeasureEIDRep->sRep.sRPI.abyRPIdensity, pbyRPIs, 8);
+		break;
+	    default :
+		break;
+	}
+	pbyCurrentEID += (2 + pMgmt->pCurrMeasureEIDRep->len);
+	pMgmt->uLengthOfRepEIDs += (2 + pMgmt->pCurrMeasureEIDRep->len);
+	pMgmt->pCurrMeasureEIDRep = (PWLAN_IE_MEASURE_REP) pbyCurrentEID;
     }
     if (bEndOfReport == true) {
-        IEEE11hbMSRRepTx(pMgmt);
+	IEEE11hbMSRRepTx(pMgmt);
     }
     //spin_unlock_irq(&pDevice->lock);
     return (true);
@@ -791,15 +791,15 @@ VNTWIFIbRadarPresent(
 {
     PSMgmtObject    pMgmt = (PSMgmtObject) pMgmtObject;
     if ((pMgmt->eCurrMode == WMAC_MODE_IBSS_STA) &&
-        (byChannel == (unsigned char) pMgmt->uCurrChannel) &&
-        (pMgmt->bSwitchChannel != true) &&
-        (pMgmt->b11hEnable == true)) {
-        if (!compare_ether_addr(pMgmt->abyIBSSDFSOwner, CARDpGetCurrentAddress(pMgmt->pAdapter))) {
-            pMgmt->byNewChannel = CARDbyAutoChannelSelect(pMgmt->pAdapter,(unsigned char) pMgmt->uCurrChannel);
-            pMgmt->bSwitchChannel = true;
-        }
-        BEACONbSendBeacon(pMgmt);
-        CARDbChannelSwitch(pMgmt->pAdapter, 0, pMgmt->byNewChannel, 10);
+	(byChannel == (unsigned char) pMgmt->uCurrChannel) &&
+	(pMgmt->bSwitchChannel != true) &&
+	(pMgmt->b11hEnable == true)) {
+	if (!compare_ether_addr(pMgmt->abyIBSSDFSOwner, CARDpGetCurrentAddress(pMgmt->pAdapter))) {
+	    pMgmt->byNewChannel = CARDbyAutoChannelSelect(pMgmt->pAdapter,(unsigned char) pMgmt->uCurrChannel);
+	    pMgmt->bSwitchChannel = true;
+	}
+	BEACONbSendBeacon(pMgmt);
+	CARDbChannelSwitch(pMgmt->pAdapter, 0, pMgmt->byNewChannel, 10);
     }
     return true;
 }

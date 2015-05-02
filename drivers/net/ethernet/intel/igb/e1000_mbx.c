@@ -347,7 +347,7 @@ static s32 igb_obtain_mbx_lock_pf(struct e1000_hw *hw, u16 vf_number)
  *  returns SUCCESS if it successfully copied message into the buffer
  **/
 static s32 igb_write_mbx_pf(struct e1000_hw *hw, u32 *msg, u16 size,
-                              u16 vf_number)
+			      u16 vf_number)
 {
 	s32 ret_val;
 	u16 i;
@@ -388,7 +388,7 @@ out_no_write:
  *  a message due to a VF request so no polling for message is needed.
  **/
 static s32 igb_read_mbx_pf(struct e1000_hw *hw, u32 *msg, u16 size,
-                             u16 vf_number)
+			     u16 vf_number)
 {
 	s32 ret_val;
 	u16 i;

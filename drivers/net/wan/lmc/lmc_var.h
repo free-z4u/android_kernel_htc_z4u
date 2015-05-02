@@ -58,10 +58,10 @@ typedef struct lmc___ctl lmc_ctl_t;
 
 /* This macro sync's up with the mii so that reads and writes can take place */
 #define LMC_MII_SYNC(sc) do {int n=32; while( n >= 0 ) { \
-                LMC_CSR_WRITE((sc), csr_9, 0x20000); \
+		LMC_CSR_WRITE((sc), csr_9, 0x20000); \
 		lmc_delay(); \
 		LMC_CSR_WRITE((sc), csr_9, 0x30000); \
-                lmc_delay(); \
+		lmc_delay(); \
 		n--; }} while(0)
 
 struct lmc_regfile_t {
@@ -142,7 +142,7 @@ struct lmc_regfile_t {
 	  LMC_RDES_OVERFLOW \
 	| LMC_RDES_DRIBBLING_BIT \
 	| LMC_RDES_REPORT_ON_MII_ERR \
-        | LMC_RDES_COLLISION_SEEN ) )
+	| LMC_RDES_COLLISION_SEEN ) )
 
 
 /*
@@ -215,8 +215,8 @@ struct lmc___media {
 	int	(* get_link_status)(lmc_softc_t * const);
 	void	(* set_link_status)(lmc_softc_t * const, int);
 	void	(* set_crc_length)(lmc_softc_t * const, int);
-        void    (* set_circuit_type)(lmc_softc_t * const, int);
-        void	(* watchdog)(lmc_softc_t * const);
+	void    (* set_circuit_type)(lmc_softc_t * const, int);
+	void	(* watchdog)(lmc_softc_t * const);
 };
 
 

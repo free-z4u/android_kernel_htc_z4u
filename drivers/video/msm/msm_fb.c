@@ -1290,13 +1290,13 @@ void msm_fb_set_backlight(struct msm_fb_data_type *mfd, __u32 bkl_lvl)
 
 void msm_fb_display_on(struct msm_fb_data_type *mfd)
 {
-        struct msm_fb_panel_data *pdata;
-        pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
+	struct msm_fb_panel_data *pdata;
+	pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
 
-        if ((pdata) && (pdata->display_on)) {
-                down(&mfd->sem);
-                pdata->display_on(mfd);
-                up(&mfd->sem);
+	if ((pdata) && (pdata->display_on)) {
+		down(&mfd->sem);
+		pdata->display_on(mfd);
+		up(&mfd->sem);
 
 		if (pdata->bklswitch)
 			pdata->bklswitch(mfd, true);
@@ -1304,19 +1304,19 @@ void msm_fb_display_on(struct msm_fb_data_type *mfd)
 		if ((pdata) && (pdata->dimming_on)) {
 			mod_timer(&mfd->dimming_update_timer, jiffies + msecs_to_jiffies(1000));
 		}
-        }
+	}
 }
 
 void msm_fb_display_off(struct msm_fb_data_type *mfd)
 {
-        struct msm_fb_panel_data *pdata;
-        pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
+	struct msm_fb_panel_data *pdata;
+	pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
 
-        if ((pdata) && (pdata->display_off)) {
-                down(&mfd->sem);
-                pdata->display_off(mfd);
-                up(&mfd->sem);
-        }
+	if ((pdata) && (pdata->display_off)) {
+		down(&mfd->sem);
+		pdata->display_off(mfd);
+		up(&mfd->sem);
+	}
 }
 
 static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
@@ -1550,17 +1550,17 @@ static int msm_fb_mmap(struct fb_info *info, struct vm_area_struct * vma)
 	unsigned long off = vma->vm_pgoff << PAGE_SHIFT;
 	struct msm_fb_data_type *mfd = (struct msm_fb_data_type *)info->par;
 
-        if ((vma->vm_end <= vma->vm_start) ||
-                (off >= len) ||
-                ((vma->vm_end - vma->vm_start) > (len - off)))
-                 return -EINVAL;
+	if ((vma->vm_end <= vma->vm_start) ||
+		(off >= len) ||
+		((vma->vm_end - vma->vm_start) > (len - off)))
+		 return -EINVAL;
 
 	/* Set VM flags. */
 	start &= PAGE_MASK;
 	off += start;
 
-        if (off < start)
-                return -EINVAL;
+	if (off < start)
+		return -EINVAL;
 
 	vma->vm_pgoff = off >> PAGE_SHIFT;
 	/* This is an IO map - tell maydump to skip this VMA */

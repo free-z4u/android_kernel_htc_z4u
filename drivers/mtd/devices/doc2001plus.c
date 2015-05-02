@@ -553,15 +553,15 @@ static int doc_dumpblk(struct mtd_info *mtd, loff_t from)
 	memset(&c[0], 0, sizeof(c));
 	printk("DUMP OFFSET=%x:\n", (int)from);
 
-        for (i = 0, bp = &buf[0]; (i < 1056); i++) {
-                if ((i % 16) == 0)
-                        printk("%08x: ", i);
-                printk(" %02x", *bp);
-                c[(i & 0xf)] = ((*bp >= 0x20) && (*bp <= 0x7f)) ? *bp : '.';
-                bp++;
-                if (((i + 1) % 16) == 0)
-                        printk("    %s\n", c);
-        }
+	for (i = 0, bp = &buf[0]; (i < 1056); i++) {
+		if ((i % 16) == 0)
+			printk("%08x: ", i);
+		printk(" %02x", *bp);
+		c[(i & 0xf)] = ((*bp >= 0x20) && (*bp <= 0x7f)) ? *bp : '.';
+		bp++;
+		if (((i + 1) % 16) == 0)
+			printk("    %s\n", c);
+	}
 	printk("\n");
 
 	/* Disable flash internally */

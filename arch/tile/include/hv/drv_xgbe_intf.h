@@ -180,17 +180,17 @@ int __netio_fastio0(uint32_t fastio_index);
 int __netio_fastio1(uint32_t fastio_index, uint32_t arg0);
 /** 3-argument fast I/O call, 2-word return value */
 netio_fastio_rv3_t __netio_fastio3_rv3(uint32_t fastio_index, uint32_t arg0,
-                                       uint32_t arg1, uint32_t arg2);
+				       uint32_t arg1, uint32_t arg2);
 /** 4-argument fast I/O call */
 int __netio_fastio4(uint32_t fastio_index, uint32_t arg0, uint32_t arg1,
-                    uint32_t arg2, uint32_t arg3);
+		    uint32_t arg2, uint32_t arg3);
 /** 6-argument fast I/O call */
 int __netio_fastio6(uint32_t fastio_index, uint32_t arg0, uint32_t arg1,
-                    uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5);
+		    uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5);
 /** 9-argument fast I/O call */
 int __netio_fastio9(uint32_t fastio_index, uint32_t arg0, uint32_t arg1,
-                    uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5,
-                    uint32_t arg6, uint32_t arg7, uint32_t arg8);
+		    uint32_t arg2, uint32_t arg3, uint32_t arg4, uint32_t arg5,
+		    uint32_t arg6, uint32_t arg7, uint32_t arg8);
 
 /** Allocate an empty packet.
  * @param fastio_index Fast I/O index.
@@ -222,7 +222,7 @@ int __netio_fastio9(uint32_t fastio_index, uint32_t arg0, uint32_t arg1,
  */
 #define __netio_fastio_send_pkt_nock(fastio_index, ackflag, size, va, handle) \
   __netio_fastio4((fastio_index) + NETIO_FASTIO_SEND_PKT_NOCK, ackflag, \
-                  size, va, handle)
+		  size, va, handle)
 
 /** Send packet, calculate checksum.
  * @param fastio_index Fast I/O index.
@@ -234,9 +234,9 @@ int __netio_fastio9(uint32_t fastio_index, uint32_t arg0, uint32_t arg1,
  * @param csum1 Checksum seed.
  */
 #define __netio_fastio_send_pkt_ck(fastio_index, ackflag, size, va, handle, \
-                                   csum0, csum1) \
+				   csum0, csum1) \
   __netio_fastio6((fastio_index) + NETIO_FASTIO_SEND_PKT_CK, ackflag, \
-                  size, va, handle, csum0, csum1)
+		  size, va, handle, csum0, csum1)
 
 
 /** Format for the "csum0" argument to the __netio_fastio_send routines
@@ -268,9 +268,9 @@ typedef union
  *        segment, if 2 segments, in high 16 bits.
  */
 #define __netio_fastio_sendv_pkt_1_2(fastio_index, flags, confno, csum0, \
-                                     va_F, va_L, len_F_L) \
+				     va_F, va_L, len_F_L) \
   __netio_fastio6((fastio_index) + NETIO_FASTIO_SENDV_PKT, flags, confno, \
-                  csum0, va_F, va_L, len_F_L)
+		  csum0, va_F, va_L, len_F_L)
 
 /** Send packet on PCIe interface.
  * @param fastio_index Fast I/O index.
@@ -282,9 +282,9 @@ typedef union
  * @param len_F_L Length of the packet buffer in low 16 bits.
  */
 #define __netio_fastio_send_pcie_pkt(fastio_index, flags, confno, csum0, \
-                                     va_F, va_L, len_F_L) \
+				     va_F, va_L, len_F_L) \
   __netio_fastio6((fastio_index) + PCIE_FASTIO_SENDV_PKT, flags, confno, \
-                  csum0, va_F, va_L, len_F_L)
+		  csum0, va_F, va_L, len_F_L)
 
 /** Sendv packet with 3 or 4 segments.
  * @param fastio_index Fast I/O index.
@@ -305,9 +305,9 @@ typedef union
  *        1 segment, if 4 segments, in high 16 bits.
  */
 #define __netio_fastio_sendv_pkt_3_4(fastio_index, flags, confno, csum0, va_F, \
-                                     va_L, len_F_L, va_M0, va_M1, len_M0_M1) \
+				     va_L, len_F_L, va_M0, va_M1, len_M0_M1) \
   __netio_fastio9((fastio_index) + NETIO_FASTIO_SENDV_PKT, flags, confno, \
-                  csum0, va_F, va_L, len_F_L, va_M0, va_M1, len_M0_M1)
+		  csum0, va_F, va_L, len_F_L, va_M0, va_M1, len_M0_M1)
 
 /** Send vector of packets.
  * @param fastio_index Fast I/O index.
@@ -328,7 +328,7 @@ typedef union
  */
 #define __netio_fastio_send_pkt_vec(fastio_index, seqno, nentries, va) \
   __netio_fastio3_rv3((fastio_index) + NETIO_FASTIO_SEND_PKT_VEC, seqno, \
-                      nentries, va)
+		      nentries, va)
 
 
 /** An egress DMA command for LEPP. */

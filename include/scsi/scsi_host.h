@@ -117,8 +117,8 @@ struct scsi_host_template {
 	 *   SCSI_MLQUEUE_HOST_BUSY: Block all devices served by this
 	 *   host temporarily.
 	 *
-         * For compatibility, any other non-zero return is treated the
-         * same as SCSI_MLQUEUE_HOST_BUSY.
+	 * For compatibility, any other non-zero return is treated the
+	 * same as SCSI_MLQUEUE_HOST_BUSY.
 	 *
 	 * NOTE: "temporarily" means either until the next command for#
 	 * this device/host completes, or a period of time determined by
@@ -798,7 +798,7 @@ static inline int __must_check scsi_add_host(struct Scsi_Host *host,
 
 static inline struct device *scsi_get_device(struct Scsi_Host *shost)
 {
-        return shost->shost_gendev.parent;
+	return shost->shost_gendev.parent;
 }
 
 /**

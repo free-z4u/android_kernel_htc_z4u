@@ -47,10 +47,10 @@ __init void scan_elf_aux( char **envp)
 				elf_aux_hwcap = auxv->a_un.a_val;
 				break;
 			case AT_PLATFORM:
-                                /* elf.h removed the pointer elements from
-                                 * a_un, so we have to use a_val, which is
-                                 * all that's left.
-                                 */
+				/* elf.h removed the pointer elements from
+				 * a_un, so we have to use a_val, which is
+				 * all that's left.
+				 */
 				elf_aux_platform =
 					(char *) (long) auxv->a_un.a_val;
 				break;

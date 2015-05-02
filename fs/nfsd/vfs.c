@@ -912,7 +912,7 @@ static int nfsd_direct_splice_actor(struct pipe_inode_info *pipe,
 
 static __be32
 nfsd_vfs_read(struct svc_rqst *rqstp, struct svc_fh *fhp, struct file *file,
-              loff_t offset, struct kvec *vec, int vlen, unsigned long *count)
+	      loff_t offset, struct kvec *vec, int vlen, unsigned long *count)
 {
 	mm_segment_t	oldfs;
 	__be32		err;
@@ -1167,7 +1167,7 @@ out:
  */
 __be32
 nfsd_commit(struct svc_rqst *rqstp, struct svc_fh *fhp,
-               loff_t offset, unsigned long count)
+	       loff_t offset, unsigned long count)
 {
 	struct file	*file;
 	loff_t		end = LLONG_MAX;

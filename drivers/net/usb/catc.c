@@ -114,9 +114,9 @@ enum register_offsets {
 
 enum eth_stats {
 	TxSingleColl =	0x00,
-        TxMultiColl =	0x02,
-        TxExcessColl =	0x04,
-        RxFramErr =	0x06,
+	TxMultiColl =	0x02,
+	TxExcessColl =	0x04,
+	RxFramErr =	0x06,
 };
 
 enum op_mode_bits {
@@ -466,10 +466,10 @@ static void catc_tx_timeout(struct net_device *netdev)
 
 static int catc_ctrl_msg(struct catc *catc, u8 dir, u8 request, u16 value, u16 index, void *buf, int len)
 {
-        int retval = usb_control_msg(catc->usbdev,
+	int retval = usb_control_msg(catc->usbdev,
 		dir ? usb_rcvctrlpipe(catc->usbdev, 0) : usb_sndctrlpipe(catc->usbdev, 0),
 		 request, 0x40 | dir, value, index, buf, len, 1000);
-        return retval < 0 ? retval : 0;
+	return retval < 0 ? retval : 0;
 }
 
 static void catc_ctrl_run(struct catc *catc)
@@ -486,7 +486,7 @@ static void catc_ctrl_run(struct catc *catc)
 	dr->wIndex = cpu_to_le16(q->index);
 	dr->wLength = cpu_to_le16(q->len);
 
-        urb->pipe = q->dir ? usb_rcvctrlpipe(usbdev, 0) : usb_sndctrlpipe(usbdev, 0);
+	urb->pipe = q->dir ? usb_rcvctrlpipe(usbdev, 0) : usb_sndctrlpipe(usbdev, 0);
 	urb->transfer_buffer_length = q->len;
 	urb->transfer_buffer = catc->ctrl_buf;
 	urb->setup_packet = (void *) dr;
@@ -769,7 +769,7 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
 
 	if (usb_set_interface(usbdev,
 			intf->altsetting->desc.bInterfaceNumber, 1)) {
-                err("Can't set altsetting 1.");
+		err("Can't set altsetting 1.");
 		return -EIO;
 	}
 
@@ -830,7 +830,7 @@ static int catc_probe(struct usb_interface *intf, const struct usb_device_id *id
 		catc->rx_buf, pktsz, catc_rx_done, catc);
 
 	usb_fill_int_urb(catc->irq_urb, usbdev, usb_rcvintpipe(usbdev, 2),
-                catc->irq_buf, 2, catc_irq_done, catc, 1);
+		catc->irq_buf, 2, catc_irq_done, catc, 1);
 
 	if (!catc->is_f5u011) {
 		dbg("Checking memory size\n");

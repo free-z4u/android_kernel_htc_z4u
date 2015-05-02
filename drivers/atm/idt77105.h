@@ -26,7 +26,7 @@
 #define IDT77105_MCR_UPLO	0x80	/* R/W, User Prog'le Output Latch */
 #define IDT77105_MCR_DREC	0x40	/* R/W, Discard Receive Error Cells */
 #define IDT77105_MCR_ECEIO	0x20	/* R/W, Enable Cell Error Interrupts
-                                         * Only */
+					 * Only */
 #define IDT77105_MCR_TDPC	0x10	/* R/W, Transmit Data Parity Check */
 #define IDT77105_MCR_DRIC	0x08	/* R/W, Discard Received Idle Cells */
 #define IDT77105_MCR_HALTTX	0x04	/* R/W, Halt Tx */

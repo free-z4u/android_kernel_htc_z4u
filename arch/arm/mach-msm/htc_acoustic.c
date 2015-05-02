@@ -682,7 +682,7 @@ static long acoustic_ioctl(struct file *file, unsigned int cmd,
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U) || defined(CONFIG_MACH_Z3DUG) || defined(CONFIG_MACH_Z3DCG)
 	case ACOUSTIC_ENABLE_TPA2081:
 		{
-            #define Z4_Z3_GPIO_AUD_SPK_EN (12)
+	    #define Z4_Z3_GPIO_AUD_SPK_EN (12)
 			int enable = 0;
 			if (copy_from_user(&enable, (void *)arg, sizeof(int))) {
 				pr_aud_err("%s: ACOUSTIC_ENABLE_TPA2081 error !!!\n", __func__);

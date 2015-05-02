@@ -115,7 +115,7 @@ static int __init m68kspkr_init(void)
 	if (!mach_beep) {
 		printk(KERN_INFO "m68kspkr: no lowlevel beep support\n");
 		return -ENODEV;
-        }
+	}
 
 	err = platform_driver_register(&m68kspkr_platform_driver);
 	if (err)

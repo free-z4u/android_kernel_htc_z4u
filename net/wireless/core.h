@@ -276,7 +276,7 @@ void ieee80211_set_bitrate_flags(struct wiphy *wiphy);
 
 void cfg80211_bss_expire(struct cfg80211_registered_device *dev);
 void cfg80211_bss_age(struct cfg80211_registered_device *dev,
-                      unsigned long age_secs);
+		      unsigned long age_secs);
 
 /* IBSS */
 int __cfg80211_join_ibss(struct cfg80211_registered_device *rdev,

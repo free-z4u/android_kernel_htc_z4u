@@ -38,7 +38,7 @@ static inline void noop__flush_region(void *start, int size)
 }
 
 static inline void cacheop_on_each_cpu(void (*func) (void *info), void *info,
-                                   int wait)
+				   int wait)
 {
 	preempt_disable();
 

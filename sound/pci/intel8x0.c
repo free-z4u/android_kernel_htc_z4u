@@ -359,15 +359,15 @@ struct ichdev {
 	unsigned int bdbar_addr;		/* PCI bus address (32bit) */
 	struct snd_pcm_substream *substream;
 	unsigned int physbuf;			/* physical address (32bit) */
-        unsigned int size;
-        unsigned int fragsize;
-        unsigned int fragsize1;
-        unsigned int position;
+	unsigned int size;
+	unsigned int fragsize;
+	unsigned int fragsize1;
+	unsigned int position;
 	unsigned int pos_shift;
 	unsigned int last_pos;
-        int frags;
-        int lvi;
-        int lvi_frag;
+	int frags;
+	int lvi;
+	int lvi_frag;
 	int civ;
 	int ack;
 	int ack_reload;
@@ -1770,12 +1770,12 @@ static struct ac97_pcm ac97_pcm_defs[] __devinitdata = {
 };
 
 static struct ac97_quirk ac97_quirks[] __devinitdata = {
-        {
+	{
 		.subvendor = 0x0e11,
 		.subdevice = 0x000e,
 		.name = "Compaq Deskpro EN",	/* AD1885 */
 		.type = AC97_TUNE_HP_ONLY
-        },
+	},
 	{
 		.subvendor = 0x0e11,
 		.subdevice = 0x008a,
@@ -1788,12 +1788,12 @@ static struct ac97_quirk ac97_quirks[] __devinitdata = {
 		.name = "Compaq Evo D510C",
 		.type = AC97_TUNE_HP_ONLY
 	},
-        {
+	{
 		.subvendor = 0x0e11,
 		.subdevice = 0x0860,
 		.name = "HP/Compaq nx7010",
 		.type = AC97_TUNE_MUTE_LED
-        },
+	},
 	{
 		.subvendor = 0x1014,
 		.subdevice = 0x0534,
@@ -2568,12 +2568,12 @@ static int snd_intel8x0_chip_init(struct intel8x0 *chip, int probing)
 	for (i = 0; i < chip->bdbars_count; i++) {
 	        timeout = 100000;
 	        while (--timeout != 0) {
-        		if ((igetbyte(chip, ICH_REG_OFF_CR + chip->ichd[i].reg_offset) & ICH_RESETREGS) == 0)
-        		        break;
-                }
-                if (timeout == 0)
-                        printk(KERN_ERR "intel8x0: reset of registers failed?\n");
-        }
+			if ((igetbyte(chip, ICH_REG_OFF_CR + chip->ichd[i].reg_offset) & ICH_RESETREGS) == 0)
+			        break;
+		}
+		if (timeout == 0)
+			printk(KERN_ERR "intel8x0: reset of registers failed?\n");
+	}
 	/* initialize Buffer Descriptor Lists */
 	for (i = 0; i < chip->bdbars_count; i++)
 		iputdword(chip, ICH_REG_OFF_BDBAR + chip->ichd[i].reg_offset,

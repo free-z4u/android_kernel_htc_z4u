@@ -172,13 +172,13 @@ struct ichdev {
 	unsigned int bdbar_addr;		/* PCI bus address (32bit) */
 	struct snd_pcm_substream *substream;
 	unsigned int physbuf;			/* physical address (32bit) */
-        unsigned int size;
-        unsigned int fragsize;
-        unsigned int fragsize1;
-        unsigned int position;
-        int frags;
-        int lvi;
-        int lvi_frag;
+	unsigned int size;
+	unsigned int fragsize;
+	unsigned int fragsize1;
+	unsigned int position;
+	int frags;
+	int lvi;
+	int lvi_frag;
 	int civ;
 	int ack;
 	int ack_reload;

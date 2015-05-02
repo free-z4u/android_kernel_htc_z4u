@@ -47,7 +47,7 @@
        a nop command. so it's ok as long as the commands we pass don't go
        through the fifo. warning: issuing a nop command seems to need pci_fifo
 -FIXME: in case of failure in the init sequence, be sure we return to a safe
-        state.
+	state.
 - FIXME: Use accelerator for 2D scroll
 -FIXME: 4MB boards have banked memory (FbiInit2 bits 1 & 20)
  */
@@ -664,7 +664,7 @@ static int sstfb_set_par(struct fb_info *info)
  *      @info: frame buffer info structure
  */
 static int sstfb_setcolreg(u_int regno, u_int red, u_int green, u_int blue,
-                           u_int transp, struct fb_info *info)
+			   u_int transp, struct fb_info *info)
 {
 	struct sstfb_par *par = info->par;
 	u32 col;

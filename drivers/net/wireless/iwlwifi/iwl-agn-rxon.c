@@ -801,7 +801,7 @@ void iwlagn_bss_info_changed(struct ieee80211_hw *hw,
 		IWL_DEBUG_MAC80211(priv, "leave - not ready\n");
 		mutex_unlock(&priv->mutex);
 		return;
-        }
+	}
 
 	if (unlikely(!ctx->vif)) {
 		IWL_DEBUG_MAC80211(priv, "leave - vif is NULL\n");

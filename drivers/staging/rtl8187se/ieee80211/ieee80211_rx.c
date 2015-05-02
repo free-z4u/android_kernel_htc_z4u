@@ -804,7 +804,7 @@ static inline int ieee80211_is_ofdm_rate(u8 rate)
 	case IEEE80211_OFDM_RATE_54MB:
 		return 1;
 	}
-        return 0;
+	return 0;
 }
 
 static inline int ieee80211_SignalStrengthTranslate(
@@ -964,7 +964,7 @@ inline int ieee80211_network_init(
 					     info_element->len + sizeof(struct ieee80211_info_element),
 					     left);
 			return 1;
-               	}
+	       	}
 
 		switch (info_element->id) {
 		case MFIE_TYPE_SSID:
@@ -977,8 +977,8 @@ inline int ieee80211_network_init(
 			network->ssid_len = min(info_element->len,
 						(u8)IW_ESSID_MAX_SIZE);
 			memcpy(network->ssid, info_element->data, network->ssid_len);
-        		if (network->ssid_len < IW_ESSID_MAX_SIZE)
-                		memset(network->ssid + network->ssid_len, 0,
+			if (network->ssid_len < IW_ESSID_MAX_SIZE)
+				memset(network->ssid + network->ssid_len, 0,
 				       IW_ESSID_MAX_SIZE - network->ssid_len);
 
 			IEEE80211_DEBUG_SCAN("MFIE_TYPE_SSID: '%s' len=%d.\n",
@@ -1174,13 +1174,13 @@ inline int ieee80211_network_init(
 		default:
 			IEEE80211_DEBUG_SCAN("unsupported IE %d\n",
 					     info_element->id);
-                        break;
+			break;
   		}
 
 		left -= sizeof(struct ieee80211_info_element_hdr) +
 			info_element->len;
 		info_element = (struct ieee80211_info_element *)
-                	&info_element->data[info_element->len];
+			&info_element->data[info_element->len];
   	}
 //by amy 080312
 	network->HighestOperaRate = hOpRate;
@@ -1241,14 +1241,14 @@ inline void update_network(struct ieee80211_network *dst,
 	unsigned char quality = src->stats.signalstrength;
 	unsigned char signal = 0;
 	unsigned char noise = 0;
-        if(dst->stats.signalstrength > 0) {
-                quality = (dst->stats.signalstrength * 5 + src->stats.signalstrength + 5)/6;
-        }
+	if(dst->stats.signalstrength > 0) {
+		quality = (dst->stats.signalstrength * 5 + src->stats.signalstrength + 5)/6;
+	}
 	signal = ieee80211_TranslateToDbm(quality);
 	//noise = signal - src->stats.noise;
 	if(dst->stats.noise > 0)
 		noise = (dst->stats.noise * 5 + src->stats.noise)/6;
-        //if(strcmp(dst->ssid, "linksys_lzm000") == 0)
+	//if(strcmp(dst->ssid, "linksys_lzm000") == 0)
 //	printk("ssid:%s, quality:%d, signal:%d\n", dst->ssid, quality, signal);
 	memcpy(&dst->stats, &src->stats, sizeof(struct ieee80211_rx_stats));
 	dst->stats.signalstrength = quality;

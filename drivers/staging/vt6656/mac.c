@@ -87,11 +87,11 @@ void MACvSetMultiAddrByHash (PSDevice pDevice, BYTE byHashIdx)
     pbyData[1] = byBitMask;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        (WORD) (MAC_REG_MAR0 + uByteIdx),
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData);
+			MESSAGE_TYPE_WRITE_MASK,
+			(WORD) (MAC_REG_MAR0 + uByteIdx),
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData);
 }
 
 
@@ -116,11 +116,11 @@ void MACvWriteMultiAddr(PSDevice pDevice, unsigned int uByteIdx, BYTE byData)
 
     byData1 = byData;
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE,
-                        (WORD) (MAC_REG_MAR0 + uByteIdx),
-                        MESSAGE_REQUEST_MACREG,
-                        1,
-                        &byData1);
+			MESSAGE_TYPE_WRITE,
+			(WORD) (MAC_REG_MAR0 + uByteIdx),
+			MESSAGE_REQUEST_MACREG,
+			1,
+			&byData1);
 }
 
 
@@ -138,12 +138,12 @@ void MACvWriteMultiAddr(PSDevice pDevice, unsigned int uByteIdx, BYTE byData)
 void MACbShutdown(PSDevice pDevice)
 {
     CONTROLnsRequestOutAsyn(pDevice,
-                        MESSAGE_TYPE_MACSHUTDOWN,
-                        0,
-                        0,
-                        0,
-                        NULL
-                        );
+			MESSAGE_TYPE_MACSHUTDOWN,
+			0,
+			0,
+			0,
+			NULL
+			);
 }
 
 void MACvSetBBType(PSDevice pDevice,BYTE byType)
@@ -155,12 +155,12 @@ BYTE            pbyData[2];
     pbyData[1] = EnCFG_BBType_MASK;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        MAC_REG_ENCFG0,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			MAC_REG_ENCFG0,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 void MACvSetMISCFifo (PSDevice pDevice, WORD wOffset, DWORD dwData)
@@ -168,19 +168,19 @@ void MACvSetMISCFifo (PSDevice pDevice, WORD wOffset, DWORD dwData)
 BYTE    pbyData[4];
 
     if (wOffset > 273)
-        return;
+	return;
     pbyData[0] = (BYTE)dwData;
     pbyData[1] = (BYTE)(dwData>>8);
     pbyData[2] = (BYTE)(dwData>>16);
     pbyData[3] = (BYTE)(dwData>>24);
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MISCFF,
-                        wOffset,
-                        0,
-                        4,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MISCFF,
+			wOffset,
+			0,
+			4,
+			pbyData
+			);
 }
 
 /*
@@ -214,12 +214,12 @@ BYTE            byData;
 
     //issue write misc fifo command to device
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_CLRKEYENTRY,
-                        0,
-                        0,
-                        1,
-                        &byData
-                        );
+			MESSAGE_TYPE_CLRKEYENTRY,
+			0,
+			0,
+			1,
+			&byData
+			);
 }
 
 
@@ -248,8 +248,8 @@ int             ii;
 BYTE            pbyData[24];
 
     if ( pDevice->byLocalID <= MAC_REVISION_A1 ) {
-        if ( pDevice->sMgmtObj.byCSSPK == KEY_CTL_CCMP )
-            return;
+	if ( pDevice->sMgmtObj.byCSSPK == KEY_CTL_CCMP )
+	    return;
     }
 
     wOffset = MISCFIFO_KEYETRY0;
@@ -287,11 +287,11 @@ BYTE            pbyData[24];
 
     //wOffset += (uKeyIdx * 4);
 /*    for (ii=0;ii<4;ii++) {
-        // alway push 128 bits
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"3.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
-        VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
+	// alway push 128 bits
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"3.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
+	VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
     }
 */
     pbyKey = (PBYTE)pdwKey;
@@ -308,12 +308,12 @@ BYTE            pbyData[24];
 	pbyData[ii] = *pbyKey++;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_SETKEY,
-                        wOffset,
-                        (WORD)uKeyIdx,
-                        24,
-                        pbyData
-                        );
+			MESSAGE_TYPE_SETKEY,
+			wOffset,
+			(WORD)uKeyIdx,
+			24,
+			pbyData
+			);
 
 
 }
@@ -327,12 +327,12 @@ BYTE            pbyData[2];
     pbyData[1] = byBits;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        byRegOfs,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			byRegOfs,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 
@@ -345,12 +345,12 @@ BYTE            pbyData[2];
     pbyData[1] = byBits;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        byRegOfs,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			byRegOfs,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 void MACvWriteWord(PSDevice pDevice, BYTE byRegOfs, WORD wData)
@@ -362,12 +362,12 @@ BYTE            pbyData[2];
     pbyData[1] = (BYTE)(wData >> 8);
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE,
-                        byRegOfs,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE,
+			byRegOfs,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 
 }
 
@@ -384,12 +384,12 @@ BYTE            pbyData[6];
     pbyData[5] = *((PBYTE)pbyEtherAddr+5);
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE,
-                        MAC_REG_BSSID0,
-                        MESSAGE_REQUEST_MACREG,
-                        6,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE,
+			MAC_REG_BSSID0,
+			MESSAGE_REQUEST_MACREG,
+			6,
+			pbyData
+			);
 }
 
 void MACvEnableProtectMD(PSDevice pDevice)
@@ -401,12 +401,12 @@ BYTE            pbyData[2];
     pbyData[1] = EnCFG_ProtectMd;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        MAC_REG_ENCFG0,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			MAC_REG_ENCFG0,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 void MACvDisableProtectMD(PSDevice pDevice)
@@ -418,12 +418,12 @@ BYTE            pbyData[2];
     pbyData[1] = EnCFG_ProtectMd;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        MAC_REG_ENCFG0,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			MAC_REG_ENCFG0,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 void MACvEnableBarkerPreambleMd(PSDevice pDevice)
@@ -435,12 +435,12 @@ BYTE            pbyData[2];
     pbyData[1] = EnCFG_BarkerPream;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        MAC_REG_ENCFG2,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			MAC_REG_ENCFG2,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 void MACvDisableBarkerPreambleMd(PSDevice pDevice)
@@ -452,12 +452,12 @@ BYTE            pbyData[2];
     pbyData[1] = EnCFG_BarkerPream;
 
     CONTROLnsRequestOut(pDevice,
-                        MESSAGE_TYPE_WRITE_MASK,
-                        MAC_REG_ENCFG2,
-                        MESSAGE_REQUEST_MACREG,
-                        2,
-                        pbyData
-                        );
+			MESSAGE_TYPE_WRITE_MASK,
+			MAC_REG_ENCFG2,
+			MESSAGE_REQUEST_MACREG,
+			2,
+			pbyData
+			);
 }
 
 

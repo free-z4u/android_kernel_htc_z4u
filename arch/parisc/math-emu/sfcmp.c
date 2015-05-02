@@ -49,7 +49,7 @@ int
 sgl_fcmp (sgl_floating_point * leftptr, sgl_floating_point * rightptr,
 	  unsigned int cond, unsigned int *status)
 
-                       /* The predicate to be tested */
+		       /* The predicate to be tested */
 
     {
     register unsigned int left, right;
@@ -63,12 +63,12 @@ sgl_fcmp (sgl_floating_point * leftptr, sgl_floating_point * rightptr,
      * Test for NaN
      */
     if(    (Sgl_exponent(left) == SGL_INFINITY_EXPONENT)
-        || (Sgl_exponent(right) == SGL_INFINITY_EXPONENT) )
+	|| (Sgl_exponent(right) == SGL_INFINITY_EXPONENT) )
 	{
 	/* Check if a NaN is involved.  Signal an invalid exception when
 	 * comparing a signaling NaN or when comparing quiet NaNs and the
 	 * low bit of the condition is set */
-        if( (  (Sgl_exponent(left) == SGL_INFINITY_EXPONENT)
+	if( (  (Sgl_exponent(left) == SGL_INFINITY_EXPONENT)
 	    && Sgl_isnotzero_mantissa(left)
 	    && (Exception(cond) || Sgl_isone_signaling(left)))
 	   ||
@@ -86,7 +86,7 @@ sgl_fcmp (sgl_floating_point * leftptr, sgl_floating_point * rightptr,
 	    }
 	/* All the exceptional conditions are handled, now special case
 	   NaN compares */
-        else if( ((Sgl_exponent(left) == SGL_INFINITY_EXPONENT)
+	else if( ((Sgl_exponent(left) == SGL_INFINITY_EXPONENT)
 	    && Sgl_isnotzero_mantissa(left))
 	   ||
 	    ((Sgl_exponent(right) == SGL_INFINITY_EXPONENT)
@@ -102,12 +102,12 @@ sgl_fcmp (sgl_floating_point * leftptr, sgl_floating_point * rightptr,
      * special equal case */
     Sgl_xortointp1(left,right,xorresult);
     if( xorresult < 0 )
-        {
-        /* left negative => less, left positive => greater.
-         * equal is possible if both operands are zeros. */
-        if( Sgl_iszero_exponentmantissa(left)
+	{
+	/* left negative => less, left positive => greater.
+	 * equal is possible if both operands are zeros. */
+	if( Sgl_iszero_exponentmantissa(left)
 	  && Sgl_iszero_exponentmantissa(right) )
-            {
+	    {
 	    Set_status_cbit(Equal(cond));
 	    }
 	else if( Sgl_isone_sign(left) )
@@ -118,17 +118,17 @@ sgl_fcmp (sgl_floating_point * leftptr, sgl_floating_point * rightptr,
 	    {
 	    Set_status_cbit(Greaterthan(cond));
 	    }
-        }
+	}
     /* Signs are the same.  Treat negative numbers separately
      * from the positives because of the reversed sense.  */
     else if( Sgl_all(left) == Sgl_all(right) )
-        {
-        Set_status_cbit(Equal(cond));
-        }
+	{
+	Set_status_cbit(Equal(cond));
+	}
     else if( Sgl_iszero_sign(left) )
-        {
-        /* Positive compare */
-        if( Sgl_all(left) < Sgl_all(right) )
+	{
+	/* Positive compare */
+	if( Sgl_all(left) < Sgl_all(right) )
 	    {
 	    Set_status_cbit(Lessthan(cond));
 	    }
@@ -138,18 +138,18 @@ sgl_fcmp (sgl_floating_point * leftptr, sgl_floating_point * rightptr,
 	    }
 	}
     else
-        {
-        /* Negative compare.  Signed or unsigned compares
-         * both work the same.  That distinction is only
-         * important when the sign bits differ. */
-        if( Sgl_all(left) > Sgl_all(right) )
+	{
+	/* Negative compare.  Signed or unsigned compares
+	 * both work the same.  That distinction is only
+	 * important when the sign bits differ. */
+	if( Sgl_all(left) > Sgl_all(right) )
 	    {
 	    Set_status_cbit(Lessthan(cond));
 	    }
-        else
+	else
 	    {
 	    Set_status_cbit(Greaterthan(cond));
 	    }
-        }
+	}
 	return(NOEXCEPTION);
     }

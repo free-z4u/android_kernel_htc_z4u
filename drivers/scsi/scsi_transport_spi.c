@@ -665,7 +665,7 @@ spi_dv_device_echo_buffer(struct scsi_device *sdev, u8 *buffer,
 		}
 		k = j;
 		/* fill with crosstalk (alternating 0x5555 0xaaa)
-                 * (test c) */
+		 * (test c) */
 		for ( ; j < min(len, k + 32); j += 2) {
 			u16 *word = (u16 *)&buffer[j];
 

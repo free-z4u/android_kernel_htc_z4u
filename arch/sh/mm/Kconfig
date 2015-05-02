@@ -4,7 +4,7 @@ config QUICKLIST
 	def_bool y
 
 config MMU
-        bool "Support for memory management hardware"
+	bool "Support for memory management hardware"
 	depends on !CPU_SH2
 	default y
 	help

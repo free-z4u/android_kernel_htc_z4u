@@ -958,7 +958,7 @@ int cu2_notifier_call_chain(unsigned long val, void *v)
 }
 
 static int default_cu2_call(struct notifier_block *nfb, unsigned long action,
-        void *data)
+	void *data)
 {
 	struct pt_regs *regs = data;
 

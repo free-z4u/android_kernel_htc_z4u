@@ -63,7 +63,7 @@ static inline unsigned long __cmpxchg_u32(volatile int *m, unsigned long old,
 }
 
 extern unsigned long __cmpxchg_u64_unsupported_on_32bit_kernels(
-        volatile int * m, unsigned long old, unsigned long new);
+	volatile int * m, unsigned long old, unsigned long new);
 #define __cmpxchg_u64 __cmpxchg_u64_unsupported_on_32bit_kernels
 
 /* This function doesn't exist, so you'll get a linker error

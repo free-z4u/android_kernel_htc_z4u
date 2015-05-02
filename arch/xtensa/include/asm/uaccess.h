@@ -234,10 +234,10 @@ do {									\
 	int __cb;							\
 	retval = 0;							\
 	switch (size) {							\
-        case 1: __put_user_asm(x,ptr,retval,1,"s8i",__cb);  break;	\
-        case 2: __put_user_asm(x,ptr,retval,2,"s16i",__cb); break;	\
-        case 4: __put_user_asm(x,ptr,retval,4,"s32i",__cb); break;	\
-        case 8: {							\
+	case 1: __put_user_asm(x,ptr,retval,1,"s8i",__cb);  break;	\
+	case 2: __put_user_asm(x,ptr,retval,2,"s16i",__cb); break;	\
+	case 4: __put_user_asm(x,ptr,retval,4,"s32i",__cb); break;	\
+	case 8: {							\
 		     __typeof__(*ptr) __v64 = x;			\
 		     retval = __copy_to_user(ptr,&__v64,8);		\
 		     break;						\
@@ -301,8 +301,8 @@ do {									\
 	"   .long  2b			\n"		\
 	"5:				\n"		\
 	"   l32r   %1, 4b		\n"		\
-        "   movi   %0, %4		\n"		\
-        "   jx     %1			\n"		\
+	"   movi   %0, %4		\n"		\
+	"   jx     %1			\n"		\
 	"   .previous			\n"		\
 	"   .section  __ex_table,\"a\"	\n"		\
 	"   .long	1b, 5b		\n"		\
@@ -334,13 +334,13 @@ extern long __get_user_bad(void);
 do {									\
 	int __cb;							\
 	retval = 0;							\
-        switch (size) {							\
-          case 1: __get_user_asm(x,ptr,retval,1,"l8ui",__cb);  break;	\
-          case 2: __get_user_asm(x,ptr,retval,2,"l16ui",__cb); break;	\
-          case 4: __get_user_asm(x,ptr,retval,4,"l32i",__cb);  break;	\
-          case 8: retval = __copy_from_user(&x,ptr,8);    break;	\
-          default: (x) = __get_user_bad();				\
-        }								\
+	switch (size) {							\
+	  case 1: __get_user_asm(x,ptr,retval,1,"l8ui",__cb);  break;	\
+	  case 2: __get_user_asm(x,ptr,retval,2,"l16ui",__cb); break;	\
+	  case 4: __get_user_asm(x,ptr,retval,4,"l32i",__cb);  break;	\
+	  case 8: retval = __copy_from_user(&x,ptr,8);    break;	\
+	  default: (x) = __get_user_bad();				\
+	}								\
 } while (0)
 
 
@@ -360,8 +360,8 @@ do {									\
 	"5:				\n"	\
 	"   l32r   %1, 4b		\n"	\
 	"   movi   %2, 0		\n"	\
-        "   movi   %0, %4		\n"	\
-        "   jx     %1			\n"	\
+	"   movi   %0, %4		\n"	\
+	"   jx     %1			\n"	\
 	"   .previous			\n"	\
 	"   .section  __ex_table,\"a\"	\n"	\
 	"   .long	1b, 5b		\n"	\

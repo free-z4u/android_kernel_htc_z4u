@@ -496,7 +496,7 @@ typedef struct SCCBscam_info {
 #define  PIO_OVERRUN       BIT(6)	/*Slave data overrun */
 #define  BM_CMD_BUSY       BIT(7)	/*Bus master transfer command busy */
 #define  BAD_EXT_STATUS    (BM_FORCE_OFF | PCI_DEV_TMOUT | CMD_ABORTED | \
-                                  BM_PARITY_ERR | PIO_OVERRUN)
+				  BM_PARITY_ERR | PIO_OVERRUN)
 
 #define  hp_int_status        0x37
 
@@ -748,37 +748,37 @@ typedef struct SCCBscam_info {
 
 #define GET_XFER_CNT(port, xfercnt) {RD_HARP32(port,hp_xfercnt_0,xfercnt); xfercnt &= 0xFFFFFF;}
 /* #define GET_XFER_CNT(port, xfercnt) (xfercnt = RD_HARPOON(port+hp_xfercnt_2), \
-                                 xfercnt <<= 16,\
-                                 xfercnt |= RDW_HARPOON((unsigned short)(port+hp_xfercnt_0)))
+				 xfercnt <<= 16,\
+				 xfercnt |= RDW_HARPOON((unsigned short)(port+hp_xfercnt_0)))
  */
 #define HP_SETUP_ADDR_CNT(port,addr,count) (WRW_HARPOON((port+hp_host_addr_lo), (unsigned short)(addr & 0x0000FFFFL)),\
-         addr >>= 16,\
-         WRW_HARPOON((port+hp_host_addr_hmi), (unsigned short)(addr & 0x0000FFFFL)),\
-         WR_HARP32(port,hp_xfercnt_0,count),\
-         WRW_HARPOON((port+hp_xfer_cnt_lo), (unsigned short)(count & 0x0000FFFFL)),\
-         count >>= 16,\
-         WR_HARPOON(port+hp_xfer_cnt_hi, (count & 0xFF)))
+	 addr >>= 16,\
+	 WRW_HARPOON((port+hp_host_addr_hmi), (unsigned short)(addr & 0x0000FFFFL)),\
+	 WR_HARP32(port,hp_xfercnt_0,count),\
+	 WRW_HARPOON((port+hp_xfer_cnt_lo), (unsigned short)(count & 0x0000FFFFL)),\
+	 count >>= 16,\
+	 WR_HARPOON(port+hp_xfer_cnt_hi, (count & 0xFF)))
 
 #define ACCEPT_MSG(port) {while(RD_HARPOON(port+hp_scsisig) & SCSI_REQ){}\
-                          WR_HARPOON(port+hp_scsisig, S_ILL_PH);}
+			  WR_HARPOON(port+hp_scsisig, S_ILL_PH);}
 
 #define ACCEPT_MSG_ATN(port) {while(RD_HARPOON(port+hp_scsisig) & SCSI_REQ){}\
-                          WR_HARPOON(port+hp_scsisig, (S_ILL_PH|SCSI_ATN));}
+			  WR_HARPOON(port+hp_scsisig, (S_ILL_PH|SCSI_ATN));}
 
 #define DISABLE_AUTO(port) (WR_HARPOON(port+hp_scsireset, PROG_RESET),\
-                        WR_HARPOON(port+hp_scsireset, 0x00))
+			WR_HARPOON(port+hp_scsireset, 0x00))
 
 #define ARAM_ACCESS(p_port) (WR_HARPOON(p_port+hp_page_ctrl, \
-                             (RD_HARPOON(p_port+hp_page_ctrl) | SGRAM_ARAM)))
+			     (RD_HARPOON(p_port+hp_page_ctrl) | SGRAM_ARAM)))
 
 #define SGRAM_ACCESS(p_port) (WR_HARPOON(p_port+hp_page_ctrl, \
-                             (RD_HARPOON(p_port+hp_page_ctrl) & ~SGRAM_ARAM)))
+			     (RD_HARPOON(p_port+hp_page_ctrl) & ~SGRAM_ARAM)))
 
 #define MDISABLE_INT(p_port) (WR_HARPOON(p_port+hp_page_ctrl, \
-                             (RD_HARPOON(p_port+hp_page_ctrl) | G_INT_DISABLE)))
+			     (RD_HARPOON(p_port+hp_page_ctrl) | G_INT_DISABLE)))
 
 #define MENABLE_INT(p_port) (WR_HARPOON(p_port+hp_page_ctrl, \
-                             (RD_HARPOON(p_port+hp_page_ctrl) & ~G_INT_DISABLE)))
+			     (RD_HARPOON(p_port+hp_page_ctrl) & ~G_INT_DISABLE)))
 
 static unsigned char FPT_sisyncn(unsigned long port, unsigned char p_card,
 				 unsigned char syncFlag);
@@ -1359,7 +1359,7 @@ static unsigned long FlashPoint_HardwareResetHostAdapter(struct sccb_mgr_info
 			}
 
 /*         if ((pCardInfo->si_per_targ_wide_nego & sync_bit_map) ||
-            (id*2+i >= 8)){
+	    (id*2+i >= 8)){
 */
 			if (pCardInfo->si_per_targ_wide_nego & sync_bit_map) {
 
@@ -1802,8 +1802,8 @@ static int FlashPoint_HandleInterrupt(unsigned long pCurrCard)
 				FPT_phaseChkFifo(ioport, thisCard);
 
 /*         WRW_HARPOON((ioport+hp_intstat),
-            (BUS_FREE | ICMD_COMP | ITAR_DISC | XFER_CNT_0));
-         */
+	    (BUS_FREE | ICMD_COMP | ITAR_DISC | XFER_CNT_0));
+	 */
 
 			WRW_HARPOON((ioport + hp_intstat), CLR_ALL_INT_1);
 
@@ -5690,8 +5690,8 @@ static void FPT_scini(unsigned char p_card, unsigned char p_our_id,
    for (i=0,k=0; i < MAX_SCSI_TAR; i++)
       {
       if ((FPT_scamInfo[i].state == ID_ASSIGNED) ||
-         (FPT_scamInfo[i].state == LEGACY))
-         k++;
+	 (FPT_scamInfo[i].state == LEGACY))
+	 k++;
       }
 
    if (k==2)

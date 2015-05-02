@@ -400,7 +400,7 @@ start_kernel(void)
 		   uncompressed_image_start,
 		   KERNEL_SIZE);
 #endif
-        decompress_kernel((void *)uncompressed_image_start,
+	decompress_kernel((void *)uncompressed_image_start,
 			  (void *)V_DATA_START,
 			  KERNEL_SIZE, KERNEL_Z_SIZE);
 

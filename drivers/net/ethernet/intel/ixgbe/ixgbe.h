@@ -305,7 +305,7 @@ struct ixgbe_ring_container {
 	for (pos = (head).ring; pos != NULL; pos = pos->next)
 
 #define MAX_RX_PACKET_BUFFERS ((adapter->flags & IXGBE_FLAG_DCB_ENABLED) \
-                              ? 8 : 1)
+			      ? 8 : 1)
 #define MAX_TX_PACKET_BUFFERS MAX_RX_PACKET_BUFFERS
 
 /* MAX_MSIX_Q_VECTORS of these are allocated,
@@ -602,7 +602,7 @@ extern netdev_tx_t ixgbe_xmit_frame_ring(struct sk_buff *,
 					 struct ixgbe_adapter *,
 					 struct ixgbe_ring *);
 extern void ixgbe_unmap_and_free_tx_resource(struct ixgbe_ring *,
-                                             struct ixgbe_tx_buffer *);
+					     struct ixgbe_tx_buffer *);
 extern void ixgbe_alloc_rx_buffers(struct ixgbe_ring *, u16);
 extern void ixgbe_write_eitr(struct ixgbe_q_vector *);
 extern int ixgbe_poll(struct napi_struct *napi, int budget);
@@ -613,7 +613,7 @@ extern s32 ixgbe_init_fdir_perfect_82599(struct ixgbe_hw *hw, u32 fdirctrl);
 extern s32 ixgbe_fdir_add_signature_filter_82599(struct ixgbe_hw *hw,
 						 union ixgbe_atr_hash_dword input,
 						 union ixgbe_atr_hash_dword common,
-                                                 u8 queue);
+						 u8 queue);
 extern s32 ixgbe_fdir_set_input_mask_82599(struct ixgbe_hw *hw,
 					   union ixgbe_atr_input *input_mask);
 extern s32 ixgbe_fdir_write_perfect_filter_82599(struct ixgbe_hw *hw,
@@ -640,7 +640,7 @@ extern int ixgbe_fcoe_ddp(struct ixgbe_adapter *adapter,
 			  union ixgbe_adv_rx_desc *rx_desc,
 			  struct sk_buff *skb);
 extern int ixgbe_fcoe_ddp_get(struct net_device *netdev, u16 xid,
-                              struct scatterlist *sgl, unsigned int sgc);
+			      struct scatterlist *sgl, unsigned int sgc);
 extern int ixgbe_fcoe_ddp_target(struct net_device *netdev, u16 xid,
 				 struct scatterlist *sgl, unsigned int sgc);
 extern int ixgbe_fcoe_ddp_put(struct net_device *netdev, u16 xid);

@@ -213,38 +213,38 @@ static struct i2c_board_info i2c_bma250_devices[] = {
 };
 
 static struct bma250_platform_data gsensor_bma250_platform_data_evt = {
-        .intr = CP3DCG_GPIO_GSENSORS_INT,
-        .chip_layout = 1,
-        .layouts = CP3DCG_LAYOUTS_EVT,
+	.intr = CP3DCG_GPIO_GSENSORS_INT,
+	.chip_layout = 1,
+	.layouts = CP3DCG_LAYOUTS_EVT,
 };
 
 static struct i2c_board_info i2c_bma250_devices_evt[] = {
-        {
-                I2C_BOARD_INFO(BMA250_I2C_NAME_REMOVE_ECOMPASS, \
-                                0x32 >> 1),
-                .platform_data = &gsensor_bma250_platform_data_evt,
-                .irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_GSENSORS_INT),
-        },
+	{
+		I2C_BOARD_INFO(BMA250_I2C_NAME_REMOVE_ECOMPASS, \
+				0x32 >> 1),
+		.platform_data = &gsensor_bma250_platform_data_evt,
+		.irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_GSENSORS_INT),
+	},
 };
 
 static struct bma250_platform_data gsensor_bma250_platform_data_xc = {
-        .intr = CP3DCG_GPIO_GSENSORS_INT,
-        .chip_layout = 0,
-        .layouts = CP3DCG_LAYOUTS_XC,
+	.intr = CP3DCG_GPIO_GSENSORS_INT,
+	.chip_layout = 0,
+	.layouts = CP3DCG_LAYOUTS_XC,
 };
 
 static struct i2c_board_info i2c_bma250_devices_xc[] = {
-        {
-                I2C_BOARD_INFO(BMA250_I2C_NAME_REMOVE_ECOMPASS, \
-                                0x32 >> 1),
-                .platform_data = &gsensor_bma250_platform_data_xc,
-                .irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_GSENSORS_INT),
-        },
+	{
+		I2C_BOARD_INFO(BMA250_I2C_NAME_REMOVE_ECOMPASS, \
+				0x32 >> 1),
+		.platform_data = &gsensor_bma250_platform_data_xc,
+		.irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_GSENSORS_INT),
+	},
 };
 
 
 struct rt5501_platform_data rt5501_data = {
-         .gpio_rt5501_spk_en = CPLD_EXT_GPIO_AUD_HP_EN,
+	 .gpio_rt5501_spk_en = CPLD_EXT_GPIO_AUD_HP_EN,
 };
 
 static struct i2c_board_info msm_i2c_gsbi1_rt5501_info[] = {
@@ -266,11 +266,11 @@ static struct i2c_board_info msm_i2c_gsbi1_tfa9887_info[] = {
 #if defined(CONFIG_I2C_CPLD)
 
 static struct i2c_board_info i2c_cpld_devices[] = {
-        {
-                I2C_BOARD_INFO("cpld",0x70),
+	{
+		I2C_BOARD_INFO("cpld",0x70),
 
-               .irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_CPLD_INT),
-        },
+	       .irq = MSM_GPIO_TO_INT(CP3DCG_GPIO_CPLD_INT),
+	},
 };
 #endif
 
@@ -1238,7 +1238,7 @@ static struct msm_gpio msm8625q_i2c_cpld_config[] = {
 
 #if 0
 
-        { GPIO_CFG(4, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),   "CPLD_CLK"},
+	{ GPIO_CFG(4, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),   "CPLD_CLK"},
 #endif
 	{ GPIO_CFG(39, 0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),   "CPLD_INT"},
 	{ GPIO_CFG(49, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),  "CPLD_RST"},
@@ -1251,10 +1251,10 @@ static struct i2c_gpio_platform_data msm8625q_i2c_cpld_pdata = {
 	.scl_pin = 33,
 	.sda_pin = 82,
 
-        .udelay = 1,
-        .timeout = 100,
-        .sda_is_open_drain = 1,
-        .scl_is_open_drain = 1,
+	.udelay = 1,
+	.timeout = 100,
+	.sda_is_open_drain = 1,
+	.scl_is_open_drain = 1,
 };
 
 static struct platform_device msm8625q_i2c_cpld = {
@@ -1366,8 +1366,8 @@ static struct platform_device android_usb_device = {
 
 static int __init board_serialno_setup(char *serialno)
 {
-        android_usb_pdata.serial_number = serialno;
-        return 1;
+	android_usb_pdata.serial_number = serialno;
+	return 1;
 }
 __setup("androidboot.serialno=", board_serialno_setup);
 
@@ -1791,18 +1791,18 @@ static struct platform_device htc_battery_pdev = {
 
 
 static struct resource ram_console_resources[] = {
-        {
-                .start  = MSM_RAM_CONSOLE_BASE,
-                .end    = MSM_RAM_CONSOLE_BASE + MSM_RAM_CONSOLE_SIZE - 1,
-                .flags  = IORESOURCE_MEM,
-        },
+	{
+		.start  = MSM_RAM_CONSOLE_BASE,
+		.end    = MSM_RAM_CONSOLE_BASE + MSM_RAM_CONSOLE_SIZE - 1,
+		.flags  = IORESOURCE_MEM,
+	},
 };
 
 static struct platform_device ram_console_device = {
-        .name           = "ram_console",
-        .id             = -1,
-        .num_resources  = ARRAY_SIZE(ram_console_resources),
-        .resource       = ram_console_resources,
+	.name           = "ram_console",
+	.id             = -1,
+	.num_resources  = ARRAY_SIZE(ram_console_resources),
+	.resource       = ram_console_resources,
 };
 
 /* battery parameters */
@@ -2110,8 +2110,8 @@ static int aic3254_lowlevel_init(void)
 
 static struct i2c_board_info i2c_aic3254_devices[] = {
     {
-        I2C_BOARD_INFO(AIC3254_I2C_NAME, \
-                AIC3254_I2C_ADDR),
+	I2C_BOARD_INFO(AIC3254_I2C_NAME, \
+		AIC3254_I2C_ADDR),
     },
 };
 #endif
@@ -2286,7 +2286,7 @@ static struct platform_device htc_headset_one_wire = {
        .name   = "HTC_HEADSET_1WIRE",
        .id     = -1,
        .dev    = {
-               .platform_data  = &htc_headset_1wire_data,
+	       .platform_data  = &htc_headset_1wire_data,
        },
 };
 
@@ -2840,38 +2840,38 @@ static struct i2c_board_info tps61310_i2c_info[] = {
 #if defined(CONFIG_INPUT_CAPELLA_CM3629)
 #define CP3DCG_GPIO_PROXIMITY_INT       (36)
 static uint8_t cm3629_mapping_table[] = {0x0, 0x3, 0x6, 0x9, 0xC,
-                        0xF, 0x12, 0x15, 0x18, 0x1B,
-                        0x1E, 0x21, 0x24, 0x27, 0x2A,
-                        0x2D, 0x30, 0x33, 0x36, 0x39,
-                        0x3C, 0x3F, 0x43, 0x47, 0x4B,
-                        0x4F, 0x53, 0x57, 0x5B, 0x5F,
-                        0x63, 0x67, 0x6B, 0x70, 0x75,
-                        0x7A, 0x7F, 0x84, 0x89, 0x8E,
-                        0x93, 0x98, 0x9D, 0xA2, 0xA8,
-                        0xAE, 0xB4, 0xBA, 0xC0, 0xC6,
-                        0xCC, 0xD3, 0xDA, 0xE1, 0xE8,
-                        0xEF, 0xF6, 0xFF};
+			0xF, 0x12, 0x15, 0x18, 0x1B,
+			0x1E, 0x21, 0x24, 0x27, 0x2A,
+			0x2D, 0x30, 0x33, 0x36, 0x39,
+			0x3C, 0x3F, 0x43, 0x47, 0x4B,
+			0x4F, 0x53, 0x57, 0x5B, 0x5F,
+			0x63, 0x67, 0x6B, 0x70, 0x75,
+			0x7A, 0x7F, 0x84, 0x89, 0x8E,
+			0x93, 0x98, 0x9D, 0xA2, 0xA8,
+			0xAE, 0xB4, 0xBA, 0xC0, 0xC6,
+			0xCC, 0xD3, 0xDA, 0xE1, 0xE8,
+			0xEF, 0xF6, 0xFF};
 
 static struct cm3629_platform_data cm36282_pdata = {
 	.model = CAPELLA_CM36282,
 	.ps_select = CM3629_PS1_ONLY,
 	.intr = CP3DCG_GPIO_PROXIMITY_INT,
-        .levels = {13, 35, 59, 265, 620, 3171, 5087, 10271, 15487, 65535},
-        .golden_adc = 0xE70,
+	.levels = {13, 35, 59, 265, 620, 3171, 5087, 10271, 15487, 65535},
+	.golden_adc = 0xE70,
 	.power = NULL,
 	.cm3629_slave_address = 0xC0>>1,
 	.ps1_thd_set = 0x07,
 	.ps1_thd_no_cal = 0xF1,
 	.ps1_thd_with_cal = 0x07,
-        .ps_calibration_rule = 1,
+	.ps_calibration_rule = 1,
 	.ps_conf1_val = CM3629_PS_DR_1_320 | CM3629_PS_IT_1_6T |
 		CM3629_PS1_PERS_3,
 	.ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
 		CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
 	.ps_conf3_val = CM3629_PS2_PROL_32,
-        .dynamical_threshold = 1,
-        .mapping_table = cm3629_mapping_table,
-        .mapping_size = ARRAY_SIZE(cm3629_mapping_table),
+	.dynamical_threshold = 1,
+	.mapping_table = cm3629_mapping_table,
+	.mapping_size = ARRAY_SIZE(cm3629_mapping_table),
 };
 
 static struct i2c_board_info i2c_cm36282_devices[] = {
@@ -3021,9 +3021,9 @@ static void __init msm_cp3dcg_init(void)
 		msm7627a_device_i2c_init();
 
 #if defined(CONFIG_I2C_CPLD)
-        i2c_register_board_info(3,
-                                i2c_cpld_devices,
-                                ARRAY_SIZE(i2c_cpld_devices));
+	i2c_register_board_info(3,
+				i2c_cpld_devices,
+				ARRAY_SIZE(i2c_cpld_devices));
 #endif
 
 	qrd7627a_uart1dm_config();
@@ -3086,9 +3086,9 @@ static void __init msm_cp3dcg_init(void)
 
 #if 0
 #if defined(CONFIG_I2C_CPLD)
-        i2c_register_board_info(3,
+	i2c_register_board_info(3,
 				i2c_cpld_devices,
-                             	ARRAY_SIZE(i2c_cpld_devices));
+			     	ARRAY_SIZE(i2c_cpld_devices));
 #endif
 #endif
 
@@ -3206,13 +3206,13 @@ static void __init qrd7627a_init_early(void)
 }
 
 MACHINE_START(CP3DCG, "cp3dcg")
-        .atag_offset    = PHYS_OFFSET + 0x100,
-        .fixup = cp3dcg_fixup,
-        .map_io         = msm8625_map_io,
-        .reserve        = msm8625_reserve,
-        .init_irq       = msm8625_init_irq,
-        .init_machine   = msm_cp3dcg_init,
-        .timer          = &msm_timer,
-        .init_early     = qrd7627a_init_early,
-        .handle_irq     = gic_handle_irq,
+	.atag_offset    = PHYS_OFFSET + 0x100,
+	.fixup = cp3dcg_fixup,
+	.map_io         = msm8625_map_io,
+	.reserve        = msm8625_reserve,
+	.init_irq       = msm8625_init_irq,
+	.init_machine   = msm_cp3dcg_init,
+	.timer          = &msm_timer,
+	.init_early     = qrd7627a_init_early,
+	.handle_irq     = gic_handle_irq,
 MACHINE_END

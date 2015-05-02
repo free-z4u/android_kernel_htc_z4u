@@ -102,7 +102,7 @@
 #define MPI_VERSION_MINOR_MASK              (0x00FF)
 #define MPI_VERSION_MINOR_SHIFT             (0)
 #define MPI_VERSION ((MPI_VERSION_MAJOR << MPI_VERSION_MAJOR_SHIFT) |   \
-                                      MPI_VERSION_MINOR)
+				      MPI_VERSION_MINOR)
 
 #define MPI_VERSION_01_00                   (0x0100)
 #define MPI_VERSION_01_01                   (0x0101)
@@ -249,12 +249,12 @@
 /****************************************************************************/
 
 #define MPI_GET_CONTEXT_REPLY_TYPE(x)  (((x) & MPI_CONTEXT_REPLY_TYPE_MASK) \
-                                          >> MPI_CONTEXT_REPLY_TYPE_SHIFT)
+					  >> MPI_CONTEXT_REPLY_TYPE_SHIFT)
 
 #define MPI_SET_CONTEXT_REPLY_TYPE(x, typ)                                  \
-            ((x) = ((x) & ~MPI_CONTEXT_REPLY_TYPE_MASK) |                   \
-                            (((typ) << MPI_CONTEXT_REPLY_TYPE_SHIFT) &      \
-                                        MPI_CONTEXT_REPLY_TYPE_MASK))
+	    ((x) = ((x) & ~MPI_CONTEXT_REPLY_TYPE_MASK) |                   \
+			    (((typ) << MPI_CONTEXT_REPLY_TYPE_SHIFT) &      \
+					MPI_CONTEXT_REPLY_TYPE_MASK))
 
 
 /*****************************************************************************
@@ -372,8 +372,8 @@ typedef struct _SGE_SIMPLE_UNION
     U32                     FlagsLength;
     union
     {
-        U32                 Address32;
-        U64                 Address64;
+	U32                 Address32;
+	U64                 Address64;
     }u;
 } SGE_SIMPLE_UNION, MPI_POINTER PTR_SGE_SIMPLE_UNION,
   SGESimpleUnion_t, MPI_POINTER pSGESimpleUnion_t;
@@ -407,8 +407,8 @@ typedef struct _SGE_CHAIN_UNION
     U8                      Flags;
     union
     {
-        U32                 Address32;
-        U64                 Address64;
+	U32                 Address32;
+	U64                 Address64;
     }u;
 } SGE_CHAIN_UNION, MPI_POINTER PTR_SGE_CHAIN_UNION,
   SGEChainUnion_t, MPI_POINTER pSGEChainUnion_t;
@@ -469,10 +469,10 @@ typedef struct _SGE_TRANSACTION_UNION
     U8                      Flags;
     union
     {
-        U32                 TransactionContext32[1];
-        U32                 TransactionContext64[2];
-        U32                 TransactionContext96[3];
-        U32                 TransactionContext128[4];
+	U32                 TransactionContext32[1];
+	U32                 TransactionContext64[2];
+	U32                 TransactionContext96[3];
+	U32                 TransactionContext128[4];
     }u;
     U32                     TransactionDetails[1];
 } SGE_TRANSACTION_UNION, MPI_POINTER PTR_SGE_TRANSACTION_UNION,
@@ -487,8 +487,8 @@ typedef struct _SGE_IO_UNION
 {
     union
     {
-        SGE_SIMPLE_UNION    Simple;
-        SGE_CHAIN_UNION     Chain;
+	SGE_SIMPLE_UNION    Simple;
+	SGE_CHAIN_UNION     Chain;
     } u;
 } SGE_IO_UNION, MPI_POINTER PTR_SGE_IO_UNION,
   SGEIOUnion_t, MPI_POINTER pSGEIOUnion_t;
@@ -501,8 +501,8 @@ typedef struct _SGE_TRANS_SIMPLE_UNION
 {
     union
     {
-        SGE_SIMPLE_UNION        Simple;
-        SGE_TRANSACTION_UNION   Transaction;
+	SGE_SIMPLE_UNION        Simple;
+	SGE_TRANSACTION_UNION   Transaction;
     } u;
 } SGE_TRANS_SIMPLE_UNION, MPI_POINTER PTR_SGE_TRANS_SIMPLE_UNION,
   SGETransSimpleUnion_t, MPI_POINTER pSGETransSimpleUnion_t;
@@ -515,9 +515,9 @@ typedef struct _SGE_MPI_UNION
 {
     union
     {
-        SGE_SIMPLE_UNION        Simple;
-        SGE_CHAIN_UNION         Chain;
-        SGE_TRANSACTION_UNION   Transaction;
+	SGE_SIMPLE_UNION        Simple;
+	SGE_CHAIN_UNION         Chain;
+	SGE_TRANSACTION_UNION   Transaction;
     } u;
 } SGE_MPI_UNION, MPI_POINTER PTR_SGE_MPI_UNION,
   MPI_SGE_UNION_t, MPI_POINTER pMPI_SGE_UNION_t,
@@ -579,7 +579,7 @@ typedef struct _SGE_MPI_UNION
 /*  SGE operation Macros                                                    */
 /****************************************************************************/
 
-         /* SIMPLE FlagsLength manipulations... */
+	 /* SIMPLE FlagsLength manipulations... */
 #define  MPI_SGE_SET_FLAGS(f)           ((U32)(f) << MPI_SGE_FLAGS_SHIFT)
 #define  MPI_SGE_GET_FLAGS(fl)          (((fl) & ~MPI_SGE_LENGTH_MASK) >> MPI_SGE_FLAGS_SHIFT)
 #define  MPI_SGE_LENGTH(fl)             ((fl) & MPI_SGE_LENGTH_MASK)
@@ -590,7 +590,7 @@ typedef struct _SGE_MPI_UNION
 #define  MPI_pSGE_GET_FLAGS(psg)        MPI_SGE_GET_FLAGS((psg)->FlagsLength)
 #define  MPI_pSGE_GET_LENGTH(psg)       MPI_SGE_LENGTH((psg)->FlagsLength)
 #define  MPI_pSGE_SET_FLAGS_LENGTH(psg,f,l)  (psg)->FlagsLength = MPI_SGE_SET_FLAGS_LENGTH(f,l)
-         /* CAUTION - The following are READ-MODIFY-WRITE! */
+	 /* CAUTION - The following are READ-MODIFY-WRITE! */
 #define  MPI_pSGE_SET_FLAGS(psg,f)      (psg)->FlagsLength |= MPI_SGE_SET_FLAGS(f)
 #define  MPI_pSGE_SET_LENGTH(psg,l)     (psg)->FlagsLength |= MPI_SGE_LENGTH(l)
 

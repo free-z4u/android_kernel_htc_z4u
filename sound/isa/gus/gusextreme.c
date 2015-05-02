@@ -166,8 +166,8 @@ static int __devinit snd_gusextreme_detect(struct snd_gus_card *gus,
 	 * This is main stuff - enable access to GF1 chip...
 	 * I'm not sure, if this will work for card which have
 	 * ES1688 chip in another place than 0x220.
-         *
-         * I used reverse-engineering in DOSEMU. [--jk]
+	 *
+	 * I used reverse-engineering in DOSEMU. [--jk]
 	 *
 	 * ULTRINIT.EXE:
 	 * 0x230 = 0,2,3

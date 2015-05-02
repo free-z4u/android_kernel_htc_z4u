@@ -4,10 +4,10 @@
 #include <asm/cpu_type.h>
 
 struct irq_bucket {
-        struct irq_bucket *next;
-        unsigned int real_irq;
-        unsigned int irq;
-        unsigned int pil;
+	struct irq_bucket *next;
+	unsigned int real_irq;
+	unsigned int irq;
+	unsigned int pil;
 };
 
 #define SUN4D_MAX_BOARD 10

@@ -297,10 +297,10 @@ struct asregs {
 #define DBE_CONFIG_EXT_ADDR          0x00000080
 
 #define DBE_CONFIG_FBDEV        ( DBE_CONFIG_VDAC_ENABLE | \
-                                      DBE_CONFIG_VDAC_GSYNC  | \
-                                      DBE_CONFIG_VDAC_PBLANK | \
-                                      DBE_CONFIG_LENDIAN     | \
-                                      DBE_CONFIG_EXT_ADDR )
+				      DBE_CONFIG_VDAC_GSYNC  | \
+				      DBE_CONFIG_VDAC_PBLANK | \
+				      DBE_CONFIG_LENDIAN     | \
+				      DBE_CONFIG_EXT_ADDR )
 
 /*
  * Available Video Timings and Corresponding Indices

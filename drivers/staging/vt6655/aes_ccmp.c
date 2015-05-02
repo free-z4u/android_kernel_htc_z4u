@@ -156,7 +156,7 @@ int i;
 
     for (i=0; i< 16; i++)
     {
-        out[i] = sbox_table[in[i]];
+	out[i] = sbox_table[in[i]];
     }
 }
 
@@ -199,32 +199,32 @@ unsigned char TmpdataB[16];
 unsigned char abyRoundKey[16];
 
     for(i=0; i<16; i++)
-        abyRoundKey[i] = key[i];
+	abyRoundKey[i] = key[i];
 
     for (round = 0; round < 11; round++)
     {
-        if (round == 0)
-        {
-            xor_128(abyRoundKey, data, ciphertext);
-            AddRoundKey(abyRoundKey, round);
-        }
-        else if (round == 10)
-        {
-            SubBytes(ciphertext, TmpdataA);
-            ShiftRows(TmpdataA, TmpdataB);
-            xor_128(TmpdataB, abyRoundKey, ciphertext);
-        }
-        else // round 1 ~ 9
-        {
-            SubBytes(ciphertext, TmpdataA);
-            ShiftRows(TmpdataA, TmpdataB);
-            MixColumns(&TmpdataB[0], &TmpdataA[0]);
-            MixColumns(&TmpdataB[4], &TmpdataA[4]);
-            MixColumns(&TmpdataB[8], &TmpdataA[8]);
-            MixColumns(&TmpdataB[12], &TmpdataA[12]);
-            xor_128(TmpdataA, abyRoundKey, ciphertext);
-            AddRoundKey(abyRoundKey, round);
-        }
+	if (round == 0)
+	{
+	    xor_128(abyRoundKey, data, ciphertext);
+	    AddRoundKey(abyRoundKey, round);
+	}
+	else if (round == 10)
+	{
+	    SubBytes(ciphertext, TmpdataA);
+	    ShiftRows(TmpdataA, TmpdataB);
+	    xor_128(TmpdataB, abyRoundKey, ciphertext);
+	}
+	else // round 1 ~ 9
+	{
+	    SubBytes(ciphertext, TmpdataA);
+	    ShiftRows(TmpdataA, TmpdataB);
+	    MixColumns(&TmpdataB[0], &TmpdataA[0]);
+	    MixColumns(&TmpdataB[4], &TmpdataA[4]);
+	    MixColumns(&TmpdataB[8], &TmpdataA[8]);
+	    MixColumns(&TmpdataB[12], &TmpdataA[12]);
+	    xor_128(TmpdataA, abyRoundKey, ciphertext);
+	    AddRoundKey(abyRoundKey, round);
+	}
     }
 
 }
@@ -268,11 +268,11 @@ int             ii,jj,kk;
 
     pbyIV = pbyFrame + WLAN_HDR_ADDR3_LEN;
     if ( WLAN_GET_FC_TODS(*(unsigned short *)pbyFrame) &&
-         WLAN_GET_FC_FROMDS(*(unsigned short *)pbyFrame) ) {
-         bA4 = true;
-         pbyIV += 6;             // 6 is 802.11 address4
-         wHLen += 6;
-         wPayloadSize -= 6;
+	 WLAN_GET_FC_FROMDS(*(unsigned short *)pbyFrame) ) {
+	 bA4 = true;
+	 pbyIV += 6;             // 6 is 802.11 address4
+	 wHLen += 6;
+	 wPayloadSize -= 6;
     }
     pbyPayload = pbyIV + 8; //IV-length
 
@@ -308,14 +308,14 @@ int             ii,jj,kk;
     MIC_HDR2[6] = byTmp & 0x0f;
     MIC_HDR2[7] = 0;
     if ( bA4 ) {
-        memcpy(&(MIC_HDR2[8]), pMACHeader->abyAddr4, ETH_ALEN);
+	memcpy(&(MIC_HDR2[8]), pMACHeader->abyAddr4, ETH_ALEN);
     } else {
-        MIC_HDR2[8]  = 0x00;
-        MIC_HDR2[9]  = 0x00;
-        MIC_HDR2[10] = 0x00;
-        MIC_HDR2[11] = 0x00;
-        MIC_HDR2[12] = 0x00;
-        MIC_HDR2[13] = 0x00;
+	MIC_HDR2[8]  = 0x00;
+	MIC_HDR2[9]  = 0x00;
+	MIC_HDR2[10] = 0x00;
+	MIC_HDR2[11] = 0x00;
+	MIC_HDR2[12] = 0x00;
+	MIC_HDR2[13] = 0x00;
     }
     MIC_HDR2[14] = 0x00;
     MIC_HDR2[15] = 0x00;
@@ -323,11 +323,11 @@ int             ii,jj,kk;
     //CCMP
     AESv128(pbyRxKey,MIC_IV,abyMIC);
     for ( kk=0; kk<16; kk++ ) {
-        abyTmp[kk] = MIC_HDR1[kk] ^ abyMIC[kk];
+	abyTmp[kk] = MIC_HDR1[kk] ^ abyMIC[kk];
     }
     AESv128(pbyRxKey,abyTmp,abyMIC);
     for ( kk=0; kk<16; kk++ ) {
-        abyTmp[kk] = MIC_HDR2[kk] ^ abyMIC[kk];
+	abyTmp[kk] = MIC_HDR2[kk] ^ abyMIC[kk];
     }
     AESv128(pbyRxKey,abyTmp,abyMIC);
 
@@ -337,28 +337,28 @@ int             ii,jj,kk;
 
     for(jj=wPayloadSize; jj>16; jj=jj-16) {
 
-        abyCTRPLD[14] = (unsigned char) (wCnt >> 8);
-        abyCTRPLD[15] = (unsigned char) (wCnt & 0xff);
+	abyCTRPLD[14] = (unsigned char) (wCnt >> 8);
+	abyCTRPLD[15] = (unsigned char) (wCnt & 0xff);
 
-        AESv128(pbyRxKey,abyCTRPLD,abyTmp);
+	AESv128(pbyRxKey,abyCTRPLD,abyTmp);
 
-        for ( kk=0; kk<16; kk++ ) {
-            abyPlainText[kk] = abyTmp[kk] ^ pbyPayload[kk];
-        }
-        for ( kk=0; kk<16; kk++ ) {
-            abyTmp[kk] = abyMIC[kk] ^ abyPlainText[kk];
-        }
-        AESv128(pbyRxKey,abyTmp,abyMIC);
+	for ( kk=0; kk<16; kk++ ) {
+	    abyPlainText[kk] = abyTmp[kk] ^ pbyPayload[kk];
+	}
+	for ( kk=0; kk<16; kk++ ) {
+	    abyTmp[kk] = abyMIC[kk] ^ abyPlainText[kk];
+	}
+	AESv128(pbyRxKey,abyTmp,abyMIC);
 
-        memcpy(pbyPayload, abyPlainText, 16);
-        wCnt++;
-        pbyPayload += 16;
+	memcpy(pbyPayload, abyPlainText, 16);
+	wCnt++;
+	pbyPayload += 16;
     } //for wPayloadSize
 
     //last payload
     memcpy(&(abyLastCipher[0]), pbyPayload, jj);
     for ( ii=jj; ii<16; ii++ ) {
-        abyLastCipher[ii] = 0x00;
+	abyLastCipher[ii] = 0x00;
     }
 
     abyCTRPLD[14] = (unsigned char) (wCnt >> 8);
@@ -366,17 +366,17 @@ int             ii,jj,kk;
 
     AESv128(pbyRxKey,abyCTRPLD,abyTmp);
     for ( kk=0; kk<16; kk++ ) {
-        abyPlainText[kk] = abyTmp[kk] ^ abyLastCipher[kk];
+	abyPlainText[kk] = abyTmp[kk] ^ abyLastCipher[kk];
     }
     memcpy(pbyPayload, abyPlainText, jj);
     pbyPayload += jj;
 
     //for MIC calculation
     for ( ii=jj; ii<16; ii++ ) {
-        abyPlainText[ii] = 0x00;
+	abyPlainText[ii] = 0x00;
     }
     for ( kk=0; kk<16; kk++ ) {
-        abyTmp[kk] = abyMIC[kk] ^ abyPlainText[kk];
+	abyTmp[kk] = abyMIC[kk] ^ abyPlainText[kk];
     }
     AESv128(pbyRxKey,abyTmp,abyMIC);
 
@@ -388,15 +388,15 @@ int             ii,jj,kk;
     abyCTRPLD[15] = (unsigned char) (wCnt & 0xff);
     AESv128(pbyRxKey,abyCTRPLD,abyTmp);
     for ( kk=0; kk<8; kk++ ) {
-        abyTmp[kk] = abyTmp[kk] ^ pbyPayload[kk];
+	abyTmp[kk] = abyTmp[kk] ^ pbyPayload[kk];
     }
     //=>above is the dec-MIC from packet
     //--------------------------------------------
 
     if ( !memcmp(abyMIC,abyTmp,8) ) {
-        return true;
+	return true;
     } else {
-        return false;
+	return false;
     }
 
 }

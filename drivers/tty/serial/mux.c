@@ -420,12 +420,12 @@ static void mux_console_write(struct console *co, const char *s, unsigned count)
 
 static int mux_console_setup(struct console *co, char *options)
 {
-        return 0;
+	return 0;
 }
 
 struct tty_driver *mux_console_device(struct console *co, int *index)
 {
-        *index = co->index;
+	*index = co->index;
 	return mux_driver.tty_driver;
 }
 
@@ -478,7 +478,7 @@ static int __init mux_probe(struct parisc_device *dev)
 
 	dev_set_drvdata(&dev->dev, (void *)(long)port_count);
 	request_mem_region(dev->hpa.start + MUX_OFFSET,
-                           port_count * MUX_LINE_OFFSET, "Mux");
+			   port_count * MUX_LINE_OFFSET, "Mux");
 
 	if(!port_cnt) {
 		mux_driver.cons = MUX_CONSOLE;

@@ -90,7 +90,7 @@ static void dump(struct pt_regs *fp)
 	}
 	printk("\n");
 	if (STACK_MAGIC != *(unsigned long *)((unsigned long)current+PAGE_SIZE))
-                printk("(Possibly corrupted stack page??)\n");
+		printk("(Possibly corrupted stack page??)\n");
 
 	printk("\n\n");
 }
@@ -113,8 +113,8 @@ void die(const char *str, struct pt_regs *fp, unsigned long err)
 
 extern char _start, _etext;
 #define check_kernel_text(addr) \
-        ((addr >= (unsigned long)(&_start)) && \
-         (addr <  (unsigned long)(&_etext)))
+	((addr >= (unsigned long)(&_start)) && \
+	 (addr <  (unsigned long)(&_etext)))
 
 static int kstack_depth_to_print = 24;
 

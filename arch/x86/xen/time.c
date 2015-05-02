@@ -165,7 +165,7 @@ static unsigned long xen_tsc_khz(void)
 
 cycle_t xen_clocksource_read(void)
 {
-        struct pvclock_vcpu_time_info *src;
+	struct pvclock_vcpu_time_info *src;
 	cycle_t ret;
 
 	preempt_disable_notrace();
@@ -184,7 +184,7 @@ static void xen_read_wallclock(struct timespec *ts)
 {
 	struct shared_info *s = HYPERVISOR_shared_info;
 	struct pvclock_wall_clock *wall_clock = &(s->wc);
-        struct pvclock_vcpu_time_info *vcpu_time;
+	struct pvclock_vcpu_time_info *vcpu_time;
 
 	vcpu_time = &get_cpu_var(xen_vcpu)->time;
 	pvclock_read_wallclock(wall_clock, vcpu_time, ts);

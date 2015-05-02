@@ -92,7 +92,7 @@ SiS300Sync(struct sis_video_info *ivideo)
 
 static void
 SiS300SetupForScreenToScreenCopy(struct sis_video_info *ivideo, int xdir, int ydir,
-                                 int rop, int trans_color)
+				 int rop, int trans_color)
 {
 	SiS300SetupDSTColorDepth(ivideo->DstColor);
 	SiS300SetupSRCPitch(ivideo->video_linelength)

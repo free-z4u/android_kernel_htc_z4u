@@ -1211,10 +1211,10 @@ static int cable_status_handler_func(struct notifier_block *nfb,
 
 	printk(DRIVER_ZONE "%s(%d)\n",__func__, cable_type);
 
-        if (cable_type != smem_cable_type && cable_type < CONNECT_TYPE_MAX) {
-                printk(DRIVER_ZONE "update to smem_cable_type(%d)\n", smem_cable_type);
-                cable_type = smem_cable_type;
-        }
+	if (cable_type != smem_cable_type && cable_type < CONNECT_TYPE_MAX) {
+		printk(DRIVER_ZONE "update to smem_cable_type(%d)\n", smem_cable_type);
+		cable_type = smem_cable_type;
+	}
 
 	if (cable_type == CONNECT_TYPE_NONE) {
 		poweralg.is_cable_in = 0;

@@ -165,8 +165,8 @@ static int actisys_change_speed(struct sir_dev *dev, unsigned speed)
 	int ret = 0;
 	int i = 0;
 
-        IRDA_DEBUG(4, "%s(), speed=%d (was %d)\n", __func__,
-        	speed, dev->speed);
+	IRDA_DEBUG(4, "%s(), speed=%d (was %d)\n", __func__,
+		speed, dev->speed);
 
 	/* dongle was already resetted from irda_request state machine,
 	 * we are in known state (dongle default)
@@ -174,7 +174,7 @@ static int actisys_change_speed(struct sir_dev *dev, unsigned speed)
 
 	/*
 	 * Now, we can set the speed requested. Send RTS pulses until we
-         * reach the target speed
+	 * reach the target speed
 	 */
 	for (i = 0; i < MAX_SPEEDS; i++) {
 		if (speed == baud_rates[i]) {

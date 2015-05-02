@@ -51,8 +51,8 @@ csum_partial(const void *buff, int len, __wsum sum)
  */
 static inline __wsum
 csum_partial_copy_from_user(const void __user *src, void *dst,
-                                          int len, __wsum sum,
-                                          int *err_ptr)
+					  int len, __wsum sum,
+					  int *err_ptr)
 {
 	int missing;
 
@@ -69,7 +69,7 @@ csum_partial_copy_from_user(const void __user *src, void *dst,
 static inline __wsum
 csum_partial_copy_nocheck (const void *src, void *dst, int len, __wsum sum)
 {
-        memcpy(dst,src,len);
+	memcpy(dst,src,len);
 	return csum_partial(dst, len, sum);
 }
 
@@ -101,8 +101,8 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
  */
 static inline __wsum
 csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
-                   unsigned short len, unsigned short proto,
-                   __wsum sum)
+		   unsigned short len, unsigned short proto,
+		   __wsum sum)
 {
 	__u32 csum = (__force __u32)sum;
 
@@ -128,8 +128,8 @@ csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
 
 static inline __sum16
 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
-                  unsigned short len, unsigned short proto,
-                  __wsum sum)
+		  unsigned short len, unsigned short proto,
+		  __wsum sum)
 {
 	return csum_fold(csum_tcpudp_nofold(saddr,daddr,len,proto,sum));
 }

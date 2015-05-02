@@ -1142,7 +1142,7 @@ static int msm_serial_suspend(struct device *dev)
 		uart_suspend_port(&msm_uart_driver, port);
 #if defined(CONFIG_GPS_1530)
 #ifdef CONFIG_GPS_1530_LNA_POWER
-                gps_1530_lna_power_enable(0);
+		gps_1530_lna_power_enable(0);
 #endif
 		msm_deinit_clock(port);
 		gps_1530_uart_on(0);
@@ -1166,7 +1166,7 @@ static int msm_serial_resume(struct device *dev)
 		gps_1530_uart_on(1);
 		msm_init_clock(port);
 #ifdef CONFIG_GPS_1530_LNA_POWER
-                gps_1530_lna_power_enable(1);
+		gps_1530_lna_power_enable(1);
 #endif
 
 #else

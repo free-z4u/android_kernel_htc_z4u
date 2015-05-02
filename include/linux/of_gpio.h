@@ -137,7 +137,7 @@ static inline int of_get_gpio_flags(struct device_node *np, int index,
  * value on the error condition.
  */
 static inline int of_get_named_gpio(struct device_node *np,
-                                   const char *propname, int index)
+				   const char *propname, int index)
 {
 	return of_get_named_gpio_flags(np, propname, index, NULL);
 }

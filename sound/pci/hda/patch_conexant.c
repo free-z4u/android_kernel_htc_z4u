@@ -922,7 +922,7 @@ static const struct hda_input_mux cxt5045_test_capture_source = {
 		{ "LINE1 pin", 0x2 },
 		{ "HP-OUT pin", 0x3 },
 		{ "CD pin", 0x4 },
-        },
+	},
 };
 
 static const struct snd_kcontrol_new cxt5045_test_mixer[] = {
@@ -1354,7 +1354,7 @@ static const struct hda_input_mux cxt5047_test_capture_source = {
 		{ "MIC1 pin", 0x1 },
 		{ "MIC2 pin", 0x2 },
 		{ "CD pin", 0x3 },
-        },
+	},
 };
 
 static const struct snd_kcontrol_new cxt5047_test_mixer[] = {

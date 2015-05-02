@@ -343,7 +343,7 @@ static int msm_irq_set_wake(struct irq_data *d, unsigned int on)
 
 static int msm_irq_set_type(struct irq_data *d, unsigned int flow_type)
 {
-        void __iomem *treg = VIC_INT_TO_REG_ADDR(VIC_INT_TYPE0, d->irq);
+	void __iomem *treg = VIC_INT_TO_REG_ADDR(VIC_INT_TYPE0, d->irq);
 	void __iomem *preg = VIC_INT_TO_REG_ADDR(VIC_INT_POLARITY0, d->irq);
 	unsigned index = VIC_INT_TO_REG_INDEX(d->irq);
 	int b = 1 << (d->irq & 31);

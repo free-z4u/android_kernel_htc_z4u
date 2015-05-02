@@ -204,8 +204,8 @@ static void ixgbe_dcbnl_get_perm_hw_addr(struct net_device *netdev,
 }
 
 static void ixgbe_dcbnl_set_pg_tc_cfg_tx(struct net_device *netdev, int tc,
-                                         u8 prio, u8 bwg_id, u8 bw_pct,
-                                         u8 up_map)
+					 u8 prio, u8 bwg_id, u8 bw_pct,
+					 u8 up_map)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -222,7 +222,7 @@ static void ixgbe_dcbnl_set_pg_tc_cfg_tx(struct net_device *netdev, int tc,
 }
 
 static void ixgbe_dcbnl_set_pg_bwg_cfg_tx(struct net_device *netdev, int bwg_id,
-                                          u8 bw_pct)
+					  u8 bw_pct)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -230,8 +230,8 @@ static void ixgbe_dcbnl_set_pg_bwg_cfg_tx(struct net_device *netdev, int bwg_id,
 }
 
 static void ixgbe_dcbnl_set_pg_tc_cfg_rx(struct net_device *netdev, int tc,
-                                         u8 prio, u8 bwg_id, u8 bw_pct,
-                                         u8 up_map)
+					 u8 prio, u8 bwg_id, u8 bw_pct,
+					 u8 up_map)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -248,7 +248,7 @@ static void ixgbe_dcbnl_set_pg_tc_cfg_rx(struct net_device *netdev, int tc,
 }
 
 static void ixgbe_dcbnl_set_pg_bwg_cfg_rx(struct net_device *netdev, int bwg_id,
-                                          u8 bw_pct)
+					  u8 bw_pct)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -256,8 +256,8 @@ static void ixgbe_dcbnl_set_pg_bwg_cfg_rx(struct net_device *netdev, int bwg_id,
 }
 
 static void ixgbe_dcbnl_get_pg_tc_cfg_tx(struct net_device *netdev, int tc,
-                                         u8 *prio, u8 *bwg_id, u8 *bw_pct,
-                                         u8 *up_map)
+					 u8 *prio, u8 *bwg_id, u8 *bw_pct,
+					 u8 *up_map)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -268,7 +268,7 @@ static void ixgbe_dcbnl_get_pg_tc_cfg_tx(struct net_device *netdev, int tc,
 }
 
 static void ixgbe_dcbnl_get_pg_bwg_cfg_tx(struct net_device *netdev, int bwg_id,
-                                          u8 *bw_pct)
+					  u8 *bw_pct)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -276,8 +276,8 @@ static void ixgbe_dcbnl_get_pg_bwg_cfg_tx(struct net_device *netdev, int bwg_id,
 }
 
 static void ixgbe_dcbnl_get_pg_tc_cfg_rx(struct net_device *netdev, int tc,
-                                         u8 *prio, u8 *bwg_id, u8 *bw_pct,
-                                         u8 *up_map)
+					 u8 *prio, u8 *bwg_id, u8 *bw_pct,
+					 u8 *up_map)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -288,7 +288,7 @@ static void ixgbe_dcbnl_get_pg_tc_cfg_rx(struct net_device *netdev, int tc,
 }
 
 static void ixgbe_dcbnl_get_pg_bwg_cfg_rx(struct net_device *netdev, int bwg_id,
-                                          u8 *bw_pct)
+					  u8 *bw_pct)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -296,7 +296,7 @@ static void ixgbe_dcbnl_get_pg_bwg_cfg_rx(struct net_device *netdev, int bwg_id,
 }
 
 static void ixgbe_dcbnl_set_pfc_cfg(struct net_device *netdev, int priority,
-                                    u8 setting)
+				    u8 setting)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -307,7 +307,7 @@ static void ixgbe_dcbnl_set_pfc_cfg(struct net_device *netdev, int priority,
 }
 
 static void ixgbe_dcbnl_get_pfc_cfg(struct net_device *netdev, int priority,
-                                    u8 *setting)
+				    u8 *setting)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 

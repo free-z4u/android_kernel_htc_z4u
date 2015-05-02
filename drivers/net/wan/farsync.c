@@ -424,7 +424,7 @@ struct buf_window {
 /*      Per port (line or channel) information
  */
 struct fst_port_info {
-        struct net_device *dev; /* Device struct - must be first */
+	struct net_device *dev; /* Device struct - must be first */
 	struct fst_card_info *card;	/* Card we're associated with */
 	int index;		/* Port index on the card */
 	int hwif;		/* Line hardware (lineInterface copy) */
@@ -1624,7 +1624,7 @@ fst_intr(int dummy, void *dev_id)
 			rdidx = 0;
 	}
 	FST_WRB(card, interruptEvent.rdindex, rdidx);
-        return IRQ_HANDLED;
+	return IRQ_HANDLED;
 }
 
 /*      Check that the shared memory configuration is one that we can handle
@@ -2199,7 +2199,7 @@ fst_open(struct net_device *dev)
 
 	port = dev_to_port(dev);
 	if (!try_module_get(THIS_MODULE))
-          return -EBUSY;
+	  return -EBUSY;
 
 	if (port->mode != FST_RAW) {
 		err = hdlc_open(dev);
@@ -2382,8 +2382,8 @@ fst_init_card(struct fst_card_info *card)
 	 * we'll have to revise it in some way then.
 	 */
 	for (i = 0; i < card->nports; i++) {
-                err = register_hdlc_device(card->ports[i].dev);
-                if (err < 0) {
+		err = register_hdlc_device(card->ports[i].dev);
+		if (err < 0) {
 			int j;
 			pr_err("Cannot register HDLC device for port %d (errno %d)\n",
 			       i, -err);
@@ -2391,9 +2391,9 @@ fst_init_card(struct fst_card_info *card)
 				free_netdev(card->ports[j].dev);
 				card->ports[j].dev = NULL;
 			}
-                        card->nports = i;
-                        break;
-                }
+			card->nports = i;
+			break;
+		}
 	}
 
 	pr_info("%s-%s: %s IRQ%d, %d ports\n",
@@ -2514,47 +2514,47 @@ fst_add_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 				(ent->driver_data == FST_TYPE_T2U)) ? 2 : 4;
 
 	card->state = FST_UNINIT;
-        spin_lock_init ( &card->card_lock );
+	spin_lock_init ( &card->card_lock );
 
-        for ( i = 0 ; i < card->nports ; i++ ) {
+	for ( i = 0 ; i < card->nports ; i++ ) {
 		struct net_device *dev = alloc_hdlcdev(&card->ports[i]);
 		hdlc_device *hdlc;
 		if (!dev) {
 			while (i--)
 				free_netdev(card->ports[i].dev);
 			pr_err("FarSync: out of memory\n");
-                        free_irq(card->irq, card);
-                        pci_release_regions(pdev);
-                        pci_disable_device(pdev);
-                        iounmap(card->ctlmem);
-                        iounmap(card->mem);
-                        kfree(card);
-                        return -ENODEV;
+			free_irq(card->irq, card);
+			pci_release_regions(pdev);
+			pci_disable_device(pdev);
+			iounmap(card->ctlmem);
+			iounmap(card->mem);
+			kfree(card);
+			return -ENODEV;
 		}
 		card->ports[i].dev    = dev;
-                card->ports[i].card   = card;
-                card->ports[i].index  = i;
-                card->ports[i].run    = 0;
+		card->ports[i].card   = card;
+		card->ports[i].index  = i;
+		card->ports[i].run    = 0;
 
 		hdlc = dev_to_hdlc(dev);
 
-                /* Fill in the net device info */
+		/* Fill in the net device info */
 		/* Since this is a PCI setup this is purely
 		 * informational. Give them the buffer addresses
 		 * and basic card I/O.
 		 */
-                dev->mem_start   = card->phys_mem
-                                 + BUF_OFFSET ( txBuffer[i][0][0]);
-                dev->mem_end     = card->phys_mem
-                                 + BUF_OFFSET ( txBuffer[i][NUM_TX_BUFFER][0]);
-                dev->base_addr   = card->pci_conf;
-                dev->irq         = card->irq;
+		dev->mem_start   = card->phys_mem
+				 + BUF_OFFSET ( txBuffer[i][0][0]);
+		dev->mem_end     = card->phys_mem
+				 + BUF_OFFSET ( txBuffer[i][NUM_TX_BUFFER][0]);
+		dev->base_addr   = card->pci_conf;
+		dev->irq         = card->irq;
 
 		dev->netdev_ops = &fst_ops;
 		dev->tx_queue_len = FST_TX_QUEUE_LEN;
 		dev->watchdog_timeo = FST_TX_TIMEOUT;
-                hdlc->attach = fst_attach;
-                hdlc->xmit   = fst_start_xmit;
+		hdlc->attach = fst_attach;
+		hdlc->xmit   = fst_start_xmit;
 	}
 
 	card->device = pdev;
@@ -2649,12 +2649,12 @@ fst_remove_one(struct pci_dev *pdev)
 }
 
 static struct pci_driver fst_driver = {
-        .name		= FST_NAME,
-        .id_table	= fst_pci_dev_id,
-        .probe		= fst_add_one,
-        .remove	= __devexit_p(fst_remove_one),
-        .suspend	= NULL,
-        .resume	= NULL,
+	.name		= FST_NAME,
+	.id_table	= fst_pci_dev_id,
+	.probe		= fst_add_one,
+	.remove	= __devexit_p(fst_remove_one),
+	.suspend	= NULL,
+	.resume	= NULL,
 };
 
 static int __init

@@ -286,9 +286,9 @@ out:
 
 static struct dsp_scb_descriptor *
 _dsp_create_generic_scb (struct snd_cs46xx *chip, char * name, u32 * scb_data, u32 dest,
-                         struct dsp_symbol_entry * task_entry,
-                         struct dsp_scb_descriptor * parent_scb,
-                         int scb_child_type)
+			 struct dsp_symbol_entry * task_entry,
+			 struct dsp_scb_descriptor * parent_scb,
+			 int scb_child_type)
 {
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
 	struct dsp_scb_descriptor * scb;
@@ -359,8 +359,8 @@ _dsp_create_generic_scb (struct snd_cs46xx *chip, char * name, u32 * scb_data, u
 static struct dsp_scb_descriptor *
 cs46xx_dsp_create_generic_scb (struct snd_cs46xx *chip, char * name, u32 * scb_data,
 			       u32 dest, char * task_entry_name,
-                               struct dsp_scb_descriptor * parent_scb,
-                               int scb_child_type)
+			       struct dsp_scb_descriptor * parent_scb,
+			       int scb_child_type)
 {
 	struct dsp_symbol_entry * task_entry;
 
@@ -412,9 +412,9 @@ cs46xx_dsp_create_timing_master_scb (struct snd_cs46xx *chip)
 
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_codec_out_scb(struct snd_cs46xx * chip, char * codec_name,
-                                u16 channel_disp, u16 fifo_addr, u16 child_scb_addr,
-                                u32 dest, struct dsp_scb_descriptor * parent_scb,
-                                int scb_child_type)
+				u16 channel_disp, u16 fifo_addr, u16 child_scb_addr,
+				u32 dest, struct dsp_scb_descriptor * parent_scb,
+				int scb_child_type)
 {
 	struct dsp_scb_descriptor * scb;
 
@@ -495,10 +495,10 @@ cs46xx_dsp_create_codec_in_scb(struct snd_cs46xx * chip, char * codec_name,
 
 static struct dsp_scb_descriptor *
 cs46xx_dsp_create_pcm_reader_scb(struct snd_cs46xx * chip, char * scb_name,
-                                 u16 sample_buffer_addr, u32 dest,
-                                 int virtual_channel, u32 playback_hw_addr,
-                                 struct dsp_scb_descriptor * parent_scb,
-                                 int scb_child_type)
+				 u16 sample_buffer_addr, u32 dest,
+				 int virtual_channel, u32 playback_hw_addr,
+				 struct dsp_scb_descriptor * parent_scb,
+				 int scb_child_type)
 {
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
 	struct dsp_scb_descriptor * scb;
@@ -599,10 +599,10 @@ cs46xx_dsp_create_pcm_reader_scb(struct snd_cs46xx * chip, char * scb_name,
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_src_task_scb(struct snd_cs46xx * chip, char * scb_name,
 			       int rate,
-                               u16 src_buffer_addr,
-                               u16 src_delay_buffer_addr, u32 dest,
-                               struct dsp_scb_descriptor * parent_scb,
-                               int scb_child_type,
+			       u16 src_buffer_addr,
+			       u16 src_delay_buffer_addr, u32 dest,
+			       struct dsp_scb_descriptor * parent_scb,
+			       int scb_child_type,
 	                       int pass_through)
 {
 
@@ -752,9 +752,9 @@ cs46xx_dsp_create_filter_scb(struct snd_cs46xx * chip, char * scb_name,
 
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_mix_only_scb(struct snd_cs46xx * chip, char * scb_name,
-                               u16 mix_buffer_addr, u32 dest,
-                               struct dsp_scb_descriptor * parent_scb,
-                               int scb_child_type)
+			       u16 mix_buffer_addr, u32 dest,
+			       struct dsp_scb_descriptor * parent_scb,
+			       int scb_child_type)
 {
 	struct dsp_scb_descriptor * scb;
 
@@ -792,9 +792,9 @@ cs46xx_dsp_create_mix_only_scb(struct snd_cs46xx * chip, char * scb_name,
 
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_mix_to_ostream_scb(struct snd_cs46xx * chip, char * scb_name,
-                                     u16 mix_buffer_addr, u16 writeback_spb, u32 dest,
-                                     struct dsp_scb_descriptor * parent_scb,
-                                     int scb_child_type)
+				     u16 mix_buffer_addr, u16 writeback_spb, u32 dest,
+				     struct dsp_scb_descriptor * parent_scb,
+				     int scb_child_type)
 {
 	struct dsp_scb_descriptor * scb;
 
@@ -846,11 +846,11 @@ cs46xx_dsp_create_mix_to_ostream_scb(struct snd_cs46xx * chip, char * scb_name,
 
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_vari_decimate_scb(struct snd_cs46xx * chip,char * scb_name,
-                                    u16 vari_buffer_addr0,
-                                    u16 vari_buffer_addr1,
-                                    u32 dest,
-                                    struct dsp_scb_descriptor * parent_scb,
-                                    int scb_child_type)
+				    u16 vari_buffer_addr0,
+				    u16 vari_buffer_addr1,
+				    u32 dest,
+				    struct dsp_scb_descriptor * parent_scb,
+				    int scb_child_type)
 {
 
 	struct dsp_scb_descriptor * scb;
@@ -890,9 +890,9 @@ cs46xx_dsp_create_vari_decimate_scb(struct snd_cs46xx * chip,char * scb_name,
 
 static struct dsp_scb_descriptor *
 cs46xx_dsp_create_pcm_serial_input_scb(struct snd_cs46xx * chip, char * scb_name, u32 dest,
-                                       struct dsp_scb_descriptor * input_scb,
-                                       struct dsp_scb_descriptor * parent_scb,
-                                       int scb_child_type)
+				       struct dsp_scb_descriptor * input_scb,
+				       struct dsp_scb_descriptor * parent_scb,
+				       int scb_child_type)
 {
 
 	struct dsp_scb_descriptor * scb;
@@ -933,10 +933,10 @@ cs46xx_dsp_create_pcm_serial_input_scb(struct snd_cs46xx * chip, char * scb_name
 
 static struct dsp_scb_descriptor *
 cs46xx_dsp_create_asynch_fg_tx_scb(struct snd_cs46xx * chip, char * scb_name, u32 dest,
-                                   u16 hfg_scb_address,
-                                   u16 asynch_buffer_address,
-                                   struct dsp_scb_descriptor * parent_scb,
-                                   int scb_child_type)
+				   u16 hfg_scb_address,
+				   u16 asynch_buffer_address,
+				   struct dsp_scb_descriptor * parent_scb,
+				   int scb_child_type)
 {
 
 	struct dsp_scb_descriptor * scb;
@@ -961,7 +961,7 @@ cs46xx_dsp_create_asynch_fg_tx_scb(struct snd_cs46xx * chip, char * scb_name, u3
 
 		RSCONFIG_SAMPLE_16STEREO + RSCONFIG_MODULO_256, /* Stereo, 256 dword */
 		(asynch_buffer_address) << 0x10,  /* This should be automagically synchronized
-                                                     to the producer pointer */
+						     to the producer pointer */
 
 		/* There is no correct initial value, it will depend upon the detected
 		   rate etc  */
@@ -980,10 +980,10 @@ cs46xx_dsp_create_asynch_fg_tx_scb(struct snd_cs46xx * chip, char * scb_name, u3
 
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_asynch_fg_rx_scb(struct snd_cs46xx * chip, char * scb_name, u32 dest,
-                                   u16 hfg_scb_address,
-                                   u16 asynch_buffer_address,
-                                   struct dsp_scb_descriptor * parent_scb,
-                                   int scb_child_type)
+				   u16 hfg_scb_address,
+				   u16 asynch_buffer_address,
+				   struct dsp_scb_descriptor * parent_scb,
+				   int scb_child_type)
 {
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
 	struct dsp_scb_descriptor * scb;
@@ -1006,7 +1006,7 @@ cs46xx_dsp_create_asynch_fg_rx_scb(struct snd_cs46xx * chip, char * scb_name, u3
 		0,dest,
 
 		RSCONFIG_MODULO_128 |
-        RSCONFIG_SAMPLE_16STEREO,                         /* Stereo, 128 dword */
+	RSCONFIG_SAMPLE_16STEREO,                         /* Stereo, 128 dword */
 		( (asynch_buffer_address + (16 * 4))  << 0x10),   /* This should be automagically
 							                                  synchrinized to the producer pointer */
 
@@ -1030,10 +1030,10 @@ cs46xx_dsp_create_asynch_fg_rx_scb(struct snd_cs46xx * chip, char * scb_name, u3
 #if 0 /* not used */
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_output_snoop_scb(struct snd_cs46xx * chip, char * scb_name, u32 dest,
-                                   u16 snoop_buffer_address,
-                                   struct dsp_scb_descriptor * snoop_scb,
-                                   struct dsp_scb_descriptor * parent_scb,
-                                   int scb_child_type)
+				   u16 snoop_buffer_address,
+				   struct dsp_scb_descriptor * snoop_scb,
+				   struct dsp_scb_descriptor * parent_scb,
+				   int scb_child_type)
 {
 
 	struct dsp_scb_descriptor * scb;
@@ -1072,8 +1072,8 @@ cs46xx_dsp_create_output_snoop_scb(struct snd_cs46xx * chip, char * scb_name, u3
 
 struct dsp_scb_descriptor *
 cs46xx_dsp_create_spio_write_scb(struct snd_cs46xx * chip, char * scb_name, u32 dest,
-                                 struct dsp_scb_descriptor * parent_scb,
-                                 int scb_child_type)
+				 struct dsp_scb_descriptor * parent_scb,
+				 int scb_child_type)
 {
 	struct dsp_scb_descriptor * scb;
 
@@ -1356,7 +1356,7 @@ cs46xx_dsp_create_pcm_channel (struct snd_cs46xx * chip,
 	snprintf (scb_name,DSP_MAX_SCB_NAME,"PCMReader_SCB%d",pcm_index);
 
 	snd_printdd( "dsp_spos: creating PCM \"%s\" (%d)\n",scb_name,
-                 pcm_channel_id);
+		 pcm_channel_id);
 
 	pcm_scb = cs46xx_dsp_create_pcm_reader_scb(chip,scb_name,
 						   pcm_reader_buffer_addr[pcm_index],
@@ -1364,9 +1364,9 @@ cs46xx_dsp_create_pcm_channel (struct snd_cs46xx * chip,
 						   (pcm_index * 0x10) + 0x200,
 						   pcm_index,    /* virtual channel 0-31 */
 						   hw_dma_addr,  /* pcm hw addr */
-                           NULL,         /* parent SCB ptr */
-                           0             /* insert point */
-                           );
+			   NULL,         /* parent SCB ptr */
+			   0             /* insert point */
+			   );
 
 	if (!pcm_scb) {
 		snd_printk (KERN_ERR "dsp_spos: failed to create PCMreaderSCB\n");

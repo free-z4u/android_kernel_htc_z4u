@@ -50,10 +50,10 @@ static int flatpanel_id = -1;
 static struct fb_fix_screeninfo sgivwfb_fix __devinitdata = {
 	.id		= "SGI Vis WS FB",
 	.type		= FB_TYPE_PACKED_PIXELS,
-        .visual		= FB_VISUAL_PSEUDOCOLOR,
+	.visual		= FB_VISUAL_PSEUDOCOLOR,
 	.mmio_start	= DBE_REG_PHYS,
 	.mmio_len	= DBE_REG_SIZE,
-        .accel		= FB_ACCEL_NONE,
+	.accel		= FB_ACCEL_NONE,
 	.line_length	= 640,
 };
 

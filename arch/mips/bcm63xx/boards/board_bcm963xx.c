@@ -359,9 +359,9 @@ static struct board_info __initdata board_FAST2404 = {
 	.expected_cpu_id		= 0x6348,
 
 	.has_uart0			= 1,
-        .has_enet0			= 1,
-        .has_enet1			= 1,
-        .has_pci			= 1,
+	.has_enet0			= 1,
+	.has_enet1			= 1,
+	.has_pci			= 1,
 
 	.enet0 = {
 		.has_phy		= 1,

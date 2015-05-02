@@ -79,7 +79,7 @@
 #define ACPI_FIXED_HARDWARE_EVENT	0x100
 
 /* --------------------------------------------------------------------------
-                                       PCI
+				       PCI
    -------------------------------------------------------------------------- */
 
 
@@ -108,7 +108,7 @@ struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root);
 void pci_acpi_crs_quirks(void);
 
 /* --------------------------------------------------------------------------
-                                    Processor
+				    Processor
    -------------------------------------------------------------------------- */
 
 #define ACPI_PROCESSOR_LIMIT_NONE	0x00
@@ -116,7 +116,7 @@ void pci_acpi_crs_quirks(void);
 #define ACPI_PROCESSOR_LIMIT_DECREMENT	0x02
 
 /*--------------------------------------------------------------------------
-                                  Dock Station
+				  Dock Station
   -------------------------------------------------------------------------- */
 struct acpi_dock_ops {
 	acpi_notify_handler handler;

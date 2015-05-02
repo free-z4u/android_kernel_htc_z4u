@@ -539,74 +539,74 @@ do {										\
 
 #define ia64_lfetch(lfhint, y)					\
 ({								\
-        switch (lfhint) {					\
-        case ia64_lfhint_none:					\
-                asm volatile ("lfetch [%0]" : : "r"(y));	\
-                break;						\
-        case ia64_lfhint_nt1:					\
-                asm volatile ("lfetch.nt1 [%0]" : : "r"(y));	\
-                break;						\
-        case ia64_lfhint_nt2:					\
-                asm volatile ("lfetch.nt2 [%0]" : : "r"(y));	\
-                break;						\
-        case ia64_lfhint_nta:					\
-                asm volatile ("lfetch.nta [%0]" : : "r"(y));	\
-                break;						\
-        }							\
+	switch (lfhint) {					\
+	case ia64_lfhint_none:					\
+		asm volatile ("lfetch [%0]" : : "r"(y));	\
+		break;						\
+	case ia64_lfhint_nt1:					\
+		asm volatile ("lfetch.nt1 [%0]" : : "r"(y));	\
+		break;						\
+	case ia64_lfhint_nt2:					\
+		asm volatile ("lfetch.nt2 [%0]" : : "r"(y));	\
+		break;						\
+	case ia64_lfhint_nta:					\
+		asm volatile ("lfetch.nta [%0]" : : "r"(y));	\
+		break;						\
+	}							\
 })
 
 #define ia64_lfetch_excl(lfhint, y)					\
 ({									\
-        switch (lfhint) {						\
-        case ia64_lfhint_none:						\
-                asm volatile ("lfetch.excl [%0]" :: "r"(y));		\
-                break;							\
-        case ia64_lfhint_nt1:						\
-                asm volatile ("lfetch.excl.nt1 [%0]" :: "r"(y));	\
-                break;							\
-        case ia64_lfhint_nt2:						\
-                asm volatile ("lfetch.excl.nt2 [%0]" :: "r"(y));	\
-                break;							\
-        case ia64_lfhint_nta:						\
-                asm volatile ("lfetch.excl.nta [%0]" :: "r"(y));	\
-                break;							\
-        }								\
+	switch (lfhint) {						\
+	case ia64_lfhint_none:						\
+		asm volatile ("lfetch.excl [%0]" :: "r"(y));		\
+		break;							\
+	case ia64_lfhint_nt1:						\
+		asm volatile ("lfetch.excl.nt1 [%0]" :: "r"(y));	\
+		break;							\
+	case ia64_lfhint_nt2:						\
+		asm volatile ("lfetch.excl.nt2 [%0]" :: "r"(y));	\
+		break;							\
+	case ia64_lfhint_nta:						\
+		asm volatile ("lfetch.excl.nta [%0]" :: "r"(y));	\
+		break;							\
+	}								\
 })
 
 #define ia64_lfetch_fault(lfhint, y)					\
 ({									\
-        switch (lfhint) {						\
-        case ia64_lfhint_none:						\
-                asm volatile ("lfetch.fault [%0]" : : "r"(y));		\
-                break;							\
-        case ia64_lfhint_nt1:						\
-                asm volatile ("lfetch.fault.nt1 [%0]" : : "r"(y));	\
-                break;							\
-        case ia64_lfhint_nt2:						\
-                asm volatile ("lfetch.fault.nt2 [%0]" : : "r"(y));	\
-                break;							\
-        case ia64_lfhint_nta:						\
-                asm volatile ("lfetch.fault.nta [%0]" : : "r"(y));	\
-                break;							\
-        }								\
+	switch (lfhint) {						\
+	case ia64_lfhint_none:						\
+		asm volatile ("lfetch.fault [%0]" : : "r"(y));		\
+		break;							\
+	case ia64_lfhint_nt1:						\
+		asm volatile ("lfetch.fault.nt1 [%0]" : : "r"(y));	\
+		break;							\
+	case ia64_lfhint_nt2:						\
+		asm volatile ("lfetch.fault.nt2 [%0]" : : "r"(y));	\
+		break;							\
+	case ia64_lfhint_nta:						\
+		asm volatile ("lfetch.fault.nta [%0]" : : "r"(y));	\
+		break;							\
+	}								\
 })
 
 #define ia64_lfetch_fault_excl(lfhint, y)				\
 ({									\
-        switch (lfhint) {						\
-        case ia64_lfhint_none:						\
-                asm volatile ("lfetch.fault.excl [%0]" :: "r"(y));	\
-                break;							\
-        case ia64_lfhint_nt1:						\
-                asm volatile ("lfetch.fault.excl.nt1 [%0]" :: "r"(y));	\
-                break;							\
-        case ia64_lfhint_nt2:						\
-                asm volatile ("lfetch.fault.excl.nt2 [%0]" :: "r"(y));	\
-                break;							\
-        case ia64_lfhint_nta:						\
-                asm volatile ("lfetch.fault.excl.nta [%0]" :: "r"(y));	\
-                break;							\
-        }								\
+	switch (lfhint) {						\
+	case ia64_lfhint_none:						\
+		asm volatile ("lfetch.fault.excl [%0]" :: "r"(y));	\
+		break;							\
+	case ia64_lfhint_nt1:						\
+		asm volatile ("lfetch.fault.excl.nt1 [%0]" :: "r"(y));	\
+		break;							\
+	case ia64_lfhint_nt2:						\
+		asm volatile ("lfetch.fault.excl.nt2 [%0]" :: "r"(y));	\
+		break;							\
+	case ia64_lfhint_nta:						\
+		asm volatile ("lfetch.fault.excl.nta [%0]" :: "r"(y));	\
+		break;							\
+	}								\
 })
 
 #define ia64_native_intrin_local_irq_restore(x)			\

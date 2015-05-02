@@ -1584,7 +1584,7 @@ qla2x00_get_fc_host_stats(struct Scsi_Host *shost)
 	pfc_host_stat->fcp_output_megabytes = ha->qla_stats.output_bytes >> 20;
 
 done_free:
-        dma_pool_free(ha->s_dma_pool, stats, stats_dma);
+	dma_pool_free(ha->s_dma_pool, stats, stats_dma);
 done:
 	return pfc_host_stat;
 }

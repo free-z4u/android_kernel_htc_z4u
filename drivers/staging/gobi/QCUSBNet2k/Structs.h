@@ -139,12 +139,12 @@ typedef struct sClientMemList
 
    /* Linked list of Notification entries */
    /*    Stores notification functions to be run as data becomes
-         available or the device is removed */
+	 available or the device is removed */
    sNotifyList *                mpReadNotifyList;
 
    /* Linked list of URB entries */
    /*    Stores pointers to outstanding URBs which need canceled
-         when the client is deregistered or the device is removed */
+	 when the client is deregistered or the device is removed */
    sURBList *                   mpURBList;
 
    /* Next entry in linked list */

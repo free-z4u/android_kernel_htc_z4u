@@ -91,7 +91,7 @@ static int do_devname(ctl_table *table, int write,
 
 
 static int do_discovery(ctl_table *table, int write,
-                    void __user *buffer, size_t *lenp, loff_t *ppos)
+		    void __user *buffer, size_t *lenp, loff_t *ppos)
 {
        int ret;
 

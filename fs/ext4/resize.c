@@ -711,9 +711,9 @@ static int add_new_gdb(handle_t *handle, struct inode *inode,
 
 	/*
 	 * If we are not using the primary superblock/GDT copy don't resize,
-         * because the user tools have no way of handling this.  Probably a
-         * bad time to do it anyways.
-         */
+	 * because the user tools have no way of handling this.  Probably a
+	 * bad time to do it anyways.
+	 */
 	if (EXT4_SB(sb)->s_sbh->b_blocknr !=
 	    le32_to_cpu(EXT4_SB(sb)->s_es->s_first_data_block)) {
 		ext4_warning(sb, "won't resize using backup superblock at %llu",

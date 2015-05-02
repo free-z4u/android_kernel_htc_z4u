@@ -35,16 +35,16 @@
 
 #ifdef DEBUG
 #define debug(fmt, ...) printk(KERN_DEBUG "%s %s:%d: Debug: " fmt "\n", \
-                        TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
+			TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
 #else
 #define debug(fmt, ...)
 #endif
 #define info(fmt, ...)  printk(KERN_INFO "%s %s:%d: Info: " fmt "\n", \
-                        TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
+			TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
 #define error(fmt, ...) printk(KERN_ERR "%s %s:%d: Error: " fmt "\n", \
-                        TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
+			TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
 #define alert(fmt, ...) printk(KERN_ALERT "%s %s:%d: Alert: " fmt "\n", \
-                        TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
+			TPM_MODULE_NAME, __FILE__, __LINE__, ## __VA_ARGS__)
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Mario Strasser <mast@gmx.net>");

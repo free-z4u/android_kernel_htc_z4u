@@ -191,7 +191,7 @@ extern void div128_by_32(u64 dividend_high, u64 dividend_low,
 /* Used to store Processor Utilization register (purr) values */
 
 struct cpu_usage {
-        u64 current_tb;  /* Holds the current purr register values */
+	u64 current_tb;  /* Holds the current purr register values */
 };
 
 DECLARE_PER_CPU(struct cpu_usage, cpu_usage_array);

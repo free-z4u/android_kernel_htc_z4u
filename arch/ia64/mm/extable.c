@@ -88,18 +88,18 @@ search_extable (const struct exception_table_entry *first,
 	unsigned long mid_ip;
 	long diff;
 
-        while (first <= last) {
+	while (first <= last) {
 		mid = &first[(last - first)/2];
 		mid_ip = (u64) &mid->addr + mid->addr;
 		diff = mid_ip - ip;
-                if (diff == 0)
-                        return mid;
-                else if (diff < 0)
-                        first = mid + 1;
-                else
-                        last = mid - 1;
-        }
-        return NULL;
+		if (diff == 0)
+			return mid;
+		else if (diff < 0)
+			first = mid + 1;
+		else
+			last = mid - 1;
+	}
+	return NULL;
 }
 
 void

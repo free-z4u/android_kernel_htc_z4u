@@ -518,7 +518,7 @@ static int input_open(struct input_dev *dev)
 		yld->copy.b[i] = ~yld->master.b[i];
 	yld->key_code = -1;	/* no keys pressed */
 
-        yealink_set_ringtone(yld, default_ringtone, sizeof(default_ringtone));
+	yealink_set_ringtone(yld, default_ringtone, sizeof(default_ringtone));
 
 	/* issue INIT */
 	memset(yld->ctl_data, 0, sizeof(*(yld->ctl_data)));
@@ -825,7 +825,7 @@ static int usb_cleanup(struct yealink_dev *yld, int err)
 	if (yld == NULL)
 		return err;
 
-        if (yld->idev) {
+	if (yld->idev) {
 		if (err)
 			input_free_device(yld->idev);
 		else
@@ -898,11 +898,11 @@ static int usb_probe(struct usb_interface *intf, const struct usb_device_id *id)
 
 	/* allocate urb structures */
 	yld->urb_irq = usb_alloc_urb(0, GFP_KERNEL);
-        if (yld->urb_irq == NULL)
+	if (yld->urb_irq == NULL)
 		return usb_cleanup(yld, -ENOMEM);
 
 	yld->urb_ctl = usb_alloc_urb(0, GFP_KERNEL);
-        if (yld->urb_ctl == NULL)
+	if (yld->urb_ctl == NULL)
 		return usb_cleanup(yld, -ENOMEM);
 
 	/* get a handle to the interrupt data pipe */

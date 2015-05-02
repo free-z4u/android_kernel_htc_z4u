@@ -65,7 +65,7 @@ struct ds1374 {
 static struct i2c_driver ds1374_driver;
 
 static int ds1374_read_rtc(struct i2c_client *client, u32 *time,
-                           int reg, int nbytes)
+			   int reg, int nbytes)
 {
 	u8 buf[4];
 	int ret;
@@ -90,7 +90,7 @@ static int ds1374_read_rtc(struct i2c_client *client, u32 *time,
 }
 
 static int ds1374_write_rtc(struct i2c_client *client, u32 time,
-                            int reg, int nbytes)
+			    int reg, int nbytes)
 {
 	u8 buf[4];
 	int i;

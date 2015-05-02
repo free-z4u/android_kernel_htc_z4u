@@ -36,7 +36,7 @@ extern struct tt_entry *sparc_ttable;
  * You have been warned.
  */
 #define SPARC_BRANCH(dest_addr, inst_addr) \
-          (0x10800000 | (((dest_addr-inst_addr)>>2)&0x3fffff))
+	  (0x10800000 | (((dest_addr-inst_addr)>>2)&0x3fffff))
 
 #define SPARC_RD_PSR_L0  (0xa1480000)
 #define SPARC_RD_WIM_L3  (0xa7500000)
@@ -111,7 +111,7 @@ extern struct tt_entry *sparc_ttable;
 /* Handy Macros */
 /* Is this a trap we never expect to get? */
 #define BAD_TRAP_P(level) \
-        ((level > SP_TRAP_WDOG && level < SP_TRAP_IRQ1) || \
+	((level > SP_TRAP_WDOG && level < SP_TRAP_IRQ1) || \
 	 (level > SP_TRAP_IACC && level < SP_TRAP_CPDIS) || \
 	 (level > SP_TRAP_BADFL && level < SP_TRAP_CPEXP) || \
 	 (level > SP_TRAP_DMM && level < SP_TRAP_IMM) || \

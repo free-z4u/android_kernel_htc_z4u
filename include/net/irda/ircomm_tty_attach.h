@@ -34,12 +34,12 @@
 #include <net/irda/ircomm_tty.h>
 
 typedef enum {
-        IRCOMM_TTY_IDLE,
+	IRCOMM_TTY_IDLE,
 	IRCOMM_TTY_SEARCH,
-        IRCOMM_TTY_QUERY_PARAMETERS,
+	IRCOMM_TTY_QUERY_PARAMETERS,
 	IRCOMM_TTY_QUERY_LSAP_SEL,
 	IRCOMM_TTY_SETUP,
-        IRCOMM_TTY_READY,
+	IRCOMM_TTY_READY,
 } IRCOMM_TTY_STATE;
 
 /* IrCOMM TTY Events */
@@ -61,9 +61,9 @@ typedef enum {
 
 /* Used for passing information through the state-machine */
 struct ircomm_tty_info {
-        __u32     saddr;               /* Source device address */
-        __u32     daddr;               /* Destination device address */
-        __u8      dlsap_sel;
+	__u32     saddr;               /* Source device address */
+	__u32     daddr;               /* Destination device address */
+	__u8      dlsap_sel;
 };
 
 extern const char *const ircomm_state[];

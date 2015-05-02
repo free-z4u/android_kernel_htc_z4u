@@ -210,7 +210,7 @@ out:
  *  @phy_data: Pointer to read data from PHY register
  **/
 s32 ixgbe_read_phy_reg_generic(struct ixgbe_hw *hw, u32 reg_addr,
-                               u32 device_type, u16 *phy_data)
+			       u32 device_type, u16 *phy_data)
 {
 	u32 command;
 	u32 i;
@@ -309,7 +309,7 @@ s32 ixgbe_read_phy_reg_generic(struct ixgbe_hw *hw, u32 reg_addr,
  *  @phy_data: Data to write to the PHY register
  **/
 s32 ixgbe_write_phy_reg_generic(struct ixgbe_hw *hw, u32 reg_addr,
-                                u32 device_type, u16 phy_data)
+				u32 device_type, u16 phy_data)
 {
 	u32 command;
 	u32 i;
@@ -497,9 +497,9 @@ s32 ixgbe_setup_phy_link_generic(struct ixgbe_hw *hw)
  *  @autoneg: true if autonegotiation enabled
  **/
 s32 ixgbe_setup_phy_link_speed_generic(struct ixgbe_hw *hw,
-                                       ixgbe_link_speed speed,
-                                       bool autoneg,
-                                       bool autoneg_wait_to_complete)
+				       ixgbe_link_speed speed,
+				       bool autoneg,
+				       bool autoneg_wait_to_complete)
 {
 
 	/*
@@ -532,8 +532,8 @@ s32 ixgbe_setup_phy_link_speed_generic(struct ixgbe_hw *hw,
  * Determines the link capabilities by reading the AUTOC register.
  */
 s32 ixgbe_get_copper_link_capabilities_generic(struct ixgbe_hw *hw,
-                                               ixgbe_link_speed *speed,
-                                               bool *autoneg)
+					       ixgbe_link_speed *speed,
+					       bool *autoneg)
 {
 	s32 status = IXGBE_ERR_LINK_SETUP;
 	u16 speed_ability;
@@ -1107,8 +1107,8 @@ err_read_i2c_eeprom:
  *  so it returns the offsets to the phy init sequence block.
  **/
 s32 ixgbe_get_sfp_init_sequence_offsets(struct ixgbe_hw *hw,
-                                        u16 *list_offset,
-                                        u16 *data_offset)
+					u16 *list_offset,
+					u16 *data_offset)
 {
 	u16 sfp_id;
 	u16 sfp_type = hw->phy.sfp_type;
@@ -1183,7 +1183,7 @@ s32 ixgbe_get_sfp_init_sequence_offsets(struct ixgbe_hw *hw,
  *  Performs byte read operation to SFP module's EEPROM over I2C interface.
  **/
 s32 ixgbe_read_i2c_eeprom_generic(struct ixgbe_hw *hw, u8 byte_offset,
-                                  u8 *eeprom_data)
+				  u8 *eeprom_data)
 {
 	return hw->phy.ops.read_i2c_byte(hw, byte_offset,
 	                                 IXGBE_I2C_EEPROM_DEV_ADDR,
@@ -1199,7 +1199,7 @@ s32 ixgbe_read_i2c_eeprom_generic(struct ixgbe_hw *hw, u8 byte_offset,
  *  Performs byte write operation to SFP module's EEPROM over I2C interface.
  **/
 s32 ixgbe_write_i2c_eeprom_generic(struct ixgbe_hw *hw, u8 byte_offset,
-                                   u8 eeprom_data)
+				   u8 eeprom_data)
 {
 	return hw->phy.ops.write_i2c_byte(hw, byte_offset,
 	                                  IXGBE_I2C_EEPROM_DEV_ADDR,
@@ -1216,7 +1216,7 @@ s32 ixgbe_write_i2c_eeprom_generic(struct ixgbe_hw *hw, u8 byte_offset,
  *  a specified device address.
  **/
 s32 ixgbe_read_i2c_byte_generic(struct ixgbe_hw *hw, u8 byte_offset,
-                                u8 dev_addr, u8 *data)
+				u8 dev_addr, u8 *data)
 {
 	s32 status = 0;
 	u32 max_retry = 10;
@@ -1305,7 +1305,7 @@ read_byte_out:
  *  a specified device address.
  **/
 s32 ixgbe_write_i2c_byte_generic(struct ixgbe_hw *hw, u8 byte_offset,
-                                 u8 dev_addr, u8 data)
+				 u8 dev_addr, u8 data)
 {
 	s32 status = 0;
 	u32 max_retry = 1;

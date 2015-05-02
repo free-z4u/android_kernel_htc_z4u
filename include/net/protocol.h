@@ -75,7 +75,7 @@ struct inet6_protocol {
 struct inet_protosw {
 	struct list_head list;
 
-        /* These two fields form the lookup key.  */
+	/* These two fields form the lookup key.  */
 	unsigned short	 type;	   /* This is the 2nd argument to socket(2). */
 	unsigned short	 protocol; /* This is the L4 protocol number.  */
 

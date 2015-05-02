@@ -244,15 +244,15 @@ cpm_free_handler(int vec)
 uint
 m360_cpm_dpalloc(uint size)
 {
-        uint    retloc;
+	uint    retloc;
 
-        if ((dp_alloc_base + size) >= dp_alloc_top)
-                return(CPM_DP_NOSPACE);
+	if ((dp_alloc_base + size) >= dp_alloc_top)
+		return(CPM_DP_NOSPACE);
 
-        retloc = dp_alloc_base;
-        dp_alloc_base += size;
+	retloc = dp_alloc_base;
+	dp_alloc_base += size;
 
-        return(retloc);
+	return(retloc);
 }
 
 

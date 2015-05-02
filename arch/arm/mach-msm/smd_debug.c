@@ -973,8 +973,8 @@ static struct mem_sleep_stat_attr mem_sleep_stat_attrs[] = {
 };
 
 static ssize_t show_mem_sleep_stat_attr(struct device *dev,
-                      struct mem_sleep_stat_attr *attr,
-                      char *buf)
+		      struct mem_sleep_stat_attr *attr,
+		      char *buf)
 {
 	int i = 0;
 	const ptrdiff_t off = attr - mem_sleep_stat_attrs;

@@ -247,8 +247,8 @@ static void __init dsmg600_init(void)
 	/* The UART is required on the DSM-G600 (Redboot cannot use the
 	 * NIC) -- do it here so that it does *not* get removed if
 	 * platform_add_devices fails!
-         */
-        (void)platform_device_register(&dsmg600_uart);
+	 */
+	(void)platform_device_register(&dsmg600_uart);
 
 	platform_add_devices(dsmg600_devices, ARRAY_SIZE(dsmg600_devices));
 

@@ -24,6 +24,6 @@ extern int ia64_esi_call(efi_guid_t, struct ia64_sal_retval *,
 			 enum esi_proc_type,
 			 u64, u64, u64, u64, u64, u64, u64, u64);
 extern int ia64_esi_call_phys(efi_guid_t, struct ia64_sal_retval *, u64, u64,
-                              u64, u64, u64, u64, u64, u64);
+			      u64, u64, u64, u64, u64, u64);
 
 #endif /* esi_h */

@@ -193,7 +193,7 @@ void __cpuinit set_firmware_width(void) {
 void pdc_emergency_unlock(void)
 {
  	/* Spinlock DEBUG code freaks out if we unconditionally unlock */
-        if (spin_is_locked(&pdc_lock))
+	if (spin_is_locked(&pdc_lock))
 		spin_unlock(&pdc_lock);
 }
 
@@ -209,14 +209,14 @@ void pdc_emergency_unlock(void)
  */
 int pdc_add_valid(unsigned long address)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_ADD_VALID, PDC_ADD_VALID_VERIFY, address);
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_ADD_VALID, PDC_ADD_VALID_VERIFY, address);
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 EXPORT_SYMBOL(pdc_add_valid);
 
@@ -230,19 +230,19 @@ EXPORT_SYMBOL(pdc_add_valid);
  */
 int __init pdc_chassis_info(struct pdc_chassis_info *chassis_info, void *led_info, unsigned long len)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        memcpy(&pdc_result, chassis_info, sizeof(*chassis_info));
-        memcpy(&pdc_result2, led_info, len);
-        retval = mem_pdc_call(PDC_CHASSIS, PDC_RETURN_CHASSIS_INFO,
-                              __pa(pdc_result), __pa(pdc_result2), len);
-        memcpy(chassis_info, pdc_result, sizeof(*chassis_info));
-        memcpy(led_info, pdc_result2, len);
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	memcpy(&pdc_result, chassis_info, sizeof(*chassis_info));
+	memcpy(&pdc_result2, led_info, len);
+	retval = mem_pdc_call(PDC_CHASSIS, PDC_RETURN_CHASSIS_INFO,
+			      __pa(pdc_result), __pa(pdc_result2), len);
+	memcpy(chassis_info, pdc_result, sizeof(*chassis_info));
+	memcpy(led_info, pdc_result2, len);
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /**
@@ -446,22 +446,22 @@ int pdc_model_info(struct pdc_model *model)
  */
 int pdc_model_sysmodel(char *name)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_SYSMODEL, __pa(pdc_result),
-                              OS_ID_HPUX, __pa(name));
-        convert_to_wide(pdc_result);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_SYSMODEL, __pa(pdc_result),
+			      OS_ID_HPUX, __pa(name));
+	convert_to_wide(pdc_result);
 
-        if (retval == PDC_OK) {
-                name[pdc_result[0]] = '\0'; /* add trailing '\0' */
-        } else {
-                name[0] = 0;
-        }
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	if (retval == PDC_OK) {
+		name[pdc_result[0]] = '\0'; /* add trailing '\0' */
+	} else {
+		name[0] = 0;
+	}
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /**
@@ -476,16 +476,16 @@ int pdc_model_sysmodel(char *name)
  */
 int pdc_model_versions(unsigned long *versions, int id)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_VERSIONS, __pa(pdc_result), id);
-        convert_to_wide(pdc_result);
-        *versions = pdc_result[0];
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_VERSIONS, __pa(pdc_result), id);
+	convert_to_wide(pdc_result);
+	*versions = pdc_result[0];
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /**
@@ -497,17 +497,17 @@ int pdc_model_versions(unsigned long *versions, int id)
  */
 int pdc_model_cpuid(unsigned long *cpu_id)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        pdc_result[0] = 0; /* preset zero (call may not be implemented!) */
-        retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_CPU_ID, __pa(pdc_result), 0);
-        convert_to_wide(pdc_result);
-        *cpu_id = pdc_result[0];
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	pdc_result[0] = 0; /* preset zero (call may not be implemented!) */
+	retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_CPU_ID, __pa(pdc_result), 0);
+	convert_to_wide(pdc_result);
+	*cpu_id = pdc_result[0];
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /**
@@ -519,21 +519,21 @@ int pdc_model_cpuid(unsigned long *cpu_id)
  */
 int pdc_model_capabilities(unsigned long *capabilities)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        pdc_result[0] = 0; /* preset zero (call may not be implemented!) */
-        retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_CAPABILITIES, __pa(pdc_result), 0);
-        convert_to_wide(pdc_result);
-        if (retval == PDC_OK) {
-                *capabilities = pdc_result[0];
-        } else {
-                *capabilities = PDC_MODEL_OS32;
-        }
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	pdc_result[0] = 0; /* preset zero (call may not be implemented!) */
+	retval = mem_pdc_call(PDC_MODEL, PDC_MODEL_CAPABILITIES, __pa(pdc_result), 0);
+	convert_to_wide(pdc_result);
+	if (retval == PDC_OK) {
+		*capabilities = pdc_result[0];
+	} else {
+		*capabilities = PDC_MODEL_OS32;
+	}
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /**
@@ -544,16 +544,16 @@ int pdc_model_capabilities(unsigned long *capabilities)
  */
 int pdc_cache_info(struct pdc_cache_info *cache_info)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_CACHE, PDC_CACHE_INFO, __pa(pdc_result), 0);
-        convert_to_wide(pdc_result);
-        memcpy(cache_info, pdc_result, sizeof(*cache_info));
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_CACHE, PDC_CACHE_INFO, __pa(pdc_result), 0);
+	convert_to_wide(pdc_result);
+	memcpy(cache_info, pdc_result, sizeof(*cache_info));
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /**
@@ -586,18 +586,18 @@ int pdc_spaceid_bits(unsigned long *space_bits)
  */
 int pdc_btlb_info(struct pdc_btlb_info *btlb)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_BLOCK_TLB, PDC_BTLB_INFO, __pa(pdc_result), 0);
-        memcpy(btlb, pdc_result, sizeof(*btlb));
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_BLOCK_TLB, PDC_BTLB_INFO, __pa(pdc_result), 0);
+	memcpy(btlb, pdc_result, sizeof(*btlb));
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        if(retval < 0) {
-                btlb->max_size = 0;
-        }
-        return retval;
+	if(retval < 0) {
+		btlb->max_size = 0;
+	}
+	return retval;
 }
 
 /**
@@ -615,17 +615,17 @@ int pdc_btlb_info(struct pdc_btlb_info *btlb)
 int pdc_mem_map_hpa(struct pdc_memory_map *address,
 		struct pdc_module_path *mod_path)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        memcpy(pdc_result2, mod_path, sizeof(*mod_path));
-        retval = mem_pdc_call(PDC_MEM_MAP, PDC_MEM_MAP_HPA, __pa(pdc_result),
+	spin_lock_irqsave(&pdc_lock, flags);
+	memcpy(pdc_result2, mod_path, sizeof(*mod_path));
+	retval = mem_pdc_call(PDC_MEM_MAP, PDC_MEM_MAP_HPA, __pa(pdc_result),
 				__pa(pdc_result2));
-        memcpy(address, pdc_result, sizeof(*address));
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	memcpy(address, pdc_result, sizeof(*address));
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 #endif	/* !CONFIG_PA20 */
 
@@ -673,7 +673,7 @@ int pdc_stable_read(unsigned long staddr, void *memaddr, unsigned long count)
 
        spin_lock_irqsave(&pdc_lock, flags);
        retval = mem_pdc_call(PDC_STABLE, PDC_STABLE_READ, staddr,
-               __pa(pdc_result), count);
+	       __pa(pdc_result), count);
        convert_to_wide(pdc_result);
        memcpy(memaddr, pdc_result, count);
        spin_unlock_irqrestore(&pdc_lock, flags);
@@ -701,7 +701,7 @@ int pdc_stable_write(unsigned long staddr, void *memaddr, unsigned long count)
        memcpy(pdc_result, memaddr, count);
        convert_to_wide(pdc_result);
        retval = mem_pdc_call(PDC_STABLE, PDC_STABLE_WRITE, staddr,
-               __pa(pdc_result), count);
+	       __pa(pdc_result), count);
        spin_unlock_irqrestore(&pdc_lock, flags);
 
        return retval;
@@ -942,16 +942,16 @@ void pdc_pci_config_write(void *hpa, unsigned long cfg_addr, unsigned int val)
  */
 int pdc_tod_read(struct pdc_tod *tod)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_TOD, PDC_TOD_READ, __pa(pdc_result), 0);
-        convert_to_wide(pdc_result);
-        memcpy(tod, pdc_result, sizeof(*tod));
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_TOD, PDC_TOD_READ, __pa(pdc_result), 0);
+	convert_to_wide(pdc_result);
+	memcpy(tod, pdc_result, sizeof(*tod));
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 EXPORT_SYMBOL(pdc_tod_read);
 
@@ -964,14 +964,14 @@ EXPORT_SYMBOL(pdc_tod_read);
  */
 int pdc_tod_set(unsigned long sec, unsigned long usec)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_TOD, PDC_TOD_WRITE, sec, usec);
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_TOD, PDC_TOD_WRITE, sec, usec);
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 EXPORT_SYMBOL(pdc_tod_set);
 
@@ -999,15 +999,15 @@ int pdc_mem_mem_table(struct pdc_memory_table_raddr *r_addr,
  */
 int pdc_do_firm_test_reset(unsigned long ftc_bitmap)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_BROADCAST_RESET, PDC_DO_FIRM_TEST_RESET,
-                              PDC_FIRM_TEST_MAGIC, ftc_bitmap);
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_BROADCAST_RESET, PDC_DO_FIRM_TEST_RESET,
+			      PDC_FIRM_TEST_MAGIC, ftc_bitmap);
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /*
@@ -1017,14 +1017,14 @@ int pdc_do_firm_test_reset(unsigned long ftc_bitmap)
  */
 int pdc_do_reset(void)
 {
-        int retval;
+	int retval;
 	unsigned long flags;
 
-        spin_lock_irqsave(&pdc_lock, flags);
-        retval = mem_pdc_call(PDC_BROADCAST_RESET, PDC_DO_RESET);
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	retval = mem_pdc_call(PDC_BROADCAST_RESET, PDC_DO_RESET);
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
-        return retval;
+	return retval;
 }
 
 /*
@@ -1043,8 +1043,8 @@ int __init pdc_soft_power_info(unsigned long *power_reg)
 	spin_lock_irqsave(&pdc_lock, flags);
 	retval = mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_INFO, __pa(pdc_result), 0);
 	if (retval == PDC_OK) {
-                convert_to_wide(pdc_result);
-                *power_reg = f_extend(pdc_result[0]);
+		convert_to_wide(pdc_result);
+		*power_reg = f_extend(pdc_result[0]);
 	}
 	spin_unlock_irqrestore(&pdc_lock, flags);
 
@@ -1140,12 +1140,12 @@ int pdc_iodc_print(const unsigned char *str, unsigned count)
 	}
 
 print:
-        spin_lock_irqsave(&pdc_lock, flags);
-        real32_call(PAGE0->mem_cons.iodc_io,
-                    (unsigned long)PAGE0->mem_cons.hpa, ENTRY_IO_COUT,
-                    PAGE0->mem_cons.spa, __pa(PAGE0->mem_cons.dp.layers),
-                    __pa(iodc_retbuf), 0, __pa(iodc_dbuf), i, 0);
-        spin_unlock_irqrestore(&pdc_lock, flags);
+	spin_lock_irqsave(&pdc_lock, flags);
+	real32_call(PAGE0->mem_cons.iodc_io,
+		    (unsigned long)PAGE0->mem_cons.hpa, ENTRY_IO_COUT,
+		    PAGE0->mem_cons.spa, __pa(PAGE0->mem_cons.dp.layers),
+		    __pa(iodc_retbuf), 0, __pa(iodc_dbuf), i, 0);
+	spin_unlock_irqrestore(&pdc_lock, flags);
 
 	return i;
 }
@@ -1184,17 +1184,17 @@ int pdc_iodc_getc(void)
 }
 
 int pdc_sti_call(unsigned long func, unsigned long flags,
-                 unsigned long inptr, unsigned long outputr,
-                 unsigned long glob_cfg)
+		 unsigned long inptr, unsigned long outputr,
+		 unsigned long glob_cfg)
 {
-        int retval;
+	int retval;
 	unsigned long irqflags;
 
-        spin_lock_irqsave(&pdc_lock, irqflags);
-        retval = real32_call(func, flags, inptr, outputr, glob_cfg);
-        spin_unlock_irqrestore(&pdc_lock, irqflags);
+	spin_lock_irqsave(&pdc_lock, irqflags);
+	retval = real32_call(func, flags, inptr, outputr, glob_cfg);
+	spin_unlock_irqrestore(&pdc_lock, irqflags);
 
-        return retval;
+	return retval;
 }
 EXPORT_SYMBOL(pdc_sti_call);
 

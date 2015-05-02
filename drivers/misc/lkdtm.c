@@ -272,7 +272,7 @@ static int recursive_loop(int a)
 	if (!recur_count)
 		return 0;
 	else
-        	return recursive_loop(a);
+		return recursive_loop(a);
 }
 
 static void lkdtm_do_action(enum ctype which)

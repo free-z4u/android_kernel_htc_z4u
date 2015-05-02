@@ -306,12 +306,12 @@ static int pxa3xx_u2d_probe(struct platform_device *pdev)
 		goto err_put_clk;
 	}
 
-        r = request_mem_region(r->start, resource_size(r), pdev->name);
-        if (!r) {
-                dev_err(&pdev->dev, "failed to request memory resource\n");
-                err = -EBUSY;
-                goto err_put_clk;
-        }
+	r = request_mem_region(r->start, resource_size(r), pdev->name);
+	if (!r) {
+		dev_err(&pdev->dev, "failed to request memory resource\n");
+		err = -EBUSY;
+		goto err_put_clk;
+	}
 
 	u2d->mmio_base = ioremap(r->start, resource_size(r));
 	if (!u2d->mmio_base) {
@@ -377,12 +377,12 @@ static int pxa3xx_u2d_remove(struct platform_device *pdev)
 }
 
 static struct platform_driver pxa3xx_u2d_ulpi_driver = {
-        .driver		= {
-                .name   = "pxa3xx-u2d",
+	.driver		= {
+		.name   = "pxa3xx-u2d",
 		.owner	= THIS_MODULE,
-        },
-        .probe          = pxa3xx_u2d_probe,
-        .remove         = pxa3xx_u2d_remove,
+	},
+	.probe          = pxa3xx_u2d_probe,
+	.remove         = pxa3xx_u2d_remove,
 };
 
 static int pxa3xx_u2d_ulpi_init(void)

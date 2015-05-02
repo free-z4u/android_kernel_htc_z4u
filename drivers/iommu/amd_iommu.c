@@ -3638,7 +3638,7 @@ void amd_iommu_enable_device_erratum(struct pci_dev *pdev, u32 erratum)
 EXPORT_SYMBOL(amd_iommu_enable_device_erratum);
 
 int amd_iommu_device_info(struct pci_dev *pdev,
-                          struct amd_iommu_device_info *info)
+			  struct amd_iommu_device_info *info)
 {
 	int max_pasids;
 	int pos;

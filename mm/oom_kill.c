@@ -768,7 +768,7 @@ out:
 
 
 #ifdef CONFIG_DEBUG_HTC_OOM
-        wake_up_kmemeleak();
+	wake_up_kmemeleak();
 #endif
 
 

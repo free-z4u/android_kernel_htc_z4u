@@ -116,7 +116,7 @@ static int bfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 	BFS_I(inode)->i_sblock = 0;
 	BFS_I(inode)->i_eblock = 0;
 	insert_inode_hash(inode);
-        mark_inode_dirty(inode);
+	mark_inode_dirty(inode);
 	dump_imap("create", s);
 
 	err = bfs_add_entry(dir, dentry->d_name.name, dentry->d_name.len,

@@ -95,9 +95,9 @@ inline void str2eaddr(unsigned char *ea, unsigned char *str)
 
 int get_ethernet_addr(char *ethernet_addr)
 {
-        char *ethaddr_str;
+	char *ethaddr_str;
 
-        ethaddr_str = prom_getenv("ethaddr");
+	ethaddr_str = prom_getenv("ethaddr");
 	if (!ethaddr_str) {
 	        printk("ethaddr not set in boot prom\n");
 		return -1;

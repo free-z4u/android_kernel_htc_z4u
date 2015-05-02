@@ -26,8 +26,8 @@ MODULE_ALIAS("ip6t_conntrack");
 
 static bool
 conntrack_addrcmp(const union nf_inet_addr *kaddr,
-                  const union nf_inet_addr *uaddr,
-                  const union nf_inet_addr *umask, unsigned int l3proto)
+		  const union nf_inet_addr *uaddr,
+		  const union nf_inet_addr *umask, unsigned int l3proto)
 {
 	if (l3proto == NFPROTO_IPV4)
 		return ((kaddr->ip ^ uaddr->ip) & umask->ip) == 0;
@@ -40,7 +40,7 @@ conntrack_addrcmp(const union nf_inet_addr *kaddr,
 
 static inline bool
 conntrack_mt_origsrc(const struct nf_conn *ct,
-                     const struct xt_conntrack_mtinfo2 *info,
+		     const struct xt_conntrack_mtinfo2 *info,
 		     u_int8_t family)
 {
 	return conntrack_addrcmp(&ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple.src.u3,
@@ -49,7 +49,7 @@ conntrack_mt_origsrc(const struct nf_conn *ct,
 
 static inline bool
 conntrack_mt_origdst(const struct nf_conn *ct,
-                     const struct xt_conntrack_mtinfo2 *info,
+		     const struct xt_conntrack_mtinfo2 *info,
 		     u_int8_t family)
 {
 	return conntrack_addrcmp(&ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple.dst.u3,
@@ -58,7 +58,7 @@ conntrack_mt_origdst(const struct nf_conn *ct,
 
 static inline bool
 conntrack_mt_replsrc(const struct nf_conn *ct,
-                     const struct xt_conntrack_mtinfo2 *info,
+		     const struct xt_conntrack_mtinfo2 *info,
 		     u_int8_t family)
 {
 	return conntrack_addrcmp(&ct->tuplehash[IP_CT_DIR_REPLY].tuple.src.u3,
@@ -67,7 +67,7 @@ conntrack_mt_replsrc(const struct nf_conn *ct,
 
 static inline bool
 conntrack_mt_repldst(const struct nf_conn *ct,
-                     const struct xt_conntrack_mtinfo2 *info,
+		     const struct xt_conntrack_mtinfo2 *info,
 		     u_int8_t family)
 {
 	return conntrack_addrcmp(&ct->tuplehash[IP_CT_DIR_REPLY].tuple.dst.u3,
@@ -76,7 +76,7 @@ conntrack_mt_repldst(const struct nf_conn *ct,
 
 static inline bool
 ct_proto_port_check(const struct xt_conntrack_mtinfo2 *info,
-                    const struct nf_conn *ct)
+		    const struct nf_conn *ct)
 {
 	const struct nf_conntrack_tuple *tuple;
 
@@ -162,7 +162,7 @@ ct_proto_port_check_v3(const struct xt_conntrack_mtinfo3 *info,
 
 static bool
 conntrack_mt(const struct sk_buff *skb, struct xt_action_param *par,
-             u16 state_mask, u16 status_mask)
+	     u16 state_mask, u16 status_mask)
 {
 	const struct xt_conntrack_mtinfo2 *info = par->matchinfo;
 	enum ip_conntrack_info ctinfo;

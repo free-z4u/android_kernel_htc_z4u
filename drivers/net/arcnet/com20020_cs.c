@@ -68,7 +68,7 @@ static void regdump(struct net_device *dev)
 
     netdev_dbg(dev, "buffer0 dump:\n");
 	/* set up the address register */
-        count = 0;
+	count = 0;
 	outb((count >> 8) | RDDATAflag | AUTOINCflag, _ADDR_HI);
 	outb(count & 0xff, _ADDR_LO);
 

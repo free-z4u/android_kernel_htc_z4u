@@ -254,7 +254,7 @@ union IO7_IID {
 #define IO7_CONF_PHYS(pe, port)	(IO7_HOSE(pe, port) | 0xFE000000UL)
 #define IO7_IO_PHYS(pe, port)	(IO7_HOSE(pe, port) | 0xFF000000UL)
 #define IO7_CSR_PHYS(pe, port, off) \
-                                (IO7_HOSE(pe, port) | 0xFF800000UL | (off))
+				(IO7_HOSE(pe, port) | 0xFF800000UL | (off))
 #define IO7_CSRS_PHYS(pe, port)	(IO7_CSR_PHYS(pe, port, 0UL))
 #define IO7_PORT7_CSRS_PHYS(pe) (IO7_CSR_PHYS(pe, 7, 0x300000UL))
 
@@ -281,7 +281,7 @@ union IO7_IID {
  * This is needed to satisify the IO() macro used in initializing the machvec
  */
 #define MARVEL_IACK_SC 							\
-        ((unsigned long)						\
+	((unsigned long)						\
 	 (&(((io7_ioport_csrs *)IO7_CSRS_KERN(0, 0))->POx_IACK_SPECIAL)))
 
 #ifdef __KERNEL__

@@ -163,34 +163,34 @@
 #define MAC_NUM_PORTS               3
 
 #define A_MAC_CHANNEL_BASE(macnum)                  \
-            (A_MAC_BASE_0 +                         \
-             MAC_SPACING*(macnum))
+	    (A_MAC_BASE_0 +                         \
+	     MAC_SPACING*(macnum))
 
 #define A_MAC_REGISTER(macnum,reg)                  \
-            (A_MAC_BASE_0 +                         \
-             MAC_SPACING*(macnum) + (reg))
+	    (A_MAC_BASE_0 +                         \
+	     MAC_SPACING*(macnum) + (reg))
 
 
 #define R_MAC_DMA_CHANNELS		0x800 /* Relative to A_MAC_CHANNEL_BASE */
 
 #define A_MAC_DMA_CHANNEL_BASE(macnum, txrx, chan)  \
-             ((A_MAC_CHANNEL_BASE(macnum)) +        \
-             R_MAC_DMA_CHANNELS +                   \
-             (MAC_DMA_TXRX_SPACING*(txrx)) +        \
-             (MAC_DMA_CHANNEL_SPACING*(chan)))
+	     ((A_MAC_CHANNEL_BASE(macnum)) +        \
+	     R_MAC_DMA_CHANNELS +                   \
+	     (MAC_DMA_TXRX_SPACING*(txrx)) +        \
+	     (MAC_DMA_CHANNEL_SPACING*(chan)))
 
 #define R_MAC_DMA_CHANNEL_BASE(txrx, chan)		\
-             (R_MAC_DMA_CHANNELS +                   \
-             (MAC_DMA_TXRX_SPACING*(txrx)) +        \
-             (MAC_DMA_CHANNEL_SPACING*(chan)))
+	     (R_MAC_DMA_CHANNELS +                   \
+	     (MAC_DMA_TXRX_SPACING*(txrx)) +        \
+	     (MAC_DMA_CHANNEL_SPACING*(chan)))
 
 #define A_MAC_DMA_REGISTER(macnum, txrx, chan, reg)           \
-            (A_MAC_DMA_CHANNEL_BASE(macnum, txrx, chan) +    \
-            (reg))
+	    (A_MAC_DMA_CHANNEL_BASE(macnum, txrx, chan) +    \
+	    (reg))
 
 #define R_MAC_DMA_REGISTER(txrx, chan, reg)           \
-            (R_MAC_DMA_CHANNEL_BASE(txrx, chan) +    \
-            (reg))
+	    (R_MAC_DMA_CHANNEL_BASE(txrx, chan) +    \
+	    (reg))
 
 /*
  * DMA channel registers, relative to A_MAC_DMA_CHANNEL_BASE
@@ -400,24 +400,24 @@
 #define SER_NUM_PORTS               2
 
 #define A_SER_CHANNEL_BASE(sernum)                  \
-            (A_SER_BASE_0 +                         \
-             SER_SPACING*(sernum))
+	    (A_SER_BASE_0 +                         \
+	     SER_SPACING*(sernum))
 
 #define A_SER_REGISTER(sernum,reg)                  \
-            (A_SER_BASE_0 +                         \
-             SER_SPACING*(sernum) + (reg))
+	    (A_SER_BASE_0 +                         \
+	     SER_SPACING*(sernum) + (reg))
 
 
 #define R_SER_DMA_CHANNELS		0   /* Relative to A_SER_BASE_x */
 
 #define A_SER_DMA_CHANNEL_BASE(sernum,txrx)    \
-             ((A_SER_CHANNEL_BASE(sernum)) +        \
-             R_SER_DMA_CHANNELS +                   \
-             (SER_DMA_TXRX_SPACING*(txrx)))
+	     ((A_SER_CHANNEL_BASE(sernum)) +        \
+	     R_SER_DMA_CHANNELS +                   \
+	     (SER_DMA_TXRX_SPACING*(txrx)))
 
 #define A_SER_DMA_REGISTER(sernum, txrx, reg)           \
-            (A_SER_DMA_CHANNEL_BASE(sernum, txrx) +    \
-            (reg))
+	    (A_SER_DMA_CHANNEL_BASE(sernum, txrx) +    \
+	    (reg))
 
 
 /*

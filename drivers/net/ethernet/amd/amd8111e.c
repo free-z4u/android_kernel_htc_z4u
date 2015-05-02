@@ -344,7 +344,7 @@ static int amd8111e_init_ring(struct net_device *dev)
 		}
 		skb_reserve(lp->rx_skbuff[i],2);
 	}
-        /* Initilaizing receive descriptors */
+	/* Initilaizing receive descriptors */
 	for (i = 0; i < NUM_RX_BUFFERS; i++) {
 		lp->rx_dma_addr[i] = pci_map_single(lp->pci_dev,
 			lp->rx_skbuff[i]->data,lp->rx_buff_len-2, PCI_DMA_FROMDEVICE);
@@ -527,7 +527,7 @@ static void amd8111e_init_hw_default( struct amd8111e_priv* lp)
 	void __iomem *mmio = lp->mmio;
 
 
-        /* stop the chip */
+	/* stop the chip */
 	writel(RUN, mmio + CMD0);
 
 	/* AUTOPOLL0 Register *//*TBD default value is 8100 in FPS */
@@ -1579,7 +1579,7 @@ static int amd8111e_change_mtu(struct net_device *dev, int new_mtu)
 
 	spin_lock_irq(&lp->lock);
 
-        /* stop the chip */
+	/* stop the chip */
 	writel(RUN, lp->mmio + CMD0);
 
 	dev->mtu = new_mtu;

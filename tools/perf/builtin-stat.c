@@ -13,18 +13,18 @@
   Performance counter stats for './hackbench 10':
 
        1708.761321 task-clock                #   11.037 CPUs utilized
-            41,190 context-switches          #    0.024 M/sec
-             6,735 CPU-migrations            #    0.004 M/sec
-            17,318 page-faults               #    0.010 M/sec
+	    41,190 context-switches          #    0.024 M/sec
+	     6,735 CPU-migrations            #    0.004 M/sec
+	    17,318 page-faults               #    0.010 M/sec
      5,205,202,243 cycles                    #    3.046 GHz
      3,856,436,920 stalled-cycles-frontend   #   74.09% frontend cycles idle
      1,600,790,871 stalled-cycles-backend    #   30.75% backend  cycles idle
      2,603,501,247 instructions              #    0.50  insns per cycle
-                                             #    1.48  stalled cycles per insn
+					     #    1.48  stalled cycles per insn
        484,357,498 branches                  #  283.455 M/sec
-         6,388,934 branch-misses             #    1.32% of all branches
+	 6,388,934 branch-misses             #    1.32% of all branches
 
-        0.154822978  seconds time elapsed
+	0.154822978  seconds time elapsed
 
  *
  * Copyright (C) 2008-2011, Red Hat Inc, Ingo Molnar <mingo@redhat.com>

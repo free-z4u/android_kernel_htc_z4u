@@ -385,8 +385,8 @@ int journal_revoke(handle_t *handle, unsigned int blocknr,
 #endif
 
 	/* We really ought not ever to revoke twice in a row without
-           first having the revoke cancelled: it's illegal to free a
-           block twice without allocating it in between! */
+	   first having the revoke cancelled: it's illegal to free a
+	   block twice without allocating it in between! */
 	if (bh) {
 		if (!J_EXPECT_BH(bh, !buffer_revoked(bh),
 				 "inconsistent data on disk")) {
@@ -587,9 +587,9 @@ static void write_one_revoke_record(journal_t *journal,
 	journal_header_t *header;
 
 	/* If we are already aborting, this all becomes a noop.  We
-           still need to go round the loop in
-           journal_write_revoke_records in order to free all of the
-           revoke records: only the IO to the journal is omitted. */
+	   still need to go round the loop in
+	   journal_write_revoke_records in order to free all of the
+	   revoke records: only the IO to the journal is omitted. */
 	if (is_journal_aborted(journal))
 		return;
 

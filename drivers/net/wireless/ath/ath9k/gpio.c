@@ -369,7 +369,7 @@ void ath9k_stop_btcoex(struct ath_softc *sc)
 
 void ath9k_deinit_btcoex(struct ath_softc *sc)
 {
-        if ((sc->btcoex.no_stomp_timer) &&
+	if ((sc->btcoex.no_stomp_timer) &&
 	    ath9k_hw_get_btcoex_scheme(sc->sc_ah) == ATH_BTCOEX_CFG_3WIRE)
 		ath_gen_timer_free(sc->sc_ah, sc->btcoex.no_stomp_timer);
 

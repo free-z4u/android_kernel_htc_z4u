@@ -752,7 +752,7 @@ static void chg_stat_work_func(struct work_struct *work)
 {
 #ifdef CONFIG_CPLD
 
-        if (!chg_stat_enabled || !cpld_gpio_read(CPLD_EXT_GPIO_CHG_STAT_INPUT_LEVEL))
+	if (!chg_stat_enabled || !cpld_gpio_read(CPLD_EXT_GPIO_CHG_STAT_INPUT_LEVEL))
 		return;
 #endif
 

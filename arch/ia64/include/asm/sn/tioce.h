@@ -233,8 +233,8 @@ typedef volatile struct tioce {
 	u64	ce_pad_004078[499];	    /* 0x004078 -- 0x005008 */
 
 	/*
-         * CXM: Coretalk Xmit Module Registers
-         */
+	 * CXM: Coretalk Xmit Module Registers
+	 */
 	u64	ce_cxm_dyn_credit_status;		/* 0x005010 */
 	u64	ce_cxm_last_credit_status;		/* 0x005018 */
 	u64	ce_cxm_credit_limit;			/* 0x005020 */
@@ -243,7 +243,7 @@ typedef volatile struct tioce {
 	u64	ce_pad_005038[3];	    /* 0x005038 -- 0x005048 */
 	u64	ce_cxm_debug_mux;			/* 0x005050 */
 
-        u64        ce_pad_005058[501];         /* 0x005058 -- 0x005FF8 */
+	u64        ce_pad_005058[501];         /* 0x005058 -- 0x005FF8 */
 
 	/*
 	 * DTL: Downstream Transaction Layer Regs (Link#1 and Link#2)
@@ -277,7 +277,7 @@ typedef volatile struct tioce {
 
 	/*
 	 * URE: Upstream Request Engine
-         */
+	 */
 	u64	ce_ure_dyn_credit_status;		/* 0x00B010 */
 	u64	ce_ure_last_credit_status;		/* 0x00B018 */
 	u64	ce_ure_credit_limit;			/* 0x00B020 */
@@ -403,7 +403,7 @@ typedef volatile struct tioce {
 
 	/*
 	 * DRE: Down Stream Request Engine
-         */
+	 */
 	u64	ce_dre_dyn_credit_status1;		/* 0x040010 */
 	u64	ce_dre_dyn_credit_status2;		/* 0x040018 */
 	u64	ce_dre_last_credit_status1;		/* 0x040020 */

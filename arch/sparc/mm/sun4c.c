@@ -665,16 +665,16 @@ static void remove_lru(struct sun4c_mmu_entry *entry)
 
 static void free_user_entry(int ctx, struct sun4c_mmu_entry *entry)
 {
-        remove_ring(sun4c_context_ring+ctx, entry);
+	remove_ring(sun4c_context_ring+ctx, entry);
 	remove_lru(entry);
-        add_ring(&sun4c_ufree_ring, entry);
+	add_ring(&sun4c_ufree_ring, entry);
 }
 
 static void free_kernel_entry(struct sun4c_mmu_entry *entry,
 			      struct sun4c_mmu_ring *ring)
 {
-        remove_ring(ring, entry);
-        add_ring(&sun4c_kfree_ring, entry);
+	remove_ring(ring, entry);
+	add_ring(&sun4c_kfree_ring, entry);
 }
 
 static void __init sun4c_init_fill_kernel_ring(int howmany)
@@ -838,7 +838,7 @@ void sun4c_grow_kernel_ring(void)
 
 	if (sun4c_ufree_ring.num_entries) {
 		entry = sun4c_ufree_ring.ringhd.next;
-        	remove_ring(&sun4c_ufree_ring, entry);
+		remove_ring(&sun4c_ufree_ring, entry);
 		add_ring(&sun4c_kfree_ring, entry);
 		sun4c_user_taken_entries++;
 	}
@@ -869,9 +869,9 @@ static int sun4c_lowbucket_avail;
 #define BUCKET_NUM(addr) ((((addr) - SUN4C_LOCK_VADDR) >> BUCKET_SHIFT))
 #define BUCKET_ADDR(num) (((num) << BUCKET_SHIFT) + SUN4C_LOCK_VADDR)
 #define BUCKET_PTE(page)       \
-        ((((page) - PAGE_OFFSET) >> PAGE_SHIFT) | pgprot_val(SUN4C_PAGE_KERNEL))
+	((((page) - PAGE_OFFSET) >> PAGE_SHIFT) | pgprot_val(SUN4C_PAGE_KERNEL))
 #define BUCKET_PTE_PAGE(pte)   \
-        (PAGE_OFFSET + (((pte) & SUN4C_PFN_MASK) << PAGE_SHIFT))
+	(PAGE_OFFSET + (((pte) & SUN4C_PFN_MASK) << PAGE_SHIFT))
 
 static void get_locked_segment(unsigned long addr)
 {

@@ -760,8 +760,8 @@ int agpioc_acquire_wrap(struct agp_file_private *priv)
 	if (!agp_bridge)
 		return -ENODEV;
 
-        if (atomic_read(&agp_bridge->agp_in_use))
-                return -EBUSY;
+	if (atomic_read(&agp_bridge->agp_in_use))
+		return -EBUSY;
 
 	atomic_inc(&agp_bridge->agp_in_use);
 

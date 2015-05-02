@@ -106,7 +106,7 @@ static void ixdp2x00_irq_unmask(struct irq_data *d)
 
 static void ixdp2x00_irq_handler(unsigned int irq, struct irq_desc *desc)
 {
-        volatile u32 ex_interrupt = 0;
+	volatile u32 ex_interrupt = 0;
 	static struct slowport_cfg old_cfg;
 	int i;
 
@@ -116,7 +116,7 @@ static void ixdp2x00_irq_handler(unsigned int irq, struct irq_desc *desc)
 	if (machine_is_ixdp2400())
 		ixp2000_acquire_slowport(&slowport_cpld_cfg, &old_cfg);
 #endif
-        ex_interrupt = *board_irq_stat & 0xff;
+	ex_interrupt = *board_irq_stat & 0xff;
 	if (machine_is_ixdp2400())
 		ixp2000_release_slowport(&old_cfg);
 

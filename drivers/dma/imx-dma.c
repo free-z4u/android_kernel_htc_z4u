@@ -1104,7 +1104,7 @@ static int __exit imxdma_remove(struct platform_device *pdev)
 	struct imxdma_engine *imxdma = platform_get_drvdata(pdev);
 	int i;
 
-        dma_async_device_unregister(&imxdma->dma_device);
+	dma_async_device_unregister(&imxdma->dma_device);
 
 	if (cpu_is_mx21() || cpu_is_mx27()) {
 		for (i = 0; i < IMX_DMA_CHANNELS; i++)
@@ -1114,9 +1114,9 @@ static int __exit imxdma_remove(struct platform_device *pdev)
 		free_irq(MX1_DMA_ERR, NULL);
 	}
 
-        kfree(imxdma);
+	kfree(imxdma);
 
-        return 0;
+	return 0;
 }
 
 static struct platform_driver imxdma_driver = {

@@ -406,7 +406,7 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 
 
 static ssize_t mwave_read(struct file *file, char __user *buf, size_t count,
-                          loff_t * ppos)
+			  loff_t * ppos)
 {
 	PRINTK_5(TRACE_MWAVE,
 		"mwavedd::mwave_read entry file %p, buf %p, count %zx ppos %p\n",
@@ -417,7 +417,7 @@ static ssize_t mwave_read(struct file *file, char __user *buf, size_t count,
 
 
 static ssize_t mwave_write(struct file *file, const char __user *buf,
-                           size_t count, loff_t * ppos)
+			   size_t count, loff_t * ppos)
 {
 	PRINTK_5(TRACE_MWAVE,
 		"mwavedd::mwave_write entry file %p, buf %p,"
@@ -499,7 +499,7 @@ static ssize_t mwave_show_##attr_name(struct device *dev, struct device_attribut
 {									\
 	DSP_3780I_CONFIG_SETTINGS *pSettings =				\
 		&mwave_s_mdd.rBDData.rDspSettings;			\
-        return sprintf(buf, format_string, pSettings->field);		\
+	return sprintf(buf, format_string, pSettings->field);		\
 }
 
 /* All of our attributes are read attributes. */

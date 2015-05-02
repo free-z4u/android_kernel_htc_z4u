@@ -129,31 +129,31 @@
 
 static void ricoh_zoom_video(struct pcmcia_socket *sock, int onoff)
 {
-        u8 reg;
+	u8 reg;
 	struct yenta_socket *socket = container_of(sock, struct yenta_socket, socket);
 
-        reg = config_readb(socket, RL5C4XX_MISC_CONTROL);
-        if (onoff)
-                /* Zoom zoom, we will all go together, zoom zoom, zoom zoom */
-                reg |=  RL5C4XX_ZV_ENABLE;
-        else
-                reg &= ~RL5C4XX_ZV_ENABLE;
+	reg = config_readb(socket, RL5C4XX_MISC_CONTROL);
+	if (onoff)
+		/* Zoom zoom, we will all go together, zoom zoom, zoom zoom */
+		reg |=  RL5C4XX_ZV_ENABLE;
+	else
+		reg &= ~RL5C4XX_ZV_ENABLE;
 
-        config_writeb(socket, RL5C4XX_MISC_CONTROL, reg);
+	config_writeb(socket, RL5C4XX_MISC_CONTROL, reg);
 }
 
 static void ricoh_set_zv(struct yenta_socket *socket)
 {
-        if(socket->dev->vendor == PCI_VENDOR_ID_RICOH)
-        {
-                switch(socket->dev->device)
-                {
-                        /* There may be more .. */
+	if(socket->dev->vendor == PCI_VENDOR_ID_RICOH)
+	{
+		switch(socket->dev->device)
+		{
+			/* There may be more .. */
 		case  PCI_DEVICE_ID_RICOH_RL5C478:
 			socket->socket.zoom_video = ricoh_zoom_video;
 			break;
-                }
-        }
+		}
+	}
 }
 
 static void ricoh_save_state(struct yenta_socket *socket)

@@ -937,7 +937,7 @@ static int rfc4106_set_key(struct crypto_aead *parent, const u8 *key,
 	struct aesni_rfc4106_gcm_ctx *ctx = aesni_rfc4106_gcm_ctx_get(parent);
 	struct crypto_aead *cryptd_child = cryptd_aead_child(ctx->cryptd_tfm);
 	struct aesni_rfc4106_gcm_ctx *child_ctx =
-                                 aesni_rfc4106_gcm_ctx_get(cryptd_child);
+				 aesni_rfc4106_gcm_ctx_get(cryptd_child);
 	u8 *new_key_mem = NULL;
 
 	if (key_len < 4) {

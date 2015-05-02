@@ -24,7 +24,7 @@ config MARVELL_PHY
 	tristate "Drivers for Marvell PHYs"
 	---help---
 	  Currently has a driver for the 88E1011S
-	
+
 config DAVICOM_PHY
 	tristate "Drivers for Davicom PHYs"
 	---help---
@@ -46,9 +46,9 @@ config CICADA_PHY
 	  Currently supports the cis8204
 
 config VITESSE_PHY
-        tristate "Drivers for the Vitesse PHYs"
-        ---help---
-          Currently supports the vsc8244
+	tristate "Drivers for the Vitesse PHYs"
+	---help---
+	  Currently supports the vsc8244
 
 config SMSC_PHY
 	tristate "Drivers for SMSC PHYs"

@@ -13,7 +13,7 @@
 #define CLEAR_BIT(x, bit)  x =bit
 
 /*****************************************************************
-        Command Register
+	Command Register
 *****************************************************************/
 
 /* bit fields within command register */
@@ -122,13 +122,13 @@
 
 
 /*****************************************************************
-        TODR (Transmit on demand) Register
+	TODR (Transmit on demand) Register
 *****************************************************************/
 #define TODR_TOD        0x8000  /* Transmit on demand */
 
 
 /*****************************************************************
-        CICR register settings
+	CICR register settings
 *****************************************************************/
 
 /* note that relative irq priorities of the SCCs can be reordered
@@ -180,7 +180,7 @@
 
 
 /*****************************************************************
-        CPM Interrupt vector encodings (MC68360UM p. 7-376)
+	CPM Interrupt vector encodings (MC68360UM p. 7-376)
 *****************************************************************/
 
 #define CPMVEC_NR		32
@@ -307,7 +307,7 @@
 
 
 /*****************************************************************
-        chip select option register
+	chip select option register
 *****************************************************************/
 #define DTACK           0xe000
 #define ADR_MASK        0x1ffc
@@ -315,7 +315,7 @@
 #define FC_MASK         0x0001
 
 /*****************************************************************
-        tbase and rbase registers
+	tbase and rbase registers
 *****************************************************************/
 #define TBD_ADDR(quicc,pram) ((struct quicc_bd *) \
     (quicc->ch_or_u.u.udata_bd_ucode + pram->tbase))
@@ -331,33 +331,33 @@
     ((unsigned short)((char *)(bd) - (char *)(quicc->ch_or_u.u.udata_bd_ucode)))
 #define INCREASE_TBD(bd,quicc,pram) {  \
     if((bd)->status & T_W)             \
-        (bd) = TBD_ADDR(quicc,pram);   \
+	(bd) = TBD_ADDR(quicc,pram);   \
     else                               \
-        (bd)++;                        \
+	(bd)++;                        \
 }
 #define DECREASE_TBD(bd,quicc,pram) {  \
     if ((bd) == TBD_ADDR(quicc, pram)) \
-        while (!((bd)->status & T_W))  \
-            (bd)++;                    \
+	while (!((bd)->status & T_W))  \
+	    (bd)++;                    \
     else                               \
-        (bd)--;                        \
+	(bd)--;                        \
 }
 #define INCREASE_RBD(bd,quicc,pram) {  \
     if((bd)->status & R_W)             \
-        (bd) = RBD_ADDR(quicc,pram);   \
+	(bd) = RBD_ADDR(quicc,pram);   \
     else                               \
-        (bd)++;                        \
+	(bd)++;                        \
 }
 #define DECREASE_RBD(bd,quicc,pram) {  \
     if ((bd) == RBD_ADDR(quicc, pram)) \
-        while (!((bd)->status & T_W))  \
-            (bd)++;                    \
+	while (!((bd)->status & T_W))  \
+	    (bd)++;                    \
     else                               \
-        (bd)--;                        \
+	(bd)--;                        \
 }
 
 /*****************************************************************
-        Macros for Multi channel
+	Macros for Multi channel
 *****************************************************************/
 #define QMC_BASE(quicc,page) (struct global_multi_pram *)(&quicc->pram[page])
 #define MCBASE(quicc,page) (unsigned long)(quicc->pram[page].m.mcbase)
@@ -380,29 +380,29 @@
 
 #define INCREASE_TBD_32(bd,quicc,page,channel) {  \
     if((bd)->status & T_W)                        \
-        (bd) = TBD_32_ADDR(quicc,page,channel);   \
+	(bd) = TBD_32_ADDR(quicc,page,channel);   \
     else                                          \
-        (bd)++;                                   \
+	(bd)++;                                   \
 }
 #define DECREASE_TBD_32(bd,quicc,page,channel) {  \
     if ((bd) == TBD_32_ADDR(quicc, page,channel)) \
-        while (!((bd)->status & T_W))             \
-            (bd)++;                               \
+	while (!((bd)->status & T_W))             \
+	    (bd)++;                               \
     else                                          \
-        (bd)--;                                   \
+	(bd)--;                                   \
 }
 #define INCREASE_RBD_32(bd,quicc,page,channel) {  \
     if((bd)->status & R_W)                        \
-        (bd) = RBD_32_ADDR(quicc,page,channel);   \
+	(bd) = RBD_32_ADDR(quicc,page,channel);   \
     else                                          \
-        (bd)++;                                   \
+	(bd)++;                                   \
 }
 #define DECREASE_RBD_32(bd,quicc,page,channel) {  \
     if ((bd) == RBD_32_ADDR(quicc, page,channel)) \
-        while (!((bd)->status & T_W))             \
-            (bd)++;                               \
+	while (!((bd)->status & T_W))             \
+	    (bd)++;                               \
     else                                          \
-        (bd)--;                                   \
+	(bd)--;                                   \
 }
 
 #endif

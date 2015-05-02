@@ -42,7 +42,7 @@
 
 #if DEBUG_SIG
 #define DBG(LEVEL, ...) \
-        ((DEBUG_SIG_LEVEL >= LEVEL) \
+	((DEBUG_SIG_LEVEL >= LEVEL) \
 	? printk(__VA_ARGS__) : (void) 0)
 #else
 #define DBG(LEVEL, ...)

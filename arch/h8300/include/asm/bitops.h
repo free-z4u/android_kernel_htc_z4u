@@ -81,7 +81,7 @@ H8300_GEN_BITOP(change_bit,"bnot")
 static __inline__ int test_bit(int nr, const unsigned long* addr)
 {
 	return (*((volatile unsigned char *)addr +
-               ((nr >> 3) ^ 3)) & (1UL << (nr & 7))) != 0;
+	       ((nr >> 3) ^ 3)) & (1UL << (nr & 7))) != 0;
 }
 
 #define __test_bit(nr, addr) test_bit(nr, addr)
@@ -97,7 +97,7 @@ static __inline__ int test_bit(int nr, const unsigned long* addr)
 		: "=r"(retval),"=&r"(ccrsave),"=m"(*b_addr)	     \
 		: "0" (retval),"r" (b_addr)			     \
 		: "memory");                                         \
-        break;
+	break;
 
 #define H8300_GEN_TEST_BITOP_CONST(OP,BIT)			     \
 	case BIT:						     \
@@ -107,7 +107,7 @@ static __inline__ int test_bit(int nr, const unsigned long* addr)
 		: "=r"(retval),"=m"(*b_addr)			     \
 		: "0" (retval),"r" (b_addr)			     \
 		: "memory");                                         \
-        break;
+	break;
 
 #define H8300_GEN_TEST_BITOP(FNNAME,OP)				     \
 static __inline__ int FNNAME(int nr, volatile void * addr)	     \

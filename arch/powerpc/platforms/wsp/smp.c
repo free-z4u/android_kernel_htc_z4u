@@ -48,14 +48,14 @@ int __devinit smp_a2_kick_cpu(int nr)
 	pr_devel("CPU%d has enable-method: \"%s\"\n", nr, enable_method);
 
 	if (!enable_method) {
-                printk(KERN_ERR "CPU%d has no enable-method\n", nr);
+		printk(KERN_ERR "CPU%d has no enable-method\n", nr);
 		return -ENOENT;
 	} else if (strcmp(enable_method, "ibm,a2-scom") == 0) {
 		if (a2_scom_startup_cpu(nr, thr_idx, np))
 			return -1;
 	} else {
 		printk(KERN_ERR "CPU%d: Don't understand enable-method \"%s\"\n",
-                       nr, enable_method);
+		       nr, enable_method);
 		return -EINVAL;
 	}
 

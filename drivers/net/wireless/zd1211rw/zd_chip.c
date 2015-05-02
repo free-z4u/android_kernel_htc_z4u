@@ -196,7 +196,7 @@ int _zd_iowrite32v_locked(struct zd_chip *chip, const struct zd_ioreq32 *ioreqs,
 }
 
 int zd_iowrite16a_locked(struct zd_chip *chip,
-                  const struct zd_ioreq16 *ioreqs, unsigned int count)
+		  const struct zd_ioreq16 *ioreqs, unsigned int count)
 {
 	int r;
 	unsigned int i, j, t, max;

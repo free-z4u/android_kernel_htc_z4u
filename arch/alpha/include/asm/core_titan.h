@@ -145,7 +145,7 @@ union TPAchipWSBA {
 		unsigned wsba_v_rsvd1 : 18;
 		unsigned wsba_v_addr : 12;
 		unsigned wsba_v_rsvd2 : 32;
-        } wsba_r_bits;
+	} wsba_r_bits;
 	int wsba_q_whole [2];
 };
 

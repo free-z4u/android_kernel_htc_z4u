@@ -55,10 +55,10 @@ void level_1_wq_fn(void)
 #endif
 
 
-        ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &rdata);
-        if(ret < 0) goto failed_I2C;
+	ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &rdata);
+	if(ret < 0) goto failed_I2C;
 
-        pr_info("[CPLD]%s: CPLD GPI_LEVEL=0x%X...\n", __func__, rdata);
+	pr_info("[CPLD]%s: CPLD GPI_LEVEL=0x%X...\n", __func__, rdata);
 
 
 	for(i=0; i<CPLD_IRQ_NUM; i++){
@@ -97,13 +97,13 @@ int cpld_gpio_config(cpld_gpio_pin_t gpio_num, cpld_dir_t dir)
 
 
 
-         	ret = CPLD_I2C_Read_Byte(CPLD_REG_6, &reg_val);
-        	if(ret < 0 ) goto i2c_fail;
+	 	ret = CPLD_I2C_Read_Byte(CPLD_REG_6, &reg_val);
+		if(ret < 0 ) goto i2c_fail;
 
-                reg_val = (reg_val & ~(1 << 6)) | (value << 6);
+		reg_val = (reg_val & ~(1 << 6)) | (value << 6);
 
-                ret = CPLD_I2C_Write_Byte(CPLD_REG_6, reg_val);
-                if(ret < 0 ) goto i2c_fail;
+		ret = CPLD_I2C_Write_Byte(CPLD_REG_6, reg_val);
+		if(ret < 0 ) goto i2c_fail;
 
 		if(dir == CPLD_GPIO_OUT)
 			flag_usb_output = 1;
@@ -141,11 +141,11 @@ int cpld_gpio_read(cpld_gpio_pin_t gpio_num)
 	mutex_lock(&cpld_gpio_mtx);
 
 	if(gpio_num <= 8){
-                ret = CPLD_I2C_Read_Byte(CPLD_REG_1, &reg_val);
-                if(ret < 0 ) goto i2c_fail;
+		ret = CPLD_I2C_Read_Byte(CPLD_REG_1, &reg_val);
+		if(ret < 0 ) goto i2c_fail;
 
 		reg_val = (reg_val >> (gpio_num-1)) & 1;
-        }
+	}
 	else if(gpio_num <= 16){
 		gpio_num -= 8;
 		ret = CPLD_I2C_Read_Byte(CPLD_REG_2, &reg_val);
@@ -214,7 +214,7 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 	if(!is_cpld_ready()){
 		printk(KERN_ERR "cpld isn't ready.\n");
 		return -1;
-        }
+	}
 
 
 	if(gpio_num <= 0 || gpio_num >= CPLD_EXT_GPIO_MAX){
@@ -261,7 +261,7 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 
 		reg_val = (reg_val & ~(1 << (gpio_num-1))) | (lv << (gpio_num-1));
 
-                ret = CPLD_I2C_Write_Byte(CPLD_REG_4, reg_val);
+		ret = CPLD_I2C_Write_Byte(CPLD_REG_4, reg_val);
 		if(ret < 0 ) goto i2c_fail;
 	}
 	else if(gpio_num <= 40){
@@ -287,10 +287,10 @@ int cpld_gpio_write(cpld_gpio_pin_t gpio_num, int value)
 		ret = CPLD_I2C_Write_Byte(CPLD_REG_6, reg_val);
 		if(ret < 0 ) goto i2c_fail;
 
-                if(lv == CPLD_GPIO_OUT)
-                        flag_usb_output = 1;
-                else
-                        flag_usb_output = 0;
+		if(lv == CPLD_GPIO_OUT)
+			flag_usb_output = 1;
+		else
+			flag_usb_output = 0;
 
 	}
 	else if(gpio_num == CPLD_EXT_GPIO_GPS_2V85_EN){
@@ -343,10 +343,10 @@ int cpld_irq_mask(cpld_irq_t cpld_irq_num)
 	int ret = 0;
 	uint8_t reg_val;
 
-        if(!is_cpld_ready()){
-                printk(KERN_ERR "cpld isn't ready.\n");
-                return -1;
-        }
+	if(!is_cpld_ready()){
+		printk(KERN_ERR "cpld isn't ready.\n");
+		return -1;
+	}
 
 	if(cpld_irq_num >= CPLD_IRQ_NUM || cpld_irq_num < 0)
 		return -1;
@@ -376,32 +376,32 @@ i2c_fail:
 
 int cpld_irq_unmask(cpld_irq_t cpld_irq_num)
 {
-        int ret = 0;
-        uint8_t reg_val;
+	int ret = 0;
+	uint8_t reg_val;
 
-        if(!is_cpld_ready()){
-                printk(KERN_ERR "cpld isn't ready.\n");
-                return -1;
-        }
+	if(!is_cpld_ready()){
+		printk(KERN_ERR "cpld isn't ready.\n");
+		return -1;
+	}
 
 	if(cpld_irq_num >= CPLD_IRQ_NUM || cpld_irq_num < 0)
-                return -1;
+		return -1;
 
 
 
 	mutex_lock(&cpld_irq_mask_mtx);
 
-        ret = CPLD_I2C_Read_Byte(CPLD_REG_INTR_MASK, &reg_val);
-        if(ret < 0) goto i2c_fail;
+	ret = CPLD_I2C_Read_Byte(CPLD_REG_INTR_MASK, &reg_val);
+	if(ret < 0) goto i2c_fail;
 
 	reg_val = (reg_val & ~(1 << (cpld_irq_num)));
 	printk(KERN_DEBUG "[CPLD] %s irq:%d reg_val:%x\n", __func__, cpld_irq_num, reg_val);
-        ret = CPLD_I2C_Write_Byte(CPLD_REG_INTR_MASK, reg_val);
-        if(ret < 0) goto i2c_fail;
+	ret = CPLD_I2C_Write_Byte(CPLD_REG_INTR_MASK, reg_val);
+	if(ret < 0) goto i2c_fail;
 
 
 	mutex_unlock(&cpld_irq_mask_mtx);
-        return ret;
+	return ret;
 i2c_fail:
 
 	mutex_unlock(&cpld_irq_mask_mtx);
@@ -411,12 +411,12 @@ int enable_cpld_keyirq_wake(cpld_irq_t cpld_irq_num)
 {
 	int ret = 0;
 	if(!is_cpld_ready()){
-                printk(KERN_ERR "cpld isn't ready.\n");
-                return -1;
-        }
+		printk(KERN_ERR "cpld isn't ready.\n");
+		return -1;
+	}
 
 	if(cpld_irq_num != CPLD_IRQ_VOL_UP && cpld_irq_num != CPLD_IRQ_VOL_DW)
-                return -1;
+		return -1;
 
     cpld_keyirq_wake_enable=1;
 	pr_info("[CPLD] cpld_keyirq_wake_enable=1\n");
@@ -427,12 +427,12 @@ int disable_cpld_keyirq_wake(cpld_irq_t cpld_irq_num)
 {
 	int ret = 0;
 	if(!is_cpld_ready()){
-                printk(KERN_ERR "cpld isn't ready.\n");
-                return -1;
-        }
+		printk(KERN_ERR "cpld isn't ready.\n");
+		return -1;
+	}
 
 	if(cpld_irq_num != CPLD_IRQ_VOL_UP && cpld_irq_num != CPLD_IRQ_VOL_DW)
-                return -1;
+		return -1;
 
     cpld_keyirq_wake_enable=0;
 	pr_info("[CPLD] cpld_keyirq_wake_enable=0\n");
@@ -455,7 +455,7 @@ unsigned int test_irq_num;
 
 static int __init cpld_init(void)
 {
-        printk(KERN_INFO "[CPLD] i2c driver: init\n");
+	printk(KERN_INFO "[CPLD] i2c driver: init\n");
 	lp_wq = create_singlethread_workqueue("cpld_wq");
 
 
@@ -468,7 +468,7 @@ static int __init cpld_init(void)
 		queue_work(lp_wq, &level_1_wq);
 	}
 
-        return 0;
+	return 0;
 }
 
 
@@ -484,8 +484,8 @@ int cpld_release_irq(enum cpld_irq irq_from_CPLD)
   int ret=0;
 
   if(!is_cpld_ready()){
-        printk(KERN_ERR "cpld isn't ready.\n");
-        return -1;
+	printk(KERN_ERR "cpld isn't ready.\n");
+	return -1;
   }
 
   mutex_lock(&cpld_irq_req_mtx);
@@ -511,13 +511,13 @@ int cpld_release_irq(enum cpld_irq irq_from_CPLD)
 }
 
 int cpld_request_irq(const cpld_irq_t cpld_irq_num,
-                     cpld_irq_handler_t handler, void *dev)
+		     cpld_irq_handler_t handler, void *dev)
 {
   int error_num = -1;
 
   if(!is_cpld_ready()){
   	printk(KERN_ERR "cpld isn't ready.\n");
-        return -1;
+	return -1;
   }
 
   if(!handler)
@@ -533,7 +533,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     if( !cpld_irq_desc[CPLD_IRQ_VOL_UP].func )
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_VOL_UP],
-                   handler, (unsigned long) dev);
+		   handler, (unsigned long) dev);
 
     }
     break;
@@ -541,7 +541,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     if( !cpld_irq_desc[CPLD_IRQ_VOL_DW].func )
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_VOL_DW],
-                   handler, (unsigned long) dev);
+		   handler, (unsigned long) dev);
 
     }
     break;
@@ -549,7 +549,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     if( !cpld_irq_desc[CPLD_IRQ_HP].func )
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_HP],
-                   handler, (unsigned long) dev);
+		   handler, (unsigned long) dev);
 
     }
     break;
@@ -557,7 +557,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     if( !cpld_irq_desc[CPLD_IRQ_USB_ID].func )
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_USB_ID],
-                   handler, (unsigned long) dev);
+		   handler, (unsigned long) dev);
 
     }
     break;
@@ -565,7 +565,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     if( !cpld_irq_desc[CPLD_IRQ_CHARGE_STATE].func )
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_CHARGE_STATE],
-                   handler, (unsigned long) dev);
+		   handler, (unsigned long) dev);
 
     }
     break;
@@ -573,7 +573,7 @@ int cpld_request_irq(const cpld_irq_t cpld_irq_num,
     if( !cpld_irq_desc[CPLD_IRQ_CHARGE_INT].func )
     {
       tasklet_init(&cpld_irq_desc[CPLD_IRQ_CHARGE_INT],
-                   handler, (unsigned long) dev);
+		   handler, (unsigned long) dev);
 
     }
     break;

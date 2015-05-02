@@ -225,7 +225,7 @@ static int __devinit get_port_memory(struct icom_port *icom_port)
 	memset(icom_port->statStg, 0, 4096);
 
 	/* FODs: Frame Out Descriptor Queue, this is a FIFO queue that
-           indicates that frames are to be transmitted
+	   indicates that frames are to be transmitted
 	*/
 
 	stgAddr = (unsigned long) icom_port->statStg;
@@ -313,7 +313,7 @@ static void stop_processor(struct icom_port *icom_port)
 		readl(stop_proc[port].global_control_reg);
 	} else {
 		dev_err(&icom_port->adapter->pci_dev->dev,
-                        "Invalid port assignment\n");
+			"Invalid port assignment\n");
 	}
 
 	spin_unlock_irqrestore(&icom_lock, flags);
@@ -342,7 +342,7 @@ static void start_processor(struct icom_port *icom_port)
 		readl(start_proc[port].global_control_reg);
 	} else {
 		dev_err(&icom_port->adapter->pci_dev->dev,
-                        "Invalid port assignment\n");
+			"Invalid port assignment\n");
 	}
 
 	spin_unlock_irqrestore(&icom_lock, flags);
@@ -574,7 +574,7 @@ static int startup(struct icom_port *icom_port)
 		readl(int_mask_tbl[port].global_int_mask);
 	} else {
 		dev_err(&icom_port->adapter->pci_dev->dev,
-                        "Invalid port assignment\n");
+			"Invalid port assignment\n");
 	}
 
 	spin_unlock_irqrestore(&icom_lock, flags);
@@ -608,7 +608,7 @@ static void shutdown(struct icom_port *icom_port)
 		readl(int_mask_tbl[port].global_int_mask);
 	} else {
 		dev_err(&icom_port->adapter->pci_dev->dev,
-                        "Invalid port assignment\n");
+			"Invalid port assignment\n");
 	}
 	spin_unlock_irqrestore(&icom_lock, flags);
 

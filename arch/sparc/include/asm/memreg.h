@@ -21,8 +21,8 @@
 #define SUN4C_SYNC_BADWRITE  0x8000  /* while writing something went bogus */
 
 #define SUN4C_SYNC_BOLIXED  \
-        (SUN4C_SYNC_WDRESET | SUN4C_SYNC_SIZE | SUN4C_SYNC_SBUS | \
-         SUN4C_SYNC_NOMEM | SUN4C_SYNC_PARITY)
+	(SUN4C_SYNC_WDRESET | SUN4C_SYNC_SIZE | SUN4C_SYNC_SBUS | \
+	 SUN4C_SYNC_NOMEM | SUN4C_SYNC_PARITY)
 
 /* Now the asynchronous error codes, these are almost always produced
  * by the cache writing things back to memory and getting a bad translation.

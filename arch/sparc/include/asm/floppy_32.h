@@ -281,7 +281,7 @@ static inline void sun_fd_enable_dma(void)
 }
 
 extern int sparc_floppy_request_irq(unsigned int irq,
-                                    irq_handler_t irq_handler);
+				    irq_handler_t irq_handler);
 
 static int sun_fd_request_irq(void)
 {

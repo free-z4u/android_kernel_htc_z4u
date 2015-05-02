@@ -198,7 +198,7 @@ static int setfl(int fd, struct file * filp, unsigned long arg)
 }
 
 static void f_modown(struct file *filp, struct pid *pid, enum pid_type type,
-                     int force)
+		     int force)
 {
 	write_lock_irq(&filp->f_owner.lock);
 	if (force || !filp->f_owner.pid) {
@@ -525,7 +525,7 @@ static const long band_table[NSIGPOLL] = {
 };
 
 static inline int sigio_perm(struct task_struct *p,
-                             struct fown_struct *fown, int sig)
+			     struct fown_struct *fown, int sig)
 {
 	const struct cred *cred;
 	int ret;
@@ -717,7 +717,7 @@ void fasync_free(struct fasync_struct *new)
  */
 struct fasync_struct *fasync_insert_entry(int fd, struct file *filp, struct fasync_struct **fapp, struct fasync_struct *new)
 {
-        struct fasync_struct *fa, **fp;
+	struct fasync_struct *fa, **fp;
 
 	spin_lock(&filp->f_lock);
 	spin_lock(&fasync_lock);

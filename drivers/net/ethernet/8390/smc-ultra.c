@@ -102,10 +102,10 @@ static int ultra_close_card(struct net_device *dev);
 
 #ifdef __ISAPNP__
 static struct isapnp_device_id ultra_device_ids[] __initdata = {
-        {       ISAPNP_VENDOR('S','M','C'), ISAPNP_FUNCTION(0x8416),
-                ISAPNP_VENDOR('S','M','C'), ISAPNP_FUNCTION(0x8416),
-                (long) "SMC EtherEZ (8416)" },
-        { }	/* terminate list */
+	{       ISAPNP_VENDOR('S','M','C'), ISAPNP_FUNCTION(0x8416),
+		ISAPNP_VENDOR('S','M','C'), ISAPNP_FUNCTION(0x8416),
+		(long) "SMC EtherEZ (8416)" },
+	{ }	/* terminate list */
 };
 
 MODULE_DEVICE_TABLE(isapnp, ultra_device_ids);
@@ -333,46 +333,46 @@ out:
 #ifdef __ISAPNP__
 static int __init ultra_probe_isapnp(struct net_device *dev)
 {
-        int i;
+	int i;
 
-        for (i = 0; ultra_device_ids[i].vendor != 0; i++) {
+	for (i = 0; ultra_device_ids[i].vendor != 0; i++) {
 		struct pnp_dev *idev = NULL;
 
-                while ((idev = pnp_find_dev(NULL,
-                                            ultra_device_ids[i].vendor,
-                                            ultra_device_ids[i].function,
-                                            idev))) {
-                        /* Avoid already found cards from previous calls */
-                        if (pnp_device_attach(idev) < 0)
-                        	continue;
-                        if (pnp_activate_dev(idev) < 0) {
-                              __again:
-                        	pnp_device_detach(idev);
-                        	continue;
-                        }
+		while ((idev = pnp_find_dev(NULL,
+					    ultra_device_ids[i].vendor,
+					    ultra_device_ids[i].function,
+					    idev))) {
+			/* Avoid already found cards from previous calls */
+			if (pnp_device_attach(idev) < 0)
+				continue;
+			if (pnp_activate_dev(idev) < 0) {
+			      __again:
+				pnp_device_detach(idev);
+				continue;
+			}
 			/* if no io and irq, search for next */
 			if (!pnp_port_valid(idev, 0) || !pnp_irq_valid(idev, 0))
 				goto __again;
-                        /* found it */
+			/* found it */
 			dev->base_addr = pnp_port_start(idev, 0);
 			dev->irq = pnp_irq(idev, 0);
-                        printk(KERN_INFO "smc-ultra.c: ISAPnP reports %s at i/o %#lx, irq %d.\n",
-                                (char *) ultra_device_ids[i].driver_data,
-                                dev->base_addr, dev->irq);
-                        if (ultra_probe1(dev, dev->base_addr) != 0) {      /* Shouldn't happen. */
-                                printk(KERN_ERR "smc-ultra.c: Probe of ISAPnP card at %#lx failed.\n", dev->base_addr);
-                                pnp_device_detach(idev);
+			printk(KERN_INFO "smc-ultra.c: ISAPnP reports %s at i/o %#lx, irq %d.\n",
+				(char *) ultra_device_ids[i].driver_data,
+				dev->base_addr, dev->irq);
+			if (ultra_probe1(dev, dev->base_addr) != 0) {      /* Shouldn't happen. */
+				printk(KERN_ERR "smc-ultra.c: Probe of ISAPnP card at %#lx failed.\n", dev->base_addr);
+				pnp_device_detach(idev);
 				return -ENXIO;
-                        }
-                        ei_status.priv = (unsigned long)idev;
-                        break;
-                }
-                if (!idev)
-                        continue;
-                return 0;
-        }
+			}
+			ei_status.priv = (unsigned long)idev;
+			break;
+		}
+		if (!idev)
+			continue;
+		return 0;
+	}
 
-        return -ENODEV;
+	return -ENODEV;
 }
 #endif
 

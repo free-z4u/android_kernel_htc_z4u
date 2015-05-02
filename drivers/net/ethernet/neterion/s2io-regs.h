@@ -32,10 +32,10 @@ struct XENA_dev_config {
 #define GEN_INTR_RXXGXS            s2BIT(36)
 #define GEN_INTR_RXTRAFFIC         s2BIT(40)
 #define GEN_ERROR_INTR             GEN_INTR_TXPIC | GEN_INTR_RXPIC | \
-                                   GEN_INTR_TXDMA | GEN_INTR_RXDMA | \
-                                   GEN_INTR_TXMAC | GEN_INTR_RXMAC | \
-                                   GEN_INTR_TXXGXS| GEN_INTR_RXXGXS| \
-                                   GEN_INTR_MC
+				   GEN_INTR_TXDMA | GEN_INTR_RXDMA | \
+				   GEN_INTR_TXMAC | GEN_INTR_RXMAC | \
+				   GEN_INTR_TXXGXS| GEN_INTR_RXXGXS| \
+				   GEN_INTR_MC
 
 	u64 general_int_mask;
 
@@ -47,8 +47,8 @@ struct XENA_dev_config {
 #define SW_RESET_FLASH             vBIT(0xA5,8,8)
 #define SW_RESET_EOI               vBIT(0xA5,16,8)
 #define SW_RESET_ALL               (SW_RESET_XENA     |   \
-                                    SW_RESET_FLASH    |   \
-                                    SW_RESET_EOI)
+				    SW_RESET_FLASH    |   \
+				    SW_RESET_EOI)
 /* The SW_RESET register must read this value after a successful reset. */
 #define	SW_RESET_RAW_VAL			0xA5000000
 
@@ -746,7 +746,7 @@ struct XENA_dev_config {
 	u8 unused15[0x8];
 
 /*
-        u64 rmac_addr_cfg;
+	u64 rmac_addr_cfg;
 #define RMAC_ADDR_UCASTn_EN(n)     mBIT(0)_n(n)
 #define RMAC_ADDR_MCASTn_EN(n)     mBIT(0)_n(n)
 #define RMAC_ADDR_BCAST_EN         vBIT(0)_48
@@ -776,7 +776,7 @@ struct XENA_dev_config {
 #define MAC_RX_LINK_UTIL_VAL( n )  vBIT(n,40,4)
 
 #define MAC_LINK_UTIL_DISABLE      MAC_TX_LINK_UTIL_DISABLE | \
-                                   MAC_RX_LINK_UTIL_DISABLE
+				   MAC_RX_LINK_UTIL_DISABLE
 
 	u64 rmac_invalid_ipg;
 

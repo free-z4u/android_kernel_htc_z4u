@@ -1188,31 +1188,31 @@ static int mmap_kvaddr(struct vm_area_struct *vma, u64 pgaddr,
 	} else if (pgaddr == cvt_kvaddr(pd->subport_rcvegrbuf)) {
 		addr = pd->subport_rcvegrbuf;
 		size *= pd->port_subport_cnt;
-        } else if (pgaddr == cvt_kvaddr(pd->subport_uregbase +
-                                        PAGE_SIZE * subport)) {
-                addr = pd->subport_uregbase + PAGE_SIZE * subport;
-                size = PAGE_SIZE;
-        } else if (pgaddr == cvt_kvaddr(pd->subport_rcvhdr_base +
-                                pd->port_rcvhdrq_size * subport)) {
-                addr = pd->subport_rcvhdr_base +
-                        pd->port_rcvhdrq_size * subport;
-                size = pd->port_rcvhdrq_size;
-        } else if (pgaddr == cvt_kvaddr(pd->subport_rcvegrbuf +
-                               size * subport)) {
-                addr = pd->subport_rcvegrbuf + size * subport;
-                /* rcvegrbufs are read-only on the slave */
-                if (vma->vm_flags & VM_WRITE) {
-                        dev_info(&dd->pcidev->dev,
-                                 "Can't map eager buffers as "
-                                 "writable (flags=%lx)\n", vma->vm_flags);
-                        ret = -EPERM;
-                        goto bail;
-                }
-                /*
-                 * Don't allow permission to later change to writeable
-                 * with mprotect.
-                 */
-                vma->vm_flags &= ~VM_MAYWRITE;
+	} else if (pgaddr == cvt_kvaddr(pd->subport_uregbase +
+					PAGE_SIZE * subport)) {
+		addr = pd->subport_uregbase + PAGE_SIZE * subport;
+		size = PAGE_SIZE;
+	} else if (pgaddr == cvt_kvaddr(pd->subport_rcvhdr_base +
+				pd->port_rcvhdrq_size * subport)) {
+		addr = pd->subport_rcvhdr_base +
+			pd->port_rcvhdrq_size * subport;
+		size = pd->port_rcvhdrq_size;
+	} else if (pgaddr == cvt_kvaddr(pd->subport_rcvegrbuf +
+			       size * subport)) {
+		addr = pd->subport_rcvegrbuf + size * subport;
+		/* rcvegrbufs are read-only on the slave */
+		if (vma->vm_flags & VM_WRITE) {
+			dev_info(&dd->pcidev->dev,
+				 "Can't map eager buffers as "
+				 "writable (flags=%lx)\n", vma->vm_flags);
+			ret = -EPERM;
+			goto bail;
+		}
+		/*
+		 * Don't allow permission to later change to writeable
+		 * with mprotect.
+		 */
+		vma->vm_flags &= ~VM_MAYWRITE;
 	} else {
 		goto bail;
 	}
@@ -1518,10 +1518,10 @@ static int init_subports(struct ipath_devdata *dd,
 		dev_info(&dd->pcidev->dev,
 			 "Mismatched user version (%d.%d) and driver "
 			 "version (%d.%d) while port sharing. Ensure "
-                         "that driver and library are from the same "
-                         "release.\n",
+			 "that driver and library are from the same "
+			 "release.\n",
 			 (int) (uinfo->spu_userversion >> 16),
-                         (int) (uinfo->spu_userversion & 0xffff),
+			 (int) (uinfo->spu_userversion & 0xffff),
 			 IPATH_USER_SWMAJOR,
 	                 IPATH_USER_SWMINOR);
 		goto bail;

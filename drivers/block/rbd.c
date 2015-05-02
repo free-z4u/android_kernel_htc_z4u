@@ -23,7 +23,7 @@
 
    For usage instructions, please refer to:
 
-                 Documentation/ABI/testing/sysfs-bus-rbd
+		 Documentation/ABI/testing/sysfs-bus-rbd
 
  */
 
@@ -2254,13 +2254,13 @@ static void rbd_id_put(struct rbd_device *rbd_dev)
  */
 static inline size_t next_token(const char **buf)
 {
-        /*
-        * These are the characters that produce nonzero for
-        * isspace() in the "C" and "POSIX" locales.
-        */
-        const char *spaces = " \f\n\r\t\v";
+	/*
+	* These are the characters that produce nonzero for
+	* isspace() in the "C" and "POSIX" locales.
+	*/
+	const char *spaces = " \f\n\r\t\v";
 
-        *buf += strspn(*buf, spaces);	/* Find start of token */
+	*buf += strspn(*buf, spaces);	/* Find start of token */
 
 	return strcspn(*buf, spaces);   /* Return token length */
 }
@@ -2283,7 +2283,7 @@ static inline size_t copy_token(const char **buf,
 				char *token,
 				size_t token_size)
 {
-        size_t len;
+	size_t len;
 
 	len = next_token(buf);
 	if (len < token_size) {
@@ -2292,7 +2292,7 @@ static inline size_t copy_token(const char **buf,
 	}
 	*buf += len;
 
-        return len;
+	return len;
 }
 
 /*

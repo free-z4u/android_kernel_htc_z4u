@@ -738,11 +738,11 @@ ACPI_EXPORT_SYMBOL(acpi_remove_table_handler)
 
 static int __init acpi_no_auto_ssdt_setup(char *s) {
 
-        printk(KERN_NOTICE "ACPI: SSDT auto-load disabled\n");
+	printk(KERN_NOTICE "ACPI: SSDT auto-load disabled\n");
 
-        no_auto_ssdt = 1;
+	no_auto_ssdt = 1;
 
-        return 1;
+	return 1;
 }
 
 __setup("acpi_no_auto_ssdt", acpi_no_auto_ssdt_setup);

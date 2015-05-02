@@ -370,7 +370,7 @@ static struct twl4030_platform_data beagle_twldata = {
 
 static struct i2c_board_info __initdata beagle_i2c_eeprom[] = {
        {
-               I2C_BOARD_INFO("eeprom", 0x50),
+	       I2C_BOARD_INFO("eeprom", 0x50),
        },
 };
 

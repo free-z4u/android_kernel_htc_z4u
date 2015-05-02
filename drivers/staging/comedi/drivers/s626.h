@@ -54,10 +54,10 @@
    insn.insn=INSN_CONFIG;   // configuration instruction
    insn.n=1;                // number of operation (must be 1)
    insn.data=&initialvalue; // initial value loaded into encoder
-                            // during configuration
+			    // during configuration
    insn.subdev=5;           // encoder subdevice
    insn.chanspec=CR_PACK(encoder_channel,0,AREF_OTHER); // encoder_channel
-                                                        // to configure
+							// to configure
 
    comedi_do_insn(cf,&insn); // executing configuration
 */

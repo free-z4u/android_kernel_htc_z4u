@@ -116,10 +116,10 @@ static int __init MTD_New_Region(char *line)
 	memset(&map_regions[params[1]],0,sizeof(map_regions[params[1]]));
 	memcpy(&map_regions[params[1]].map_info,
 		&default_map,sizeof(map_regions[params[1]].map_info));
-        map_regions_set[params[1]] = 1;
-        map_regions[params[1]].window_addr_physical = DEF_WINDOW_ADDR_PHY;
-        map_regions[params[1]].altbankwidth = 2;
-        map_regions[params[1]].mymtd = NULL;
+	map_regions_set[params[1]] = 1;
+	map_regions[params[1]].window_addr_physical = DEF_WINDOW_ADDR_PHY;
+	map_regions[params[1]].altbankwidth = 2;
+	map_regions[params[1]].mymtd = NULL;
 	map_regions[params[1]].map_info.name = map_regions[params[1]].map_name;
 	strcpy(map_regions[params[1]].map_info.name,string);
 	if(params[0]>1)

@@ -3325,7 +3325,7 @@ static int vendor_cmd_is_valid(unsigned cmd)
 
 static ssize_t
 vendor_cmd_read_buffer(struct file* f, struct kobject *kobj, struct bin_attribute *attr,
-                char *buf, loff_t off, size_t count)
+		char *buf, loff_t off, size_t count)
 {
 	ssize_t	status;
 	struct op_desc	*desc = attr->private;
@@ -3360,7 +3360,7 @@ vendor_cmd_read_buffer(struct file* f, struct kobject *kobj, struct bin_attribut
 
 static ssize_t
 vendor_cmd_write_buffer(struct file* f, struct kobject *kobj, struct bin_attribute *attr,
-                char *buf, loff_t off, size_t count)
+		char *buf, loff_t off, size_t count)
 {
 	ssize_t	status;
 	struct op_desc	*desc = attr->private;
@@ -3401,7 +3401,7 @@ static int
 vendor_cmd_mmap_buffer(struct file *f, struct kobject *kobj, struct bin_attribute *attr,
 		struct vm_area_struct *vma)
 {
-        int rc = -EINVAL;
+	int rc = -EINVAL;
 	unsigned long pgoff, delta;
 	ssize_t size = vma->vm_end - vma->vm_start;
 	struct op_desc	*desc = attr->private;
@@ -3418,13 +3418,13 @@ vendor_cmd_mmap_buffer(struct file *f, struct kobject *kobj, struct bin_attribut
 	delta = PAGE_ALIGN(pgoff) - pgoff;
 	printk("[fms_CR7]%s size=%x delta=%lx pgoff=%lx\n", __func__, size, delta, pgoff);
 
-        if (size + delta > desc->len) {
+	if (size + delta > desc->len) {
 			printk("[fms_CR7]%s mmap failed: size %d\n", __func__, size);
 		goto done;
-        }
+	}
 
-        pgoff += delta;
-        vma->vm_flags |= VM_RESERVED;
+	pgoff += delta;
+	vma->vm_flags |= VM_RESERVED;
 
 	rc = io_remap_pfn_range(vma, vma->vm_start, pgoff >> PAGE_SHIFT,
 		size, vma->vm_page_prot);
@@ -3694,7 +3694,7 @@ done:
 
 
 static ssize_t vendor_export_store(struct device *dev,
-                struct device_attribute *attr, const char *buf, size_t len)
+		struct device_attribute *attr, const char *buf, size_t len)
 {
 	long cmd;
 	int status;
@@ -3724,7 +3724,7 @@ done:
 static DEVICE_ATTR(export, 0220, 0, vendor_export_store);
 
 static ssize_t vendor_unexport_store(struct device *dev,
-                struct device_attribute *attr, const char *buf, size_t len)
+		struct device_attribute *attr, const char *buf, size_t len)
 {
 	long cmd;
 	int status;
@@ -3765,7 +3765,7 @@ static ssize_t vendor_inquiry_show(struct device *dev,
 }
 
 static ssize_t vendor_inquiry_store(struct device *dev,
-                struct device_attribute *attr, const char *buf, size_t len)
+		struct device_attribute *attr, const char *buf, size_t len)
 {
 	struct fsg_lun *curlun = fsg_lun_from_dev(dev);
 

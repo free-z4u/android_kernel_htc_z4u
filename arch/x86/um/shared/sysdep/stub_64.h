@@ -90,7 +90,7 @@ static inline void remap_stack(long fd, unsigned long offset)
 			  : "a" (STUB_MMAP_NR), "D" (STUB_DATA),
 			    "S" (UM_KERN_PAGE_SIZE),
 			    "d" (PROT_READ | PROT_WRITE),
-                            "g" (MAP_FIXED | MAP_SHARED), "g" (fd),
+			    "g" (MAP_FIXED | MAP_SHARED), "g" (fd),
 			    "g" (offset),
 			    "i" (&((struct stub_data *) STUB_DATA)->err)
 			  : __syscall_clobber, "r10", "r8", "r9" );

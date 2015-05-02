@@ -62,8 +62,8 @@ sgl_denormalize(unsigned int *sgl_opnd, boolean *inexactflag, int rmode)
 
 	opnd = *sgl_opnd;
 	stickybit = *inexactflag;
-        exponent = Sgl_exponent(opnd) - SGL_WRAP;
-        sign = Sgl_sign(opnd);
+	exponent = Sgl_exponent(opnd) - SGL_WRAP;
+	sign = Sgl_sign(opnd);
 	Sgl_denormalize(opnd,exponent,guardbit,stickybit,inexact);
 	if (inexact) {
 	    switch (rmode) {

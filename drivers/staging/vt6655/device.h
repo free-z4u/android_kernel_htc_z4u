@@ -798,13 +798,13 @@ typedef struct __device_info {
     struct sk_buff          *skb;
 #ifdef WPA_SUPPLICANT_DRIVER_WEXT_SUPPORT
 /*
-        bool bwextstep0;
-        bool bwextstep1;
-        bool bwextstep2;
-        bool bwextstep3;
-        */
-        unsigned int	bwextcount;
-        bool bWPASuppWextEnabled;
+	bool bwextstep0;
+	bool bwextstep1;
+	bool bwextstep2;
+	bool bwextstep3;
+	*/
+	unsigned int	bwextcount;
+	bool bWPASuppWextEnabled;
 #endif
 
     //--
@@ -885,11 +885,11 @@ inline static bool device_get_ip(PSDevice pInfo) {
     struct in_ifaddr* ifa;
 
     if (in_dev!=NULL) {
-        ifa=(struct in_ifaddr*) in_dev->ifa_list;
-        if (ifa!=NULL) {
-            memcpy(pInfo->abyIPAddr,&ifa->ifa_address,4);
-            return true;
-        }
+	ifa=(struct in_ifaddr*) in_dev->ifa_list;
+	if (ifa!=NULL) {
+	    memcpy(pInfo->abyIPAddr,&ifa->ifa_address,4);
+	    return true;
+	}
     }
     return false;
 }
@@ -900,10 +900,10 @@ static inline PDEVICE_RD_INFO alloc_rd_info(void) {
     PDEVICE_RD_INFO  ptr;
     ptr = (PDEVICE_RD_INFO)kmalloc((int)sizeof(DEVICE_RD_INFO), (int)GFP_ATOMIC);
     if (ptr == NULL)
-        return NULL;
+	return NULL;
     else {
-        memset(ptr,0,sizeof(DEVICE_RD_INFO));
-        return ptr;
+	memset(ptr,0,sizeof(DEVICE_RD_INFO));
+	return ptr;
     }
 }
 
@@ -911,10 +911,10 @@ static inline PDEVICE_TD_INFO alloc_td_info(void) {
     PDEVICE_TD_INFO  ptr;
     ptr = (PDEVICE_TD_INFO)kmalloc((int)sizeof(DEVICE_TD_INFO), (int)GFP_ATOMIC);
     if (ptr == NULL)
-        return NULL;
+	return NULL;
     else {
-        memset(ptr,0,sizeof(DEVICE_TD_INFO));
-        return ptr;
+	memset(ptr,0,sizeof(DEVICE_TD_INFO));
+	return ptr;
     }
 }
 

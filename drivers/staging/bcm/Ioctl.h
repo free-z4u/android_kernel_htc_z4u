@@ -189,11 +189,11 @@ typedef struct stUserThreadReq
 
 typedef enum _BCM_INTERFACE_TYPE
 {
-        BCM_MII,
-        BCM_CARDBUS,
-        BCM_USB,
-        BCM_SDIO,
-        BCM_PCMCIA
+	BCM_MII,
+	BCM_CARDBUS,
+	BCM_USB,
+	BCM_SDIO,
+	BCM_PCMCIA
 }BCM_INTERFACE_TYPE;
 
 typedef struct _DEVICE_DRIVER_INFO

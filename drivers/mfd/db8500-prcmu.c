@@ -841,7 +841,7 @@ bool db8500_prcmu_gic_pending_irq(void)
 	void __iomem *dist_base = __io_address(U8500_GIC_DIST_BASE);
 	int i;
 
-        /* 5 registers. STI & PPI not skipped */
+	/* 5 registers. STI & PPI not skipped */
 	for (i = 0; i < PRCMU_GIC_NUMBER_REGS; i++) {
 
 		pr = readl_relaxed(dist_base + GIC_DIST_PENDING_SET + i * 4);
@@ -896,7 +896,7 @@ int db8500_prcmu_copy_gic_settings(void)
 	void __iomem *dist_base = __io_address(U8500_GIC_DIST_BASE);
 	int i;
 
-        /* We skip the STI and PPI */
+	/* We skip the STI and PPI */
 	for (i = 0; i < PRCMU_GIC_NUMBER_REGS - 1; i++) {
 		er = readl_relaxed(dist_base +
 				   GIC_DIST_ENABLE_SET + (i + 1) * 4);

@@ -260,7 +260,7 @@ static inline void write_seqcount_barrier(seqcount_t *s)
 #define write_seqlock_irq(lock)						\
 	do { local_irq_disable();   write_seqlock(lock); } while (0)
 #define write_seqlock_bh(lock)						\
-        do { local_bh_disable();    write_seqlock(lock); } while (0)
+	do { local_bh_disable();    write_seqlock(lock); } while (0)
 
 #define write_sequnlock_irqrestore(lock, flags)				\
 	do { write_sequnlock(lock); local_irq_restore(flags); } while(0)

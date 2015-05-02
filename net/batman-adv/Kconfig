@@ -6,14 +6,14 @@ config BATMAN_ADV
 	tristate "B.A.T.M.A.N. Advanced Meshing Protocol"
 	depends on NET
 	select CRC16
-        default n
+	default n
 	---help---
 
-        B.A.T.M.A.N. (better approach to mobile ad-hoc networking) is
-        a routing protocol for multi-hop ad-hoc mesh networks. The
-        networks may be wired or wireless. See
-        http://www.open-mesh.org/ for more information and user space
-        tools.
+	B.A.T.M.A.N. (better approach to mobile ad-hoc networking) is
+	a routing protocol for multi-hop ad-hoc mesh networks. The
+	networks may be wired or wireless. See
+	http://www.open-mesh.org/ for more information and user space
+	tools.
 
 config BATMAN_ADV_DEBUG
 	bool "B.A.T.M.A.N. debugging"

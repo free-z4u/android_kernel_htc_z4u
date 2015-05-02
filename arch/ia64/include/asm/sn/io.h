@@ -145,7 +145,7 @@ ___sn_readb (const volatile void __iomem *addr)
 	val = *(volatile unsigned char __force *)addr;
 	__sn_mf_a();
 	sn_dma_flush((unsigned long)addr);
-        return val;
+	return val;
 }
 
 static inline unsigned short
@@ -156,7 +156,7 @@ ___sn_readw (const volatile void __iomem *addr)
 	val = *(volatile unsigned short __force *)addr;
 	__sn_mf_a();
 	sn_dma_flush((unsigned long)addr);
-        return val;
+	return val;
 }
 
 static inline unsigned int
@@ -167,7 +167,7 @@ ___sn_readl (const volatile void __iomem *addr)
 	val = *(volatile unsigned int __force *)addr;
 	__sn_mf_a();
 	sn_dma_flush((unsigned long)addr);
-        return val;
+	return val;
 }
 
 static inline unsigned long
@@ -178,7 +178,7 @@ ___sn_readq (const volatile void __iomem *addr)
 	val = *(volatile unsigned long __force *)addr;
 	__sn_mf_a();
 	sn_dma_flush((unsigned long)addr);
-        return val;
+	return val;
 }
 
 /*

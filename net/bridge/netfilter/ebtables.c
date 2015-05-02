@@ -125,7 +125,7 @@ ebt_dev_check(const char *entry, const struct net_device *device)
 /* process standard matches */
 static inline int
 ebt_basic_match(const struct ebt_entry *e, const struct sk_buff *skb,
-                const struct net_device *in, const struct net_device *out)
+		const struct net_device *in, const struct net_device *out)
 {
 	const struct ethhdr *h = eth_hdr(skb);
 	const struct net_bridge_port *p;

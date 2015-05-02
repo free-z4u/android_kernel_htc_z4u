@@ -9,7 +9,7 @@
 
 struct dn_scp                                   /* Session Control Port */
 {
-        unsigned char           state;
+	unsigned char           state;
 #define DN_O     1                      /* Open                 */
 #define DN_CR    2                      /* Connect Receive      */
 #define DN_DR    3                      /* Disconnect Reject    */
@@ -27,17 +27,17 @@ struct dn_scp                                   /* Session Control Port */
 #define DN_CL    15                     /* Closed               */
 #define DN_CN    16                     /* Closed Notification  */
 
-        __le16          addrloc;
-        __le16          addrrem;
-        __u16          numdat;
-        __u16          numoth;
-        __u16          numoth_rcv;
-        __u16          numdat_rcv;
-        __u16          ackxmt_dat;
-        __u16          ackxmt_oth;
-        __u16          ackrcv_dat;
-        __u16          ackrcv_oth;
-        __u8           flowrem_sw;
+	__le16          addrloc;
+	__le16          addrrem;
+	__u16          numdat;
+	__u16          numoth;
+	__u16          numoth_rcv;
+	__u16          numdat_rcv;
+	__u16          ackxmt_dat;
+	__u16          ackxmt_oth;
+	__u16          ackrcv_dat;
+	__u16          ackrcv_oth;
+	__u8           flowrem_sw;
 	__u8           flowloc_sw;
 #define DN_SEND         2
 #define DN_DONTSEND     1
@@ -63,9 +63,9 @@ struct dn_scp                                   /* Session Control Port */
 	struct optdata_dn     conndata_out;
 	struct optdata_dn     discdata_in;
 	struct optdata_dn     discdata_out;
-        struct accessdata_dn  accessdata;
+	struct accessdata_dn  accessdata;
 
-        struct sockaddr_dn addr; /* Local address  */
+	struct sockaddr_dn addr; /* Local address  */
 	struct sockaddr_dn peer; /* Remote address */
 
 	/*

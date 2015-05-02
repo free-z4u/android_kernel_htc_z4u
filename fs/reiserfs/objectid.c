@@ -9,7 +9,7 @@
 
 // find where objectid map starts
 #define objectid_map(s,rs) (old_format_only (s) ? \
-                         (__le32 *)((struct reiserfs_super_block_v1 *)(rs) + 1) :\
+			 (__le32 *)((struct reiserfs_super_block_v1 *)(rs) + 1) :\
 			 (__le32 *)((rs) + 1))
 
 #ifdef CONFIG_REISERFS_CHECK

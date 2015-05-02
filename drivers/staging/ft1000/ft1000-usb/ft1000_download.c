@@ -315,7 +315,7 @@ static void put_handshake_usb(struct ft1000_device *ft1000dev,u16 handshake_valu
 {
 	int i;
 
-        for (i=0; i<1000; i++);
+	for (i=0; i<1000; i++);
 }
 
 //---------------------------------------------------------------------------
@@ -542,24 +542,24 @@ static u32 write_blk (struct ft1000_device *ft1000dev, u16 **pUsFile, u8 **pUcFi
 		       {
 			   tempbuffer[i++] = 0;
 			   tempbuffer[i] = 0;
-                       }
+		       }
 	      }
 
-              //DEBUG("write_blk: loopcnt is %d\n", loopcnt);
-              //DEBUG("write_blk: bootmode = %d\n", bootmode);
-              //DEBUG("write_blk: dpram = %x\n", dpram);
+	      //DEBUG("write_blk: loopcnt is %d\n", loopcnt);
+	      //DEBUG("write_blk: bootmode = %d\n", bootmode);
+	      //DEBUG("write_blk: dpram = %x\n", dpram);
 	      if (pft1000info->bootmode == 0)
 	      {
 		 if (dpram >= 0x3F4)
-                     Status = ft1000_write_dpram32 (ft1000dev, dpram, (u8 *)&tempbuffer[0], 8);
+		     Status = ft1000_write_dpram32 (ft1000dev, dpram, (u8 *)&tempbuffer[0], 8);
 	         else
-                    Status = ft1000_write_dpram32 (ft1000dev, dpram, (u8 *)&tempbuffer[0], 64);
+		    Status = ft1000_write_dpram32 (ft1000dev, dpram, (u8 *)&tempbuffer[0], 64);
 	      }
 	      else
 	      {
-                 for (j=0; j<10; j++)
-                 {
-                   Status = ft1000_write_dpram32 (ft1000dev, dpram, (u8 *)&tempbuffer[0], 64);
+		 for (j=0; j<10; j++)
+		 {
+		   Status = ft1000_write_dpram32 (ft1000dev, dpram, (u8 *)&tempbuffer[0], 64);
 		   if (Status == STATUS_SUCCESS)
 		   {
 		       // Work around for ASIC bit stuffing problem.
@@ -606,7 +606,7 @@ static u32 write_blk (struct ft1000_device *ft1000dev, u16 **pUsFile, u8 **pUcFi
 
 		if (Status != STATUS_SUCCESS)
 		{
-                    DEBUG("FT1000:download:Write failed tempbuffer[31] = 0x%x\n", tempbuffer[31]);
+		    DEBUG("FT1000:download:Write failed tempbuffer[31] = 0x%x\n", tempbuffer[31]);
 		    break;
 		}
 
@@ -1215,12 +1215,12 @@ u16 scram_dnldr(struct ft1000_device *ft1000dev, void *pFileStart,
       // Check if Card is present
       status = Harley_Read_Register(&temp, FT1000_REG_SUP_IMASK);
       if ( (status != NDIS_STATUS_SUCCESS) || (temp == 0x0000) ) {
-          break;
+	  break;
       }
 
       status = Harley_Read_Register(&temp, FT1000_REG_ASIC_ID);
       if ( (status != NDIS_STATUS_SUCCESS) || (temp == 0xffff) ) {
-          break;
+	  break;
       }
 ****/
 

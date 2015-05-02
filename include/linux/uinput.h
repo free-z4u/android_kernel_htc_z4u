@@ -131,7 +131,7 @@ struct uinput_ff_erase {
  *      uinput_ff_upload struct. It will be filled in with the
  *      ff_effects passed to upload_effect().
  *   4. Perform the effect upload, and place a return code back into
-        the uinput_ff_upload struct.
+	the uinput_ff_upload struct.
  *   5. Issue a UI_END_FF_UPLOAD ioctl, also giving it the
  *      uinput_ff_upload_effect struct. This will complete execution
  *      of our upload_effect() handler.

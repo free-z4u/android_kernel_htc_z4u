@@ -111,29 +111,29 @@
 #define CMD_TLB_PURGE        33         /* IO_COMMAND to Purge I/O TLB entry */
 
 struct ioa_registers {
-        /* Runway Supervisory Set */
-        int32_t    unused1[12];
-        uint32_t   io_command;             /* Offset 12 */
-        uint32_t   io_status;              /* Offset 13 */
-        uint32_t   io_control;             /* Offset 14 */
-        int32_t    unused2[1];
+	/* Runway Supervisory Set */
+	int32_t    unused1[12];
+	uint32_t   io_command;             /* Offset 12 */
+	uint32_t   io_status;              /* Offset 13 */
+	uint32_t   io_control;             /* Offset 14 */
+	int32_t    unused2[1];
 
-        /* Runway Auxiliary Register Set */
-        uint32_t   io_err_resp;            /* Offset  0 */
-        uint32_t   io_err_info;            /* Offset  1 */
-        uint32_t   io_err_req;             /* Offset  2 */
-        uint32_t   io_err_resp_hi;         /* Offset  3 */
-        uint32_t   io_tlb_entry_m;         /* Offset  4 */
-        uint32_t   io_tlb_entry_l;         /* Offset  5 */
-        uint32_t   unused3[1];
-        uint32_t   io_pdir_base;           /* Offset  7 */
-        uint32_t   io_io_low_hv;           /* Offset  8 */
-        uint32_t   io_io_high_hv;          /* Offset  9 */
-        uint32_t   unused4[1];
-        uint32_t   io_chain_id_mask;       /* Offset 11 */
-        uint32_t   unused5[2];
-        uint32_t   io_io_low;              /* Offset 14 */
-        uint32_t   io_io_high;             /* Offset 15 */
+	/* Runway Auxiliary Register Set */
+	uint32_t   io_err_resp;            /* Offset  0 */
+	uint32_t   io_err_info;            /* Offset  1 */
+	uint32_t   io_err_req;             /* Offset  2 */
+	uint32_t   io_err_resp_hi;         /* Offset  3 */
+	uint32_t   io_tlb_entry_m;         /* Offset  4 */
+	uint32_t   io_tlb_entry_l;         /* Offset  5 */
+	uint32_t   unused3[1];
+	uint32_t   io_pdir_base;           /* Offset  7 */
+	uint32_t   io_io_low_hv;           /* Offset  8 */
+	uint32_t   io_io_high_hv;          /* Offset  9 */
+	uint32_t   unused4[1];
+	uint32_t   io_chain_id_mask;       /* Offset 11 */
+	uint32_t   unused5[2];
+	uint32_t   io_io_low;              /* Offset 14 */
+	uint32_t   io_io_high;             /* Offset 15 */
 };
 
 /*
@@ -415,9 +415,9 @@ resource_found:
 }
 
 #define CCIO_FREE_MAPPINGS(ioc, res_idx, mask, size) \
-        u##size *res_ptr = (u##size *)&((ioc)->res_map[res_idx]); \
-        BUG_ON((*res_ptr & mask) != mask); \
-        *res_ptr &= ~(mask);
+	u##size *res_ptr = (u##size *)&((ioc)->res_map[res_idx]); \
+	BUG_ON((*res_ptr & mask) != mask); \
+	*res_ptr &= ~(mask);
 
 /**
  * ccio_free_range - Free pages from the ioc's resource map.
@@ -849,7 +849,7 @@ ccio_alloc_consistent(struct device *dev, size_t size, dma_addr_t *dma_handle, g
 		return 0;
 	}
 #endif
-        ret = (void *) __get_free_pages(flag, get_order(size));
+	ret = (void *) __get_free_pages(flag, get_order(size));
 
 	if (ret) {
 		memset(ret, 0, size);

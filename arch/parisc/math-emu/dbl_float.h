@@ -63,8 +63,8 @@
 /* varamount must be less than 64 */
 #define Dbl_rightshift(srcdstA, srcdstB, varamount)			\
     {if((varamount) >= 32) {						\
-        Dallp2(srcdstB) = Dallp1(srcdstA) >> (varamount-32);		\
-        Dallp1(srcdstA)=0;						\
+	Dallp2(srcdstB) = Dallp1(srcdstA) >> (varamount-32);		\
+	Dallp1(srcdstA)=0;						\
     }									\
     else if(varamount > 0) {						\
 	Variable_shift_double(Dallp1(srcdstA), Dallp2(srcdstB), 	\
@@ -74,7 +74,7 @@
 /* varamount must be less than 64 */
 #define Dbl_rightshift_exponentmantissa(srcdstA, srcdstB, varamount)	\
     {if((varamount) >= 32) {						\
-        Dallp2(srcdstB) = Dexponentmantissap1(srcdstA) >> (varamount-32); \
+	Dallp2(srcdstB) = Dexponentmantissap1(srcdstA) >> (varamount-32); \
 	Dallp1(srcdstA) &= ((unsigned int)1<<31);  /* clear expmant field */ \
     }									\
     else if(varamount > 0) {						\
@@ -275,11 +275,11 @@
     Dmantissap2(dbl_valueB) = 0
 #define Dbl_setinfinitypositive(dbl_valueA,dbl_valueB)		\
     Dallp1(dbl_valueA) 						\
-        = (DBL_INFINITY_EXPONENT << (32-(1+DBL_EXP_LENGTH)));	\
+	= (DBL_INFINITY_EXPONENT << (32-(1+DBL_EXP_LENGTH)));	\
     Dmantissap2(dbl_valueB) = 0
 #define Dbl_setinfinitynegative(dbl_valueA,dbl_valueB)		\
     Dallp1(dbl_valueA) = ((unsigned int)1<<31) |		\
-         (DBL_INFINITY_EXPONENT << (32-(1+DBL_EXP_LENGTH)));	\
+	 (DBL_INFINITY_EXPONENT << (32-(1+DBL_EXP_LENGTH)));	\
     Dmantissap2(dbl_valueB) = 0
 #define Dbl_setinfinity(dbl_valueA,dbl_valueB,sign)		\
     Dallp1(dbl_valueA) = ((unsigned int)sign << 31) | 		\
@@ -339,7 +339,7 @@
     Dallp2(dbl_valueB) = 0
 #define Dbl_setlargest(dbl_valueA,dbl_valueB,sign)			\
     Dallp1(dbl_valueA) = ((unsigned int)sign << 31) |			\
-         ((DBL_EMAX+DBL_BIAS) << (32-(1+DBL_EXP_LENGTH))) |	 	\
+	 ((DBL_EMAX+DBL_BIAS) << (32-(1+DBL_EXP_LENGTH))) |	 	\
 	 ((1 << (32-(1+DBL_EXP_LENGTH))) - 1 );				\
     Dallp2(dbl_valueB) = 0xFFFFFFFF
 
@@ -407,9 +407,9 @@
 #define Dbl_subtract_withextension(lefta,leftb,righta,rightb,extent,resulta,resultb)	\
     Dbl_subtract(lefta,leftb,righta,rightb,resulta,resultb);		\
     if( (Extall(extent) = 0-Extall(extent)) )				\
-        {								\
-        if((Dallp2(resultb)--) == 0) Dallp1(resulta)--;			\
-        }
+	{								\
+	if((Dallp2(resultb)--) == 0) Dallp1(resulta)--;			\
+	}
 
 #define Dbl_addition(lefta,leftb,righta,rightb,resulta,resultb)		\
     /* If the sum of the low words is less than either source, then	\
@@ -432,11 +432,11 @@
 /* Need to Initialize */
 #define Dbl_makequietnan(desta,destb)					\
     Dallp1(desta) = ((DBL_EMAX+DBL_BIAS)+1)<< (32-(1+DBL_EXP_LENGTH))	\
-                 | (1<<(32-(1+DBL_EXP_LENGTH+2)));			\
+		 | (1<<(32-(1+DBL_EXP_LENGTH+2)));			\
     Dallp2(destb) = 0
 #define Dbl_makesignalingnan(desta,destb)				\
     Dallp1(desta) = ((DBL_EMAX+DBL_BIAS)+1)<< (32-(1+DBL_EXP_LENGTH))	\
-                 | (1<<(32-(1+DBL_EXP_LENGTH+1)));			\
+		 | (1<<(32-(1+DBL_EXP_LENGTH+1)));			\
     Dallp2(destb) = 0
 
 #define Dbl_normalize(dbl_opndA,dbl_opndB,exponent)			\
@@ -576,21 +576,21 @@
     switch (shift/32) {							\
      case 0: if (shiftamt > 0) {					\
 	        sticky = Dextallp4(srcdstD) << 32 - (shiftamt); 	\
-                Variable_shift_double(Dextallp3(srcdstC),		\
+		Variable_shift_double(Dextallp3(srcdstC),		\
 		 Dextallp4(srcdstD),shiftamt,Dextallp4(srcdstD));	\
-                Variable_shift_double(Dextallp2(srcdstB),		\
+		Variable_shift_double(Dextallp2(srcdstB),		\
 		 Dextallp3(srcdstC),shiftamt,Dextallp3(srcdstC));	\
-                Variable_shift_double(Dextallp1(srcdstA),		\
+		Variable_shift_double(Dextallp1(srcdstA),		\
 		 Dextallp2(srcdstB),shiftamt,Dextallp2(srcdstB));	\
 	        Dextallp1(srcdstA) >>= shiftamt;			\
 	     }								\
 	     break;							\
      case 1: if (shiftamt > 0) {					\
-                sticky = (Dextallp3(srcdstC) << 31 - shiftamt) |	\
+		sticky = (Dextallp3(srcdstC) << 31 - shiftamt) |	\
 			 Dextallp4(srcdstD);				\
-                Variable_shift_double(Dextallp2(srcdstB),		\
+		Variable_shift_double(Dextallp2(srcdstB),		\
 		 Dextallp3(srcdstC),shiftamt,Dextallp4(srcdstD));	\
-                Variable_shift_double(Dextallp1(srcdstA),		\
+		Variable_shift_double(Dextallp1(srcdstA),		\
 		 Dextallp2(srcdstB),shiftamt,Dextallp3(srcdstC));	\
 	     }								\
 	     else {							\
@@ -602,9 +602,9 @@
 	     Dextallp1(srcdstA) = 0;					\
 	     break;							\
      case 2: if (shiftamt > 0) {					\
-                sticky = (Dextallp2(srcdstB) << 31 - shiftamt) |	\
+		sticky = (Dextallp2(srcdstB) << 31 - shiftamt) |	\
 			 Dextallp3(srcdstC) | Dextallp4(srcdstD);	\
-                Variable_shift_double(Dextallp1(srcdstA),		\
+		Variable_shift_double(Dextallp1(srcdstA),		\
 		 Dextallp2(srcdstB),shiftamt,Dextallp4(srcdstD));	\
 	     }								\
 	     else {							\
@@ -615,7 +615,7 @@
 	     Dextallp1(srcdstA) = Dextallp2(srcdstB) = 0;		\
 	     break;							\
      case 3: if (shiftamt > 0) {					\
-                sticky = (Dextallp1(srcdstA) << 31 - shiftamt) |	\
+		sticky = (Dextallp1(srcdstA) << 31 - shiftamt) |	\
 			 Dextallp2(srcdstB) | Dextallp3(srcdstC) |	\
 			 Dextallp4(srcdstD);				\
 	     }								\
@@ -638,7 +638,7 @@
 	    if( (Dextallp2(leftb)--) == 0) Dextallp1(lefta)--;	\
     Dextallp4(resultd) = Dextallp4(leftd) - Dextallp4(rightd);	\
     if( Dextallp3(rightc) > Dextallp3(leftc) ) 			\
-        if( (Dextallp2(leftb)--) == 0) Dextallp1(lefta)--;	\
+	if( (Dextallp2(leftb)--) == 0) Dextallp1(lefta)--;	\
     Dextallp3(resultc) = Dextallp3(leftc) - Dextallp3(rightc);	\
     if( Dextallp2(rightb) > Dextallp2(leftb) ) Dextallp1(lefta)--; \
     Dextallp2(resultb) = Dextallp2(leftb) - Dextallp2(rightb);	\

@@ -89,7 +89,7 @@ typedef struct tagSDot11Counters {
 typedef struct tagSMib2Counter {
     signed long    ifIndex;
     char    ifDescr[256];               // max size 255 plus zero ending
-                                        // e.g. "interface 1"
+					// e.g. "interface 1"
     signed long    ifType;
     signed long    ifMtu;
     DWORD   ifSpeed;
@@ -303,7 +303,7 @@ typedef struct tagSStatCounter {
     DWORD   dwTsrOnceRetry;         // this packet only occur one collision
     DWORD   dwTsrMoreThanOnceRetry; // this packet occur more than one collision
     DWORD   dwTsrRetry;             // this packet has ever occur collision,
-                                         // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
+					 // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
     DWORD   dwTsrACKData;
     DWORD   dwTsrErr;
     DWORD   dwAllTsrOK;

@@ -285,7 +285,7 @@ typedef enum {
 #define E1000_BLK_PHY_RESET   12
 
 #define E1000_BYTE_SWAP_WORD(_value) ((((_value) & 0x00ff) << 8) | \
-                                     (((_value) & 0xff00) >> 8))
+				     (((_value) & 0xff00) >> 8))
 
 /* Function prototypes */
 /* Initialization */
@@ -2172,11 +2172,11 @@ struct e1000_host_command_info {
 #define E1000_GCR_TXDSCR_NO_SNOOP       0x00000020
 
 #define PCI_EX_NO_SNOOP_ALL (E1000_GCR_RXD_NO_SNOOP         | \
-                             E1000_GCR_RXDSCW_NO_SNOOP      | \
-                             E1000_GCR_RXDSCR_NO_SNOOP      | \
-                             E1000_GCR_TXD_NO_SNOOP         | \
-                             E1000_GCR_TXDSCW_NO_SNOOP      | \
-                             E1000_GCR_TXDSCR_NO_SNOOP)
+			     E1000_GCR_RXDSCW_NO_SNOOP      | \
+			     E1000_GCR_RXDSCR_NO_SNOOP      | \
+			     E1000_GCR_TXD_NO_SNOOP         | \
+			     E1000_GCR_TXDSCW_NO_SNOOP      | \
+			     E1000_GCR_TXDSCR_NO_SNOOP)
 
 #define PCI_EX_82566_SNOOP_ALL PCI_EX_NO_SNOOP_ALL
 
@@ -2259,9 +2259,9 @@ struct e1000_host_command_info {
 #define ID_LED_RESERVED_0000 0x0000
 #define ID_LED_RESERVED_FFFF 0xFFFF
 #define ID_LED_DEFAULT       ((ID_LED_OFF1_ON2 << 12) | \
-                              (ID_LED_OFF1_OFF2 << 8) | \
-                              (ID_LED_DEF1_DEF2 << 4) | \
-                              (ID_LED_DEF1_DEF2))
+			      (ID_LED_OFF1_OFF2 << 8) | \
+			      (ID_LED_DEF1_DEF2 << 4) | \
+			      (ID_LED_DEF1_DEF2))
 #define ID_LED_DEF1_DEF2     0x1
 #define ID_LED_DEF1_ON2      0x2
 #define ID_LED_DEF1_OFF2     0x3
@@ -2484,10 +2484,10 @@ struct e1000_host_command_info {
      (((errors) & E1000_RXD_ERR_FRAME_ERR_MASK) == E1000_RXD_ERR_CE) && \
      ((last_byte) == CARRIER_EXTENSION) && \
      (((status) & E1000_RXD_STAT_VP) ? \
-          (((length) > ((adapter)->min_frame_size - VLAN_TAG_SIZE)) && \
-           ((length) <= ((adapter)->max_frame_size + 1))) : \
-          (((length) > (adapter)->min_frame_size) && \
-           ((length) <= ((adapter)->max_frame_size + VLAN_TAG_SIZE + 1)))))
+	  (((length) > ((adapter)->min_frame_size - VLAN_TAG_SIZE)) && \
+	   ((length) <= ((adapter)->max_frame_size + 1))) : \
+	  (((length) > (adapter)->min_frame_size) && \
+	   ((length) <= ((adapter)->max_frame_size + VLAN_TAG_SIZE + 1)))))
 
 /* Structures, enums, and macros for the PHY */
 
@@ -2940,32 +2940,32 @@ struct e1000_host_command_info {
  */
 #define PHY_PAGE_SHIFT        5
 #define PHY_REG(page, reg)    \
-        (((page) << PHY_PAGE_SHIFT) | ((reg) & MAX_PHY_REG_ADDRESS))
+	(((page) << PHY_PAGE_SHIFT) | ((reg) & MAX_PHY_REG_ADDRESS))
 
 #define IGP3_PHY_PORT_CTRL           \
-        PHY_REG(769, 17)	/* Port General Configuration */
+	PHY_REG(769, 17)	/* Port General Configuration */
 #define IGP3_PHY_RATE_ADAPT_CTRL \
-        PHY_REG(769, 25)	/* Rate Adapter Control Register */
+	PHY_REG(769, 25)	/* Rate Adapter Control Register */
 
 #define IGP3_KMRN_FIFO_CTRL_STATS \
-        PHY_REG(770, 16)	/* KMRN FIFO's control/status register */
+	PHY_REG(770, 16)	/* KMRN FIFO's control/status register */
 #define IGP3_KMRN_POWER_MNG_CTRL \
-        PHY_REG(770, 17)	/* KMRN Power Management Control Register */
+	PHY_REG(770, 17)	/* KMRN Power Management Control Register */
 #define IGP3_KMRN_INBAND_CTRL \
-        PHY_REG(770, 18)	/* KMRN Inband Control Register */
+	PHY_REG(770, 18)	/* KMRN Inband Control Register */
 #define IGP3_KMRN_DIAG \
-        PHY_REG(770, 19)	/* KMRN Diagnostic register */
+	PHY_REG(770, 19)	/* KMRN Diagnostic register */
 #define IGP3_KMRN_DIAG_PCS_LOCK_LOSS 0x0002	/* RX PCS is not synced */
 #define IGP3_KMRN_ACK_TIMEOUT \
-        PHY_REG(770, 20)	/* KMRN Acknowledge Timeouts register */
+	PHY_REG(770, 20)	/* KMRN Acknowledge Timeouts register */
 
 #define IGP3_VR_CTRL \
-        PHY_REG(776, 18)	/* Voltage regulator control register */
+	PHY_REG(776, 18)	/* Voltage regulator control register */
 #define IGP3_VR_CTRL_MODE_SHUT       0x0200	/* Enter powerdown, shutdown VRs */
 #define IGP3_VR_CTRL_MODE_MASK       0x0300	/* Shutdown VR Mask */
 
 #define IGP3_CAPABILITY \
-        PHY_REG(776, 19)	/* IGP3 Capability Register */
+	PHY_REG(776, 19)	/* IGP3 Capability Register */
 
 /* Capabilities for SKU Control  */
 #define IGP3_CAP_INITIATE_TEAM       0x0001	/* Able to initiate a team */

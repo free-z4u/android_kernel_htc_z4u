@@ -12,9 +12,9 @@
 static inline void mmc_init_progress(void)
 {
        /* Initialise LEDS0-3
-        * registers: PORT0CR-PORT2CR,PORT159CR (LED0-LED3 Control)
-        * value:     0x10 - enable output
-        */
+	* registers: PORT0CR-PORT2CR,PORT159CR (LED0-LED3 Control)
+	* value:     0x10 - enable output
+	*/
        __raw_writeb(0x10, PORT0CR);
        __raw_writeb(0x10, PORT1CR);
        __raw_writeb(0x10, PORT2CR);

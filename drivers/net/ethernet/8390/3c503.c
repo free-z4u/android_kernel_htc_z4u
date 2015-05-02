@@ -550,27 +550,27 @@ el2_block_output(struct net_device *dev, int count,
     count  = (count + 1) >> 1;
     for(;;)
     {
-        boguscount = 0x1000;
-        while ((inb(E33G_STATUS) & ESTAT_DPRDY) == 0)
-        {
-            if(!boguscount--)
-            {
-                pr_notice("%s: FIFO blocked in el2_block_output.\n", dev->name);
-                el2_reset_8390(dev);
-                goto blocked;
-            }
-        }
-        if(count > WRD_COUNT)
-        {
-            outsw(E33G_FIFOH, wrd, WRD_COUNT);
-            wrd   += WRD_COUNT;
-            count -= WRD_COUNT;
-        }
-        else
-        {
-            outsw(E33G_FIFOH, wrd, count);
-            break;
-        }
+	boguscount = 0x1000;
+	while ((inb(E33G_STATUS) & ESTAT_DPRDY) == 0)
+	{
+	    if(!boguscount--)
+	    {
+		pr_notice("%s: FIFO blocked in el2_block_output.\n", dev->name);
+		el2_reset_8390(dev);
+		goto blocked;
+	    }
+	}
+	if(count > WRD_COUNT)
+	{
+	    outsw(E33G_FIFOH, wrd, WRD_COUNT);
+	    wrd   += WRD_COUNT;
+	    count -= WRD_COUNT;
+	}
+	else
+	{
+	    outsw(E33G_FIFOH, wrd, count);
+	    break;
+	}
     }
     blocked:;
     outb_p(ei_status.interface_num==0 ? ECNTRL_THIN : ECNTRL_AUI, E33G_CNTRL);
@@ -604,13 +604,13 @@ el2_get_8390_hdr(struct net_device *dev, struct e8390_pkt_hdr *hdr, int ring_pag
     boguscount = 0x1000;
     while ((inb(E33G_STATUS) & ESTAT_DPRDY) == 0)
     {
-        if(!boguscount--)
-        {
-            pr_notice("%s: FIFO blocked in el2_get_8390_hdr.\n", dev->name);
-            memset(hdr, 0x00, sizeof(struct e8390_pkt_hdr));
-            el2_reset_8390(dev);
-            goto blocked;
-        }
+	if(!boguscount--)
+	{
+	    pr_notice("%s: FIFO blocked in el2_get_8390_hdr.\n", dev->name);
+	    memset(hdr, 0x00, sizeof(struct e8390_pkt_hdr));
+	    el2_reset_8390(dev);
+	    goto blocked;
+	}
     }
     insw(E33G_FIFOH, hdr, (sizeof(struct e8390_pkt_hdr))>> 1);
     blocked:;
@@ -665,27 +665,27 @@ el2_block_input(struct net_device *dev, int count, struct sk_buff *skb, int ring
     count =  (count + 1) >> 1;
     for(;;)
     {
-        boguscount = 0x1000;
-        while ((inb(E33G_STATUS) & ESTAT_DPRDY) == 0)
-        {
-            if(!boguscount--)
-            {
-                pr_notice("%s: FIFO blocked in el2_block_input.\n", dev->name);
-                el2_reset_8390(dev);
-                goto blocked;
-            }
-        }
-        if(count > WRD_COUNT)
-        {
-            insw(E33G_FIFOH, buf, WRD_COUNT);
-            buf   += WRD_COUNT;
-            count -= WRD_COUNT;
-        }
-        else
-        {
-            insw(E33G_FIFOH, buf, count);
-            break;
-        }
+	boguscount = 0x1000;
+	while ((inb(E33G_STATUS) & ESTAT_DPRDY) == 0)
+	{
+	    if(!boguscount--)
+	    {
+		pr_notice("%s: FIFO blocked in el2_block_input.\n", dev->name);
+		el2_reset_8390(dev);
+		goto blocked;
+	    }
+	}
+	if(count > WRD_COUNT)
+	{
+	    insw(E33G_FIFOH, buf, WRD_COUNT);
+	    buf   += WRD_COUNT;
+	    count -= WRD_COUNT;
+	}
+	else
+	{
+	    insw(E33G_FIFOH, buf, count);
+	    break;
+	}
     }
     blocked:;
     outb_p(ei_status.interface_num == 0 ? ECNTRL_THIN : ECNTRL_AUI, E33G_CNTRL);

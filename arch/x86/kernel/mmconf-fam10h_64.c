@@ -215,18 +215,18 @@ void __cpuinit fam10h_check_enable_mmcfg(void)
 
 static int __init set_check_enable_amd_mmconf(const struct dmi_system_id *d)
 {
-        pci_probe |= PCI_CHECK_ENABLE_AMD_MMCONF;
-        return 0;
+	pci_probe |= PCI_CHECK_ENABLE_AMD_MMCONF;
+	return 0;
 }
 
 static const struct dmi_system_id __initconst mmconf_dmi_table[] = {
-        {
-                .callback = set_check_enable_amd_mmconf,
-                .ident = "Sun Microsystems Machine",
-                .matches = {
-                        DMI_MATCH(DMI_SYS_VENDOR, "Sun Microsystems"),
-                },
-        },
+	{
+		.callback = set_check_enable_amd_mmconf,
+		.ident = "Sun Microsystems Machine",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Sun Microsystems"),
+		},
+	},
 	{}
 };
 

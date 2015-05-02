@@ -2037,7 +2037,7 @@ EXPORT_SYMBOL(scsi_reset_provider);
  *	1 if valid sense data information found, else 0;
  */
 int scsi_normalize_sense(const u8 *sense_buffer, int sb_len,
-                         struct scsi_sense_hdr *sshdr)
+			 struct scsi_sense_hdr *sshdr)
 {
 	if (!sense_buffer || !sb_len)
 		return 0;

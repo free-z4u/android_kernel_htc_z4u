@@ -202,7 +202,7 @@ struct dasd_ccw_req {
 	unsigned long long stopclk;	/* TOD-clock of request interrupt */
 	unsigned long long endclk;	/* TOD-clock of request termination */
 
-        /* Callback that is called after reaching final status. */
+	/* Callback that is called after reaching final status. */
 	void (*callback)(struct dasd_ccw_req *, void *data);
 	void *callback_data;
 };
@@ -342,7 +342,7 @@ struct dasd_discipline {
 					 struct dasd_ccw_req *,
 					 struct irb *);
 
-        /* i/o control functions. */
+	/* i/o control functions. */
 	int (*fill_geometry) (struct dasd_block *, struct hd_geometry *);
 	int (*fill_info) (struct dasd_device *, struct dasd_information2_t *);
 	int (*ioctl) (struct dasd_block *, unsigned int, void __user *);
@@ -422,7 +422,7 @@ struct dasd_device {
 	/* Block device stuff. */
 	struct dasd_block *block;
 
-        unsigned int devindex;
+	unsigned int devindex;
 	unsigned long flags;	   /* per device flags */
 	unsigned short features;   /* copy of devmap-features (read-only!) */
 
@@ -441,7 +441,7 @@ struct dasd_device {
 	int stopped;		/* device (ccw_device_start) was stopped */
 
 	/* reference count. */
-        atomic_t ref_count;
+	atomic_t ref_count;
 
 	/* ccw queue and memory for static ccw/erp buffers. */
 	struct list_head ccw_queue;
@@ -452,7 +452,7 @@ struct dasd_device {
 	struct list_head erp_chunks;
 
 	atomic_t tasklet_scheduled;
-        struct tasklet_struct tasklet;
+	struct tasklet_struct tasklet;
 	struct work_struct kick_work;
 	struct work_struct restore_device;
 	struct work_struct reload_device;

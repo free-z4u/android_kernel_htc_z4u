@@ -84,7 +84,7 @@ static void unhandled_fault(unsigned long, struct task_struct *,
 		struct pt_regs *) __attribute__ ((noreturn));
 
 static void unhandled_fault(unsigned long address, struct task_struct *tsk,
-                     struct pt_regs *regs)
+		     struct pt_regs *regs)
 {
 	if((unsigned long) address < PAGE_SIZE) {
 		printk(KERN_ALERT
@@ -248,8 +248,8 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
 	 * If we're in an interrupt or have no user
 	 * context, we must not take the fault..
 	 */
-        if (in_atomic() || !mm)
-                goto no_context;
+	if (in_atomic() || !mm)
+		goto no_context;
 
 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
 

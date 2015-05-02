@@ -8,7 +8,7 @@ typedef long syscall_handler_t(unsigned long arg1, unsigned long arg2,
 			       unsigned long arg5, unsigned long arg6);
 
 #define EXECUTE_SYSCALL(syscall, regs) \
-        (*sys_call_table[syscall])(UM_SYSCALL_ARG1(&regs), \
+	(*sys_call_table[syscall])(UM_SYSCALL_ARG1(&regs), \
 			           UM_SYSCALL_ARG2(&regs), \
 				   UM_SYSCALL_ARG3(&regs), \
 				   UM_SYSCALL_ARG4(&regs), \

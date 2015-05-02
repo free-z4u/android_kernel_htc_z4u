@@ -109,7 +109,7 @@ vxfs_immed_readpage(struct file *fp, struct page *pp)
 
 	flush_dcache_page(pp);
 	SetPageUptodate(pp);
-        unlock_page(pp);
+	unlock_page(pp);
 
 	return 0;
 }

@@ -122,10 +122,10 @@ __cmpxchg_u32(volatile unsigned int *p, unsigned int old, unsigned int new)
 		"	bne	%0, %2, 1f;	\n"
 			M32R_UNLOCK" %3, @%1;	\n"
 		"	bra	2f;		\n"
-                "       .fillinsn		\n"
+		"       .fillinsn		\n"
 		"1:"
 			M32R_UNLOCK" %0, @%1;	\n"
-                "       .fillinsn		\n"
+		"       .fillinsn		\n"
 		"2:"
 			: "=&r" (retval)
 			: "r" (p), "r" (old), "r" (new)

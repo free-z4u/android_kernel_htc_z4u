@@ -121,7 +121,7 @@ static int sb_midi_end_read(int dev)
 
 static int sb_midi_ioctl(int dev, unsigned cmd, void __user *arg)
 {
-        return -EINVAL;
+	return -EINVAL;
 }
 
 void sb_midi_interrupt(sb_devc * devc)

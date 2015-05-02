@@ -30,12 +30,12 @@ struct rt5501_reg_data {
 
 struct rt5501_config {
 	unsigned int reg_len;
-        struct rt5501_reg_data reg[MAX_REG_DATA];
+	struct rt5501_reg_data reg[MAX_REG_DATA];
 };
 
 struct rt5501_comm_data {
 	unsigned int out_mode;
-        struct rt5501_config config;
+	struct rt5501_config config;
 };
 
 struct rt5501_config_data {
@@ -44,9 +44,9 @@ struct rt5501_config_data {
 };
 
 enum {
-        RT5501_INIT = 0,
-        RT5501_MUTE,
-        RT5501_MAX_FUNC
+	RT5501_INIT = 0,
+	RT5501_MUTE,
+	RT5501_MAX_FUNC
 };
 
 enum RT5501_Mode {

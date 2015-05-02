@@ -296,7 +296,7 @@ struct qe_txd {
 #define PREV_TX(num)       (((num) - 1) & (TX_RING_MAXSIZE - 1))
 
 #define TX_BUFFS_AVAIL(qp)                                    \
-        (((qp)->tx_old <= (qp)->tx_new) ?                     \
+	(((qp)->tx_old <= (qp)->tx_new) ?                     \
 	  (qp)->tx_old + (TX_RING_SIZE - 1) - (qp)->tx_new :  \
 			    (qp)->tx_old - (qp)->tx_new - 1)
 

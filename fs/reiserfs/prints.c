@@ -182,7 +182,7 @@ static char *is_there_reiserfs_struct(char *fmt, int *what)
    reiserfs_warning ("bad key %k", key);
    instead of
    printk ("bad key %lu %lu %lu %lu", key->k_dir_id, key->k_objectid,
-           key->k_offset, key->k_uniqueness);
+	   key->k_offset, key->k_uniqueness);
 */
 static DEFINE_SPINLOCK(error_lock);
 static void prepare_error_buf(const char *fmt, va_list args)
@@ -306,7 +306,7 @@ void reiserfs_debug(struct super_block *s, int level, const char *fmt, ...)
 
 /* The format:
 
-           maintainer-errorid: [function-name:] message
+	   maintainer-errorid: [function-name:] message
 
     where errorid is unique to the maintainer and function-name is
     optional, is recommended, so that anyone can easily find the bug

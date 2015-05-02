@@ -79,14 +79,14 @@
 #endif
 #if defined(CONFIG_ATM_FORE200E_DEBUG) && (CONFIG_ATM_FORE200E_DEBUG > 0)
 #define DPRINTK(level, format, args...)  do { if (CONFIG_ATM_FORE200E_DEBUG >= (level)) \
-                                                  printk(FORE200E format, ##args); } while (0)
+						  printk(FORE200E format, ##args); } while (0)
 #else
 #define DPRINTK(level, format, args...)  do {} while (0)
 #endif
 
 
 #define FORE200E_ALIGN(addr, alignment) \
-        ((((unsigned long)(addr) + (alignment - 1)) & ~(alignment - 1)) - (unsigned long)(addr))
+	((((unsigned long)(addr) + (alignment - 1)) & ~(alignment - 1)) - (unsigned long)(addr))
 
 #define FORE200E_DMA_INDEX(dma_addr, type, index)  ((dma_addr) + (index) * sizeof(type))
 
@@ -582,10 +582,10 @@ fore200e_pca_configure(struct fore200e* fore200e)
 	| PCA200E_CTRL_CONVERT_ENDIAN
 #endif
 #if 0
-        | PCA200E_CTRL_DIS_CACHE_RD
-        | PCA200E_CTRL_DIS_WRT_INVAL
-        | PCA200E_CTRL_ENA_CONT_REQ_MODE
-        | PCA200E_CTRL_2_CACHE_WRT_INVAL
+	| PCA200E_CTRL_DIS_CACHE_RD
+	| PCA200E_CTRL_DIS_WRT_INVAL
+	| PCA200E_CTRL_ENA_CONT_REQ_MODE
+	| PCA200E_CTRL_2_CACHE_WRT_INVAL
 #endif
 	| PCA200E_CTRL_LARGE_PCI_BURSTS;
 
@@ -866,7 +866,7 @@ fore200e_tx_irq(struct fore200e* fore200e)
 
 	entry = &txq->host_entry[ txq->tail ];
 
-        if ((*entry->status & STATUS_COMPLETE) == 0) {
+	if ((*entry->status & STATUS_COMPLETE) == 0) {
 	    break;
 	}
 
@@ -1069,9 +1069,9 @@ fore200e_push_rpd(struct fore200e* fore200e, struct atm_vcc* vcc, struct rpd* rp
 
 	cell_header = (rpd->atm_header.gfc << ATM_HDR_GFC_SHIFT) |
 	              (rpd->atm_header.vpi << ATM_HDR_VPI_SHIFT) |
-                      (rpd->atm_header.vci << ATM_HDR_VCI_SHIFT) |
-                      (rpd->atm_header.plt << ATM_HDR_PTI_SHIFT) |
-                       rpd->atm_header.clp;
+		      (rpd->atm_header.vci << ATM_HDR_VCI_SHIFT) |
+		      (rpd->atm_header.plt << ATM_HDR_PTI_SHIFT) |
+		       rpd->atm_header.clp;
 	pdu_len = 4;
     }
 #endif
@@ -1607,7 +1607,7 @@ fore200e_send(struct atm_vcc *vcc, struct sk_buff *skb)
 
     if ((vcc->qos.aal == ATM_AAL0) && (skb_len % ATM_CELL_PAYLOAD)) {
 
-        /* this simply NUKES the PCA board */
+	/* this simply NUKES the PCA board */
 	DPRINTK(2, "incomplete tx AAL0 PDU on device %s\n", fore200e->name);
 	tx_copy = 1;
 	tx_len  = ((skb_len / ATM_CELL_PAYLOAD) + 1) * ATM_CELL_PAYLOAD;
@@ -2309,7 +2309,7 @@ fore200e_init_tx_queue(struct fore200e* fore200e)
 	txq->host_entry[ i ].tpd =
 	                     FORE200E_INDEX(txq->tpd.align_addr, struct tpd, i);
 	txq->host_entry[ i ].tpd_dma  =
-                             FORE200E_DMA_INDEX(txq->tpd.dma_addr, struct tpd, i);
+			     FORE200E_DMA_INDEX(txq->tpd.dma_addr, struct tpd, i);
 	txq->host_entry[ i ].cp_entry = &cp_entry[ i ];
 
 	*txq->host_entry[ i ].status = STATUS_FREE;
@@ -2317,7 +2317,7 @@ fore200e_init_tx_queue(struct fore200e* fore200e)
 	fore200e->bus->write(FORE200E_DMA_INDEX(txq->status.dma_addr, enum status, i),
 			     &cp_entry[ i ].status_haddr);
 
-        /* although there is a one-to-one mapping of tx queue entries and tpds,
+	/* although there is a one-to-one mapping of tx queue entries and tpds,
 	   we do not write here the DMA (physical) base address of each tpd into
 	   the related cp resident entry, because the cp relies on this write
 	   operation to detect that a new pdu has been submitted for tx */
@@ -2357,13 +2357,13 @@ fore200e_init_cmd_queue(struct fore200e* fore200e)
     for (i=0; i < QUEUE_SIZE_CMD; i++) {
 
 	cmdq->host_entry[ i ].status   =
-                              FORE200E_INDEX(cmdq->status.align_addr, enum status, i);
+			      FORE200E_INDEX(cmdq->status.align_addr, enum status, i);
 	cmdq->host_entry[ i ].cp_entry = &cp_entry[ i ];
 
 	*cmdq->host_entry[ i ].status = STATUS_FREE;
 
 	fore200e->bus->write(FORE200E_DMA_INDEX(cmdq->status.dma_addr, enum status, i),
-                             &cp_entry[ i ].status_haddr);
+			     &cp_entry[ i ].status_haddr);
     }
 
     /* set the head entry of the queue */
@@ -2574,7 +2574,7 @@ fore200e_register(struct fore200e* fore200e, struct device *parent)
     DPRINTK(2, "device %s being registered\n", fore200e->name);
 
     atm_dev = atm_dev_register(fore200e->bus->proc_name, parent, &fore200e_ops,
-                               -1, NULL);
+			       -1, NULL);
     if (atm_dev == NULL) {
 	printk(FORE200E "unable to register device %s\n", fore200e->name);
 	return -ENODEV;
@@ -2932,7 +2932,7 @@ fore200e_proc_read(struct atm_dev *dev, loff_t* pos, char* page)
 		       "   monitor release:\t\t%d.%d\n"
 		       "   media type:\t\t\t%s\n"
 		       "   OC-3 revision:\t\t0x%x\n"
-                       "   OC-3 mode:\t\t\t%s",
+		       "   OC-3 mode:\t\t\t%s",
 		       fw_release >> 16, fw_release << 16 >> 24,  fw_release << 24 >> 24,
 		       mon960_release >> 16, mon960_release << 16 >> 16,
 		       media_name[ media_index ],
@@ -3076,7 +3076,7 @@ fore200e_proc_read(struct atm_dev *dev, loff_t* pos, char* page)
 		       fore200e->stats->aux.receive_carrier ? "ON" : "OFF!");
 
     if (!left--) {
-        return sprintf(page,"\n"
+	return sprintf(page,"\n"
 		       " VCCs:\n  address   VPI VCI   AAL "
 		       "TX PDUs   TX min/max size  RX PDUs   RX min/max size\n");
     }

@@ -331,7 +331,7 @@ typedef struct {
 	unsigned int hostrw0;
 	unsigned int hostrw1;
 
-        /* configregs */
+	/* configregs */
 
 	unsigned int smask1x;
 	unsigned int smask1y;
@@ -346,7 +346,7 @@ typedef struct {
 	unsigned int clipmode;
 	unsigned int config;
 
-        /* dcb registers */
+	/* dcb registers */
 	unsigned int dcbmode;
 	unsigned int dcbdata0;
 	unsigned int dcbdata1;
@@ -537,7 +537,7 @@ static __inline__ int newport_bfwait(struct newport_regs *regs)
 
 
 #define DCB_CYCLES(setup,hold,width)                \
-                  ((hold << DCB_CSHOLD_SHIFT)  |    \
+		  ((hold << DCB_CSHOLD_SHIFT)  |    \
 		   (setup << DCB_CSSETUP_SHIFT)|    \
 		   (width << DCB_CSWIDTH_SHIFT))
 
@@ -549,27 +549,27 @@ static __inline__ int newport_bfwait(struct newport_regs *regs)
 static __inline__ void
 xmap9FIFOWait (struct newport_regs *rex)
 {
-        rex->set.dcbmode = DCB_XMAP0 | XM9_CRS_FIFO_AVAIL |
+	rex->set.dcbmode = DCB_XMAP0 | XM9_CRS_FIFO_AVAIL |
 		DCB_DATAWIDTH_1 | R_DCB_XMAP9_PROTOCOL;
-        newport_bfwait (rex);
+	newport_bfwait (rex);
 
-        while ((rex->set.dcbdata0.bybytes.b3 & 3) != XM9_FIFO_EMPTY)
+	while ((rex->set.dcbdata0.bybytes.b3 & 3) != XM9_FIFO_EMPTY)
 		;
 }
 
 static __inline__ void
 xmap9SetModeReg (struct newport_regs *rex, unsigned int modereg, unsigned int data24, int cfreq)
 {
-        if (cfreq > 119)
-            rex->set.dcbmode = DCB_XMAP_ALL | XM9_CRS_MODE_REG_DATA |
-                        DCB_DATAWIDTH_4 | W_DCB_XMAP9_PROTOCOL;
-        else if (cfreq > 59)
-            rex->set.dcbmode = DCB_XMAP_ALL | XM9_CRS_MODE_REG_DATA |
+	if (cfreq > 119)
+	    rex->set.dcbmode = DCB_XMAP_ALL | XM9_CRS_MODE_REG_DATA |
+			DCB_DATAWIDTH_4 | W_DCB_XMAP9_PROTOCOL;
+	else if (cfreq > 59)
+	    rex->set.dcbmode = DCB_XMAP_ALL | XM9_CRS_MODE_REG_DATA |
 		    DCB_DATAWIDTH_4 | WSLOW_DCB_XMAP9_PROTOCOL;
-        else
-            rex->set.dcbmode = DCB_XMAP_ALL | XM9_CRS_MODE_REG_DATA |
-                        DCB_DATAWIDTH_4 | WAYSLOW_DCB_XMAP9_PROTOCOL;
-        rex->set.dcbdata0.byword = ((modereg) << 24) | (data24 & 0xffffff);
+	else
+	    rex->set.dcbmode = DCB_XMAP_ALL | XM9_CRS_MODE_REG_DATA |
+			DCB_DATAWIDTH_4 | WAYSLOW_DCB_XMAP9_PROTOCOL;
+	rex->set.dcbdata0.byword = ((modereg) << 24) | (data24 & 0xffffff);
 }
 
 #define BT445_PROTOCOL		DCB_CYCLES(1,1,3)

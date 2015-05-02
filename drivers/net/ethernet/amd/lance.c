@@ -19,7 +19,7 @@
 	- alignment problem with 1.3.* kernel and some minor changes.
 	Thomas Bogendoerfer (tsbogend@bigbug.franken.de):
 	- added support for Linux/Alpha, but removed most of it, because
-        it worked only for the PCI chip.
+	it worked only for the PCI chip.
       - added hook for the 32bit lance driver
       - added PCnetPCI II (79C970A) to chip table
 	Paul Gortmaker (gpg109@rsphy1.anu.edu.au):
@@ -28,9 +28,9 @@
     v1.12 10/27/97 Module support -djb
     v1.14  2/3/98 Module support modified, made PCI support optional -djb
     v1.15 5/27/99 Fixed bug in the cleanup_module(). dev->priv was freed
-                  before unregister_netdev() which caused NULL pointer
-                  reference later in the chain (in rtnetlink_fill_ifinfo())
-                  -- Mika Kuoppala <miku@iki.fi>
+		  before unregister_netdev() which caused NULL pointer
+		  reference later in the chain (in rtnetlink_fill_ifinfo())
+		  -- Mika Kuoppala <miku@iki.fi>
 
     Forward ported v1.14 to 2.1.129, merged the PCI and misc changes from
     the 2.1 version of the old driver - Alan Cox
@@ -282,9 +282,9 @@ static struct lance_chip_type {
 	{0x2430, "PCnet32",					/* 79C965 PCnet for VL bus. */
 		LANCE_ENABLE_AUTOSELECT + LANCE_MUST_REINIT_RING +
 			LANCE_HAS_MISSED_FRAME},
-        {0x2621, "PCnet/PCI-II 79C970A",        /* 79C970A PCInetPCI II. */
-                LANCE_ENABLE_AUTOSELECT + LANCE_MUST_REINIT_RING +
-                        LANCE_HAS_MISSED_FRAME},
+	{0x2621, "PCnet/PCI-II 79C970A",        /* 79C970A PCInetPCI II. */
+		LANCE_ENABLE_AUTOSELECT + LANCE_MUST_REINIT_RING +
+			LANCE_HAS_MISSED_FRAME},
 	{0x0, 	 "PCnet (unknown)",
 		LANCE_ENABLE_AUTOSELECT + LANCE_MUST_REINIT_RING +
 			LANCE_HAS_MISSED_FRAME},

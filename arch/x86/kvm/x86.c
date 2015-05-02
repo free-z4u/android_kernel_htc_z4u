@@ -1052,12 +1052,12 @@ void kvm_write_tsc(struct kvm_vcpu *vcpu, u64 data)
 	 * Special case: TSC write with a small delta (1 second) of virtual
 	 * cycle time against real time is interpreted as an attempt to
 	 * synchronize the CPU.
-         *
+	 *
 	 * For a reliable TSC, we can match TSC offsets, and for an unstable
 	 * TSC, we add elapsed time in this computation.  We could let the
 	 * compensation code attempt to catch up if we fall behind, but
 	 * it's better to try to match offsets from the beginning.
-         */
+	 */
 	if (usdiff < USEC_PER_SEC &&
 	    vcpu->arch.virtual_tsc_khz == kvm->arch.last_tsc_khz) {
 		if (!check_tsc_unstable()) {

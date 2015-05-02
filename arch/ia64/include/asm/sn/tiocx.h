@@ -43,7 +43,7 @@ struct cx_drv {
 #define TIOCX_DMA_ADDR(a) (u64)((u64)(a) & 0xffffcfffffffffUL)
 
 #define TIOCX_TO_TIOCX_DMA_ADDR(a) (u64)(((u64)(a) & 0xfffffffff) |  \
-                                  ((((u64)(a)) & 0xffffc000000000UL) <<2))
+				  ((((u64)(a)) & 0xffffc000000000UL) <<2))
 
 #define TIO_CE_ASIC_PARTNUM 0xce00
 #define TIOCX_CORELET 3

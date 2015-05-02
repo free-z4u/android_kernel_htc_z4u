@@ -46,7 +46,7 @@ unsigned long __init rtas_get_boot_time(void)
  */
 void rtas_get_rtc_time(struct rtc_time *rtc_tm)
 {
-        int ret[8];
+	int ret[8];
 	int error;
 	unsigned int wait_time;
 	u64 max_wait_tb;
@@ -73,7 +73,7 @@ void rtas_get_rtc_time(struct rtc_time *rtc_tm)
 				   "error: reading the clock failed (%d)\n",
 				   error);
 		return;
-        }
+	}
 
 	rtc_tm->tm_sec = ret[5];
 	rtc_tm->tm_min = ret[4];
@@ -108,5 +108,5 @@ int rtas_set_rtc_time(struct rtc_time *tm)
 				   "error: setting the clock failed (%d)\n",
 				   error);
 
-        return 0;
+	return 0;
 }

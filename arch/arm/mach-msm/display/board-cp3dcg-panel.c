@@ -71,15 +71,15 @@ static char display_on[] = {0x29, 0x00};
 static char display_off[2] = {0x28, 0x00};
 static char sleep_in[2] = {0x10, 0x00};
 static struct dsi_cmd_desc backlight_cmds[] = {
-        {DTYPE_DCS_LWRITE, 1, 0, 0, 0,
-                sizeof(led_pwm1), led_pwm1},
+	{DTYPE_DCS_LWRITE, 1, 0, 0, 0,
+		sizeof(led_pwm1), led_pwm1},
 };
 static char sony_orise_001[] ={0x00, 0x00};
 static char sony_orise_002[] = {
-        0xFF, 0x96, 0x01, 0x01};
+	0xFF, 0x96, 0x01, 0x01};
 static char sony_orise_003[] ={0x00, 0x80};
 static char sony_orise_004[] = {
-        0xFF, 0x96, 0x01};
+	0xFF, 0x96, 0x01};
 static char sony_inv_01[] = {0x00, 0xB3};
 static char sony_inv_02[] = {0xC0, 0x50};
 static char sony_timing1_01[] = {0x00, 0x80};
@@ -1064,7 +1064,7 @@ static struct dsi_cmd_desc dim_off_cmd[] = {
 static void uranus_dim_on(struct msm_fb_data_type *mfd)
 {
 	mipi_dsi_cmds_tx(&cp3dcg_panel_tx_buf, dim_on_cmd, 1);
-        PR_DISP_INFO("%s\n", __func__);
+	PR_DISP_INFO("%s\n", __func__);
 }
 static void uranus_dim_off(struct msm_fb_data_type *mfd)
 {
@@ -1508,11 +1508,11 @@ static int __init uranus_panel_panel_init(void)
 		mipi_cmd_sony_orise_init();
 		PR_DISP_INFO("match PANEL_ID_URANUS_SONY_ORISE panel_type\n");
 	} else if(panel_type == PANEL_ID_URANUS_LG_NOVATEK) {
-                mipi_cmd_lg_novatek_init();
-                PR_DISP_INFO("match PANEL_ID_URANUS_LG_NOVATEK panel_type\n");
+		mipi_cmd_lg_novatek_init();
+		PR_DISP_INFO("match PANEL_ID_URANUS_LG_NOVATEK panel_type\n");
 	} else if(panel_type == PANEL_ID_URANUS_JDI_NOVATEK) {
-                mipi_cmd_jdi_novatek_init();
-                PR_DISP_INFO("match PANEL_ID_URANUS_JDI_NOVATEK panel_type\n");
+		mipi_cmd_jdi_novatek_init();
+		PR_DISP_INFO("match PANEL_ID_URANUS_JDI_NOVATEK panel_type\n");
 	} else
 		PR_DISP_INFO("Mis-match panel_type\n");
 

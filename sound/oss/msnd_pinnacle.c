@@ -205,7 +205,7 @@ static int dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	int val, i, data, tmp;
 	LPDAQD lpDAQ, lpDARQ;
-        audio_buf_info abinfo;
+	audio_buf_info abinfo;
 	unsigned long flags;
 	int __user *p = (int __user *)arg;
 
@@ -230,9 +230,9 @@ static int dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			return -EINVAL;
 		spin_lock_irqsave(&dev.lock, flags);
 		abinfo.fragsize = dsp_get_frag_size();
-                abinfo.bytes = dev.DAPF.n - dev.DAPF.len;
-                abinfo.fragstotal = dev.DAPF.n / abinfo.fragsize;
-                abinfo.fragments = abinfo.bytes / abinfo.fragsize;
+		abinfo.bytes = dev.DAPF.n - dev.DAPF.len;
+		abinfo.fragstotal = dev.DAPF.n / abinfo.fragsize;
+		abinfo.fragments = abinfo.bytes / abinfo.fragsize;
 		spin_unlock_irqrestore(&dev.lock, flags);
 		return copy_to_user((void __user *)arg, &abinfo, sizeof(abinfo)) ? -EFAULT : 0;
 
@@ -241,9 +241,9 @@ static int dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			return -EINVAL;
 		spin_lock_irqsave(&dev.lock, flags);
 		abinfo.fragsize = dsp_get_frag_size();
-                abinfo.bytes = dev.DARF.n - dev.DARF.len;
-                abinfo.fragstotal = dev.DARF.n / abinfo.fragsize;
-                abinfo.fragments = abinfo.bytes / abinfo.fragsize;
+		abinfo.bytes = dev.DARF.n - dev.DARF.len;
+		abinfo.fragstotal = dev.DARF.n / abinfo.fragsize;
+		abinfo.fragments = abinfo.bytes / abinfo.fragsize;
 		spin_unlock_irqrestore(&dev.lock, flags);
 		return copy_to_user((void __user *)arg, &abinfo, sizeof(abinfo)) ? -EFAULT : 0;
 
@@ -259,7 +259,7 @@ static int dsp_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	case SNDCTL_DSP_GETBLKSIZE:
 		tmp = dsp_get_frag_size();
 		if (put_user(tmp, p))
-                        return -EFAULT;
+			return -EFAULT;
 		return 0;
 
 	case SNDCTL_DSP_GETFMTS:
@@ -833,7 +833,7 @@ static __inline__ int pack_DARQ_to_DARF(register int bank)
 	size = readw(DAQD + DAQDS_wSize);
 
 	/* Read data from the head (unprotected bank 1 access okay
-           since this is only called inside an interrupt) */
+	   since this is only called inside an interrupt) */
 	msnd_outb(HPBLKSEL_1, dev.io + HP_BLKS);
 	msnd_fifo_write_io(
 		&dev.DARF,
@@ -1081,7 +1081,7 @@ static __inline__ void eval_dsp_msg(register WORD wMessage)
 		}
 		break;
 
-        case HIMT_MIDI_IN_UCHAR:
+	case HIMT_MIDI_IN_UCHAR:
 		if (dev.midi_in_interrupt)
 			(*dev.midi_in_interrupt)(&dev);
 		break;

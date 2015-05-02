@@ -295,7 +295,7 @@ static void __init mpc86xx_hpcd_setup_arch(void)
 			else
 				fsl_add_bridge(np, 0);
 		}
-        }
+	}
 #endif
 #if defined(CONFIG_FB_FSL_DIU) || defined(CONFIG_FB_FSL_DIU_MODULE)
 	diu_ops.get_pixel_format	= mpc8610hpcd_get_pixel_format;

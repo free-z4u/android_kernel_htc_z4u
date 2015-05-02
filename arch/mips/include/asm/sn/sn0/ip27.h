@@ -80,6 +80,6 @@
 #define LED_CYCLE_SHFT  4
 
 #define SEND_NMI(_nasid, _slice)	\
-          REMOTE_HUB_S((_nasid),  (PI_NMI_A + ((_slice) * PI_NMI_OFFSET)), 1)
+	  REMOTE_HUB_S((_nasid),  (PI_NMI_A + ((_slice) * PI_NMI_OFFSET)), 1)
 
 #endif /* _ASM_SN_SN0_IP27_H */

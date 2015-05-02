@@ -52,8 +52,8 @@ enum sas_phy_role {
 };
 
 enum sas_phy_type {
-        PHY_TYPE_PHYSICAL,
-        PHY_TYPE_VIRTUAL
+	PHY_TYPE_PHYSICAL,
+	PHY_TYPE_VIRTUAL
 };
 
 /* The events are mnemonically described in sas_dump.c
@@ -95,7 +95,7 @@ enum discover_event {
 
 #define to_dom_device(_obj) container_of(_obj, struct domain_device, dev_obj)
 #define to_dev_attr(_attr)  container_of(_attr, struct domain_dev_attribute,\
-                                         attr)
+					 attr)
 
 enum routing_attribute {
 	DIRECT_ROUTING,
@@ -159,17 +159,17 @@ struct expander_device {
 
 /* ---------- SATA device ---------- */
 enum ata_command_set {
-        ATA_COMMAND_SET   = 0,
-        ATAPI_COMMAND_SET = 1,
+	ATA_COMMAND_SET   = 0,
+	ATAPI_COMMAND_SET = 1,
 };
 
 #define ATA_RESP_FIS_SIZE 24
 
 struct sata_device {
-        enum   ata_command_set command_set;
-        struct smp_resp        rps_resp; /* report_phy_sata_resp */
-        u8     port_no;        /* port number, if this is a PM (Port) */
-        struct list_head children; /* PM Ports if this is a PM */
+	enum   ata_command_set command_set;
+	struct smp_resp        rps_resp; /* report_phy_sata_resp */
+	u8     port_no;        /* port number, if this is a PM (Port) */
+	struct list_head children; /* PM Ports if this is a PM */
 
 	struct ata_port *ap;
 	struct ata_host ata_host;
@@ -183,38 +183,38 @@ enum {
 
 struct domain_device {
 	spinlock_t done_lock;
-        enum sas_dev_type dev_type;
+	enum sas_dev_type dev_type;
 
-        enum sas_linkrate linkrate;
-        enum sas_linkrate min_linkrate;
-        enum sas_linkrate max_linkrate;
+	enum sas_linkrate linkrate;
+	enum sas_linkrate min_linkrate;
+	enum sas_linkrate max_linkrate;
 
-        int  pathways;
+	int  pathways;
 
-        struct domain_device *parent;
-        struct list_head siblings; /* devices on the same level */
-        struct asd_sas_port *port;        /* shortcut to root of the tree */
+	struct domain_device *parent;
+	struct list_head siblings; /* devices on the same level */
+	struct asd_sas_port *port;        /* shortcut to root of the tree */
 	struct sas_phy *phy;
 
-        struct list_head dev_list_node;
+	struct list_head dev_list_node;
 	struct list_head disco_list_node; /* awaiting probe or destruct */
 
-        enum sas_protocol    iproto;
-        enum sas_protocol    tproto;
+	enum sas_protocol    iproto;
+	enum sas_protocol    tproto;
 
-        struct sas_rphy *rphy;
+	struct sas_rphy *rphy;
 
-        u8  sas_addr[SAS_ADDR_SIZE];
-        u8  hashed_sas_addr[HASHED_SAS_ADDR_SIZE];
+	u8  sas_addr[SAS_ADDR_SIZE];
+	u8  hashed_sas_addr[HASHED_SAS_ADDR_SIZE];
 
-        u8  frame_rcvd[32];
+	u8  frame_rcvd[32];
 
-        union {
-                struct expander_device ex_dev;
-                struct sata_device     sata_dev; /* STP & directly attached */
-        };
+	union {
+		struct expander_device ex_dev;
+		struct sata_device     sata_dev; /* STP & directly attached */
+	};
 
-        void *lldd_dev;
+	void *lldd_dev;
 	unsigned long state;
 	struct kref kref;
 };

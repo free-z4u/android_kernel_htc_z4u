@@ -943,8 +943,8 @@ static void decode_prio_command(struct sixpack *sp, unsigned char cmd)
 	/* needed to trigger the TNC watchdog */
 	sp->tty->ops->write(sp->tty, &sp->led_state, 1);
 
-        /* if the state byte has been received, the TNC is present,
-           so the resync timer can be reset. */
+	/* if the state byte has been received, the TNC is present,
+	   so the resync timer can be reset. */
 
 	if (sp->tnc_state == TNC_IN_SYNC) {
 		del_timer(&sp->resync_t);

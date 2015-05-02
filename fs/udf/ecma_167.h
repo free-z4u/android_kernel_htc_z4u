@@ -366,8 +366,8 @@ struct kernel_lb_addr {
 
 /* Short Allocation Descriptor (ECMA 167r3 4/14.14.1) */
 struct short_ad {
-        __le32		extLength;
-        __le32		extPosition;
+	__le32		extLength;
+	__le32		extPosition;
 } __attribute__ ((packed));
 
 /* Long Allocation Descriptor (ECMA 167r3 4/14.14.2) */

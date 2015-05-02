@@ -498,7 +498,7 @@ int cleanup_journal_tail(journal_t *journal)
 	J_ASSERT(blocknr != 0);
 
 	/* If the oldest pinned transaction is at the tail of the log
-           already then there's not much we can do right now. */
+	   already then there's not much we can do right now. */
 	if (journal->j_tail_sequence == first_tid) {
 		spin_unlock(&journal->j_state_lock);
 		return 1;
@@ -706,7 +706,7 @@ int __journal_remove_checkpoint(struct journal_head *jh)
 	__journal_drop_transaction(journal, transaction);
 
 	/* Just in case anybody was waiting for more transactions to be
-           checkpointed... */
+	   checkpointed... */
 	wake_up(&journal->j_wait_logspace);
 	ret = 1;
 out:

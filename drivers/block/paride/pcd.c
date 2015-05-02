@@ -3,75 +3,75 @@
 		            Under the terms of the GNU General Public License.
 
 	This is a high-level driver for parallel port ATAPI CD-ROM
-        drives based on chips supported by the paride module.
+	drives based on chips supported by the paride module.
 
-        By default, the driver will autoprobe for a single parallel
-        port ATAPI CD-ROM drive, but if their individual parameters are
-        specified, the driver can handle up to 4 drives.
+	By default, the driver will autoprobe for a single parallel
+	port ATAPI CD-ROM drive, but if their individual parameters are
+	specified, the driver can handle up to 4 drives.
 
-        The behaviour of the pcd driver can be altered by setting
-        some parameters from the insmod command line.  The following
-        parameters are adjustable:
+	The behaviour of the pcd driver can be altered by setting
+	some parameters from the insmod command line.  The following
+	parameters are adjustable:
 
-            drive0      These four arguments can be arrays of
-            drive1      1-6 integers as follows:
-            drive2
-            drive3      <prt>,<pro>,<uni>,<mod>,<slv>,<dly>
+	    drive0      These four arguments can be arrays of
+	    drive1      1-6 integers as follows:
+	    drive2
+	    drive3      <prt>,<pro>,<uni>,<mod>,<slv>,<dly>
 
-                        Where,
+			Where,
 
-                <prt>   is the base of the parallel port address for
-                        the corresponding drive.  (required)
+		<prt>   is the base of the parallel port address for
+			the corresponding drive.  (required)
 
-                <pro>   is the protocol number for the adapter that
-                        supports this drive.  These numbers are
-                        logged by 'paride' when the protocol modules
-                        are initialised.  (0 if not given)
+		<pro>   is the protocol number for the adapter that
+			supports this drive.  These numbers are
+			logged by 'paride' when the protocol modules
+			are initialised.  (0 if not given)
 
-                <uni>   for those adapters that support chained
-                        devices, this is the unit selector for the
-                        chain of devices on the given port.  It should
-                        be zero for devices that don't support chaining.
-                        (0 if not given)
+		<uni>   for those adapters that support chained
+			devices, this is the unit selector for the
+			chain of devices on the given port.  It should
+			be zero for devices that don't support chaining.
+			(0 if not given)
 
-                <mod>   this can be -1 to choose the best mode, or one
-                        of the mode numbers supported by the adapter.
-                        (-1 if not given)
+		<mod>   this can be -1 to choose the best mode, or one
+			of the mode numbers supported by the adapter.
+			(-1 if not given)
 
 		<slv>   ATAPI CD-ROMs can be jumpered to master or slave.
 			Set this to 0 to choose the master drive, 1 to
-                        choose the slave, -1 (the default) to choose the
+			choose the slave, -1 (the default) to choose the
 			first drive found.
 
-                <dly>   some parallel ports require the driver to
-                        go more slowly.  -1 sets a default value that
-                        should work with the chosen protocol.  Otherwise,
-                        set this to a small integer, the larger it is
-                        the slower the port i/o.  In some cases, setting
-                        this to zero will speed up the device. (default -1)
+		<dly>   some parallel ports require the driver to
+			go more slowly.  -1 sets a default value that
+			should work with the chosen protocol.  Otherwise,
+			set this to a small integer, the larger it is
+			the slower the port i/o.  In some cases, setting
+			this to zero will speed up the device. (default -1)
 
-            major       You may use this parameter to overide the
-                        default major number (46) that this driver
-                        will use.  Be sure to change the device
-                        name as well.
+	    major       You may use this parameter to overide the
+			default major number (46) that this driver
+			will use.  Be sure to change the device
+			name as well.
 
-            name        This parameter is a character string that
-                        contains the name the kernel will use for this
-                        device (in /proc output, for instance).
-                        (default "pcd")
+	    name        This parameter is a character string that
+			contains the name the kernel will use for this
+			device (in /proc output, for instance).
+			(default "pcd")
 
-            verbose     This parameter controls the amount of logging
-                        that the driver will do.  Set it to 0 for
-                        normal operation, 1 to see autoprobe progress
-                        messages, or 2 to see additional debugging
-                        output.  (default 0)
+	    verbose     This parameter controls the amount of logging
+			that the driver will do.  Set it to 0 for
+			normal operation, 1 to see autoprobe progress
+			messages, or 2 to see additional debugging
+			output.  (default 0)
 
-            nice        This parameter controls the driver's use of
-                        idle CPU time, at the expense of some speed.
+	    nice        This parameter controls the driver's use of
+			idle CPU time, at the expense of some speed.
 
 	If this driver is built into the kernel, you can use kernel
-        the following command line parameters, with the same values
-        as the corresponding module parameters listed above:
+	the following command line parameters, with the same values
+	as the corresponding module parameters listed above:
 
 	    pcd.drive0
 	    pcd.drive1
@@ -79,8 +79,8 @@
 	    pcd.drive3
 	    pcd.nice
 
-        In addition, you can use the parameter pcd.disable to disable
-        the driver entirely.
+	In addition, you can use the parameter pcd.disable to disable
+	the driver entirely.
 
 */
 

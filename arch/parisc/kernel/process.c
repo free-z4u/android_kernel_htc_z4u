@@ -271,8 +271,8 @@ copy_thread(unsigned long clone_flags, unsigned long usp,
 	*cregs = *pregs;
 
 	/* Set the return value for the child.  Note that this is not
-           actually restored by the syscall exit path, but we put it
-           here for consistency in case of signals. */
+	   actually restored by the syscall exit path, but we put it
+	   here for consistency in case of signals. */
 	cregs->gr[28] = 0; /* child */
 
 	/*

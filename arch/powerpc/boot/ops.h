@@ -109,7 +109,7 @@ static inline int getprop(void *devp, const char *name, void *buf, int buflen)
 }
 
 static inline int setprop(void *devp, const char *name,
-                          const void *buf, int buflen)
+			  const void *buf, int buflen)
 {
 	return (dt_ops.setprop) ? dt_ops.setprop(devp, name, buf, buflen) : -1;
 }
@@ -144,8 +144,8 @@ static inline void *create_node(const void *parent, const char *name)
 
 
 static inline void *find_node_by_prop_value(const void *prev,
-                                            const char *propname,
-                                            const char *propval, int proplen)
+					    const char *propname,
+					    const char *propval, int proplen)
 {
 	if (dt_ops.find_node_by_prop_value)
 		return dt_ops.find_node_by_prop_value(prev, propname,
@@ -155,15 +155,15 @@ static inline void *find_node_by_prop_value(const void *prev,
 }
 
 static inline void *find_node_by_prop_value_str(const void *prev,
-                                                const char *propname,
-                                                const char *propval)
+						const char *propname,
+						const char *propval)
 {
 	return find_node_by_prop_value(prev, propname, propval,
 	                               strlen(propval) + 1);
 }
 
 static inline void *find_node_by_devtype(const void *prev,
-                                         const char *type)
+					 const char *type)
 {
 	return find_node_by_prop_value_str(prev, "device_type", type);
 }
@@ -182,7 +182,7 @@ static inline void *find_node_by_alias(const char *alias)
 }
 
 static inline void *find_node_by_compatible(const void *prev,
-                                            const char *compat)
+					    const char *compat)
 {
 	if (dt_ops.find_node_by_compatible)
 		return dt_ops.find_node_by_compatible(prev, compat);

@@ -87,11 +87,11 @@
 
 typedef struct atm_header {
     BITFIELD5(
-        u32 clp :  1,    /* cell loss priority         */
-        u32 plt :  3,    /* payload type               */
-        u32 vci : 16,    /* virtual channel identifier */
-        u32 vpi :  8,    /* virtual path identifier    */
-        u32 gfc :  4     /* generic flow control       */
+	u32 clp :  1,    /* cell loss priority         */
+	u32 plt :  3,    /* payload type               */
+	u32 vci : 16,    /* virtual channel identifier */
+	u32 vpi :  8,    /* virtual path identifier    */
+	u32 gfc :  4     /* generic flow control       */
    )
 } atm_header_t;
 
@@ -109,10 +109,10 @@ typedef enum fore200e_aal {
 
 typedef struct tpd_spec {
     BITFIELD4(
-        u32               length : 16,    /* total PDU length            */
-        u32               nseg   :  8,    /* number of transmit segments */
-        enum fore200e_aal aal    :  4,    /* adaptation layer            */
-        u32               intr   :  4     /* interrupt requested         */
+	u32               length : 16,    /* total PDU length            */
+	u32               nseg   :  8,    /* number of transmit segments */
+	enum fore200e_aal aal    :  4,    /* adaptation layer            */
+	u32               intr   :  4     /* interrupt requested         */
     )
 } tpd_spec_t;
 
@@ -122,8 +122,8 @@ typedef struct tpd_spec {
 typedef struct tpd_rate
 {
     BITFIELD2(
-        u32 idle_cells : 16,    /* number of idle cells to insert   */
-        u32 data_cells : 16     /* number of data cells to transmit */
+	u32 idle_cells : 16,    /* number of idle cells to insert   */
+	u32 data_cells : 16     /* number of data cells to transmit */
     )
 } tpd_rate_t;
 
@@ -201,9 +201,9 @@ typedef struct rbd_block {
 
 typedef struct tpd_haddr {
     BITFIELD3(
-        u32 size  :  4,    /* tpd size expressed in 32 byte blocks     */
-        u32 pad   :  1,    /* reserved                                 */
-        u32 haddr : 27     /* tpd DMA addr aligned on 32 byte boundary */
+	u32 size  :  4,    /* tpd size expressed in 32 byte blocks     */
+	u32 pad   :  1,    /* reserved                                 */
+	u32 haddr : 27     /* tpd DMA addr aligned on 32 byte boundary */
     )
 } tpd_haddr_t;
 
@@ -267,9 +267,9 @@ typedef enum opcode {
 
 typedef struct vpvc {
     BITFIELD3(
-        u32 vci : 16,    /* virtual channel identifier */
-        u32 vpi :  8,    /* virtual path identifier    */
-        u32 pad :  8     /* reserved                   */
+	u32 vci : 16,    /* virtual channel identifier */
+	u32 vpi :  8,    /* virtual path identifier    */
+	u32 pad :  8     /* reserved                   */
     )
 } vpvc_t;
 
@@ -278,10 +278,10 @@ typedef struct vpvc {
 
 typedef struct activate_opcode {
     BITFIELD4(
-        enum opcode        opcode : 8,    /* cp opcode        */
-        enum fore200e_aal  aal    : 8,    /* adaptation layer */
-        enum buffer_scheme scheme : 8,    /* buffer scheme    */
-        u32  pad                  : 8     /* reserved         */
+	enum opcode        opcode : 8,    /* cp opcode        */
+	enum fore200e_aal  aal    : 8,    /* adaptation layer */
+	enum buffer_scheme scheme : 8,    /* buffer scheme    */
+	u32  pad                  : 8     /* reserved         */
    )
 } activate_opcode_t;
 
@@ -300,8 +300,8 @@ typedef struct activate_block {
 
 typedef struct deactivate_opcode {
     BITFIELD2(
-        enum opcode opcode :  8,    /* cp opcode */
-        u32         pad    : 24     /* reserved  */
+	enum opcode opcode :  8,    /* cp opcode */
+	u32         pad    : 24     /* reserved  */
     )
 } deactivate_opcode_t;
 
@@ -327,7 +327,7 @@ typedef struct oc3_regs {
 
 typedef struct oc3_opcode {
     BITFIELD4(
-        enum opcode opcode : 8,    /* cp opcode                           */
+	enum opcode opcode : 8,    /* cp opcode                           */
 	u32         reg    : 8,    /* register index                      */
 	u32         value  : 8,    /* register value                      */
 	u32         mask   : 8     /* register mask that specifies which
@@ -452,8 +452,8 @@ typedef struct stats {
 
 typedef struct stats_opcode {
     BITFIELD2(
-        enum opcode opcode :  8,    /* cp opcode */
-        u32         pad    : 24     /* reserved  */
+	enum opcode opcode :  8,    /* cp opcode */
+	u32         pad    : 24     /* reserved  */
     )
 } stats_opcode_t;
 
@@ -479,8 +479,8 @@ typedef struct prom_data {
 
 typedef struct prom_opcode {
     BITFIELD2(
-        enum opcode opcode :  8,    /* cp opcode */
-        u32         pad    : 24     /* reserved  */
+	enum opcode opcode :  8,    /* cp opcode */
+	u32         pad    : 24     /* reserved  */
     )
 } prom_opcode_t;
 
@@ -829,7 +829,7 @@ typedef struct fore200e_vc_map {
 } fore200e_vc_map_t;
 
 #define FORE200E_VC_MAP(fore200e, vpi, vci)  \
-        (& (fore200e)->vc_map[ ((vpi) << FORE200E_VCI_BITS) | (vci) ])
+	(& (fore200e)->vc_map[ ((vpi) << FORE200E_VCI_BITS) | (vci) ])
 
 
 /* per-device data */
@@ -855,7 +855,7 @@ typedef struct fore200e {
     struct host_cmdq           host_cmdq;              /* host resident cmd queue            */
     struct host_txq            host_txq;               /* host resident tx queue             */
     struct host_rxq            host_rxq;               /* host resident rx queue             */
-                                                       /* host resident buffer supply queues */
+						       /* host resident buffer supply queues */
     struct host_bsq            host_bsq[ BUFFER_SCHEME_NBR ][ BUFFER_MAGN_NBR ];
 
     u32                        available_cell_rate;    /* remaining pseudo-CBR bw on link    */

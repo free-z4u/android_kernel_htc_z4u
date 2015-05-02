@@ -76,7 +76,7 @@ static void sapphire_set_backlight_level(uint8_t level)
 	int i = 0;
 
 	/* Non-linear transform for the difference between two
-         * kind of default backlight settings.
+	 * kind of default backlight settings.
 	 */
 	new_level = level<=GDBB ?
 		level*SDBB/GDBB : (SDBB + (level-GDBB)*(255-SDBB) / (255-GDBB)) ;
@@ -730,7 +730,7 @@ static const struct mddi_table sharp2_init_table[] = {
 	{ 0xE5E, 0x005A},
 	{ 0xE5F, 0x006B},
 
-        { 0x0290, 0x01 },
+	{ 0x0290, 0x01 },
 };
 
 #undef TPO2_ONE_GAMMA

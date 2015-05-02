@@ -283,7 +283,7 @@ void __init page_cgroup_init(void)
 		 */
 		for (pfn = start_pfn;
 		     pfn < end_pfn;
-                     pfn = ALIGN(pfn + 1, PAGES_PER_SECTION)) {
+		     pfn = ALIGN(pfn + 1, PAGES_PER_SECTION)) {
 
 			if (!pfn_valid(pfn))
 				continue;

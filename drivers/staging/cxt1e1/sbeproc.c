@@ -44,16 +44,16 @@ sbecom_proc_brd_cleanup (ci_t * ci)
     {
 	char dir[7 + SBE_IFACETMPL_SIZE + 1];
 	snprintf(dir, sizeof(dir), "driver/%s", ci->devname);
-        remove_proc_entry("info", ci->dir_dev);
-        remove_proc_entry(dir, NULL);
-        ci->dir_dev = NULL;
+	remove_proc_entry("info", ci->dir_dev);
+	remove_proc_entry(dir, NULL);
+	ci->dir_dev = NULL;
     }
 }
 
 
 static int
 sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
-                          int length, int *eof, void *priv)
+			  int length, int *eof, void *priv)
 {
     ci_t       *ci = (ci_t *) priv;
     int         len = 0;
@@ -62,80 +62,80 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
 
     if (!(bip = OS_kmalloc (sizeof (struct sbe_brd_info))))
     {
-        return -ENOMEM;
+	return -ENOMEM;
     }
 #if 0
     /** RLD DEBUG **/
     pr_info(">> sbecom_proc_get_sbe_info: entered, offset %d. length %d.\n",
-            (int) offset, (int) length);
+	    (int) offset, (int) length);
 #endif
 
     {
-        hdw_info_t *hi = &hdw_info[ci->brdno];
+	hdw_info_t *hi = &hdw_info[ci->brdno];
 
-        u_int8_t *bsn = 0;
+	u_int8_t *bsn = 0;
 
-        switch (hi->promfmt)
-        {
-        case PROM_FORMAT_TYPE1:
-            bsn = (u_int8_t *) hi->mfg_info.pft1.Serial;
-            break;
-        case PROM_FORMAT_TYPE2:
-            bsn = (u_int8_t *) hi->mfg_info.pft2.Serial;
-            break;
-        }
+	switch (hi->promfmt)
+	{
+	case PROM_FORMAT_TYPE1:
+	    bsn = (u_int8_t *) hi->mfg_info.pft1.Serial;
+	    break;
+	case PROM_FORMAT_TYPE2:
+	    bsn = (u_int8_t *) hi->mfg_info.pft2.Serial;
+	    break;
+	}
 
-        sbecom_get_brdinfo (ci, bip, bsn);
+	sbecom_get_brdinfo (ci, bip, bsn);
     }
 
 #if 0
     /** RLD DEBUG **/
     pr_info(">> sbecom_get_brdinfo: returned, first_if %p <%s> last_if %p <%s>\n",
-            (char *) &bip->first_iname, (char *) &bip->first_iname,
-            (char *) &bip->last_iname, (char *) &bip->last_iname);
+	    (char *) &bip->first_iname, (char *) &bip->first_iname,
+	    (char *) &bip->last_iname, (char *) &bip->last_iname);
 #endif
     len += sprintf (buffer + len, "Board Type:    ");
     switch (bip->brd_id)
     {
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C1T3):
-        len += sprintf (buffer + len, "wanPMC-C1T3");
-        break;
+	len += sprintf (buffer + len, "wanPMC-C1T3");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPTMC_256T3_E1):
-        len += sprintf (buffer + len, "wanPTMC-256T3 <E1>");
-        break;
+	len += sprintf (buffer + len, "wanPTMC-256T3 <E1>");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPTMC_256T3_T1):
-        len += sprintf (buffer + len, "wanPTMC-256T3 <T1>");
-        break;
+	len += sprintf (buffer + len, "wanPTMC-256T3 <T1>");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPTMC_C24TE1):
-        len += sprintf (buffer + len, "wanPTMC-C24TE1");
-        break;
+	len += sprintf (buffer + len, "wanPTMC-C24TE1");
+	break;
 
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C4T1E1):
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C4T1E1_L):
-        len += sprintf (buffer + len, "wanPMC-C4T1E1");
-        break;
+	len += sprintf (buffer + len, "wanPMC-C4T1E1");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C2T1E1):
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C2T1E1_L):
-        len += sprintf (buffer + len, "wanPMC-C2T1E1");
-        break;
+	len += sprintf (buffer + len, "wanPMC-C2T1E1");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C1T1E1):
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPMC_C1T1E1_L):
-        len += sprintf (buffer + len, "wanPMC-C1T1E1");
-        break;
+	len += sprintf (buffer + len, "wanPMC-C1T1E1");
+	break;
 
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPCI_C4T1E1):
-        len += sprintf (buffer + len, "wanPCI-C4T1E1");
-        break;
+	len += sprintf (buffer + len, "wanPCI-C4T1E1");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPCI_C2T1E1):
-        len += sprintf (buffer + len, "wanPCI-C2T1E1");
-        break;
+	len += sprintf (buffer + len, "wanPCI-C2T1E1");
+	break;
     case SBE_BOARD_ID (PCI_VENDOR_ID_SBE, PCI_DEVICE_ID_WANPCI_C1T1E1):
-        len += sprintf (buffer + len, "wanPCI-C1T1E1");
-        break;
+	len += sprintf (buffer + len, "wanPCI-C1T1E1");
+	break;
 
     default:
-        len += sprintf (buffer + len, "unknown");
-        break;
+	len += sprintf (buffer + len, "unknown");
+	break;
     }
     len += sprintf (buffer + len, "  [%08X]\n", bip->brd_id);
 
@@ -148,43 +148,43 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
     len += sprintf (buffer + len, "Channels:      %d\n", bip->brd_chan_cnt);
 #if 1
     len += sprintf (buffer + len, "Interface:     %s -> %s\n",
-                    (char *) &bip->first_iname, (char *) &bip->last_iname);
+		    (char *) &bip->first_iname, (char *) &bip->last_iname);
 #else
     len += sprintf (buffer + len, "Interface:     <not available> 1st %p lst %p\n",
-                    (char *) &bip->first_iname, (char *) &bip->last_iname);
+		    (char *) &bip->first_iname, (char *) &bip->last_iname);
 #endif
 
     switch (bip->brd_pci_speed)
     {
     case BINFO_PCI_SPEED_33:
-        spd = "33Mhz";
-        break;
+	spd = "33Mhz";
+	break;
     case BINFO_PCI_SPEED_66:
-        spd = "66Mhz";
-        break;
+	spd = "66Mhz";
+	break;
     default:
-        spd = "<not available>";
-        break;
+	spd = "<not available>";
+	break;
     }
     len += sprintf (buffer + len, "PCI Bus Speed: %s\n", spd);
     len += sprintf (buffer + len, "Release:       %s\n", ci->release);
 
 #ifdef SBE_PMCC4_ENABLE
     {
-               extern int cxt1e1_max_mru;
+	       extern int cxt1e1_max_mru;
 #if 0
-        extern int max_chans_used;
-        extern int cxt1e1_max_mtu;
+	extern int max_chans_used;
+	extern int cxt1e1_max_mtu;
 #endif
-        extern int max_rxdesc_used, max_txdesc_used;
+	extern int max_rxdesc_used, max_txdesc_used;
 
-        len += sprintf (buffer + len, "\ncxt1e1_max_mru:         %d\n", cxt1e1_max_mru);
+	len += sprintf (buffer + len, "\ncxt1e1_max_mru:         %d\n", cxt1e1_max_mru);
 #if 0
-        len += sprintf (buffer + len, "\nmax_chans_used:  %d\n", max_chans_used);
-        len += sprintf (buffer + len, "cxt1e1_max_mtu:         %d\n", cxt1e1_max_mtu);
+	len += sprintf (buffer + len, "\nmax_chans_used:  %d\n", max_chans_used);
+	len += sprintf (buffer + len, "cxt1e1_max_mtu:         %d\n", cxt1e1_max_mtu);
 #endif
-        len += sprintf (buffer + len, "max_rxdesc_used: %d\n", max_rxdesc_used);
-        len += sprintf (buffer + len, "max_txdesc_used: %d\n", max_txdesc_used);
+	len += sprintf (buffer + len, "max_rxdesc_used: %d\n", max_rxdesc_used);
+	len += sprintf (buffer + len, "max_txdesc_used: %d\n", max_txdesc_used);
     }
 #endif
 
@@ -251,44 +251,44 @@ sbecom_proc_get_sbe_info (char *buffer, char **start, off_t offset,
      * least only a single message set is being displayed.
      */
     if (len <= offset + length)
-        *eof = 1;
+	*eof = 1;
     *start = buffer + offset;
     len -= offset;
     if (len > length)
-        len = length;
+	len = length;
     if (len < 0)
-        len = 0;
+	len = 0;
 #endif
 
 #if 0                               /* #2 from net/tokenring/olympic.c +
-                                     * lanstreamer.c */
+				     * lanstreamer.c */
     {
-        off_t       begin = 0;
-        int         size = 0;
-        off_t       pos = 0;
+	off_t       begin = 0;
+	int         size = 0;
+	off_t       pos = 0;
 
-        size = len;
-        pos = begin + size;
-        if (pos < offset)
-        {
-            len = 0;
-            begin = pos;
-        }
-        *start = buffer + (offset - begin);     /* Start of wanted data */
-        len -= (offset - begin);    /* Start slop */
-        if (len > length)
-            len = length;           /* Ending slop */
+	size = len;
+	pos = begin + size;
+	if (pos < offset)
+	{
+	    len = 0;
+	    begin = pos;
+	}
+	*start = buffer + (offset - begin);     /* Start of wanted data */
+	len -= (offset - begin);    /* Start slop */
+	if (len > length)
+	    len = length;           /* Ending slop */
     }
 #endif
 
 #if 0                               /* #3 from
-                                     * char/ftape/lowlevel/ftape-proc.c */
+				     * char/ftape/lowlevel/ftape-proc.c */
     len = strlen (buffer);
     *start = NULL;
     if (offset + length >= len)
-        *eof = 1;
+	*eof = 1;
     else
-        *eof = 0;
+	*eof = 0;
 #endif
 
 #if 0
@@ -319,15 +319,15 @@ sbecom_proc_brd_init (ci_t * ci)
     ci->dir_dev = proc_mkdir(dir, NULL);
     if (!ci->dir_dev)
     {
-        pr_err("Unable to create directory /proc/driver/%s\n", ci->devname);
-        goto fail;
+	pr_err("Unable to create directory /proc/driver/%s\n", ci->devname);
+	goto fail;
     }
     e = create_proc_read_entry ("info", S_IFREG | S_IRUGO,
-                                ci->dir_dev, sbecom_proc_get_sbe_info, ci);
+				ci->dir_dev, sbecom_proc_get_sbe_info, ci);
     if (!e)
     {
-        pr_err("Unable to create entry /proc/driver/%s/info\n", ci->devname);
-        goto fail;
+	pr_err("Unable to create entry /proc/driver/%s/info\n", ci->devname);
+	goto fail;
     }
     return 0;
 

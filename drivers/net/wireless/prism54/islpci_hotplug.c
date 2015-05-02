@@ -122,7 +122,7 @@ prism54_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	if (pci_set_dma_mask(pdev, DMA_BIT_MASK(32))) {
 		printk(KERN_ERR "%s: 32-bit PCI DMA not supported", DRV_NAME);
 		goto do_pci_disable_device;
-        }
+	}
 
 	/* 0x40 is the programmable timer to configure the response timeout (TRDY_TIMEOUT)
 	 * 0x41 is the programmable timer to configure the retry timeout (RETRY_TIMEOUT)

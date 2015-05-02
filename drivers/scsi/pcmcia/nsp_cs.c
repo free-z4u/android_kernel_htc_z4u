@@ -4,7 +4,7 @@
       By: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
 
     Ver.2.8   Support 32bit MMIO mode
-              Support Synchronous Data Transfer Request (SDTR) mode
+	      Support Synchronous Data Transfer Request (SDTR) mode
     Ver.2.0   Support 32bit PIO mode
     Ver.1.1.2 Fix for scatter list buffer exceeds
     Ver.1.1   Support scatter list
@@ -1366,7 +1366,7 @@ static const char *nsp_info(struct Scsi_Host *shpnt)
 
 #undef SPRINTF
 #define SPRINTF(args...) \
-        do { \
+	do { \
 		if(length > (pos - buffer)) { \
 			pos += snprintf(pos, length - (pos - buffer) + 1, ## args); \
 			nsp_dbg(NSP_DEBUG_PROC, "buffer=0x%p pos=0x%p length=%d %d\n", buffer, pos, length,  length - (pos - buffer));\
@@ -1463,8 +1463,8 @@ static int nsp_proc_info(struct Scsi_Host *host, char *buffer, char **start,
 
 	if(thislength < 0) {
 		*start = NULL;
-                return 0;
-        }
+		return 0;
+	}
 
 
 	thislength = min(thislength, length);

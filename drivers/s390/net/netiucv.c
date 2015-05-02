@@ -252,7 +252,7 @@ struct netiucv_priv {
 	struct net_device_stats stats;
 	unsigned long           tbusy;
 	fsm_instance            *fsm;
-        struct iucv_connection  *conn;
+	struct iucv_connection  *conn;
 	struct device           *dev;
 	int			 pm_state;
 };
@@ -1035,7 +1035,7 @@ static const fsm_node conn_fsm[] = {
 	{ CONN_STATE_CONNERR,   CONN_EVENT_STOP,     conn_action_stop       },
 
 	{ CONN_STATE_STOPPED,   CONN_EVENT_CONN_REQ, conn_action_connreject },
-        { CONN_STATE_STARTWAIT, CONN_EVENT_CONN_REQ, conn_action_connaccept },
+	{ CONN_STATE_STARTWAIT, CONN_EVENT_CONN_REQ, conn_action_connaccept },
 	{ CONN_STATE_SETUPWAIT, CONN_EVENT_CONN_REQ, conn_action_connaccept },
 	{ CONN_STATE_IDLE,      CONN_EVENT_CONN_REQ, conn_action_connreject },
 	{ CONN_STATE_TX,        CONN_EVENT_CONN_REQ, conn_action_connreject },
@@ -2154,48 +2154,48 @@ static ssize_t remove_write (struct device_driver *drv,
 			     const char *buf, size_t count)
 {
 	struct iucv_connection *cp;
-        struct net_device *ndev;
-        struct netiucv_priv *priv;
-        struct device *dev;
-        char name[IFNAMSIZ];
+	struct net_device *ndev;
+	struct netiucv_priv *priv;
+	struct device *dev;
+	char name[IFNAMSIZ];
 	const char *p;
-        int i;
+	int i;
 
 	IUCV_DBF_TEXT(trace, 3, __func__);
 
-        if (count >= IFNAMSIZ)
-                count = IFNAMSIZ - 1;
+	if (count >= IFNAMSIZ)
+		count = IFNAMSIZ - 1;
 
 	for (i = 0, p = buf; i < count && *p; i++, p++) {
 		if (*p == '\n' || *p == ' ')
-                        /* trailing lf, grr */
-                        break;
+			/* trailing lf, grr */
+			break;
 		name[i] = *p;
-        }
-        name[i] = '\0';
+	}
+	name[i] = '\0';
 
 	read_lock_bh(&iucv_connection_rwlock);
 	list_for_each_entry(cp, &iucv_connection_list, list) {
 		ndev = cp->netdev;
 		priv = netdev_priv(ndev);
-                dev = priv->dev;
+		dev = priv->dev;
 		if (strncmp(name, ndev->name, count))
 			continue;
 		read_unlock_bh(&iucv_connection_rwlock);
-                if (ndev->flags & (IFF_UP | IFF_RUNNING)) {
+		if (ndev->flags & (IFF_UP | IFF_RUNNING)) {
 			dev_warn(dev, "The IUCV device is connected"
 				" to %s and cannot be removed\n",
 				priv->conn->userid);
 			IUCV_DBF_TEXT(data, 2, "remove_write: still active\n");
 			return -EPERM;
-                }
-                unregister_netdev(ndev);
-                netiucv_unregister_device(dev);
-                return count;
-        }
+		}
+		unregister_netdev(ndev);
+		netiucv_unregister_device(dev);
+		return count;
+	}
 	read_unlock_bh(&iucv_connection_rwlock);
 	IUCV_DBF_TEXT(data, 2, "remove_write: unknown device\n");
-        return -EINVAL;
+	return -EINVAL;
 }
 
 static DRIVER_ATTR(remove, 0200, NULL, remove_write);

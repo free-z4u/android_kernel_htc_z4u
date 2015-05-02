@@ -3044,7 +3044,7 @@ static inline void free_secdata(void *secdata)
 
 static inline char *alloc_secdata(void)
 {
-        return (char *)1;
+	return (char *)1;
 }
 
 static inline void free_secdata(void *secdata)

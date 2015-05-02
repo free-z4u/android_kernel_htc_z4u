@@ -180,7 +180,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for size of QMUX header
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int ParseQMUX(
    u16 *    pClientID,
@@ -206,7 +206,7 @@ int ParseQMUX(
 
    // Client ID
    *pClientID = (pQMUXHeader->mQMIClientID << 8)
-              + pQMUXHeader->mQMIService;
+	      + pQMUXHeader->mQMIService;
 
    return sizeof( sQMUX );
 }
@@ -225,7 +225,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int FillQMUX(
    u16      clientID,
@@ -275,7 +275,7 @@ PARAMETERS
 
 RETURN VALUE:
    u16 - Size of TLV for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 u16 GetTLV(
    void *   pQMIMessage,
@@ -294,28 +294,28 @@ u16 GetTLV(
    }
 
    for (pos = 4;
-        pos + 3 < messageLen;
-        pos += tlvSize + 3)
+	pos + 3 < messageLen;
+	pos += tlvSize + 3)
    {
       tlvSize = *(u16 *)(pQMIMessage + pos + 1);
       if (*(u8 *)(pQMIMessage + pos) == type)
       {
-         if (bufferLen < tlvSize)
-         {
-            return -ENOMEM;
-         }
+	 if (bufferLen < tlvSize)
+	 {
+	    return -ENOMEM;
+	 }
 
-         /* replacement memcpy
-            memcpy( pOutDataBuf,
-                    pQMIMessage + pos + 3,
-                    tlvSize ); */
+	 /* replacement memcpy
+	    memcpy( pOutDataBuf,
+		    pQMIMessage + pos + 3,
+		    tlvSize ); */
 
-         for (cpyCount = 0; cpyCount < tlvSize; cpyCount++)
-         {
-            *((char*)(pOutDataBuf + cpyCount)) = *((char*)(pQMIMessage + pos + 3 + cpyCount));
-         }
+	 for (cpyCount = 0; cpyCount < tlvSize; cpyCount++)
+	 {
+	    *((char*)(pOutDataBuf + cpyCount)) = *((char*)(pQMIMessage + pos + 3 + cpyCount));
+	 }
 
-         return tlvSize;
+	 return tlvSize;
       }
    }
 
@@ -337,8 +337,8 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success (no error)
-         Negative errno for error
-         Positive for QMI error code
+	 Negative errno for error
+	 Positive for QMI error code
 ===========================================================================*/
 int ValidQMIMessage(
    void *   pQMIMessage,
@@ -351,11 +351,11 @@ int ValidQMIMessage(
       // Found TLV
       if (*(u16 *)&mandTLV[0] != 0)
       {
-         return *(u16 *)&mandTLV[2];
+	 return *(u16 *)&mandTLV[2];
       }
       else
       {
-         return 0;
+	 return 0;
       }
    }
    else
@@ -379,7 +379,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for message ID
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int GetQMIMessageID(
    void *   pQMIMessage,
@@ -414,7 +414,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for resulting size of pBuffer
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMICTLGetClientIDReq(
    void *   pBuffer,
@@ -462,7 +462,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for resulting size of pBuffer
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMICTLReleaseClientIDReq(
    void *   pBuffer,
@@ -509,7 +509,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for resulting size of pBuffer
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMICTLReadyReq(
    void *   pBuffer,
@@ -549,7 +549,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for resulting size of pBuffer
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMIWDSSetEventReportReq(
    void *   pBuffer,
@@ -597,7 +597,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for resulting size of pBuffer
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMIWDSGetPKGSRVCStatusReq(
    void *   pBuffer,
@@ -637,7 +637,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - Positive for resulting size of pBuffer
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMIDMSGetMEIDReq(
    void *   pBuffer,
@@ -681,7 +681,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMICTLGetClientIDResp(
    void * pBuffer,
@@ -736,7 +736,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMICTLReleaseClientIDResp(
    void *   pBuffer,
@@ -797,7 +797,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMIWDSEventResp(
    void *   pBuffer,
@@ -861,30 +861,30 @@ int QMIWDSEventResp(
       // 1 or 2 bytes may be received
       if (result >= 1)
       {
-         if (pktStatusRead[0] == 0x02)
-         {
-            *pbLinkState = true;
-         }
-         else
-         {
-            *pbLinkState = false;
-         }
+	 if (pktStatusRead[0] == 0x02)
+	 {
+	    *pbLinkState = true;
+	 }
+	 else
+	 {
+	    *pbLinkState = false;
+	 }
       }
       if (result == 2)
       {
-         if (pktStatusRead[1] == 0x01)
-         {
-            *pbReconfigure = true;
-         }
-         else
-         {
-            *pbReconfigure = false;
-         }
+	 if (pktStatusRead[1] == 0x01)
+	 {
+	    *pbReconfigure = true;
+	 }
+	 else
+	 {
+	    *pbReconfigure = false;
+	 }
       }
 
       if (result < 0)
       {
-         return result;
+	 return result;
       }
    }
    else
@@ -910,7 +910,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QMIDMSGetMEIDResp(
    void *   pBuffer,

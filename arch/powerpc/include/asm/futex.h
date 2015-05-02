@@ -92,15 +92,15 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
 	if (!access_ok(VERIFY_WRITE, uaddr, sizeof(u32)))
 		return -EFAULT;
 
-        __asm__ __volatile__ (
-        PPC_ATOMIC_ENTRY_BARRIER
+	__asm__ __volatile__ (
+	PPC_ATOMIC_ENTRY_BARRIER
 "1:     lwarx   %1,0,%3         # futex_atomic_cmpxchg_inatomic\n\
-        cmpw    0,%1,%4\n\
-        bne-    3f\n"
-        PPC405_ERR77(0,%3)
+	cmpw    0,%1,%4\n\
+	bne-    3f\n"
+	PPC405_ERR77(0,%3)
 "2:     stwcx.  %5,0,%3\n\
-        bne-    1b\n"
-        PPC_ATOMIC_EXIT_BARRIER
+	bne-    1b\n"
+	PPC_ATOMIC_EXIT_BARRIER
 "3:	.section .fixup,\"ax\"\n\
 4:	li	%0,%6\n\
 	b	3b\n\
@@ -109,12 +109,12 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
 	.align 3\n\
 	" PPC_LONG "1b,4b,2b,4b\n\
 	.previous" \
-        : "+r" (ret), "=&r" (prev), "+m" (*uaddr)
-        : "r" (uaddr), "r" (oldval), "r" (newval), "i" (-EFAULT)
-        : "cc", "memory");
+	: "+r" (ret), "=&r" (prev), "+m" (*uaddr)
+	: "r" (uaddr), "r" (oldval), "r" (newval), "i" (-EFAULT)
+	: "cc", "memory");
 
 	*uval = prev;
-        return ret;
+	return ret;
 }
 
 #endif /* __KERNEL__ */

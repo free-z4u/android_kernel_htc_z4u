@@ -604,7 +604,7 @@ output_listing(char *ifilename)
 			/* Don't count this instruction as it is in a patch
 			 * that was removed.
 			 */
-                        continue;
+			continue;
 		}
 
 		while (line < cur_instr->srcline) {

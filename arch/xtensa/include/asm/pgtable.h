@@ -399,7 +399,7 @@ extern  void update_mmu_cache(struct vm_area_struct * vma,
  */
 
 #define io_remap_pfn_range(vma,from,pfn,size,prot) \
-                remap_pfn_range(vma, from, pfn, size, prot)
+		remap_pfn_range(vma, from, pfn, size, prot)
 
 typedef pte_t *pte_addr_t;
 

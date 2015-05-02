@@ -425,7 +425,7 @@ static int xl_hw_reset(struct net_device *dev)
 
 	/*
 	 *  Reset the card.  If the card has got the microcode on board, we have
-         *  missed the initialization interrupt, so we must always do this.
+	 *  missed the initialization interrupt, so we must always do this.
 	 */
 
 	writew( GLOBAL_RESET, xl_mmio + MMIO_COMMAND ) ;
@@ -513,8 +513,8 @@ static int xl_hw_reset(struct net_device *dev)
 
 		/*
 		 * Have to write the start address of the upload to FFF4, but
-                 * the address must be >> 4. You do not want to know how long
-                 * it took me to discover this.
+		 * the address must be >> 4. You do not want to know how long
+		 * it took me to discover this.
 		 */
 
 		writel(MEM_WORD_WRITE | 0xDFFF4, xl_mmio + MMIO_MAC_ACCESS_CMD) ;
@@ -541,8 +541,8 @@ static int xl_hw_reset(struct net_device *dev)
 
 	/*
 	 * The card should now go though a self test procedure and get itself ready
-         * to be opened, we must wait for an srb response with the initialization
-         * information.
+	 * to be opened, we must wait for an srb response with the initialization
+	 * information.
 	 */
 
 #if XL_DEBUG
@@ -1408,7 +1408,7 @@ static void xl_set_rx_mode(struct net_device *dev)
 		dev_mc_address[1] |= ha->addr[3];
 		dev_mc_address[2] |= ha->addr[4];
 		dev_mc_address[3] |= ha->addr[5];
-        }
+	}
 
 	if (memcmp(xl_priv->xl_functional_addr,dev_mc_address,4) != 0) { /* Options have changed, run the command */
 		memcpy(xl_priv->xl_functional_addr, dev_mc_address,4) ;

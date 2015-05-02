@@ -851,18 +851,18 @@ static void savage_update_var(struct fb_var_screeninfo *var,
 {
 	var->xres = var->xres_virtual = modedb->xres;
 	var->yres = modedb->yres;
-        if (var->yres_virtual < var->yres)
+	if (var->yres_virtual < var->yres)
 	    var->yres_virtual = var->yres;
-        var->xoffset = var->yoffset = 0;
-        var->pixclock = modedb->pixclock;
-        var->left_margin = modedb->left_margin;
-        var->right_margin = modedb->right_margin;
-        var->upper_margin = modedb->upper_margin;
-        var->lower_margin = modedb->lower_margin;
-        var->hsync_len = modedb->hsync_len;
-        var->vsync_len = modedb->vsync_len;
-        var->sync = modedb->sync;
-        var->vmode = modedb->vmode;
+	var->xoffset = var->yoffset = 0;
+	var->pixclock = modedb->pixclock;
+	var->left_margin = modedb->left_margin;
+	var->right_margin = modedb->right_margin;
+	var->upper_margin = modedb->upper_margin;
+	var->lower_margin = modedb->lower_margin;
+	var->hsync_len = modedb->hsync_len;
+	var->vsync_len = modedb->vsync_len;
+	var->sync = modedb->sync;
+	var->vmode = modedb->vmode;
 }
 
 static int savagefb_check_var(struct fb_var_screeninfo   *var,

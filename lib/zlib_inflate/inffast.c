@@ -58,17 +58,17 @@ get_unaligned16(const unsigned short *p)
 
    Entry assumptions:
 
-        state->mode == LEN
-        strm->avail_in >= 6
-        strm->avail_out >= 258
-        start >= strm->avail_out
-        state->bits < 8
+	state->mode == LEN
+	strm->avail_in >= 6
+	strm->avail_out >= 258
+	start >= strm->avail_out
+	state->bits < 8
 
    On return, state->mode is one of:
 
-        LEN -- ran out of enough output space or enough available input
-        TYPE -- reached end of block code, inflate() to interpret next block
-        BAD -- error in block data
+	LEN -- ran out of enough output space or enough available input
+	TYPE -- reached end of block code, inflate() to interpret next block
+	BAD -- error in block data
 
    Notes:
 
@@ -108,7 +108,7 @@ void inflate_fast(z_streamp strm, unsigned start)
     unsigned dmask;             /* mask for first level of distance codes */
     code this;                  /* retrieved table entry */
     unsigned op;                /* code bits, operation, extra bits, or */
-                                /*  window position, window bytes to copy */
+				/*  window position, window bytes to copy */
     unsigned len;               /* match length, unused bytes */
     unsigned dist;              /* match distance */
     unsigned char *from;        /* where to copy match from */
@@ -137,131 +137,131 @@ void inflate_fast(z_streamp strm, unsigned start)
     /* decode literals and length/distances until end-of-block or not enough
        input data or output space */
     do {
-        if (bits < 15) {
-            hold += (unsigned long)(PUP(in)) << bits;
-            bits += 8;
-            hold += (unsigned long)(PUP(in)) << bits;
-            bits += 8;
-        }
-        this = lcode[hold & lmask];
+	if (bits < 15) {
+	    hold += (unsigned long)(PUP(in)) << bits;
+	    bits += 8;
+	    hold += (unsigned long)(PUP(in)) << bits;
+	    bits += 8;
+	}
+	this = lcode[hold & lmask];
       dolen:
-        op = (unsigned)(this.bits);
-        hold >>= op;
-        bits -= op;
-        op = (unsigned)(this.op);
-        if (op == 0) {                          /* literal */
-            PUP(out) = (unsigned char)(this.val);
-        }
-        else if (op & 16) {                     /* length base */
-            len = (unsigned)(this.val);
-            op &= 15;                           /* number of extra bits */
-            if (op) {
-                if (bits < op) {
-                    hold += (unsigned long)(PUP(in)) << bits;
-                    bits += 8;
-                }
-                len += (unsigned)hold & ((1U << op) - 1);
-                hold >>= op;
-                bits -= op;
-            }
-            if (bits < 15) {
-                hold += (unsigned long)(PUP(in)) << bits;
-                bits += 8;
-                hold += (unsigned long)(PUP(in)) << bits;
-                bits += 8;
-            }
-            this = dcode[hold & dmask];
-          dodist:
-            op = (unsigned)(this.bits);
-            hold >>= op;
-            bits -= op;
-            op = (unsigned)(this.op);
-            if (op & 16) {                      /* distance base */
-                dist = (unsigned)(this.val);
-                op &= 15;                       /* number of extra bits */
-                if (bits < op) {
-                    hold += (unsigned long)(PUP(in)) << bits;
-                    bits += 8;
-                    if (bits < op) {
-                        hold += (unsigned long)(PUP(in)) << bits;
-                        bits += 8;
-                    }
-                }
-                dist += (unsigned)hold & ((1U << op) - 1);
+	op = (unsigned)(this.bits);
+	hold >>= op;
+	bits -= op;
+	op = (unsigned)(this.op);
+	if (op == 0) {                          /* literal */
+	    PUP(out) = (unsigned char)(this.val);
+	}
+	else if (op & 16) {                     /* length base */
+	    len = (unsigned)(this.val);
+	    op &= 15;                           /* number of extra bits */
+	    if (op) {
+		if (bits < op) {
+		    hold += (unsigned long)(PUP(in)) << bits;
+		    bits += 8;
+		}
+		len += (unsigned)hold & ((1U << op) - 1);
+		hold >>= op;
+		bits -= op;
+	    }
+	    if (bits < 15) {
+		hold += (unsigned long)(PUP(in)) << bits;
+		bits += 8;
+		hold += (unsigned long)(PUP(in)) << bits;
+		bits += 8;
+	    }
+	    this = dcode[hold & dmask];
+	  dodist:
+	    op = (unsigned)(this.bits);
+	    hold >>= op;
+	    bits -= op;
+	    op = (unsigned)(this.op);
+	    if (op & 16) {                      /* distance base */
+		dist = (unsigned)(this.val);
+		op &= 15;                       /* number of extra bits */
+		if (bits < op) {
+		    hold += (unsigned long)(PUP(in)) << bits;
+		    bits += 8;
+		    if (bits < op) {
+			hold += (unsigned long)(PUP(in)) << bits;
+			bits += 8;
+		    }
+		}
+		dist += (unsigned)hold & ((1U << op) - 1);
 #ifdef INFLATE_STRICT
-                if (dist > dmax) {
-                    strm->msg = (char *)"invalid distance too far back";
-                    state->mode = BAD;
-                    break;
-                }
+		if (dist > dmax) {
+		    strm->msg = (char *)"invalid distance too far back";
+		    state->mode = BAD;
+		    break;
+		}
 #endif
-                hold >>= op;
-                bits -= op;
-                op = (unsigned)(out - beg);     /* max distance in output */
-                if (dist > op) {                /* see if copy from window */
-                    op = dist - op;             /* distance back in window */
-                    if (op > whave) {
-                        strm->msg = (char *)"invalid distance too far back";
-                        state->mode = BAD;
-                        break;
-                    }
-                    from = window - OFF;
-                    if (write == 0) {           /* very common case */
-                        from += wsize - op;
-                        if (op < len) {         /* some from window */
-                            len -= op;
-                            do {
-                                PUP(out) = PUP(from);
-                            } while (--op);
-                            from = out - dist;  /* rest from output */
-                        }
-                    }
-                    else if (write < op) {      /* wrap around window */
-                        from += wsize + write - op;
-                        op -= write;
-                        if (op < len) {         /* some from end of window */
-                            len -= op;
-                            do {
-                                PUP(out) = PUP(from);
-                            } while (--op);
-                            from = window - OFF;
-                            if (write < len) {  /* some from start of window */
-                                op = write;
-                                len -= op;
-                                do {
-                                    PUP(out) = PUP(from);
-                                } while (--op);
-                                from = out - dist;      /* rest from output */
-                            }
-                        }
-                    }
-                    else {                      /* contiguous in window */
-                        from += write - op;
-                        if (op < len) {         /* some from window */
-                            len -= op;
-                            do {
-                                PUP(out) = PUP(from);
-                            } while (--op);
-                            from = out - dist;  /* rest from output */
-                        }
-                    }
-                    while (len > 2) {
-                        PUP(out) = PUP(from);
-                        PUP(out) = PUP(from);
-                        PUP(out) = PUP(from);
-                        len -= 3;
-                    }
-                    if (len) {
-                        PUP(out) = PUP(from);
-                        if (len > 1)
-                            PUP(out) = PUP(from);
-                    }
-                }
-                else {
+		hold >>= op;
+		bits -= op;
+		op = (unsigned)(out - beg);     /* max distance in output */
+		if (dist > op) {                /* see if copy from window */
+		    op = dist - op;             /* distance back in window */
+		    if (op > whave) {
+			strm->msg = (char *)"invalid distance too far back";
+			state->mode = BAD;
+			break;
+		    }
+		    from = window - OFF;
+		    if (write == 0) {           /* very common case */
+			from += wsize - op;
+			if (op < len) {         /* some from window */
+			    len -= op;
+			    do {
+				PUP(out) = PUP(from);
+			    } while (--op);
+			    from = out - dist;  /* rest from output */
+			}
+		    }
+		    else if (write < op) {      /* wrap around window */
+			from += wsize + write - op;
+			op -= write;
+			if (op < len) {         /* some from end of window */
+			    len -= op;
+			    do {
+				PUP(out) = PUP(from);
+			    } while (--op);
+			    from = window - OFF;
+			    if (write < len) {  /* some from start of window */
+				op = write;
+				len -= op;
+				do {
+				    PUP(out) = PUP(from);
+				} while (--op);
+				from = out - dist;      /* rest from output */
+			    }
+			}
+		    }
+		    else {                      /* contiguous in window */
+			from += write - op;
+			if (op < len) {         /* some from window */
+			    len -= op;
+			    do {
+				PUP(out) = PUP(from);
+			    } while (--op);
+			    from = out - dist;  /* rest from output */
+			}
+		    }
+		    while (len > 2) {
+			PUP(out) = PUP(from);
+			PUP(out) = PUP(from);
+			PUP(out) = PUP(from);
+			len -= 3;
+		    }
+		    if (len) {
+			PUP(out) = PUP(from);
+			if (len > 1)
+			    PUP(out) = PUP(from);
+		    }
+		}
+		else {
 		    unsigned short *sout;
 		    unsigned long loops;
 
-                    from = out - dist;          /* copy direct from output */
+		    from = out - dist;          /* copy direct from output */
 		    /* minimum length is three */
 		    /* Align out addr */
 		    if (!((long)(out - 1 + OFF) & 1)) {
@@ -302,31 +302,31 @@ void inflate_fast(z_streamp strm, unsigned start)
 		    }
 		    if (len & 1)
 			PUP(out) = PUP(from);
-                }
-            }
-            else if ((op & 64) == 0) {          /* 2nd level distance code */
-                this = dcode[this.val + (hold & ((1U << op) - 1))];
-                goto dodist;
-            }
-            else {
-                strm->msg = (char *)"invalid distance code";
-                state->mode = BAD;
-                break;
-            }
-        }
-        else if ((op & 64) == 0) {              /* 2nd level length code */
-            this = lcode[this.val + (hold & ((1U << op) - 1))];
-            goto dolen;
-        }
-        else if (op & 32) {                     /* end-of-block */
-            state->mode = TYPE;
-            break;
-        }
-        else {
-            strm->msg = (char *)"invalid literal/length code";
-            state->mode = BAD;
-            break;
-        }
+		}
+	    }
+	    else if ((op & 64) == 0) {          /* 2nd level distance code */
+		this = dcode[this.val + (hold & ((1U << op) - 1))];
+		goto dodist;
+	    }
+	    else {
+		strm->msg = (char *)"invalid distance code";
+		state->mode = BAD;
+		break;
+	    }
+	}
+	else if ((op & 64) == 0) {              /* 2nd level length code */
+	    this = lcode[this.val + (hold & ((1U << op) - 1))];
+	    goto dolen;
+	}
+	else if (op & 32) {                     /* end-of-block */
+	    state->mode = TYPE;
+	    break;
+	}
+	else {
+	    strm->msg = (char *)"invalid literal/length code";
+	    state->mode = BAD;
+	    break;
+	}
     } while (in < last && out < end);
 
     /* return unused bytes (on entry, bits < 8, so in won't go too far back) */
@@ -340,7 +340,7 @@ void inflate_fast(z_streamp strm, unsigned start)
     strm->next_out = out + OFF;
     strm->avail_in = (unsigned)(in < last ? 5 + (last - in) : 5 - (in - last));
     strm->avail_out = (unsigned)(out < end ?
-                                 257 + (end - out) : 257 - (out - end));
+				 257 + (end - out) : 257 - (out - end));
     state->hold = hold;
     state->bits = bits;
     return;

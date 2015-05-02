@@ -417,7 +417,7 @@ void __init init_IRQ(void)
 #else
 	cpu_eiem = EIEM_MASK(TIMER_IRQ);
 #endif
-        set_eiem(cpu_eiem);	/* EIEM : enable all external intr */
+	set_eiem(cpu_eiem);	/* EIEM : enable all external intr */
 
 }
 

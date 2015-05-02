@@ -283,7 +283,7 @@ void __init arch_init_irq(void)
 	for (cpu = 0; cpu < 4; cpu++) {
 		__raw_writeq(IMR_IP3_VAL, IOADDR(A_BCM1480_IMR_REGISTER(cpu, R_BCM1480_IMR_INTERRUPT_MAP_BASE_H) +
 						 (K_BCM1480_INT_MBOX_0_0 << 3)));
-        }
+	}
 
 
 	/* Clear the mailboxes.  The firmware may leave them dirty */

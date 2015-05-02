@@ -385,10 +385,10 @@ static enum task_disposition sas_scsi_find_task(struct sas_task *task)
 					    __func__, task);
 				return TASK_IS_NOT_AT_LU;
 			case TMF_RESP_FUNC_FAILED:
-                                SAS_DPRINTK("%s: task 0x%p failed to abort\n",
-                                                __func__, task);
-                                return TASK_ABORT_FAILED;
-                        }
+				SAS_DPRINTK("%s: task 0x%p failed to abort\n",
+						__func__, task);
+				return TASK_ABORT_FAILED;
+			}
 
 		}
 	}

@@ -736,7 +736,7 @@ static PyObject *pyrf_evlist__get_pollfd(struct pyrf_evlist *pevlist,
 					 PyObject *args __used, PyObject *kwargs __used)
 {
 	struct perf_evlist *evlist = &pevlist->evlist;
-        PyObject *list = PyList_New(0);
+	PyObject *list = PyList_New(0);
 	int i;
 
 	for (i = 0; i < evlist->nr_fds; ++i) {

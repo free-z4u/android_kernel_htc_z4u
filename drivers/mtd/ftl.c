@@ -169,7 +169,7 @@ static int scan_header(partition_t *part)
 	 offset += part->mbd.mtd->erasesize ? : 0x2000) {
 
 	err = mtd_read(part->mbd.mtd, offset, sizeof(header), &ret,
-                       (unsigned char *)&header);
+		       (unsigned char *)&header);
 
 	if (err)
 	    return err;
@@ -225,7 +225,7 @@ static int build_maps(partition_t *part)
 	offset = ((i + le16_to_cpu(part->header.FirstPhysicalEUN))
 		      << part->header.EraseUnitSize);
 	ret = mtd_read(part->mbd.mtd, offset, sizeof(header), &retval,
-                       (unsigned char *)&header);
+		       (unsigned char *)&header);
 
 	if (ret)
 	    goto out_XferInfo;
@@ -290,8 +290,8 @@ static int build_maps(partition_t *part)
 	offset = part->EUNInfo[i].Offset + le32_to_cpu(header.BAMOffset);
 
 	ret = mtd_read(part->mbd.mtd, offset,
-                       part->BlocksPerUnit * sizeof(uint32_t), &retval,
-                       (unsigned char *)part->bam_cache);
+		       part->BlocksPerUnit * sizeof(uint32_t), &retval,
+		       (unsigned char *)part->bam_cache);
 
 	if (ret)
 		goto out_bam_cache;
@@ -347,7 +347,7 @@ static int erase_xfer(partition_t *part,
 
     erase=kmalloc(sizeof(struct erase_info), GFP_KERNEL);
     if (!erase)
-            return -ENOMEM;
+	    return -ENOMEM;
 
     erase->mtd = part->mbd.mtd;
     erase->callback = ftl_erase_callback;
@@ -423,7 +423,7 @@ static int prepare_xfer(partition_t *part, int i)
     header.EraseCount = cpu_to_le32(xfer->EraseCount);
 
     ret = mtd_write(part->mbd.mtd, xfer->Offset, sizeof(header), &retlen,
-                    (u_char *)&header);
+		    (u_char *)&header);
 
     if (ret) {
 	return ret;
@@ -439,7 +439,7 @@ static int prepare_xfer(partition_t *part, int i)
     for (i = 0; i < nbam; i++, offset += sizeof(uint32_t)) {
 
 	ret = mtd_write(part->mbd.mtd, offset, sizeof(uint32_t), &retlen,
-                        (u_char *)&ctl);
+			(u_char *)&ctl);
 
 	if (ret)
 	    return ret;
@@ -486,8 +486,8 @@ static int copy_erase_unit(partition_t *part, uint16_t srcunit,
 	offset = eun->Offset + le32_to_cpu(part->header.BAMOffset);
 
 	ret = mtd_read(part->mbd.mtd, offset,
-                       part->BlocksPerUnit * sizeof(uint32_t), &retlen,
-                       (u_char *)(part->bam_cache));
+		       part->BlocksPerUnit * sizeof(uint32_t), &retlen,
+		       (u_char *)(part->bam_cache));
 
 	/* mark the cache bad, in case we get an error later */
 	part->bam_index = 0xffff;
@@ -504,7 +504,7 @@ static int copy_erase_unit(partition_t *part, uint16_t srcunit,
     unit = cpu_to_le16(0x7fff);
 
     ret = mtd_write(part->mbd.mtd, offset, sizeof(uint16_t), &retlen,
-                    (u_char *)&unit);
+		    (u_char *)&unit);
 
     if (ret) {
 	printk( KERN_WARNING "ftl: Failed to write back to BAM cache in copy_erase_unit()!\n");
@@ -524,19 +524,19 @@ static int copy_erase_unit(partition_t *part, uint16_t srcunit,
 	case BLOCK_DATA:
 	case BLOCK_REPLACEMENT:
 	    ret = mtd_read(part->mbd.mtd, src, SECTOR_SIZE, &retlen,
-                           (u_char *)buf);
+			   (u_char *)buf);
 	    if (ret) {
 		printk(KERN_WARNING "ftl: Error reading old xfer unit in copy_erase_unit\n");
 		return ret;
-            }
+	    }
 
 
 	    ret = mtd_write(part->mbd.mtd, dest, SECTOR_SIZE, &retlen,
-                            (u_char *)buf);
+			    (u_char *)buf);
 	    if (ret)  {
 		printk(KERN_WARNING "ftl: Error writing new xfer unit in copy_erase_unit\n");
 		return ret;
-            }
+	    }
 
 	    break;
 	default:
@@ -551,10 +551,10 @@ static int copy_erase_unit(partition_t *part, uint16_t srcunit,
 
     /* Write the BAM to the transfer unit */
     ret = mtd_write(part->mbd.mtd,
-                    xfer->Offset + le32_to_cpu(part->header.BAMOffset),
-                    part->BlocksPerUnit * sizeof(int32_t),
-                    &retlen,
-                    (u_char *)part->bam_cache);
+		    xfer->Offset + le32_to_cpu(part->header.BAMOffset),
+		    part->BlocksPerUnit * sizeof(int32_t),
+		    &retlen,
+		    (u_char *)part->bam_cache);
     if (ret) {
 	printk( KERN_WARNING "ftl: Error writing BAM in copy_erase_unit\n");
 	return ret;
@@ -563,7 +563,7 @@ static int copy_erase_unit(partition_t *part, uint16_t srcunit,
 
     /* All clear? Then update the LogicalEUN again */
     ret = mtd_write(part->mbd.mtd, xfer->Offset + 20, sizeof(uint16_t),
-                    &retlen, (u_char *)&srcunitswap);
+		    &retlen, (u_char *)&srcunitswap);
 
     if (ret) {
 	printk(KERN_WARNING "ftl: Error writing new LogicalEUN in copy_erase_unit\n");
@@ -749,10 +749,10 @@ static uint32_t find_free(partition_t *part)
 	part->bam_index = 0xffff;
 
 	ret = mtd_read(part->mbd.mtd,
-                       part->EUNInfo[eun].Offset + le32_to_cpu(part->header.BAMOffset),
-                       part->BlocksPerUnit * sizeof(uint32_t),
-                       &retlen,
-                       (u_char *)(part->bam_cache));
+		       part->EUNInfo[eun].Offset + le32_to_cpu(part->header.BAMOffset),
+		       part->BlocksPerUnit * sizeof(uint32_t),
+		       &retlen,
+		       (u_char *)(part->bam_cache));
 
 	if (ret) {
 	    printk(KERN_WARNING"ftl: Error reading BAM in find_free\n");
@@ -813,7 +813,7 @@ static int ftl_read(partition_t *part, caddr_t buffer,
 	    offset = (part->EUNInfo[log_addr / bsize].Offset
 			  + (log_addr % bsize));
 	    ret = mtd_read(part->mbd.mtd, offset, SECTOR_SIZE, &retlen,
-                           (u_char *)buffer);
+			   (u_char *)buffer);
 
 	    if (ret) {
 		printk(KERN_WARNING "Error reading MTD device in ftl_read()\n");
@@ -852,7 +852,7 @@ static int set_bam_entry(partition_t *part, uint32_t log_addr,
 
 #ifdef PSYCHO_DEBUG
     ret = mtd_read(part->mbd.mtd, offset, sizeof(uint32_t), &retlen,
-                   (u_char *)&old_addr);
+		   (u_char *)&old_addr);
     if (ret) {
 	printk(KERN_WARNING"ftl: Error reading old_addr in set_bam_entry: %d\n",ret);
 	return ret;
@@ -889,7 +889,7 @@ static int set_bam_entry(partition_t *part, uint32_t log_addr,
 	part->bam_cache[blk] = le_virt_addr;
     }
     ret = mtd_write(part->mbd.mtd, offset, sizeof(uint32_t), &retlen,
-                    (u_char *)&le_virt_addr);
+		    (u_char *)&le_virt_addr);
 
     if (ret) {
 	printk(KERN_NOTICE "ftl_cs: set_bam_entry() failed!\n");

@@ -1102,7 +1102,7 @@ static const struct SiS_LVDSData SiS310_CHTVSOPALData[] =   /* (super overscan -
 	{1008, 625,1008, 625},
 	{ 840, 625, 840, 625},
 	{ 944, 625, 944, 625},
-        {1400, 875,1400, 875}
+	{1400, 875,1400, 875}
 };
 
 /* CRT1 CRTC for Chrontel TV slave modes */
@@ -1217,7 +1217,7 @@ static const struct SiS_CHTVRegData SiS310_CHTVReg_UNTSC[] =
  {{0xcf,0x77,0xb7,0xc8,0x84,0x3b,0x02,0x5a,0x04,0x00,0x80,0x19,0x88,0x30,0x7f,0x00}},
  {{0xee,0x77,0xbb,0x66,0x87,0x32,0x01,0x5a,0x04,0x00,0x80,0x1b,0xd3,0xf2,0x36,0x00}}
 }; /* WRONG: 0x02: should be 0xfx, because if CIVEnable is clear, this should be set;
-             0x07: Blacklevel: NTSC/PAL-M: Should be 131 (0x83), and not 0x50/0x5a
+	     0x07: Blacklevel: NTSC/PAL-M: Should be 131 (0x83), and not 0x50/0x5a
 	                       PAL/PAL-N:  110 (0x6e)
 			       NTSC-J:     102 (0x66)
 	     0x0c-0x0f: CIV is not default as in datasheet

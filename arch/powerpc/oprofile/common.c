@@ -115,8 +115,8 @@ static void op_powerpc_stop(void)
 {
 	if (model->stop)
 		on_each_cpu(op_powerpc_cpu_stop, NULL, 1);
-        if (model->global_stop)
-                model->global_stop();
+	if (model->global_stop)
+		model->global_stop();
 }
 
 static int op_powerpc_create_files(struct super_block *sb, struct dentry *root)

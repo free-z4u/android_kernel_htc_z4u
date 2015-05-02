@@ -39,10 +39,10 @@
 
 #ifdef CONFIG_PPC32
 struct pmac_irq_hw {
-        unsigned int    event;
-        unsigned int    enable;
-        unsigned int    ack;
-        unsigned int    level;
+	unsigned int    event;
+	unsigned int    enable;
+	unsigned int    ack;
+	unsigned int    level;
 };
 
 /* Workaround flags for 32bit powermac machines */
@@ -79,64 +79,64 @@ static void __pmac_retrigger(unsigned int irq_nr)
 static void pmac_mask_and_ack_irq(struct irq_data *d)
 {
 	unsigned int src = irqd_to_hwirq(d);
-        unsigned long bit = 1UL << (src & 0x1f);
-        int i = src >> 5;
-        unsigned long flags;
+	unsigned long bit = 1UL << (src & 0x1f);
+	int i = src >> 5;
+	unsigned long flags;
 
 	raw_spin_lock_irqsave(&pmac_pic_lock, flags);
-        __clear_bit(src, ppc_cached_irq_mask);
-        if (__test_and_clear_bit(src, ppc_lost_interrupts))
-                atomic_dec(&ppc_n_lost_interrupts);
-        out_le32(&pmac_irq_hw[i]->enable, ppc_cached_irq_mask[i]);
-        out_le32(&pmac_irq_hw[i]->ack, bit);
-        do {
-                /* make sure ack gets to controller before we enable
-                   interrupts */
-                mb();
-        } while((in_le32(&pmac_irq_hw[i]->enable) & bit)
-                != (ppc_cached_irq_mask[i] & bit));
+	__clear_bit(src, ppc_cached_irq_mask);
+	if (__test_and_clear_bit(src, ppc_lost_interrupts))
+		atomic_dec(&ppc_n_lost_interrupts);
+	out_le32(&pmac_irq_hw[i]->enable, ppc_cached_irq_mask[i]);
+	out_le32(&pmac_irq_hw[i]->ack, bit);
+	do {
+		/* make sure ack gets to controller before we enable
+		   interrupts */
+		mb();
+	} while((in_le32(&pmac_irq_hw[i]->enable) & bit)
+		!= (ppc_cached_irq_mask[i] & bit));
 	raw_spin_unlock_irqrestore(&pmac_pic_lock, flags);
 }
 
 static void pmac_ack_irq(struct irq_data *d)
 {
 	unsigned int src = irqd_to_hwirq(d);
-        unsigned long bit = 1UL << (src & 0x1f);
-        int i = src >> 5;
-        unsigned long flags;
+	unsigned long bit = 1UL << (src & 0x1f);
+	int i = src >> 5;
+	unsigned long flags;
 
 	raw_spin_lock_irqsave(&pmac_pic_lock, flags);
 	if (__test_and_clear_bit(src, ppc_lost_interrupts))
-                atomic_dec(&ppc_n_lost_interrupts);
-        out_le32(&pmac_irq_hw[i]->ack, bit);
-        (void)in_le32(&pmac_irq_hw[i]->ack);
+		atomic_dec(&ppc_n_lost_interrupts);
+	out_le32(&pmac_irq_hw[i]->ack, bit);
+	(void)in_le32(&pmac_irq_hw[i]->ack);
 	raw_spin_unlock_irqrestore(&pmac_pic_lock, flags);
 }
 
 static void __pmac_set_irq_mask(unsigned int irq_nr, int nokicklost)
 {
-        unsigned long bit = 1UL << (irq_nr & 0x1f);
-        int i = irq_nr >> 5;
+	unsigned long bit = 1UL << (irq_nr & 0x1f);
+	int i = irq_nr >> 5;
 
-        if ((unsigned)irq_nr >= max_irqs)
-                return;
+	if ((unsigned)irq_nr >= max_irqs)
+		return;
 
-        /* enable unmasked interrupts */
-        out_le32(&pmac_irq_hw[i]->enable, ppc_cached_irq_mask[i]);
+	/* enable unmasked interrupts */
+	out_le32(&pmac_irq_hw[i]->enable, ppc_cached_irq_mask[i]);
 
-        do {
-                /* make sure mask gets to controller before we
-                   return to user */
-                mb();
-        } while((in_le32(&pmac_irq_hw[i]->enable) & bit)
-                != (ppc_cached_irq_mask[i] & bit));
+	do {
+		/* make sure mask gets to controller before we
+		   return to user */
+		mb();
+	} while((in_le32(&pmac_irq_hw[i]->enable) & bit)
+		!= (ppc_cached_irq_mask[i] & bit));
 
-        /*
-         * Unfortunately, setting the bit in the enable register
-         * when the device interrupt is already on *doesn't* set
-         * the bit in the flag register or request another interrupt.
-         */
-        if (bit & ppc_cached_irq_mask[i] & in_le32(&pmac_irq_hw[i]->level))
+	/*
+	 * Unfortunately, setting the bit in the enable register
+	 * when the device interrupt is already on *doesn't* set
+	 * the bit in the flag register or request another interrupt.
+	 */
+	if (bit & ppc_cached_irq_mask[i] & in_le32(&pmac_irq_hw[i]->level))
 		__pmac_retrigger(irq_nr);
 }
 
@@ -147,14 +147,14 @@ static unsigned int pmac_startup_irq(struct irq_data *d)
 {
 	unsigned long flags;
 	unsigned int src = irqd_to_hwirq(d);
-        unsigned long bit = 1UL << (src & 0x1f);
-        int i = src >> 5;
+	unsigned long bit = 1UL << (src & 0x1f);
+	int i = src >> 5;
 
 	raw_spin_lock_irqsave(&pmac_pic_lock, flags);
 	if (!irqd_is_level_type(d))
 		out_le32(&pmac_irq_hw[i]->ack, bit);
-        __set_bit(src, ppc_cached_irq_mask);
-        __pmac_set_irq_mask(src, 0);
+	__set_bit(src, ppc_cached_irq_mask);
+	__pmac_set_irq_mask(src, 0);
 	raw_spin_unlock_irqrestore(&pmac_pic_lock, flags);
 
 	return 0;
@@ -166,8 +166,8 @@ static void pmac_mask_irq(struct irq_data *d)
 	unsigned int src = irqd_to_hwirq(d);
 
 	raw_spin_lock_irqsave(&pmac_pic_lock, flags);
-        __clear_bit(src, ppc_cached_irq_mask);
-        __pmac_set_irq_mask(src, 1);
+	__clear_bit(src, ppc_cached_irq_mask);
+	__pmac_set_irq_mask(src, 1);
 	raw_spin_unlock_irqrestore(&pmac_pic_lock, flags);
 }
 
@@ -178,7 +178,7 @@ static void pmac_unmask_irq(struct irq_data *d)
 
 	raw_spin_lock_irqsave(&pmac_pic_lock, flags);
 	__set_bit(src, ppc_cached_irq_mask);
-        __pmac_set_irq_mask(src, 0);
+	__pmac_set_irq_mask(src, 0);
 	raw_spin_unlock_irqrestore(&pmac_pic_lock, flags);
 }
 
@@ -236,7 +236,7 @@ static unsigned int pmac_pic_get_irq(void)
 	/* IPI's are a hack on the powersurge -- Cort */
 	if (smp_processor_id() != 0) {
 		return  psurge_secondary_virq;
-        }
+	}
 #endif /* CONFIG_PPC_PMAC32_PSURGE */
 	raw_spin_lock_irqsave(&pmac_pic_lock, flags);
 	for (irq = max_real_irqs; (irq -= 32) >= 0; ) {
@@ -296,8 +296,8 @@ static const struct irq_domain_ops pmac_pic_host_ops = {
 
 static void __init pmac_pic_probe_oldstyle(void)
 {
-        int i;
-        struct device_node *master = NULL;
+	int i;
+	struct device_node *master = NULL;
 	struct device_node *slave = NULL;
 	u8 __iomem *addr;
 	struct resource r;
@@ -621,9 +621,9 @@ static int pmacpic_suspend(void)
 	(void)in_le32(&pmac_irq_hw[0]->event);
 	/* make sure mask gets to controller before we return to caller */
 	mb();
-        (void)in_le32(&pmac_irq_hw[0]->enable);
+	(void)in_le32(&pmac_irq_hw[0]->enable);
 
-        return 0;
+	return 0;
 }
 
 static void pmacpic_resume(void)

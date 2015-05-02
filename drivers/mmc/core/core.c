@@ -70,7 +70,7 @@ MODULE_PARM_DESC(
 extern int mmc_is_sd_host(struct mmc_host *mmc);
 #endif
 int mmc_schedule_card_removal_work(struct delayed_work *work,
-                                    unsigned long delay)
+				    unsigned long delay)
 {
        wake_lock(&mmc_removal_work_wake_lock);
        return queue_delayed_work(workqueue, work, delay);
@@ -2179,7 +2179,7 @@ int mmc_suspend_host(struct mmc_host *host)
 	}
 #ifdef CONFIG_MMC_BLOCK_DEFERRED_RESUME
        if (mmc_bus_manual_resume(host))
-               host->bus_resume_flags |= MMC_BUSRESUME_NEEDS_RESUME;
+	       host->bus_resume_flags |= MMC_BUSRESUME_NEEDS_RESUME;
 #endif
 	mmc_bus_put(host);
 

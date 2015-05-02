@@ -220,12 +220,12 @@ enum {
 };
 
 struct pci_id_info {
-        const char *name;
-        struct match_info {
-                int     pci, pci_mask, subsystem, subsystem_mask;
-                int revision, revision_mask;                            /* Only 8 bits. */
-        } id;
-        int drv_flags;                          /* Driver use, intended as capability flags. */
+	const char *name;
+	struct match_info {
+		int     pci, pci_mask, subsystem, subsystem_mask;
+		int revision, revision_mask;                            /* Only 8 bits. */
+	} id;
+	int drv_flags;                          /* Driver use, intended as capability flags. */
 };
 
 static const struct pci_id_info pci_id_tbl[] = {
@@ -378,8 +378,8 @@ static int __devinit yellowfin_init_one(struct pci_dev *pdev,
 	void __iomem *ioaddr;
 	int i, option = find_cnt < MAX_UNITS ? options[find_cnt] : 0;
 	int drv_flags = pci_id_tbl[chip_idx].drv_flags;
-        void *ring_space;
-        dma_addr_t ring_dma;
+	void *ring_space;
+	dma_addr_t ring_dma;
 #ifdef USE_IO_OPS
 	int bar = 0;
 #else
@@ -509,12 +509,12 @@ static int __devinit yellowfin_init_one(struct pci_dev *pdev,
 	return 0;
 
 err_out_unmap_status:
-        pci_free_consistent(pdev, STATUS_TOTAL_SIZE, np->tx_status,
+	pci_free_consistent(pdev, STATUS_TOTAL_SIZE, np->tx_status,
 		np->tx_status_dma);
 err_out_unmap_rx:
-        pci_free_consistent(pdev, RX_TOTAL_SIZE, np->rx_ring, np->rx_ring_dma);
+	pci_free_consistent(pdev, RX_TOTAL_SIZE, np->rx_ring, np->rx_ring_dma);
 err_out_unmap_tx:
-        pci_free_consistent(pdev, TX_TOTAL_SIZE, np->tx_ring, np->tx_ring_dma);
+	pci_free_consistent(pdev, TX_TOTAL_SIZE, np->tx_ring, np->tx_ring_dma);
 err_out_cleardev:
 	pci_set_drvdata(pdev, NULL);
 	pci_iounmap(pdev, ioaddr);
@@ -1384,7 +1384,7 @@ static void __devexit yellowfin_remove_one (struct pci_dev *pdev)
 	BUG_ON(!dev);
 	np = netdev_priv(dev);
 
-        pci_free_consistent(pdev, STATUS_TOTAL_SIZE, np->tx_status,
+	pci_free_consistent(pdev, STATUS_TOTAL_SIZE, np->tx_status,
 		np->tx_status_dma);
 	pci_free_consistent(pdev, RX_TOTAL_SIZE, np->rx_ring, np->rx_ring_dma);
 	pci_free_consistent(pdev, TX_TOTAL_SIZE, np->tx_ring, np->tx_ring_dma);

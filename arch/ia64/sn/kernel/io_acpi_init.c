@@ -309,9 +309,9 @@ find_matching_device(acpi_handle handle, u32 lvl, void *context, void **rv)
 	struct sn_pcidev_match *info = context;
 	struct acpi_buffer name_buffer = { ACPI_ALLOCATE_BUFFER, NULL };
 
-        status = acpi_evaluate_integer(handle, METHOD_NAME__ADR, NULL,
-                                       &adr);
-        if (ACPI_SUCCESS(status)) {
+	status = acpi_evaluate_integer(handle, METHOD_NAME__ADR, NULL,
+				       &adr);
+	if (ACPI_SUCCESS(status)) {
 		status = acpi_get_parent(handle, &parent);
 		if (ACPI_FAILURE(status)) {
 			acpi_get_name(handle, ACPI_FULL_PATHNAME, &name_buffer);
@@ -332,10 +332,10 @@ find_matching_device(acpi_handle handle, u32 lvl, void *context, void **rv)
 			return AE_OK;
 		}
 
-                slot = (adr >> 16) & 0xffff;
-                function = adr & 0xffff;
-                devfn = PCI_DEVFN(slot, function);
-                if ((info->devfn == devfn) && (info->bus == bbn)) {
+		slot = (adr >> 16) & 0xffff;
+		function = adr & 0xffff;
+		devfn = PCI_DEVFN(slot, function);
+		if ((info->devfn == devfn) && (info->bus == bbn)) {
 			/* We have a match! */
 			info->handle = handle;
 			return 1;
@@ -361,9 +361,9 @@ sn_acpi_get_pcidev_info(struct pci_dev *dev, struct pcidev_info **pcidev_info,
 	struct acpi_buffer name_buffer = { ACPI_ALLOCATE_BUFFER, NULL };
 
 	rootbus_handle = PCI_CONTROLLER(dev)->acpi_handle;
-        status = acpi_evaluate_integer(rootbus_handle, METHOD_NAME__SEG, NULL,
-                                       &segment);
-        if (ACPI_SUCCESS(status)) {
+	status = acpi_evaluate_integer(rootbus_handle, METHOD_NAME__SEG, NULL,
+				       &segment);
+	if (ACPI_SUCCESS(status)) {
 		if (segment != pci_domain_nr(dev)) {
 			acpi_get_name(rootbus_handle, ACPI_FULL_PATHNAME,
 				&name_buffer);

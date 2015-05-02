@@ -37,7 +37,7 @@
 // constants
 //
 #define U_ETHER_ADDR_STR_LEN (ETH_ALEN * 2 + 1)
-                                        // Ethernet address string length
+					// Ethernet address string length
 #define U_MULTI_ADDR_LEN    8           // multicast address length
 
 #ifdef __BIG_ENDIAN

@@ -62,7 +62,7 @@ static inline char pin_name(int pin)
 }
 
 /* --------------------------------------------------------------------------
-                         PCI IRQ Routing Table (PRT) Support
+			 PCI IRQ Routing Table (PRT) Support
    -------------------------------------------------------------------------- */
 
 static struct acpi_prt_entry *acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
@@ -301,7 +301,7 @@ void acpi_pci_irq_del_prt(struct pci_bus *bus)
 }
 
 /* --------------------------------------------------------------------------
-                          PCI Interrupt Routing Support
+			  PCI Interrupt Routing Support
    -------------------------------------------------------------------------- */
 #ifdef CONFIG_X86_IO_APIC
 extern int noioapicquirk;

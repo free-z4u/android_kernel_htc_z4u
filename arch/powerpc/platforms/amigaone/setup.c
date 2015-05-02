@@ -129,7 +129,7 @@ void amigaone_restart(char *cmd)
 	/* Flush and disable caches. */
 	__flush_disable_L1();
 
-        /* Set SRR0 to the reset vector and turn on MSR_IP. */
+	/* Set SRR0 to the reset vector and turn on MSR_IP. */
 	mtspr(SPRN_SRR0, 0xfff00100);
 	mtspr(SPRN_SRR1, MSR_IP);
 

@@ -78,7 +78,7 @@ static int tape_proc_show(struct seq_file *m, void *v)
 	seq_printf(m, "%s\n", tape_med_st_verbose[device->medium_state]);
 	spin_unlock_irq(get_ccwdev_lock(device->cdev));
 	tape_put_device(device);
-        return 0;
+	return 0;
 }
 
 static void *tape_proc_start(struct seq_file *m, loff_t *pos)

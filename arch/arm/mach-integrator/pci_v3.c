@@ -225,7 +225,7 @@ static unsigned long v3_open_config_window(struct pci_bus *bus,
 			 */
 			address |= 1 << (slot + 11);
 	} else {
-        	/*
+		/*
 		 * not the local bus segment so need a type 1 config cycle
 		 *
 		 * address:

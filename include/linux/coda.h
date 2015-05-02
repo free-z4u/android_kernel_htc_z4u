@@ -5,11 +5,11 @@
 
 /* BLURB lgpl
 
-                           Coda File System
-                              Release 5
+			   Coda File System
+			      Release 5
 
-          Copyright (c) 1987-1999 Carnegie Mellon University
-                  Additional copyrights listed below
+	  Copyright (c) 1987-1999 Carnegie Mellon University
+		  Additional copyrights listed below
 
 This code is distributed "AS IS" without warranty of any kind under
 the terms of the GNU Library General Public Licence Version 2, as
@@ -17,16 +17,16 @@ shown in the file LICENSE, or under the license shown below. The
 technical and financial contributors to Coda are listed in the file
 CREDITS.
 
-                        Additional copyrights
+			Additional copyrights
 */
 
 /*
 
-            Coda: an Experimental Distributed File System
-                             Release 4.0
+	    Coda: an Experimental Distributed File System
+			     Release 4.0
 
-          Copyright (c) 1987-1999 Carnegie Mellon University
-                         All Rights Reserved
+	  Copyright (c) 1987-1999 Carnegie Mellon University
+			 All Rights Reserved
 
 Permission  to  use, copy, modify and distribute this software and its
 documentation is hereby granted,  provided  that  both  the  copyright
@@ -87,8 +87,8 @@ typedef unsigned long long u_quad_t;
 #define inline
 
 struct timespec {
-        long       ts_sec;
-        long       ts_nsec;
+	long       ts_sec;
+	long       ts_nsec;
 };
 #else  /* DJGPP but not KERNEL */
 #include <sys/time.h>
@@ -114,8 +114,8 @@ typedef unsigned long long u_quad_t;
 
 #ifdef __CYGWIN32__
 struct timespec {
-        time_t  tv_sec;         /* seconds */
-        long    tv_nsec;        /* nanoseconds */
+	time_t  tv_sec;         /* seconds */
+	long    tv_nsec;        /* nanoseconds */
 };
 #endif
 
@@ -162,15 +162,15 @@ typedef unsigned int	   u_int32_t;
 #ifndef _VENUS_DIRENT_T_
 #define _VENUS_DIRENT_T_ 1
 struct venus_dirent {
-        u_int32_t d_fileno;		/* file number of entry */
-        u_int16_t d_reclen;		/* length of this record */
-        u_int8_t  d_type;			/* file type, see below */
-        u_int8_t  d_namlen;		/* length of string in d_name */
-        char	  d_name[CODA_MAXNAMLEN + 1];/* name must be no longer than this */
+	u_int32_t d_fileno;		/* file number of entry */
+	u_int16_t d_reclen;		/* length of this record */
+	u_int8_t  d_type;			/* file type, see below */
+	u_int8_t  d_namlen;		/* length of string in d_name */
+	char	  d_name[CODA_MAXNAMLEN + 1];/* name must be no longer than this */
 };
 #undef DIRSIZ
 #define DIRSIZ(dp)      ((sizeof (struct venus_dirent) - (CODA_MAXNAMLEN+1)) + \
-                         (((dp)->d_namlen+1 + 3) &~ 3))
+			 (((dp)->d_namlen+1 + 3) &~ 3))
 
 /*
  * File types
@@ -285,7 +285,7 @@ struct coda_statfs {
 
 #define VC_MAXDATASIZE	    8192
 #define VC_MAXMSGSIZE      sizeof(union inputArgs)+sizeof(union outputArgs) +\
-                            VC_MAXDATASIZE
+			    VC_MAXDATASIZE
 
 #define CIOC_KERNEL_VERSION _IOWR('c', 10, size_t)
 
@@ -715,16 +715,16 @@ union coda_downcalls {
 
 #define PIOCPARM_MASK 0x0000ffff
 struct ViceIoctl {
-        void __user *in;        /* Data to be transferred in */
-        void __user *out;       /* Data to be transferred out */
-        u_short in_size;        /* Size of input buffer <= 2K */
-        u_short out_size;       /* Maximum size of output buffer, <= 2K */
+	void __user *in;        /* Data to be transferred in */
+	void __user *out;       /* Data to be transferred out */
+	u_short in_size;        /* Size of input buffer <= 2K */
+	u_short out_size;       /* Maximum size of output buffer, <= 2K */
 };
 
 struct PioctlData {
-        const char __user *path;
-        int follow;
-        struct ViceIoctl vi;
+	const char __user *path;
+	int follow;
+	struct ViceIoctl vi;
 };
 
 #define CODA_CONTROL		".CONTROL"

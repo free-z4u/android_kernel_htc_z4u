@@ -569,9 +569,9 @@ int perf_evlist__mmap(struct perf_evlist *evlist, unsigned int pages,
 	const struct thread_map *threads = evlist->threads;
 	int prot = PROT_READ | (overwrite ? 0 : PROT_WRITE), mask;
 
-        /* 512 kiB: default amount of unprivileged mlocked memory */
-        if (pages == UINT_MAX)
-                pages = (512 * 1024) / page_size;
+	/* 512 kiB: default amount of unprivileged mlocked memory */
+	if (pages == UINT_MAX)
+		pages = (512 * 1024) / page_size;
 	else if (!is_power_of_2(pages))
 		return -EINVAL;
 

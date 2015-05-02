@@ -50,9 +50,9 @@ type name(void) \
 { \
    register long __res __asm__ ("%d0") = __BN_##name; \
    __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res) \
-                         ); \
+			 : "=g" (__res) \
+			 : "0" (__res) \
+			 ); \
    __bsc_return(type,__res); \
 }
 
@@ -62,9 +62,9 @@ type name(atype a) \
    register long __res __asm__ ("%d0") = __BN_##name; \
    register long __a __asm__ ("%d1") = (long)a; \
    __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res), "d" (__a) \
-                         ); \
+			 : "=g" (__res) \
+			 : "0" (__res), "d" (__a) \
+			 ); \
    __bsc_return(type,__res); \
 }
 
@@ -75,9 +75,9 @@ type name(atype a, btype b) \
    register long __a __asm__ ("%d1") = (long)a; \
    register long __b __asm__ ("%d2") = (long)b; \
    __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res), "d" (__a), "d" (__b) \
-                         ); \
+			 : "=g" (__res) \
+			 : "0" (__res), "d" (__a), "d" (__b) \
+			 ); \
    __bsc_return(type,__res); \
 }
 
@@ -89,10 +89,10 @@ type name(atype a, btype b, ctype c) \
    register long __b __asm__ ("%d2") = (long)b; \
    register long __c __asm__ ("%d3") = (long)c; \
    __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res), "d" (__a), "d" (__b), \
-                           "d" (__c) \
-                         ); \
+			 : "=g" (__res) \
+			 : "0" (__res), "d" (__a), "d" (__b), \
+			   "d" (__c) \
+			 ); \
    __bsc_return(type,__res); \
 }
 
@@ -105,10 +105,10 @@ type name(atype a, btype b, ctype c, dtype d) \
    register long __c __asm__ ("%d3") = (long)c; \
    register long __d __asm__ ("%d4") = (long)d; \
    __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res), "d" (__a), "d" (__b), \
-                           "d" (__c), "d" (__d) \
-                         ); \
+			 : "=g" (__res) \
+			 : "0" (__res), "d" (__a), "d" (__b), \
+			   "d" (__c), "d" (__d) \
+			 ); \
    __bsc_return(type,__res); \
 }
 
@@ -122,10 +122,10 @@ type name(atype a, btype b, ctype c, dtype d, etype e) \
    register long __d __asm__ ("%d4") = (long)d; \
    register long __e __asm__ ("%d5") = (long)e; \
    __asm__ __volatile__ ("trap #2" \
-                         : "=g" (__res) \
-                         : "0" (__res), "d" (__a), "d" (__b), \
-                           "d" (__c), "d" (__d), "d" (__e) \
-                         ); \
+			 : "=g" (__res) \
+			 : "0" (__res), "d" (__a), "d" (__b), \
+			   "d" (__c), "d" (__d), "d" (__e) \
+			 ); \
    __bsc_return(type,__res); \
 }
 

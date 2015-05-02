@@ -296,8 +296,8 @@ static void __init sun4d_load_profile_irqs(void)
 }
 
 unsigned int _sun4d_build_device_irq(unsigned int real_irq,
-                                     unsigned int pil,
-                                     unsigned int board)
+				     unsigned int pil,
+				     unsigned int board)
 {
 	struct sun4d_handler_data *handler_data;
 	unsigned int irq;
@@ -331,7 +331,7 @@ err_out:
 
 
 unsigned int sun4d_build_device_irq(struct platform_device *op,
-                                    unsigned int real_irq)
+				    unsigned int real_irq)
 {
 	struct device_node *dp = op->dev.of_node;
 	struct device_node *board_parent, *bus = dp->parent;

@@ -94,10 +94,10 @@ MODULE_PARM_DESC(max_queue, "Maximum number of queued commands. (min==1, max==30
 #define assert(expr)
 #else
 #define assert(expr) \
-        if(unlikely(!(expr))) {                                   \
-        printk(KERN_ERR "Assertion failed! %s,%s,%s,line=%d\n", \
+	if(unlikely(!(expr))) {                                   \
+	printk(KERN_ERR "Assertion failed! %s,%s,%s,line=%d\n", \
 	#expr, __FILE__, __func__, __LINE__);          \
-        }
+	}
 #endif
 
 /* defines only for the constants which don't work well as enums */

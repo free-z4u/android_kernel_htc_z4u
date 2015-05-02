@@ -55,13 +55,13 @@ static int find_boot_record(struct INFTLrecord *inftl)
 
 	pr_debug("INFTL: find_boot_record(inftl=%p)\n", inftl);
 
-        /*
+	/*
 	 * Assume logical EraseSize == physical erasesize for starting the
 	 * scan. We'll sort it out later if we find a MediaHeader which says
 	 * otherwise.
 	 */
 	inftl->EraseSize = inftl->mbd.mtd->erasesize;
-        inftl->nb_blocks = (u32)inftl->mbd.mtd->size / inftl->EraseSize;
+	inftl->nb_blocks = (u32)inftl->mbd.mtd->size / inftl->EraseSize;
 
 	inftl->MediaUnit = BLOCK_NIL;
 

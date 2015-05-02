@@ -78,7 +78,7 @@ struct vlan_info;
 
 static inline int is_vlan_dev(struct net_device *dev)
 {
-        return dev->priv_flags & IFF_802_1Q_VLAN;
+	return dev->priv_flags & IFF_802_1Q_VLAN;
 }
 
 #define vlan_tx_tag_present(__skb)	((__skb)->vlan_tci & VLAN_TAG_PRESENT)
@@ -392,14 +392,14 @@ struct vlan_ioctl_args {
 	int cmd; /* Should be one of the vlan_ioctl_cmds enum above. */
 	char device1[24];
 
-        union {
+	union {
 		char device2[24];
 		int VID;
 		unsigned int skb_priority;
 		unsigned int name_type;
 		unsigned int bind_type;
 		unsigned int flag; /* Matches vlan_dev_priv flags */
-        } u;
+	} u;
 
 	short vlan_qos;
 };

@@ -320,7 +320,7 @@ static void recover_list_clear(struct dlm_ls *ls)
    dlm_recover_masters
    recover_master
    dlm_send_rcom_lookup            ->  receive_rcom_lookup
-                                       dlm_dir_lookup
+				       dlm_dir_lookup
    receive_rcom_lookup_reply       <-
    dlm_recover_master_reply
    set_new_master
@@ -498,7 +498,7 @@ int dlm_recover_master_reply(struct dlm_ls *ls, struct dlm_rcom *rc)
    recover_locks
    recover_locks_queue
    dlm_send_rcom_lock              ->  receive_rcom_lock
-                                       dlm_recover_master_copy
+				       dlm_recover_master_copy
    receive_rcom_lock_reply         <-
    dlm_recover_process_copy
 */

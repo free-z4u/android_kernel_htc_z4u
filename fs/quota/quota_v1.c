@@ -149,7 +149,7 @@ static int v1_check_quota_file(struct super_block *sb, int type)
 	printk(KERN_INFO
 	       "VFS: %s: Refusing to turn on old quota format on given file."
 	       " It probably contains newer quota format.\n", sb->s_id);
-        return 0;		/* Seems like a new format file -> refuse it */
+	return 0;		/* Seems like a new format file -> refuse it */
 }
 
 static int v1_read_file_info(struct super_block *sb, int type)
@@ -220,12 +220,12 @@ static struct quota_format_type v1_quota_format = {
 
 static int __init init_v1_quota_format(void)
 {
-        return register_quota_format(&v1_quota_format);
+	return register_quota_format(&v1_quota_format);
 }
 
 static void __exit exit_v1_quota_format(void)
 {
-        unregister_quota_format(&v1_quota_format);
+	unregister_quota_format(&v1_quota_format);
 }
 
 module_init(init_v1_quota_format);

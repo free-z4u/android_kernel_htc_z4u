@@ -194,7 +194,7 @@ static unsigned int pvr2dma = ONCHIP_NR_DMA_CHANNELS;
 #endif
 
 static int pvr2fb_setcolreg(unsigned int regno, unsigned int red, unsigned int green, unsigned int blue,
-                            unsigned int transp, struct fb_info *info);
+			    unsigned int transp, struct fb_info *info);
 static int pvr2fb_blank(int blank, struct fb_info *info);
 static unsigned long get_line_length(int xres_virtual, int bpp);
 static void set_color_bitfields(struct fb_var_screeninfo *var);
@@ -206,7 +206,7 @@ static void pvr2_do_blank(void);
 static irqreturn_t pvr2fb_interrupt(int irq, void *dev_id);
 static int pvr2_init_cable(void);
 static int pvr2_get_param(const struct pvr2_params *p, const char *s,
-                            int val, int size);
+			    int val, int size);
 #ifdef CONFIG_PVR2_DMA
 static ssize_t pvr2fb_write(struct fb_info *info, const char *buf,
 			    size_t count, loff_t *ppos);
@@ -311,7 +311,7 @@ static void set_color_bitfields(struct fb_var_screeninfo *var)
 
 static int pvr2fb_setcolreg(unsigned int regno, unsigned int red,
 			    unsigned int green, unsigned int blue,
-                            unsigned int transp, struct fb_info *info)
+			    unsigned int transp, struct fb_info *info)
 {
 	struct pvr2fb_par *par = (struct pvr2fb_par *)info->par;
 	unsigned int tmp;
@@ -994,7 +994,7 @@ static void __exit pvr2fb_pci_exit(void)
 #endif /* CONFIG_PCI */
 
 static int __devinit pvr2_get_param(const struct pvr2_params *p, const char *s,
-                                   int val, int size)
+				   int val, int size)
 {
 	int i;
 

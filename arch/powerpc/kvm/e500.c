@@ -78,7 +78,7 @@ int kvmppc_core_vcpu_setup(struct kvm_vcpu *vcpu)
 
 /* 'linear_address' is actually an encoding of AS|PID|EADDR . */
 int kvmppc_core_vcpu_translate(struct kvm_vcpu *vcpu,
-                               struct kvm_translation *tr)
+			       struct kvm_translation *tr)
 {
 	int index;
 	gva_t eaddr;

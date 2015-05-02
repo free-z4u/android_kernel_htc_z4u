@@ -73,7 +73,7 @@
 #define DC395X_VERSION	"v2.05, 2004/03/08"
 
 /*---------------------------------------------------------------------------
-                                  Features
+				  Features
  ---------------------------------------------------------------------------*/
 /*
  * Set to disable parts of the driver
@@ -84,7 +84,7 @@
 /*#define DC395x_NO_WIDE*/
 
 /*---------------------------------------------------------------------------
-                                  Debugging
+				  Debugging
  ---------------------------------------------------------------------------*/
 /*
  * Types of debugging that can be enabled and disabled
@@ -337,7 +337,7 @@ struct AdapterCtlBlk {
 
 
 /*---------------------------------------------------------------------------
-                            Forward declarations
+			    Forward declarations
  ---------------------------------------------------------------------------*/
 static void data_out_phase0(struct AdapterCtlBlk *acb, struct ScsiReqBlk *srb,
 		u16 *pscsi_status);
@@ -397,7 +397,7 @@ static void waiting_timeout(unsigned long ptr);
 
 
 /*---------------------------------------------------------------------------
-                                 Static Data
+				 Static Data
  ---------------------------------------------------------------------------*/
 static u16 current_sync_offset = 0;
 
@@ -450,7 +450,7 @@ static u16 clock_speed[] = { 200, 133, 100, 80, 67, 58, 50, 40 };
 
 
 /*---------------------------------------------------------------------------
-                                Configuration
+				Configuration
   ---------------------------------------------------------------------------*/
 /*
  * Module/boot parameters currently effect *all* instances of the
@@ -724,10 +724,10 @@ static struct DeviceCtlBlk *dcb_get_next(struct list_head *head,
 		}
 	/* if no next one take the head one (ie, wraparound) */
 	if (!next)
-        	list_for_each_entry(i, head, list) {
-        		next = i;
-        		break;
-        	}
+		list_for_each_entry(i, head, list) {
+			next = i;
+			break;
+		}
 
 	return next;
 }
@@ -4414,7 +4414,7 @@ static void __devinit adapter_init_params(struct AdapterCtlBlk *acb)
  **/
 static void __devinit adapter_init_scsi_host(struct Scsi_Host *host)
 {
-        struct AdapterCtlBlk *acb = (struct AdapterCtlBlk *)host->hostdata;
+	struct AdapterCtlBlk *acb = (struct AdapterCtlBlk *)host->hostdata;
 	struct NvRamType *eeprom = &acb->eeprom;
 
 	host->max_cmd_len = 24;
@@ -4455,9 +4455,9 @@ static void __devinit adapter_init_scsi_host(struct Scsi_Host *host)
  **/
 static void __devinit adapter_init_chip(struct AdapterCtlBlk *acb)
 {
-        struct NvRamType *eeprom = &acb->eeprom;
+	struct NvRamType *eeprom = &acb->eeprom;
 
-        /* Mask all the interrupt */
+	/* Mask all the interrupt */
 	DC395x_write8(acb, TRM_S1040_DMA_INTEN, 0x00);
 	DC395x_write8(acb, TRM_S1040_SCSI_INTEN, 0x00);
 
@@ -4715,7 +4715,7 @@ static int dc395x_proc_info(struct Scsi_Host *host, char *buffer,
 			SPRINTF("DCB (%02i-%i): Waiting: %i:",
 				dcb->target_id, dcb->target_lun,
 				list_size(&dcb->srb_waiting_list));
-                list_for_each_entry(srb, &dcb->srb_waiting_list, list)
+		list_for_each_entry(srb, &dcb->srb_waiting_list, list)
 			SPRINTF(" %p", srb->cmd);
 		if (!list_empty(&dcb->srb_going_list))
 			SPRINTF("\nDCB (%02i-%i): Going  : %i:",

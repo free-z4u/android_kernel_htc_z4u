@@ -36,17 +36,17 @@ typedef void (*relocate_new_kernel_t)(
 struct kimage *ia64_kimage;
 
 struct resource efi_memmap_res = {
-        .name  = "EFI Memory Map",
-        .start = 0,
-        .end   = 0,
-        .flags = IORESOURCE_BUSY | IORESOURCE_MEM
+	.name  = "EFI Memory Map",
+	.start = 0,
+	.end   = 0,
+	.flags = IORESOURCE_BUSY | IORESOURCE_MEM
 };
 
 struct resource boot_param_res = {
-        .name  = "Boot parameter",
-        .start = 0,
-        .end   = 0,
-        .flags = IORESOURCE_BUSY | IORESOURCE_MEM
+	.name  = "Boot parameter",
+	.start = 0,
+	.end   = 0,
+	.flags = IORESOURCE_BUSY | IORESOURCE_MEM
 };
 
 

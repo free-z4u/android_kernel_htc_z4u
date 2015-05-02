@@ -2545,9 +2545,9 @@ find_opcode(tilepro_bundle_bits bits, tilepro_pipeline pipe)
 
 int
 parse_insn_tilepro(tilepro_bundle_bits bits,
-                   unsigned int pc,
-                   struct tilepro_decoded_instruction
-                   decoded[TILEPRO_MAX_INSTRUCTIONS_PER_BUNDLE])
+		   unsigned int pc,
+		   struct tilepro_decoded_instruction
+		   decoded[TILEPRO_MAX_INSTRUCTIONS_PER_BUNDLE])
 {
   int num_instructions = 0;
   int pipe;
@@ -2579,20 +2579,20 @@ parse_insn_tilepro(tilepro_bundle_bits bits,
     for (i = 0; i < opc->num_operands; i++)
     {
       const struct tilepro_operand *op =
-        &tilepro_operands[opc->operands[pipe][i]];
+	&tilepro_operands[opc->operands[pipe][i]];
       int opval = op->extract (bits);
       if (op->is_signed)
       {
-        /* Sign-extend the operand. */
-        int shift = (int)((sizeof(int) * 8) - op->num_bits);
-        opval = (opval << shift) >> shift;
+	/* Sign-extend the operand. */
+	int shift = (int)((sizeof(int) * 8) - op->num_bits);
+	opval = (opval << shift) >> shift;
       }
 
       /* Adjust PC-relative scaled branch offsets. */
       if (op->type == TILEPRO_OP_TYPE_ADDRESS)
       {
-        opval *= TILEPRO_BUNDLE_SIZE_IN_BYTES;
-        opval += (int)pc;
+	opval *= TILEPRO_BUNDLE_SIZE_IN_BYTES;
+	opval += (int)pc;
       }
 
       /* Record the final value. */

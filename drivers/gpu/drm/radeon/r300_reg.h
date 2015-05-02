@@ -93,7 +93,7 @@
 
 #	define	R300_VAP_VF_CNTL__PRIM_WALK__SHIFT              4
 	/* State based - direct writes to registers trigger vertex
-           generation */
+	   generation */
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_STATE_BASED         (0<<4)
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_INDICES             (1<<4)
 #	define	R300_VAP_VF_CNTL__PRIM_WALK_VERTEX_LIST         (2<<4)
@@ -935,7 +935,7 @@
 		)
 	/* These can be ORed with result of R300_EASY_TX_FORMAT()
 	   We don't really know what they do. Take values from a
-           constant color ? */
+	   constant color ? */
 #	define R300_TX_FORMAT_CONST_X		(1<<5)
 #	define R300_TX_FORMAT_CONST_Y		(2<<5)
 #	define R300_TX_FORMAT_CONST_Z		(4<<5)

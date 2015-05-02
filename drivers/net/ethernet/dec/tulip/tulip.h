@@ -297,25 +297,25 @@ enum tulip_comet_csr13_bits {
 /* The LINKOFFE and LINKONE work in conjunction with LSCE, i.e. they
  * determine which link status transition wakes up if LSCE is
  * enabled */
-        comet_csr13_linkoffe = (1 << 17),
-        comet_csr13_linkone = (1 << 16),
-        comet_csr13_wfre = (1 << 10),
-        comet_csr13_mpre = (1 << 9),
-        comet_csr13_lsce = (1 << 8),
-        comet_csr13_wfr = (1 << 2),
-        comet_csr13_mpr = (1 << 1),
-        comet_csr13_lsc = (1 << 0),
+	comet_csr13_linkoffe = (1 << 17),
+	comet_csr13_linkone = (1 << 16),
+	comet_csr13_wfre = (1 << 10),
+	comet_csr13_mpre = (1 << 9),
+	comet_csr13_lsce = (1 << 8),
+	comet_csr13_wfr = (1 << 2),
+	comet_csr13_mpr = (1 << 1),
+	comet_csr13_lsc = (1 << 0),
 };
 
 enum tulip_comet_csr18_bits {
-        comet_csr18_pmes_sticky = (1 << 24),
-        comet_csr18_pm_mode = (1 << 19),
-        comet_csr18_apm_mode = (1 << 18),
-        comet_csr18_d3a = (1 << 7)
+	comet_csr18_pmes_sticky = (1 << 24),
+	comet_csr18_pm_mode = (1 << 19),
+	comet_csr18_apm_mode = (1 << 18),
+	comet_csr18_d3a = (1 << 7)
 };
 
 enum tulip_comet_csr20_bits {
-        comet_csr20_pmes = (1 << 15),
+	comet_csr20_pmes = (1 << 15),
 };
 
 /* Keep the ring sizes a power of two for efficiency.
@@ -423,7 +423,7 @@ struct tulip_private {
 	unsigned int dirty_rx, dirty_tx;	/* The ring entries to be free()ed. */
 
 #ifdef 	CONFIG_TULIP_NAPI_HW_MITIGATION
-        int mit_on;
+	int mit_on;
 #endif
 	unsigned int full_duplex:1;	/* Full-duplex operation requested. */
 	unsigned int full_duplex_lock:1;
@@ -438,7 +438,7 @@ struct tulip_private {
 	unsigned int csr6;	/* Current CSR6 control settings. */
 	unsigned char eeprom[EEPROM_SIZE];	/* Serial EEPROM contents. */
 	void (*link_change) (struct net_device * dev, int csr5);
-        struct ethtool_wolinfo wolinfo;        /* WOL settings */
+	struct ethtool_wolinfo wolinfo;        /* WOL settings */
 	u16 sym_advertise, mii_advertise; /* NWay capabilities advertised.  */
 	u16 lpar;		/* 21143 Link partner ability. */
 	u16 advertising[4];

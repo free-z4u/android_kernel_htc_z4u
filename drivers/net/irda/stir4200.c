@@ -161,14 +161,14 @@ enum StirTestMask {
 };
 
 struct stir_cb {
-        struct usb_device *usbdev;      /* init: probe_irda */
-        struct net_device *netdev;      /* network layer */
-        struct irlap_cb   *irlap;       /* The link layer we are binded to */
+	struct usb_device *usbdev;      /* init: probe_irda */
+	struct net_device *netdev;      /* network layer */
+	struct irlap_cb   *irlap;       /* The link layer we are binded to */
 
-        struct qos_info   qos;
+	struct qos_info   qos;
 	unsigned 	  speed;	/* Current speed */
 
-        struct task_struct *thread;     /* transmit thread */
+	struct task_struct *thread;     /* transmit thread */
 
 	struct sk_buff	  *tx_pending;
 	void		  *io_buf;	/* transmit/receive buffer */
@@ -479,13 +479,13 @@ static const struct {
 	unsigned speed;
 	__u8 pdclk;
 } stir_modes[] = {
-        { 2400,    PDCLK_2400 },
-        { 9600,    PDCLK_9600 },
-        { 19200,   PDCLK_19200 },
-        { 38400,   PDCLK_38400 },
-        { 57600,   PDCLK_57600 },
-        { 115200,  PDCLK_115200 },
-        { 4000000, PDCLK_4000000 },
+	{ 2400,    PDCLK_2400 },
+	{ 9600,    PDCLK_9600 },
+	{ 19200,   PDCLK_19200 },
+	{ 38400,   PDCLK_38400 },
+	{ 57600,   PDCLK_57600 },
+	{ 115200,  PDCLK_115200 },
+	{ 4000000, PDCLK_4000000 },
 };
 
 
@@ -571,7 +571,7 @@ static netdev_tx_t stir_hard_xmit(struct sk_buff *skb,
 	SKB_LINEAR_ASSERT(skb);
 
 	skb = xchg(&stir->tx_pending, skb);
-        wake_up_process(stir->thread);
+	wake_up_process(stir->thread);
 
 	/* this should never happen unless stop/wakeup problem */
 	if (unlikely(skb)) {
@@ -739,7 +739,7 @@ static int stir_transmit_thread(void *arg)
 	struct net_device *dev = stir->netdev;
 	struct sk_buff *skb;
 
-        while (!kthread_should_stop()) {
+	while (!kthread_should_stop()) {
 #ifdef CONFIG_PM
 		/* if suspending, then power off and wait */
 		if (unlikely(freezing(current))) {
@@ -794,11 +794,11 @@ static int stir_transmit_thread(void *arg)
 		}
 
 		/* sleep if nothing to send */
-                set_current_state(TASK_INTERRUPTIBLE);
-                schedule();
+		set_current_state(TASK_INTERRUPTIBLE);
+		schedule();
 
 	}
-        return 0;
+	return 0;
 }
 
 
@@ -911,8 +911,8 @@ static int stir_net_open(struct net_device *netdev)
 	/** Start kernel thread for transmit.  */
 	stir->thread = kthread_run(stir_transmit_thread, stir,
 				   "%s", stir->netdev->name);
-        if (IS_ERR(stir->thread)) {
-                err = PTR_ERR(stir->thread);
+	if (IS_ERR(stir->thread)) {
+		err = PTR_ERR(stir->thread);
 		err("stir4200: unable to start kernel thread");
 		goto err_out6;
 	}

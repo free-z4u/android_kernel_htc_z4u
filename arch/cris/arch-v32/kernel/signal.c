@@ -122,7 +122,7 @@ restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
 	unsigned int err = 0;
 	unsigned long old_usp;
 
-        /* Always make any pending restarted system calls return -EINTR */
+	/* Always make any pending restarted system calls return -EINTR */
 	current_thread_info()->restart_block.fn = do_no_restart_syscall;
 
 	/*
@@ -461,7 +461,7 @@ give_sigsegv:
 static inline int
 handle_signal(int canrestart, unsigned long sig,
 	      siginfo_t *info, struct k_sigaction *ka,
-              sigset_t *oldset, struct pt_regs * regs)
+	      sigset_t *oldset, struct pt_regs * regs)
 {
 	int ret;
 
@@ -482,11 +482,11 @@ handle_signal(int canrestart, unsigned long sig,
 				regs->r10 = -EINTR;
 				break;
 
-                        case -ERESTARTSYS:
+			case -ERESTARTSYS:
 				/*
 				 * This means restart the syscall if
-                                 * there is no handler, or the handler
-                                 * was registered with SA_RESTART.
+				 * there is no handler, or the handler
+				 * was registered with SA_RESTART.
 				 */
 				if (!(ka->sa.sa_flags & SA_RESTART)) {
 					regs->r10 = -EINTR;
@@ -498,13 +498,13 @@ handle_signal(int canrestart, unsigned long sig,
 			case -ERESTARTNOINTR:
 				/*
 				 * This means that the syscall should
-                                 * be called again after the signal
-                                 * handler returns.
+				 * be called again after the signal
+				 * handler returns.
 				 */
 				RESTART_CRIS_SYS(regs);
 				break;
-                }
-        }
+		}
+	}
 
 	/* Set up the stack frame. */
 	if (ka->sa.sa_flags & SA_SIGINFO)
@@ -544,7 +544,7 @@ do_signal(int canrestart, struct pt_regs *regs)
 {
 	int signr;
 	siginfo_t info;
-        struct k_sigaction ka;
+	struct k_sigaction ka;
 	sigset_t *oldset;
 
 	/*
@@ -668,7 +668,7 @@ cris_init_signal(void)
 
 	/* Map to userspace with appropriate permissions (no write access...) */
 	cris_signal_return_page = (unsigned long)
-          __ioremap_prot(virt_to_phys(data), PAGE_SIZE, PAGE_SIGNAL_TRAMPOLINE);
+	  __ioremap_prot(virt_to_phys(data), PAGE_SIZE, PAGE_SIGNAL_TRAMPOLINE);
 
 	return 0;
 }

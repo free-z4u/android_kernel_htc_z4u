@@ -508,7 +508,7 @@ do {									\
 })
 
 static __always_inline int x86_this_cpu_constant_test_bit(unsigned int nr,
-                        const unsigned long __percpu *addr)
+			const unsigned long __percpu *addr)
 {
 	unsigned long __percpu *a = (unsigned long *)addr + nr / BITS_PER_LONG;
 
@@ -516,7 +516,7 @@ static __always_inline int x86_this_cpu_constant_test_bit(unsigned int nr,
 }
 
 static inline int x86_this_cpu_variable_test_bit(int nr,
-                        const unsigned long __percpu *addr)
+			const unsigned long __percpu *addr)
 {
 	int oldbit;
 

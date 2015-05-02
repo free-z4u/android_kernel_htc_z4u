@@ -174,7 +174,7 @@ static int __devinit sonic_probe1(struct net_device *dev)
 	lp->dma_bitmode = SONIC_BITMODE32;
 
 	/* Allocate the entire chunk of memory for the descriptors.
-           Note that this cannot cross a 64K boundary. */
+	   Note that this cannot cross a 64K boundary. */
 	if ((lp->descriptors = dma_alloc_coherent(lp->device,
 				SIZEOF_SONIC_DESC * SONIC_BUS_SCALE(lp->dma_bitmode),
 				&lp->descriptors_laddr, GFP_KERNEL)) == NULL) {

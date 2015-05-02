@@ -34,9 +34,9 @@ extern void igb_power_down_phy_copper_82575(struct e1000_hw *hw);
 extern void igb_rx_fifo_flush_82575(struct e1000_hw *hw);
 
 #define ID_LED_DEFAULT_82575_SERDES ((ID_LED_DEF1_DEF2 << 12) | \
-                                     (ID_LED_DEF1_DEF2 <<  8) | \
-                                     (ID_LED_DEF1_DEF2 <<  4) | \
-                                     (ID_LED_OFF1_ON2))
+				     (ID_LED_DEF1_DEF2 <<  8) | \
+				     (ID_LED_DEF1_DEF2 <<  4) | \
+				     (ID_LED_OFF1_ON2))
 
 #define E1000_RAR_ENTRIES_82575        16
 #define E1000_RAR_ENTRIES_82576        24

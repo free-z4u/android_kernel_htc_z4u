@@ -169,14 +169,14 @@ static int scsi_ioctl_get_pci(struct scsi_device *sdev, void __user *arg)
 	struct device *dev = scsi_get_device(sdev->host);
 	const char *name;
 
-        if (!dev)
+	if (!dev)
 		return -ENXIO;
 
 	name = dev_name(dev);
 
 	/* compatibility with old ioctl which only returned
 	 * 20 characters */
-        return copy_to_user(arg, name, min(strlen(name), (size_t)20))
+	return copy_to_user(arg, name, min(strlen(name), (size_t)20))
 		? -EFAULT: 0;
 }
 
@@ -266,8 +266,8 @@ int scsi_ioctl(struct scsi_device *sdev, int cmd, void __user *arg)
 		scsi_cmd[4] = 0;
 		return ioctl_internal_command(sdev, scsi_cmd,
 				     START_STOP_TIMEOUT, NORMAL_RETRIES);
-        case SCSI_IOCTL_GET_PCI:
-                return scsi_ioctl_get_pci(sdev, arg);
+	case SCSI_IOCTL_GET_PCI:
+		return scsi_ioctl_get_pci(sdev, arg);
 	default:
 		if (sdev->host->hostt->ioctl)
 			return sdev->host->hostt->ioctl(sdev, cmd, arg);

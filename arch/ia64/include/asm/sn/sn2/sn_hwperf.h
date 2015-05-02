@@ -71,10 +71,10 @@ struct sn_hwperf_data {
 
 /* user ioctl() argument, see below */
 struct sn_hwperf_ioctl_args {
-        u64 arg;		/* argument, usually an object id */
-        u64 sz;                 /* size of transfer */
-        void *ptr;              /* pointer to source/target */
-        u32 v0;			/* second return value */
+	u64 arg;		/* argument, usually an object id */
+	u64 sz;                 /* size of transfer */
+	void *ptr;              /* pointer to source/target */
+	u32 v0;			/* second return value */
 };
 
 /*

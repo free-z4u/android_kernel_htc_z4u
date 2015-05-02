@@ -175,7 +175,7 @@ enum {
    /* Next 768 (== 256*3) registers exist for colormap */
 
    SVGA_SCRATCH_BASE = SVGA_PALETTE_BASE + SVGA_NUM_PALETTE_REGS
-                                    /* Base of scratch registers */
+				    /* Base of scratch registers */
    /* Next reg[SVGA_REG_SCRATCH_SIZE] registers exist for scratch usage:
       First 4 are reserved for VESA BIOS Extension; any remaining are for
       the use of the current SVGA driver. */
@@ -315,9 +315,9 @@ typedef
 struct SVGAGMRImageFormat {
    union {
       struct {
-         uint32 bitsPerPixel : 8;
-         uint32 colorDepth   : 8;
-         uint32 reserved     : 16;  /* Must be zero */
+	 uint32 bitsPerPixel : 8;
+	 uint32 colorDepth   : 8;
+	 uint32 reserved     : 16;  /* Must be zero */
       };
 
       uint32 value;
@@ -358,10 +358,10 @@ typedef
 struct SVGAColorBGRX {
    union {
       struct {
-         uint32 b : 8;
-         uint32 g : 8;
-         uint32 r : 8;
-         uint32 x : 8;  /* Unused */
+	 uint32 b : 8;
+	 uint32 g : 8;
+	 uint32 r : 8;
+	 uint32 x : 8;  /* Unused */
       };
 
       uint32 value;

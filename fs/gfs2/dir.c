@@ -618,7 +618,7 @@ static int dirent_next(struct gfs2_inode *dip, struct buffer_head *bh,
 	if (ret == -EIO)
 		return ret;
 
-        /* Only the first dent could ever have de_inum.no_addr == 0 */
+	/* Only the first dent could ever have de_inum.no_addr == 0 */
 	if (gfs2_dirent_sentinel(tmp)) {
 		gfs2_consist_inode(dip);
 		return -EIO;

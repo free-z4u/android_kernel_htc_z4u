@@ -4,22 +4,22 @@
     History and copyrights:
 
     Driver skeleton
-        Written 1993 by Donald Becker.
-        Copyright 1993 United States Government as represented by the Director,
-        National Security Agency.  This software may only be used and
+	Written 1993 by Donald Becker.
+	Copyright 1993 United States Government as represented by the Director,
+	National Security Agency.  This software may only be used and
 	distributed according to the terms of the GNU General Public License
 	as modified by SRC, incorporated herein by reference.
 
-        The author may be reached as becker@scyld.com, or C/O
+	The author may be reached as becker@scyld.com, or C/O
 	Scyld Computing Corporation
 	410 Severn Ave., Suite 210
 	Annapolis MD 21403
 
     Apricot
-        Written 1994 by Mark Evans.
-        This driver is for the Apricot 82596 bus-master interface
+	Written 1994 by Mark Evans.
+	This driver is for the Apricot 82596 bus-master interface
 
-        Modularised 12/94 Mark Evans
+	Modularised 12/94 Mark Evans
 
     Professional Workstation
 	Derived from apricot.c by Ard van Breemen

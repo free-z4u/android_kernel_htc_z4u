@@ -378,7 +378,7 @@ static void dma_reset_output(int dev)
 
 static void dma_reset_input(int dev)
 {
-        struct audio_operations *adev = audio_devs[dev];
+	struct audio_operations *adev = audio_devs[dev];
 	unsigned long flags;
 	struct dma_buffparms *dmap = adev->dmap_in;
 

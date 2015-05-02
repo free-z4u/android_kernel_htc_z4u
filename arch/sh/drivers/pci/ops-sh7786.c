@@ -96,7 +96,7 @@ static int sh7786_pcie_read(struct pci_bus *bus, unsigned int devfn,
 	int ret;
 	u32 data;
 
-        if ((size == 2) && (where & 1))
+	if ((size == 2) && (where & 1))
 		return PCIBIOS_BAD_REGISTER_NUMBER;
 	else if ((size == 4) && (where & 3))
 		return PCIBIOS_BAD_REGISTER_NUMBER;
@@ -132,7 +132,7 @@ static int sh7786_pcie_write(struct pci_bus *bus, unsigned int devfn,
 	int shift, ret;
 	u32 data;
 
-        if ((size == 2) && (where & 1))
+	if ((size == 2) && (where & 1))
 		return PCIBIOS_BAD_REGISTER_NUMBER;
 	else if ((size == 4) && (where & 3))
 		return PCIBIOS_BAD_REGISTER_NUMBER;

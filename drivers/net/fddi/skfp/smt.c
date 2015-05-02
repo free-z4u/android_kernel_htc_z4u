@@ -69,7 +69,7 @@ static void smt_send_rdf(struct s_smc *smc, SMbuf *rej, int fc, int reason,
 static void smt_send_nif(struct s_smc *smc, const struct fddi_addr *dest,
 			 int fc, u_long tid, int type, int local);
 static void smt_send_ecf(struct s_smc *smc, struct fddi_addr *dest, int fc,
-                         u_long tid, int type, int len);
+			 u_long tid, int type, int len);
 static void smt_echo_test(struct s_smc *smc, int dna);
 static void smt_send_sif_config(struct s_smc *smc, struct fddi_addr *dest,
 				u_long tid, int local);

@@ -87,8 +87,8 @@ extern struct thread_info *current_set[NR_CPUS];
 	"jmpl	%%o7 + 0x8, %%g0\n\t"							\
 	" ld	[%%g3 + %5], %0\n\t"							\
 	"here:\n"									\
-        : "=&r" (last)									\
-        : "r" (&(current_set[hard_smp_processor_id()])),	\
+	: "=&r" (last)									\
+	: "r" (&(current_set[hard_smp_processor_id()])),	\
 	  "r" (task_thread_info(next)),				\
 	  "i" (TI_KPSR),					\
 	  "i" (TI_KSP),						\

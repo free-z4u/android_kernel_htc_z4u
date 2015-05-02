@@ -61,7 +61,7 @@
 /* Bits [13:5] select one of 512 instruction cache tags */
 static inline void turbosparc_inv_insn_tag(unsigned long addr)
 {
-        __asm__ __volatile__("sta %%g0, [%0] %1\n\t"
+	__asm__ __volatile__("sta %%g0, [%0] %1\n\t"
 			     : /* no outputs */
 			     : "r" (addr), "i" (ASI_M_TXTC_TAG)
 			     : "memory");
@@ -70,7 +70,7 @@ static inline void turbosparc_inv_insn_tag(unsigned long addr)
 /* Bits [13:5] select one of 512 data cache tags */
 static inline void turbosparc_inv_data_tag(unsigned long addr)
 {
-        __asm__ __volatile__("sta %%g0, [%0] %1\n\t"
+	__asm__ __volatile__("sta %%g0, [%0] %1\n\t"
 			     : /* no outputs */
 			     : "r" (addr), "i" (ASI_M_DATAC_TAG)
 			     : "memory");
@@ -80,25 +80,25 @@ static inline void turbosparc_flush_icache(void)
 {
 	unsigned long addr;
 
-        for (addr = 0; addr < 0x4000; addr += 0x20)
-                turbosparc_inv_insn_tag(addr);
+	for (addr = 0; addr < 0x4000; addr += 0x20)
+		turbosparc_inv_insn_tag(addr);
 }
 
 static inline void turbosparc_flush_dcache(void)
 {
 	unsigned long addr;
 
-        for (addr = 0; addr < 0x4000; addr += 0x20)
-                turbosparc_inv_data_tag(addr);
+	for (addr = 0; addr < 0x4000; addr += 0x20)
+		turbosparc_inv_data_tag(addr);
 }
 
 static inline void turbosparc_idflash_clear(void)
 {
 	unsigned long addr;
 
-        for (addr = 0; addr < 0x4000; addr += 0x20) {
-                turbosparc_inv_insn_tag(addr);
-                turbosparc_inv_data_tag(addr);
+	for (addr = 0; addr < 0x4000; addr += 0x20) {
+		turbosparc_inv_insn_tag(addr);
+		turbosparc_inv_data_tag(addr);
 	}
 }
 

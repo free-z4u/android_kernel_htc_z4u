@@ -578,7 +578,7 @@ static inline void mmiowb(void)
 
 static inline void iosync(void)
 {
-        __asm__ __volatile__ ("sync" : : : "memory");
+	__asm__ __volatile__ ("sync" : : : "memory");
 }
 
 /* Enforce in-order execution of data I/O.
@@ -738,16 +738,16 @@ static inline void * phys_to_virt(unsigned long address)
 
 static inline unsigned long virt_to_bus(volatile void * address)
 {
-        if (address == NULL)
+	if (address == NULL)
 		return 0;
-        return __pa(address) + PCI_DRAM_OFFSET;
+	return __pa(address) + PCI_DRAM_OFFSET;
 }
 
 static inline void * bus_to_virt(unsigned long address)
 {
-        if (address == 0)
+	if (address == 0)
 		return NULL;
-        return __va(address - PCI_DRAM_OFFSET);
+	return __va(address - PCI_DRAM_OFFSET);
 }
 
 #define page_to_bus(page)	(page_to_phys(page) + PCI_DRAM_OFFSET)

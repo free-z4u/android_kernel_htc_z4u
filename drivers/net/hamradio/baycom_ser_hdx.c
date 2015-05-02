@@ -722,11 +722,11 @@ module_exit(cleanup_baycomserhdx);
 
 static int __init baycom_ser_hdx_setup(char *str)
 {
-        static unsigned nr_dev;
+	static unsigned nr_dev;
 	int ints[3];
 
-        if (nr_dev >= NR_PORTS)
-                return 0;
+	if (nr_dev >= NR_PORTS)
+		return 0;
 	str = get_options(str, 3, ints);
 	if (ints[0] < 2)
 		return 0;

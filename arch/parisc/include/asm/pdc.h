@@ -357,10 +357,10 @@ struct pdc_chassis_info {       /* for PDC_CHASSIS_INFO */
 };
 
 struct pdc_coproc_cfg {         /* for PDC_COPROC_CFG */
-        unsigned long ccr_functional;
-        unsigned long ccr_present;
-        unsigned long revision;
-        unsigned long model;
+	unsigned long ccr_functional;
+	unsigned long ccr_present;
+	unsigned long revision;
+	unsigned long model;
 };
 
 struct pdc_model {		/* for PDC_MODEL */
@@ -657,8 +657,8 @@ int pdc_iodc_print(const unsigned char *str, unsigned count);
 
 void pdc_emergency_unlock(void);
 int pdc_sti_call(unsigned long func, unsigned long flags,
-                 unsigned long inptr, unsigned long outputr,
-                 unsigned long glob_cfg);
+		 unsigned long inptr, unsigned long outputr,
+		 unsigned long glob_cfg);
 
 static inline char * os_id_to_string(u16 os_id) {
 	switch(os_id) {

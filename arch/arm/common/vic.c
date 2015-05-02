@@ -222,7 +222,7 @@ static void vic_unmask_irq(struct irq_data *d)
 #if defined(CONFIG_PM)
 static struct vic_device *vic_from_irq(unsigned int irq)
 {
-        struct vic_device *v = vic_devices;
+	struct vic_device *v = vic_devices;
 	unsigned int base_irq = irq & ~31;
 	int id;
 

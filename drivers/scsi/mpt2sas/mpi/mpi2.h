@@ -91,7 +91,7 @@
 #define MPI2_VERSION_MINOR_MASK             (0x00FF)
 #define MPI2_VERSION_MINOR_SHIFT            (0)
 #define MPI2_VERSION ((MPI2_VERSION_MAJOR << MPI2_VERSION_MAJOR_SHIFT) |   \
-                                      MPI2_VERSION_MINOR)
+				      MPI2_VERSION_MINOR)
 
 #define MPI2_VERSION_02_00                  (0x0200)
 
@@ -751,8 +751,8 @@ typedef struct _MPI2_SGE_SIMPLE_UNION
     U32                     FlagsLength;
     union
     {
-        U32                 Address32;
-        U64                 Address64;
+	U32                 Address32;
+	U64                 Address64;
     } u;
 } MPI2_SGE_SIMPLE_UNION, MPI2_POINTER PTR_MPI2_SGE_SIMPLE_UNION,
   Mpi2SGESimpleUnion_t, MPI2_POINTER pMpi2SGESimpleUnion_t;
@@ -787,8 +787,8 @@ typedef struct _MPI2_SGE_CHAIN_UNION
     U8                      Flags;
     union
     {
-        U32                 Address32;
-        U64                 Address64;
+	U32                 Address32;
+	U64                 Address64;
     } u;
 } MPI2_SGE_CHAIN_UNION, MPI2_POINTER PTR_MPI2_SGE_CHAIN_UNION,
   Mpi2SGEChainUnion_t, MPI2_POINTER pMpi2SGEChainUnion_t;
@@ -850,10 +850,10 @@ typedef struct _MPI2_SGE_TRANSACTION_UNION
     U8                      Flags;
     union
     {
-        U32                 TransactionContext32[1];
-        U32                 TransactionContext64[2];
-        U32                 TransactionContext96[3];
-        U32                 TransactionContext128[4];
+	U32                 TransactionContext32[1];
+	U32                 TransactionContext64[2];
+	U32                 TransactionContext96[3];
+	U32                 TransactionContext128[4];
     } u;
     U32                     TransactionDetails[1];
 } MPI2_SGE_TRANSACTION_UNION, MPI2_POINTER PTR_MPI2_SGE_TRANSACTION_UNION,
@@ -868,8 +868,8 @@ typedef struct _MPI2_MPI_SGE_IO_UNION
 {
     union
     {
-        MPI2_SGE_SIMPLE_UNION   Simple;
-        MPI2_SGE_CHAIN_UNION    Chain;
+	MPI2_SGE_SIMPLE_UNION   Simple;
+	MPI2_SGE_CHAIN_UNION    Chain;
     } u;
 } MPI2_MPI_SGE_IO_UNION, MPI2_POINTER PTR_MPI2_MPI_SGE_IO_UNION,
   Mpi2MpiSGEIOUnion_t, MPI2_POINTER pMpi2MpiSGEIOUnion_t;
@@ -883,8 +883,8 @@ typedef struct _MPI2_SGE_TRANS_SIMPLE_UNION
 {
     union
     {
-        MPI2_SGE_SIMPLE_UNION       Simple;
-        MPI2_SGE_TRANSACTION_UNION  Transaction;
+	MPI2_SGE_SIMPLE_UNION       Simple;
+	MPI2_SGE_TRANSACTION_UNION  Transaction;
     } u;
 } MPI2_SGE_TRANS_SIMPLE_UNION, MPI2_POINTER PTR_MPI2_SGE_TRANS_SIMPLE_UNION,
   Mpi2SGETransSimpleUnion_t, MPI2_POINTER pMpi2SGETransSimpleUnion_t;
@@ -898,9 +898,9 @@ typedef struct _MPI2_MPI_SGE_UNION
 {
     union
     {
-        MPI2_SGE_SIMPLE_UNION       Simple;
-        MPI2_SGE_CHAIN_UNION        Chain;
-        MPI2_SGE_TRANSACTION_UNION  Transaction;
+	MPI2_SGE_SIMPLE_UNION       Simple;
+	MPI2_SGE_CHAIN_UNION        Chain;
+	MPI2_SGE_TRANSACTION_UNION  Transaction;
     } u;
 } MPI2_MPI_SGE_UNION, MPI2_POINTER PTR_MPI2_MPI_SGE_UNION,
   Mpi2MpiSgeUnion_t, MPI2_POINTER pMpi2MpiSgeUnion_t;
@@ -1041,8 +1041,8 @@ typedef struct _MPI2_IEEE_SGE_UNION
 {
     union
     {
-        MPI2_IEEE_SGE_SIMPLE_UNION  Simple;
-        MPI2_IEEE_SGE_CHAIN_UNION   Chain;
+	MPI2_IEEE_SGE_SIMPLE_UNION  Simple;
+	MPI2_IEEE_SGE_CHAIN_UNION   Chain;
     } u;
 } MPI2_IEEE_SGE_UNION, MPI2_POINTER PTR_MPI2_IEEE_SGE_UNION,
   Mpi2IeeeSgeUnion_t, MPI2_POINTER pMpi2IeeeSgeUnion_t;

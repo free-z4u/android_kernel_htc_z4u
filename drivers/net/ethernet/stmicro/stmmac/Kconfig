@@ -64,17 +64,17 @@ config STMMAC_TIMER
 	  to use the TMU channel 2 and the SH-RTC device.
 
 choice
-        prompt "Select Timer device"
-        depends on STMMAC_TIMER
+	prompt "Select Timer device"
+	depends on STMMAC_TIMER
 
 config STMMAC_TMU_TIMER
-        bool "TMU channel 2"
-        depends on CPU_SH4
+	bool "TMU channel 2"
+	depends on CPU_SH4
 	---help---
 
 config STMMAC_RTC_TIMER
-        bool "Real time clock"
-        depends on RTC_CLASS
+	bool "Real time clock"
+	depends on RTC_CLASS
 	---help---
 
 endchoice

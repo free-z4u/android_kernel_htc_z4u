@@ -143,10 +143,10 @@
 						      3 reg data */
 #define    INTR_TX_COMP_3_SHIFT        19
 #define    INTR_ERROR_MASK (INTR_MIF_STATUS | INTR_PCI_ERROR_STATUS | \
-                            INTR_PCS_STATUS | INTR_RX_LEN_MISMATCH | \
-                            INTR_TX_MAC_STATUS | INTR_RX_MAC_STATUS | \
-                            INTR_TX_TAG_ERROR | INTR_RX_TAG_ERROR | \
-                            INTR_MAC_CTRL_STATUS)
+			    INTR_PCS_STATUS | INTR_RX_LEN_MISMATCH | \
+			    INTR_TX_MAC_STATUS | INTR_RX_MAC_STATUS | \
+			    INTR_TX_TAG_ERROR | INTR_RX_TAG_ERROR | \
+			    INTR_MAC_CTRL_STATUS)
 
 /* determines which status events will cause an interrupt. layout same
  * as REG_INTR_STATUS.
@@ -385,10 +385,10 @@
 #define    INTR_RX_BUF_AE_1              0x10 /* almost empty */
 #define    INTRN_MASK_RX_EN              0x80
 #define    INTRN_MASK_CLEAR_ALL          (INTR_RX_DONE_ALT | \
-                                          INTR_RX_COMP_FULL_ALT | \
-                                          INTR_RX_COMP_AF_ALT | \
-                                          INTR_RX_BUF_UNAVAIL_1 | \
-                                          INTR_RX_BUF_AE_1)
+					  INTR_RX_COMP_FULL_ALT | \
+					  INTR_RX_COMP_AF_ALT | \
+					  INTR_RX_BUF_UNAVAIL_1 | \
+					  INTR_RX_BUF_AE_1)
 #define  REG_PLUS_INTR_STATUS_1        0x103C /* Cassini+: interrupt status
 						 register 2 for INTB. default: 0x1F */
 #define  REG_PLUS_INTRN_STATUS(x)       (REG_PLUS_INTR_STATUS_1 + ((x) - 1)*16)
@@ -2572,8 +2572,8 @@ static cas_hp_inst_t cas_prog_null[] = { {NULL} };
 #define CAS_BASE(x, y)                (((y) << (x ## _SHIFT)) & (x ## _MASK))
 #define CAS_VAL(x, y)                 (((y) & (x ## _MASK)) >> (x ## _SHIFT))
 #define CAS_TX_RINGN_BASE(y)          ((TX_DESC_RINGN_INDEX(y) << \
-                                        TX_CFG_DESC_RINGN_SHIFT(y)) & \
-                                        TX_CFG_DESC_RINGN_MASK(y))
+					TX_CFG_DESC_RINGN_SHIFT(y)) & \
+					TX_CFG_DESC_RINGN_MASK(y))
 
 /* min is 2k, but we can't do jumbo frames unless it's at least 8k */
 #define CAS_MIN_PAGE_SHIFT            11 /* 2048 */
@@ -2807,7 +2807,7 @@ struct cas {
 #define CAS_FLAG_RXD_POST_MASK  0x000000F0
 #define CAS_FLAG_RXD_POST_SHIFT 4
 #define CAS_FLAG_RXD_POST(x)    ((1 << (CAS_FLAG_RXD_POST_SHIFT + (x))) & \
-                                 CAS_FLAG_RXD_POST_MASK)
+				 CAS_FLAG_RXD_POST_MASK)
 #define CAS_FLAG_ENTROPY_DEV    0x00000100
 #define CAS_FLAG_NO_HW_CSUM     0x00000200
 	u32                     cas_flags;
@@ -2883,11 +2883,11 @@ struct cas {
 #define RX_COMP_ENTRY(r, x) ((x) & (RX_COMP_RINGN_SIZE(r) - 1))
 
 #define TX_BUFF_COUNT(r, x, y)    ((x) <= (y) ? ((y) - (x)) : \
-        (TX_DESC_RINGN_SIZE(r) - (x) + (y)))
+	(TX_DESC_RINGN_SIZE(r) - (x) + (y)))
 
 #define TX_BUFFS_AVAIL(cp, i)	((cp)->tx_old[(i)] <= (cp)->tx_new[(i)] ? \
-        (cp)->tx_old[(i)] + (TX_DESC_RINGN_SIZE(i) - 1) - (cp)->tx_new[(i)] : \
-        (cp)->tx_old[(i)] - (cp)->tx_new[(i)] - 1)
+	(cp)->tx_old[(i)] + (TX_DESC_RINGN_SIZE(i) - 1) - (cp)->tx_new[(i)] : \
+	(cp)->tx_old[(i)] - (cp)->tx_new[(i)] - 1)
 
 #define CAS_ALIGN(addr, align) \
      (((unsigned long) (addr) + ((align) - 1UL)) & ~((align) - 1))
@@ -2898,7 +2898,7 @@ struct cas {
 #define CAS_MC_EXACT_MATCH_SIZE       15
 #define CAS_MC_HASH_SIZE              256
 #define CAS_MC_HASH_MAX              (CAS_MC_EXACT_MATCH_SIZE + \
-                                      CAS_MC_HASH_SIZE)
+				      CAS_MC_HASH_SIZE)
 
 #define TX_TARGET_ABORT_LEN           0x20
 #define RX_SWIVEL_OFF_VAL             0x2

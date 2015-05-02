@@ -74,7 +74,7 @@ void sun3x_reboot(void)
 }
 
 static void sun3x_prom_write(struct console *co, const char *s,
-                             unsigned int count)
+			     unsigned int count)
 {
 	while (count--) {
 		if (*s == '\n')
@@ -156,11 +156,11 @@ void prom_halt (void)
 unsigned char
 prom_get_idprom(char *idbuf, int num_bytes)
 {
-        int i;
+	int i;
 
 	/* make a copy of the idprom structure */
 	for (i = 0; i < num_bytes; i++)
 		idbuf[i] = ((char *)SUN3X_IDPROM)[i];
 
-        return idbuf[0];
+	return idbuf[0];
 }

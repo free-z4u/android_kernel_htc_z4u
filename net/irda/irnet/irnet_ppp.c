@@ -683,7 +683,7 @@ dev_irnet_ioctl(
 	  else
 	    DERROR(FS_ERROR, "Can't setup PPP channel...\n");
 
-          mutex_unlock(&ap->lock);
+	  mutex_unlock(&ap->lock);
 	}
       else
 	{
@@ -723,7 +723,7 @@ dev_irnet_ioctl(
 
       if(ap->ppp_open && !put_user(ppp_unit_number(&ap->chan),
 						(int __user *)argp))
-        err = 0;
+	err = 0;
 
       mutex_unlock(&ap->lock);
       break;

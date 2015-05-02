@@ -26,9 +26,9 @@
 
 struct ihex_binrec {
 	struct ihex_binrec *next; /* not part of the real data structure */
-        uint32_t addr;
-        uint16_t len;
-        uint8_t data[];
+	uint32_t addr;
+	uint16_t len;
+	uint8_t data[];
 };
 
 /**

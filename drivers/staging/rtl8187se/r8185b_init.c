@@ -33,7 +33,7 @@ Notes:
 
 #define TC_3W_POLL_MAX_TRY_CNT 5
 static u8 MAC_REG_TABLE[][2] =	{
-                        /*PAGA 0:	*/
+			/*PAGA 0:	*/
 						/* 0x34(BRSR), 0xBE(RATE_FALLBACK_CTL), 0x1E0(ARFR) would set in HwConfigureRTL8185()	*/
 						/* 0x272(RFSW_CTRL), 0x1CE(AESMSK_QC) set in InitializeAdapter8185().					*/
 						/* 0x1F0~0x1F8  set in MacConfig_85BASIC()												*/

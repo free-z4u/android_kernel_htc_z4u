@@ -70,9 +70,9 @@ static void __init mpc834x_itx_setup_arch(void)
  */
 static int __init mpc834x_itx_probe(void)
 {
-        unsigned long root = of_get_flat_dt_root();
+	unsigned long root = of_get_flat_dt_root();
 
-        return of_flat_dt_is_compatible(root, "MPC834xMITX");
+	return of_flat_dt_is_compatible(root, "MPC834xMITX");
 }
 
 define_machine(mpc834x_itx) {

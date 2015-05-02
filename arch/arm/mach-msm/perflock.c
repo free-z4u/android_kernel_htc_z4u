@@ -371,7 +371,7 @@ EXPORT_SYMBOL(perf_lock_init);
 static int perflock_setspeed = 1;
 
 void set_perflock_setspeed(int enable){
-        perflock_setspeed = enable;
+	perflock_setspeed = enable;
 }
 EXPORT_SYMBOL(set_perflock_setspeed);
 

@@ -79,8 +79,8 @@ typedef void (*exitcall_t)(void);
 
 #ifndef MODULE
 struct uml_param {
-        const char *str;
-        int (*setup_func)(char *, int *);
+	const char *str;
+	int (*setup_func)(char *, int *);
 };
 
 extern initcall_t __uml_initcall_start, __uml_initcall_end;

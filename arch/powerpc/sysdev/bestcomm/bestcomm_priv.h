@@ -260,16 +260,16 @@ static inline void bcom_disable_prefetch(void)
 static inline void
 bcom_enable_task(int task)
 {
-        u16 reg;
-        reg = in_be16(&bcom_eng->regs->tcr[task]);
-        out_be16(&bcom_eng->regs->tcr[task],  reg | TASK_ENABLE);
+	u16 reg;
+	reg = in_be16(&bcom_eng->regs->tcr[task]);
+	out_be16(&bcom_eng->regs->tcr[task],  reg | TASK_ENABLE);
 }
 
 static inline void
 bcom_disable_task(int task)
 {
-        u16 reg = in_be16(&bcom_eng->regs->tcr[task]);
-        out_be16(&bcom_eng->regs->tcr[task], reg & ~TASK_ENABLE);
+	u16 reg = in_be16(&bcom_eng->regs->tcr[task]);
+	out_be16(&bcom_eng->regs->tcr[task], reg & ~TASK_ENABLE);
 }
 
 

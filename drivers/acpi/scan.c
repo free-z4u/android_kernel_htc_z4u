@@ -217,10 +217,10 @@ static int acpi_device_setup_files(struct acpi_device *dev)
 			goto end;
 	}
 
-        /*
-         * If device has _EJ0, 'eject' file is created that is used to trigger
-         * hot-removal function from userland.
-         */
+	/*
+	 * If device has _EJ0, 'eject' file is created that is used to trigger
+	 * hot-removal function from userland.
+	 */
 	status = acpi_get_handle(dev->handle, "_EJ0", &temp);
 	if (ACPI_SUCCESS(status))
 		result = device_create_file(&dev->dev, &dev_attr_eject);
@@ -541,7 +541,7 @@ static void acpi_device_unregister(struct acpi_device *device, int type)
 }
 
 /* --------------------------------------------------------------------------
-                                 Driver Management
+				 Driver Management
    -------------------------------------------------------------------------- */
 /**
  * acpi_bus_driver_init - add a device to a driver
@@ -638,7 +638,7 @@ void acpi_bus_unregister_driver(struct acpi_driver *driver)
 EXPORT_SYMBOL(acpi_bus_unregister_driver);
 
 /* --------------------------------------------------------------------------
-                                 Device Enumeration
+				 Device Enumeration
    -------------------------------------------------------------------------- */
 static struct acpi_device *acpi_bus_get_parent(acpi_handle handle)
 {
@@ -1029,11 +1029,11 @@ static int acpi_bay_match(struct acpi_device *device){
 	if (acpi_get_parent(handle, &phandle))
 		return -ENODEV;
 
-        if ((ACPI_SUCCESS(acpi_get_handle(phandle, "_GTF", &tmp))) ||
-                (ACPI_SUCCESS(acpi_get_handle(phandle, "_GTM", &tmp))) ||
-                (ACPI_SUCCESS(acpi_get_handle(phandle, "_STM", &tmp))) ||
-                (ACPI_SUCCESS(acpi_get_handle(phandle, "_SDD", &tmp))))
-                return 0;
+	if ((ACPI_SUCCESS(acpi_get_handle(phandle, "_GTF", &tmp))) ||
+		(ACPI_SUCCESS(acpi_get_handle(phandle, "_GTM", &tmp))) ||
+		(ACPI_SUCCESS(acpi_get_handle(phandle, "_STM", &tmp))) ||
+		(ACPI_SUCCESS(acpi_get_handle(phandle, "_SDD", &tmp))))
+		return 0;
 
 	return -ENODEV;
 }

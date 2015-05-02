@@ -68,9 +68,9 @@ typedef struct
 
 #define PAGE_NONE       __pgprot(_PAGE_PRESENT | _PAGE_ACCESSED)
 #define PAGE_SHARED     __pgprot(_PAGE_PRESENT | __READABLE | _PAGE_WRITE | \
-                                 _PAGE_ACCESSED)
+				 _PAGE_ACCESSED)
 #define PAGE_SHARED_EXEC __pgprot(_PAGE_PRESENT | __READABLE | _PAGE_WRITE | \
-                                  _PAGE_ACCESSED | _PAGE_EXECUTE)
+				  _PAGE_ACCESSED | _PAGE_EXECUTE)
 
 #define PAGE_READONLY   __pgprot(_PAGE_PRESENT | __READABLE)
 #define PAGE_READONLY_EXEC __pgprot(_PAGE_PRESENT | __READABLE | _PAGE_EXECUTE | _PAGE_ACCESSED)
@@ -78,11 +78,11 @@ typedef struct
 #define PAGE_COPY       __pgprot(_PAGE_PRESENT | __READABLE)
 #define PAGE_COPY_EXEC	__pgprot(_PAGE_PRESENT | __READABLE | _PAGE_EXECUTE)
 #define PAGE_KERNEL     __pgprot(_PAGE_GLOBAL | _PAGE_KERNEL | \
-                                 _PAGE_PRESENT | __READABLE | __WRITEABLE)
+				 _PAGE_PRESENT | __READABLE | __WRITEABLE)
 #define PAGE_KERNEL_EXEC __pgprot(_PAGE_GLOBAL | _PAGE_KERNEL | _PAGE_EXECUTE | \
-                                 _PAGE_PRESENT | __READABLE | __WRITEABLE)
+				 _PAGE_PRESENT | __READABLE | __WRITEABLE)
 #define PAGE_SIGNAL_TRAMPOLINE __pgprot(_PAGE_GLOBAL | _PAGE_EXECUTE | \
-                                       _PAGE_PRESENT | __READABLE)
+				       _PAGE_PRESENT | __READABLE)
 
 #define _KERNPG_TABLE   (_PAGE_TABLE | _PAGE_KERNEL)
 

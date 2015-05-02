@@ -1448,7 +1448,7 @@ int i_APCI1710_InsnWriteEnableDisableTorCounter(struct comedi_device *dev,
 	pb_CycleMode		=	(unsigned char *) &data[4];
 	pb_Enable			=	(unsigned char *) &data[5];
 	pb_InterruptEnable	=	(unsigned char *) &data[6];
-                 |
+		 |
 +----------------------------------------------------------------------------+
 | Return Value      :  0: No error                                           |
 |                     -1: The handle parameter of the board is wrong         |

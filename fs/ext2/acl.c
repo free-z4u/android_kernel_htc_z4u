@@ -287,7 +287,7 @@ int
 ext2_acl_chmod(struct inode *inode)
 {
 	struct posix_acl *acl;
-        int error;
+	int error;
 
 	if (!test_opt(inode->i_sb, POSIX_ACL))
 		return 0;

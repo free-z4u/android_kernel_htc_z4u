@@ -238,7 +238,7 @@ static int __devinit snd_ice1712_hoontech_init(struct snd_ice1712 *ice)
 		(spec->config & ICE1712_STDSP24_INSEL) ? 1 : 0);
 	for (box = 0; box < 4; box++) {
 		if (spec->boxconfig[box] & ICE1712_STDSP24_BOX_MIDI2)
-                        snd_ice1712_stdsp24_midi2(ice, 1);
+			snd_ice1712_stdsp24_midi2(ice, 1);
 		for (chn = 0; chn < 4; chn++)
 			snd_ice1712_stdsp24_box_channel(ice, box, chn,
 				(spec->boxconfig[box] & (1 << chn)) ? 1 : 0);

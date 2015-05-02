@@ -446,10 +446,10 @@ static int macscsi_pread (struct Scsi_Host *instance,
 /* These conditions are derived from MacOS */
 
    while (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)
-         && !(NCR5380_read(STATUS_REG) & SR_REQ))
+	 && !(NCR5380_read(STATUS_REG) & SR_REQ))
       ;
    if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)
-         && (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH)) {
+	 && (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH)) {
       printk(KERN_ERR "Error in macscsi_pread\n");
       return -1;
    }
@@ -538,8 +538,8 @@ static int macscsi_pwrite (struct Scsi_Host *instance,
 /* These conditions are derived from MacOS */
 
    while (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)
-         && (!(NCR5380_read(STATUS_REG) & SR_REQ)
-            || (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH)))
+	 && (!(NCR5380_read(STATUS_REG) & SR_REQ)
+	    || (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH)))
       ;
    if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)) {
       printk(KERN_ERR "Error in macscsi_pwrite\n");

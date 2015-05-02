@@ -287,13 +287,13 @@ static int __sysv_write_inode(struct inode *inode, int wait)
 			&raw_inode->i_data[3*block]);
 	mark_buffer_dirty(bh);
 	if (wait) {
-                sync_dirty_buffer(bh);
-                if (buffer_req(bh) && !buffer_uptodate(bh)) {
-                        printk ("IO error syncing sysv inode [%s:%08x]\n",
-                                sb->s_id, ino);
-                        err = -EIO;
-                }
-        }
+		sync_dirty_buffer(bh);
+		if (buffer_req(bh) && !buffer_uptodate(bh)) {
+			printk ("IO error syncing sysv inode [%s:%08x]\n",
+				sb->s_id, ino);
+			err = -EIO;
+		}
+	}
 	brelse(bh);
 	return 0;
 }

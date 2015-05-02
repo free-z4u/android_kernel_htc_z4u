@@ -77,7 +77,7 @@ EXPORT_SYMBOL(of_i2c_register_devices);
 
 static int of_dev_node_match(struct device *dev, void *data)
 {
-        return dev->of_node == data;
+	return dev->of_node == data;
 }
 
 /* must call put_device() when done with returned i2c_client device */

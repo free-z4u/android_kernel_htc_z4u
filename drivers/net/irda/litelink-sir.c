@@ -111,7 +111,7 @@ static int litelink_close(struct sir_dev *dev)
  */
 static int litelink_change_speed(struct sir_dev *dev, unsigned speed)
 {
-        int i;
+	int i;
 
 	IRDA_DEBUG(2, "%s()\n", __func__);
 
@@ -137,7 +137,7 @@ static int litelink_change_speed(struct sir_dev *dev, unsigned speed)
 
 		/* Sleep a minimum of 15 us */
 		udelay(MIN_DELAY);
-        }
+	}
 
 	dev->speed = baud_rates[i];
 

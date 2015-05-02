@@ -41,7 +41,7 @@
 /*                                                                           */
 /*****************************************************************************/
 #define VPCI2VC(card, vpi, vci) \
-        (((vpi) << card->vcibits) | ((vci) & card->vcimask))
+	(((vpi) << card->vcibits) | ((vci) & card->vcimask))
 
 /*****************************************************************************/
 /*                                                                           */
@@ -166,7 +166,7 @@ struct scq_info
 	spinlock_t		lock;
 	atomic_t		used;
 	unsigned long		trans_start;
-        unsigned long		scd;
+	unsigned long		scd;
 	spinlock_t		skblock;
 	struct sk_buff_head	transmit;
 	struct sk_buff_head	pending;
@@ -343,8 +343,8 @@ struct sb_pool
 
 struct idt77252_dev
 {
-        struct tsq_info		tsq;		/* Transmit Status Queue */
-        struct rsq_info		rsq;		/* Receive Status Queue */
+	struct tsq_info		tsq;		/* Transmit Status Queue */
+	struct rsq_info		rsq;		/* Receive Status Queue */
 
 	struct pci_dev		*pcidev;	/* PCI handle (desriptor) */
 	struct atm_dev		*atmdev;	/* ATM device desriptor */
@@ -362,28 +362,28 @@ struct idt77252_dev
 	struct work_struct	tqueue;
 
 	unsigned long		tct_base;	/* TCT base address in SRAM */
-        unsigned long		rct_base;	/* RCT base address in SRAM */
-        unsigned long		rt_base;	/* Rate Table base in SRAM */
-        unsigned long		scd_base;	/* SCD base address in SRAM */
-        unsigned long		tst[2];		/* TST base address in SRAM */
+	unsigned long		rct_base;	/* RCT base address in SRAM */
+	unsigned long		rt_base;	/* Rate Table base in SRAM */
+	unsigned long		scd_base;	/* SCD base address in SRAM */
+	unsigned long		tst[2];		/* TST base address in SRAM */
 	unsigned long		abrst_base;	/* ABRST base address in SRAM */
-        unsigned long		fifo_base;	/* RX FIFO base in SRAM */
+	unsigned long		fifo_base;	/* RX FIFO base in SRAM */
 
 	unsigned long		irqstat[16];
 
 	unsigned int		sramsize;	/* SAR's sram size */
 
-        unsigned int		tct_size;	/* total TCT entries */
-        unsigned int		rct_size;	/* total RCT entries */
-        unsigned int		scd_size;	/* length of SCD */
-        unsigned int		tst_size;	/* total TST entries */
-        unsigned int		tst_free;	/* free TSTEs in TST */
-        unsigned int		abrst_size;	/* size of ABRST in words */
-        unsigned int		fifo_size;	/* size of RX FIFO in words */
+	unsigned int		tct_size;	/* total TCT entries */
+	unsigned int		rct_size;	/* total RCT entries */
+	unsigned int		scd_size;	/* length of SCD */
+	unsigned int		tst_size;	/* total TST entries */
+	unsigned int		tst_free;	/* free TSTEs in TST */
+	unsigned int		abrst_size;	/* size of ABRST in words */
+	unsigned int		fifo_size;	/* size of RX FIFO in words */
 
-        unsigned int		vpibits;	/* Bits used for VPI index */
-        unsigned int		vcibits;	/* Bits used for VCI index */
-        unsigned int		vcimask;	/* Mask for VCI index */
+	unsigned int		vpibits;	/* Bits used for VPI index */
+	unsigned int		vcibits;	/* Bits used for VCI index */
+	unsigned int		vcimask;	/* Mask for VCI index */
 
 	unsigned int		utopia_pcr;	/* Utopia Itf's Cell Rate */
 	unsigned int		link_pcr;	/* PHY's Peek Cell Rate */
@@ -426,7 +426,7 @@ struct idt77252_dev
 /*                                                                           */
 /*****************************************************************************/
 #define ALIGN_ADDRESS(addr, alignment) \
-        ((((u32)(addr)) + (((u32)(alignment))-1)) & ~(((u32)(alignment)) - 1))
+	((((u32)(addr)) + (((u32)(alignment))-1)) & ~(((u32)(alignment)) - 1))
 
 
 /*****************************************************************************/

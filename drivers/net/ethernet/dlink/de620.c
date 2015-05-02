@@ -733,8 +733,8 @@ static int adapter_init(struct net_device *dev)
 	/* Let's hope some bits from the statusregister make a good check */
 #define CHECK_MASK (  0 | TXSUC |  T16  |  0  | RXCRC | RXSHORT |  0  |  0  )
 #define CHECK_OK   (  0 |   0   |  0    |  0  |   0   |   0     |  0  |  0  )
-        /* success:   X     0      0       X      0       0        X     X  */
-        /* ignore:   EEDI                RXGOOD                   COLS  LNKS*/
+	/* success:   X     0      0       X      0       0        X     X  */
+	/* ignore:   EEDI                RXGOOD                   COLS  LNKS*/
 
 	if (((i = de620_get_register(dev, R_STS)) & CHECK_MASK) != CHECK_OK) {
 		printk(KERN_ERR "%s: Something has happened to the DE-620!  Please check it"

@@ -1,9 +1,9 @@
 /******************************************************************************
-             Device driver for Interphase ATM PCI adapter cards
-                    Author: Peter Wang  <pwang@iphase.com>
-                   Interphase Corporation  <www.iphase.com>
-                               Version: 1.0
-               iphase.h:  This is the header file for iphase.c.
+	     Device driver for Interphase ATM PCI adapter cards
+		    Author: Peter Wang  <pwang@iphase.com>
+		   Interphase Corporation  <www.iphase.com>
+			       Version: 1.0
+	       iphase.h:  This is the header file for iphase.c.
 *******************************************************************************
 
       This software may be used and distributed according to the terms
@@ -23,18 +23,18 @@
       in terms of PHY type, the size of control memory and the size of
       packet memory. The followings are the change log and history:
 
-          Bugfix the Mona's UBR driver.
-          Modify the basic memory allocation and dma logic.
-          Port the driver to the latest kernel from 2.0.46.
-          Complete the ABR logic of the driver, and added the ABR work-
-              around for the hardware anormalies.
-          Add the CBR support.
+	  Bugfix the Mona's UBR driver.
+	  Modify the basic memory allocation and dma logic.
+	  Port the driver to the latest kernel from 2.0.46.
+	  Complete the ABR logic of the driver, and added the ABR work-
+	      around for the hardware anormalies.
+	  Add the CBR support.
 	  Add the flow control logic to the driver to allow rate-limit VC.
-          Add 4K VC support to the board with 512K control memory.
-          Add the support of all the variants of the Interphase ATM PCI
-          (i)Chip adapter cards including x575 (155M OC3 and UTP155), x525
-          (25M UTP25) and x531 (DS3 and E3).
-          Add SMP support.
+	  Add 4K VC support to the board with 512K control memory.
+	  Add the support of all the variants of the Interphase ATM PCI
+	  (i)Chip adapter cards including x575 (155M OC3 and UTP155), x525
+	  (25M UTP25) and x531 (DS3 and E3).
+	  Add SMP support.
 
       Support and updates available at: ftp://ftp.iphase.com/pub/atm
 
@@ -134,11 +134,11 @@
 #define IA_CMD   0x7749
 typedef struct {
 	int cmd;
-        int sub_cmd;
-        int len;
-        u32 maddr;
-        int status;
-        void __user *buf;
+	int sub_cmd;
+	int len;
+	u32 maddr;
+	int status;
+	void __user *buf;
 } IA_CMDBUF, *PIA_CMDBUF;
 
 /* cmds */
@@ -208,13 +208,13 @@ struct ia_vcc
 {
 	int rxing;
 	int txing;
-        int NumCbrEntry;
-        u32 pcr;
-        u32 saved_tx_quota;
-        int flow_inc;
-        struct sk_buff_head txing_skb;
-        int  ltimeout;
-        u8  vc_desc_cnt;
+	int NumCbrEntry;
+	u32 pcr;
+	u32 saved_tx_quota;
+	int flow_inc;
+	struct sk_buff_head txing_skb;
+	int  ltimeout;
+	u8  vc_desc_cnt;
 
 };
 
@@ -640,143 +640,143 @@ typedef volatile u_int  freg_t;
 typedef u_int   rreg_t;
 
 typedef struct _ffredn_t {
-        freg_t  idlehead_high;  /* Idle cell header (high)              */
-        freg_t  idlehead_low;   /* Idle cell header (low)               */
-        freg_t  maxrate;        /* Maximum rate                         */
-        freg_t  stparms;        /* Traffic Management Parameters        */
-        freg_t  abrubr_abr;     /* ABRUBR Priority Byte 1, TCR Byte 0   */
-        freg_t  rm_type;        /*                                      */
-        u_int   filler5[0x17 - 0x06];
-        freg_t  cmd_reg;        /* Command register                     */
-        u_int   filler18[0x20 - 0x18];
-        freg_t  cbr_base;       /* CBR Pointer Base                     */
-        freg_t  vbr_base;       /* VBR Pointer Base                     */
-        freg_t  abr_base;       /* ABR Pointer Base                     */
-        freg_t  ubr_base;       /* UBR Pointer Base                     */
-        u_int   filler24;
-        freg_t  vbrwq_base;     /* VBR Wait Queue Base                  */
-        freg_t  abrwq_base;     /* ABR Wait Queue Base                  */
-        freg_t  ubrwq_base;     /* UBR Wait Queue Base                  */
-        freg_t  vct_base;       /* Main VC Table Base                   */
-        freg_t  vcte_base;      /* Extended Main VC Table Base          */
-        u_int   filler2a[0x2C - 0x2A];
-        freg_t  cbr_tab_beg;    /* CBR Table Begin                      */
-        freg_t  cbr_tab_end;    /* CBR Table End                        */
-        freg_t  cbr_pointer;    /* CBR Pointer                          */
-        u_int   filler2f[0x30 - 0x2F];
-        freg_t  prq_st_adr;     /* Packet Ready Queue Start Address     */
-        freg_t  prq_ed_adr;     /* Packet Ready Queue End Address       */
-        freg_t  prq_rd_ptr;     /* Packet Ready Queue read pointer      */
-        freg_t  prq_wr_ptr;     /* Packet Ready Queue write pointer     */
-        freg_t  tcq_st_adr;     /* Transmit Complete Queue Start Address*/
-        freg_t  tcq_ed_adr;     /* Transmit Complete Queue End Address  */
-        freg_t  tcq_rd_ptr;     /* Transmit Complete Queue read pointer */
-        freg_t  tcq_wr_ptr;     /* Transmit Complete Queue write pointer*/
-        u_int   filler38[0x40 - 0x38];
-        freg_t  queue_base;     /* Base address for PRQ and TCQ         */
-        freg_t  desc_base;      /* Base address of descriptor table     */
-        u_int   filler42[0x45 - 0x42];
-        freg_t  mode_reg_0;     /* Mode register 0                      */
-        freg_t  mode_reg_1;     /* Mode register 1                      */
-        freg_t  intr_status_reg;/* Interrupt Status register            */
-        freg_t  mask_reg;       /* Mask Register                        */
-        freg_t  cell_ctr_high1; /* Total cell transfer count (high)     */
-        freg_t  cell_ctr_lo1;   /* Total cell transfer count (low)      */
-        freg_t  state_reg;      /* Status register                      */
-        u_int   filler4c[0x58 - 0x4c];
-        freg_t  curr_desc_num;  /* Contains the current descriptor num  */
-        freg_t  next_desc;      /* Next descriptor                      */
-        freg_t  next_vc;        /* Next VC                              */
-        u_int   filler5b[0x5d - 0x5b];
-        freg_t  present_slot_cnt;/* Present slot count                  */
-        u_int   filler5e[0x6a - 0x5e];
-        freg_t  new_desc_num;   /* New descriptor number                */
-        freg_t  new_vc;         /* New VC                               */
-        freg_t  sched_tbl_ptr;  /* Schedule table pointer               */
-        freg_t  vbrwq_wptr;     /* VBR wait queue write pointer         */
-        freg_t  vbrwq_rptr;     /* VBR wait queue read pointer          */
-        freg_t  abrwq_wptr;     /* ABR wait queue write pointer         */
-        freg_t  abrwq_rptr;     /* ABR wait queue read pointer          */
-        freg_t  ubrwq_wptr;     /* UBR wait queue write pointer         */
-        freg_t  ubrwq_rptr;     /* UBR wait queue read pointer          */
-        freg_t  cbr_vc;         /* CBR VC                               */
-        freg_t  vbr_sb_vc;      /* VBR SB VC                            */
-        freg_t  abr_sb_vc;      /* ABR SB VC                            */
-        freg_t  ubr_sb_vc;      /* UBR SB VC                            */
-        freg_t  vbr_next_link;  /* VBR next link                        */
-        freg_t  abr_next_link;  /* ABR next link                        */
-        freg_t  ubr_next_link;  /* UBR next link                        */
-        u_int   filler7a[0x7c-0x7a];
-        freg_t  out_rate_head;  /* Out of rate head                     */
-        u_int   filler7d[0xca-0x7d]; /* pad out to full address space   */
-        freg_t  cell_ctr_high1_nc;/* Total cell transfer count (high)   */
-        freg_t  cell_ctr_lo1_nc;/* Total cell transfer count (low)      */
-        u_int   fillercc[0x100-0xcc]; /* pad out to full address space   */
+	freg_t  idlehead_high;  /* Idle cell header (high)              */
+	freg_t  idlehead_low;   /* Idle cell header (low)               */
+	freg_t  maxrate;        /* Maximum rate                         */
+	freg_t  stparms;        /* Traffic Management Parameters        */
+	freg_t  abrubr_abr;     /* ABRUBR Priority Byte 1, TCR Byte 0   */
+	freg_t  rm_type;        /*                                      */
+	u_int   filler5[0x17 - 0x06];
+	freg_t  cmd_reg;        /* Command register                     */
+	u_int   filler18[0x20 - 0x18];
+	freg_t  cbr_base;       /* CBR Pointer Base                     */
+	freg_t  vbr_base;       /* VBR Pointer Base                     */
+	freg_t  abr_base;       /* ABR Pointer Base                     */
+	freg_t  ubr_base;       /* UBR Pointer Base                     */
+	u_int   filler24;
+	freg_t  vbrwq_base;     /* VBR Wait Queue Base                  */
+	freg_t  abrwq_base;     /* ABR Wait Queue Base                  */
+	freg_t  ubrwq_base;     /* UBR Wait Queue Base                  */
+	freg_t  vct_base;       /* Main VC Table Base                   */
+	freg_t  vcte_base;      /* Extended Main VC Table Base          */
+	u_int   filler2a[0x2C - 0x2A];
+	freg_t  cbr_tab_beg;    /* CBR Table Begin                      */
+	freg_t  cbr_tab_end;    /* CBR Table End                        */
+	freg_t  cbr_pointer;    /* CBR Pointer                          */
+	u_int   filler2f[0x30 - 0x2F];
+	freg_t  prq_st_adr;     /* Packet Ready Queue Start Address     */
+	freg_t  prq_ed_adr;     /* Packet Ready Queue End Address       */
+	freg_t  prq_rd_ptr;     /* Packet Ready Queue read pointer      */
+	freg_t  prq_wr_ptr;     /* Packet Ready Queue write pointer     */
+	freg_t  tcq_st_adr;     /* Transmit Complete Queue Start Address*/
+	freg_t  tcq_ed_adr;     /* Transmit Complete Queue End Address  */
+	freg_t  tcq_rd_ptr;     /* Transmit Complete Queue read pointer */
+	freg_t  tcq_wr_ptr;     /* Transmit Complete Queue write pointer*/
+	u_int   filler38[0x40 - 0x38];
+	freg_t  queue_base;     /* Base address for PRQ and TCQ         */
+	freg_t  desc_base;      /* Base address of descriptor table     */
+	u_int   filler42[0x45 - 0x42];
+	freg_t  mode_reg_0;     /* Mode register 0                      */
+	freg_t  mode_reg_1;     /* Mode register 1                      */
+	freg_t  intr_status_reg;/* Interrupt Status register            */
+	freg_t  mask_reg;       /* Mask Register                        */
+	freg_t  cell_ctr_high1; /* Total cell transfer count (high)     */
+	freg_t  cell_ctr_lo1;   /* Total cell transfer count (low)      */
+	freg_t  state_reg;      /* Status register                      */
+	u_int   filler4c[0x58 - 0x4c];
+	freg_t  curr_desc_num;  /* Contains the current descriptor num  */
+	freg_t  next_desc;      /* Next descriptor                      */
+	freg_t  next_vc;        /* Next VC                              */
+	u_int   filler5b[0x5d - 0x5b];
+	freg_t  present_slot_cnt;/* Present slot count                  */
+	u_int   filler5e[0x6a - 0x5e];
+	freg_t  new_desc_num;   /* New descriptor number                */
+	freg_t  new_vc;         /* New VC                               */
+	freg_t  sched_tbl_ptr;  /* Schedule table pointer               */
+	freg_t  vbrwq_wptr;     /* VBR wait queue write pointer         */
+	freg_t  vbrwq_rptr;     /* VBR wait queue read pointer          */
+	freg_t  abrwq_wptr;     /* ABR wait queue write pointer         */
+	freg_t  abrwq_rptr;     /* ABR wait queue read pointer          */
+	freg_t  ubrwq_wptr;     /* UBR wait queue write pointer         */
+	freg_t  ubrwq_rptr;     /* UBR wait queue read pointer          */
+	freg_t  cbr_vc;         /* CBR VC                               */
+	freg_t  vbr_sb_vc;      /* VBR SB VC                            */
+	freg_t  abr_sb_vc;      /* ABR SB VC                            */
+	freg_t  ubr_sb_vc;      /* UBR SB VC                            */
+	freg_t  vbr_next_link;  /* VBR next link                        */
+	freg_t  abr_next_link;  /* ABR next link                        */
+	freg_t  ubr_next_link;  /* UBR next link                        */
+	u_int   filler7a[0x7c-0x7a];
+	freg_t  out_rate_head;  /* Out of rate head                     */
+	u_int   filler7d[0xca-0x7d]; /* pad out to full address space   */
+	freg_t  cell_ctr_high1_nc;/* Total cell transfer count (high)   */
+	freg_t  cell_ctr_lo1_nc;/* Total cell transfer count (low)      */
+	u_int   fillercc[0x100-0xcc]; /* pad out to full address space   */
 } ffredn_t;
 
 typedef struct _rfredn_t {
-        rreg_t  mode_reg_0;     /* Mode register 0                      */
-        rreg_t  protocol_id;    /* Protocol ID                          */
-        rreg_t  mask_reg;       /* Mask Register                        */
-        rreg_t  intr_status_reg;/* Interrupt status register            */
-        rreg_t  drp_pkt_cntr;   /* Dropped packet cntr (clear on read)  */
-        rreg_t  err_cntr;       /* Error Counter (cleared on read)      */
-        u_int   filler6[0x08 - 0x06];
-        rreg_t  raw_base_adr;   /* Base addr for raw cell Q             */
-        u_int   filler2[0x0c - 0x09];
-        rreg_t  cell_ctr0;      /* Cell Counter 0 (cleared when read)   */
-        rreg_t  cell_ctr1;      /* Cell Counter 1 (cleared when read)   */
-        u_int   filler3[0x0f - 0x0e];
-        rreg_t  cmd_reg;        /* Command register                     */
-        rreg_t  desc_base;      /* Base address for description table   */
-        rreg_t  vc_lkup_base;   /* Base address for VC lookup table     */
-        rreg_t  reass_base;     /* Base address for reassembler table   */
-        rreg_t  queue_base;     /* Base address for Communication queue */
-        u_int   filler14[0x16 - 0x14];
-        rreg_t  pkt_tm_cnt;     /* Packet Timeout and count register    */
-        rreg_t  tmout_range;    /* Range of reassembley IDs for timeout */
-        rreg_t  intrvl_cntr;    /* Packet aging interval counter        */
-        rreg_t  tmout_indx;     /* index of pkt being tested for aging  */
-        u_int   filler1a[0x1c - 0x1a];
-        rreg_t  vp_lkup_base;   /* Base address for VP lookup table     */
-        rreg_t  vp_filter;      /* VP filter register                   */
-        rreg_t  abr_lkup_base;  /* Base address of ABR VC Table         */
-        u_int   filler1f[0x24 - 0x1f];
-        rreg_t  fdq_st_adr;     /* Free desc queue start address        */
-        rreg_t  fdq_ed_adr;     /* Free desc queue end address          */
-        rreg_t  fdq_rd_ptr;     /* Free desc queue read pointer         */
-        rreg_t  fdq_wr_ptr;     /* Free desc queue write pointer        */
-        rreg_t  pcq_st_adr;     /* Packet Complete queue start address  */
-        rreg_t  pcq_ed_adr;     /* Packet Complete queue end address    */
-        rreg_t  pcq_rd_ptr;     /* Packet Complete queue read pointer   */
-        rreg_t  pcq_wr_ptr;     /* Packet Complete queue write pointer  */
-        rreg_t  excp_st_adr;    /* Exception queue start address        */
-        rreg_t  excp_ed_adr;    /* Exception queue end address          */
-        rreg_t  excp_rd_ptr;    /* Exception queue read pointer         */
-        rreg_t  excp_wr_ptr;    /* Exception queue write pointer        */
-        u_int   filler30[0x34 - 0x30];
-        rreg_t  raw_st_adr;     /* Raw Cell start address               */
-        rreg_t  raw_ed_adr;     /* Raw Cell end address                 */
-        rreg_t  raw_rd_ptr;     /* Raw Cell read pointer                */
-        rreg_t  raw_wr_ptr;     /* Raw Cell write pointer               */
-        rreg_t  state_reg;      /* State Register                       */
-        u_int   filler39[0x42 - 0x39];
-        rreg_t  buf_size;       /* Buffer size                          */
-        u_int   filler43;
-        rreg_t  xtra_rm_offset; /* Offset of the additional turnaround RM */
-        u_int   filler45[0x84 - 0x45];
-        rreg_t  drp_pkt_cntr_nc;/* Dropped Packet cntr, Not clear on rd */
-        rreg_t  err_cntr_nc;    /* Error Counter, Not clear on read     */
-        u_int   filler86[0x8c - 0x86];
-        rreg_t  cell_ctr0_nc;   /* Cell Counter 0,  Not clear on read   */
-        rreg_t  cell_ctr1_nc;   /* Cell Counter 1, Not clear on read    */
-        u_int   filler8e[0x100-0x8e]; /* pad out to full address space   */
+	rreg_t  mode_reg_0;     /* Mode register 0                      */
+	rreg_t  protocol_id;    /* Protocol ID                          */
+	rreg_t  mask_reg;       /* Mask Register                        */
+	rreg_t  intr_status_reg;/* Interrupt status register            */
+	rreg_t  drp_pkt_cntr;   /* Dropped packet cntr (clear on read)  */
+	rreg_t  err_cntr;       /* Error Counter (cleared on read)      */
+	u_int   filler6[0x08 - 0x06];
+	rreg_t  raw_base_adr;   /* Base addr for raw cell Q             */
+	u_int   filler2[0x0c - 0x09];
+	rreg_t  cell_ctr0;      /* Cell Counter 0 (cleared when read)   */
+	rreg_t  cell_ctr1;      /* Cell Counter 1 (cleared when read)   */
+	u_int   filler3[0x0f - 0x0e];
+	rreg_t  cmd_reg;        /* Command register                     */
+	rreg_t  desc_base;      /* Base address for description table   */
+	rreg_t  vc_lkup_base;   /* Base address for VC lookup table     */
+	rreg_t  reass_base;     /* Base address for reassembler table   */
+	rreg_t  queue_base;     /* Base address for Communication queue */
+	u_int   filler14[0x16 - 0x14];
+	rreg_t  pkt_tm_cnt;     /* Packet Timeout and count register    */
+	rreg_t  tmout_range;    /* Range of reassembley IDs for timeout */
+	rreg_t  intrvl_cntr;    /* Packet aging interval counter        */
+	rreg_t  tmout_indx;     /* index of pkt being tested for aging  */
+	u_int   filler1a[0x1c - 0x1a];
+	rreg_t  vp_lkup_base;   /* Base address for VP lookup table     */
+	rreg_t  vp_filter;      /* VP filter register                   */
+	rreg_t  abr_lkup_base;  /* Base address of ABR VC Table         */
+	u_int   filler1f[0x24 - 0x1f];
+	rreg_t  fdq_st_adr;     /* Free desc queue start address        */
+	rreg_t  fdq_ed_adr;     /* Free desc queue end address          */
+	rreg_t  fdq_rd_ptr;     /* Free desc queue read pointer         */
+	rreg_t  fdq_wr_ptr;     /* Free desc queue write pointer        */
+	rreg_t  pcq_st_adr;     /* Packet Complete queue start address  */
+	rreg_t  pcq_ed_adr;     /* Packet Complete queue end address    */
+	rreg_t  pcq_rd_ptr;     /* Packet Complete queue read pointer   */
+	rreg_t  pcq_wr_ptr;     /* Packet Complete queue write pointer  */
+	rreg_t  excp_st_adr;    /* Exception queue start address        */
+	rreg_t  excp_ed_adr;    /* Exception queue end address          */
+	rreg_t  excp_rd_ptr;    /* Exception queue read pointer         */
+	rreg_t  excp_wr_ptr;    /* Exception queue write pointer        */
+	u_int   filler30[0x34 - 0x30];
+	rreg_t  raw_st_adr;     /* Raw Cell start address               */
+	rreg_t  raw_ed_adr;     /* Raw Cell end address                 */
+	rreg_t  raw_rd_ptr;     /* Raw Cell read pointer                */
+	rreg_t  raw_wr_ptr;     /* Raw Cell write pointer               */
+	rreg_t  state_reg;      /* State Register                       */
+	u_int   filler39[0x42 - 0x39];
+	rreg_t  buf_size;       /* Buffer size                          */
+	u_int   filler43;
+	rreg_t  xtra_rm_offset; /* Offset of the additional turnaround RM */
+	u_int   filler45[0x84 - 0x45];
+	rreg_t  drp_pkt_cntr_nc;/* Dropped Packet cntr, Not clear on rd */
+	rreg_t  err_cntr_nc;    /* Error Counter, Not clear on read     */
+	u_int   filler86[0x8c - 0x86];
+	rreg_t  cell_ctr0_nc;   /* Cell Counter 0,  Not clear on read   */
+	rreg_t  cell_ctr1_nc;   /* Cell Counter 1, Not clear on read    */
+	u_int   filler8e[0x100-0x8e]; /* pad out to full address space   */
 } rfredn_t;
 
 typedef struct {
-        /* Atlantic */
-        ffredn_t        ffredn;         /* F FRED                       */
-        rfredn_t        rfredn;         /* R FRED                       */
+	/* Atlantic */
+	ffredn_t        ffredn;         /* F FRED                       */
+	rfredn_t        rfredn;         /* R FRED                       */
 } ia_regs_t;
 
 typedef struct {
@@ -799,25 +799,25 @@ typedef struct {
 } f_vc_abr_entry;
 
 typedef struct {
-        u_short         r_status_rdf;   /* status + RDF         */
-        u_short         r_air;          /* AIR                  */
-        u_short         reserved4[14];  /* Reserved             */
+	u_short         r_status_rdf;   /* status + RDF         */
+	u_short         r_air;          /* AIR                  */
+	u_short         reserved4[14];  /* Reserved             */
 } r_vc_abr_entry;
 
 #define MRM 3
 
 typedef struct srv_cls_param {
-        u32 class_type;         /* CBR/VBR/ABR/UBR; use the enum above */
-        u32 pcr;                /* Peak Cell Rate (24-bit) */
-        /* VBR parameters */
-        u32 scr;                /* sustainable cell rate */
-        u32 max_burst_size;     /* ?? cell rate or data rate */
+	u32 class_type;         /* CBR/VBR/ABR/UBR; use the enum above */
+	u32 pcr;                /* Peak Cell Rate (24-bit) */
+	/* VBR parameters */
+	u32 scr;                /* sustainable cell rate */
+	u32 max_burst_size;     /* ?? cell rate or data rate */
 
-        /* ABR only UNI 4.0 Parameters */
-        u32 mcr;                /* Min Cell Rate (24-bit) */
-        u32 icr;                /* Initial Cell Rate (24-bit) */
-        u32 tbe;                /* Transient Buffer Exposure (24-bit) */
-        u32 frtt;               /* Fixed Round Trip Time (24-bit) */
+	/* ABR only UNI 4.0 Parameters */
+	u32 mcr;                /* Min Cell Rate (24-bit) */
+	u32 icr;                /* Initial Cell Rate (24-bit) */
+	u32 tbe;                /* Transient Buffer Exposure (24-bit) */
+	u32 frtt;               /* Fixed Round Trip Time (24-bit) */
 
 #if 0   /* Additional Parameters of TM 4.0 */
 bits  31          30           29          28       27-25 24-22 21-19  18-9
@@ -826,14 +826,14 @@ bits  31          30           29          28       27-25 24-22 21-19  18-9
 -----------------------------------------------------------------------------
 #endif /* 0 */
 
-        u8 nrm;                 /* Max # of Cells for each forward RM
-                                        cell (3-bit) */
-        u8 trm;                 /* Time between forward RM cells (3-bit) */
-        u16 adtf;               /* ACR Decrease Time Factor (10-bit) */
-        u8 cdf;                 /* Cutoff Decrease Factor (3-bit) */
-        u8 rif;                 /* Rate Increment Factor (4-bit) */
-        u8 rdf;                 /* Rate Decrease Factor (4-bit) */
-        u8 reserved;            /* 8 bits to keep structure word aligned */
+	u8 nrm;                 /* Max # of Cells for each forward RM
+					cell (3-bit) */
+	u8 trm;                 /* Time between forward RM cells (3-bit) */
+	u16 adtf;               /* ACR Decrease Time Factor (10-bit) */
+	u8 cdf;                 /* Cutoff Decrease Factor (3-bit) */
+	u8 rif;                 /* Rate Increment Factor (4-bit) */
+	u8 rdf;                 /* Rate Decrease Factor (4-bit) */
+	u8 reserved;            /* 8 bits to keep structure word aligned */
 } srv_cls_param_t;
 
 struct testTable_t {
@@ -859,28 +859,28 @@ typedef struct {
 
 struct ia_rfL_t {
     	u32  fdq_st;     /* Free desc queue start address        */
-        u32  fdq_ed;     /* Free desc queue end address          */
-        u32  fdq_rd;     /* Free desc queue read pointer         */
-        u32  fdq_wr;     /* Free desc queue write pointer        */
-        u32  pcq_st;     /* Packet Complete queue start address  */
-        u32  pcq_ed;     /* Packet Complete queue end address    */
-        u32  pcq_rd;     /* Packet Complete queue read pointer   */
-        u32  pcq_wr;     /* Packet Complete queue write pointer  */
+	u32  fdq_ed;     /* Free desc queue end address          */
+	u32  fdq_rd;     /* Free desc queue read pointer         */
+	u32  fdq_wr;     /* Free desc queue write pointer        */
+	u32  pcq_st;     /* Packet Complete queue start address  */
+	u32  pcq_ed;     /* Packet Complete queue end address    */
+	u32  pcq_rd;     /* Packet Complete queue read pointer   */
+	u32  pcq_wr;     /* Packet Complete queue write pointer  */
 };
 
 struct ia_ffL_t {
 	u32  prq_st;     /* Packet Ready Queue Start Address     */
-        u32  prq_ed;     /* Packet Ready Queue End Address       */
-        u32  prq_wr;     /* Packet Ready Queue write pointer     */
-        u32  tcq_st;     /* Transmit Complete Queue Start Address*/
-        u32  tcq_ed;     /* Transmit Complete Queue End Address  */
-        u32  tcq_rd;     /* Transmit Complete Queue read pointer */
+	u32  prq_ed;     /* Packet Ready Queue End Address       */
+	u32  prq_wr;     /* Packet Ready Queue write pointer     */
+	u32  tcq_st;     /* Transmit Complete Queue Start Address*/
+	u32  tcq_ed;     /* Transmit Complete Queue End Address  */
+	u32  tcq_rd;     /* Transmit Complete Queue read pointer */
 };
 
 struct desc_tbl_t {
-        u32 timestamp;
-        struct ia_vcc *iavcc;
-        struct sk_buff *txskb;
+	u32 timestamp;
+	struct ia_vcc *iavcc;
+	struct sk_buff *txskb;
 };
 
 typedef struct ia_rtn_q {
@@ -1000,25 +1000,25 @@ typedef struct iadev_priv {
 	struct dle_q tx_dle_q;
 	struct free_desc_q *tx_free_desc_qhead;
 	struct sk_buff_head tx_dma_q, tx_backlog;
-        spinlock_t            tx_lock;
-        IARTN_Q               tx_return_q;
-        u32                   close_pending;
-        wait_queue_head_t    close_wait;
-        wait_queue_head_t    timeout_wait;
+	spinlock_t            tx_lock;
+	IARTN_Q               tx_return_q;
+	u32                   close_pending;
+	wait_queue_head_t    close_wait;
+	wait_queue_head_t    timeout_wait;
 	struct cpcs_trailer_desc *tx_buf;
-        u16 num_tx_desc, tx_buf_sz, rate_limit;
-        u32 tx_cell_cnt, tx_pkt_cnt;
-        void __iomem *MAIN_VC_TABLE_ADDR, *EXT_VC_TABLE_ADDR, *ABR_SCHED_TABLE_ADDR;
+	u16 num_tx_desc, tx_buf_sz, rate_limit;
+	u32 tx_cell_cnt, tx_pkt_cnt;
+	void __iomem *MAIN_VC_TABLE_ADDR, *EXT_VC_TABLE_ADDR, *ABR_SCHED_TABLE_ADDR;
 	struct dle_q rx_dle_q;
 	struct free_desc_q *rx_free_desc_qhead;
 	struct sk_buff_head rx_dma_q;
 	spinlock_t rx_lock;
 	struct atm_vcc **rx_open;	/* list of all open VCs */
-        u16 num_rx_desc, rx_buf_sz, rxing;
-        u32 rx_pkt_ram, rx_tmp_cnt;
-        unsigned long rx_tmp_jif;
-        void __iomem *RX_DESC_BASE_ADDR;
-        u32 drop_rxpkt, drop_rxcell, rx_cell_cnt, rx_pkt_cnt;
+	u16 num_rx_desc, rx_buf_sz, rxing;
+	u32 rx_pkt_ram, rx_tmp_cnt;
+	unsigned long rx_tmp_jif;
+	void __iomem *RX_DESC_BASE_ADDR;
+	u32 drop_rxpkt, drop_rxcell, rx_cell_cnt, rx_pkt_cnt;
 	struct atm_dev *next_board;	/* other iphase devices */
 	struct pci_dev *pci;
 	int mem;
@@ -1028,30 +1028,30 @@ typedef struct iadev_priv {
 	unsigned char irq;
 	unsigned char bus;
 	unsigned char dev_fn;
-        u_short  phy_type;
-        u_short  num_vc, memSize, memType;
-        struct ia_ffL_t ffL;
-        struct ia_rfL_t rfL;
-        /* Suni stat */
-        // IA_SUNI_STATS suni_stats;
-        unsigned char carrier_detect;
-        /* CBR related */
-        // transmit DMA & Receive
-        unsigned int tx_dma_cnt;     // number of elements on dma queue
-        unsigned int rx_dma_cnt;     // number of elements on rx dma queue
-        unsigned int NumEnabledCBR;  // number of CBR VCI's enabled.     CBR
-        // receive MARK  for Cell FIFO
-        unsigned int rx_mark_cnt;    // number of elements on mark queue
-        unsigned int CbrTotEntries;  // Total CBR Entries in Scheduling Table.
-        unsigned int CbrRemEntries;  // Remaining CBR Entries in Scheduling Table.
-        unsigned int CbrEntryPt;     // CBR Sched Table Entry Point.
-        unsigned int Granularity;    // CBR Granularity given Table Size.
-        /* ABR related */
+	u_short  phy_type;
+	u_short  num_vc, memSize, memType;
+	struct ia_ffL_t ffL;
+	struct ia_rfL_t rfL;
+	/* Suni stat */
+	// IA_SUNI_STATS suni_stats;
+	unsigned char carrier_detect;
+	/* CBR related */
+	// transmit DMA & Receive
+	unsigned int tx_dma_cnt;     // number of elements on dma queue
+	unsigned int rx_dma_cnt;     // number of elements on rx dma queue
+	unsigned int NumEnabledCBR;  // number of CBR VCI's enabled.     CBR
+	// receive MARK  for Cell FIFO
+	unsigned int rx_mark_cnt;    // number of elements on mark queue
+	unsigned int CbrTotEntries;  // Total CBR Entries in Scheduling Table.
+	unsigned int CbrRemEntries;  // Remaining CBR Entries in Scheduling Table.
+	unsigned int CbrEntryPt;     // CBR Sched Table Entry Point.
+	unsigned int Granularity;    // CBR Granularity given Table Size.
+	/* ABR related */
 	unsigned int  sum_mcr, sum_cbr, LineRate;
 	unsigned int  n_abr;
-        struct desc_tbl_t *desc_tbl;
-        u_short host_tcq_wr;
-        struct testTable_t **testTable;
+	struct desc_tbl_t *desc_tbl;
+	u_short host_tcq_wr;
+	struct testTable_t **testTable;
 	dma_addr_t tx_dle_dma;
 	dma_addr_t rx_dle_dma;
 } IADEV;
@@ -1320,7 +1320,7 @@ enum suni_pm7345 {
 #define MEM_SIZE_128K   0x0000          /* board has 128k buffer */
 #define MEM_SIZE_512K   0x0001          /* board has 512K of buffer */
 #define MEM_SIZE_1M     0x0002          /* board has 1M of buffer */
-                                        /* 0x3 to 0xF are reserved for future */
+					/* 0x3 to 0xF are reserved for future */
 
 #define FE_MASK         0x00F0          /* mask of 4 bits defining FE type */
 #define FE_MULTI_MODE   0x0000          /* 155 MBit multimode fiber */

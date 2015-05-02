@@ -195,7 +195,7 @@ static struct mtd_info *probe_cs(struct map_info *map_cs)
 	struct mtd_info *mtd_cs = NULL;
 
 	printk(KERN_INFO
-               "%s: Probing a 0x%08lx bytes large window at 0x%08lx.\n",
+	       "%s: Probing a 0x%08lx bytes large window at 0x%08lx.\n",
 	       map_cs->name, map_cs->size, map_cs->map_priv_1);
 
 #ifdef CONFIG_MTD_CFI
@@ -363,7 +363,7 @@ static int __init init_axis_flash(void)
 		axis_partitions[pidx].mask_flags |= MTD_WRITEABLE;
 
 		printk(KERN_INFO
-                       " Adding readonly flash partition for romfs image:\n");
+		       " Adding readonly flash partition for romfs image:\n");
 		printk(pmsg, pidx, axis_partitions[pidx].offset,
 		       axis_partitions[pidx].size);
 		pidx++;
@@ -379,7 +379,7 @@ static int __init init_axis_flash(void)
 	}
 #endif
 
-        if (mymtd) {
+	if (mymtd) {
 		if (use_default_ptable) {
 			printk(KERN_INFO " Using default partition table.\n");
 			err = mtd_device_register(mymtd,

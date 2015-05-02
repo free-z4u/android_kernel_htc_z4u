@@ -694,8 +694,8 @@ static int __devexit wf_smu_remove(struct platform_device *ddev)
 }
 
 static struct platform_driver wf_smu_driver = {
-        .probe = wf_smu_probe,
-        .remove = __devexit_p(wf_smu_remove),
+	.probe = wf_smu_probe,
+	.remove = __devexit_p(wf_smu_remove),
 	.driver = {
 		.name = "windfarm",
 		.owner	= THIS_MODULE,

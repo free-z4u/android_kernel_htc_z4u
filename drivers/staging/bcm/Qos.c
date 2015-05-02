@@ -154,10 +154,10 @@ BOOLEAN MatchSrcPort(S_CLASSIFIER_RULE *pstClassifierRule,USHORT ushSrcPort)
 
 
     	if(0 == pstClassifierRule->ucSrcPortRangeLength)
-        	return TRUE;
+		return TRUE;
     	for(ucLoopIndex=0;ucLoopIndex<pstClassifierRule->ucSrcPortRangeLength;ucLoopIndex++)
     	{
-        	if(ushSrcPort <= pstClassifierRule->usSrcPortRangeHi[ucLoopIndex] &&
+		if(ushSrcPort <= pstClassifierRule->usSrcPortRangeHi[ucLoopIndex] &&
 		    ushSrcPort >= pstClassifierRule->usSrcPortRangeLo[ucLoopIndex])
 	    	{
 		    	return TRUE;
@@ -184,11 +184,11 @@ BOOLEAN MatchDestPort(S_CLASSIFIER_RULE *pstClassifierRule,USHORT ushDestPort)
 		PMINI_ADAPTER Adapter = GET_BCM_ADAPTER(gblpnetdev);
 
     	if(0 == pstClassifierRule->ucDestPortRangeLength)
-        	return TRUE;
+		return TRUE;
 
     	for(ucLoopIndex=0;ucLoopIndex<pstClassifierRule->ucDestPortRangeLength;ucLoopIndex++)
     	{
-        	BCM_DEBUG_PRINT(Adapter,DBG_TYPE_TX, IPV4_DBG, DBG_LVL_ALL, "Matching Port:0x%X   0x%X  0x%X",ushDestPort,pstClassifierRule->usDestPortRangeLo[ucLoopIndex],pstClassifierRule->usDestPortRangeHi[ucLoopIndex]);
+		BCM_DEBUG_PRINT(Adapter,DBG_TYPE_TX, IPV4_DBG, DBG_LVL_ALL, "Matching Port:0x%X   0x%X  0x%X",ushDestPort,pstClassifierRule->usDestPortRangeLo[ucLoopIndex],pstClassifierRule->usDestPortRangeHi[ucLoopIndex]);
 
  		if(ushDestPort <= pstClassifierRule->usDestPortRangeHi[ucLoopIndex] &&
 		    ushDestPort >= pstClassifierRule->usDestPortRangeLo[ucLoopIndex])
@@ -467,7 +467,7 @@ USHORT ClassifyPacket(PMINI_ADAPTER Adapter,struct sk_buff* skb)
 		case eEth802LLCFrame:
 		{
 			BCM_DEBUG_PRINT(Adapter, DBG_TYPE_TX, IPV4_DBG, DBG_LVL_ALL, "ClassifyPacket : 802LLCFrame\n");
-            pIpHeader = pvEThPayload + sizeof(ETH_CS_802_LLC_FRAME);
+	    pIpHeader = pvEThPayload + sizeof(ETH_CS_802_LLC_FRAME);
 			break;
 		}
 

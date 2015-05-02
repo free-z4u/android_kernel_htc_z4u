@@ -73,7 +73,7 @@ static const u_int num_chip_names = ARRAY_SIZE(ahc_chip_names);
  * Hardware error codes.
  */
 struct ahc_hard_error_entry {
-        uint8_t errno;
+	uint8_t errno;
 	const char *errmesg;
 };
 

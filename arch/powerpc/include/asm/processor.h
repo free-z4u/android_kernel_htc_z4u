@@ -286,7 +286,7 @@ struct thread_struct {
  * Return saved PC of a blocked thread. For now, this is the "user" PC
  */
 #define thread_saved_pc(tsk)    \
-        ((tsk)->thread.regs? (tsk)->thread.regs->nip: 0)
+	((tsk)->thread.regs? (tsk)->thread.regs->nip: 0)
 
 #define task_pt_regs(tsk)	((struct pt_regs *)(tsk)->thread.regs)
 
@@ -332,7 +332,7 @@ static inline unsigned long __pack_fe01(unsigned int fpmode)
 
 /* Check that a certain kernel stack pointer is valid in task_struct p */
 int validate_sp(unsigned long sp, struct task_struct *p,
-                       unsigned long nbytes);
+		       unsigned long nbytes);
 
 /*
  * Prefetch macros.

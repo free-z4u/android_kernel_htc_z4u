@@ -2,13 +2,13 @@
 	on20.c	(c) 1996-8  Grant R. Guenther <grant@torque.net>
 		            Under the terms of the GNU General Public License.
 
-        on20.c is a low-level protocol driver for the
-        Onspec 90c20 parallel to IDE adapter.
+	on20.c is a low-level protocol driver for the
+	Onspec 90c20 parallel to IDE adapter.
 */
 
 /* Changes:
 
-        1.01    GRG 1998.05.06 init_proto, release_proto
+	1.01    GRG 1998.05.06 init_proto, release_proto
 
 */
 
@@ -37,19 +37,19 @@ static int on20_read_regr( PIA *pi, int cont, int regr )
 
 {	int h,l, r ;
 
-        r = (regr<<2) + 1 + cont;
+	r = (regr<<2) + 1 + cont;
 
-        op(1); vl(r); op(0);
+	op(1); vl(r); op(0);
 
 	switch (pi->mode)  {
 
-        case 0:  w2(4); w2(6); l = r1();
-                 w2(4); w2(6); h = r1();
-                 w2(4); w2(6); w2(4); w2(6); w2(4);
+	case 0:  w2(4); w2(6); l = r1();
+		 w2(4); w2(6); h = r1();
+		 w2(4); w2(6); w2(4); w2(6); w2(4);
 		 return j44(l,h);
 
 	case 1:  w2(4); w2(0x26); r = r0();
-                 w2(4); w2(0x26); w2(4);
+		 w2(4); w2(0x26); w2(4);
 		 return r;
 
 	}
@@ -70,7 +70,7 @@ static void on20_write_regr( PIA *pi, int cont, int regr, int val )
 static void on20_connect ( PIA *pi)
 
 {	pi->saved_r0 = r0();
-        pi->saved_r2 = r2();
+	pi->saved_r2 = r2();
 
 	w2(4);w0(0);w2(0xc);w2(4);w2(6);w2(4);w2(6);w2(4);
 	if (pi->mode) { op(2); vl(8); op(2); vl(9); }
@@ -80,8 +80,8 @@ static void on20_connect ( PIA *pi)
 static void on20_disconnect ( PIA *pi )
 
 {	w2(4);w0(7);w2(4);w2(0xc);w2(4);
-        w0(pi->saved_r0);
-        w2(pi->saved_r2);
+	w0(pi->saved_r0);
+	w2(pi->saved_r2);
 }
 
 static void on20_read_block( PIA *pi, char * buf, int count )
@@ -115,9 +115,9 @@ static void on20_log_adapter( PIA *pi, char * scratch, int verbose )
 
 {       char    *mode_string[2] = {"4-bit","8-bit"};
 
-        printk("%s: on20 %s, OnSpec 90c20 at 0x%x, ",
-                pi->device,ON20_VERSION,pi->port);
-        printk("mode %d (%s), delay %d\n",pi->mode,
+	printk("%s: on20 %s, OnSpec 90c20 at 0x%x, ",
+		pi->device,ON20_VERSION,pi->port);
+	printk("mode %d (%s), delay %d\n",pi->mode,
 		mode_string[pi->mode],pi->delay);
 
 }

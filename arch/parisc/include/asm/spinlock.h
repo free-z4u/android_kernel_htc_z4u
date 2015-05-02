@@ -50,7 +50,7 @@ static inline int arch_spin_trylock(arch_spinlock_t *x)
 
 	mb();
 	a = __ldcw_align(x);
-        ret = __ldcw(a) != 0;
+	ret = __ldcw(a) != 0;
 	mb();
 
 	return ret;

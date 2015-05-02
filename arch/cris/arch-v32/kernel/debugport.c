@@ -194,7 +194,7 @@ putDebugChar(int val)
 int __init
 init_etrax_debug(void)
 {
-        start_port(port);
+	start_port(port);
 
 #ifdef CONFIG_ETRAX_KGDB
 	start_port(kgdb_port);

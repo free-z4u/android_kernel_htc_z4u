@@ -76,8 +76,8 @@ config DRM_RADEON
 	select FB_CFB_COPYAREA
 	select FB_CFB_IMAGEBLIT
 	select FW_LOADER
-        select DRM_KMS_HELPER
-        select DRM_TTM
+	select DRM_KMS_HELPER
+	select DRM_TTM
 	select POWER_SUPPLY
 	select HWMON
 	help
@@ -162,8 +162,8 @@ config DRM_SIS
 	depends on FB_SIS || FB_SIS=n
 	help
 	  Choose this option if you have a SiS 630 or compatible video
-          chipset. If M is selected the module will be called sis. AGP
-          support is required for this driver to work.
+	  chipset. If M is selected the module will be called sis. AGP
+	  support is required for this driver to work.
 
 config DRM_VIA
 	tristate "Via unichrome video cards"

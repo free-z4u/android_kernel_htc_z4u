@@ -732,7 +732,7 @@ mpt_lan_sdu_send (struct sk_buff *skb, struct net_device *dev)
 	skb_reset_mac_header(skb);
 	skb_pull(skb, 12);
 
-        dma = pci_map_single(mpt_dev->pcidev, skb->data, skb->len,
+	dma = pci_map_single(mpt_dev->pcidev, skb->data, skb->len,
 			     PCI_DMA_TODEVICE);
 
 	priv->SendCtl[ctx].skb = skb;

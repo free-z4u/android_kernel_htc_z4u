@@ -134,15 +134,15 @@ static void gf2k_trigger_seq(struct gameport *gameport, short *seq)
 	unsigned long flags;
 	int i, t;
 
-        local_irq_save(flags);
+	local_irq_save(flags);
 
 	i = 0;
-        do {
+	do {
 		gameport_trigger(gameport);
 		t = gameport_time(gameport, GF2K_TIMEOUT * 1000);
 		while ((gameport_read(gameport) & 1) && t) t--;
-                udelay(seq[i]);
-        } while (seq[++i]);
+		udelay(seq[i]);
+	} while (seq[++i]);
 
 	gameport_trigger(gameport);
 

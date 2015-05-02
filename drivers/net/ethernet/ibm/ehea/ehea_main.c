@@ -3410,7 +3410,7 @@ static void ehea_crash_handler(void)
 }
 
 static int ehea_mem_notifier(struct notifier_block *nb,
-                             unsigned long action, void *data)
+			     unsigned long action, void *data)
 {
 	int ret = NOTIFY_BAD;
 	struct memory_notify *arg = data;

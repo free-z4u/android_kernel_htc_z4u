@@ -100,9 +100,9 @@ static inline unsigned long ___pa(unsigned long x)
      if(x == 0)
 	  return 0;
      if(x >= PAGE_OFFSET)
-        return (x-PAGE_OFFSET);
+	return (x-PAGE_OFFSET);
      else
-        return (x+0x2000000);
+	return (x+0x2000000);
 }
 
 static inline void *__va(unsigned long x)
@@ -111,9 +111,9 @@ static inline void *__va(unsigned long x)
 	  return (void *)0;
 
      if(x < 0x2000000)
-        return (void *)(x+PAGE_OFFSET);
+	return (void *)(x+PAGE_OFFSET);
      else
-        return (void *)(x-0x2000000);
+	return (void *)(x-0x2000000);
 }
 #endif	/* CONFIG_SUN3 */
 

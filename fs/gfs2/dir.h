@@ -39,7 +39,7 @@ extern void gfs2_dir_hash_inval(struct gfs2_inode *ip);
 
 static inline u32 gfs2_disk_hash(const char *data, int len)
 {
-        return crc32_le((u32)~0, data, len) ^ (u32)~0;
+	return crc32_le((u32)~0, data, len) ^ (u32)~0;
 }
 
 

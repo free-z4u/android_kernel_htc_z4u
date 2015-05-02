@@ -671,7 +671,7 @@ static int __devinit snd_interwave_probe(struct snd_card *card, int dev)
 
 	if ((err = snd_interwave_detect(iwcard, gus, dev
 #ifdef SNDRV_STB
-            , &i2c_bus
+	    , &i2c_bus
 #endif
 	    )) < 0)
 		return err;

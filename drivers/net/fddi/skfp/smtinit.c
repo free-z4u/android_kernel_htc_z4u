@@ -118,7 +118,7 @@ int init_smt(struct s_smc *smc, u_char *mac_addr)
 
 	smt_agent_task(smc) ;		/* NIF FSM etc */
 
-        PNMI_INIT(smc) ;                /* PNMI initialization */
+	PNMI_INIT(smc) ;                /* PNMI initialization */
 
 	return 0;
 }

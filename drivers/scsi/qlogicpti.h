@@ -502,6 +502,6 @@ struct qlogicpti {
 
 /* For our interrupt engine. */
 #define for_each_qlogicpti(qp) \
-        for((qp) = qptichain; (qp); (qp) = (qp)->next)
+	for((qp) = qptichain; (qp); (qp) = (qp)->next)
 
 #endif /* !(_QLOGICPTI_H) */

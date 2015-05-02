@@ -208,16 +208,16 @@
  */
 
 #define SONIC_IMR_DEFAULT     ( SONIC_INT_BR | \
-                                SONIC_INT_LCD | \
-                                SONIC_INT_RFO | \
-                                SONIC_INT_PKTRX | \
-                                SONIC_INT_TXDN | \
-                                SONIC_INT_TXER | \
-                                SONIC_INT_RDE | \
-                                SONIC_INT_RBAE | \
-                                SONIC_INT_CRC | \
-                                SONIC_INT_FAE | \
-                                SONIC_INT_MP)
+				SONIC_INT_LCD | \
+				SONIC_INT_RFO | \
+				SONIC_INT_PKTRX | \
+				SONIC_INT_TXDN | \
+				SONIC_INT_TXER | \
+				SONIC_INT_RDE | \
+				SONIC_INT_RBAE | \
+				SONIC_INT_CRC | \
+				SONIC_INT_FAE | \
+				SONIC_INT_MP)
 
 
 #define SONIC_EOL       0x0001

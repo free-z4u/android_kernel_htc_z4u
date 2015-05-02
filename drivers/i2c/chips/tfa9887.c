@@ -252,9 +252,9 @@ void set_tfa9887_spkamp(int en, int dsp_mode)
 	int i =0;
 
 
-        unsigned char mute_reg[1] = {0x06};
+	unsigned char mute_reg[1] = {0x06};
 	unsigned char mute_data[3] = {0, 0, 0};
-        unsigned char power_reg[1] = {0x09};
+	unsigned char power_reg[1] = {0x09};
 	unsigned char power_data[3] = {0, 0, 0};
 	unsigned char SPK_CR[3] = {0x8, 0x8, 0};
 
@@ -391,21 +391,21 @@ static long tfa9887_ioctl(struct file *file, unsigned int cmd,
 		dsp_enabled = reg_value[1];
 		break;
 
-        case TPA9887_KERNEL_LOCK:
-                rc = copy_from_user(reg_value, argp, sizeof(reg_value));;
-                if (rc < 0) {
-                   pr_err("%s: copy from user failed.\n", __func__);
-                   goto err;
-                }
+	case TPA9887_KERNEL_LOCK:
+		rc = copy_from_user(reg_value, argp, sizeof(reg_value));;
+		if (rc < 0) {
+		   pr_err("%s: copy from user failed.\n", __func__);
+		   goto err;
+		}
 
-                len = reg_value[0];
+		len = reg_value[0];
 
-                pr_info("TPA9887_KLOCK1 %d\n", reg_value[1]);
-                if (reg_value[1])
-                   mutex_lock(&spk_amp_lock);
-                else
-                   mutex_unlock(&spk_amp_lock);
-                break;
+		pr_info("TPA9887_KLOCK1 %d\n", reg_value[1]);
+		if (reg_value[1])
+		   mutex_lock(&spk_amp_lock);
+		else
+		   mutex_unlock(&spk_amp_lock);
+		break;
 
 	}
 
@@ -516,7 +516,7 @@ static int __init tfa9887_init(void)
 {
 	pr_info("%s\n", __func__);
 	mutex_init(&spk_amp_lock);
-        dsp_enabled = 0;
+	dsp_enabled = 0;
 	return i2c_add_driver(&tfa9887_driver);
 }
 

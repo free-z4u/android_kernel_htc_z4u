@@ -4120,7 +4120,7 @@ static void hub_events(void)
 				dev_dbg(hub_dev, "over-current change\n");
 				clear_hub_feature(hdev, C_HUB_OVER_CURRENT);
 				msleep(500);	/* Cool down */
-                        	hub_power_on(hub, true);
+				hub_power_on(hub, true);
 				hub_hub_status(hub, &status, &unused);
 				if (status & HUB_STATUS_OVERCURRENT)
 					dev_err(hub_dev, "over-current "
@@ -4238,7 +4238,7 @@ static void hub_events(void)
 		usb_unlock_device(hdev);
 		kref_put(&hub->kref, hub_release);
 
-        } /* end while (1) */
+	} /* end while (1) */
 }
 
 static int hub_thread(void *__unused)

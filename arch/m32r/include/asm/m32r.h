@@ -13,7 +13,7 @@
 #include <asm/m32r_mp_fpga.h>
 #elif defined(CONFIG_CHIP_VDEC2) || defined(CONFIG_CHIP_XNUX2) \
 	|| defined(CONFIG_CHIP_M32700) || defined(CONFIG_CHIP_M32102) \
-        || defined(CONFIG_CHIP_OPSP) || defined(CONFIG_CHIP_M32104)
+	|| defined(CONFIG_CHIP_OPSP) || defined(CONFIG_CHIP_M32104)
 #include <asm/m32102.h>
 #endif
 

@@ -88,9 +88,9 @@ typedef struct 	ChnlAccessSetting {
 }*PCHANNEL_ACCESS_SETTING,CHANNEL_ACCESS_SETTING;
 
 typedef enum{
-        NIC_8185 = 1,
-        NIC_8185B
-        } nic_t;
+	NIC_8185 = 1,
+	NIC_8185B
+	} nic_t;
 
 typedef u32 AC_CODING;
 #define AC0_BE	0		// ACI: 0x00	// Best Effort
@@ -593,25 +593,25 @@ typedef struct r8180_priv
 	u8      keepAliveLevel; //YJ,add,080828,for KeepAlive
 	unsigned long 	NumTxOkTotal;
 	u16                                 LastRetryCnt;
-        u16                                     LastRetryRate;
-        unsigned long       LastTxokCnt;
-        unsigned long           LastRxokCnt;
-        u16                                     CurrRetryCnt;
-        unsigned long           LastTxOKBytes;
+	u16                                     LastRetryRate;
+	unsigned long       LastTxokCnt;
+	unsigned long           LastRxokCnt;
+	u16                                     CurrRetryCnt;
+	unsigned long           LastTxOKBytes;
 	unsigned long 		    NumTxOkBytesTotal;
-        u8                          LastFailTxRate;
-        long                        LastFailTxRateSS;
-        u8                          FailTxRateCount;
-        u32                         LastTxThroughput;
-        //for up rate
-        unsigned short          bTryuping;
-        u8                                      CurrTxRate;     //the rate before up
-        u16                                     CurrRetryRate;
-        u16                                     TryupingCount;
-        u8                                      TryDownCountLowData;
-        u8                                      TryupingCountNoData;
+	u8                          LastFailTxRate;
+	long                        LastFailTxRateSS;
+	u8                          FailTxRateCount;
+	u32                         LastTxThroughput;
+	//for up rate
+	unsigned short          bTryuping;
+	u8                                      CurrTxRate;     //the rate before up
+	u16                                     CurrRetryRate;
+	u16                                     TryupingCount;
+	u8                                      TryDownCountLowData;
+	u8                                      TryupingCountNoData;
 
-        u8                  CurrentOperaRate;
+	u8                  CurrentOperaRate;
 //by amy for rate adaptive
 //by amy 080312}
 //	short wq_hurryup;

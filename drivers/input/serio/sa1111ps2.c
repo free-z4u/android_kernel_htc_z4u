@@ -80,9 +80,9 @@ static irqreturn_t ps2_rxint(int irq, void *dev_id)
 		serio_interrupt(ps2if->io, scancode, flag);
 
 		status = sa1111_readl(ps2if->base + PS2STAT);
-        }
+	}
 
-        return IRQ_HANDLED;
+	return IRQ_HANDLED;
 }
 
 /*

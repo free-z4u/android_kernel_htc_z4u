@@ -159,7 +159,7 @@ static inline void mga_memcpy_toio(vaddr_t va, const void* src, int len) {
 	 */
 	iowrite32_rep(va.vaddr, src, len >> 2);
 #else
-        u_int32_t __iomem* addr = va.vaddr;
+	u_int32_t __iomem* addr = va.vaddr;
 
 	if ((unsigned long)src & 3) {
 		while (len >= 4) {

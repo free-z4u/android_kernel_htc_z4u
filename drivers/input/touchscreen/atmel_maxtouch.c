@@ -156,7 +156,7 @@ struct mxt_data {
 	struct mutex         debug_mutex;
 	u16                  *debug_data;
 
-        /* Character device variables */
+	/* Character device variables */
 	struct cdev          cdev;
 	struct cdev          cdev_messages;  /* 2nd Char dev for messages */
 	dev_t                dev_num;
@@ -169,7 +169,7 @@ struct mxt_data {
 	/* Message buffer & pointers */
 	char                 *messages;
 	int                  msg_buffer_startp, msg_buffer_endp;
-        /* Put only non-touch messages to buffer if this is set */
+	/* Put only non-touch messages to buffer if this is set */
 	char                 nontouch_msg_only;
 	struct mutex         msg_mutex;
 #if defined(CONFIG_HAS_EARLYSUSPEND)
@@ -375,7 +375,7 @@ ssize_t debug_data_read(struct mxt_data *mxt, char *buf, size_t count,
 		error = mxt_write_byte(mxt->client, diagnostics_reg,
 				debug_command);
 
-                /* Wait for command to be handled; when it has, the
+		/* Wait for command to be handled; when it has, the
 		 * register will be cleared. */
 		debug_command_reg = 1;
 		while (debug_command_reg != 0) {
@@ -913,13 +913,13 @@ void process_T9_message(u8 *message, struct mxt_data *mxt, int last_touch)
   	 * active.
  	 */
 	if (last_touch){
-        /* TODO: For compatibility with single-touch systems, send ABS_X &
+	/* TODO: For compatibility with single-touch systems, send ABS_X &
 	 * ABS_Y */
-        /*
-        if (stored_size[0]){
-            input_report_abs(mxt->input, ABS_X, stored_x[0]);
-            input_report_abs(mxt->input, ABS_Y, stored_y[0]);
-        }*/
+	/*
+	if (stored_size[0]){
+	    input_report_abs(mxt->input, ABS_X, stored_x[0]);
+	    input_report_abs(mxt->input, ABS_Y, stored_y[0]);
+	}*/
 
 
 		for (i = 0; i < 10; i++){
@@ -988,10 +988,10 @@ void process_T9_message(u8 *message, struct mxt_data *mxt, int last_touch)
 			if (!touch_size)
 				touch_size = 1;
 			/*
-             * report_mt(touch_number, touch_size, xpos, ypos, mxt);
-             */
+	     * report_mt(touch_number, touch_size, xpos, ypos, mxt);
+	     */
 
-            stored_size[touch_number] = touch_size;
+	    stored_size[touch_number] = touch_size;
 
 			if (status & MXT_MSGB_T9_AMP)
 				/* Amplitude of touch has changed */
@@ -1001,7 +1001,7 @@ void process_T9_message(u8 *message, struct mxt_data *mxt, int last_touch)
 		if (status & MXT_MSGB_T9_RELEASE) {
 			/* The previously reported touch has been removed.*/
 			/* report_mt(touch_number, 0, xpos, ypos, mxt); */
-            stored_size[touch_number] = 0;
+	    stored_size[touch_number] = 0;
 		}
 
 		/* input_sync(input); */
@@ -1310,7 +1310,7 @@ static void mxt_worker(struct work_struct *work)
 
 	do {
 		/* Read next message, reread on failure. */
-        /* TODO: message length, CRC included? */
+	/* TODO: message length, CRC included? */
 		mxt->message_counter++;
 		for (i = 1; i < I2C_RETRY_COUNT; i++) {
 			error = mxt_read_block(client,
@@ -1447,9 +1447,9 @@ static int __devinit mxt_identify(struct i2c_client *client,
 				      mxt->device_info.y_size;
 
 	/*
-         * Check Family & Variant Info; warn if not recognized but
-         * still continue.
-         */
+	 * Check Family & Variant Info; warn if not recognized but
+	 * still continue.
+	 */
 
 	/* MXT224 */
 	if (mxt->device_info.family_id == MXT224_FAMILYID) {
@@ -2095,7 +2095,7 @@ static int __devinit mxt_probe(struct i2c_client *client,
 				    &refs_fops);
 	}
 
-        /* Create character device nodes for reading & writing registers */
+	/* Create character device nodes for reading & writing registers */
 	mxt->mxt_class = class_create(THIS_MODULE, "maXTouch_memory");
 	if (IS_ERR(mxt->mxt_class)){
 	  printk(KERN_WARNING "class create failed! exiting...");
@@ -2168,7 +2168,7 @@ static int __devinit mxt_probe(struct i2c_client *client,
 		}
 	}
 
-        if (debug > DEBUG_INFO)
+	if (debug > DEBUG_INFO)
 		dev_info(&client->dev, "touchscreen, irq %d\n", mxt->irq);
 
 	t38_data = kmalloc(t38_size*sizeof(u8), GFP_KERNEL);

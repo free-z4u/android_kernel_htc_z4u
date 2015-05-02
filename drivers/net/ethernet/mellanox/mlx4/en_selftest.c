@@ -84,7 +84,7 @@ static int mlx4_en_test_loopback(struct mlx4_en_priv *priv)
 	int i;
 
 
-        priv->loopback_ok = 0;
+	priv->loopback_ok = 0;
 	priv->validate_loopback = 1;
 
 	/* xmit */

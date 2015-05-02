@@ -313,7 +313,7 @@ static __devinit const char *hp100_read_id(int ioaddr)
 	int i;
 	static char str[HP100_SIG_LEN];
 	unsigned char sig[4], sum;
-        unsigned short rev;
+	unsigned short rev;
 
 	hp100_page(ID_MAC_ADDR);
 	sum = 0;
@@ -326,11 +326,11 @@ static __devinit const char *hp100_read_id(int ioaddr)
 	if (sum != 0xff)
 		return NULL;	/* bad checksum */
 
-        str[0] = ((sig[0] >> 2) & 0x1f) + ('A' - 1);
-        str[1] = (((sig[0] & 3) << 3) | (sig[1] >> 5)) + ('A' - 1);
-        str[2] = (sig[1] & 0x1f) + ('A' - 1);
-        rev = (sig[2] << 8) | sig[3];
-        sprintf(str + 3, "%04X", rev);
+	str[0] = ((sig[0] >> 2) & 0x1f) + ('A' - 1);
+	str[1] = (((sig[0] & 3) << 3) | (sig[1] >> 5)) + ('A' - 1);
+	str[2] = (sig[1] & 0x1f) + ('A' - 1);
+	rev = (sig[2] << 8) | sig[3];
+	sprintf(str + 3, "%04X", rev);
 
 	return str;
 }
@@ -2874,12 +2874,12 @@ static int __devexit hp100_eisa_remove (struct device *gendev)
 }
 
 static struct eisa_driver hp100_eisa_driver = {
-        .id_table = hp100_eisa_tbl,
-        .driver   = {
-                .name    = "hp100",
-                .probe   = hp100_eisa_probe,
-                .remove  = __devexit_p (hp100_eisa_remove),
-        }
+	.id_table = hp100_eisa_tbl,
+	.driver   = {
+		.name    = "hp100",
+		.probe   = hp100_eisa_probe,
+		.remove  = __devexit_p (hp100_eisa_remove),
+	}
 };
 #endif
 
@@ -2960,7 +2960,7 @@ static struct pci_driver hp100_pci_driver = {
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Jaroslav Kysela <perex@perex.cz>, "
-              "Siegfried \"Frieder\" Loeffler (dg1sek) <floeff@mathematik.uni-stuttgart.de>");
+	      "Siegfried \"Frieder\" Loeffler (dg1sek) <floeff@mathematik.uni-stuttgart.de>");
 MODULE_DESCRIPTION("HP CASCADE Architecture Driver for 100VG-AnyLan Network Adapters");
 
 /*

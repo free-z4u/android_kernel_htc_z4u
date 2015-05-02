@@ -41,7 +41,7 @@
 /* local prototypes */
 static uint _sb_coreidx(si_info_t *sii, uint32 sba);
 static uint _sb_scan(si_info_t *sii, uint32 sba, void *regs, uint bus, uint32 sbba,
-                     uint ncores);
+		     uint ncores);
 static uint32 _sb_coresba(si_info_t *sii);
 static void *_sb_setcoreidx(si_info_t *sii, uint coreidx);
 

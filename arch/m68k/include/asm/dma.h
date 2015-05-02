@@ -194,14 +194,14 @@ static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
     /* 32 bit, 16 bit or 8 bit transfers */
     ((mode & DMA_MODE_WORD_BIT)  ? MCFDMA_DCR_SSIZE_WORD :
      ((mode & DMA_MODE_LONG_BIT) ? MCFDMA_DCR_SSIZE_LONG :
-                                   MCFDMA_DCR_SSIZE_BYTE)) |
+				   MCFDMA_DCR_SSIZE_BYTE)) |
     ((mode & DMA_MODE_WORD_BIT)  ? MCFDMA_DCR_DSIZE_WORD :
      ((mode & DMA_MODE_LONG_BIT) ? MCFDMA_DCR_DSIZE_LONG :
-                                   MCFDMA_DCR_DSIZE_BYTE));
+				   MCFDMA_DCR_DSIZE_BYTE));
 
 #ifdef DEBUG_DMA
   printk("%s(%d): dmanr=%d DSR[%x]=%x DCR[%x]=%x\n", __FILE__, __LINE__,
-         dmanr, (int) &dmabp[MCFDMA_DSR], dmabp[MCFDMA_DSR],
+	 dmanr, (int) &dmabp[MCFDMA_DSR], dmabp[MCFDMA_DSR],
 	 (int) &dmawp[MCFDMA_DCR], dmawp[MCFDMA_DCR]);
 #endif
 }
@@ -387,7 +387,7 @@ static __inline__ void set_dma_mode(unsigned int dmanr, char mode)
 
 #ifdef DEBUG_DMA
   printk("%s(%d): dmanr=%d DMR[%x]=%x DIR[%x]=%x\n", __FILE__, __LINE__,
-         dmanr, (int) &dmalp[MCFDMA_DMR], dmabp[MCFDMA_DMR],
+	 dmanr, (int) &dmalp[MCFDMA_DMR], dmabp[MCFDMA_DMR],
 	 (int) &dmawp[MCFDMA_DIR], dmawp[MCFDMA_DIR]);
 #endif
 }

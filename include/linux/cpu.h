@@ -21,9 +21,9 @@
 struct device;
 
 struct cpu {
-        int node_id;            /* The node which contains the CPU */
-        int hotpluggable;       /* creates sysfs control file if hotpluggable */
-        struct device dev;
+	int node_id;            /* The node which contains the CPU */
+	int hotpluggable;       /* creates sysfs control file if hotpluggable */
+	struct device dev;
 };
 
 extern int register_cpu(struct cpu *cpu, int num);
@@ -48,36 +48,36 @@ struct notifier_block;
 #ifdef CONFIG_ARCH_HAS_CPU_AUTOPROBE
 extern int arch_cpu_uevent(struct device *dev, struct kobj_uevent_env *env);
 extern ssize_t arch_print_cpu_modalias(struct device *dev,
-                                       struct device_attribute *attr,
-                                       char *bufptr);
+				       struct device_attribute *attr,
+				       char *bufptr);
 #endif
 
 /*
  * CPU notifier priorities.
  */
 enum {
-        /*
-         * SCHED_ACTIVE marks a cpu which is coming up active during
-         * CPU_ONLINE and CPU_DOWN_FAILED and must be the first
-         * notifier.  CPUSET_ACTIVE adjusts cpuset according to
-         * cpu_active mask right after SCHED_ACTIVE.  During
-         * CPU_DOWN_PREPARE, SCHED_INACTIVE and CPUSET_INACTIVE are
-         * ordered in the similar way.
-         *
-         * This ordering guarantees consistent cpu_active mask and
-         * migration behavior to all cpu notifiers.
-         */
-        CPU_PRI_SCHED_ACTIVE    = INT_MAX,
-        CPU_PRI_CPUSET_ACTIVE   = INT_MAX - 1,
-        CPU_PRI_SCHED_INACTIVE  = INT_MIN + 1,
-        CPU_PRI_CPUSET_INACTIVE = INT_MIN,
+	/*
+	 * SCHED_ACTIVE marks a cpu which is coming up active during
+	 * CPU_ONLINE and CPU_DOWN_FAILED and must be the first
+	 * notifier.  CPUSET_ACTIVE adjusts cpuset according to
+	 * cpu_active mask right after SCHED_ACTIVE.  During
+	 * CPU_DOWN_PREPARE, SCHED_INACTIVE and CPUSET_INACTIVE are
+	 * ordered in the similar way.
+	 *
+	 * This ordering guarantees consistent cpu_active mask and
+	 * migration behavior to all cpu notifiers.
+	 */
+	CPU_PRI_SCHED_ACTIVE    = INT_MAX,
+	CPU_PRI_CPUSET_ACTIVE   = INT_MAX - 1,
+	CPU_PRI_SCHED_INACTIVE  = INT_MIN + 1,
+	CPU_PRI_CPUSET_INACTIVE = INT_MIN,
 
-        /* migration should happen before other stuff but after perf */
-        CPU_PRI_PERF            = 20,
-        CPU_PRI_MIGRATION       = 10,
-        /* bring up workqueues before normal notifiers and down after */
-        CPU_PRI_WORKQUEUE_UP    = 5,
-        CPU_PRI_WORKQUEUE_DOWN  = -5,
+	/* migration should happen before other stuff but after perf */
+	CPU_PRI_PERF            = 20,
+	CPU_PRI_MIGRATION       = 10,
+	/* bring up workqueues before normal notifiers and down after */
+	CPU_PRI_WORKQUEUE_UP    = 5,
+	CPU_PRI_WORKQUEUE_DOWN  = -5,
 };
 
 #define CPU_ONLINE              0x0002 /* CPU (unsigned)v is up */
@@ -87,16 +87,16 @@ enum {
 #define CPU_DOWN_FAILED         0x0006 /* CPU (unsigned)v NOT going down */
 #define CPU_DEAD                0x0007 /* CPU (unsigned)v dead */
 #define CPU_DYING               0x0008 /* CPU (unsigned)v not running any task,
-                                        * not handling interrupts, soon dead.
-                                        * Called on the dying cpu, interrupts
-                                        * are already disabled. Must not
-                                        * sleep, must not fail */
+					* not handling interrupts, soon dead.
+					* Called on the dying cpu, interrupts
+					* are already disabled. Must not
+					* sleep, must not fail */
 #define CPU_POST_DEAD           0x0009 /* CPU (unsigned)v dead, cpu_hotplug
-                                        * lock is dropped */
+					* lock is dropped */
 #define CPU_STARTING            0x000A /* CPU (unsigned)v soon running.
-                                        * Called on the new cpu, just before
-                                        * enabling interrupts. Must not sleep,
-                                        * must not fail */
+					* Called on the new cpu, just before
+					* enabling interrupts. Must not sleep,
+					* must not fail */
 
 /* Used for CPU hotplug events occurring while tasks are frozen due to a suspend
  * operation in progress
@@ -117,9 +117,9 @@ enum {
 /* Need to know about CPUs going up/down? */
 #if defined(CONFIG_HOTPLUG_CPU) || !defined(MODULE)
 #define cpu_notifier(fn, pri) {                                 \
-        static struct notifier_block fn##_nb __cpuinitdata =    \
-                { .notifier_call = fn, .priority = pri };       \
-        register_cpu_notifier(&fn##_nb);                        \
+	static struct notifier_block fn##_nb __cpuinitdata =    \
+		{ .notifier_call = fn, .priority = pri };       \
+	register_cpu_notifier(&fn##_nb);                        \
 }
 #else /* #if defined(CONFIG_HOTPLUG_CPU) || !defined(MODULE) */
 #define cpu_notifier(fn, pri)   do { (void)(fn); } while (0)
@@ -134,7 +134,7 @@ extern int register_cpu_notifier(struct notifier_block *nb);
 #else
 static inline int register_cpu_notifier(struct notifier_block *nb)
 {
-        return 0;
+	return 0;
 }
 #endif
 
@@ -154,7 +154,7 @@ extern void cpu_maps_update_done(void);
 
 static inline int register_cpu_notifier(struct notifier_block *nb)
 {
-        return 0;
+	return 0;
 }
 
 static inline void unregister_cpu_notifier(struct notifier_block *nb)

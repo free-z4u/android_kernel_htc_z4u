@@ -197,8 +197,8 @@ static void cw_clear_margins(struct vc_data *vc, struct fb_info *info,
 	if (bh) {
 		region.dx = info->var.xoffset;
 		region.dy = info->var.yoffset;
-                region.height = info->var.yres;
-                region.width = bh;
+		region.height = info->var.yres;
+		region.width = bh;
 		info->fbops->fb_fillrect(info, &region);
 	}
 }

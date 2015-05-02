@@ -83,7 +83,7 @@ static u64 acpi_lapic_addr __initdata = APIC_DEFAULT_PHYS_BASE;
 #endif
 
 /* --------------------------------------------------------------------------
-                              Boot-time Configuration
+			      Boot-time Configuration
    -------------------------------------------------------------------------- */
 
 /*

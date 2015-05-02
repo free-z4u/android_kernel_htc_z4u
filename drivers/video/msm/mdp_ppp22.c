@@ -1073,7 +1073,7 @@ int mdp_ppp_cfg_scale(const struct mdp_info *mdp, struct ppp_regs *regs,
 int mdp_ppp_load_blur(const struct mdp_info *mdp)
 {
 	if (!(downscale_x_table == MDP_DOWNSCALE_BLUR &&
-              downscale_y_table == MDP_DOWNSCALE_BLUR)) {
+	      downscale_y_table == MDP_DOWNSCALE_BLUR)) {
 		load_table(mdp, mdp_gaussian_blur_table, 128);
 		downscale_x_table = MDP_DOWNSCALE_BLUR;
 		downscale_y_table = MDP_DOWNSCALE_BLUR;

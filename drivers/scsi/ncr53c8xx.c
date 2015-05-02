@@ -5864,7 +5864,7 @@ static void ncr_log_hard_error(struct ncb *np, u16 sist, u_char dstat)
 
 	printk ("%s: regdump:", ncr_name(np));
 	for (i=0; i<16;i++)
-            printk (" %02x", (unsigned)INB_OFF(i));
+	    printk (" %02x", (unsigned)INB_OFF(i));
 	printk (".\n");
 }
 
@@ -8059,8 +8059,8 @@ printk("ncr53c8xx : command successfully queued\n");
      spin_unlock_irqrestore(&np->smp_lock, flags);
 
      if (sts != DID_OK) {
-          unmap_scsi_data(np, cmd);
-          done(cmd);
+	  unmap_scsi_data(np, cmd);
+	  done(cmd);
 	  sts = 0;
      }
 

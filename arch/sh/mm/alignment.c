@@ -180,10 +180,10 @@ static int __init alignment_init(void)
 	if (!res)
 		return -ENOMEM;
 
-        res = proc_create_data("kernel_alignment", S_IWUSR | S_IRUGO, dir,
+	res = proc_create_data("kernel_alignment", S_IWUSR | S_IRUGO, dir,
 			       &alignment_proc_fops, &se_kernmode_warn);
-        if (!res)
-                return -ENOMEM;
+	if (!res)
+		return -ENOMEM;
 
 	return 0;
 }

@@ -11,10 +11,10 @@ struct beacon_rx {
     UCHAR beacon_intvl[2];
     UCHAR capability[2];
     UCHAR elements[sizeof(struct essid_element)
-                  + sizeof(struct rates_element)
-                  + sizeof(struct freq_hop_element)
-                  + sizeof(struct japan_call_sign_element)
-                  + sizeof(struct tim_element)];
+		  + sizeof(struct rates_element)
+		  + sizeof(struct freq_hop_element)
+		  + sizeof(struct japan_call_sign_element)
+		  + sizeof(struct tim_element)];
 };
 
 /* Return values for get_free{,_tx}_ccs */
@@ -34,8 +34,8 @@ typedef struct ray_dev_t {
     unsigned long ccs_lock;
     int   dl_param_ccs;
     union {
-        struct b4_startup_params b4;
-        struct b5_startup_params b5;
+	struct b4_startup_params b4;
+	struct b5_startup_params b5;
     } sparm;
     int timeout_flag;
     UCHAR supported_rates[8];

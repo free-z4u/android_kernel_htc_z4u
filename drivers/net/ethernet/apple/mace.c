@@ -387,7 +387,7 @@ static void __mace_set_address(struct net_device *dev, void *addr)
     for (i = 0; i < 6; ++i)
 	out_8(&mb->padr, dev->dev_addr[i] = p[i]);
     if (mp->chipid != BROKEN_ADDRCHG_REV)
-        out_8(&mb->iac, 0);
+	out_8(&mb->iac, 0);
 }
 
 static int mace_set_address(struct net_device *dev, void *addr)

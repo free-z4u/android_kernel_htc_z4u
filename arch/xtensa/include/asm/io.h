@@ -114,27 +114,27 @@ static inline void iounmap(void *addr)
 
 static inline __u8 __raw_readb(const volatile void __iomem *addr)
 {
-          return *(__force volatile __u8 *)(addr);
+	  return *(__force volatile __u8 *)(addr);
 }
 static inline __u16 __raw_readw(const volatile void __iomem *addr)
 {
-          return *(__force volatile __u16 *)(addr);
+	  return *(__force volatile __u16 *)(addr);
 }
 static inline __u32 __raw_readl(const volatile void __iomem *addr)
 {
-          return *(__force volatile __u32 *)(addr);
+	  return *(__force volatile __u32 *)(addr);
 }
 static inline void __raw_writeb(__u8 b, volatile void __iomem *addr)
 {
-          *(__force volatile __u8 *)(addr) = b;
+	  *(__force volatile __u8 *)(addr) = b;
 }
 static inline void __raw_writew(__u16 b, volatile void __iomem *addr)
 {
-          *(__force volatile __u16 *)(addr) = b;
+	  *(__force volatile __u16 *)(addr) = b;
 }
 static inline void __raw_writel(__u32 b, volatile void __iomem *addr)
 {
-          *(__force volatile __u32 *)(addr) = b;
+	  *(__force volatile __u32 *)(addr) = b;
 }
 
 /* These are the definitions for the x86 IO instructions

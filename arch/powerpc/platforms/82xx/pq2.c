@@ -36,7 +36,7 @@ void pq2_restart(char *cmd)
 
 #ifdef CONFIG_PCI
 static int pq2_pci_exclude_device(struct pci_controller *hose,
-                                  u_char bus, u8 devfn)
+				  u_char bus, u8 devfn)
 {
 	if (bus == 0 && PCI_SLOT(devfn) == 0)
 		return PCIBIOS_DEVICE_NOT_FOUND;

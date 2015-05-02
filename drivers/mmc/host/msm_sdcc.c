@@ -3810,12 +3810,12 @@ static int msmsdcc_sdc_get_status(struct mmc_host *mmc)
        unsigned int status = 0;
 
        if (host->plat->status || host->plat->status_gpio) {
-               if (host->plat->status)
-                       status = host->plat->status(mmc_dev(host->mmc));
-               else
-                       status = msmsdcc_slot_status(host);
+	       if (host->plat->status)
+		       status = host->plat->status(mmc_dev(host->mmc));
+	       else
+		       status = msmsdcc_slot_status(host);
        } else {
-               pr_debug("%s: fail to get card status %s\n", mmc_hostname(mmc), __func__);
+	       pr_debug("%s: fail to get card status %s\n", mmc_hostname(mmc), __func__);
        }
        return status;
 }
@@ -4800,7 +4800,7 @@ static int msmsdcc_proc_burst_set(struct file *file, const char __user *buffer,
 }
 
 static int msmsdcc_proc_speed_class(char *page, char **start, off_t off,
-               int count, int *eof, void *data)
+	       int count, int *eof, void *data)
 {
 	struct mmc_host *host = (struct mmc_host*) data;
 	if (!host || !host->card)
@@ -5506,7 +5506,7 @@ static void msmsdcc_shutdown(struct platform_device *pdev)
 	host = mmc_priv(mmc);
 	if (host && is_mmc_platform(host->plat)) {
 		pr_info("%s: %s enter\n", mmc_hostname(mmc), __func__);
-        	printk(KERN_INFO "%s: Lock eMMC\n", __func__);
+		printk(KERN_INFO "%s: Lock eMMC\n", __func__);
 		atomic_set(&emmc_reboot, 1);
 
 		pr_info("%s: %s leave\n", mmc_hostname(mmc), __func__);

@@ -322,7 +322,7 @@ int snd_pcm_hw_refine(struct snd_pcm_substream *substream,
 		m = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
 		i = hw_param_interval(params, SNDRV_PCM_HW_PARAM_CHANNELS);
 		if (snd_mask_min(m) == snd_mask_max(m) &&
-                    snd_interval_min(i) == snd_interval_max(i)) {
+		    snd_interval_min(i) == snd_interval_max(i)) {
 			changed = substream->ops->ioctl(substream,
 					SNDRV_PCM_IOCTL1_FIFO_SIZE, params);
 			if (changed < 0)
@@ -556,7 +556,7 @@ static int snd_pcm_sw_params(struct snd_pcm_substream *substream,
 	runtime->stop_threshold = params->stop_threshold;
 	runtime->silence_threshold = params->silence_threshold;
 	runtime->silence_size = params->silence_size;
-        params->boundary = runtime->boundary;
+	params->boundary = runtime->boundary;
 	if (snd_pcm_running(substream)) {
 		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK &&
 		    runtime->silence_size > 0)
@@ -1770,7 +1770,7 @@ static int snd_pcm_hw_rule_sample_bits(struct snd_pcm_hw_params *params,
 #endif
 
 static unsigned int rates[] = { 5512, 8000, 11025, 16000, 22050, 32000, 44100,
-                                 48000, 64000, 88200, 96000, 176400, 192000 };
+				 48000, 64000, 88200, 96000, 176400, 192000 };
 
 const struct snd_pcm_hw_constraint_list snd_pcm_known_rates = {
 	.count = ARRAY_SIZE(rates),
@@ -1930,9 +1930,9 @@ int snd_pcm_hw_constraints_complete(struct snd_pcm_substream *substream)
 	int err;
 	unsigned int mask = 0;
 
-        if (hw->info & SNDRV_PCM_INFO_INTERLEAVED)
+	if (hw->info & SNDRV_PCM_INFO_INTERLEAVED)
 		mask |= 1 << SNDRV_PCM_ACCESS_RW_INTERLEAVED;
-        if (hw->info & SNDRV_PCM_INFO_NONINTERLEAVED)
+	if (hw->info & SNDRV_PCM_INFO_NONINTERLEAVED)
 		mask |= 1 << SNDRV_PCM_ACCESS_RW_NONINTERLEAVED;
 	if (hw->info & SNDRV_PCM_INFO_MMAP) {
 		if (hw->info & SNDRV_PCM_INFO_INTERLEAVED)
@@ -2936,7 +2936,7 @@ static unsigned int snd_pcm_playback_poll(struct file *file, poll_table * wait)
 	struct snd_pcm_file *pcm_file;
 	struct snd_pcm_substream *substream;
 	struct snd_pcm_runtime *runtime;
-        unsigned int mask;
+	unsigned int mask;
 	snd_pcm_uframes_t avail;
 
 	pcm_file = file->private_data;
@@ -2975,7 +2975,7 @@ static unsigned int snd_pcm_capture_poll(struct file *file, poll_table * wait)
 	struct snd_pcm_file *pcm_file;
 	struct snd_pcm_substream *substream;
 	struct snd_pcm_runtime *runtime;
-        unsigned int mask;
+	unsigned int mask;
 	snd_pcm_uframes_t avail;
 
 	pcm_file = file->private_data;

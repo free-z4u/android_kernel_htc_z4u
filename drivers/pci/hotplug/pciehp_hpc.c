@@ -92,7 +92,7 @@ static void start_int_poll_timer(struct controller *ctrl, int sec)
 {
 	/* Clamp to sane value */
 	if ((sec <= 0) || (sec > 60))
-        	sec = 2;
+		sec = 2;
 
 	ctrl->poll_timer.function = &int_poll_timeout;
 	ctrl->poll_timer.data = (unsigned long)ctrl;
@@ -234,7 +234,7 @@ static int pcie_write_cmd(struct controller *ctrl, u16 cmd, u16 mask)
 		if (!(slot_ctrl & PCI_EXP_SLTCTL_HPIE) ||
 		    !(slot_ctrl & PCI_EXP_SLTCTL_CCIE))
 			poll = 1;
-                pcie_wait_cmd(ctrl, poll);
+		pcie_wait_cmd(ctrl, poll);
 	}
  out:
 	mutex_unlock(&ctrl->ctrl_lock);
@@ -315,15 +315,15 @@ int pciehp_check_link_status(struct controller *ctrl)
 	int retval = 0;
 	bool found = false;
 
-        /*
-         * Data Link Layer Link Active Reporting must be capable for
-         * hot-plug capable downstream port. But old controller might
-         * not implement it. In this case, we wait for 1000 ms.
-         */
-        if (ctrl->link_active_reporting)
-                pcie_wait_link_active(ctrl);
-        else
-                msleep(1000);
+	/*
+	 * Data Link Layer Link Active Reporting must be capable for
+	 * hot-plug capable downstream port. But old controller might
+	 * not implement it. In this case, we wait for 1000 ms.
+	 */
+	if (ctrl->link_active_reporting)
+		pcie_wait_link_active(ctrl);
+	else
+		msleep(1000);
 
 	/* wait 100ms before read pci conf, and try in 1s */
 	msleep(100);
@@ -979,15 +979,15 @@ struct controller *pcie_init(struct pcie_device *dev)
 	    !(POWER_CTRL(ctrl) | ATTN_LED(ctrl) | PWR_LED(ctrl) | EMI(ctrl)))
 	    ctrl->no_cmd_complete = 1;
 
-        /* Check if Data Link Layer Link Active Reporting is implemented */
-        if (pciehp_readl(ctrl, PCI_EXP_LNKCAP, &link_cap)) {
-                ctrl_err(ctrl, "%s: Cannot read LNKCAP register\n", __func__);
-                goto abort_ctrl;
-        }
-        if (link_cap & PCI_EXP_LNKCAP_DLLLARC) {
-                ctrl_dbg(ctrl, "Link Active Reporting supported\n");
-                ctrl->link_active_reporting = 1;
-        }
+	/* Check if Data Link Layer Link Active Reporting is implemented */
+	if (pciehp_readl(ctrl, PCI_EXP_LNKCAP, &link_cap)) {
+		ctrl_err(ctrl, "%s: Cannot read LNKCAP register\n", __func__);
+		goto abort_ctrl;
+	}
+	if (link_cap & PCI_EXP_LNKCAP_DLLLARC) {
+		ctrl_dbg(ctrl, "Link Active Reporting supported\n");
+		ctrl->link_active_reporting = 1;
+	}
 
 	/* Clear all remaining event bits in Slot Status register */
 	if (pciehp_writew(ctrl, PCI_EXP_SLTSTA, 0x1f))

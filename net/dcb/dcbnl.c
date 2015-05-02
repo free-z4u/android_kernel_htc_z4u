@@ -197,7 +197,7 @@ static DEFINE_SPINLOCK(dcb_lock);
 
 /* standard netlink reply call */
 static int dcbnl_reply(u8 value, u8 event, u8 cmd, u8 attr, u32 pid,
-                       u32 seq, u16 flags)
+		       u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct dcbmsg *dcb;
@@ -233,7 +233,7 @@ err:
 }
 
 static int dcbnl_getstate(struct net_device *netdev, struct nlattr **tb,
-                          u32 pid, u32 seq, u16 flags)
+			  u32 pid, u32 seq, u16 flags)
 {
 	int ret = -EINVAL;
 
@@ -248,7 +248,7 @@ static int dcbnl_getstate(struct net_device *netdev, struct nlattr **tb,
 }
 
 static int dcbnl_getpfccfg(struct net_device *netdev, struct nlattr **tb,
-                           u32 pid, u32 seq, u16 flags)
+			   u32 pid, u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -315,7 +315,7 @@ err_out:
 }
 
 static int dcbnl_getperm_hwaddr(struct net_device *netdev, struct nlattr **tb,
-                                u32 pid, u32 seq, u16 flags)
+				u32 pid, u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -356,7 +356,7 @@ err_out:
 }
 
 static int dcbnl_getcap(struct net_device *netdev, struct nlattr **tb,
-                        u32 pid, u32 seq, u16 flags)
+			u32 pid, u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -422,7 +422,7 @@ err_out:
 }
 
 static int dcbnl_getnumtcs(struct net_device *netdev, struct nlattr **tb,
-                           u32 pid, u32 seq, u16 flags)
+			   u32 pid, u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -500,7 +500,7 @@ err_out:
 }
 
 static int dcbnl_setnumtcs(struct net_device *netdev, struct nlattr **tb,
-                           u32 pid, u32 seq, u16 flags)
+			   u32 pid, u32 seq, u16 flags)
 {
 	struct nlattr *data[DCB_NUMTCS_ATTR_MAX + 1];
 	int ret = -EINVAL;
@@ -539,7 +539,7 @@ err:
 }
 
 static int dcbnl_getpfcstate(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags)
+			     u32 pid, u32 seq, u16 flags)
 {
 	int ret = -EINVAL;
 
@@ -554,7 +554,7 @@ static int dcbnl_getpfcstate(struct net_device *netdev, struct nlattr **tb,
 }
 
 static int dcbnl_setpfcstate(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags)
+			     u32 pid, u32 seq, u16 flags)
 {
 	int ret = -EINVAL;
 	u8 value;
@@ -573,7 +573,7 @@ static int dcbnl_setpfcstate(struct net_device *netdev, struct nlattr **tb,
 }
 
 static int dcbnl_getapp(struct net_device *netdev, struct nlattr **tb,
-                        u32 pid, u32 seq, u16 flags)
+			u32 pid, u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -660,7 +660,7 @@ out:
 }
 
 static int dcbnl_setapp(struct net_device *netdev, struct nlattr **tb,
-                        u32 pid, u32 seq, u16 flags)
+			u32 pid, u32 seq, u16 flags)
 {
 	int err, ret = -EINVAL;
 	u16 id;
@@ -708,7 +708,7 @@ out:
 }
 
 static int __dcbnl_pg_getcfg(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags, int dir)
+			     u32 pid, u32 seq, u16 flags, int dir)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -865,19 +865,19 @@ err_out:
 }
 
 static int dcbnl_pgtx_getcfg(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags)
+			     u32 pid, u32 seq, u16 flags)
 {
 	return __dcbnl_pg_getcfg(netdev, tb, pid, seq, flags, 0);
 }
 
 static int dcbnl_pgrx_getcfg(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags)
+			     u32 pid, u32 seq, u16 flags)
 {
 	return __dcbnl_pg_getcfg(netdev, tb, pid, seq, flags, 1);
 }
 
 static int dcbnl_setstate(struct net_device *netdev, struct nlattr **tb,
-                          u32 pid, u32 seq, u16 flags)
+			  u32 pid, u32 seq, u16 flags)
 {
 	int ret = -EINVAL;
 	u8 value;
@@ -895,7 +895,7 @@ static int dcbnl_setstate(struct net_device *netdev, struct nlattr **tb,
 }
 
 static int dcbnl_setpfccfg(struct net_device *netdev, struct nlattr **tb,
-                           u32 pid, u32 seq, u16 flags)
+			   u32 pid, u32 seq, u16 flags)
 {
 	struct nlattr *data[DCB_PFC_UP_ATTR_MAX + 1];
 	int i;
@@ -926,7 +926,7 @@ err:
 }
 
 static int dcbnl_setall(struct net_device *netdev, struct nlattr **tb,
-                        u32 pid, u32 seq, u16 flags)
+			u32 pid, u32 seq, u16 flags)
 {
 	int ret = -EINVAL;
 
@@ -940,7 +940,7 @@ static int dcbnl_setall(struct net_device *netdev, struct nlattr **tb,
 }
 
 static int __dcbnl_pg_setcfg(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags, int dir)
+			     u32 pid, u32 seq, u16 flags, int dir)
 {
 	struct nlattr *pg_tb[DCB_PG_ATTR_MAX + 1];
 	struct nlattr *param_tb[DCB_TC_ATTR_PARAM_MAX + 1];
@@ -1032,19 +1032,19 @@ err:
 }
 
 static int dcbnl_pgtx_setcfg(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags)
+			     u32 pid, u32 seq, u16 flags)
 {
 	return __dcbnl_pg_setcfg(netdev, tb, pid, seq, flags, 0);
 }
 
 static int dcbnl_pgrx_setcfg(struct net_device *netdev, struct nlattr **tb,
-                             u32 pid, u32 seq, u16 flags)
+			     u32 pid, u32 seq, u16 flags)
 {
 	return __dcbnl_pg_setcfg(netdev, tb, pid, seq, flags, 1);
 }
 
 static int dcbnl_bcn_getcfg(struct net_device *netdev, struct nlattr **tb,
-                            u32 pid, u32 seq, u16 flags)
+			    u32 pid, u32 seq, u16 flags)
 {
 	struct sk_buff *dcbnl_skb;
 	struct nlmsghdr *nlh;
@@ -1127,7 +1127,7 @@ err_out:
 }
 
 static int dcbnl_bcn_setcfg(struct net_device *netdev, struct nlattr **tb,
-                            u32 pid, u32 seq, u16 flags)
+			    u32 pid, u32 seq, u16 flags)
 {
 	struct nlattr *data[DCB_BCN_ATTR_MAX + 1];
 	int i;

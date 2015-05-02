@@ -226,7 +226,7 @@ MODULE_SUPPORTED_DEVICE("{{RME HDSPM-MADI}}");
 #define HDSPM_Emphasis    (1<<10) /* Emphasis */ /* AES32 ONLY */
 
 #define HDSPM_AutoInp     (1<<11) /* Auto Input (takeover) == Safe Mode,
-                                     0=off, 1=on  */ /* MADI ONLY */
+				     0=off, 1=on  */ /* MADI ONLY */
 #define HDSPM_Dolby       (1<<11) /* Dolby = "NonAudio" ?? */ /* AES32 ONLY */
 
 #define HDSPM_InputSelect0 (1<<14) /* Input select 0= optical, 1=coax
@@ -239,7 +239,7 @@ MODULE_SUPPORTED_DEVICE("{{RME HDSPM-MADI}}");
 
 #define HDSPM_SMUX         (1<<18) /* Frame ??? */ /* MADI ONY */
 #define HDSPM_clr_tms      (1<<19) /* clear track marker, do not use
-                                      AES additional bits in
+				      AES additional bits in
 				      lower 5 Audiodatabits ??? */
 #define HDSPM_taxi_reset   (1<<20) /* ??? */ /* MADI ONLY ? */
 #define HDSPM_WCK48        (1<<20) /* Frame ??? = HDSPM_SMUX */ /* AES32 ONLY */
@@ -860,10 +860,10 @@ struct hdspm_tco {
 };
 
 struct hdspm {
-        spinlock_t lock;
+	spinlock_t lock;
 	/* only one playback and/or capture stream */
-        struct snd_pcm_substream *capture_substream;
-        struct snd_pcm_substream *playback_substream;
+	struct snd_pcm_substream *capture_substream;
+	struct snd_pcm_substream *playback_substream;
 
 	char *card_name;	     /* for procinfo */
 	unsigned short firmware_rev; /* dont know if relevant (yes if AES32)*/

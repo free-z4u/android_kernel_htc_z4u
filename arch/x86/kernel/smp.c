@@ -287,8 +287,8 @@ void smp_call_function_single_interrupt(struct pt_regs *regs)
 
 static int __init nonmi_ipi_setup(char *str)
 {
-        native_smp_disable_nmi_ipi();
-        return 1;
+	native_smp_disable_nmi_ipi();
+	return 1;
 }
 
 __setup("nonmi_ipi", nonmi_ipi_setup);

@@ -65,7 +65,7 @@ static const u_int num_chip_names = ARRAY_SIZE(ahd_chip_names);
  * Hardware error codes.
  */
 struct ahd_hard_error_entry {
-        uint8_t errno;
+	uint8_t errno;
 	const char *errmesg;
 };
 
@@ -2339,7 +2339,7 @@ ahd_handle_seqint(struct ahd_softc *ahd, u_int intstat)
 			/*
 			 * Remove the second instance of this SCB from
 			 * the QINFIFO if it is still there.
-                         */
+			 */
 			ahd_print_path(ahd, scb);
 			printk("SCB completes before TMF\n");
 			/*
@@ -10201,7 +10201,7 @@ ahd_acquire_seeprom(struct ahd_softc *ahd)
 
 	error = ahd_read_flexport(ahd, FLXADDR_ROMSTAT_CURSENSECTL, &seetype);
 	if (error != 0
-         || ((seetype & FLX_ROMSTAT_SEECFG) == FLX_ROMSTAT_SEE_NONE))
+	 || ((seetype & FLX_ROMSTAT_SEECFG) == FLX_ROMSTAT_SEE_NONE))
 		return (0);
 	return (1);
 #endif

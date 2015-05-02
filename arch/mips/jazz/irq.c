@@ -111,7 +111,7 @@ asmlinkage void plat_irq_dispatch(void)
 }
 
 static void r4030_set_mode(enum clock_event_mode mode,
-                           struct clock_event_device *evt)
+			   struct clock_event_device *evt)
 {
 	/* Nothing to do ...  */
 }

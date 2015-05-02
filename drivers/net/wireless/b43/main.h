@@ -3,10 +3,10 @@
   Broadcom B43 wireless driver
 
   Copyright (c) 2005 Martin Langer <martin-langer@gmx.de>,
-                     Stefano Brivio <stefano.brivio@polimi.it>
-                     Michael Buesch <m@bues.ch>
-                     Danny van Dyk <kugelfang@gentoo.org>
-                     Andreas Jaggi <andreas.jaggi@waterwave.ch>
+		     Stefano Brivio <stefano.brivio@polimi.it>
+		     Michael Buesch <m@bues.ch>
+		     Danny van Dyk <kugelfang@gentoo.org>
+		     Andreas Jaggi <andreas.jaggi@waterwave.ch>
 
   Some parts of the code in this file are derived from the ipw2200
   driver  Copyright(c) 2003 - 2004 Intel Corporation.

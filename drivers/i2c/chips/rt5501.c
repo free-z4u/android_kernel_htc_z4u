@@ -395,29 +395,29 @@ static int init_rt5501(void)
     ret = rt5501_i2c_write(RT5501_AMP_INIT.reg, RT5501_AMP_INIT.reg_len);
 
     if(ret < 0) {
-        pr_err("init rt5501 error %d\n",ret);
-        return ret;
+	pr_err("init rt5501 error %d\n",ret);
+	return ret;
     }
 #if 0
     ret = rt5501_i2c_write(RT5501_AMP_ON.reg, RT5501_AMP_ON.reg_len);
 
     if(ret < 0) {
-        pr_err("init rt5501 to playback error %d\n",ret);
-        return ret;
+	pr_err("init rt5501 to playback error %d\n",ret);
+	return ret;
     }
 
     ret = rt5501_i2c_write(RT5501_AMP_MUTE.reg, RT5501_AMP_MUTE.reg_len);
 
     if(ret < 0) {
-        pr_err("init rt5501 to mute error %d\n",ret);
-        return ret;
+	pr_err("init rt5501 to mute error %d\n",ret);
+	return ret;
     }
 
     ret = rt5501_i2c_write(RT5501_AMP_OFF.reg, RT5501_AMP_OFF.reg_len);
 
     if(ret < 0) {
-        pr_err("init rt5501 to off error %d\n",ret);
-        return ret;
+	pr_err("init rt5501 to off error %d\n",ret);
+	return ret;
     }
 #endif
     return ret;
@@ -923,7 +923,7 @@ err2:
 			pr_err("%s: RT5501_SET_AMP wrong on off param: %d\n", __func__, rt5501_onoff);
 			rc = -EINVAL;
 		}
-        break;
+	break;
 
 	default:
 		pr_err("%s: Invalid command\n", __func__);

@@ -25,8 +25,8 @@
  */
 
 #define PRODIGY_HIFI_DEVICE_DESC 	       "{Audiotrak,Prodigy 7.1 HIFI},"\
-                                           "{Audiotrak Prodigy HD2},"\
-                                           "{Hercules Fortissimo IV},"
+					   "{Audiotrak Prodigy HD2},"\
+					   "{Hercules Fortissimo IV},"
 
 #define VT1724_SUBDEVICE_PRODIGY_HIFI	0x38315441	/* PRODIGY 7.1 HIFI */
 #define VT1724_SUBDEVICE_PRODIGY_HD2	0x37315441	/* PRODIGY HD2 */

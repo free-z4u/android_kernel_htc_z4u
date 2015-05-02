@@ -10,11 +10,11 @@ enum km_type {
 	__KM_DTLB_PTD,		/* current data TLB miss page table lookup */
 
 	/* general kmaps */
-        KM_BOUNCE_READ,
-        KM_SKB_SUNRPC_DATA,
-        KM_SKB_DATA_SOFTIRQ,
-        KM_USER0,
-        KM_USER1,
+	KM_BOUNCE_READ,
+	KM_SKB_SUNRPC_DATA,
+	KM_SKB_DATA_SOFTIRQ,
+	KM_USER0,
+	KM_USER1,
 	KM_BIO_SRC_IRQ,
 	KM_BIO_DST_IRQ,
 	KM_PTE0,

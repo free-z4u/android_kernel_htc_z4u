@@ -130,25 +130,25 @@ struct usbdevfs_hub_portinfo {
 #include <linux/compat.h>
 
 struct usbdevfs_ctrltransfer32 {
-        u8 bRequestType;
-        u8 bRequest;
-        u16 wValue;
-        u16 wIndex;
-        u16 wLength;
-        u32 timeout;  /* in milliseconds */
-        compat_caddr_t data;
+	u8 bRequestType;
+	u8 bRequest;
+	u16 wValue;
+	u16 wIndex;
+	u16 wLength;
+	u32 timeout;  /* in milliseconds */
+	compat_caddr_t data;
 };
 
 struct usbdevfs_bulktransfer32 {
-        compat_uint_t ep;
-        compat_uint_t len;
-        compat_uint_t timeout; /* in milliseconds */
-        compat_caddr_t data;
+	compat_uint_t ep;
+	compat_uint_t len;
+	compat_uint_t timeout; /* in milliseconds */
+	compat_caddr_t data;
 };
 
 struct usbdevfs_disconnectsignal32 {
-        compat_int_t signr;
-        compat_caddr_t context;
+	compat_int_t signr;
+	compat_caddr_t context;
 };
 
 struct usbdevfs_urb32 {

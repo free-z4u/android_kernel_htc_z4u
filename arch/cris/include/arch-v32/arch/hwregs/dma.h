@@ -74,26 +74,26 @@ typedef struct dma_descr_data {
 // enable DMA channel
 #define DMA_ENABLE( inst ) \
    do { reg_dma_rw_cfg e = REG_RD( dma, inst, rw_cfg );\
-        e.en = regk_dma_yes; \
-        REG_WR( dma, inst, rw_cfg, e); } while( 0 )
+	e.en = regk_dma_yes; \
+	REG_WR( dma, inst, rw_cfg, e); } while( 0 )
 
 // reset DMA channel
 #define DMA_RESET( inst ) \
    do { reg_dma_rw_cfg r = REG_RD( dma, inst, rw_cfg );\
-        r.en = regk_dma_no; \
-        REG_WR( dma, inst, rw_cfg, r); } while( 0 )
+	r.en = regk_dma_no; \
+	REG_WR( dma, inst, rw_cfg, r); } while( 0 )
 
 // stop DMA channel
 #define DMA_STOP( inst ) \
    do { reg_dma_rw_cfg s = REG_RD( dma, inst, rw_cfg );\
-        s.stop = regk_dma_yes; \
-        REG_WR( dma, inst, rw_cfg, s); } while( 0 )
+	s.stop = regk_dma_yes; \
+	REG_WR( dma, inst, rw_cfg, s); } while( 0 )
 
 // continue DMA channel operation
 #define DMA_CONTINUE( inst ) \
    do { reg_dma_rw_cfg c = REG_RD( dma, inst, rw_cfg );\
-        c.stop = regk_dma_no; \
-        REG_WR( dma, inst, rw_cfg, c); } while( 0 )
+	c.stop = regk_dma_no; \
+	REG_WR( dma, inst, rw_cfg, c); } while( 0 )
 
 // give stream command
 #define DMA_WR_CMD( inst, cmd_par ) \
@@ -106,16 +106,16 @@ typedef struct dma_descr_data {
 // load: g,c,d:burst
 #define DMA_START_GROUP( inst, group_descr ) \
    do { REG_WR_INT( dma, inst, rw_group, (int) group_descr ); \
-        DMA_WR_CMD( inst, regk_dma_load_g ); \
-        DMA_WR_CMD( inst, regk_dma_load_c ); \
-        DMA_WR_CMD( inst, regk_dma_load_d | regk_dma_burst ); \
+	DMA_WR_CMD( inst, regk_dma_load_g ); \
+	DMA_WR_CMD( inst, regk_dma_load_c ); \
+	DMA_WR_CMD( inst, regk_dma_load_d | regk_dma_burst ); \
       } while( 0 )
 
 // load: c,d:burst
 #define DMA_START_CONTEXT( inst, ctx_descr ) \
    do { REG_WR_INT( dma, inst, rw_group_down, (int) ctx_descr ); \
-        DMA_WR_CMD( inst, regk_dma_load_c ); \
-        DMA_WR_CMD( inst, regk_dma_load_d | regk_dma_burst ); \
+	DMA_WR_CMD( inst, regk_dma_load_c ); \
+	DMA_WR_CMD( inst, regk_dma_load_d | regk_dma_burst ); \
       } while( 0 )
 
 // if the DMA is at the end of the data list, the last data descr is reloaded

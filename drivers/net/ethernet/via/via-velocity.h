@@ -595,9 +595,9 @@ enum  velocity_owner {
 /* 0x0013FB0FUL  =  initial value of IMR */
 
 #define INT_MASK_DEF        (IMR_PPTXIM|IMR_PPRXIM|IMR_PTXIM|IMR_PRXIM|\
-                            IMR_PWEIM|IMR_TXWB0IM|IMR_TXWB1IM|IMR_FLONIM|\
-                            IMR_OVFIM|IMR_LSTEIM|IMR_LSTPEIM|IMR_SRCIM|IMR_MIBFIM|\
-                            IMR_SHDNIM|IMR_TMR1IM|IMR_TMR0IM|IMR_TXSTLM)
+			    IMR_PWEIM|IMR_TXWB0IM|IMR_TXWB1IM|IMR_FLONIM|\
+			    IMR_OVFIM|IMR_LSTEIM|IMR_LSTPEIM|IMR_SRCIM|IMR_MIBFIM|\
+			    IMR_SHDNIM|IMR_TMR1IM|IMR_TMR0IM|IMR_TXSTLM)
 
 /*
  *	Bits in the TDCSR0/1, RDCSR0 register
@@ -1327,7 +1327,7 @@ enum velocity_msg_level {
 #define VELOCITY_PRT_CAMMASK(p,t) {\
 	int i;\
 	if ((t)==VELOCITY_MULTICAST_CAM) {\
-        	for (i=0;i<(MCAM_SIZE/8);i++)\
+		for (i=0;i<(MCAM_SIZE/8);i++)\
 			printk("%02X",(p)->mCAMmask[i]);\
 	}\
 	else {\

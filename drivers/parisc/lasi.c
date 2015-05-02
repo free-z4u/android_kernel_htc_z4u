@@ -68,7 +68,7 @@ lasi_init_irq(struct gsc_asic *this_lasi)
 	gsc_readl(lasi_base+OFFSET_IRR);
 
 	/* We're not really convinced we want to reset the onboard
-         * devices. Firmware does it for us...
+	 * devices. Firmware does it for us...
 	 */
 
 	/* Resets */

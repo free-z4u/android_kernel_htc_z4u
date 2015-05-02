@@ -802,7 +802,7 @@
 
 #define PHY_PAGE_SHIFT 5
 #define PHY_REG(page, reg) (((page) << PHY_PAGE_SHIFT) | \
-                           ((reg) & MAX_PHY_REG_ADDRESS))
+			   ((reg) & MAX_PHY_REG_ADDRESS))
 
 /*
  * Bits...

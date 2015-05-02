@@ -1110,7 +1110,7 @@ struct timex32 {
 
 SYSCALL_DEFINE1(old_adjtimex, struct timex32 __user *, txc_p)
 {
-        struct timex txc;
+	struct timex txc;
 	int ret;
 
 	/* copy relevant bits of struct timex. */

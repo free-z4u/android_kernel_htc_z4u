@@ -583,7 +583,7 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
 		if (!nbd->sock)
 			return -EINVAL;
 		nbd_send_req(nbd, &sreq);
-                return 0;
+		return 0;
 	}
 
 	case NBD_CLEAR_SOCK: {

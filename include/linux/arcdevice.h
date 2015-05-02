@@ -90,8 +90,8 @@ extern int arcnet_debug;
 #define BUGMSG2(x,msg,args...) do { BUGLVL(x) printk(msg, ## args); } while (0)
 #define BUGMSG(x,msg,args...) \
 	BUGMSG2(x, "%s%6s: " msg, \
-            x==D_NORMAL	? KERN_WARNING \
-            		: x < D_DURING ? KERN_INFO : KERN_DEBUG, \
+	    x==D_NORMAL	? KERN_WARNING \
+	    		: x < D_DURING ? KERN_INFO : KERN_DEBUG, \
 	    dev->name , ## args)
 
 /* see how long a function call takes to run, expressed in CPU cycles */

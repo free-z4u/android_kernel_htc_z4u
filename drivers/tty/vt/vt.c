@@ -2245,17 +2245,17 @@ rescan_last_byte:
 					&param) == NOTIFY_STOP)
 			continue;
 
-                /* If the original code was a control character we
-                 * only allow a glyph to be displayed if the code is
-                 * not normally used (such as for cursor movement) or
-                 * if the disp_ctrl mode has been explicitly enabled.
-                 * Certain characters (as given by the CTRL_ALWAYS
-                 * bitmap) are always displayed as control characters,
-                 * as the console would be pretty useless without
-                 * them; to display an arbitrary font position use the
-                 * direct-to-font zone in UTF-8 mode.
-                 */
-                ok = tc && (c >= 32 ||
+		/* If the original code was a control character we
+		 * only allow a glyph to be displayed if the code is
+		 * not normally used (such as for cursor movement) or
+		 * if the disp_ctrl mode has been explicitly enabled.
+		 * Certain characters (as given by the CTRL_ALWAYS
+		 * bitmap) are always displayed as control characters,
+		 * as the console would be pretty useless without
+		 * them; to display an arbitrary font position use the
+		 * direct-to-font zone in UTF-8 mode.
+		 */
+		ok = tc && (c >= 32 ||
 			    !(vc->vc_disp_ctrl ? (CTRL_ALWAYS >> c) & 1 :
 				  vc->vc_utf || ((CTRL_ACTION >> c) & 1)))
 			&& (c != 127 || vc->vc_disp_ctrl)

@@ -960,7 +960,7 @@ static int pcxhr_iec958_get(struct snd_kcontrol *kcontrol,
 		ucontrol->value.iec958.status[i] = aes_bits;
 	}
 	mutex_unlock(&chip->mgr->mixer_mutex);
-        return 0;
+	return 0;
 }
 
 static int pcxhr_iec958_mask_get(struct snd_kcontrol *kcontrol,
@@ -969,7 +969,7 @@ static int pcxhr_iec958_mask_get(struct snd_kcontrol *kcontrol,
 	int i;
 	for (i = 0; i < 5; i++)
 		ucontrol->value.iec958.status[i] = 0xff;
-        return 0;
+	return 0;
 }
 
 static int pcxhr_iec958_update_byte(struct snd_pcxhr *chip,

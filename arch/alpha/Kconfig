@@ -48,7 +48,7 @@ config GENERIC_CALIBRATE_DELAY
 	default y
 
 config GENERIC_CMOS_UPDATE
-        def_bool y
+	def_bool y
 
 config GENERIC_GPIO
 	bool
@@ -548,7 +548,7 @@ config NR_CPUS
 	default "4" if !ALPHA_GENERIC && !ALPHA_MARVEL
 	help
 	  MARVEL support can handle a maximum of 32 CPUs, all the others
-          with working support have a maximum of 4 CPUs.
+	  with working support have a maximum of 4 CPUs.
 
 config ARCH_DISCONTIGMEM_ENABLE
 	bool "Discontiguous Memory Support (EXPERIMENTAL)"

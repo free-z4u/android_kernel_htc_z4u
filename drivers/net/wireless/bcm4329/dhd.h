@@ -334,7 +334,7 @@ extern int dhd_timeout_expired(dhd_timeout_t *tmo);
 extern int dhd_ifname2idx(struct dhd_info *dhd, char *name);
 extern uint8 *dhd_bssidx2bssid(dhd_pub_t *dhd, int idx);
 extern int wl_host_event(struct dhd_info *dhd, int *idx, void *pktdata,
-                         wl_event_msg_t *, void **data_ptr);
+			 wl_event_msg_t *, void **data_ptr);
 extern void wl_event_to_host_order(wl_event_msg_t * evt);
 
 extern void dhd_common_init(void);

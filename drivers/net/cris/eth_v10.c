@@ -153,7 +153,7 @@ enum duplex
 					  IO_STATE_(reg##_, field##_, _##val)
 
 static etrax_eth_descr *myNextRxDesc;  /* Points to the next descriptor to
-                                          to be processed */
+					  to be processed */
 static etrax_eth_descr *myLastRxDesc;  /* The last processed descriptor */
 
 static etrax_eth_descr RxDescList[NBR_OF_RX_DESC] __attribute__ ((aligned(32)));
@@ -247,7 +247,7 @@ struct transceiver_ops transceivers[] =
 	{0x1018, broadcom_check_speed, broadcom_check_duplex},  /* Broadcom */
 	{0xC039, tdk_check_speed, tdk_check_duplex},            /* TDK 2120 */
 	{0x039C, tdk_check_speed, tdk_check_duplex},            /* TDK 2120C */
-        {0x04de, intel_check_speed, intel_check_duplex},     	/* Intel LXT972A*/
+	{0x04de, intel_check_speed, intel_check_duplex},     	/* Intel LXT972A*/
 	{0x0000, generic_check_speed, generic_check_duplex}     /* Generic, must be last */
 #endif
 };
@@ -285,7 +285,7 @@ static int __init
 etrax_ethernet_init(void)
 {
 	struct net_device *dev;
-        struct net_local* np;
+	struct net_local* np;
 	int i, err;
 
 	printk(KERN_INFO
@@ -393,10 +393,10 @@ etrax_ethernet_init(void)
 	full_duplex = 0;
 	current_duplex = autoneg;
 	duplex_timer.expires = jiffies + NET_DUPLEX_CHECK_INTERVAL;
-        duplex_timer.data = (unsigned long)dev;
+	duplex_timer.data = (unsigned long)dev;
 	duplex_timer.function = e100_check_duplex;
 
-        /* Initialize mii interface */
+	/* Initialize mii interface */
 	np->mii_if.phy_id_mask = 0x1f;
 	np->mii_if.reg_num_mask = 0x1f;
 	np->mii_if.dev = dev;
@@ -519,14 +519,14 @@ e100_open(struct net_device *dev)
 	                     DMA_VERBOSE_ON_ERROR,
 	                     dma_eth)) {
 		goto grace_exit3;
-        }
+	}
 
 	if (cris_request_dma(NETWORK_RX_DMA_NBR,
 	                     cardname,
 	                     DMA_VERBOSE_ON_ERROR,
 	                     dma_eth)) {
 		goto grace_exit4;
-        }
+	}
 
 	/* give the HW an idea of what MAC address we want */
 
@@ -1179,7 +1179,7 @@ e100rxtx_interrupt(int irq, void *dev_id)
 		dev_kfree_skb_irq(myFirstTxDesc->skb);
 		myFirstTxDesc->skb = 0;
 		myFirstTxDesc = phys_to_virt(myFirstTxDesc->descr.next);
-                /* Wake up queue. */
+		/* Wake up queue. */
 		netif_wake_queue(dev);
 	}
 
@@ -1377,7 +1377,7 @@ e100_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 	struct mii_ioctl_data *data = if_mii(ifr);
 	struct net_local *np = netdev_priv(dev);
 	int rc = 0;
-        int old_autoneg;
+	int old_autoneg;
 
 	spin_lock(&np->lock); /* Preempt protection */
 	switch (cmd) {
@@ -1657,9 +1657,9 @@ e100_hardware_send_packet(struct net_local *np, char *buf, int length)
 	myNextTxDesc->descr.ctrl = d_eop | d_eol | d_wait;
 	myNextTxDesc->descr.buf = virt_to_phys(buf);
 
-        /* Move end of list */
-        myLastTxDesc->descr.ctrl &= ~d_eol;
-        myLastTxDesc = myNextTxDesc;
+	/* Move end of list */
+	myLastTxDesc->descr.ctrl &= ~d_eol;
+	myLastTxDesc = myNextTxDesc;
 
 	/* Restart DMA channel */
 	*R_DMA_CH0_CMD = IO_STATE(R_DMA_CH0_CMD, cmd, restart);

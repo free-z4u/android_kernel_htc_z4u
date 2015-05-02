@@ -710,7 +710,7 @@ struct ipw_rx_packet {
 
 #define IPW_RX_NOTIFICATION_SIZE sizeof(struct ipw_rx_header) + 12
 #define IPW_RX_FRAME_SIZE        (unsigned int)(sizeof(struct ipw_rx_header) + \
-                                 sizeof(struct ipw_rx_frame))
+				 sizeof(struct ipw_rx_frame))
 
 struct ipw_rx_mem_buffer {
 	dma_addr_t dma_addr;
@@ -1398,13 +1398,13 @@ BIT_ARG16(x)
 #define IPW_DEBUG(level, fmt, args...) \
 do { if (ipw_debug_level & (level)) \
   printk(KERN_DEBUG DRV_NAME": %c %s " fmt, \
-         in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
+	 in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
 
 #ifdef CONFIG_IPW2200_DEBUG
 #define IPW_LL_DEBUG(level, fmt, args...) \
 do { if (ipw_debug_level & (level)) \
   printk(KERN_DEBUG DRV_NAME": %c %s " fmt, \
-         in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
+	 in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
 #else
 #define IPW_LL_DEBUG(level, fmt, args...) do {} while (0)
 #endif				/* CONFIG_IPW2200_DEBUG */
@@ -1712,7 +1712,7 @@ do { if (ipw_debug_level & (level)) \
 
 /* Interrupts enabled at init time. */
 #define IPW_INTA_MASK_ALL                        \
-        (IPW_INTA_BIT_TX_QUEUE_1               | \
+	(IPW_INTA_BIT_TX_QUEUE_1               | \
 	 IPW_INTA_BIT_TX_QUEUE_2               | \
 	 IPW_INTA_BIT_TX_QUEUE_3               | \
 	 IPW_INTA_BIT_TX_QUEUE_4               | \
@@ -1726,7 +1726,7 @@ do { if (ipw_debug_level & (level)) \
 	 IPW_INTA_BIT_SLAVE_MODE_HOST_CMD_DONE | \
 	 IPW_INTA_BIT_PREPARE_FOR_POWER_DOWN   | \
 	 IPW_INTA_BIT_POWER_DOWN               | \
-         IPW_INTA_BIT_RF_KILL_DONE )
+	 IPW_INTA_BIT_RF_KILL_DONE )
 
 /* FW event log definitions */
 #define EVENT_ELEM_SIZE     (3 * sizeof(u32))

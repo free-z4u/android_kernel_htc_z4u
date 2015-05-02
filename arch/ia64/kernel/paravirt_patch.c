@@ -27,13 +27,13 @@
 #include <asm/paravirt_patch.h>
 
 typedef union ia64_inst {
-        struct {
+	struct {
 		unsigned long long qp : 6;
 		unsigned long long : 31;
 		unsigned long long opcode : 4;
 		unsigned long long reserved : 23;
-        } generic;
-        unsigned long long l;
+	} generic;
+	unsigned long long l;
 } ia64_inst_t;
 
 /*

@@ -239,11 +239,11 @@ static struct tgfx __init *tgfx_probe(int parport, int *n_buttons, int n_devs)
 			goto err_free_dev;
 	}
 
-        if (!tgfx->sticks) {
+	if (!tgfx->sticks) {
 		printk(KERN_ERR "turbografx.c: No valid devices specified\n");
 		err = -EINVAL;
 		goto err_free_tgfx;
-        }
+	}
 
 	parport_put_port(pp);
 	return tgfx;

@@ -82,7 +82,7 @@
 #define bond_for_each_slave_from(bond, pos, cnt, start)	\
 	for (cnt = 0, pos = start;				\
 	     cnt < (bond)->slave_cnt;				\
-             cnt++, pos = (pos)->next)
+	     cnt++, pos = (pos)->next)
 
 /**
  * bond_for_each_slave_from_to - iterate the slaves list from start point to stop point
@@ -97,7 +97,7 @@
 #define bond_for_each_slave_from_to(bond, pos, cnt, start, stop)	\
 	for (cnt = 0, pos = start;					\
 	     ((cnt < (bond)->slave_cnt) && (pos != (stop)->next));	\
-             cnt++, pos = (pos)->next)
+	     cnt++, pos = (pos)->next)
 
 /**
  * bond_for_each_slave - iterate the slaves list from head

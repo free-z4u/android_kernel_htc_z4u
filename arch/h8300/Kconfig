@@ -51,8 +51,8 @@ config GENERIC_CALIBRATE_DELAY
 	default y
 
 config GENERIC_BUG
-        bool
-        depends on BUG
+	bool
+	depends on BUG
 
 config TIME_LOW_RES
 	bool

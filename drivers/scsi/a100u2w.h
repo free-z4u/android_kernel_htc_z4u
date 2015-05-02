@@ -167,7 +167,7 @@ struct orc_scb {	/* Scsi_Ctrl_Blk                */
 	u32 sense_addr;	/*34 Sense Buffer physical Addr */
 
 	struct orc_extended_scb *escb; /*38 Extended SCB Pointer       */
-        /* 64bit pointer or 32bit pointer + reserved ? */
+	/* 64bit pointer or 32bit pointer + reserved ? */
 #ifndef CONFIG_64BIT
 	u8 reserved2[4];	/*3E Reserved for Driver use    */
 #endif
@@ -224,7 +224,7 @@ struct orc_target {
 
 
 /***********************************************************************
-              Host Adapter Control Structure
+	      Host Adapter Control Structure
 ************************************************************************/
 struct orc_host {
 	unsigned long base;	/* Base address */
@@ -265,76 +265,76 @@ struct orc_host {
 
 struct orc_nvram {
 /*----------header ---------------*/
-        u8 SubVendorID0;     /* 00 - Sub Vendor ID           */
-        u8 SubVendorID1;     /* 00 - Sub Vendor ID           */
-        u8 SubSysID0;        /* 02 - Sub System ID           */
-        u8 SubSysID1;        /* 02 - Sub System ID           */
-        u8 SubClass;         /* 04 - Sub Class               */
-        u8 VendorID0;        /* 05 - Vendor ID               */
-        u8 VendorID1;        /* 05 - Vendor ID               */
-        u8 DeviceID0;        /* 07 - Device ID               */
-        u8 DeviceID1;        /* 07 - Device ID               */
-        u8 Reserved0[2];     /* 09 - Reserved                */
-        u8 revision;         /* 0B - revision of data structure */
-        /* ----Host Adapter Structure ---- */
-        u8 NumOfCh;          /* 0C - Number of SCSI channel  */
-        u8 BIOSConfig1;      /* 0D - BIOS configuration 1    */
-        u8 BIOSConfig2;      /* 0E - BIOS boot channel&target ID */
-        u8 BIOSConfig3;      /* 0F - BIOS configuration 3    */
-        /* ----SCSI channel Structure ---- */
-        /* from "CTRL-I SCSI Host Adapter SetUp menu "  */
-        u8 scsi_id;          /* 10 - Channel 0 SCSI ID       */
-        u8 SCSI0Config;      /* 11 - Channel 0 SCSI configuration */
-        u8 SCSI0MaxTags;     /* 12 - Channel 0 Maximum tags  */
-        u8 SCSI0ResetTime;   /* 13 - Channel 0 Reset recovering time */
-        u8 ReservedforChannel0[2];   /* 14 - Reserved                */
+	u8 SubVendorID0;     /* 00 - Sub Vendor ID           */
+	u8 SubVendorID1;     /* 00 - Sub Vendor ID           */
+	u8 SubSysID0;        /* 02 - Sub System ID           */
+	u8 SubSysID1;        /* 02 - Sub System ID           */
+	u8 SubClass;         /* 04 - Sub Class               */
+	u8 VendorID0;        /* 05 - Vendor ID               */
+	u8 VendorID1;        /* 05 - Vendor ID               */
+	u8 DeviceID0;        /* 07 - Device ID               */
+	u8 DeviceID1;        /* 07 - Device ID               */
+	u8 Reserved0[2];     /* 09 - Reserved                */
+	u8 revision;         /* 0B - revision of data structure */
+	/* ----Host Adapter Structure ---- */
+	u8 NumOfCh;          /* 0C - Number of SCSI channel  */
+	u8 BIOSConfig1;      /* 0D - BIOS configuration 1    */
+	u8 BIOSConfig2;      /* 0E - BIOS boot channel&target ID */
+	u8 BIOSConfig3;      /* 0F - BIOS configuration 3    */
+	/* ----SCSI channel Structure ---- */
+	/* from "CTRL-I SCSI Host Adapter SetUp menu "  */
+	u8 scsi_id;          /* 10 - Channel 0 SCSI ID       */
+	u8 SCSI0Config;      /* 11 - Channel 0 SCSI configuration */
+	u8 SCSI0MaxTags;     /* 12 - Channel 0 Maximum tags  */
+	u8 SCSI0ResetTime;   /* 13 - Channel 0 Reset recovering time */
+	u8 ReservedforChannel0[2];   /* 14 - Reserved                */
 
-        /* ----SCSI target Structure ----  */
-        /* from "CTRL-I SCSI device SetUp menu "                        */
-        u8 Target00Config;   /* 16 - Channel 0 Target 0 config */
-        u8 Target01Config;   /* 17 - Channel 0 Target 1 config */
-        u8 Target02Config;   /* 18 - Channel 0 Target 2 config */
-        u8 Target03Config;   /* 19 - Channel 0 Target 3 config */
-        u8 Target04Config;   /* 1A - Channel 0 Target 4 config */
-        u8 Target05Config;   /* 1B - Channel 0 Target 5 config */
-        u8 Target06Config;   /* 1C - Channel 0 Target 6 config */
-        u8 Target07Config;   /* 1D - Channel 0 Target 7 config */
-        u8 Target08Config;   /* 1E - Channel 0 Target 8 config */
-        u8 Target09Config;   /* 1F - Channel 0 Target 9 config */
-        u8 Target0AConfig;   /* 20 - Channel 0 Target A config */
-        u8 Target0BConfig;   /* 21 - Channel 0 Target B config */
-        u8 Target0CConfig;   /* 22 - Channel 0 Target C config */
-        u8 Target0DConfig;   /* 23 - Channel 0 Target D config */
-        u8 Target0EConfig;   /* 24 - Channel 0 Target E config */
-        u8 Target0FConfig;   /* 25 - Channel 0 Target F config */
+	/* ----SCSI target Structure ----  */
+	/* from "CTRL-I SCSI device SetUp menu "                        */
+	u8 Target00Config;   /* 16 - Channel 0 Target 0 config */
+	u8 Target01Config;   /* 17 - Channel 0 Target 1 config */
+	u8 Target02Config;   /* 18 - Channel 0 Target 2 config */
+	u8 Target03Config;   /* 19 - Channel 0 Target 3 config */
+	u8 Target04Config;   /* 1A - Channel 0 Target 4 config */
+	u8 Target05Config;   /* 1B - Channel 0 Target 5 config */
+	u8 Target06Config;   /* 1C - Channel 0 Target 6 config */
+	u8 Target07Config;   /* 1D - Channel 0 Target 7 config */
+	u8 Target08Config;   /* 1E - Channel 0 Target 8 config */
+	u8 Target09Config;   /* 1F - Channel 0 Target 9 config */
+	u8 Target0AConfig;   /* 20 - Channel 0 Target A config */
+	u8 Target0BConfig;   /* 21 - Channel 0 Target B config */
+	u8 Target0CConfig;   /* 22 - Channel 0 Target C config */
+	u8 Target0DConfig;   /* 23 - Channel 0 Target D config */
+	u8 Target0EConfig;   /* 24 - Channel 0 Target E config */
+	u8 Target0FConfig;   /* 25 - Channel 0 Target F config */
 
-        u8 SCSI1Id;          /* 26 - Channel 1 SCSI ID       */
-        u8 SCSI1Config;      /* 27 - Channel 1 SCSI configuration */
-        u8 SCSI1MaxTags;     /* 28 - Channel 1 Maximum tags  */
-        u8 SCSI1ResetTime;   /* 29 - Channel 1 Reset recovering time */
-        u8 ReservedforChannel1[2];   /* 2A - Reserved                */
+	u8 SCSI1Id;          /* 26 - Channel 1 SCSI ID       */
+	u8 SCSI1Config;      /* 27 - Channel 1 SCSI configuration */
+	u8 SCSI1MaxTags;     /* 28 - Channel 1 Maximum tags  */
+	u8 SCSI1ResetTime;   /* 29 - Channel 1 Reset recovering time */
+	u8 ReservedforChannel1[2];   /* 2A - Reserved                */
 
-        /* ----SCSI target Structure ----  */
-        /* from "CTRL-I SCSI device SetUp menu "                                          */
-        u8 Target10Config;   /* 2C - Channel 1 Target 0 config */
-        u8 Target11Config;   /* 2D - Channel 1 Target 1 config */
-        u8 Target12Config;   /* 2E - Channel 1 Target 2 config */
-        u8 Target13Config;   /* 2F - Channel 1 Target 3 config */
-        u8 Target14Config;   /* 30 - Channel 1 Target 4 config */
-        u8 Target15Config;   /* 31 - Channel 1 Target 5 config */
-        u8 Target16Config;   /* 32 - Channel 1 Target 6 config */
-        u8 Target17Config;   /* 33 - Channel 1 Target 7 config */
-        u8 Target18Config;   /* 34 - Channel 1 Target 8 config */
-        u8 Target19Config;   /* 35 - Channel 1 Target 9 config */
-        u8 Target1AConfig;   /* 36 - Channel 1 Target A config */
-        u8 Target1BConfig;   /* 37 - Channel 1 Target B config */
-        u8 Target1CConfig;   /* 38 - Channel 1 Target C config */
-        u8 Target1DConfig;   /* 39 - Channel 1 Target D config */
-        u8 Target1EConfig;   /* 3A - Channel 1 Target E config */
-        u8 Target1FConfig;   /* 3B - Channel 1 Target F config */
-        u8 reserved[3];      /* 3C - Reserved                */
-        /* ---------- CheckSum ----------       */
-        u8 CheckSum;         /* 3F - Checksum of NVRam       */
+	/* ----SCSI target Structure ----  */
+	/* from "CTRL-I SCSI device SetUp menu "                                          */
+	u8 Target10Config;   /* 2C - Channel 1 Target 0 config */
+	u8 Target11Config;   /* 2D - Channel 1 Target 1 config */
+	u8 Target12Config;   /* 2E - Channel 1 Target 2 config */
+	u8 Target13Config;   /* 2F - Channel 1 Target 3 config */
+	u8 Target14Config;   /* 30 - Channel 1 Target 4 config */
+	u8 Target15Config;   /* 31 - Channel 1 Target 5 config */
+	u8 Target16Config;   /* 32 - Channel 1 Target 6 config */
+	u8 Target17Config;   /* 33 - Channel 1 Target 7 config */
+	u8 Target18Config;   /* 34 - Channel 1 Target 8 config */
+	u8 Target19Config;   /* 35 - Channel 1 Target 9 config */
+	u8 Target1AConfig;   /* 36 - Channel 1 Target A config */
+	u8 Target1BConfig;   /* 37 - Channel 1 Target B config */
+	u8 Target1CConfig;   /* 38 - Channel 1 Target C config */
+	u8 Target1DConfig;   /* 39 - Channel 1 Target D config */
+	u8 Target1EConfig;   /* 3A - Channel 1 Target E config */
+	u8 Target1FConfig;   /* 3B - Channel 1 Target F config */
+	u8 reserved[3];      /* 3C - Reserved                */
+	/* ---------- CheckSum ----------       */
+	u8 CheckSum;         /* 3F - Checksum of NVRam       */
 };
 
 /* Bios Configuration for nvram->BIOSConfig1                            */

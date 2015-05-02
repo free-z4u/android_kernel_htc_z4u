@@ -1772,8 +1772,8 @@ int ft1000_poll(void* dev_id) {
     unsigned long flags;
 
     if (ft1000_chkcard(dev) == FALSE) {
-        DEBUG("ft1000_poll::ft1000_chkcard: failed\n");
-        return STATUS_FAILURE;
+	DEBUG("ft1000_poll::ft1000_chkcard: failed\n");
+	return STATUS_FAILURE;
     }
 
     status = ft1000_read_register (dev, &tempword, FT1000_REG_DOORBELL);
@@ -1781,34 +1781,34 @@ int ft1000_poll(void* dev_id) {
     if ( !status )
     {
 
-        if (tempword & FT1000_DB_DPRAM_RX) {
+	if (tempword & FT1000_DB_DPRAM_RX) {
 
-            status = ft1000_read_dpram16(dev, 0x200, (u8 *)&data, 0);
-            size = ntohs(data) + 16 + 2;
-            if (size % 4) {
-                modulo = 4 - (size % 4);
-                size = size + modulo;
-            }
-            status = ft1000_read_dpram16(dev, 0x201, (u8 *)&portid, 1);
-            portid &= 0xff;
+	    status = ft1000_read_dpram16(dev, 0x200, (u8 *)&data, 0);
+	    size = ntohs(data) + 16 + 2;
+	    if (size % 4) {
+		modulo = 4 - (size % 4);
+		size = size + modulo;
+	    }
+	    status = ft1000_read_dpram16(dev, 0x201, (u8 *)&portid, 1);
+	    portid &= 0xff;
 
-            if (size < MAX_CMD_SQSIZE) {
-                switch (portid)
-                {
-                    case DRIVERID:
-                        DEBUG("ft1000_poll: FT1000_REG_DOORBELL message type: FT1000_DB_DPRAM_RX : portid DRIVERID\n");
+	    if (size < MAX_CMD_SQSIZE) {
+		switch (portid)
+		{
+		    case DRIVERID:
+			DEBUG("ft1000_poll: FT1000_REG_DOORBELL message type: FT1000_DB_DPRAM_RX : portid DRIVERID\n");
 
-                        status = ft1000_proc_drvmsg (dev, size);
-                        if (status != STATUS_SUCCESS )
-                            return status;
-                        break;
-                    case DSPBCMSGID:
-                        // This is a dsp broadcast message
-                        // Check which application has registered for dsp broadcast messages
+			status = ft1000_proc_drvmsg (dev, size);
+			if (status != STATUS_SUCCESS )
+			    return status;
+			break;
+		    case DSPBCMSGID:
+			// This is a dsp broadcast message
+			// Check which application has registered for dsp broadcast messages
 
     	    	        for (i=0; i<MAX_NUM_APP; i++) {
-        	           if ( (info->app_info[i].DspBCMsgFlag) && (info->app_info[i].fileobject) &&
-                                         (info->app_info[i].NumOfMsg < MAX_MSG_LIMIT)  )
+		           if ( (info->app_info[i].DspBCMsgFlag) && (info->app_info[i].fileobject) &&
+					 (info->app_info[i].NumOfMsg < MAX_MSG_LIMIT)  )
 			   {
 			       nxtph = FT1000_DPRAM_RX_BASE + 2;
 			       pdpram_blk = ft1000_get_buffer (&freercvpool);
@@ -1822,127 +1822,127 @@ int ft1000_poll(void* dev_id) {
 				       info->app_info[i].NumOfMsg++;
 				       spin_unlock_irqrestore(&free_buff_lock, flags);
 				       wake_up_interruptible(&info->app_info[i].wait_dpram_msg);
-                                   }
-                                   else {
+				   }
+				   else {
 				       info->app_info[i].nRxMsgMiss++;
 				       // Put memory back to free pool
 				       ft1000_free_buffer(pdpram_blk, &freercvpool);
 				       DEBUG("pdpram_blk::ft1000_get_buffer NULL\n");
-                                   }
-                               }
-                               else {
-                                   DEBUG("Out of memory in free receive command pool\n");
-                                   info->app_info[i].nRxMsgMiss++;
-                               }
-                           }
+				   }
+			       }
+			       else {
+				   DEBUG("Out of memory in free receive command pool\n");
+				   info->app_info[i].nRxMsgMiss++;
+			       }
+			   }
 	                }
-                        break;
-                    default:
-                        pdpram_blk = ft1000_get_buffer (&freercvpool);
+			break;
+		    default:
+			pdpram_blk = ft1000_get_buffer (&freercvpool);
 
-                        if (pdpram_blk != NULL) {
-                           if ( ft1000_receive_cmd(dev, pdpram_blk->pbuffer, MAX_CMD_SQSIZE, &nxtph) ) {
+			if (pdpram_blk != NULL) {
+			   if ( ft1000_receive_cmd(dev, pdpram_blk->pbuffer, MAX_CMD_SQSIZE, &nxtph) ) {
 				ppseudo_hdr = (struct pseudo_hdr *)pdpram_blk->pbuffer;
-                               // Search for correct application block
-                               for (i=0; i<MAX_NUM_APP; i++) {
-                                   if (info->app_info[i].app_id == ppseudo_hdr->portdest) {
-                                       break;
-                                   }
-                               }
+			       // Search for correct application block
+			       for (i=0; i<MAX_NUM_APP; i++) {
+				   if (info->app_info[i].app_id == ppseudo_hdr->portdest) {
+				       break;
+				   }
+			       }
 
-                               if (i == MAX_NUM_APP) {
-                                   DEBUG("FT1000:ft1000_parse_dpram_msg: No application matching id = %d\n", ppseudo_hdr->portdest);
-                                   // Put memory back to free pool
-                                   ft1000_free_buffer(pdpram_blk, &freercvpool);
-                               }
-                               else {
-                                   if (info->app_info[i].NumOfMsg > MAX_MSG_LIMIT) {
+			       if (i == MAX_NUM_APP) {
+				   DEBUG("FT1000:ft1000_parse_dpram_msg: No application matching id = %d\n", ppseudo_hdr->portdest);
+				   // Put memory back to free pool
+				   ft1000_free_buffer(pdpram_blk, &freercvpool);
+			       }
+			       else {
+				   if (info->app_info[i].NumOfMsg > MAX_MSG_LIMIT) {
 	                               // Put memory back to free pool
 	                               ft1000_free_buffer(pdpram_blk, &freercvpool);
-                                   }
-                                   else {
-                                       info->app_info[i].nRxMsg++;
-                                       // Put message into the appropriate application block
-                                       list_add_tail(&pdpram_blk->list, &info->app_info[i].app_sqlist);
-            			       info->app_info[i].NumOfMsg++;
-                                   }
-                               }
-                           }
-                           else {
-                               // Put memory back to free pool
-                               ft1000_free_buffer(pdpram_blk, &freercvpool);
-                           }
-                        }
-                        else {
-                            DEBUG("Out of memory in free receive command pool\n");
-                        }
-                        break;
-                }
-            }
-            else {
-                DEBUG("FT1000:dpc:Invalid total length for SlowQ = %d\n", size);
-            }
-            status = ft1000_write_register (dev, FT1000_DB_DPRAM_RX, FT1000_REG_DOORBELL);
-        }
-        else if (tempword & FT1000_DSP_ASIC_RESET) {
+				   }
+				   else {
+				       info->app_info[i].nRxMsg++;
+				       // Put message into the appropriate application block
+				       list_add_tail(&pdpram_blk->list, &info->app_info[i].app_sqlist);
+	    			       info->app_info[i].NumOfMsg++;
+				   }
+			       }
+			   }
+			   else {
+			       // Put memory back to free pool
+			       ft1000_free_buffer(pdpram_blk, &freercvpool);
+			   }
+			}
+			else {
+			    DEBUG("Out of memory in free receive command pool\n");
+			}
+			break;
+		}
+	    }
+	    else {
+		DEBUG("FT1000:dpc:Invalid total length for SlowQ = %d\n", size);
+	    }
+	    status = ft1000_write_register (dev, FT1000_DB_DPRAM_RX, FT1000_REG_DOORBELL);
+	}
+	else if (tempword & FT1000_DSP_ASIC_RESET) {
 
-            // Let's reset the ASIC from the Host side as well
-            status = ft1000_write_register (dev, ASIC_RESET_BIT, FT1000_REG_RESET);
-            status = ft1000_read_register (dev, &tempword, FT1000_REG_RESET);
-            i = 0;
-            while (tempword & ASIC_RESET_BIT) {
-                status = ft1000_read_register (dev, &tempword, FT1000_REG_RESET);
-                msleep(10);
-                i++;
-                if (i==100)
-                    break;
-            }
-            if (i==100) {
-                DEBUG("Unable to reset ASIC\n");
-                return STATUS_SUCCESS;
-            }
-            msleep(10);
-            // Program WMARK register
-            status = ft1000_write_register (dev, 0x600, FT1000_REG_MAG_WATERMARK);
-            // clear ASIC reset doorbell
-            status = ft1000_write_register (dev, FT1000_DSP_ASIC_RESET, FT1000_REG_DOORBELL);
-            msleep(10);
-        }
-        else if (tempword & FT1000_ASIC_RESET_REQ) {
-            DEBUG("ft1000_poll: FT1000_REG_DOORBELL message type:  FT1000_ASIC_RESET_REQ\n");
+	    // Let's reset the ASIC from the Host side as well
+	    status = ft1000_write_register (dev, ASIC_RESET_BIT, FT1000_REG_RESET);
+	    status = ft1000_read_register (dev, &tempword, FT1000_REG_RESET);
+	    i = 0;
+	    while (tempword & ASIC_RESET_BIT) {
+		status = ft1000_read_register (dev, &tempword, FT1000_REG_RESET);
+		msleep(10);
+		i++;
+		if (i==100)
+		    break;
+	    }
+	    if (i==100) {
+		DEBUG("Unable to reset ASIC\n");
+		return STATUS_SUCCESS;
+	    }
+	    msleep(10);
+	    // Program WMARK register
+	    status = ft1000_write_register (dev, 0x600, FT1000_REG_MAG_WATERMARK);
+	    // clear ASIC reset doorbell
+	    status = ft1000_write_register (dev, FT1000_DSP_ASIC_RESET, FT1000_REG_DOORBELL);
+	    msleep(10);
+	}
+	else if (tempword & FT1000_ASIC_RESET_REQ) {
+	    DEBUG("ft1000_poll: FT1000_REG_DOORBELL message type:  FT1000_ASIC_RESET_REQ\n");
 
-            // clear ASIC reset request from DSP
-            status = ft1000_write_register (dev, FT1000_ASIC_RESET_REQ, FT1000_REG_DOORBELL);
-            status = ft1000_write_register (dev, HOST_INTF_BE, FT1000_REG_SUP_CTRL);
-            // copy dsp session record from Adapter block
-            status = ft1000_write_dpram32 (dev, 0, (u8 *)&info->DSPSess.Rec[0], 1024);
-            // Program WMARK register
-            status = ft1000_write_register (dev, 0x600, FT1000_REG_MAG_WATERMARK);
-            // ring doorbell to tell DSP that ASIC is out of reset
-            status = ft1000_write_register (dev, FT1000_ASIC_RESET_DSP, FT1000_REG_DOORBELL);
-        }
-        else if (tempword & FT1000_DB_COND_RESET) {
-            DEBUG("ft1000_poll: FT1000_REG_DOORBELL message type:  FT1000_DB_COND_RESET\n");
+	    // clear ASIC reset request from DSP
+	    status = ft1000_write_register (dev, FT1000_ASIC_RESET_REQ, FT1000_REG_DOORBELL);
+	    status = ft1000_write_register (dev, HOST_INTF_BE, FT1000_REG_SUP_CTRL);
+	    // copy dsp session record from Adapter block
+	    status = ft1000_write_dpram32 (dev, 0, (u8 *)&info->DSPSess.Rec[0], 1024);
+	    // Program WMARK register
+	    status = ft1000_write_register (dev, 0x600, FT1000_REG_MAG_WATERMARK);
+	    // ring doorbell to tell DSP that ASIC is out of reset
+	    status = ft1000_write_register (dev, FT1000_ASIC_RESET_DSP, FT1000_REG_DOORBELL);
+	}
+	else if (tempword & FT1000_DB_COND_RESET) {
+	    DEBUG("ft1000_poll: FT1000_REG_DOORBELL message type:  FT1000_DB_COND_RESET\n");
 
 	    if (info->fAppMsgPend == 0) {
-               // Reset ASIC and DSP
+	       // Reset ASIC and DSP
 
-                status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER0, (u8 *)&(info->DSP_TIME[0]), FT1000_MAG_DSP_TIMER0_INDX);
-                status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER1, (u8 *)&(info->DSP_TIME[1]), FT1000_MAG_DSP_TIMER1_INDX);
-                status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER2, (u8 *)&(info->DSP_TIME[2]), FT1000_MAG_DSP_TIMER2_INDX);
-                status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER3, (u8 *)&(info->DSP_TIME[3]), FT1000_MAG_DSP_TIMER3_INDX);
-                info->CardReady = 0;
-                info->DrvErrNum = DSP_CONDRESET_INFO;
-                DEBUG("ft1000_hw:DSP conditional reset requested\n");
-                info->ft1000_reset(dev->net);
-            }
-            else {
-                info->fProvComplete = 0;
-                info->fCondResetPend = 1;
-            }
+		status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER0, (u8 *)&(info->DSP_TIME[0]), FT1000_MAG_DSP_TIMER0_INDX);
+		status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER1, (u8 *)&(info->DSP_TIME[1]), FT1000_MAG_DSP_TIMER1_INDX);
+		status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER2, (u8 *)&(info->DSP_TIME[2]), FT1000_MAG_DSP_TIMER2_INDX);
+		status    = ft1000_read_dpram16(dev, FT1000_MAG_DSP_TIMER3, (u8 *)&(info->DSP_TIME[3]), FT1000_MAG_DSP_TIMER3_INDX);
+		info->CardReady = 0;
+		info->DrvErrNum = DSP_CONDRESET_INFO;
+		DEBUG("ft1000_hw:DSP conditional reset requested\n");
+		info->ft1000_reset(dev->net);
+	    }
+	    else {
+		info->fProvComplete = 0;
+		info->fCondResetPend = 1;
+	    }
 
-            ft1000_write_register(dev, FT1000_DB_COND_RESET, FT1000_REG_DOORBELL);
-        }
+	    ft1000_write_register(dev, FT1000_DB_COND_RESET, FT1000_REG_DOORBELL);
+	}
 
     }
 

@@ -158,9 +158,9 @@ struct mmc_blk_data {
 static DEFINE_MUTEX(open_lock);
 
 enum {
-        MMC_PACKED_N_IDX = -1,
-        MMC_PACKED_N_ZERO,
-        MMC_PACKED_N_SINGLE,
+	MMC_PACKED_N_IDX = -1,
+	MMC_PACKED_N_ZERO,
+	MMC_PACKED_N_SINGLE,
 };
 
 module_param(perdev_minors, int, 0444);
@@ -168,8 +168,8 @@ MODULE_PARM_DESC(perdev_minors, "Minors numbers to allocate per device");
 
 static inline void mmc_blk_clear_packed(struct mmc_queue_req *mqrq)
 {
-        mqrq->packed_cmd = MMC_PACKED_NONE;
-        mqrq->packed_num = MMC_PACKED_N_ZERO;
+	mqrq->packed_cmd = MMC_PACKED_NONE;
+	mqrq->packed_num = MMC_PACKED_N_ZERO;
 }
 
 static struct mmc_blk_data *mmc_blk_get(struct gendisk *disk)

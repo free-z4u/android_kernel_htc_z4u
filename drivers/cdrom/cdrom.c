@@ -392,8 +392,8 @@ static int cdrom_dummy_generic_packet(struct cdrom_device_info *cdi,
 int register_cdrom(struct cdrom_device_info *cdi)
 {
 	static char banner_printed;
-        struct cdrom_device_ops *cdo = cdi->ops;
-        int *change_capability = (int *)&cdo->capability; /* hack */
+	struct cdrom_device_ops *cdo = cdi->ops;
+	int *change_capability = (int *)&cdo->capability; /* hack */
 
 	cdinfo(CD_OPEN, "entering register_cdrom\n");
 
@@ -417,7 +417,7 @@ int register_cdrom(struct cdrom_device_info *cdi)
 	ENSURE(generic_packet, CDC_GENERIC_PACKET);
 	cdi->mc_flags = 0;
 	cdo->n_minors = 0;
-        cdi->options = CDO_USE_FFLAGS;
+	cdi->options = CDO_USE_FFLAGS;
 
 	if (autoclose==1 && CDROM_CAN(CDC_CLOSE_TRAY))
 		cdi->options |= (int) CDO_AUTO_CLOSE;
@@ -1137,7 +1137,7 @@ clean_up_and_return:
 static int check_for_audio_disc(struct cdrom_device_info * cdi,
 				struct cdrom_device_ops * cdo)
 {
-        int ret;
+	int ret;
 	tracktype tracks;
 	cdinfo(CD_OPEN, "entering check_for_audio_disc\n");
 	if (!(cdi->options & CDO_CHECK_TYPE))
@@ -3362,7 +3362,7 @@ static int cdrom_get_next_writable(struct cdrom_device_info *cdi, long *next_wri
 	if (ti_size < 0 || ti_size < offsetof(typeof(ti), track_start))
 		goto use_last_written;
 
-        /* if this track is blank, try the previous. */
+	/* if this track is blank, try the previous. */
 	if (ti.blank) {
 		if (last_track == 1)
 			goto use_last_written;
@@ -3466,7 +3466,7 @@ static int cdrom_print_info(const char *header, int val, char *info,
 }
 
 static int cdrom_sysctl_info(ctl_table *ctl, int write,
-                           void __user *buffer, size_t *lenp, loff_t *ppos)
+			   void __user *buffer, size_t *lenp, loff_t *ppos)
 {
 	int pos;
 	char *info = cdrom_sysctl_settings.info;
@@ -3600,7 +3600,7 @@ static int cdrom_sysctl_handler(ctl_table *ctl, int write,
 		cdrom_update_settings();
 	}
 
-        return ret;
+	return ret;
 }
 
 /* Place files in /proc/sys/dev/cdrom */

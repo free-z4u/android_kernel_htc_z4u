@@ -204,9 +204,9 @@ unsigned int cpm2_get_irq(void)
 	unsigned long bits;
 
        /* For CPM2, read the SIVEC register and shift the bits down
-         * to get the irq number.         */
-        bits = in_be32(&cpm2_intctl->ic_sivec);
-        irq = bits >> 26;
+	 * to get the irq number.         */
+	bits = in_be32(&cpm2_intctl->ic_sivec);
+	irq = bits >> 26;
 
 	if (irq == 0)
 		return(-1);

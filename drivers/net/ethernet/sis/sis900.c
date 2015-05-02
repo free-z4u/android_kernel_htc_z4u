@@ -410,7 +410,7 @@ static const struct net_device_ops sis900_netdev_ops = {
 	.ndo_do_ioctl		= mii_ioctl,
 	.ndo_tx_timeout		= sis900_tx_timeout,
 #ifdef CONFIG_NET_POLL_CONTROLLER
-        .ndo_poll_controller	= sis900_poll,
+	.ndo_poll_controller	= sis900_poll,
 #endif
 };
 
@@ -669,14 +669,14 @@ static int __devinit sis900_mii_probe(struct net_device * net_dev)
 	sis900_default_phy( net_dev );
 
 	/* Reset phy if default phy is internal sis900 */
-        if ((sis_priv->mii->phy_id0 == 0x001D) &&
+	if ((sis_priv->mii->phy_id0 == 0x001D) &&
 	    ((sis_priv->mii->phy_id1&0xFFF0) == 0x8000))
-        	status = sis900_reset_phy(net_dev, sis_priv->cur_phy);
+		status = sis900_reset_phy(net_dev, sis_priv->cur_phy);
 
-        /* workaround for ICS1893 PHY */
-        if ((sis_priv->mii->phy_id0 == 0x0015) &&
-            ((sis_priv->mii->phy_id1&0xFFF0) == 0xF440))
-            	mdio_write(net_dev, sis_priv->cur_phy, 0x0018, 0xD200);
+	/* workaround for ICS1893 PHY */
+	if ((sis_priv->mii->phy_id0 == 0x0015) &&
+	    ((sis_priv->mii->phy_id1&0xFFF0) == 0xF440))
+	    	mdio_write(net_dev, sis_priv->cur_phy, 0x0018, 0xD200);
 
 	if(status & MII_STAT_LINK){
 		while (poll_bit) {
@@ -724,7 +724,7 @@ static u16 sis900_default_phy(struct net_device * net_dev)
 		*default_phy = NULL, *phy_lan = NULL;
 	u16 status;
 
-        for (phy=sis_priv->first_mii; phy; phy=phy->next) {
+	for (phy=sis_priv->first_mii; phy; phy=phy->next) {
 		status = mdio_read(net_dev, phy->phy_addr, MII_STATUS);
 		status = mdio_read(net_dev, phy->phy_addr, MII_STATUS);
 
@@ -1175,8 +1175,8 @@ sis900_init_rx_ring(struct net_device *net_dev)
 		}
 		sis_priv->rx_skbuff[i] = skb;
 		sis_priv->rx_ring[i].cmdsts = RX_BUF_SIZE;
-                sis_priv->rx_ring[i].bufptr = pci_map_single(sis_priv->pci_dev,
-                        skb->data, RX_BUF_SIZE, PCI_DMA_FROMDEVICE);
+		sis_priv->rx_ring[i].bufptr = pci_map_single(sis_priv->pci_dev,
+			skb->data, RX_BUF_SIZE, PCI_DMA_FROMDEVICE);
 	}
 	sis_priv->dirty_rx = (unsigned int) (i - NUM_RX_DESC);
 
@@ -1324,20 +1324,20 @@ static void sis900_timer(unsigned long data)
 		}
 	} else {
 	/* Link ON -> OFF */
-                if (!(status & MII_STAT_LINK)){
-                	netif_carrier_off(net_dev);
+		if (!(status & MII_STAT_LINK)){
+			netif_carrier_off(net_dev);
 			if(netif_msg_link(sis_priv))
-                		printk(KERN_INFO "%s: Media Link Off\n", net_dev->name);
+				printk(KERN_INFO "%s: Media Link Off\n", net_dev->name);
 
-                	/* Change mode issue */
-                	if ((mii_phy->phy_id0 == 0x001D) &&
+			/* Change mode issue */
+			if ((mii_phy->phy_id0 == 0x001D) &&
 			    ((mii_phy->phy_id1 & 0xFFF0) == 0x8000))
-               			sis900_reset_phy(net_dev,  sis_priv->cur_phy);
+	       			sis900_reset_phy(net_dev,  sis_priv->cur_phy);
 
 			sis630_set_eq(net_dev, sis_priv->chipset_rev);
 
-                	goto LookForLink;
-                }
+			goto LookForLink;
+		}
 	}
 
 	sis_priv->timer.expires = jiffies + next_tick;
@@ -1810,7 +1810,7 @@ static int sis900_rx(struct net_device *net_dev)
 refill_rx_ring:
 			sis_priv->rx_skbuff[entry] = skb;
 			sis_priv->rx_ring[entry].cmdsts = RX_BUF_SIZE;
-                	sis_priv->rx_ring[entry].bufptr =
+			sis_priv->rx_ring[entry].bufptr =
 				pci_map_single(sis_priv->pci_dev, skb->data,
 					RX_BUF_SIZE, PCI_DMA_FROMDEVICE);
 		}
@@ -1841,7 +1841,7 @@ refill_rx_ring:
 			}
 			sis_priv->rx_skbuff[entry] = skb;
 			sis_priv->rx_ring[entry].cmdsts = RX_BUF_SIZE;
-                	sis_priv->rx_ring[entry].bufptr =
+			sis_priv->rx_ring[entry].bufptr =
 				pci_map_single(sis_priv->pci_dev, skb->data,
 					RX_BUF_SIZE, PCI_DMA_FROMDEVICE);
 		}
@@ -2234,7 +2234,7 @@ static int sis900_set_config(struct net_device *dev, struct ifmap *map)
 		case IF_PORT_10BASE2: /* 10Base2 */
 		case IF_PORT_AUI: /* AUI */
 		case IF_PORT_100BASEFX: /* 100BaseFx */
-                	/* These Modes are not supported (are they?)*/
+			/* These Modes are not supported (are they?)*/
 			return -EOPNOTSUPP;
 			break;
 
@@ -2321,7 +2321,7 @@ static void set_rx_mode(struct net_device *net_dev)
 
 	/* update Multicast Hash Table in Receive Filter */
 	for (i = 0; i < table_entries; i++) {
-                /* why plus 0x04 ??, That makes the correct value for hash table. */
+		/* why plus 0x04 ??, That makes the correct value for hash table. */
 		outl((u32)(0x00000004+i) << RFADDR_shift, ioaddr + rfcr);
 		outl(mc_filter[i], ioaddr + rfdr);
 	}

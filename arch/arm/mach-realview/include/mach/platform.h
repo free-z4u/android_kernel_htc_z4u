@@ -154,7 +154,7 @@
 #define REALVIEW_INTREG_WPROT        0x00    /* MMC protection status (no interrupt generated) */
 #define REALVIEW_INTREG_RI0          0x01    /* Ring indicator UART0 is asserted,              */
 #define REALVIEW_INTREG_CARDIN       0x08    /* MMCI card in detect                            */
-                                                /* write 1 to acknowledge and clear               */
+						/* write 1 to acknowledge and clear               */
 #define REALVIEW_INTREG_RI1          0x02    /* Ring indicator UART1 is asserted,              */
 #define REALVIEW_INTREG_CARDINSERT   0x03    /* Signal insertion of MMC card                   */
 

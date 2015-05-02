@@ -170,7 +170,7 @@ static void bfin_spi_cs_active(struct bfin_spi_master_data *drv_data, struct bfi
 }
 
 static void bfin_spi_cs_deactive(struct bfin_spi_master_data *drv_data,
-                                 struct bfin_spi_slave_data *chip)
+				 struct bfin_spi_slave_data *chip)
 {
 	if (likely(chip->chip_select_num < MAX_CTRL_CS))
 		bfin_write_or(&drv_data->regs->flg, chip->flag);
@@ -184,14 +184,14 @@ static void bfin_spi_cs_deactive(struct bfin_spi_master_data *drv_data,
 
 /* enable or disable the pin muxed by GPIO and SPI CS to work as SPI CS */
 static inline void bfin_spi_cs_enable(struct bfin_spi_master_data *drv_data,
-                                      struct bfin_spi_slave_data *chip)
+				      struct bfin_spi_slave_data *chip)
 {
 	if (chip->chip_select_num < MAX_CTRL_CS)
 		bfin_write_or(&drv_data->regs->flg, chip->flag >> 8);
 }
 
 static inline void bfin_spi_cs_disable(struct bfin_spi_master_data *drv_data,
-                                       struct bfin_spi_slave_data *chip)
+				       struct bfin_spi_slave_data *chip)
 {
 	if (chip->chip_select_num < MAX_CTRL_CS)
 		bfin_write_and(&drv_data->regs->flg, ~(chip->flag >> 8));

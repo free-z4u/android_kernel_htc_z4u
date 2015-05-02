@@ -261,7 +261,7 @@ int wpa_set_wpadev(PSDevice pDevice, int val)
 		return -EINVAL;
 
 	spin_unlock_irq(&pDevice->lock);
-        if (param->u.wpa_key.seq && fcpfkernel) {
+	if (param->u.wpa_key.seq && fcpfkernel) {
 		memcpy(&abySeq[0], param->u.wpa_key.seq, param->u.wpa_key.seq_len);
 	} else {
 		if (param->u.wpa_key.seq &&
@@ -469,8 +469,8 @@ static int wpa_set_scan(PSDevice pDevice, struct viawget_wpa_param *param)
 	int ret = 0;
 
 /**set ap_scan=1&&scan_ssid=1 under hidden ssid mode**/
-        PSMgmtObject pMgmt = &pDevice->sMgmtObj;
-        PWLAN_IE_SSID pItemSSID;
+	PSMgmtObject pMgmt = &pDevice->sMgmtObj;
+	PWLAN_IE_SSID pItemSSID;
 	printk("wpa_set_scan-->desired [ssid=%s,ssid_len=%d]\n",
 		param->u.scan_req.ssid,param->u.scan_req.ssid_len);
 // Set the SSID

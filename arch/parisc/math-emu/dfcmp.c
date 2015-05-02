@@ -50,7 +50,7 @@ int
 dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
 	  unsigned int cond, unsigned int *status)
 
-                       /* The predicate to be tested */
+		       /* The predicate to be tested */
 
     {
     register unsigned int leftp1, leftp2, rightp1, rightp2;
@@ -63,12 +63,12 @@ dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
      * Test for NaN
      */
     if(    (Dbl_exponent(leftp1) == DBL_INFINITY_EXPONENT)
-        || (Dbl_exponent(rightp1) == DBL_INFINITY_EXPONENT) )
+	|| (Dbl_exponent(rightp1) == DBL_INFINITY_EXPONENT) )
 	{
 	/* Check if a NaN is involved.  Signal an invalid exception when
 	 * comparing a signaling NaN or when comparing quiet NaNs and the
 	 * low bit of the condition is set */
-        if( ((Dbl_exponent(leftp1) == DBL_INFINITY_EXPONENT)
+	if( ((Dbl_exponent(leftp1) == DBL_INFINITY_EXPONENT)
 	    && Dbl_isnotzero_mantissa(leftp1,leftp2)
 	    && (Exception(cond) || Dbl_isone_signaling(leftp1)))
 	   ||
@@ -86,7 +86,7 @@ dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
 	    }
 	/* All the exceptional conditions are handled, now special case
 	   NaN compares */
-        else if( ((Dbl_exponent(leftp1) == DBL_INFINITY_EXPONENT)
+	else if( ((Dbl_exponent(leftp1) == DBL_INFINITY_EXPONENT)
 	    && Dbl_isnotzero_mantissa(leftp1,leftp2))
 	   ||
 	    ((Dbl_exponent(rightp1) == DBL_INFINITY_EXPONENT)
@@ -102,12 +102,12 @@ dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
      * special equal case */
     Dbl_xortointp1(leftp1,rightp1,xorresult);
     if( xorresult < 0 )
-        {
-        /* left negative => less, left positive => greater.
-         * equal is possible if both operands are zeros. */
-        if( Dbl_iszero_exponentmantissa(leftp1,leftp2)
+	{
+	/* left negative => less, left positive => greater.
+	 * equal is possible if both operands are zeros. */
+	if( Dbl_iszero_exponentmantissa(leftp1,leftp2)
 	  && Dbl_iszero_exponentmantissa(rightp1,rightp2) )
-            {
+	    {
 	    Set_status_cbit(Equal(cond));
 	    }
 	else if( Dbl_isone_sign(leftp1) )
@@ -118,16 +118,16 @@ dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
 	    {
 	    Set_status_cbit(Greaterthan(cond));
 	    }
-        }
+	}
     /* Signs are the same.  Treat negative numbers separately
      * from the positives because of the reversed sense.  */
     else if(Dbl_isequal(leftp1,leftp2,rightp1,rightp2))
-        {
-        Set_status_cbit(Equal(cond));
-        }
+	{
+	Set_status_cbit(Equal(cond));
+	}
     else if( Dbl_iszero_sign(leftp1) )
-        {
-        /* Positive compare */
+	{
+	/* Positive compare */
 	if( Dbl_allp1(leftp1) < Dbl_allp1(rightp1) )
 	    {
 	    Set_status_cbit(Lessthan(cond));
@@ -151,10 +151,10 @@ dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
 	    }
 	}
     else
-        {
-        /* Negative compare.  Signed or unsigned compares
-         * both work the same.  That distinction is only
-         * important when the sign bits differ. */
+	{
+	/* Negative compare.  Signed or unsigned compares
+	 * both work the same.  That distinction is only
+	 * important when the sign bits differ. */
 	if( Dbl_allp1(leftp1) > Dbl_allp1(rightp1) )
 	    {
 	    Set_status_cbit(Lessthan(cond));
@@ -176,6 +176,6 @@ dbl_fcmp (dbl_floating_point * leftptr, dbl_floating_point * rightptr,
 		Set_status_cbit(Greaterthan(cond));
 		}
 	    }
-        }
+	}
 	return(NOEXCEPTION);
     }

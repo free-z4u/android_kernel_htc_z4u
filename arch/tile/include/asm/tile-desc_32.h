@@ -537,9 +537,9 @@ struct tilepro_decoded_instruction
 
 /* Disassemble a bundle into a struct for machine processing. */
 extern int parse_insn_tilepro(tilepro_bundle_bits bits,
-                              unsigned int pc,
-                              struct tilepro_decoded_instruction
-                              decoded[TILEPRO_MAX_INSTRUCTIONS_PER_BUNDLE]);
+			      unsigned int pc,
+			      struct tilepro_decoded_instruction
+			      decoded[TILEPRO_MAX_INSTRUCTIONS_PER_BUNDLE]);
 
 
 /* Given a set of bundle bits and a specific pipe, returns which

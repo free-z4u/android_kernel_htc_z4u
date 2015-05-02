@@ -82,7 +82,7 @@
  * a 'bad alias'.
  */
 #define S4CVAC_BADALIAS(vaddr1, vaddr2) \
-        ((((unsigned long) (vaddr1)) ^ ((unsigned long) (vaddr2))) & \
+	((((unsigned long) (vaddr1)) ^ ((unsigned long) (vaddr2))) & \
 	 (S4CVAC_BADBITS))
 
 /* The following structure describes the characteristics of a sun4c

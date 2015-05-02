@@ -11,8 +11,8 @@
  */
 static inline void w977_efm_enter(unsigned int efio)
 {
-        outb(0x87, efio);
-        outb(0x87, efio);
+	outb(0x87, efio);
+	outb(0x87, efio);
 }
 
 /*

@@ -74,16 +74,16 @@ struct eeprom_type
   /* this one is to keep the read/write operations atomic */
   struct mutex lock;
   int retry_cnt_addr; /* Used to keep track of number of retries for
-                         adaptive timing adjustments */
+			 adaptive timing adjustments */
   int retry_cnt_read;
 };
 
 static int  eeprom_open(struct inode * inode, struct file * file);
 static loff_t  eeprom_lseek(struct file * file, loff_t offset, int orig);
 static ssize_t  eeprom_read(struct file * file, char * buf, size_t count,
-                            loff_t *off);
+			    loff_t *off);
 static ssize_t  eeprom_write(struct file * file, const char * buf, size_t count,
-                             loff_t *off);
+			     loff_t *off);
 static int eeprom_close(struct inode * inode, struct file * file);
 
 static int  eeprom_address(unsigned long addr);
@@ -123,7 +123,7 @@ int __init eeprom_init(void)
   if (register_chrdev(EEPROM_MAJOR_NR, eeprom_name, &eeprom_fops))
   {
     printk(KERN_INFO "%s: unable to get major %d for eeprom device\n",
-           eeprom_name, EEPROM_MAJOR_NR);
+	   eeprom_name, EEPROM_MAJOR_NR);
     return -1;
   }
 
@@ -189,123 +189,123 @@ int __init eeprom_init(void)
       unsigned char loc1[4], loc2[4], tmp[4];
       if( eeprom_read_buf(LOC2, loc2, 4) == 4)
       {
-        if( eeprom_read_buf(LOC1, loc1, 4) == 4)
-        {
-          D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
-                   LOC1, loc1, LOC2, loc2));
+	if( eeprom_read_buf(LOC1, loc1, 4) == 4)
+	{
+	  D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
+		   LOC1, loc1, LOC2, loc2));
 #if 0
-          if (memcmp(loc1, loc2, 4) != 0 )
-          {
-            /* It's 16k */
-            printk(KERN_INFO "%s: 16k detected in step 1\n", eeprom_name);
-            eeprom.size = EEPROM_16KB;
-            success = 1;
-          }
-          else
+	  if (memcmp(loc1, loc2, 4) != 0 )
+	  {
+	    /* It's 16k */
+	    printk(KERN_INFO "%s: 16k detected in step 1\n", eeprom_name);
+	    eeprom.size = EEPROM_16KB;
+	    success = 1;
+	  }
+	  else
 #endif
-          {
-            /* Do step 2 check */
-            /* Invert value */
-            loc1[0] = ~loc1[0];
-            if (eeprom_write_buf(LOC1, loc1, 1) == 1)
-            {
-              /* If 2k EEPROM this write will actually write 10 bytes
-               * from pos 0
-               */
-              D(printk("1 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
-                       LOC1, loc1, LOC2, loc2));
-              if( eeprom_read_buf(LOC1, tmp, 4) == 4)
-              {
-                D(printk("2 loc1: (%i) '%4.4s' tmp '%4.4s'\n",
-                         LOC1, loc1, tmp));
-                if (memcmp(loc1, tmp, 4) != 0 )
-                {
-                  printk(KERN_INFO "%s: read and write differs! Not 16kB\n",
-                         eeprom_name);
-                  loc1[0] = ~loc1[0];
+	  {
+	    /* Do step 2 check */
+	    /* Invert value */
+	    loc1[0] = ~loc1[0];
+	    if (eeprom_write_buf(LOC1, loc1, 1) == 1)
+	    {
+	      /* If 2k EEPROM this write will actually write 10 bytes
+	       * from pos 0
+	       */
+	      D(printk("1 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
+		       LOC1, loc1, LOC2, loc2));
+	      if( eeprom_read_buf(LOC1, tmp, 4) == 4)
+	      {
+		D(printk("2 loc1: (%i) '%4.4s' tmp '%4.4s'\n",
+			 LOC1, loc1, tmp));
+		if (memcmp(loc1, tmp, 4) != 0 )
+		{
+		  printk(KERN_INFO "%s: read and write differs! Not 16kB\n",
+			 eeprom_name);
+		  loc1[0] = ~loc1[0];
 
-                  if (eeprom_write_buf(LOC1, loc1, 1) == 1)
-                  {
-                    success = 1;
-                  }
-                  else
-                  {
-                    printk(KERN_INFO "%s: Restore 2k failed during probe,"
-                           " EEPROM might be corrupt!\n", eeprom_name);
+		  if (eeprom_write_buf(LOC1, loc1, 1) == 1)
+		  {
+		    success = 1;
+		  }
+		  else
+		  {
+		    printk(KERN_INFO "%s: Restore 2k failed during probe,"
+			   " EEPROM might be corrupt!\n", eeprom_name);
 
-                  }
-                  i2c_stop();
-                  /* Go to 2k mode and write original data */
-                  eeprom.size = EEPROM_2KB;
-                  eeprom.select_cmd = 0xA0;
-                  eeprom.sequential_write_pagesize = 16;
-                  if( eeprom_write_buf(0, buf_2k_start, 16) == 16)
-                  {
-                  }
-                  else
-                  {
-                    printk(KERN_INFO "%s: Failed to write back 2k start!\n",
-                           eeprom_name);
-                  }
+		  }
+		  i2c_stop();
+		  /* Go to 2k mode and write original data */
+		  eeprom.size = EEPROM_2KB;
+		  eeprom.select_cmd = 0xA0;
+		  eeprom.sequential_write_pagesize = 16;
+		  if( eeprom_write_buf(0, buf_2k_start, 16) == 16)
+		  {
+		  }
+		  else
+		  {
+		    printk(KERN_INFO "%s: Failed to write back 2k start!\n",
+			   eeprom_name);
+		  }
 
-                  eeprom.size = EEPROM_2KB;
-                }
-              }
+		  eeprom.size = EEPROM_2KB;
+		}
+	      }
 
-              if(!success)
-              {
-                if( eeprom_read_buf(LOC2, loc2, 1) == 1)
-                {
-                  D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
-                           LOC1, loc1, LOC2, loc2));
-                  if (memcmp(loc1, loc2, 4) == 0 )
-                  {
-                    /* Data the same, must be mirrored -> 2k */
-                    /* Restore data */
-                    printk(KERN_INFO "%s: 2k detected in step 2\n", eeprom_name);
-                    loc1[0] = ~loc1[0];
-                    if (eeprom_write_buf(LOC1, loc1, 1) == 1)
-                    {
-                      success = 1;
-                    }
-                    else
-                    {
-                      printk(KERN_INFO "%s: Restore 2k failed during probe,"
-                             " EEPROM might be corrupt!\n", eeprom_name);
+	      if(!success)
+	      {
+		if( eeprom_read_buf(LOC2, loc2, 1) == 1)
+		{
+		  D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
+			   LOC1, loc1, LOC2, loc2));
+		  if (memcmp(loc1, loc2, 4) == 0 )
+		  {
+		    /* Data the same, must be mirrored -> 2k */
+		    /* Restore data */
+		    printk(KERN_INFO "%s: 2k detected in step 2\n", eeprom_name);
+		    loc1[0] = ~loc1[0];
+		    if (eeprom_write_buf(LOC1, loc1, 1) == 1)
+		    {
+		      success = 1;
+		    }
+		    else
+		    {
+		      printk(KERN_INFO "%s: Restore 2k failed during probe,"
+			     " EEPROM might be corrupt!\n", eeprom_name);
 
-                    }
+		    }
 
-                    eeprom.size = EEPROM_2KB;
-                  }
-                  else
-                  {
-                    printk(KERN_INFO "%s: 16k detected in step 2\n",
-                           eeprom_name);
-                    loc1[0] = ~loc1[0];
-                    /* Data differs, assume 16k */
-                    /* Restore data */
-                    if (eeprom_write_buf(LOC1, loc1, 1) == 1)
-                    {
-                      success = 1;
-                    }
-                    else
-                    {
-                      printk(KERN_INFO "%s: Restore 16k failed during probe,"
-                             " EEPROM might be corrupt!\n", eeprom_name);
-                    }
+		    eeprom.size = EEPROM_2KB;
+		  }
+		  else
+		  {
+		    printk(KERN_INFO "%s: 16k detected in step 2\n",
+			   eeprom_name);
+		    loc1[0] = ~loc1[0];
+		    /* Data differs, assume 16k */
+		    /* Restore data */
+		    if (eeprom_write_buf(LOC1, loc1, 1) == 1)
+		    {
+		      success = 1;
+		    }
+		    else
+		    {
+		      printk(KERN_INFO "%s: Restore 16k failed during probe,"
+			     " EEPROM might be corrupt!\n", eeprom_name);
+		    }
 
-                    eeprom.size = EEPROM_16KB;
-                  }
-                }
-              }
-            }
-          } /* read LOC1 */
-        } /* address LOC1 */
-        if (!success)
-        {
-          printk(KERN_INFO "%s: Probing failed!, using 2KB!\n", eeprom_name);
-          eeprom.size = EEPROM_2KB;
-        }
+		    eeprom.size = EEPROM_16KB;
+		  }
+		}
+	      }
+	    }
+	  } /* read LOC1 */
+	} /* address LOC1 */
+	if (!success)
+	{
+	  printk(KERN_INFO "%s: Probing failed!, using 2KB!\n", eeprom_name);
+	  eeprom.size = EEPROM_2KB;
+	}
       } /* read */
     }
   }
@@ -323,13 +323,13 @@ int __init eeprom_init(void)
       i2c_outbyte(0x81);
       if (!i2c_getack())
       {
-        eeprom.size = EEPROM_2KB;
+	eeprom.size = EEPROM_2KB;
       }
       else
       {
-        /* It's a 8kB */
-        i2c_inbyte();
-        eeprom.size = EEPROM_8KB;
+	/* It's a 8kB */
+	i2c_inbyte();
+	eeprom.size = EEPROM_8KB;
       }
     }
   }
@@ -462,7 +462,7 @@ static ssize_t eeprom_read(struct file * file, char * buf, size_t count, loff_t 
   if(!eeprom_address(p))
   {
     printk(KERN_INFO "%s: Read failed to address the eeprom: "
-           "0x%08X (%i) page: %i\n", eeprom_name, (int)p, (int)p, page);
+	   "0x%08X (%i) page: %i\n", eeprom_name, (int)p, (int)p, page);
     i2c_stop();
 
     /* don't forget to wake them up */
@@ -508,7 +508,7 @@ static int eeprom_write_buf(loff_t addr, const char * buf, int count)
 /* Writes data to eeprom. */
 
 static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
-                            loff_t *off)
+			    loff_t *off)
 {
   int i, written, restart=1;
   unsigned long p;
@@ -533,115 +533,115 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
       /* address the eeprom */
       if(!eeprom_address(p))
       {
-        printk(KERN_INFO "%s: Write failed to address the eeprom: "
-               "0x%08X (%i) \n", eeprom_name, (int)p, (int)p);
-        i2c_stop();
+	printk(KERN_INFO "%s: Write failed to address the eeprom: "
+	       "0x%08X (%i) \n", eeprom_name, (int)p, (int)p);
+	i2c_stop();
 
-        /* don't forget to wake them up */
-        mutex_unlock(&eeprom.lock);
-        return -EFAULT;
+	/* don't forget to wake them up */
+	mutex_unlock(&eeprom.lock);
+	return -EFAULT;
       }
 #ifdef EEPROM_ADAPTIVE_TIMING
       /* Adaptive algorithm to adjust timing */
       if (eeprom.retry_cnt_addr > 0)
       {
-        /* To Low now */
-        D(printk(">D=%i d=%i\n",
-               eeprom.usec_delay_writecycles, eeprom.usec_delay_step));
+	/* To Low now */
+	D(printk(">D=%i d=%i\n",
+	       eeprom.usec_delay_writecycles, eeprom.usec_delay_step));
 
-        if (eeprom.usec_delay_step < 4)
-        {
-          eeprom.usec_delay_step++;
-          eeprom.usec_delay_writecycles += eeprom.usec_delay_step;
-        }
-        else
-        {
+	if (eeprom.usec_delay_step < 4)
+	{
+	  eeprom.usec_delay_step++;
+	  eeprom.usec_delay_writecycles += eeprom.usec_delay_step;
+	}
+	else
+	{
 
-          if (eeprom.adapt_state > 0)
-          {
-            /* To Low before */
-            eeprom.usec_delay_step *= 2;
-            if (eeprom.usec_delay_step > 2)
-            {
-              eeprom.usec_delay_step--;
-            }
-            eeprom.usec_delay_writecycles += eeprom.usec_delay_step;
-          }
-          else if (eeprom.adapt_state < 0)
-          {
-            /* To High before (toggle dir) */
-            eeprom.usec_delay_writecycles += eeprom.usec_delay_step;
-            if (eeprom.usec_delay_step > 1)
-            {
-              eeprom.usec_delay_step /= 2;
-              eeprom.usec_delay_step--;
-            }
-          }
-        }
+	  if (eeprom.adapt_state > 0)
+	  {
+	    /* To Low before */
+	    eeprom.usec_delay_step *= 2;
+	    if (eeprom.usec_delay_step > 2)
+	    {
+	      eeprom.usec_delay_step--;
+	    }
+	    eeprom.usec_delay_writecycles += eeprom.usec_delay_step;
+	  }
+	  else if (eeprom.adapt_state < 0)
+	  {
+	    /* To High before (toggle dir) */
+	    eeprom.usec_delay_writecycles += eeprom.usec_delay_step;
+	    if (eeprom.usec_delay_step > 1)
+	    {
+	      eeprom.usec_delay_step /= 2;
+	      eeprom.usec_delay_step--;
+	    }
+	  }
+	}
 
-        eeprom.adapt_state = 1;
+	eeprom.adapt_state = 1;
       }
       else
       {
-        /* To High (or good) now */
-        D(printk("<D=%i d=%i\n",
-               eeprom.usec_delay_writecycles, eeprom.usec_delay_step));
+	/* To High (or good) now */
+	D(printk("<D=%i d=%i\n",
+	       eeprom.usec_delay_writecycles, eeprom.usec_delay_step));
 
-        if (eeprom.adapt_state < 0)
-        {
-          /* To High before */
-          if (eeprom.usec_delay_step > 1)
-          {
-            eeprom.usec_delay_step *= 2;
-            eeprom.usec_delay_step--;
+	if (eeprom.adapt_state < 0)
+	{
+	  /* To High before */
+	  if (eeprom.usec_delay_step > 1)
+	  {
+	    eeprom.usec_delay_step *= 2;
+	    eeprom.usec_delay_step--;
 
-            if (eeprom.usec_delay_writecycles > eeprom.usec_delay_step)
-            {
-              eeprom.usec_delay_writecycles -= eeprom.usec_delay_step;
-            }
-          }
-        }
-        else if (eeprom.adapt_state > 0)
-        {
-          /* To Low before (toggle dir) */
-          if (eeprom.usec_delay_writecycles > eeprom.usec_delay_step)
-          {
-            eeprom.usec_delay_writecycles -= eeprom.usec_delay_step;
-          }
-          if (eeprom.usec_delay_step > 1)
-          {
-            eeprom.usec_delay_step /= 2;
-            eeprom.usec_delay_step--;
-          }
+	    if (eeprom.usec_delay_writecycles > eeprom.usec_delay_step)
+	    {
+	      eeprom.usec_delay_writecycles -= eeprom.usec_delay_step;
+	    }
+	  }
+	}
+	else if (eeprom.adapt_state > 0)
+	{
+	  /* To Low before (toggle dir) */
+	  if (eeprom.usec_delay_writecycles > eeprom.usec_delay_step)
+	  {
+	    eeprom.usec_delay_writecycles -= eeprom.usec_delay_step;
+	  }
+	  if (eeprom.usec_delay_step > 1)
+	  {
+	    eeprom.usec_delay_step /= 2;
+	    eeprom.usec_delay_step--;
+	  }
 
-          eeprom.adapt_state = -1;
-        }
+	  eeprom.adapt_state = -1;
+	}
 
-        if (eeprom.adapt_state > -100)
-        {
-          eeprom.adapt_state--;
-        }
-        else
-        {
-          /* Restart adaption */
-          D(printk("#Restart\n"));
-          eeprom.usec_delay_step++;
-        }
+	if (eeprom.adapt_state > -100)
+	{
+	  eeprom.adapt_state--;
+	}
+	else
+	{
+	  /* Restart adaption */
+	  D(printk("#Restart\n"));
+	  eeprom.usec_delay_step++;
+	}
       }
 #endif /* EEPROM_ADAPTIVE_TIMING */
       /* write until we hit a page boundary or count */
       do
       {
-        i2c_outbyte(buf[written]);
-        if(!i2c_getack())
-        {
-          restart=1;
-          printk(KERN_INFO "%s: write error, retrying. %d\n", eeprom_name, i);
-          i2c_stop();
-          break;
-        }
-        written++;
-        p++;
+	i2c_outbyte(buf[written]);
+	if(!i2c_getack())
+	{
+	  restart=1;
+	  printk(KERN_INFO "%s: write error, retrying. %d\n", eeprom_name, i);
+	  i2c_stop();
+	  break;
+	}
+	written++;
+	p++;
       } while( written < count && ( p % eeprom.sequential_write_pagesize ));
 
       /* end write cycle */
@@ -706,11 +706,11 @@ static int eeprom_address(unsigned long addr)
 
       if(!i2c_getack())
       {
-        /* retry */
-        i2c_stop();
+	/* retry */
+	i2c_stop();
       }
       else
-        break;
+	break;
     }
   }
 

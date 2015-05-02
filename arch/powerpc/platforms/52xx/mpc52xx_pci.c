@@ -236,7 +236,7 @@ static struct pci_ops mpc52xx_pci_ops = {
 
 static void __init
 mpc52xx_pci_setup(struct pci_controller *hose,
-                  struct mpc52xx_pci __iomem *pci_regs, phys_addr_t pci_phys)
+		  struct mpc52xx_pci __iomem *pci_regs, phys_addr_t pci_phys)
 {
 	struct resource *res;
 	u32 tmp;

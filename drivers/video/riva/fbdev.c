@@ -844,18 +844,18 @@ static void riva_update_var(struct fb_var_screeninfo *var,
 	NVTRACE_ENTER();
 	var->xres = var->xres_virtual = modedb->xres;
 	var->yres = modedb->yres;
-        if (var->yres_virtual < var->yres)
+	if (var->yres_virtual < var->yres)
 	    var->yres_virtual = var->yres;
-        var->xoffset = var->yoffset = 0;
-        var->pixclock = modedb->pixclock;
-        var->left_margin = modedb->left_margin;
-        var->right_margin = modedb->right_margin;
-        var->upper_margin = modedb->upper_margin;
-        var->lower_margin = modedb->lower_margin;
-        var->hsync_len = modedb->hsync_len;
-        var->vsync_len = modedb->vsync_len;
-        var->sync = modedb->sync;
-        var->vmode = modedb->vmode;
+	var->xoffset = var->yoffset = 0;
+	var->pixclock = modedb->pixclock;
+	var->left_margin = modedb->left_margin;
+	var->right_margin = modedb->right_margin;
+	var->upper_margin = modedb->upper_margin;
+	var->lower_margin = modedb->lower_margin;
+	var->hsync_len = modedb->hsync_len;
+	var->vsync_len = modedb->vsync_len;
+	var->sync = modedb->sync;
+	var->vmode = modedb->vmode;
 	NVTRACE_LEAVE();
 }
 
@@ -985,8 +985,8 @@ static void
 riva_set_rop_solid(struct riva_par *par, int rop)
 {
 	riva_set_pattern(par, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
-        RIVA_FIFO_FREE(par->riva, Rop, 1);
-        NV_WR32(&par->riva.Rop->Rop3, 0, rop);
+	RIVA_FIFO_FREE(par->riva, Rop, 1);
+	NV_WR32(&par->riva.Rop->Rop3, 0, rop);
 
 }
 

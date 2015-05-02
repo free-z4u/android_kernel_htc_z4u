@@ -413,8 +413,8 @@ static int scsi_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
 }
 
 struct bus_type scsi_bus_type = {
-        .name		= "scsi",
-        .match		= scsi_bus_match,
+	.name		= "scsi",
+	.match		= scsi_bus_match,
 	.uevent		= scsi_bus_uevent,
 #ifdef CONFIG_PM
 	.pm		= &scsi_bus_pm_ops,

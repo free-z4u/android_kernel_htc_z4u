@@ -101,7 +101,7 @@ NCR5380_pwrite(struct Scsi_Host *host, unsigned char *addr, int len)
     {
       writeb(*addr++, dma);
       if(--len == 0)
-        break;
+	break;
     }
 
     status = readb(priv(host)->base + STAT);
@@ -111,7 +111,7 @@ NCR5380_pwrite(struct Scsi_Host *host, unsigned char *addr, int len)
     {
       writeb(*addr++, dma);
       if(--len == 0)
-        break;
+	break;
     }
   }
 end:
@@ -163,7 +163,7 @@ NCR5380_pread(struct Scsi_Host *host, unsigned char *addr, int len)
     {
       *addr++ = readb(dma);
       if(--len == 0)
-        break;
+	break;
     }
 
     status = readb(priv(host)->base + STAT);
@@ -173,7 +173,7 @@ NCR5380_pread(struct Scsi_Host *host, unsigned char *addr, int len)
     {
       *addr++ = readb(dma);
       if(--len == 0)
-        break;
+	break;
     }
   }
 end:
@@ -254,8 +254,8 @@ cumanascsi1_probe(struct expansion_card *ec, const struct ecard_id *id)
 
 	NCR5380_init(host, 0);
 
-        priv(host)->ctrl = 0;
-        writeb(0, priv(host)->base + CTRL);
+	priv(host)->ctrl = 0;
+	writeb(0, priv(host)->base + CTRL);
 
 	host->n_io_port = 255;
 	if (!(request_region(host->io_port, host->n_io_port, "CumanaSCSI-1"))) {

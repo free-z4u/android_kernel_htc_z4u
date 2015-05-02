@@ -137,9 +137,9 @@ typedef struct console_s {
 } console_t;
 
 typedef struct klc_malloc_hdr {
-        klconf_off_t km_base;
-        klconf_off_t km_limit;
-        klconf_off_t km_current;
+	klconf_off_t km_base;
+	klconf_off_t km_limit;
+	klconf_off_t km_current;
 } klc_malloc_hdr_t;
 
 /* Functions/macros needed to use this structure */
@@ -159,21 +159,21 @@ typedef struct kl_config_hdr {
 
 #define KL_CONFIG_HDR(_nasid) 	((kl_config_hdr_t *)(KLCONFIG_ADDR(_nasid)))
 #define KL_CONFIG_INFO_OFFSET(_nasid)					\
-        (KL_CONFIG_HDR(_nasid)->ch_board_info)
+	(KL_CONFIG_HDR(_nasid)->ch_board_info)
 #define KL_CONFIG_INFO_SET_OFFSET(_nasid, _off)				\
-        (KL_CONFIG_HDR(_nasid)->ch_board_info = (_off))
+	(KL_CONFIG_HDR(_nasid)->ch_board_info = (_off))
 
 #define KL_CONFIG_INFO(_nasid) 						\
-        (lboard_t *)((KL_CONFIG_HDR(_nasid)->ch_board_info) ?		\
+	(lboard_t *)((KL_CONFIG_HDR(_nasid)->ch_board_info) ?		\
 	 NODE_OFFSET_TO_K1((_nasid), KL_CONFIG_HDR(_nasid)->ch_board_info) : \
 	 0)
 #define KL_CONFIG_MAGIC(_nasid)		(KL_CONFIG_HDR(_nasid)->ch_magic)
 
 #define KL_CONFIG_CHECK_MAGIC(_nasid)					\
-        (KL_CONFIG_HDR(_nasid)->ch_magic == KLCFGINFO_MAGIC)
+	(KL_CONFIG_HDR(_nasid)->ch_magic == KLCFGINFO_MAGIC)
 
 #define KL_CONFIG_HDR_INIT_MAGIC(_nasid)	\
-                  (KL_CONFIG_HDR(_nasid)->ch_magic = KLCFGINFO_MAGIC)
+		  (KL_CONFIG_HDR(_nasid)->ch_magic = KLCFGINFO_MAGIC)
 
 /* --- New Macros for the changed kl_config_hdr_t structure --- */
 
@@ -190,7 +190,7 @@ typedef struct kl_config_hdr {
 /* ------------------------------------------------------------- */
 
 #define KL_CONFIG_INFO_START(_nasid)	\
-        (klconf_off_t)(KLCONFIG_OFFSET(_nasid) + sizeof(kl_config_hdr_t))
+	(klconf_off_t)(KLCONFIG_OFFSET(_nasid) + sizeof(kl_config_hdr_t))
 
 #define KL_CONFIG_BOARD_NASID(_brd)	((_brd)->brd_nasid)
 #define KL_CONFIG_BOARD_SET_NEXT(_brd, _off)	((_brd)->brd_next = (_off))
@@ -198,14 +198,14 @@ typedef struct kl_config_hdr {
 #define KL_CONFIG_DUPLICATE_BOARD(_brd)	((_brd)->brd_flags & DUPLICATE_BOARD)
 
 #define XBOW_PORT_TYPE_HUB(_xbowp, _link) 	\
-               ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_flag & XBOW_PORT_HUB)
+	       ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_flag & XBOW_PORT_HUB)
 #define XBOW_PORT_TYPE_IO(_xbowp, _link) 	\
-               ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_flag & XBOW_PORT_IO)
+	       ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_flag & XBOW_PORT_IO)
 
 #define XBOW_PORT_IS_ENABLED(_xbowp, _link) 	\
-               ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_flag & XBOW_PORT_ENABLE)
+	       ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_flag & XBOW_PORT_ENABLE)
 #define XBOW_PORT_NASID(_xbowp, _link) 	\
-               ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_nasid)
+	       ((_xbowp)->xbow_port_info[(_link) - BASE_XBOW_PORT].port_nasid)
 
 #define XBOW_PORT_IO     0x1
 #define XBOW_PORT_HUB    0x2
@@ -262,8 +262,8 @@ typedef struct kl_config_hdr {
  +------------+       +--------------------------------+
  | errinfo    |--+
  +------------+  |    +--------------------------------+
-                 +--->|r/l brd errinfo,compt err flags |
-                      +--------------------------------+
+		 +--->|r/l brd errinfo,compt err flags |
+		      +--------------------------------+
 
  *
  * Each BOARD consists of COMPONENTs and the BOARD structure has
@@ -326,7 +326,7 @@ typedef struct kl_config_hdr {
 					    and the non-graphics widget boards */
 #define KLCLASS_ROUTER	0x30             /* Router board */
 #define KLCLASS_MIDPLANE 0x40            /* We need to treat this as a board
-                                            so that we can record error info */
+					    so that we can record error info */
 #define KLCLASS_GFX	0x50		/* graphics boards */
 
 #define KLCLASS_PSEUDO_GFX	0x60	/* HDTV type cards that use a gfx
@@ -423,18 +423,18 @@ typedef struct lboard_s {
 	unsigned char 	struct_type;      /* type of structure, local or remote */
 	unsigned char 	brd_type;         /* type+class */
 	unsigned char 	brd_sversion;     /* version of this structure */
-        unsigned char 	brd_brevision;    /* board revision */
-        unsigned char 	brd_promver;      /* board prom version, if any */
+	unsigned char 	brd_brevision;    /* board revision */
+	unsigned char 	brd_promver;      /* board prom version, if any */
 	unsigned char 	brd_flags;        /* Enabled, Disabled etc */
 	unsigned char 	brd_slot;         /* slot number */
 	unsigned short	brd_debugsw;      /* Debug switches */
 	moduleid_t	brd_module;       /* module to which it belongs */
 	partid_t 	brd_partition;    /* Partition number */
-        unsigned short 	brd_diagval;      /* diagnostic value */
-        unsigned short 	brd_diagparm;     /* diagnostic parameter */
-        unsigned char 	brd_inventory;    /* inventory history */
-        unsigned char 	brd_numcompts;    /* Number of components */
-        nic_t         	brd_nic;          /* Number in CAN */
+	unsigned short 	brd_diagval;      /* diagnostic value */
+	unsigned short 	brd_diagparm;     /* diagnostic parameter */
+	unsigned char 	brd_inventory;    /* inventory history */
+	unsigned char 	brd_numcompts;    /* Number of components */
+	nic_t         	brd_nic;          /* Number in CAN */
 	nasid_t		brd_nasid;        /* passed parameter */
 	klconf_off_t 	brd_compts[MAX_COMPTS_PER_BRD]; /* pointers to COMPONENTS */
 	klconf_off_t 	brd_errinfo;      /* Board's error information */
@@ -461,15 +461,15 @@ typedef struct lboard_s {
 #define KLCF_MODULE_ID(_brd)	((_brd)->brd_module)
 
 #define KLCF_NEXT(_brd) 	\
-        ((_brd)->brd_next ? 	\
+	((_brd)->brd_next ? 	\
 	 (lboard_t *)(NODE_OFFSET_TO_K1(NASID_GET(_brd), (_brd)->brd_next)):\
 	 NULL)
 #define KLCF_COMP(_brd, _ndx)   \
-                (klinfo_t *)(NODE_OFFSET_TO_K1(NASID_GET(_brd),	\
+		(klinfo_t *)(NODE_OFFSET_TO_K1(NASID_GET(_brd),	\
 					       (_brd)->brd_compts[(_ndx)]))
 
 #define KLCF_COMP_ERROR(_brd, _comp)	\
-               (NODE_OFFSET_TO_K1(NASID_GET(_brd), (_comp)->errinfo))
+	       (NODE_OFFSET_TO_K1(NASID_GET(_brd), (_comp)->errinfo))
 
 #define KLCF_COMP_TYPE(_comp)	((_comp)->struct_type)
 #define KLCF_BRIDGE_W_ID(_comp)	((_comp)->physid)	/* Widget ID */
@@ -482,24 +482,24 @@ typedef struct lboard_s {
  */
 
 typedef struct klinfo_s {                  /* Generic info */
-        unsigned char   struct_type;       /* type of this structure */
-        unsigned char   struct_version;    /* version of this structure */
-        unsigned char   flags;            /* Enabled, disabled etc */
-        unsigned char   revision;         /* component revision */
-        unsigned short  diagval;          /* result of diagnostics */
-        unsigned short  diagparm;         /* diagnostic parameter */
-        unsigned char   inventory;        /* previous inventory status */
+	unsigned char   struct_type;       /* type of this structure */
+	unsigned char   struct_version;    /* version of this structure */
+	unsigned char   flags;            /* Enabled, disabled etc */
+	unsigned char   revision;         /* component revision */
+	unsigned short  diagval;          /* result of diagnostics */
+	unsigned short  diagparm;         /* diagnostic parameter */
+	unsigned char   inventory;        /* previous inventory status */
 	nic_t 		nic;              /* MUst be aligned properly */
-        unsigned char   physid;           /* physical id of component */
-        unsigned int    virtid;           /* virtual id as seen by system */
+	unsigned char   physid;           /* physical id of component */
+	unsigned int    virtid;           /* virtual id as seen by system */
 	unsigned char	widid;	          /* Widget id - if applicable */
 	nasid_t		nasid;            /* node number - from parent */
 	char		pad1;		  /* pad out structure. */
 	char		pad2;		  /* pad out structure. */
 	COMPONENT	*arcs_compt;      /* ptr to the arcs struct for ease*/
-        klconf_off_t	errinfo;          /* component specific errors */
-        unsigned short  pad3;             /* pci fields have moved over to */
-        unsigned short  pad4;             /* klbri_t */
+	klconf_off_t	errinfo;          /* component specific errors */
+	unsigned short  pad3;             /* pci fields have moved over to */
+	unsigned short  pad4;             /* klbri_t */
 } klinfo_t ;
 
 #define KLCONFIG_INFO_ENABLED(_i)	((_i)->flags & KLINFO_ENABLE)
@@ -628,20 +628,20 @@ typedef struct klmembnk_s {			/* MEMORY BANK */
 } klmembnk_t ;
 
 #define KLCONFIG_MEMBNK_SIZE(_info, _bank)	\
-                            ((_info)->membnk_bnksz[(_bank)])
+			    ((_info)->membnk_bnksz[(_bank)])
 
 
 #define MEMBNK_PREMIUM 1
 #define KLCONFIG_MEMBNK_PREMIUM(_info, _bank)	\
-                            ((_info)->membnk_attr & (MEMBNK_PREMIUM << (_bank)))
+			    ((_info)->membnk_attr & (MEMBNK_PREMIUM << (_bank)))
 
 #define MAX_SERIAL_NUM_SIZE 10
 
 typedef struct klmod_serial_num_s {
       klinfo_t        snum_info;
       union {
-              char snum_str[MAX_SERIAL_NUM_SIZE];
-              unsigned long long       snum_int;
+	      char snum_str[MAX_SERIAL_NUM_SIZE];
+	      unsigned long long       snum_int;
       } snum;
 } klmod_serial_num_t;
 
@@ -658,8 +658,8 @@ typedef struct klmod_serial_num_s {
 typedef struct klxbow_s {                          /* XBOW */
 	klinfo_t 	xbow_info ;
 	klport_t	xbow_port_info[MAX_XBOW_LINKS] ; /* Module number */
-        int		xbow_master_hub_link;
-        /* type of brd connected+component struct ptr+flags */
+	int		xbow_master_hub_link;
+	/* type of brd connected+component struct ptr+flags */
 } klxbow_t ;
 
 #define MAX_PCI_SLOTS 8
@@ -795,8 +795,8 @@ typedef struct klkbddev_s {                          /* KBD device */
 } klkbddev_t ;
 
 typedef struct klmsdev_s {                          /* mouse device */
-        klinfo_t        msdev_info ;
-        void 		*msdev_cfg ;
+	klinfo_t        msdev_info ;
+	void 		*msdev_cfg ;
 } klmsdev_t ;
 
 #define MAX_FDDI_DEVS 10 /* XXX Is this true */

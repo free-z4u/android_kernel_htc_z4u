@@ -152,7 +152,7 @@ static void eisa_mask_irq(struct irq_data *d)
 	EISA_DBG("disable irq %d\n", irq);
 	/* just mask for now */
 	spin_lock_irqsave(&eisa_irq_lock, flags);
-        if (irq & 8) {
+	if (irq & 8) {
 		slave_mask |= (1 << (irq&7));
 		eisa_out8(slave_mask, 0xa1);
 	} else {
@@ -172,7 +172,7 @@ static void eisa_unmask_irq(struct irq_data *d)
 	EISA_DBG("enable irq %d\n", irq);
 
 	spin_lock_irqsave(&eisa_irq_lock, flags);
-        if (irq & 8) {
+	if (irq & 8) {
 		slave_mask &= ~(1 << (irq&7));
 		eisa_out8(slave_mask, 0xa1);
 	} else {
@@ -229,7 +229,7 @@ static irqreturn_t eisa_irq(int wax_irq, void *intr_dev)
 
 	spin_lock_irqsave(&eisa_irq_lock, flags);
 	/* unmask */
-        if (irq & 8) {
+	if (irq & 8) {
 		slave_mask &= ~(1 << (irq&7));
 		eisa_out8(slave_mask, 0xa1);
 	} else {
@@ -270,7 +270,7 @@ static void init_eisa_pic(void)
 	/* slave pic */
 	eisa_out8(0x11,0xa0); /* ICW1 */
 	eisa_out8(0x08,0xa1); /* ICW2 */
-        eisa_out8(0x02,0xa1); /* ICW3 */
+	eisa_out8(0x02,0xa1); /* ICW3 */
 	eisa_out8(0x01,0xa1); /* ICW4 */
 	eisa_out8(0x40,0xa0); /* OCW2 */
 

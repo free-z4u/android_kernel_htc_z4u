@@ -158,11 +158,11 @@ struct mc32_local
 	volatile struct mc32_mailbox *rx_box;
 	volatile struct mc32_mailbox *tx_box;
 	volatile struct mc32_mailbox *exec_box;
-        volatile struct mc32_stats *stats;    /* Start of on-card statistics */
-        u16 tx_chain;           /* Transmit list start offset */
+	volatile struct mc32_stats *stats;    /* Start of on-card statistics */
+	u16 tx_chain;           /* Transmit list start offset */
 	u16 rx_chain;           /* Receive list start offset */
-        u16 tx_len;             /* Transmit list count */
-        u16 rx_len;             /* Receive list count */
+	u16 tx_len;             /* Transmit list count */
+	u16 rx_len;             /* Receive list count */
 
 	u16 xceiver_desired_state; /* HALTED or RUNNING */
 	u16 cmd_nonblocking;    /* Thread is uninterested in command result */
@@ -179,7 +179,7 @@ struct mc32_local
 	u16 rx_ring_tail;       /* index to rx de-queue end */
 
 	struct semaphore cmd_mutex;    /* Serialises issuing of execute commands */
-        struct completion execution_cmd; /* Card has completed an execute command */
+	struct completion execution_cmd; /* Card has completed an execute command */
 	struct completion xceiver_cmd;   /* Card has completed a tx or rx command */
 };
 
@@ -650,7 +650,7 @@ static int mc32_command(struct net_device *dev, u16 cmd, void *data, int len)
 
 	/*
 	 *	A multicast set got blocked - try it now
-         */
+	 */
 
 	if(lp->mc_reload_wait)
 	{
@@ -1107,7 +1107,7 @@ static void mc32_update_stats(struct net_device *dev)
 	                                           st->rx_tooshort_errors=0;
 	rx_errors+=dev->stats.rx_missed_errors+=st->rx_outofresource_errors;
 	                                           st->rx_outofresource_errors=0;
-        dev->stats.rx_errors=rx_errors;
+	dev->stats.rx_errors=rx_errors;
 
 	/* Number of packets which saw one collision */
 	dev->stats.collisions+=st->dataC[10];
@@ -1203,7 +1203,7 @@ static void mc32_rx_ring(struct net_device *dev)
 
 		rx_ring_tail=next_rx(rx_ring_tail);
 	}
-        while(x++<48);
+	while(x++<48);
 
 	/* If there was actually a frame to be processed, place the EOL bit */
 	/* at the descriptor prior to the one to be filled next */
@@ -1405,7 +1405,7 @@ static irqreturn_t mc32_interrupt(int irq, void *dev_id)
 
 	/*
 	 *	Process the transmit and receive rings
-         */
+	 */
 
 	if(tx_event)
 		mc32_tx_ring(dev);

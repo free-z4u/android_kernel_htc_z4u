@@ -1349,15 +1349,15 @@ int max17050_get_batt_level(struct battery_type *battery)
 
        rc = max17050_i2c_read(MAX17050_FG_RepSOC, (u8 *)&battery->capacity_raw_hex, 2);
        if (unlikely(rc < 0))
-               printk(KERN_ERR "%s: Failed to read MAX17050_FG_RepSOC: 0x%x", __func__, rc);
+	       printk(KERN_ERR "%s: Failed to read MAX17050_FG_RepSOC: 0x%x", __func__, rc);
 
        battery->capacity_raw = level = (battery->capacity_raw_hex * 10) / 256;
 
        if (level >= 1000)
-               level = 1000;
+	       level = 1000;
 
 	   if (level < 0)
-               level = 0;
+	       level = 0;
 
        return level;
 }

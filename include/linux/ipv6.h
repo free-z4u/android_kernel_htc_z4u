@@ -345,7 +345,7 @@ struct ipv6_pinfo {
 				ohopopts:1,
 				dstopts:1,
 				odstopts:1,
-                                rxflow:1,
+				rxflow:1,
 				rxtclass:1,
 				rxpmtu:1,
 				rxorigdstaddr:1;

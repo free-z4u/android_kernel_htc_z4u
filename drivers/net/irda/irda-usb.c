@@ -325,10 +325,10 @@ static void irda_usb_change_speed_xbofs(struct irda_usb_cb *self)
 	}
 
 	/* Submit the 0 length IrDA frame to trigger new speed settings */
-        usb_fill_bulk_urb(urb, self->usbdev,
+	usb_fill_bulk_urb(urb, self->usbdev,
 		      usb_sndbulkpipe(self->usbdev, self->bulk_out_ep),
-                      frame, IRDA_USB_SPEED_MTU,
-                      speed_bulk_callback, self);
+		      frame, IRDA_USB_SPEED_MTU,
+		      speed_bulk_callback, self);
 	urb->transfer_buffer_length = self->header_length;
 	urb->transfer_flags = 0;
 
@@ -408,12 +408,12 @@ static netdev_tx_t irda_usb_hard_xmit(struct sk_buff *skb,
 	}
 
 	/* Check if we need to change the number of xbofs */
-        xbofs = irda_get_next_xbofs(skb);
-        if ((xbofs != self->xbofs) && (xbofs != -1)) {
+	xbofs = irda_get_next_xbofs(skb);
+	if ((xbofs != self->xbofs) && (xbofs != -1)) {
 		self->new_xbofs = xbofs;
 	}
 
-        /* Check if we need to change the speed */
+	/* Check if we need to change the speed */
 	speed = irda_get_next_speed(skb);
 	if ((speed != self->speed) && (speed != -1)) {
 		/* Set the desired speed */
@@ -467,8 +467,8 @@ static netdev_tx_t irda_usb_hard_xmit(struct sk_buff *skb,
 
 	usb_fill_bulk_urb(urb, self->usbdev,
 		      usb_sndbulkpipe(self->usbdev, self->bulk_out_ep),
-                      self->tx_buff, skb->len + self->header_length,
-                      write_bulk_callback, skb);
+		      self->tx_buff, skb->len + self->header_length,
+		      write_bulk_callback, skb);
 
 	/* This flag (URB_ZERO_PACKET) indicates that what we send is not
 	 * a continuous stream of data but separate packets.
@@ -530,7 +530,7 @@ static netdev_tx_t irda_usb_hard_xmit(struct sk_buff *skb,
 	} else {
 		/* Increment packet stats */
 		netdev->stats.tx_packets++;
-                netdev->stats.tx_bytes += skb->len;
+		netdev->stats.tx_bytes += skb->len;
 
 		netdev->trans_start = jiffies;
 	}
@@ -776,7 +776,7 @@ static void irda_usb_submit(struct irda_usb_cb *self, struct sk_buff *skb, struc
 	usb_fill_bulk_urb(urb, self->usbdev,
 		      usb_rcvbulkpipe(self->usbdev, self->bulk_in_ep),
 		      skb->data, IRDA_SKB_MAX_MTU,
-                      irda_usb_receive, skb);
+		      irda_usb_receive, skb);
 	urb->status = 0;
 
 	/* Can be called from irda_usb_receive (irq handler) -> GFP_ATOMIC */
@@ -869,7 +869,7 @@ static void irda_usb_receive(struct urb *urb)
 	 * reduce the min turn time a bit since we will know
 	 * how much time we have used for protocol processing
 	 */
-        do_gettimeofday(&self->stamp);
+	do_gettimeofday(&self->stamp);
 
 	/* Check if we need to copy the data to a new skb or not.
 	 * For most frames, we use ZeroCopy and pass the already
@@ -1025,13 +1025,13 @@ static int stir421x_fw_upload(struct irda_usb_cb *self,
 			     const unsigned char *patch,
 			     const unsigned int patch_len)
 {
-        int ret = -ENOMEM;
-        int actual_len = 0;
-        unsigned int i;
-        unsigned int block_size = 0;
-        unsigned char *patch_block;
+	int ret = -ENOMEM;
+	int actual_len = 0;
+	unsigned int i;
+	unsigned int block_size = 0;
+	unsigned char *patch_block;
 
-        patch_block = kzalloc(STIR421X_PATCH_BLOCK_SIZE, GFP_KERNEL);
+	patch_block = kzalloc(STIR421X_PATCH_BLOCK_SIZE, GFP_KERNEL);
 	if (patch_block == NULL)
 		return -ENOMEM;
 
@@ -1061,7 +1061,7 @@ static int stir421x_fw_upload(struct irda_usb_cb *self,
 
 	kfree(patch_block);
 
-        return ret;
+	return ret;
  }
 
 /*
@@ -1078,30 +1078,30 @@ static int stir421x_patch_device(struct irda_usb_cb *self)
 	const unsigned char *fw_version_ptr; /* pointer to version string */
 	unsigned long fw_version = 0;
 
-        /*
-         * Known firmware patch file names for STIR421x dongles
-         * are "42101001.sb" or "42101002.sb"
-         */
-        sprintf(stir421x_fw_name, "4210%4X.sb",
-                self->usbdev->descriptor.bcdDevice);
-        ret = request_firmware(&fw, stir421x_fw_name, &self->usbdev->dev);
-        if (ret < 0)
-                return ret;
+	/*
+	 * Known firmware patch file names for STIR421x dongles
+	 * are "42101001.sb" or "42101002.sb"
+	 */
+	sprintf(stir421x_fw_name, "4210%4X.sb",
+		self->usbdev->descriptor.bcdDevice);
+	ret = request_firmware(&fw, stir421x_fw_name, &self->usbdev->dev);
+	if (ret < 0)
+		return ret;
 
-        /* We get a patch from userspace */
-        IRDA_MESSAGE("%s(): Received firmware %s (%zu bytes)\n",
-                     __func__, stir421x_fw_name, fw->size);
+	/* We get a patch from userspace */
+	IRDA_MESSAGE("%s(): Received firmware %s (%zu bytes)\n",
+		     __func__, stir421x_fw_name, fw->size);
 
-        ret = -EINVAL;
+	ret = -EINVAL;
 
 	/* Get the bcd product version */
-        if (!memcmp(fw->data, STIR421X_PATCH_PRODUCT_VER,
-                    sizeof(STIR421X_PATCH_PRODUCT_VER) - 1)) {
-                fw_version_ptr = fw->data +
+	if (!memcmp(fw->data, STIR421X_PATCH_PRODUCT_VER,
+		    sizeof(STIR421X_PATCH_PRODUCT_VER) - 1)) {
+		fw_version_ptr = fw->data +
 			sizeof(STIR421X_PATCH_PRODUCT_VER) - 1;
 
-                /* Let's check if the product version is dotted */
-                if (fw_version_ptr[3] == '.' &&
+		/* Let's check if the product version is dotted */
+		if (fw_version_ptr[3] == '.' &&
 		    fw_version_ptr[7] == '.') {
 			unsigned long major, minor, build;
 			major = simple_strtoul(fw_version_ptr, NULL, 10);
@@ -1114,35 +1114,35 @@ static int stir421x_patch_device(struct irda_usb_cb *self)
 				+ (build % 10);
 
 			IRDA_DEBUG(3, "%s(): Firmware Product version %ld\n",
-                                   __func__, fw_version);
-                }
-        }
+				   __func__, fw_version);
+		}
+	}
 
-        if (self->usbdev->descriptor.bcdDevice == cpu_to_le16(fw_version)) {
-                /*
+	if (self->usbdev->descriptor.bcdDevice == cpu_to_le16(fw_version)) {
+		/*
 		 * If we're here, we've found a correct patch
-                 * The actual image starts after the "STMP" keyword
-                 * so forward to the firmware header tag
-                 */
-                for (i = 0; i < fw->size && fw->data[i] !=
+		 * The actual image starts after the "STMP" keyword
+		 * so forward to the firmware header tag
+		 */
+		for (i = 0; i < fw->size && fw->data[i] !=
 			     STIR421X_PATCH_END_OF_HDR_TAG; i++) ;
-                /* here we check for the out of buffer case */
-                if (i < STIR421X_PATCH_CODE_OFFSET && i < fw->size &&
+		/* here we check for the out of buffer case */
+		if (i < STIR421X_PATCH_CODE_OFFSET && i < fw->size &&
 				STIR421X_PATCH_END_OF_HDR_TAG == fw->data[i]) {
-                        if (!memcmp(fw->data + i + 1, STIR421X_PATCH_STMP_TAG,
-                                    sizeof(STIR421X_PATCH_STMP_TAG) - 1)) {
+			if (!memcmp(fw->data + i + 1, STIR421X_PATCH_STMP_TAG,
+				    sizeof(STIR421X_PATCH_STMP_TAG) - 1)) {
 
 				/* We can upload the patch to the target */
 				i += sizeof(STIR421X_PATCH_STMP_TAG);
-                                ret = stir421x_fw_upload(self, &fw->data[i],
+				ret = stir421x_fw_upload(self, &fw->data[i],
 							 fw->size - i);
-                        }
-                }
-        }
+			}
+		}
+	}
 
-        release_firmware(fw);
+	release_firmware(fw);
 
-        return ret;
+	return ret;
 }
 
 

@@ -9,7 +9,7 @@
    bits 31..9 are used like this:
    bits 15..9 (SHM_ID) the id of the shared memory segment
    bits 30..16 (SHM_IDX) the index of the page within the shared memory segment
-                    (actually only bits 25..16 get used since SHMMAX is so low)
+		    (actually only bits 25..16 get used since SHMMAX is so low)
    bit 31 (SHM_READ_ONLY) flag whether the page belongs to a read-only attach
 */
 /* on the m68k both bits 0 and 1 must be zero */

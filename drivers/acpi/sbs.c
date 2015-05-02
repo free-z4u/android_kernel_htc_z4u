@@ -318,7 +318,7 @@ static enum power_supply_property sbs_energy_battery_props[] = {
 
 
 /* --------------------------------------------------------------------------
-                            Smart Battery System Management
+			    Smart Battery System Management
    -------------------------------------------------------------------------- */
 
 struct acpi_battery_reader {
@@ -482,7 +482,7 @@ static struct device_attribute alarm_attr = {
 };
 
 /* --------------------------------------------------------------------------
-                              FS Interface (/proc/acpi)
+			      FS Interface (/proc/acpi)
    -------------------------------------------------------------------------- */
 
 #ifdef CONFIG_ACPI_PROCFS_POWER
@@ -750,7 +750,7 @@ static const struct file_operations acpi_ac_state_fops = {
 #endif
 
 /* --------------------------------------------------------------------------
-                                 Driver Interface
+				 Driver Interface
    -------------------------------------------------------------------------- */
 static int acpi_battery_read(struct acpi_battery *battery)
 {

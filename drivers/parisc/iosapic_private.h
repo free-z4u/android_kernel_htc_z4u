@@ -122,10 +122,10 @@ struct irt_entry {
 
 #ifdef SUPPORT_MULTI_CELL
 struct iosapic_irt {
-        struct iosapic_irt *irt_next;  /* next routing table */
-        struct irt_entry *irt_base;             /* intr routing table address */
-        size_t  irte_count;            /* number of entries in the table */
-        size_t  irte_size;             /* size (bytes) of each entry */
+	struct iosapic_irt *irt_next;  /* next routing table */
+	struct irt_entry *irt_base;             /* intr routing table address */
+	size_t  irte_count;            /* number of entries in the table */
+	size_t  irte_size;             /* size (bytes) of each entry */
 };
 #endif
 

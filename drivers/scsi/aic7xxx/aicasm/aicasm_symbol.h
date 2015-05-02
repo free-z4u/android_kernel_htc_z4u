@@ -121,8 +121,8 @@ struct macro_info {
 };
 
 typedef struct expression_info {
-        symlist_t       referenced_syms;
-        int             value;
+	symlist_t       referenced_syms;
+	int             value;
 } expression_t;
 
 typedef struct symbol {
@@ -176,7 +176,7 @@ typedef struct scope {
 	scope_type type;
 	int inner_scope_patches;
 	int begin_addr;
-        int end_addr;
+	int end_addr;
 	patch_info_t patches[2];
 	int func_num;
 } scope_t;

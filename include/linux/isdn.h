@@ -224,7 +224,7 @@ typedef struct {
 #define USG_FAX(x)          ((x & ISDN_USAGE_MASK)==ISDN_USAGE_FAX)
 #define USG_OUTGOING(x)     ((x & ISDN_USAGE_OUTGOING)==ISDN_USAGE_OUTGOING)
 #define USG_MODEMORVOICE(x) (((x & ISDN_USAGE_MASK)==ISDN_USAGE_MODEM) || \
-                             ((x & ISDN_USAGE_MASK)==ISDN_USAGE_VOICE)     )
+			     ((x & ISDN_USAGE_MASK)==ISDN_USAGE_VOICE)     )
 
 /* Timer-delays and scheduling-flags */
 #define ISDN_TIMER_RES         4                         /* Main Timer-Resolution   */
@@ -240,9 +240,9 @@ typedef struct {
 #define ISDN_TIMER_NETHANGUP  32
 #define ISDN_TIMER_CARRIER   256 /* Wait for Carrier */
 #define ISDN_TIMER_FAST      (ISDN_TIMER_MODEMREAD | ISDN_TIMER_MODEMPLUS | \
-                              ISDN_TIMER_MODEMXMIT)
+			      ISDN_TIMER_MODEMXMIT)
 #define ISDN_TIMER_SLOW      (ISDN_TIMER_MODEMRING | ISDN_TIMER_NETHANGUP | \
-                              ISDN_TIMER_NETDIAL | ISDN_TIMER_CARRIER)
+			      ISDN_TIMER_NETDIAL | ISDN_TIMER_CARRIER)
 
 /* Timeout-Values for isdn_net_dial() */
 #define ISDN_TIMER_DTIMEOUT10 (10*HZ/(ISDN_TIMER_02SEC*(ISDN_TIMER_RES+1)))
@@ -297,28 +297,28 @@ typedef struct isdn_net_local_s {
   u_char                 cbhup;        /* Flag: Reject Call before Callback*/
   u_char                 dialstate;    /* State for dialing                */
   u_char                 p_encap;      /* Packet encapsulation             */
-                                       /*   0 = Ethernet over ISDN         */
+				       /*   0 = Ethernet over ISDN         */
 				       /*   1 = RAW-IP                     */
-                                       /*   2 = IP with type field         */
+				       /*   2 = IP with type field         */
   u_char                 l2_proto;     /* Layer-2-protocol                 */
 				       /* See ISDN_PROTO_L2..-constants in */
-                                       /* isdnif.h                         */
-                                       /*   0 = X75/LAPB with I-Frames     */
+				       /* isdnif.h                         */
+				       /*   0 = X75/LAPB with I-Frames     */
 				       /*   1 = X75/LAPB with UI-Frames    */
 				       /*   2 = X75/LAPB with BUI-Frames   */
 				       /*   3 = HDLC                       */
   u_char                 l3_proto;     /* Layer-3-protocol                 */
 				       /* See ISDN_PROTO_L3..-constants in */
-                                       /* isdnif.h                         */
-                                       /*   0 = Transparent                */
+				       /* isdnif.h                         */
+				       /*   0 = Transparent                */
   int                    huptimer;     /* Timeout-counter for auto-hangup  */
   int                    charge;       /* Counter for charging units       */
   ulong                  chargetime;   /* Timer for Charging info          */
   int                    hupflags;     /* Flags for charge-unit-hangup:    */
 				       /* bit0: chargeint is invalid       */
 				       /* bit1: Getting charge-interval    */
-                                       /* bit2: Do charge-unit-hangup      */
-                                       /* bit3: Do hangup even on incoming */
+				       /* bit2: Do charge-unit-hangup      */
+				       /* bit3: Do hangup even on incoming */
   int                    outgoing;     /* Flag: outgoing call              */
   int                    onhtime;      /* Time to keep link up             */
   int                    chargeint;    /* Interval between charge-infos    */
@@ -341,11 +341,11 @@ typedef struct isdn_net_local_s {
   struct sk_buff_head    super_tx_queue; /* List of supervisory frames to  */
 	                               /* be transmitted asap              */
   atomic_t frame_cnt;                  /* number of frames currently       */
-                        	       /* queued in HL driver              */
-                                       /* Ptr to orig. hard_header_cache   */
+				       /* queued in HL driver              */
+				       /* Ptr to orig. hard_header_cache   */
   spinlock_t             xmit_lock;    /* used to protect the xmit path of */
-                                       /* a particular channel (including  */
-                                       /* the frame_cnt                    */
+				       /* a particular channel (including  */
+				       /* the frame_cnt                    */
 
   int  pppbind;                        /* ippp device for bindings         */
   int					dialtimeout;	/* How long shall we try on dialing? (jiffies) */

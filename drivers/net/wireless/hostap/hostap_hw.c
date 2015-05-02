@@ -595,28 +595,28 @@ static int hfa384x_cmd_wait(struct net_device *dev, u16 cmd, u16 param0)
 	if (res)
 		return res;
 
-        /* wait for command completion */
+	/* wait for command completion */
 	if ((cmd & HFA384X_CMDCODE_MASK) == HFA384X_CMDCODE_DOWNLOAD)
 		tries = HFA384X_DL_COMPL_TIMEOUT;
 	else
 		tries = HFA384X_CMD_COMPL_TIMEOUT;
 
-        while (!(HFA384X_INW(HFA384X_EVSTAT_OFF) & HFA384X_EV_CMD) &&
-               tries > 0) {
-                tries--;
-                udelay(10);
-        }
-        if (tries == 0) {
-                reg = HFA384X_INW(HFA384X_EVSTAT_OFF);
+	while (!(HFA384X_INW(HFA384X_EVSTAT_OFF) & HFA384X_EV_CMD) &&
+	       tries > 0) {
+		tries--;
+		udelay(10);
+	}
+	if (tries == 0) {
+		reg = HFA384X_INW(HFA384X_EVSTAT_OFF);
 		prism2_io_debug_error(dev, 5);
-                printk(KERN_DEBUG "%s: hfa384x_cmd_wait - timeout2 - "
+		printk(KERN_DEBUG "%s: hfa384x_cmd_wait - timeout2 - "
 		       "reg=0x%04x\n", dev->name, reg);
-                return -ETIMEDOUT;
-        }
+		return -ETIMEDOUT;
+	}
 
-        res = (HFA384X_INW(HFA384X_STATUS_OFF) &
-               (BIT(14) | BIT(13) | BIT(12) | BIT(11) | BIT(10) | BIT(9) |
-                BIT(8))) >> 8;
+	res = (HFA384X_INW(HFA384X_STATUS_OFF) &
+	       (BIT(14) | BIT(13) | BIT(12) | BIT(11) | BIT(10) | BIT(9) |
+		BIT(8))) >> 8;
 #ifndef final_version
 	if (res) {
 		printk(KERN_DEBUG "%s: CMD=0x%04x => res=0x%02x\n",

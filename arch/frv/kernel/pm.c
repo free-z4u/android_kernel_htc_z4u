@@ -83,7 +83,7 @@ int pm_do_bus_sleep(void)
 	local_irq_disable();
 
 	/*
-         * Here is where we need some platform-dependent setup
+	 * Here is where we need some platform-dependent setup
 	 * of the interrupt state so that appropriate wakeup
 	 * sources are allowed and all others are masked.
 	 */
@@ -104,7 +104,7 @@ int pm_do_bus_sleep(void)
 	__set_LEDS(0xa2);
 
 	/*
-         * Here is where we need some platform-dependent restore
+	 * Here is where we need some platform-dependent restore
 	 * of the interrupt state prior to being called.
 	 */
 	__power_switch_wake_cleanup();

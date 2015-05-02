@@ -564,15 +564,15 @@ static int ali_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	if (pdev->revision < 0x20) {
 		ppi[0] = &info_early;
 	} else if (pdev->revision < 0xC2) {
-        	ppi[0] = &info_20;
+		ppi[0] = &info_20;
 	} else if (pdev->revision == 0xC2) {
-        	ppi[0] = &info_c2;
+		ppi[0] = &info_c2;
 	} else if (pdev->revision == 0xC3) {
-        	ppi[0] = &info_c3;
+		ppi[0] = &info_c3;
 	} else if (pdev->revision == 0xC4) {
-        	ppi[0] = &info_c4;
+		ppi[0] = &info_c4;
 	} else
-        	ppi[0] = &info_c5;
+		ppi[0] = &info_c5;
 
 	ali_init_chipset(pdev);
 

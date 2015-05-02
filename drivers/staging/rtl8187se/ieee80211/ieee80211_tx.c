@@ -71,10 +71,10 @@ desc | ^-ver-^  |  ^type-^  |  ^-----subtype-----^  | to  |from |more |retry| pw
      |          |           | x=0 data,x=1 data+ack | DS  | DS  |frag |     | mgm |data |      |
      '-----------------------------------------------------------------------------------------'
 		                                    /\
-                                                    |
+						    |
 802.11 Data Frame                                   |
-           ,--------- 'ctrl' expands to >-----------'
-          |
+	   ,--------- 'ctrl' expands to >-----------'
+	  |
       ,--'---,-------------------------------------------------------------.
 Bytes |  2   |  2   |    6    |    6    |    6    |  2   | 0..2312 |   4  |
       |------|------|---------|---------|---------|------|---------|------|
@@ -82,7 +82,7 @@ Desc. | ctrl | dura |  DA/RA  |   TA    |    SA   | Sequ |  Frame  |  fcs |
       |      | tion | (BSSID) |         |         | ence |  data   |      |
       `--------------------------------------------------|         |------'
 Total: 28 non-data bytes                                 `----.----'
-                                                              |
+							      |
        .- 'Frame data' expands to <---------------------------'
        |
        V
@@ -94,7 +94,7 @@ Desc. | SNAP | SNAP | Control |Eth Tunnel| Type | IP      |
       | 0xAA | 0xAA |0x03 (UI)|0x00-00-F8|      |         |
       `-----------------------------------------|         |
 Total: 8 non-data bytes                         `----.----'
-                                                     |
+						     |
        .- 'IP Packet' expands, if WEP enabled, to <--'
        |
        V
@@ -187,8 +187,8 @@ int ieee80211_encrypt_fragment(
 	int res;
 
  /*added to care about null crypt condition, to solve that system hangs when shared keys error*/
-        if (!crypt || !crypt->ops)
-        return -1;
+	if (!crypt || !crypt->ops)
+	return -1;
 
 #ifdef CONFIG_IEEE80211_CRYPT_TKIP
 	struct ieee80211_hdr_4addr *header;

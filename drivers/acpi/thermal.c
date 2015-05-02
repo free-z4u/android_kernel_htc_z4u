@@ -190,7 +190,7 @@ struct acpi_thermal {
 };
 
 /* --------------------------------------------------------------------------
-                             Thermal Zone Management
+			     Thermal Zone Management
    -------------------------------------------------------------------------- */
 
 static int acpi_thermal_get_temperature(struct acpi_thermal *tz)
@@ -897,7 +897,7 @@ static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
 
 
 /* --------------------------------------------------------------------------
-                                 Driver Interface
+				 Driver Interface
    -------------------------------------------------------------------------- */
 
 static void acpi_thermal_notify(struct acpi_device *device, u32 event)

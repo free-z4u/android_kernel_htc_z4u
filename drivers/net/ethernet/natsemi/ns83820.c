@@ -1563,7 +1563,7 @@ static int ns83820_stop(struct net_device *ndev)
 static void ns83820_tx_timeout(struct net_device *ndev)
 {
 	struct ns83820 *dev = PRIV(ndev);
-        u32 tx_done_idx;
+	u32 tx_done_idx;
 	__le32 *desc;
 	unsigned long flags;
 

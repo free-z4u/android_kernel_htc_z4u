@@ -66,7 +66,7 @@ static void gdb_console_output(struct console *c, const char *msg, unsigned len)
 {
 	for (; len > 0; len--) {
 		asm("mov.w %0,r2\n\t"
-                    "jsr @0xc4"::"r"(*msg++):"er2");
+		    "jsr @0xc4"::"r"(*msg++):"er2");
 	}
 }
 

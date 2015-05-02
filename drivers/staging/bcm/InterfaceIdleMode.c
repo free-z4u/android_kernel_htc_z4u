@@ -284,7 +284,7 @@ void InterfaceHandleShutdownModeWakeup(PMINI_ADAPTER Adapter)
     else
 	{
 
-        //clear Interrupt EP registers.
+	//clear Interrupt EP registers.
 		bytes = rdmalt(Adapter,DEVICE_INT_OUT_EP_REG0, &uiRegVal, sizeof(uiRegVal));
 		if (bytes < 0) {
 			Status = bytes;

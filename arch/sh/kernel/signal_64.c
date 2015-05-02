@@ -337,7 +337,7 @@ static int
 restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc, long long *r2_p)
 {
 	unsigned int err = 0;
-        unsigned long long current_sr, new_sr;
+	unsigned long long current_sr, new_sr;
 #define SR_MASK 0xffff8cfd
 
 #define COPY(x)		err |= __get_user(regs->x, &sc->sc_##x)
@@ -361,13 +361,13 @@ restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc, long long
 	COPY(tregs[0]);	COPY(tregs[1]);	COPY(tregs[2]);	COPY(tregs[3]);
 	COPY(tregs[4]);	COPY(tregs[5]);	COPY(tregs[6]);	COPY(tregs[7]);
 
-        /* Prevent the signal handler manipulating SR in a way that can
-           crash the kernel. i.e. only allow S, Q, M, PR, SZ, FR to be
-           modified */
-        current_sr = regs->sr;
-        err |= __get_user(new_sr, &sc->sc_sr);
-        regs->sr &= SR_MASK;
-        regs->sr |= (new_sr & ~SR_MASK);
+	/* Prevent the signal handler manipulating SR in a way that can
+	   crash the kernel. i.e. only allow S, Q, M, PR, SZ, FR to be
+	   modified */
+	current_sr = regs->sr;
+	err |= __get_user(new_sr, &sc->sc_sr);
+	regs->sr &= SR_MASK;
+	regs->sr |= (new_sr & ~SR_MASK);
 
 	COPY(pc);
 
@@ -582,14 +582,14 @@ static int setup_frame(int sig, struct k_sigaction *ka,
 	regs->regs[REG_SP] = neff_sign_extend((unsigned long)frame);
 	regs->regs[REG_ARG1] = signal; /* Arg for signal handler */
 
-        /* FIXME:
-           The glibc profiling support for SH-5 needs to be passed a sigcontext
-           so it can retrieve the PC.  At some point during 2003 the glibc
-           support was changed to receive the sigcontext through the 2nd
-           argument, but there are still versions of libc.so in use that use
-           the 3rd argument.  Until libc.so is stabilised, pass the sigcontext
-           through both 2nd and 3rd arguments.
-        */
+	/* FIXME:
+	   The glibc profiling support for SH-5 needs to be passed a sigcontext
+	   so it can retrieve the PC.  At some point during 2003 the glibc
+	   support was changed to receive the sigcontext through the 2nd
+	   argument, but there are still versions of libc.so in use that use
+	   the 3rd argument.  Until libc.so is stabilised, pass the sigcontext
+	   through both 2nd and 3rd arguments.
+	*/
 
 	regs->regs[REG_ARG2] = (unsigned long long)(unsigned long)(signed long)&frame->sc;
 	regs->regs[REG_ARG3] = (unsigned long long)(unsigned long)(signed long)&frame->sc;

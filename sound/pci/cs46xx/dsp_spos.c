@@ -176,8 +176,8 @@ static int add_symbols (struct snd_cs46xx * chip, struct dsp_module_desc * modul
 
 			ins->symbol_table.nsymbols++;
 		} else {
-          /* if (0) printk ("dsp_spos: symbol <%s> duplicated, probably nothing wrong with that (Cirrus?)\n",
-                             module->symbol_table.symbols[i].symbol_name); */
+	  /* if (0) printk ("dsp_spos: symbol <%s> duplicated, probably nothing wrong with that (Cirrus?)\n",
+			     module->symbol_table.symbols[i].symbol_name); */
 		}
 	}
 
@@ -1800,7 +1800,7 @@ int cs46xx_dsp_enable_pcm_capture (struct snd_cs46xx *chip)
 
 	mutex_lock(&chip->spos_mutex);
 	ins->pcm_input = cs46xx_add_record_source(chip,ins->ref_snoop_scb,PCMSERIALIN_PCM_SCB_ADDR,
-                                                  "PCMSerialInput_Wave");
+						  "PCMSerialInput_Wave");
 	mutex_unlock(&chip->spos_mutex);
 
 	return 0;

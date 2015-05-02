@@ -40,7 +40,7 @@ static int coda_symlink(struct inode *dir_inode, struct dentry *entry,
 static int coda_mkdir(struct inode *dir_inode, struct dentry *entry, umode_t mode);
 static int coda_rmdir(struct inode *dir_inode, struct dentry *entry);
 static int coda_rename(struct inode *old_inode, struct dentry *old_dentry,
-                       struct inode *new_inode, struct dentry *new_dentry);
+		       struct inode *new_inode, struct dentry *new_dentry);
 
 /* dir file-ops */
 static int coda_readdir(struct file *file, void *buf, filldir_t filldir);
@@ -259,7 +259,7 @@ static int coda_link(struct dentry *source_de, struct inode *dir_inode,
 	  struct dentry *de)
 {
 	struct inode *inode = source_de->d_inode;
-        const char * name = de->d_name.name;
+	const char * name = de->d_name.name;
 	int len = de->d_name.len;
 	int error;
 
@@ -314,7 +314,7 @@ static int coda_symlink(struct inode *dir_inode, struct dentry *de,
 /* destruction routines: unlink, rmdir */
 static int coda_unlink(struct inode *dir, struct dentry *de)
 {
-        int error;
+	int error;
 	const char *name = de->d_name.name;
 	int len = de->d_name.len;
 

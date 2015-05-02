@@ -806,7 +806,7 @@ static void zfcp_fsf_abort_fcp_command_handler(struct zfcp_fsf_req *req)
 		zfcp_erp_lun_reopen(sdev, ZFCP_STATUS_COMMON_ERP_FAILED,
 				    "fsafch4");
 		req->status |= ZFCP_STATUS_FSFREQ_ERROR;
-                break;
+		break;
 	case FSF_ADAPTER_STATUS_AVAILABLE:
 		switch (fsq->word[0]) {
 		case FSF_SQ_INVOKE_LINK_TEST_PROCEDURE:
@@ -884,24 +884,24 @@ static void zfcp_fsf_send_ct_handler(struct zfcp_fsf_req *req)
 		goto skip_fsfstatus;
 
 	switch (header->fsf_status) {
-        case FSF_GOOD:
+	case FSF_GOOD:
 		zfcp_dbf_san_res("fsscth1", req);
 		ct->status = 0;
 		break;
-        case FSF_SERVICE_CLASS_NOT_SUPPORTED:
+	case FSF_SERVICE_CLASS_NOT_SUPPORTED:
 		zfcp_fsf_class_not_supp(req);
 		break;
-        case FSF_ADAPTER_STATUS_AVAILABLE:
-                switch (header->fsf_status_qual.word[0]){
-                case FSF_SQ_INVOKE_LINK_TEST_PROCEDURE:
-                case FSF_SQ_ULP_DEPENDENT_ERP_REQUIRED:
+	case FSF_ADAPTER_STATUS_AVAILABLE:
+		switch (header->fsf_status_qual.word[0]){
+		case FSF_SQ_INVOKE_LINK_TEST_PROCEDURE:
+		case FSF_SQ_ULP_DEPENDENT_ERP_REQUIRED:
 			req->status |= ZFCP_STATUS_FSFREQ_ERROR;
 			break;
-                }
-                break;
+		}
+		break;
 	case FSF_ACCESS_DENIED:
 		break;
-        case FSF_PORT_BOXED:
+	case FSF_PORT_BOXED:
 		req->status |= ZFCP_STATUS_FSFREQ_ERROR;
 		break;
 	case FSF_PORT_HANDLE_NOT_VALID:

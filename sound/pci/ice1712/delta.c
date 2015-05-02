@@ -261,8 +261,8 @@ static int delta_spdif_stream_put(struct snd_ice1712 *ice, struct snd_ctl_elem_v
  */
 static void delta_ak4524_lock(struct snd_akm4xxx *ak, int chip)
 {
-        struct snd_ak4xxx_private *priv = (void *)ak->private_value[0];
-        struct snd_ice1712 *ice = ak->private_data[0];
+	struct snd_ak4xxx_private *priv = (void *)ak->private_value[0];
+	struct snd_ice1712 *ice = ak->private_data[0];
 
 	snd_ice1712_save_gpio_status(ice);
 	priv->cs_mask =
@@ -275,8 +275,8 @@ static void delta_ak4524_lock(struct snd_akm4xxx *ak, int chip)
  */
 static void delta1010lt_ak4524_lock(struct snd_akm4xxx *ak, int chip)
 {
-        struct snd_ak4xxx_private *priv = (void *)ak->private_value[0];
-        struct snd_ice1712 *ice = ak->private_data[0];
+	struct snd_ak4xxx_private *priv = (void *)ak->private_value[0];
+	struct snd_ice1712 *ice = ak->private_data[0];
 
 	snd_ice1712_save_gpio_status(ice);
 	priv->cs_mask = ICE1712_DELTA_1010LT_CS;
@@ -302,8 +302,8 @@ static void delta66e_ak4524_lock(struct snd_akm4xxx *ak, int chip)
  */
 static void vx442_ak4524_lock(struct snd_akm4xxx *ak, int chip)
 {
-        struct snd_ak4xxx_private *priv = (void *)ak->private_value[0];
-        struct snd_ice1712 *ice = ak->private_data[0];
+	struct snd_ak4xxx_private *priv = (void *)ak->private_value[0];
+	struct snd_ice1712 *ice = ak->private_data[0];
 
 	snd_ice1712_save_gpio_status(ice);
 	priv->cs_mask =

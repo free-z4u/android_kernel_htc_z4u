@@ -106,7 +106,7 @@ struct arc_cap {
  */
 struct arc_hardware {
     __u8  source,		/* source ARCnet - filled in automagically */
-             dest,		/* destination ARCnet - 0 for broadcast    */
+	     dest,		/* destination ARCnet - 0 for broadcast    */
     	     offset[2];		/* offset bytes (some weird semantics)     */
 };
 #define ARC_HDR_SIZE 4

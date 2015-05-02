@@ -192,9 +192,9 @@ static void sysrq_handle_cfun_zero(int key)
 }
 
 static struct sysrq_key_op sysrq_cfun_zero_op = {
-        .handler        = sysrq_handle_cfun_zero,
-        .help_msg       = "cfun=0 trigger",
-        .action_msg     = "cfun=0 had beeing triggered",
+	.handler        = sysrq_handle_cfun_zero,
+	.help_msg       = "cfun=0 trigger",
+	.action_msg     = "cfun=0 had beeing triggered",
 };
 
 #ifdef CONFIG_LOCKDEP
@@ -477,22 +477,22 @@ static int sysrq_key_table_key2index(int key)
  */
 struct sysrq_key_op *__sysrq_get_key_op(int key)
 {
-        struct sysrq_key_op *op_p = NULL;
-        int i;
+	struct sysrq_key_op *op_p = NULL;
+	int i;
 
 	i = sysrq_key_table_key2index(key);
 	if (i != -1)
 	        op_p = sysrq_key_table[i];
 
-        return op_p;
+	return op_p;
 }
 
 static void __sysrq_put_key_op(int key, struct sysrq_key_op *op_p)
 {
-        int i = sysrq_key_table_key2index(key);
+	int i = sysrq_key_table_key2index(key);
 
-        if (i != -1)
-                sysrq_key_table[i] = op_p;
+	if (i != -1)
+		sysrq_key_table[i] = op_p;
 }
 
 void __handle_sysrq(int key, bool check_mask)
@@ -513,8 +513,8 @@ void __handle_sysrq(int key, bool check_mask)
 	console_loglevel = 7;
 	printk(KERN_INFO "SysRq : ");
 
-        op_p = __sysrq_get_key_op(key);
-        if (op_p) {
+	op_p = __sysrq_get_key_op(key);
+	if (op_p) {
 		/*
 		 * Should we check for enabled operations (/proc/sysrq-trigger
 		 * should not) and is the invoked operation enabled?
@@ -558,13 +558,13 @@ EXPORT_SYMBOL(handle_sysrq);
 
 /* Simple translation table for the SysRq keys */
 static const unsigned char sysrq_xlate[KEY_CNT] =
-        "\000\0331234567890-=\177\t"                    /* 0x00 - 0x0f */
-        "qwertyuiop[]\r\000as"                          /* 0x10 - 0x1f */
-        "dfghjkl;'`\000\\zxcv"                          /* 0x20 - 0x2f */
-        "bnm,./\000*\000 \000\201\202\203\204\205"      /* 0x30 - 0x3f */
-        "\206\207\210\211\212\000\000789-456+1"         /* 0x40 - 0x4f */
-        "230\177\000\000\213\214\000\000\000\000\000\000\000\000\000\000" /* 0x50 - 0x5f */
-        "\r\000/";                                      /* 0x60 - 0x6f */
+	"\000\0331234567890-=\177\t"                    /* 0x00 - 0x0f */
+	"qwertyuiop[]\r\000as"                          /* 0x10 - 0x1f */
+	"dfghjkl;'`\000\\zxcv"                          /* 0x20 - 0x2f */
+	"bnm,./\000*\000 \000\201\202\203\204\205"      /* 0x30 - 0x3f */
+	"\206\207\210\211\212\000\000789-456+1"         /* 0x40 - 0x4f */
+	"230\177\000\000\213\214\000\000\000\000\000\000\000\000\000\000" /* 0x50 - 0x5f */
+	"\r\000/";                                      /* 0x60 - 0x6f */
 
 struct sysrq_state {
 	struct input_handle handle;
@@ -830,7 +830,7 @@ int sysrq_toggle_support(int enable_mask)
 }
 
 static int __sysrq_swap_key_ops(int key, struct sysrq_key_op *insert_op_p,
-                                struct sysrq_key_op *remove_op_p)
+				struct sysrq_key_op *remove_op_p)
 {
 	int retval;
 	unsigned long flags;

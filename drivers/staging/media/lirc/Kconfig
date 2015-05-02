@@ -13,7 +13,7 @@ menuconfig LIRC_STAGING
 if LIRC_STAGING
 
 config LIRC_BT829
-        tristate "BT829 based hardware"
+	tristate "BT829 based hardware"
 	depends on LIRC && PCI
 	help
 	  Driver for the IR interface on BT829-based hardware

@@ -230,12 +230,12 @@ static void unmap_uncached_pages(unsigned long vaddr, unsigned long size)
 #define PCXL_SEARCH_LOOP(idx, mask, size)  \
        for(; res_ptr < res_end; ++res_ptr) \
        { \
-               if(0 == ((*res_ptr) & mask)) { \
-                       *res_ptr |= mask; \
+	       if(0 == ((*res_ptr) & mask)) { \
+		       *res_ptr |= mask; \
 		       idx = (int)((u_long)res_ptr - (u_long)pcxl_res_map); \
 		       pcxl_res_hint = idx + (size >> 3); \
-                       goto resource_found; \
-               } \
+		       goto resource_found; \
+	       } \
        }
 
 #define PCXL_FIND_FREE_MAPPING(idx, mask, size)  { \

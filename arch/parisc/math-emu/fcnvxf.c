@@ -74,12 +74,12 @@ sgl_to_sgl_fcnvxf(
 	}
 	else {
 		Sgl_setzero_sign(result);
-        	/* Check for zero */
-        	if (src == 0) {
-                	Sgl_setzero(result);
+		/* Check for zero */
+		if (src == 0) {
+			Sgl_setzero(result);
 			*dstptr = result;
-                	return(NOEXCEPTION);
-        	}
+			return(NOEXCEPTION);
+		}
 	}
 	/*
 	 * Generate exponent and normalized mantissa
@@ -145,12 +145,12 @@ sgl_to_dbl_fcnvxf(
 	}
 	else {
 		Dbl_setzero_sign(resultp1);
-        	/* Check for zero */
-        	if (src == 0) {
-                	Dbl_setzero(resultp1,resultp2);
-                	Dbl_copytoptr(resultp1,resultp2,dstptr);
-                	return(NOEXCEPTION);
-        	}
+		/* Check for zero */
+		if (src == 0) {
+			Dbl_setzero(resultp1,resultp2);
+			Dbl_copytoptr(resultp1,resultp2,dstptr);
+			return(NOEXCEPTION);
+		}
 	}
 	/*
 	 * Generate exponent and normalized mantissa
@@ -196,13 +196,13 @@ dbl_to_sgl_fcnvxf(
 	}
 	else {
 		Sgl_setzero_sign(result);
-        	/* Check for zero */
-        	if (srcp1 == 0 && srcp2 == 0) {
-                	Sgl_setzero(result);
-                	*dstptr = result;
-                	return(NOEXCEPTION);
+		/* Check for zero */
+		if (srcp1 == 0 && srcp2 == 0) {
+			Sgl_setzero(result);
+			*dstptr = result;
+			return(NOEXCEPTION);
 		}
-        }
+	}
 	/*
 	 * Generate exponent and normalized mantissa
 	 */
@@ -301,13 +301,13 @@ dbl_to_dbl_fcnvxf(
 	}
 	else {
 		Dbl_setzero_sign(resultp1);
-        	/* Check for zero */
-        	if (srcp1 == 0 && srcp2 ==0) {
-                	Dbl_setzero(resultp1,resultp2);
-                	Dbl_copytoptr(resultp1,resultp2,dstptr);
-                	return(NOEXCEPTION);
+		/* Check for zero */
+		if (srcp1 == 0 && srcp2 ==0) {
+			Dbl_setzero(resultp1,resultp2);
+			Dbl_copytoptr(resultp1,resultp2,dstptr);
+			return(NOEXCEPTION);
 		}
-        }
+	}
 	/*
 	 * Generate exponent and normalized mantissa
 	 */

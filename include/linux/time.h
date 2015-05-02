@@ -43,7 +43,7 @@ extern struct timezone sys_tz;
 #define TIME_T_MAX	(time_t)((1UL << ((sizeof(time_t) << 3) - 1)) - 1)
 
 static inline int timespec_equal(const struct timespec *a,
-                                 const struct timespec *b)
+				 const struct timespec *b)
 {
 	return (a->tv_sec == b->tv_sec) && (a->tv_nsec == b->tv_nsec);
 }

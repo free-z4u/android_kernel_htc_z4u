@@ -65,43 +65,43 @@ sgl_frem (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 			if (Sgl_isnotnan(opnd2)) {
 				/* invalid since first operand is infinity */
 				if (Is_invalidtrap_enabled())
-                                	return(INVALIDEXCEPTION);
-                                Set_invalidflag();
-                                Sgl_makequietnan(result);
+					return(INVALIDEXCEPTION);
+				Set_invalidflag();
+				Sgl_makequietnan(result);
 				*dstptr = result;
 				return(NOEXCEPTION);
 			}
 		}
 		else {
-                	/*
-                 	 * is NaN; signaling or quiet?
-                 	 */
-                	if (Sgl_isone_signaling(opnd1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Sgl_set_quiet(opnd1);
-                	}
+			/*
+		 	 * is NaN; signaling or quiet?
+		 	 */
+			if (Sgl_isone_signaling(opnd1)) {
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Sgl_set_quiet(opnd1);
+			}
 			/*
 			 * is second operand a signaling NaN?
 			 */
 			else if (Sgl_is_signalingnan(opnd2)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Sgl_set_quiet(opnd2);
-                		*dstptr = opnd2;
-                		return(NOEXCEPTION);
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Sgl_set_quiet(opnd2);
+				*dstptr = opnd2;
+				return(NOEXCEPTION);
 			}
-                	/*
-                 	 * return quiet NaN
-                 	 */
-                	*dstptr = opnd1;
-                	return(NOEXCEPTION);
+			/*
+		 	 * return quiet NaN
+		 	 */
+			*dstptr = opnd1;
+			return(NOEXCEPTION);
 		}
 	}
 	/*
@@ -112,24 +112,24 @@ sgl_frem (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 			/*
 			 * return first operand
 			 */
-                	*dstptr = opnd1;
+			*dstptr = opnd1;
 			return(NOEXCEPTION);
 		}
-                /*
-                 * is NaN; signaling or quiet?
-                 */
-                if (Sgl_isone_signaling(opnd2)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Sgl_set_quiet(opnd2);
-                }
-                /*
-                 * return quiet NaN
-                 */
-                *dstptr = opnd2;
-                return(NOEXCEPTION);
+		/*
+		 * is NaN; signaling or quiet?
+		 */
+		if (Sgl_isone_signaling(opnd2)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Sgl_set_quiet(opnd2);
+		}
+		/*
+		 * return quiet NaN
+		 */
+		*dstptr = opnd2;
+		return(NOEXCEPTION);
 	}
 	/*
 	 * check second operand for zero
@@ -137,8 +137,8 @@ sgl_frem (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 	if (Sgl_iszero_exponentmantissa(opnd2)) {
 		/* invalid since second operand is zero */
 		if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                Set_invalidflag();
-                Sgl_makequietnan(result);
+		Set_invalidflag();
+		Sgl_makequietnan(result);
 		*dstptr = result;
 		return(NOEXCEPTION);
 	}
@@ -193,9 +193,9 @@ sgl_frem (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 			Sgl_leftshiftby1(opnd2);
 			Sgl_subtract(opnd2,opnd1,opnd2);
 			/* now normalize */
-                	while (Sgl_iszero_hidden(opnd2)) {
-                        	Sgl_leftshiftby1(opnd2);
-                        	dest_exponent--;
+			while (Sgl_iszero_hidden(opnd2)) {
+				Sgl_leftshiftby1(opnd2);
+				dest_exponent--;
 			}
 			Sgl_set_exponentmantissa(result,opnd2);
 			goto testforunderflow;
@@ -253,34 +253,34 @@ sgl_frem (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 	}
 
 	/* normalize result's mantissa */
-        while (Sgl_iszero_hidden(opnd1)) {
-                dest_exponent--;
-                Sgl_leftshiftby1(opnd1);
-        }
+	while (Sgl_iszero_hidden(opnd1)) {
+		dest_exponent--;
+		Sgl_leftshiftby1(opnd1);
+	}
 	Sgl_set_exponentmantissa(result,opnd1);
 
-        /*
-         * Test for underflow
-         */
+	/*
+	 * Test for underflow
+	 */
     testforunderflow:
 	if (dest_exponent <= 0) {
-                /* trap if UNDERFLOWTRAP enabled */
-                if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Sgl_setwrapped_exponent(result,dest_exponent,unfl);
+		/* trap if UNDERFLOWTRAP enabled */
+		if (Is_underflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(result,dest_exponent,unfl);
 			*dstptr = result;
 			/* frem is always exact */
 			return(UNDERFLOWEXCEPTION);
-                }
-                /*
-                 * denormalize result or set to signed zero
-                 */
-                if (dest_exponent >= (1 - SGL_P)) {
+		}
+		/*
+		 * denormalize result or set to signed zero
+		 */
+		if (dest_exponent >= (1 - SGL_P)) {
 			Sgl_rightshift_exponentmantissa(result,1-dest_exponent);
-                }
-                else {
+		}
+		else {
 			Sgl_setzero_exponentmantissa(result);
 		}
 	}

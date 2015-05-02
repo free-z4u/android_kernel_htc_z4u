@@ -107,7 +107,7 @@ static inline void libipw_networks_free(struct libipw_device *ieee)
 }
 
 void libipw_networks_age(struct libipw_device *ieee,
-                            unsigned long age_secs)
+			    unsigned long age_secs)
 {
 	struct libipw_network *network = NULL;
 	unsigned long flags;

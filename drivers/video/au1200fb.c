@@ -1443,7 +1443,7 @@ static void get_window(unsigned int plane,
 }
 
 static int au1200fb_ioctl(struct fb_info *info, unsigned int cmd,
-                          unsigned long arg)
+			  unsigned long arg)
 {
 	struct au1200fb_device *fbdev = info->par;
 	int plane;

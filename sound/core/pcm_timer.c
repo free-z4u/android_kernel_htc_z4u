@@ -34,7 +34,7 @@ void snd_pcm_timer_resolution_change(struct snd_pcm_substream *substream)
 	unsigned long rate, mult, fsize, l, post;
 	struct snd_pcm_runtime *runtime = substream->runtime;
 
-        mult = 1000000000;
+	mult = 1000000000;
 	rate = runtime->rate;
 	if (snd_BUG_ON(!rate))
 		return;

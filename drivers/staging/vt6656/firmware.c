@@ -93,18 +93,18 @@ FIRMWAREbDownload(
 		memcpy(pBuffer, fw->data + ii, wLength);
 
 		NdisStatus = CONTROLnsRequestOutAsyn(pDevice,
-                                            0,
-                                            0x1200+ii,
-                                            0x0000,
-                                            wLength,
-                                            pBuffer
-                                            );
+					    0,
+					    0x1200+ii,
+					    0x0000,
+					    wLength,
+					    pBuffer
+					    );
 
 		DBG_PRT(MSG_LEVEL_DEBUG,
 			KERN_INFO"Download firmware...%d %zu\n", ii, fw->size);
 		if (NdisStatus != STATUS_SUCCESS)
 			goto out;
-        }
+	}
 
 	result = TRUE;
 
@@ -126,17 +126,17 @@ FIRMWAREbBrach2Sram(
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"---->Branch to Sram\n");
 
     NdisStatus = CONTROLnsRequestOut(pDevice,
-                                    1,
-                                    0x1200,
-                                    0x0000,
-                                    0,
-                                    NULL
-                                    );
+				    1,
+				    0x1200,
+				    0x0000,
+				    0,
+				    NULL
+				    );
 
     if (NdisStatus != STATUS_SUCCESS) {
-        return (FALSE);
+	return (FALSE);
     } else {
-        return (TRUE);
+	return (TRUE);
     }
 }
 
@@ -149,26 +149,26 @@ FIRMWAREbCheckVersion(
 	int ntStatus;
 
     ntStatus = CONTROLnsRequestIn(pDevice,
-                                    MESSAGE_TYPE_READ,
-                                    0,
-                                    MESSAGE_REQUEST_VERSION,
-                                    2,
-                                    (PBYTE) &(pDevice->wFirmwareVersion));
+				    MESSAGE_TYPE_READ,
+				    0,
+				    MESSAGE_REQUEST_VERSION,
+				    2,
+				    (PBYTE) &(pDevice->wFirmwareVersion));
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Firmware Version [%04x]\n", pDevice->wFirmwareVersion);
     if (ntStatus != STATUS_SUCCESS) {
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Firmware Invalid.\n");
-        return FALSE;
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Firmware Invalid.\n");
+	return FALSE;
     }
     if (pDevice->wFirmwareVersion == 0xFFFF) {
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"In Loader.\n");
-        return FALSE;
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"In Loader.\n");
+	return FALSE;
     }
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"Firmware Version [%04x]\n", pDevice->wFirmwareVersion);
     if (pDevice->wFirmwareVersion < FIRMWARE_VERSION) {
-        // branch to loader for download new firmware
-        FIRMWAREbBrach2Sram(pDevice);
-        return FALSE;
+	// branch to loader for download new firmware
+	FIRMWAREbBrach2Sram(pDevice);
+	return FALSE;
     }
     return TRUE;
 }

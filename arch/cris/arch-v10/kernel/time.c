@@ -178,8 +178,8 @@ timer_interrupt(int irq, void *dev_id)
 
 	xtime_update(1);
 
-        cris_do_profile(regs); /* Save profiling information */
-        return IRQ_HANDLED;
+	cris_do_profile(regs); /* Save profiling information */
+	return IRQ_HANDLED;
 }
 
 /* timer is IRQF_SHARED so drivers can add stuff to the timer irq chain

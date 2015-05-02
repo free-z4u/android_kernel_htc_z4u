@@ -113,7 +113,7 @@ struct lib80211_crypt_info {
 };
 
 int lib80211_crypt_info_init(struct lib80211_crypt_info *info, char *name,
-                                spinlock_t *lock);
+				spinlock_t *lock);
 void lib80211_crypt_info_free(struct lib80211_crypt_info *info);
 int lib80211_register_crypto_ops(struct lib80211_crypto_ops *ops);
 int lib80211_unregister_crypto_ops(struct lib80211_crypto_ops *ops);

@@ -200,13 +200,13 @@ struct net_device_stats {
 
 /* Media selection options. */
 enum {
-        IF_PORT_UNKNOWN = 0,
-        IF_PORT_10BASE2,
-        IF_PORT_10BASET,
-        IF_PORT_AUI,
-        IF_PORT_100BASET,
-        IF_PORT_100BASETX,
-        IF_PORT_100BASEFX
+	IF_PORT_UNKNOWN = 0,
+	IF_PORT_10BASE2,
+	IF_PORT_10BASET,
+	IF_PORT_AUI,
+	IF_PORT_100BASET,
+	IF_PORT_100BASETX,
+	IF_PORT_100BASEFX
 };
 
 #ifdef __KERNEL__

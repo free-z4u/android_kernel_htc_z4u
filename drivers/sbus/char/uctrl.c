@@ -73,17 +73,17 @@ struct ts102_regs {
 
 static DEFINE_MUTEX(uctrl_mutex);
 static const char *uctrl_extstatus[16] = {
-        "main power available",
-        "internal battery attached",
-        "external battery attached",
-        "external VGA attached",
-        "external keyboard attached",
-        "external mouse attached",
-        "lid down",
-        "internal battery currently charging",
-        "external battery currently charging",
-        "internal battery currently discharging",
-        "external battery currently discharging",
+	"main power available",
+	"internal battery attached",
+	"external battery attached",
+	"external VGA attached",
+	"external keyboard attached",
+	"external mouse attached",
+	"lid down",
+	"internal battery currently charging",
+	"external battery currently charging",
+	"internal battery currently discharging",
+	"external battery currently discharging",
 };
 
 /* Everything required for one transaction with the uctrl */

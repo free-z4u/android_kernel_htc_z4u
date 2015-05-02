@@ -124,22 +124,22 @@ static const DECLARE_TLV_DB_SCALE(in_adc_tlv, -7163, 1763, 0);
 static const DECLARE_TLV_DB_SCALE(out_sidetone_tlv, -3600, 0, 0);
 
 static int wm8400_outpga_put_volsw_vu(struct snd_kcontrol *kcontrol,
-        struct snd_ctl_elem_value *ucontrol)
+	struct snd_ctl_elem_value *ucontrol)
 {
-        struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
+	struct snd_soc_codec *codec = snd_kcontrol_chip(kcontrol);
 	struct soc_mixer_control *mc =
 		(struct soc_mixer_control *)kcontrol->private_value;
 	int reg = mc->reg;
-        int ret;
-        u16 val;
+	int ret;
+	u16 val;
 
-        ret = snd_soc_put_volsw(kcontrol, ucontrol);
-        if (ret < 0)
-                return ret;
+	ret = snd_soc_put_volsw(kcontrol, ucontrol);
+	if (ret < 0)
+		return ret;
 
-        /* now hit the volume update bits (always bit 8) */
-        val = wm8400_read(codec, reg);
-        return wm8400_write(codec, reg, val | 0x0100);
+	/* now hit the volume update bits (always bit 8) */
+	val = wm8400_read(codec, reg);
+	return wm8400_write(codec, reg, val | 0x0100);
 }
 
 #define WM8400_OUTPGA_SINGLE_R_TLV(xname, reg, shift, max, invert, tlv_array) \

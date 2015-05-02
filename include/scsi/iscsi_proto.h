@@ -67,9 +67,9 @@ static inline int iscsi_sna_gte(u32 n1, u32 n2)
  */
 #define ntoh24(p) (((p)[0] << 16) | ((p)[1] << 8) | ((p)[2]))
 #define hton24(p, v) { \
-        p[0] = (((v) >> 16) & 0xFF); \
-        p[1] = (((v) >> 8) & 0xFF); \
-        p[2] = ((v) & 0xFF); \
+	p[0] = (((v) >> 16) & 0xFF); \
+	p[1] = (((v) >> 8) & 0xFF); \
+	p[2] = ((v) & 0xFF); \
 }
 #define zero_data(p) {p[0]=0;p[1]=0;p[2]=0;}
 

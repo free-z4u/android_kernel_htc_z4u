@@ -917,8 +917,8 @@ sg_ioctl(struct file *filp, unsigned int cmd_in, unsigned long arg)
 		result = get_user(val, ip);
 		if (result)
 			return result;
-                if (val < 0)
-                        return -EINVAL;
+		if (val < 0)
+			return -EINVAL;
 		val = min_t(int, val,
 			    queue_max_sectors(sdp->device->request_queue) * 512);
 		if (val != sfp->reserve.bufflen) {
@@ -1569,7 +1569,7 @@ MODULE_VERSION(SG_VERSION_STR);
 MODULE_ALIAS_CHARDEV_MAJOR(SCSI_GENERIC_MAJOR);
 
 MODULE_PARM_DESC(scatter_elem_sz, "scatter gather element "
-                "size (default: max(SG_SCATTER_SZ, PAGE_SIZE))");
+		"size (default: max(SG_SCATTER_SZ, PAGE_SIZE))");
 MODULE_PARM_DESC(def_reserved_size, "size of buffer reserved for each fd");
 MODULE_PARM_DESC(allow_dio, "allow direct I/O (default: 0 (disallow))");
 
@@ -1591,11 +1591,11 @@ init_sg(void)
 				    SG_MAX_DEVS, "sg");
 	if (rc)
 		return rc;
-        sg_sysfs_class = class_create(THIS_MODULE, "scsi_generic");
-        if ( IS_ERR(sg_sysfs_class) ) {
+	sg_sysfs_class = class_create(THIS_MODULE, "scsi_generic");
+	if ( IS_ERR(sg_sysfs_class) ) {
 		rc = PTR_ERR(sg_sysfs_class);
 		goto err_out;
-        }
+	}
 	sg_sysfs_valid = 1;
 	rc = scsi_register_interface(&sg_interface);
 	if (0 == rc) {
@@ -2464,7 +2464,7 @@ static void dev_seq_stop(struct seq_file *s, void *v)
 
 static int sg_proc_open_dev(struct inode *inode, struct file *file)
 {
-        return seq_open(file, &dev_seq_ops);
+	return seq_open(file, &dev_seq_ops);
 }
 
 static int sg_proc_seq_show_dev(struct seq_file *s, void *v)
@@ -2492,7 +2492,7 @@ static int sg_proc_seq_show_dev(struct seq_file *s, void *v)
 
 static int sg_proc_open_devstrs(struct inode *inode, struct file *file)
 {
-        return seq_open(file, &devstrs_seq_ops);
+	return seq_open(file, &devstrs_seq_ops);
 }
 
 static int sg_proc_seq_show_devstrs(struct seq_file *s, void *v)
@@ -2581,7 +2581,7 @@ static void sg_proc_debug_helper(struct seq_file *s, Sg_device * sdp)
 
 static int sg_proc_open_debug(struct inode *inode, struct file *file)
 {
-        return seq_open(file, &debug_seq_ops);
+	return seq_open(file, &debug_seq_ops);
 }
 
 static int sg_proc_seq_show_debug(struct seq_file *s, void *v)

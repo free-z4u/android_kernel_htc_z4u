@@ -31,10 +31,10 @@ int show_unhandled_signals = 0;
 void __user * get_sigframe(struct k_sigaction *ka, struct pt_regs *regs,
 			   size_t frame_size, int is_32)
 {
-        unsigned long oldsp, newsp;
+	unsigned long oldsp, newsp;
 
-        /* Default to using normal stack */
-        oldsp = get_clean_sp(regs, is_32);
+	/* Default to using normal stack */
+	oldsp = get_clean_sp(regs, is_32);
 
 	/* Check for alt stack */
 	if ((ka->sa.sa_flags & SA_ONSTACK) &&
@@ -48,7 +48,7 @@ void __user * get_sigframe(struct k_sigaction *ka, struct pt_regs *regs,
 	if (!access_ok(VERIFY_WRITE, (void __user *)newsp, oldsp - newsp))
 		return NULL;
 
-        return (void __user *)newsp;
+	return (void __user *)newsp;
 }
 
 
@@ -143,7 +143,7 @@ static int do_signal(struct pt_regs *regs)
 	}
 
 #ifndef CONFIG_PPC_ADV_DEBUG_REGS
-        /*
+	/*
 	 * Reenable the DABR before delivering the signal to
 	 * user space. The DABR will have been cleared if it
 	 * triggered inside the kernel.
@@ -155,7 +155,7 @@ static int do_signal(struct pt_regs *regs)
 	thread_change_pc(current, regs);
 
 	if (is32) {
-        	if (ka.sa.sa_flags & SA_SIGINFO)
+		if (ka.sa.sa_flags & SA_SIGINFO)
 			ret = handle_rt_signal32(signr, &ka, &info, oldset,
 					regs);
 		else

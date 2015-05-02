@@ -125,7 +125,7 @@ MODULE_DEVICE_TABLE(pci, wl_pci_tbl);
  * function prototypes
  ******************************************************************************/
 int __devinit wl_pci_probe( struct pci_dev *pdev,
-                                const struct pci_device_id *ent );
+				const struct pci_device_id *ent );
 void __devexit wl_pci_remove(struct pci_dev *pdev);
 int wl_pci_setup( struct pci_dev *pdev );
 void wl_pci_enable_cardbus_interrupts( struct pci_dev *pdev );
@@ -134,25 +134,25 @@ void wl_pci_enable_cardbus_interrupts( struct pci_dev *pdev );
 int wl_pci_dma_alloc( struct pci_dev *pdev, struct wl_private *lp );
 int wl_pci_dma_free( struct pci_dev *pdev, struct wl_private *lp );
 int wl_pci_dma_alloc_tx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc );
+				DESC_STRCT **desc );
 int wl_pci_dma_free_tx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc );
+				DESC_STRCT **desc );
 int wl_pci_dma_alloc_rx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc );
+				DESC_STRCT **desc );
 int wl_pci_dma_free_rx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc );
+				DESC_STRCT **desc );
 int wl_pci_dma_alloc_desc_and_buf( struct pci_dev *pdev, struct wl_private *lp,
-                                   DESC_STRCT **desc, int size );
+				   DESC_STRCT **desc, int size );
 int wl_pci_dma_free_desc_and_buf( struct pci_dev *pdev, struct wl_private *lp,
-                                   DESC_STRCT **desc );
+				   DESC_STRCT **desc );
 int wl_pci_dma_alloc_desc( struct pci_dev *pdev, struct wl_private *lp,
-                           DESC_STRCT **desc );
+			   DESC_STRCT **desc );
 int wl_pci_dma_free_desc( struct pci_dev *pdev, struct wl_private *lp,
-                           DESC_STRCT **desc );
+			   DESC_STRCT **desc );
 int wl_pci_dma_alloc_buf( struct pci_dev *pdev, struct wl_private *lp,
-                          DESC_STRCT *desc, int size );
+			  DESC_STRCT *desc, int size );
 int wl_pci_dma_free_buf( struct pci_dev *pdev, struct wl_private *lp,
-                          DESC_STRCT *desc );
+			  DESC_STRCT *desc );
 
 void wl_pci_dma_hcf_reclaim_rx( struct wl_private *lp );
 #endif  // ENABLE_DMA
@@ -265,13 +265,13 @@ int wl_adapter_insert( struct net_device *dev )
     DBG_TRACE( DbgInfo, "wl_adapter_insert() -- PCI\n" );
 
     if( dev == NULL ) {
-        DBG_ERROR( DbgInfo, "net_device pointer is NULL!!!\n" );
+	DBG_ERROR( DbgInfo, "net_device pointer is NULL!!!\n" );
     } else if( dev->priv == NULL ) {
-        DBG_ERROR( DbgInfo, "wl_private pointer is NULL!!!\n" );
+	DBG_ERROR( DbgInfo, "wl_private pointer is NULL!!!\n" );
     } else if( wl_insert( dev ) ) { /* Perform remaining device initialization */
 		result = TRUE;
 	} else {
-        DBG_TRACE( DbgInfo, "wl_insert() FAILED\n" );
+	DBG_TRACE( DbgInfo, "wl_insert() FAILED\n" );
     }
     DBG_LEAVE( DbgInfo );
     return result;
@@ -309,7 +309,7 @@ int wl_adapter_open( struct net_device *dev )
     hcf_status = wl_open( dev );
 
     if( hcf_status != HCF_SUCCESS ) {
-        result = -ENODEV;
+	result = -ENODEV;
     }
 
     DBG_LEAVE( DbgInfo );
@@ -400,7 +400,7 @@ int wl_adapter_is_open( struct net_device *dev )
  *
  ******************************************************************************/
 int __devinit wl_pci_probe( struct pci_dev *pdev,
-                                const struct pci_device_id *ent )
+				const struct pci_device_id *ent )
 {
     int result;
     /*------------------------------------------------------------------------*/
@@ -446,14 +446,14 @@ void __devexit wl_pci_remove(struct pci_dev *pdev)
 
     /* Make sure the pci_dev pointer passed in is valid */
     if( pdev == NULL ) {
-        DBG_ERROR( DbgInfo, "PCI subsys passed in an invalid pci_dev pointer\n" );
-        return;
+	DBG_ERROR( DbgInfo, "PCI subsys passed in an invalid pci_dev pointer\n" );
+	return;
     }
 
     dev = pci_get_drvdata( pdev );
     if( dev == NULL ) {
-        DBG_ERROR( DbgInfo, "Could not retrieve net_device structure\n" );
-        return;
+	DBG_ERROR( DbgInfo, "Could not retrieve net_device structure\n" );
+	return;
     }
 
     /* Perform device cleanup */
@@ -501,39 +501,39 @@ int wl_pci_setup( struct pci_dev *pdev )
 
     /* Make sure the pci_dev pointer passed in is valid */
     if( pdev == NULL ) {
-        DBG_ERROR( DbgInfo, "PCI subsys passed in an invalid pci_dev pointer\n" );
-        return -ENODEV;
+	DBG_ERROR( DbgInfo, "PCI subsys passed in an invalid pci_dev pointer\n" );
+	return -ENODEV;
     }
 
     result = pci_enable_device( pdev );
     if( result != 0 ) {
-        DBG_ERROR( DbgInfo, "pci_enable_device() failed\n" );
-        DBG_LEAVE( DbgInfo );
-        return result;
+	DBG_ERROR( DbgInfo, "pci_enable_device() failed\n" );
+	DBG_LEAVE( DbgInfo );
+	return result;
     }
 
     /* We found our device! Let's register it with the system */
     DBG_TRACE( DbgInfo, "Found our device, now registering\n" );
     dev = wl_device_alloc( );
     if( dev == NULL ) {
-        DBG_ERROR( DbgInfo, "Could not register device!!!\n" );
-        DBG_LEAVE( DbgInfo );
-        return -ENOMEM;
+	DBG_ERROR( DbgInfo, "Could not register device!!!\n" );
+	DBG_LEAVE( DbgInfo );
+	return -ENOMEM;
     }
 
     /* Make sure that space was allocated for our private adapter struct */
     if( dev->priv == NULL ) {
-        DBG_ERROR( DbgInfo, "Private adapter struct was not allocated!!!\n" );
-        DBG_LEAVE( DbgInfo );
-        return -ENOMEM;
+	DBG_ERROR( DbgInfo, "Private adapter struct was not allocated!!!\n" );
+	DBG_LEAVE( DbgInfo );
+	return -ENOMEM;
     }
 
 #ifdef ENABLE_DMA
     /* Allocate DMA Descriptors */
     if( wl_pci_dma_alloc( pdev, dev->priv ) < 0 ) {
-        DBG_ERROR( DbgInfo, "Could not allocate DMA descriptor memory!!!\n" );
-        DBG_LEAVE( DbgInfo );
-        return -ENOMEM;
+	DBG_ERROR( DbgInfo, "Could not allocate DMA descriptor memory!!!\n" );
+	DBG_LEAVE( DbgInfo );
+	return -ENOMEM;
     }
 #endif
 
@@ -549,10 +549,10 @@ int wl_pci_setup( struct pci_dev *pdev )
 
     /* Initialize our device here */
     if( !wl_adapter_insert( dev )) {
-        DBG_ERROR( DbgInfo, "wl_adapter_insert() FAILED!!!\n" );
-        wl_device_dealloc( dev );
-        DBG_LEAVE( DbgInfo );
-        return -EINVAL;
+	DBG_ERROR( DbgInfo, "wl_adapter_insert() FAILED!!!\n" );
+	wl_device_dealloc( dev );
+	DBG_LEAVE( DbgInfo );
+	return -EINVAL;
     }
 
     /* Register our ISR */
@@ -560,9 +560,9 @@ int wl_pci_setup( struct pci_dev *pdev )
 
     result = request_irq(dev->irq, wl_isr, SA_SHIRQ, dev->name, dev);
     if( result ) {
-        DBG_WARNING( DbgInfo, "Could not register ISR!!!\n" );
-        DBG_LEAVE( DbgInfo );
-        return result;
+	DBG_WARNING( DbgInfo, "Could not register ISR!!!\n" );
+	DBG_LEAVE( DbgInfo );
+	return result;
 	}
 
     /* Make sure interrupts are enabled properly for CardBus */
@@ -570,8 +570,8 @@ int wl_pci_setup( struct pci_dev *pdev )
 
     if( lp->hcfCtx.IFB_BusType == CFG_NIC_BUS_TYPE_CARDBUS ||
 	    lp->hcfCtx.IFB_BusType == CFG_NIC_BUS_TYPE_PCI 		) {
-        DBG_TRACE( DbgInfo, "This is a PCI/CardBus card, enable interrupts\n" );
-        wl_pci_enable_cardbus_interrupts( pdev );
+	DBG_TRACE( DbgInfo, "This is a PCI/CardBus card, enable interrupts\n" );
+	wl_pci_enable_cardbus_interrupts( pdev );
     }
 
     /* Enable bus mastering */
@@ -758,38 +758,38 @@ int wl_pci_dma_free( struct pci_dev *pdev, struct wl_private *lp )
 
     /* Free everything needed for DMA Rx */
     for( i = 0; i < NUM_RX_DESC; i++ ) {
-        if( lp->dma.rx_packet[i] ) {
-            status = wl_pci_dma_free_rx_packet( pdev, lp, &lp->dma.rx_packet[i] );
-            if( status != 0 ) {
-                DBG_WARNING( DbgInfo, "Problem freeing Rx packet\n" );
-            }
-        }
+	if( lp->dma.rx_packet[i] ) {
+	    status = wl_pci_dma_free_rx_packet( pdev, lp, &lp->dma.rx_packet[i] );
+	    if( status != 0 ) {
+		DBG_WARNING( DbgInfo, "Problem freeing Rx packet\n" );
+	    }
+	}
     }
     lp->dma.rx_rsc_ind = 0;
 
     if( lp->dma.rx_reclaim_desc ) {
-        status = wl_pci_dma_free_desc( pdev, lp, &lp->dma.rx_reclaim_desc );
-        if( status != 0 ) {
-            DBG_WARNING( DbgInfo, "Problem freeing Rx reclaim descriptor\n" );
-        }
+	status = wl_pci_dma_free_desc( pdev, lp, &lp->dma.rx_reclaim_desc );
+	if( status != 0 ) {
+	    DBG_WARNING( DbgInfo, "Problem freeing Rx reclaim descriptor\n" );
+	}
     }
 
     /* Free everything needed for DMA Tx */
     for( i = 0; i < NUM_TX_DESC; i++ ) {
-        if( lp->dma.tx_packet[i] ) {
-            status = wl_pci_dma_free_tx_packet( pdev, lp, &lp->dma.tx_packet[i] );
-            if( status != 0 ) {
-                DBG_WARNING( DbgInfo, "Problem freeing Tx packet\n" );
-            }
-        }
+	if( lp->dma.tx_packet[i] ) {
+	    status = wl_pci_dma_free_tx_packet( pdev, lp, &lp->dma.tx_packet[i] );
+	    if( status != 0 ) {
+		DBG_WARNING( DbgInfo, "Problem freeing Tx packet\n" );
+	    }
+	}
     }
     lp->dma.tx_rsc_ind = 0;
 
     if( lp->dma.tx_reclaim_desc ) {
-        status = wl_pci_dma_free_desc( pdev, lp, &lp->dma.tx_reclaim_desc );
-        if( status != 0 ) {
-            DBG_WARNING( DbgInfo, "Problem freeing Tx reclaim descriptor\n" );
-        }
+	status = wl_pci_dma_free_desc( pdev, lp, &lp->dma.tx_reclaim_desc );
+	if( status != 0 ) {
+	    DBG_WARNING( DbgInfo, "Problem freeing Tx reclaim descriptor\n" );
+	}
     }
 
     DBG_LEAVE( DbgInfo );
@@ -821,7 +821,7 @@ int wl_pci_dma_free( struct pci_dev *pdev, struct wl_private *lp )
  *
  ******************************************************************************/
 int wl_pci_dma_alloc_tx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc )
+				DESC_STRCT **desc )
 {
 //     int status = 0;
 //     /*------------------------------------------------------------------------*/
@@ -867,22 +867,22 @@ int wl_pci_dma_alloc_tx_packet( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_free_tx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc )
+				DESC_STRCT **desc )
 {
     int status = 0;
     /*------------------------------------------------------------------------*/
 
     if( *desc == NULL ) {
-        DBG_PRINT( "Null descriptor\n" );
-        status = -EFAULT;
+	DBG_PRINT( "Null descriptor\n" );
+	status = -EFAULT;
     }
 	//;?the "limited" NDIS strategy, assuming a frame consists ALWAYS out of 2
 	//descriptors, make this robust
     if( status == 0 && (*desc)->next_desc_addr ) {
-        status = wl_pci_dma_free_desc_and_buf( pdev, lp, &(*desc)->next_desc_addr );
+	status = wl_pci_dma_free_desc_and_buf( pdev, lp, &(*desc)->next_desc_addr );
     }
     if( status == 0 ) {
-        status = wl_pci_dma_free_desc_and_buf( pdev, lp, desc );
+	status = wl_pci_dma_free_desc_and_buf( pdev, lp, desc );
     }
     return status;
 } // wl_pci_dma_free_tx_packet
@@ -912,7 +912,7 @@ int wl_pci_dma_free_tx_packet( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_alloc_rx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc )
+				DESC_STRCT **desc )
 {
     int         status = 0;
     DESC_STRCT  *p;
@@ -972,31 +972,31 @@ int wl_pci_dma_alloc_rx_packet( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_free_rx_packet( struct pci_dev *pdev, struct wl_private *lp,
-                                DESC_STRCT **desc )
+				DESC_STRCT **desc )
 {
     int status = 0;
     DESC_STRCT *p;
     /*------------------------------------------------------------------------*/
 
     if( *desc == NULL ) {
-        status = -EFAULT;
+	status = -EFAULT;
     }
     if( status == 0 ) {
-        p = (*desc)->next_desc_addr;
+	p = (*desc)->next_desc_addr;
 
-        /* Free the 2nd descriptor */
-        if( p != NULL ) {
-            p->buf_addr      = NULL;
-            p->buf_phys_addr = 0;
+	/* Free the 2nd descriptor */
+	if( p != NULL ) {
+	    p->buf_addr      = NULL;
+	    p->buf_phys_addr = 0;
 
-            status = wl_pci_dma_free_desc( pdev, lp, &p );
-        }
+	    status = wl_pci_dma_free_desc( pdev, lp, &p );
+	}
     }
 
     /* Free the buffer and 1st descriptor */
     if( status == 0 ) {
-        SET_BUF_SIZE( *desc, HCF_MAX_PACKET_SIZE );
-        status = wl_pci_dma_free_desc_and_buf( pdev, lp, desc );
+	SET_BUF_SIZE( *desc, HCF_MAX_PACKET_SIZE );
+	status = wl_pci_dma_free_desc_and_buf( pdev, lp, desc );
     }
     return status;
 } // wl_pci_dma_free_rx_packet
@@ -1024,7 +1024,7 @@ int wl_pci_dma_free_rx_packet( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_alloc_desc_and_buf( struct pci_dev *pdev, struct wl_private *lp,
-                                   DESC_STRCT **desc, int size )
+				   DESC_STRCT **desc, int size )
 {
     int status = 0;
     /*------------------------------------------------------------------------*/
@@ -1064,23 +1064,23 @@ int wl_pci_dma_alloc_desc_and_buf( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_free_desc_and_buf( struct pci_dev *pdev, struct wl_private *lp,
-                                   DESC_STRCT **desc )
+				   DESC_STRCT **desc )
 {
     int status = 0;
     /*------------------------------------------------------------------------*/
 
     if( desc == NULL ) {
-        status = -EFAULT;
+	status = -EFAULT;
     }
     if( status == 0 && *desc == NULL ) {
-        status = -EFAULT;
+	status = -EFAULT;
     }
     if( status == 0 ) {
-        status = wl_pci_dma_free_buf( pdev, lp, *desc );
+	status = wl_pci_dma_free_buf( pdev, lp, *desc );
 
-        if( status == 0 ) {
-            status = wl_pci_dma_free_desc( pdev, lp, desc );
-        }
+	if( status == 0 ) {
+	    status = wl_pci_dma_free_desc( pdev, lp, desc );
+	}
     }
     return status;
 } // wl_pci_dma_free_desc_and_buf
@@ -1106,7 +1106,7 @@ int wl_pci_dma_free_desc_and_buf( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_alloc_desc( struct pci_dev *pdev, struct wl_private *lp,
-                           DESC_STRCT **desc )
+			   DESC_STRCT **desc )
 {
 //     int         status = 0;
 //     dma_addr_t  pa;
@@ -1153,17 +1153,17 @@ int wl_pci_dma_alloc_desc( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_free_desc( struct pci_dev *pdev, struct wl_private *lp,
-                           DESC_STRCT **desc )
+			   DESC_STRCT **desc )
 {
     int         status = 0;
     /*------------------------------------------------------------------------*/
 
     if( *desc == NULL ) {
-        status = -EFAULT;
+	status = -EFAULT;
     }
     if( status == 0 ) {
-        pci_free_consistent( pdev, sizeof( DESC_STRCT ), *desc,
-                             (*desc)->desc_phys_addr );
+	pci_free_consistent( pdev, sizeof( DESC_STRCT ), *desc,
+			     (*desc)->desc_phys_addr );
     }
     *desc = NULL;
     return status;
@@ -1191,7 +1191,7 @@ int wl_pci_dma_free_desc( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_alloc_buf( struct pci_dev *pdev, struct wl_private *lp,
-                          DESC_STRCT *desc, int size )
+			  DESC_STRCT *desc, int size )
 {
     int         status = 0;
     dma_addr_t  pa;
@@ -1242,24 +1242,24 @@ int wl_pci_dma_alloc_buf( struct pci_dev *pdev, struct wl_private *lp,
  *
  ******************************************************************************/
 int wl_pci_dma_free_buf( struct pci_dev *pdev, struct wl_private *lp,
-                         DESC_STRCT *desc )
+			 DESC_STRCT *desc )
 {
     int         status = 0;
     /*------------------------------------------------------------------------*/
 
     if( desc == NULL ) {
-        status = -EFAULT;
+	status = -EFAULT;
     }
     if( status == 0 && desc->buf_addr == NULL ) {
-        status = -EFAULT;
+	status = -EFAULT;
     }
     if( status == 0 ) {
-        pci_free_consistent( pdev, GET_BUF_SIZE( desc ), desc->buf_addr,
-                             desc->buf_phys_addr );
+	pci_free_consistent( pdev, GET_BUF_SIZE( desc ), desc->buf_addr,
+			     desc->buf_phys_addr );
 
-        desc->buf_addr = 0;
-        desc->buf_phys_addr = 0;
-        SET_BUF_SIZE( desc, 0 );
+	desc->buf_addr = 0;
+	desc->buf_phys_addr = 0;
+	SET_BUF_SIZE( desc, 0 );
     }
     return status;
 } // wl_pci_dma_free_buf
@@ -1300,26 +1300,26 @@ void wl_pci_dma_hcf_supply( struct wl_private *lp )
 
     //if( lp->dma.status == 0 );
     //{
-        /* Hand over the Rx/Tx reclaim descriptors to the HCF */
-        if( lp->dma.tx_reclaim_desc ) {
-            DBG_PRINT( "lp->dma.tx_reclaim_desc: 0x%p\n", lp->dma.tx_reclaim_desc );
-            hcf_dma_tx_put( &lp->hcfCtx, lp->dma.tx_reclaim_desc, 0 );
-            lp->dma.tx_reclaim_desc = NULL;
-            DBG_PRINT( "lp->dma.tx_reclaim_desc: 0x%p\n", lp->dma.tx_reclaim_desc );
-        }
-        if( lp->dma.rx_reclaim_desc ) {
-            DBG_PRINT( "lp->dma.rx_reclaim_desc: 0x%p\n", lp->dma.rx_reclaim_desc );
-            hcf_dma_rx_put( &lp->hcfCtx, lp->dma.rx_reclaim_desc );
-            lp->dma.rx_reclaim_desc = NULL;
-            DBG_PRINT( "lp->dma.rx_reclaim_desc: 0x%p\n", lp->dma.rx_reclaim_desc );
-        }
-        /* Hand over the Rx descriptor chain to the HCF */
-        for( i = 0; i < NUM_RX_DESC; i++ ) {
-            DBG_PRINT( "lp->dma.rx_packet[%d]:    0x%p\n", i, lp->dma.rx_packet[i] );
-            hcf_dma_rx_put( &lp->hcfCtx, lp->dma.rx_packet[i] );
-            lp->dma.rx_packet[i] = NULL;
-            DBG_PRINT( "lp->dma.rx_packet[%d]:    0x%p\n", i, lp->dma.rx_packet[i] );
-        }
+	/* Hand over the Rx/Tx reclaim descriptors to the HCF */
+	if( lp->dma.tx_reclaim_desc ) {
+	    DBG_PRINT( "lp->dma.tx_reclaim_desc: 0x%p\n", lp->dma.tx_reclaim_desc );
+	    hcf_dma_tx_put( &lp->hcfCtx, lp->dma.tx_reclaim_desc, 0 );
+	    lp->dma.tx_reclaim_desc = NULL;
+	    DBG_PRINT( "lp->dma.tx_reclaim_desc: 0x%p\n", lp->dma.tx_reclaim_desc );
+	}
+	if( lp->dma.rx_reclaim_desc ) {
+	    DBG_PRINT( "lp->dma.rx_reclaim_desc: 0x%p\n", lp->dma.rx_reclaim_desc );
+	    hcf_dma_rx_put( &lp->hcfCtx, lp->dma.rx_reclaim_desc );
+	    lp->dma.rx_reclaim_desc = NULL;
+	    DBG_PRINT( "lp->dma.rx_reclaim_desc: 0x%p\n", lp->dma.rx_reclaim_desc );
+	}
+	/* Hand over the Rx descriptor chain to the HCF */
+	for( i = 0; i < NUM_RX_DESC; i++ ) {
+	    DBG_PRINT( "lp->dma.rx_packet[%d]:    0x%p\n", i, lp->dma.rx_packet[i] );
+	    hcf_dma_rx_put( &lp->hcfCtx, lp->dma.rx_packet[i] );
+	    lp->dma.rx_packet[i] = NULL;
+	    DBG_PRINT( "lp->dma.rx_packet[%d]:    0x%p\n", i, lp->dma.rx_packet[i] );
+	}
     //}
 
     DBG_LEAVE( DbgInfo );
@@ -1363,7 +1363,7 @@ void wl_pci_dma_hcf_reclaim( struct wl_private *lp )
 
     wl_pci_dma_hcf_reclaim_rx( lp );
     for( i = 0; i < NUM_RX_DESC; i++ ) {
-        DBG_PRINT( "rx_packet[%d] 0x%p\n", i, lp->dma.rx_packet[i] );
+	DBG_PRINT( "rx_packet[%d] 0x%p\n", i, lp->dma.rx_packet[i] );
 //         if( lp->dma.rx_packet[i] == NULL ) {
 //             DBG_PRINT( "wl_pci_dma_hcf_reclaim: rx_packet[%d] NULL\n", i );
 //         }
@@ -1371,7 +1371,7 @@ void wl_pci_dma_hcf_reclaim( struct wl_private *lp )
 
     wl_pci_dma_hcf_reclaim_tx( lp );
     for( i = 0; i < NUM_TX_DESC; i++ ) {
-        DBG_PRINT( "tx_packet[%d] 0x%p\n", i, lp->dma.tx_packet[i] );
+	DBG_PRINT( "tx_packet[%d] 0x%p\n", i, lp->dma.tx_packet[i] );
 //         if( lp->dma.tx_packet[i] == NULL ) {
 //             DBG_PRINT( "wl_pci_dma_hcf_reclaim: tx_packet[%d] NULL\n", i );
 //         }
@@ -1411,24 +1411,24 @@ void wl_pci_dma_hcf_reclaim_rx( struct wl_private *lp )
 
     //if( lp->dma.status == 0 )
     //{
-        while ( ( p = hcf_dma_rx_get( &lp->hcfCtx ) ) != NULL ) {
-            if( p && p->buf_addr == NULL ) {
-                /* A reclaim descriptor is being given back by the HCF. Reclaim
-                   descriptors have a NULL buf_addr */
-                lp->dma.rx_reclaim_desc = p;
-            	DBG_PRINT( "reclaim_descriptor: 0x%p\n", p );
-                continue;
-            }
-            for( i = 0; i < NUM_RX_DESC; i++ ) {
-                if( lp->dma.rx_packet[i] == NULL ) {
-                    break;
-                }
-            }
-            /* An Rx buffer descriptor is being given back by the HCF */
-            lp->dma.rx_packet[i] = p;
-            lp->dma.rx_rsc_ind++;
-        	DBG_PRINT( "rx_packet[%d] 0x%p\n", i, lp->dma.rx_packet[i] );
-        }
+	while ( ( p = hcf_dma_rx_get( &lp->hcfCtx ) ) != NULL ) {
+	    if( p && p->buf_addr == NULL ) {
+		/* A reclaim descriptor is being given back by the HCF. Reclaim
+		   descriptors have a NULL buf_addr */
+		lp->dma.rx_reclaim_desc = p;
+	    	DBG_PRINT( "reclaim_descriptor: 0x%p\n", p );
+		continue;
+	    }
+	    for( i = 0; i < NUM_RX_DESC; i++ ) {
+		if( lp->dma.rx_packet[i] == NULL ) {
+		    break;
+		}
+	    }
+	    /* An Rx buffer descriptor is being given back by the HCF */
+	    lp->dma.rx_packet[i] = p;
+	    lp->dma.rx_rsc_ind++;
+		DBG_PRINT( "rx_packet[%d] 0x%p\n", i, lp->dma.rx_packet[i] );
+	}
     //}
     DBG_LEAVE( DbgInfo );
 } // wl_pci_dma_hcf_reclaim_rx
@@ -1458,18 +1458,18 @@ DESC_STRCT * wl_pci_dma_get_tx_packet( struct wl_private *lp )
     /*------------------------------------------------------------------------*/
 
     for( i = 0; i < NUM_TX_DESC; i++ ) {
-        if( lp->dma.tx_packet[i] ) {
-            break;
-        }
+	if( lp->dma.tx_packet[i] ) {
+	    break;
+	}
     }
 
     if( i != NUM_TX_DESC ) {
-        desc = lp->dma.tx_packet[i];
+	desc = lp->dma.tx_packet[i];
 
-        lp->dma.tx_packet[i] = NULL;
-        lp->dma.tx_rsc_ind--;
+	lp->dma.tx_packet[i] = NULL;
+	lp->dma.tx_rsc_ind--;
 
-        memset( desc->buf_addr, 0, HCF_DMA_TX_BUF1_SIZE );
+	memset( desc->buf_addr, 0, HCF_DMA_TX_BUF1_SIZE );
     }
 
     return desc;
@@ -1500,14 +1500,14 @@ void wl_pci_dma_put_tx_packet( struct wl_private *lp, DESC_STRCT *desc )
     /*------------------------------------------------------------------------*/
 
     for( i = 0; i < NUM_TX_DESC; i++ ) {
-        if( lp->dma.tx_packet[i] == NULL ) {
-            break;
-        }
+	if( lp->dma.tx_packet[i] == NULL ) {
+	    break;
+	}
     }
 
     if( i != NUM_TX_DESC ) {
-        lp->dma.tx_packet[i] = desc;
-        lp->dma.tx_rsc_ind++;
+	lp->dma.tx_packet[i] = desc;
+	lp->dma.tx_rsc_ind++;
     }
 } // wl_pci_dma_put_tx_packet
 /*============================================================================*/
@@ -1542,31 +1542,31 @@ void wl_pci_dma_hcf_reclaim_tx( struct wl_private *lp )
 
     //if( lp->dma.status == 0 )
     //{
-        while ( ( p = hcf_dma_tx_get( &lp->hcfCtx ) ) != NULL ) {
+	while ( ( p = hcf_dma_tx_get( &lp->hcfCtx ) ) != NULL ) {
 
-            if( p != NULL && p->buf_addr == NULL ) {
-                /* A Reclaim descriptor is being given back by the HCF. Reclaim
-                   descriptors have a NULL buf_addr */
-                lp->dma.tx_reclaim_desc = p;
-            	DBG_PRINT( "reclaim_descriptor: 0x%p\n", p );
-                continue;
-            }
-            for( i = 0; i < NUM_TX_DESC; i++ ) {
-                if( lp->dma.tx_packet[i] == NULL ) {
-                    break;
-                }
-            }
-            /* An Rx buffer descriptor is being given back by the HCF */
-            lp->dma.tx_packet[i] = p;
-            lp->dma.tx_rsc_ind++;
-        	DBG_PRINT( "tx_packet[%d] 0x%p\n", i, lp->dma.tx_packet[i] );
-        }
+	    if( p != NULL && p->buf_addr == NULL ) {
+		/* A Reclaim descriptor is being given back by the HCF. Reclaim
+		   descriptors have a NULL buf_addr */
+		lp->dma.tx_reclaim_desc = p;
+	    	DBG_PRINT( "reclaim_descriptor: 0x%p\n", p );
+		continue;
+	    }
+	    for( i = 0; i < NUM_TX_DESC; i++ ) {
+		if( lp->dma.tx_packet[i] == NULL ) {
+		    break;
+		}
+	    }
+	    /* An Rx buffer descriptor is being given back by the HCF */
+	    lp->dma.tx_packet[i] = p;
+	    lp->dma.tx_rsc_ind++;
+		DBG_PRINT( "tx_packet[%d] 0x%p\n", i, lp->dma.tx_packet[i] );
+	}
     //}
 
     if( lp->netif_queue_on == FALSE ) {
-        netif_wake_queue( lp->dev );
-        WL_WDS_NETIF_WAKE_QUEUE( lp );
-        lp->netif_queue_on = TRUE;
+	netif_wake_queue( lp->dev );
+	WL_WDS_NETIF_WAKE_QUEUE( lp );
+	lp->netif_queue_on = TRUE;
     }
     DBG_LEAVE( DbgInfo );
     return;

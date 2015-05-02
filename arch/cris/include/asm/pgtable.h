@@ -119,8 +119,8 @@ static inline int pte_special(pte_t pte)	{ return 0; }
 
 static inline pte_t pte_wrprotect(pte_t pte)
 {
-        pte_val(pte) &= ~(_PAGE_WRITE | _PAGE_SILENT_WRITE);
-        return pte;
+	pte_val(pte) &= ~(_PAGE_WRITE | _PAGE_SILENT_WRITE);
+	return pte;
 }
 
 static inline pte_t pte_mkclean(pte_t pte)
@@ -137,31 +137,31 @@ static inline pte_t pte_mkold(pte_t pte)
 
 static inline pte_t pte_mkwrite(pte_t pte)
 {
-        pte_val(pte) |= _PAGE_WRITE;
-        if (pte_val(pte) & _PAGE_MODIFIED)
-                pte_val(pte) |= _PAGE_SILENT_WRITE;
-        return pte;
+	pte_val(pte) |= _PAGE_WRITE;
+	if (pte_val(pte) & _PAGE_MODIFIED)
+		pte_val(pte) |= _PAGE_SILENT_WRITE;
+	return pte;
 }
 
 static inline pte_t pte_mkdirty(pte_t pte)
 {
-        pte_val(pte) |= _PAGE_MODIFIED;
-        if (pte_val(pte) & _PAGE_WRITE)
-                pte_val(pte) |= _PAGE_SILENT_WRITE;
-        return pte;
+	pte_val(pte) |= _PAGE_MODIFIED;
+	if (pte_val(pte) & _PAGE_WRITE)
+		pte_val(pte) |= _PAGE_SILENT_WRITE;
+	return pte;
 }
 
 static inline pte_t pte_mkyoung(pte_t pte)
 {
-        pte_val(pte) |= _PAGE_ACCESSED;
-        if (pte_val(pte) & _PAGE_READ)
-        {
-                pte_val(pte) |= _PAGE_SILENT_READ;
-                if ((pte_val(pte) & (_PAGE_WRITE | _PAGE_MODIFIED)) ==
+	pte_val(pte) |= _PAGE_ACCESSED;
+	if (pte_val(pte) & _PAGE_READ)
+	{
+		pte_val(pte) |= _PAGE_SILENT_READ;
+		if ((pte_val(pte) & (_PAGE_WRITE | _PAGE_MODIFIED)) ==
 		    (_PAGE_WRITE | _PAGE_MODIFIED))
-                        pte_val(pte) |= _PAGE_SILENT_WRITE;
-        }
-        return pte;
+			pte_val(pte) |= _PAGE_SILENT_WRITE;
+	}
+	return pte;
 }
 static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
 
@@ -188,10 +188,10 @@ static inline pte_t __mk_pte(void * page, pgprot_t pgprot)
 
 #define mk_pte_phys(physpage, pgprot) \
 ({                                                                      \
-        pte_t __pte;                                                    \
-                                                                        \
-        pte_val(__pte) = (physpage) + pgprot_val(pgprot);               \
-        __pte;                                                          \
+	pte_t __pte;                                                    \
+									\
+	pte_val(__pte) = (physpage) + pgprot_val(pgprot);               \
+	__pte;                                                          \
 })
 
 static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
@@ -254,9 +254,9 @@ static inline pgd_t * pgd_offset(const struct mm_struct *mm, unsigned long addre
 #define pfn_pte(pfn, prot)	__pte(((pfn) << PAGE_SHIFT) | pgprot_val(prot))
 
 #define pte_ERROR(e) \
-        printk("%s:%d: bad pte %p(%08lx).\n", __FILE__, __LINE__, &(e), pte_val(e))
+	printk("%s:%d: bad pte %p(%08lx).\n", __FILE__, __LINE__, &(e), pte_val(e))
 #define pgd_ERROR(e) \
-        printk("%s:%d: bad pgd %p(%08lx).\n", __FILE__, __LINE__, &(e), pgd_val(e))
+	printk("%s:%d: bad pgd %p(%08lx).\n", __FILE__, __LINE__, &(e), pgd_val(e))
 
 #define io_remap_pfn_range(vma, vaddr, pfn, size, prot)         \
 		remap_pfn_range(vma, vaddr, pfn, size, prot)

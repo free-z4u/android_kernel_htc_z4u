@@ -201,7 +201,7 @@ bool_t Yushan_Init_Clocks(Yushan_Init_Struct_t *sInitStruct, Yushan_SystemStatus
 
 			break;
 
-        	}
+		}
 
 		bCount--;
 	}

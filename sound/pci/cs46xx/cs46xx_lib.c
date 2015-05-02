@@ -256,7 +256,7 @@ static void snd_cs46xx_codec_write(struct snd_cs46xx *chip,
 	 *  set VFRM - valid frame enabled
 	 *  set ESYN - ASYNC generation enabled
 	 *  set RSTN - ARST# inactive, AC97 codec not reset
-         */
+	 */
 	snd_cs46xx_pokeBA0(chip, BA0_ACCAD , reg);
 	snd_cs46xx_pokeBA0(chip, BA0_ACCDA , val);
 	snd_cs46xx_peekBA0(chip, BA0_ACCTL);
@@ -310,8 +310,8 @@ static void snd_cs46xx_ac97_write(struct snd_ac97 *ac97,
 
 int snd_cs46xx_download(struct snd_cs46xx *chip,
 			u32 *src,
-                        unsigned long offset,
-                        unsigned long len)
+			unsigned long offset,
+			unsigned long len)
 {
 	void __iomem *dst;
 	unsigned int bank = offset >> 16;
@@ -339,8 +339,8 @@ int snd_cs46xx_download(struct snd_cs46xx *chip,
 #include "imgs/cwcdma.h"
 
 int snd_cs46xx_clear_BA1(struct snd_cs46xx *chip,
-                         unsigned long offset,
-                         unsigned long len)
+			 unsigned long offset,
+			 unsigned long len)
 {
 	void __iomem *dst;
 	unsigned int bank = offset >> 16;
@@ -547,9 +547,9 @@ static void snd_cs46xx_set_play_sample_rate(struct snd_cs46xx *chip, unsigned in
 	 *
 	 *  phiIncr = floor((Fs,in * 2^26) / Fs,out)
 	 *  correctionPerGOF = floor((Fs,in * 2^26 - Fs,out * phiIncr) /
-         *                                   GOF_PER_SEC)
-         *  ulCorrectionPerSec = Fs,in * 2^26 - Fs,out * phiIncr -M
-         *                       GOF_PER_SEC * correctionPerGOF
+	 *                                   GOF_PER_SEC)
+	 *  ulCorrectionPerSec = Fs,in * 2^26 - Fs,out * phiIncr -M
+	 *                       GOF_PER_SEC * correctionPerGOF
 	 *
 	 *  i.e.
 	 *
@@ -671,7 +671,7 @@ static void snd_cs46xx_set_capture_sample_rate(struct snd_cs46xx *chip, unsigned
 	for (cnt = 5; cnt <= 125; cnt *= 5) {
 		if (((rate / cnt) * cnt) != rate)
 			frameGroupLength *= 5;
-        }
+	}
 
 	/*
 	 * Fill in the WriteBack control block.
@@ -1829,7 +1829,7 @@ static int snd_cs46xx_vol_iec958_put(struct snd_kcontrol *kcontrol, struct snd_c
 #define snd_mixer_boolean_info		snd_ctl_boolean_mono_info
 
 static int snd_cs46xx_iec958_get(struct snd_kcontrol *kcontrol,
-                                 struct snd_ctl_elem_value *ucontrol)
+				 struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	int reg = kcontrol->private_value;
@@ -1843,7 +1843,7 @@ static int snd_cs46xx_iec958_get(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_cs46xx_iec958_put(struct snd_kcontrol *kcontrol,
-                                  struct snd_ctl_elem_value *ucontrol)
+				  struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	int change, res;
@@ -1880,7 +1880,7 @@ static int snd_cs46xx_iec958_put(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_cs46xx_adc_capture_get(struct snd_kcontrol *kcontrol,
-                                      struct snd_ctl_elem_value *ucontrol)
+				      struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
@@ -1894,7 +1894,7 @@ static int snd_cs46xx_adc_capture_get(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_cs46xx_adc_capture_put(struct snd_kcontrol *kcontrol,
-                                      struct snd_ctl_elem_value *ucontrol)
+				      struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
@@ -1911,7 +1911,7 @@ static int snd_cs46xx_adc_capture_put(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_cs46xx_pcm_capture_get(struct snd_kcontrol *kcontrol,
-                                      struct snd_ctl_elem_value *ucontrol)
+				      struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
@@ -1926,7 +1926,7 @@ static int snd_cs46xx_pcm_capture_get(struct snd_kcontrol *kcontrol,
 
 
 static int snd_cs46xx_pcm_capture_put(struct snd_kcontrol *kcontrol,
-                                      struct snd_ctl_elem_value *ucontrol)
+				      struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
@@ -1944,7 +1944,7 @@ static int snd_cs46xx_pcm_capture_put(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_herc_spdif_select_get(struct snd_kcontrol *kcontrol,
-                                     struct snd_ctl_elem_value *ucontrol)
+				     struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 
@@ -1962,7 +1962,7 @@ static int snd_herc_spdif_select_get(struct snd_kcontrol *kcontrol,
  *	Game Theatre XP card - EGPIO[0] is used to select SPDIF input optical or coaxial.
  */
 static int snd_herc_spdif_select_put(struct snd_kcontrol *kcontrol,
-                                       struct snd_ctl_elem_value *ucontrol)
+				       struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	int val1 = snd_cs46xx_peekBA0(chip, BA0_EGPIODR);
@@ -2047,7 +2047,7 @@ static int snd_cs46xx_spdif_mask_get(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_cs46xx_spdif_stream_get(struct snd_kcontrol *kcontrol,
-                                         struct snd_ctl_elem_value *ucontrol)
+					 struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx *chip = snd_kcontrol_chip(kcontrol);
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
@@ -2063,7 +2063,7 @@ static int snd_cs46xx_spdif_stream_get(struct snd_kcontrol *kcontrol,
 }
 
 static int snd_cs46xx_spdif_stream_put(struct snd_kcontrol *kcontrol,
-                                        struct snd_ctl_elem_value *ucontrol)
+					struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_cs46xx * chip = snd_kcontrol_chip(kcontrol);
 	struct dsp_spos_instance * ins = chip->dsp_spos_instance;
@@ -2172,7 +2172,7 @@ static struct snd_kcontrol_new snd_cs46xx_controls[] __devinitdata = {
 	.iface = SNDRV_CTL_ELEM_IFACE_PCM,
 	.name =	 SNDRV_CTL_NAME_IEC958("",PLAYBACK,MASK),
 	.info =	 snd_cs46xx_spdif_info,
-        .get =	 snd_cs46xx_spdif_mask_get,
+	.get =	 snd_cs46xx_spdif_mask_get,
 	.access = SNDRV_CTL_ELEM_ACCESS_READ
 },
 {
@@ -2725,20 +2725,20 @@ static void snd_cs46xx_hw_stop(struct snd_cs46xx *chip)
 	snd_cs46xx_poke(chip, BA1_CIE, tmp);	/* capture interrupt disable */
 
 	/*
-         *  Stop playback DMA.
+	 *  Stop playback DMA.
 	 */
 	tmp = snd_cs46xx_peek(chip, BA1_PCTL);
 	snd_cs46xx_poke(chip, BA1_PCTL, tmp & 0x0000ffff);
 
 	/*
-         *  Stop capture DMA.
+	 *  Stop capture DMA.
 	 */
 	tmp = snd_cs46xx_peek(chip, BA1_CCTL);
 	snd_cs46xx_poke(chip, BA1_CCTL, tmp & 0xffff0000);
 
 	/*
-         *  Reset the processor.
-         */
+	 *  Reset the processor.
+	 */
 	snd_cs46xx_reset(chip);
 
 	snd_cs46xx_proc_stop(chip);
@@ -2821,16 +2821,16 @@ static int snd_cs46xx_chip_init(struct snd_cs46xx *chip)
 
 	/*
 	 *  First, blast the clock control register to zero so that the PLL starts
-         *  out in a known state, and blast the master serial port control register
-         *  to zero so that the serial ports also start out in a known state.
-         */
-        snd_cs46xx_pokeBA0(chip, BA0_CLKCR1, 0);
-        snd_cs46xx_pokeBA0(chip, BA0_SERMC1, 0);
+	 *  out in a known state, and blast the master serial port control register
+	 *  to zero so that the serial ports also start out in a known state.
+	 */
+	snd_cs46xx_pokeBA0(chip, BA0_CLKCR1, 0);
+	snd_cs46xx_pokeBA0(chip, BA0_SERMC1, 0);
 
 	/*
 	 *  If we are in AC97 mode, then we must set the part to a host controlled
-         *  AC-link.  Otherwise, we won't be able to bring up the link.
-         */
+	 *  AC-link.  Otherwise, we won't be able to bring up the link.
+	 */
 #ifdef CONFIG_SND_CS46XX_NEW_DSP
 	snd_cs46xx_pokeBA0(chip, BA0_SERACC, SERACC_HSP | SERACC_CHIP_TYPE_2_0 |
 			   SERACC_TWO_CODECS);	/* 2.00 dual codecs */
@@ -2839,12 +2839,12 @@ static int snd_cs46xx_chip_init(struct snd_cs46xx *chip)
 	snd_cs46xx_pokeBA0(chip, BA0_SERACC, SERACC_HSP | SERACC_CHIP_TYPE_1_03); /* 1.03 codec */
 #endif
 
-        /*
-         *  Drive the ARST# pin low for a minimum of 1uS (as defined in the AC97
-         *  spec) and then drive it high.  This is done for non AC97 modes since
-         *  there might be logic external to the CS461x that uses the ARST# line
-         *  for a reset.
-         */
+	/*
+	 *  Drive the ARST# pin low for a minimum of 1uS (as defined in the AC97
+	 *  spec) and then drive it high.  This is done for non AC97 modes since
+	 *  there might be logic external to the CS461x that uses the ARST# line
+	 *  for a reset.
+	 */
 	snd_cs46xx_pokeBA0(chip, BA0_ACCTL, 0);
 #ifdef CONFIG_SND_CS46XX_NEW_DSP
 	snd_cs46xx_pokeBA0(chip, BA0_ACCTL2, 0);
@@ -2893,7 +2893,7 @@ static int snd_cs46xx_chip_init(struct snd_cs46xx *chip)
 	snd_cs46xx_pokeBA0(chip, BA0_CLKCR1, CLKCR1_PLLP);
 
 	/*
-         *  Wait until the PLL has stabilized.
+	 *  Wait until the PLL has stabilized.
 	 */
 	msleep(100);
 
@@ -3010,7 +3010,7 @@ static int snd_cs46xx_chip_init(struct snd_cs46xx *chip)
 
 	snd_printk(KERN_ERR "ERROR: snd-cs46xx: never read ISV3 & ISV4 from AC'97\n");
 	snd_printk(KERN_ERR "       Try reloading the ALSA driver, if you find something\n");
-        snd_printk(KERN_ERR "       broken or not working on your soundcard upon\n");
+	snd_printk(KERN_ERR "       broken or not working on your soundcard upon\n");
 	snd_printk(KERN_ERR "       this message please report to alsa-devel@alsa-project.org\n");
 
 	return -EIO;
@@ -3114,7 +3114,7 @@ int __devinit snd_cs46xx_start_dsp(struct snd_cs46xx *chip)
 	}
 
 	/*
-         *  Stop playback DMA.
+	 *  Stop playback DMA.
 	 */
 	tmp = snd_cs46xx_peek(chip, BA1_PCTL);
 	chip->play_ctl = tmp & 0xffff0000;
@@ -3122,7 +3122,7 @@ int __devinit snd_cs46xx_start_dsp(struct snd_cs46xx *chip)
 #endif
 
 	/*
-         *  Stop capture DMA.
+	 *  Stop capture DMA.
 	 */
 	tmp = snd_cs46xx_peek(chip, BA1_CCTL);
 	chip->capt.ctl = tmp & 0x0000ffff;
@@ -3683,7 +3683,7 @@ int snd_cs46xx_resume(struct pci_dev *pci)
 	snd_ac97_resume(chip->ac97[CS46XX_SECONDARY_CODEC_INDEX]);
 
 	/*
-         *  Stop capture DMA.
+	 *  Stop capture DMA.
 	 */
 	tmp = snd_cs46xx_peek(chip, BA1_CCTL);
 	chip->capt.ctl = tmp & 0x0000ffff;

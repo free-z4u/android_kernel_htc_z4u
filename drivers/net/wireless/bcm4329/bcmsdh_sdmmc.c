@@ -399,7 +399,7 @@ const bcm_iovar_t sdioh_iovars[] = {
 
 int
 sdioh_iovar_op(sdioh_info_t *si, const char *name,
-                           void *params, int plen, void *arg, int len, bool set)
+			   void *params, int plen, void *arg, int len, bool set)
 {
 	const bcm_iovar_t *vi = NULL;
 	int bcmerror = 0;
@@ -838,7 +838,7 @@ sdioh_request_byte(sdioh_info_t *sd, uint rw, uint func, uint regaddr, uint8 *by
 
 extern SDIOH_API_RC
 sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint addr,
-                                   uint32 *word, uint nbytes)
+				   uint32 *word, uint nbytes)
 {
 	int err_ret = SDIOH_API_RC_FAIL;
 
@@ -886,7 +886,7 @@ sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint add
 
 static SDIOH_API_RC
 sdioh_request_packet(sdioh_info_t *sd, uint fix_inc, uint write, uint func,
-                     uint addr, void *pkt)
+		     uint addr, void *pkt)
 {
 	bool fifo = (fix_inc == SDIOH_DATA_FIX);
 	uint32	SGCount = 0;
@@ -979,7 +979,7 @@ sdioh_request_packet(sdioh_info_t *sd, uint fix_inc, uint write, uint func,
  */
 extern SDIOH_API_RC
 sdioh_request_buffer(sdioh_info_t *sd, uint pio_dma, uint fix_inc, uint write, uint func,
-                     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
+		     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
 {
 	SDIOH_API_RC Status;
 	void *mypkt = NULL;

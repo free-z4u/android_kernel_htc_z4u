@@ -100,8 +100,8 @@ cache_flush_040 (unsigned long addr, int scope, int cache, unsigned long len)
       /* Find the physical address of the first mapped page in the
 	 address range.  */
       if ((paddr = virt_to_phys_040(addr))) {
-        paddr += addr & ~(PAGE_MASK | 15);
-        len = (len + (addr & 15) + 15) >> 4;
+	paddr += addr & ~(PAGE_MASK | 15);
+	len = (len + (addr & 15) + 15) >> 4;
       } else {
 	unsigned long tmp = PAGE_SIZE - (addr & ~PAGE_MASK);
 

@@ -58,7 +58,7 @@ static int fm801_gp_cooked_read(struct gameport *gameport, int *axes, int *butto
 	axes[3] = (w == 0xffff) ? -1 : ((w & 0x1fff) << 5);
 	outw(0xff, gameport->io); /* reset */
 
-        return 0;
+	return 0;
 }
 #endif
 

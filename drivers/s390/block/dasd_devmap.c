@@ -46,8 +46,8 @@ EXPORT_SYMBOL_GPL(dasd_page_cache);
 struct dasd_devmap {
 	struct list_head list;
 	char bus_id[DASD_BUS_ID_SIZE];
-        unsigned int devindex;
-        unsigned short features;
+	unsigned int devindex;
+	unsigned short features;
 	struct dasd_device *device;
 };
 
@@ -255,17 +255,17 @@ dasd_parse_keyword( char *parsestring ) {
 	} else {
 		length = strlen(parsestring);
 		residual_str = parsestring + length;
-        }
+	}
 	if (strncmp("autodetect", parsestring, length) == 0) {
 		dasd_autodetect = 1;
 		pr_info("The autodetection mode has been activated\n");
-                return residual_str;
-        }
+		return residual_str;
+	}
 	if (strncmp("probeonly", parsestring, length) == 0) {
 		dasd_probeonly = 1;
 		pr_info("The probeonly mode has been activated\n");
-                return residual_str;
-        }
+		return residual_str;
+	}
 	if (strncmp("nopav", parsestring, length) == 0) {
 		if (MACHINE_IS_VM)
 			pr_info("'nopav' is not supported on z/VM\n");
@@ -294,8 +294,8 @@ dasd_parse_keyword( char *parsestring ) {
 		else
 			DBF_EVENT(DBF_INFO, "%s",
 				 "turning on fixed buffer mode");
-                return residual_str;
-        }
+		return residual_str;
+	}
 	return ERR_PTR(-EINVAL);
 }
 

@@ -78,21 +78,21 @@ static struct net_device * __init ipddp_init(void)
 	strcpy(dev->name, "ipddp%d");
 
 	if (version_printed++ == 0)
-                printk(version);
+		printk(version);
 
 	/* Initialize the device structure. */
 	dev->netdev_ops = &ipddp_netdev_ops;
 
-        dev->type = ARPHRD_IPDDP;       	/* IP over DDP tunnel */
-        dev->mtu = 585;
-        dev->flags |= IFF_NOARP;
+	dev->type = ARPHRD_IPDDP;       	/* IP over DDP tunnel */
+	dev->mtu = 585;
+	dev->flags |= IFF_NOARP;
 
-        /*
-         *      The worst case header we will need is currently a
-         *      ethernet header (14 bytes) and a ddp header (sizeof ddpehdr+1)
-         *      We send over SNAP so that takes another 8 bytes.
-         */
-        dev->hard_header_len = 14+8+sizeof(struct ddpehdr)+1;
+	/*
+	 *      The worst case header we will need is currently a
+	 *      ethernet header (14 bytes) and a ddp header (sizeof ddpehdr+1)
+	 *      We send over SNAP so that takes another 8 bytes.
+	 */
+	dev->hard_header_len = 14+8+sizeof(struct ddpehdr)+1;
 
 	err = register_netdev(dev);
 	if (err) {
@@ -108,7 +108,7 @@ static struct net_device * __init ipddp_init(void)
 		printk("%s: Appletalk-IP Decap. mode by Jay Schulist <jschlst@samba.org>\n",
 			dev->name);
 
-        return dev;
+	return dev;
 }
 
 
@@ -118,26 +118,26 @@ static struct net_device * __init ipddp_init(void)
 static netdev_tx_t ipddp_xmit(struct sk_buff *skb, struct net_device *dev)
 {
 	__be32 paddr = skb_rtable(skb)->rt_gateway;
-        struct ddpehdr *ddp;
-        struct ipddp_route *rt;
-        struct atalk_addr *our_addr;
+	struct ddpehdr *ddp;
+	struct ipddp_route *rt;
+	struct atalk_addr *our_addr;
 
 	spin_lock(&ipddp_route_lock);
 
 	/*
-         * Find appropriate route to use, based only on IP number.
-         */
-        for(rt = ipddp_route_list; rt != NULL; rt = rt->next)
-        {
-                if(rt->ip == paddr)
-                        break;
-        }
-        if(rt == NULL) {
+	 * Find appropriate route to use, based only on IP number.
+	 */
+	for(rt = ipddp_route_list; rt != NULL; rt = rt->next)
+	{
+		if(rt->ip == paddr)
+			break;
+	}
+	if(rt == NULL) {
 		spin_unlock(&ipddp_route_lock);
-                return NETDEV_TX_OK;
+		return NETDEV_TX_OK;
 	}
 
-        our_addr = atalk_find_dev_addr(rt->dev);
+	our_addr = atalk_find_dev_addr(rt->dev);
 
 	if(ipddp_mode == IPDDP_DECAP)
 		/*
@@ -149,31 +149,31 @@ static netdev_tx_t ipddp_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	/* Create the Extended DDP header */
 	ddp = (struct ddpehdr *)skb->data;
-        ddp->deh_len_hops = htons(skb->len + (1<<10));
-        ddp->deh_sum = 0;
+	ddp->deh_len_hops = htons(skb->len + (1<<10));
+	ddp->deh_sum = 0;
 
 	/*
-         * For Localtalk we need aarp_send_ddp to strip the
-         * long DDP header and place a shot DDP header on it.
-         */
-        if(rt->dev->type == ARPHRD_LOCALTLK)
-        {
-                ddp->deh_dnet  = 0;   /* FIXME more hops?? */
-                ddp->deh_snet  = 0;
-        }
-        else
-        {
-                ddp->deh_dnet  = rt->at.s_net;   /* FIXME more hops?? */
-                ddp->deh_snet  = our_addr->s_net;
-        }
-        ddp->deh_dnode = rt->at.s_node;
-        ddp->deh_snode = our_addr->s_node;
-        ddp->deh_dport = 72;
-        ddp->deh_sport = 72;
+	 * For Localtalk we need aarp_send_ddp to strip the
+	 * long DDP header and place a shot DDP header on it.
+	 */
+	if(rt->dev->type == ARPHRD_LOCALTLK)
+	{
+		ddp->deh_dnet  = 0;   /* FIXME more hops?? */
+		ddp->deh_snet  = 0;
+	}
+	else
+	{
+		ddp->deh_dnet  = rt->at.s_net;   /* FIXME more hops?? */
+		ddp->deh_snet  = our_addr->s_net;
+	}
+	ddp->deh_dnode = rt->at.s_node;
+	ddp->deh_snode = our_addr->s_node;
+	ddp->deh_dport = 72;
+	ddp->deh_sport = 72;
 
-        *((__u8 *)(ddp+1)) = 22;        	/* ddp type = IP */
+	*((__u8 *)(ddp+1)) = 22;        	/* ddp type = IP */
 
-        skb->protocol = htons(ETH_P_ATALK);     /* Protocol has changed */
+	skb->protocol = htons(ETH_P_ATALK);     /* Protocol has changed */
 
 	dev->stats.tx_packets++;
 	dev->stats.tx_bytes += skb->len;
@@ -182,7 +182,7 @@ static netdev_tx_t ipddp_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	spin_unlock(&ipddp_route_lock);
 
-        return NETDEV_TX_OK;
+	return NETDEV_TX_OK;
 }
 
 /*
@@ -191,18 +191,18 @@ static netdev_tx_t ipddp_xmit(struct sk_buff *skb, struct net_device *dev)
  */
 static int ipddp_create(struct ipddp_route *new_rt)
 {
-        struct ipddp_route *rt = kmalloc(sizeof(*rt), GFP_KERNEL);
+	struct ipddp_route *rt = kmalloc(sizeof(*rt), GFP_KERNEL);
 
-        if (rt == NULL)
-                return -ENOMEM;
+	if (rt == NULL)
+		return -ENOMEM;
 
-        rt->ip = new_rt->ip;
-        rt->at = new_rt->at;
-        rt->next = NULL;
-        if ((rt->dev = atrtr_get_dev(&rt->at)) == NULL) {
+	rt->ip = new_rt->ip;
+	rt->at = new_rt->at;
+	rt->next = NULL;
+	if ((rt->dev = atrtr_get_dev(&rt->at)) == NULL) {
 		kfree(rt);
-                return -ENETUNREACH;
-        }
+		return -ENETUNREACH;
+	}
 
 	spin_lock_bh(&ipddp_route_lock);
 	if (__ipddp_find_route(rt)) {
@@ -211,12 +211,12 @@ static int ipddp_create(struct ipddp_route *new_rt)
 		return -EEXIST;
 	}
 
-        rt->next = ipddp_route_list;
-        ipddp_route_list = rt;
+	rt->next = ipddp_route_list;
+	ipddp_route_list = rt;
 
 	spin_unlock_bh(&ipddp_route_lock);
 
-        return 0;
+	return 0;
 }
 
 /*
@@ -225,26 +225,26 @@ static int ipddp_create(struct ipddp_route *new_rt)
  */
 static int ipddp_delete(struct ipddp_route *rt)
 {
-        struct ipddp_route **r = &ipddp_route_list;
-        struct ipddp_route *tmp;
+	struct ipddp_route **r = &ipddp_route_list;
+	struct ipddp_route *tmp;
 
 	spin_lock_bh(&ipddp_route_lock);
-        while((tmp = *r) != NULL)
-        {
-                if(tmp->ip == rt->ip &&
+	while((tmp = *r) != NULL)
+	{
+		if(tmp->ip == rt->ip &&
 		   tmp->at.s_net == rt->at.s_net &&
 		   tmp->at.s_node == rt->at.s_node)
-                {
-                        *r = tmp->next;
+		{
+			*r = tmp->next;
 			spin_unlock_bh(&ipddp_route_lock);
-                        kfree(tmp);
-                        return 0;
-                }
-                r = &tmp->next;
-        }
+			kfree(tmp);
+			return 0;
+		}
+		r = &tmp->next;
+	}
 
 	spin_unlock_bh(&ipddp_route_lock);
-        return -ENOENT;
+	return -ENOENT;
 }
 
 /*
@@ -252,36 +252,36 @@ static int ipddp_delete(struct ipddp_route *rt)
  */
 static struct ipddp_route* __ipddp_find_route(struct ipddp_route *rt)
 {
-        struct ipddp_route *f;
+	struct ipddp_route *f;
 
-        for(f = ipddp_route_list; f != NULL; f = f->next)
-        {
-                if(f->ip == rt->ip &&
+	for(f = ipddp_route_list; f != NULL; f = f->next)
+	{
+		if(f->ip == rt->ip &&
 		   f->at.s_net == rt->at.s_net &&
 		   f->at.s_node == rt->at.s_node)
-                        return f;
-        }
+			return f;
+	}
 
-        return NULL;
+	return NULL;
 }
 
 static int ipddp_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 {
-        struct ipddp_route __user *rt = ifr->ifr_data;
-        struct ipddp_route rcp, rcp2, *rp;
+	struct ipddp_route __user *rt = ifr->ifr_data;
+	struct ipddp_route rcp, rcp2, *rp;
 
-        if(!capable(CAP_NET_ADMIN))
-                return -EPERM;
+	if(!capable(CAP_NET_ADMIN))
+		return -EPERM;
 
 	if(copy_from_user(&rcp, rt, sizeof(rcp)))
 		return -EFAULT;
 
-        switch(cmd)
-        {
+	switch(cmd)
+	{
 		case SIOCADDIPDDPRT:
-                        return ipddp_create(&rcp);
+			return ipddp_create(&rcp);
 
-                case SIOCFINDIPDDPRT:
+		case SIOCFINDIPDDPRT:
 			spin_lock_bh(&ipddp_route_lock);
 			rp = __ipddp_find_route(&rcp);
 			if (rp)
@@ -296,12 +296,12 @@ static int ipddp_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 			} else
 				return -ENOENT;
 
-                case SIOCDELIPDDPRT:
-                        return ipddp_delete(&rcp);
+		case SIOCDELIPDDPRT:
+			return ipddp_delete(&rcp);
 
-                default:
-                        return -EINVAL;
-        }
+		default:
+			return -EINVAL;
+	}
 }
 
 static struct net_device *dev_ipddp;
@@ -312,23 +312,23 @@ module_param(ipddp_mode, int, 0);
 static int __init ipddp_init_module(void)
 {
 	dev_ipddp = ipddp_init();
-        if (IS_ERR(dev_ipddp))
-                return PTR_ERR(dev_ipddp);
+	if (IS_ERR(dev_ipddp))
+		return PTR_ERR(dev_ipddp);
 	return 0;
 }
 
 static void __exit ipddp_cleanup_module(void)
 {
-        struct ipddp_route *p;
+	struct ipddp_route *p;
 
 	unregister_netdev(dev_ipddp);
-        free_netdev(dev_ipddp);
+	free_netdev(dev_ipddp);
 
-        while (ipddp_route_list) {
-                p = ipddp_route_list->next;
-                kfree(ipddp_route_list);
-                ipddp_route_list = p;
-        }
+	while (ipddp_route_list) {
+		p = ipddp_route_list->next;
+		kfree(ipddp_route_list);
+		ipddp_route_list = p;
+	}
 }
 
 module_init(ipddp_init_module);

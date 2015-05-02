@@ -90,8 +90,8 @@ struct cdrom_info {
 	u8 max_speed;		/* Max speed of the drive. */
 	u8 current_speed;	/* Current speed of the drive. */
 
-        /* Per-device info needed by cdrom.c generic driver. */
-        struct cdrom_device_info devinfo;
+	/* Per-device info needed by cdrom.c generic driver. */
+	struct cdrom_device_info devinfo;
 
 	unsigned long write_timeout;
 };

@@ -462,11 +462,11 @@ static int gen_rtc_read_proc(char *page, char **start, off_t off,
 			     int count, int *eof, void *data)
 {
 	int len = gen_rtc_proc_output (page);
-        if (len <= off+count) *eof = 1;
+	if (len <= off+count) *eof = 1;
 	*start = page + off;
 	len -= off;
-        if (len>count) len = count;
-        if (len<0) len = 0;
+	if (len>count) len = count;
+	if (len<0) len = 0;
 	return len;
 }
 

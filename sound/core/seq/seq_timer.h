@@ -100,8 +100,8 @@ static inline void snd_seq_sanity_real_time(snd_seq_real_time_t *tm)
 	while (tm->tv_nsec >= 1000000000) {
 		/* roll-over */
 		tm->tv_nsec -= 1000000000;
-                tm->tv_sec++;
-        }
+		tm->tv_sec++;
+	}
 }
 
 

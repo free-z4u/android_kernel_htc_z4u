@@ -88,10 +88,10 @@ static int sun3scsi_release (struct Scsi_Host *);
     int port, ctrl
 
 #define NCR5380_local_declare() \
-        struct Scsi_Host *_instance
+	struct Scsi_Host *_instance
 
 #define NCR5380_setup(instance) \
-        _instance = instance
+	_instance = instance
 
 #define NCR5380_read(reg) sun3scsi_read(reg)
 #define NCR5380_write(reg, value) sun3scsi_write(reg, value)
@@ -102,7 +102,7 @@ static int sun3scsi_release (struct Scsi_Host *);
 #define NCR5380_abort sun3scsi_abort
 #define NCR5380_proc_info sun3scsi_proc_info
 #define NCR5380_dma_xfer_len(i, cmd, phase) \
-        sun3scsi_dma_xfer_len(cmd->SCp.this_residual,cmd,((phase) & SR_IO) ? 0 : 1)
+	sun3scsi_dma_xfer_len(cmd->SCp.this_residual,cmd,((phase) & SR_IO) ? 0 : 1)
 
 #define NCR5380_dma_write_setup(instance, data, count) sun3scsi_dma_setup(data, count, 1)
 #define NCR5380_dma_read_setup(instance, data, count) sun3scsi_dma_setup(data, count, 0)

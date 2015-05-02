@@ -50,7 +50,7 @@ struct uart_driver jsm_uart_driver = {
 };
 
 static pci_ers_result_t jsm_io_error_detected(struct pci_dev *pdev,
-                                       pci_channel_state_t state);
+				       pci_channel_state_t state);
 static pci_ers_result_t jsm_io_slot_reset(struct pci_dev *pdev);
 static void jsm_io_resume(struct pci_dev *pdev);
 

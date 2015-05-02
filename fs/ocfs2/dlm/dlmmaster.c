@@ -2360,7 +2360,7 @@ static int dlm_is_lockres_migrateable(struct dlm_ctxt *dlm,
 	if (res->owner != dlm->node_num)
 		return 0;
 
-        for (idx = DLM_GRANTED_LIST; idx <= DLM_BLOCKED_LIST; idx++) {
+	for (idx = DLM_GRANTED_LIST; idx <= DLM_BLOCKED_LIST; idx++) {
 		queue = dlm_list_idx_to_ptr(res, idx);
 		list_for_each_entry(lock, queue, list) {
 			if (lock->ml.node != dlm->node_num) {

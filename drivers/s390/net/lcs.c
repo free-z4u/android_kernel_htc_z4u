@@ -334,92 +334,92 @@ lcs_set_allowed_threads(struct lcs_card *card, unsigned long threads)
 static inline int
 lcs_threads_running(struct lcs_card *card, unsigned long threads)
 {
-        unsigned long flags;
-        int rc = 0;
+	unsigned long flags;
+	int rc = 0;
 
 	spin_lock_irqsave(&card->mask_lock, flags);
-        rc = (card->thread_running_mask & threads);
+	rc = (card->thread_running_mask & threads);
 	spin_unlock_irqrestore(&card->mask_lock, flags);
-        return rc;
+	return rc;
 }
 
 static int
 lcs_wait_for_threads(struct lcs_card *card, unsigned long threads)
 {
-        return wait_event_interruptible(card->wait_q,
-                        lcs_threads_running(card, threads) == 0);
+	return wait_event_interruptible(card->wait_q,
+			lcs_threads_running(card, threads) == 0);
 }
 
 static inline int
 lcs_set_thread_start_bit(struct lcs_card *card, unsigned long thread)
 {
-        unsigned long flags;
+	unsigned long flags;
 
 	spin_lock_irqsave(&card->mask_lock, flags);
-        if ( !(card->thread_allowed_mask & thread) ||
-              (card->thread_start_mask & thread) ) {
-                spin_unlock_irqrestore(&card->mask_lock, flags);
-                return -EPERM;
-        }
-        card->thread_start_mask |= thread;
+	if ( !(card->thread_allowed_mask & thread) ||
+	      (card->thread_start_mask & thread) ) {
+		spin_unlock_irqrestore(&card->mask_lock, flags);
+		return -EPERM;
+	}
+	card->thread_start_mask |= thread;
 	spin_unlock_irqrestore(&card->mask_lock, flags);
-        return 0;
+	return 0;
 }
 
 static void
 lcs_clear_thread_running_bit(struct lcs_card *card, unsigned long thread)
 {
-        unsigned long flags;
+	unsigned long flags;
 
 	spin_lock_irqsave(&card->mask_lock, flags);
-        card->thread_running_mask &= ~thread;
+	card->thread_running_mask &= ~thread;
 	spin_unlock_irqrestore(&card->mask_lock, flags);
-        wake_up(&card->wait_q);
+	wake_up(&card->wait_q);
 }
 
 static inline int
 __lcs_do_run_thread(struct lcs_card *card, unsigned long thread)
 {
-        unsigned long flags;
-        int rc = 0;
+	unsigned long flags;
+	int rc = 0;
 
 	spin_lock_irqsave(&card->mask_lock, flags);
-        if (card->thread_start_mask & thread){
-                if ((card->thread_allowed_mask & thread) &&
-                    !(card->thread_running_mask & thread)){
-                        rc = 1;
-                        card->thread_start_mask &= ~thread;
-                        card->thread_running_mask |= thread;
-                } else
-                        rc = -EPERM;
-        }
+	if (card->thread_start_mask & thread){
+		if ((card->thread_allowed_mask & thread) &&
+		    !(card->thread_running_mask & thread)){
+			rc = 1;
+			card->thread_start_mask &= ~thread;
+			card->thread_running_mask |= thread;
+		} else
+			rc = -EPERM;
+	}
 	spin_unlock_irqrestore(&card->mask_lock, flags);
-        return rc;
+	return rc;
 }
 
 static int
 lcs_do_run_thread(struct lcs_card *card, unsigned long thread)
 {
-        int rc = 0;
-        wait_event(card->wait_q,
-                   (rc = __lcs_do_run_thread(card, thread)) >= 0);
-        return rc;
+	int rc = 0;
+	wait_event(card->wait_q,
+		   (rc = __lcs_do_run_thread(card, thread)) >= 0);
+	return rc;
 }
 
 static int
 lcs_do_start_thread(struct lcs_card *card, unsigned long thread)
 {
-        unsigned long flags;
-        int rc = 0;
+	unsigned long flags;
+	int rc = 0;
 
 	spin_lock_irqsave(&card->mask_lock, flags);
-        LCS_DBF_TEXT_(4, trace, "  %02x%02x%02x",
-                        (u8) card->thread_start_mask,
-                        (u8) card->thread_allowed_mask,
-                        (u8) card->thread_running_mask);
-        rc = (card->thread_start_mask & thread);
+	LCS_DBF_TEXT_(4, trace, "  %02x%02x%02x",
+			(u8) card->thread_start_mask,
+			(u8) card->thread_allowed_mask,
+			(u8) card->thread_running_mask);
+	rc = (card->thread_start_mask & thread);
 	spin_unlock_irqrestore(&card->mask_lock, flags);
-        return rc;
+	return rc;
 }
 
 /**
@@ -785,8 +785,8 @@ lcs_get_reply(struct lcs_reply *reply)
 static void
 lcs_put_reply(struct lcs_reply *reply)
 {
-        WARN_ON(atomic_read(&reply->refcnt) <= 0);
-        if (atomic_dec_and_test(&reply->refcnt)) {
+	WARN_ON(atomic_read(&reply->refcnt) <= 0);
+	if (atomic_dec_and_test(&reply->refcnt)) {
 		kfree(reply);
 	}
 
@@ -1300,12 +1300,12 @@ static void
 lcs_set_multicast_list(struct net_device *dev)
 {
 #ifdef CONFIG_IP_MULTICAST
-        struct lcs_card *card;
+	struct lcs_card *card;
 
-        LCS_DBF_TEXT(4, trace, "setmulti");
-        card = (struct lcs_card *) dev->ml_priv;
+	LCS_DBF_TEXT(4, trace, "setmulti");
+	card = (struct lcs_card *) dev->ml_priv;
 
-        if (!lcs_set_thread_start_bit(card, LCS_SET_MC_THREAD))
+	if (!lcs_set_thread_start_bit(card, LCS_SET_MC_THREAD))
 		schedule_work(&card->kernel_thread_starter);
 #endif /* CONFIG_IP_MULTICAST */
 }
@@ -1669,18 +1669,18 @@ lcs_startlan(struct lcs_card *card)
 		else
 			rc = lcs_send_startlan(card, LCS_INITIATOR_TCPIP);
 	} else {
-                for (i = 0; i <= 16; i++) {
-                        card->portno = i;
-                        if (card->lan_type != LCS_FRAME_TYPE_AUTO)
-                                rc = lcs_send_startlan(card,
-                                                       LCS_INITIATOR_TCPIP);
-                        else
-                                /* autodetecting lan type */
-                                rc = lcs_startlan_auto(card);
-                        if (rc == 0)
-                                break;
-                }
-        }
+		for (i = 0; i <= 16; i++) {
+			card->portno = i;
+			if (card->lan_type != LCS_FRAME_TYPE_AUTO)
+				rc = lcs_send_startlan(card,
+						       LCS_INITIATOR_TCPIP);
+			else
+				/* autodetecting lan type */
+				rc = lcs_startlan_auto(card);
+			if (rc == 0)
+				break;
+		}
+	}
 	if (rc == 0)
 		return lcs_send_lanstat(card);
 	return rc;
@@ -1936,14 +1936,14 @@ lcs_open_device(struct net_device *dev)
 static ssize_t
 lcs_portno_show (struct device *dev, struct device_attribute *attr, char *buf)
 {
-        struct lcs_card *card;
+	struct lcs_card *card;
 
 	card = dev_get_drvdata(dev);
 
-        if (!card)
-                return 0;
+	if (!card)
+		return 0;
 
-        return sprintf(buf, "%d\n", card->portno);
+	return sprintf(buf, "%d\n", card->portno);
 }
 
 /**
@@ -1952,19 +1952,19 @@ lcs_portno_show (struct device *dev, struct device_attribute *attr, char *buf)
 static ssize_t
 lcs_portno_store (struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
 {
-        struct lcs_card *card;
-        int value;
+	struct lcs_card *card;
+	int value;
 
 	card = dev_get_drvdata(dev);
 
-        if (!card)
-                return 0;
+	if (!card)
+		return 0;
 
-        sscanf(buf, "%u", &value);
-        /* TODO: sanity checks */
-        card->portno = value;
+	sscanf(buf, "%u", &value);
+	/* TODO: sanity checks */
+	card->portno = value;
 
-        return count;
+	return count;
 
 }
 
@@ -2006,19 +2006,19 @@ lcs_timeout_show(struct device *dev, struct device_attribute *attr, char *buf)
 static ssize_t
 lcs_timeout_store (struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
 {
-        struct lcs_card *card;
-        int value;
+	struct lcs_card *card;
+	int value;
 
 	card = dev_get_drvdata(dev);
 
-        if (!card)
-                return 0;
+	if (!card)
+		return 0;
 
-        sscanf(buf, "%u", &value);
-        /* TODO: sanity checks */
-        card->lancmd_timeout = value;
+	sscanf(buf, "%u", &value);
+	/* TODO: sanity checks */
+	card->lancmd_timeout = value;
 
-        return count;
+	return count;
 
 }
 
@@ -2069,18 +2069,18 @@ lcs_probe_device(struct ccwgroup_device *ccwgdev)
 		return -ENODEV;
 
 	LCS_DBF_TEXT(2, setup, "add_dev");
-        card = lcs_alloc_card();
-        if (!card) {
+	card = lcs_alloc_card();
+	if (!card) {
 		LCS_DBF_TEXT_(2, setup, "  rc%d", -ENOMEM);
 		put_device(&ccwgdev->dev);
-                return -ENOMEM;
-        }
+		return -ENOMEM;
+	}
 	ret = sysfs_create_group(&ccwgdev->dev.kobj, &lcs_attr_group);
 	if (ret) {
 		lcs_free_card(card);
 		put_device(&ccwgdev->dev);
 		return ret;
-        }
+	}
 	dev_set_drvdata(&ccwgdev->dev, card);
 	ccwgdev->cdev[0]->handler = lcs_irq;
 	ccwgdev->cdev[1]->handler = lcs_irq;
@@ -2089,7 +2089,7 @@ lcs_probe_device(struct ccwgroup_device *ccwgdev)
 	card->thread_start_mask = 0;
 	card->thread_allowed_mask = 0;
 	card->thread_running_mask = 0;
-        return 0;
+	return 0;
 }
 
 static int
@@ -2281,7 +2281,7 @@ lcs_recovery(void *ptr)
 {
 	struct lcs_card *card;
 	struct ccwgroup_device *gdev;
-        int rc;
+	int rc;
 
 	card = (struct lcs_card *) ptr;
 

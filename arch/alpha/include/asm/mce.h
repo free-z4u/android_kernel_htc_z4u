@@ -22,37 +22,37 @@ struct el_common {
  *      --- These errors are detected by both processor and systems.
  */
 struct el_common_EV5_uncorrectable_mcheck {
-        unsigned long   shadow[8];        /* Shadow reg. 8-14, 25           */
-        unsigned long   paltemp[24];      /* PAL TEMP REGS.                 */
-        unsigned long   exc_addr;         /* Address of excepting instruction*/
-        unsigned long   exc_sum;          /* Summary of arithmetic traps.   */
-        unsigned long   exc_mask;         /* Exception mask (from exc_sum). */
-        unsigned long   pal_base;         /* Base address for PALcode.      */
-        unsigned long   isr;              /* Interrupt Status Reg.          */
-        unsigned long   icsr;             /* CURRENT SETUP OF EV5 IBOX      */
-        unsigned long   ic_perr_stat;     /* I-CACHE Reg. <11> set Data parity
-                                                         <12> set TAG parity*/
-        unsigned long   dc_perr_stat;     /* D-CACHE error Reg. Bits set to 1:
-                                                     <2> Data error in bank 0
-                                                     <3> Data error in bank 1
-                                                     <4> Tag error in bank 0
-                                                     <5> Tag error in bank 1 */
-        unsigned long   va;               /* Effective VA of fault or miss. */
-        unsigned long   mm_stat;          /* Holds the reason for D-stream
-                                             fault or D-cache parity errors */
-        unsigned long   sc_addr;          /* Address that was being accessed
-                                             when EV5 detected Secondary cache
-                                             failure.                 */
-        unsigned long   sc_stat;          /* Helps determine if the error was
-                                             TAG/Data parity(Secondary Cache)*/
-        unsigned long   bc_tag_addr;      /* Contents of EV5 BC_TAG_ADDR    */
-        unsigned long   ei_addr;          /* Physical address of any transfer
-                                             that is logged in EV5 EI_STAT */
-        unsigned long   fill_syndrome;    /* For correcting ECC errors.     */
-        unsigned long   ei_stat;          /* Helps identify reason of any
-                                             processor uncorrectable error
-                                             at its external interface.     */
-        unsigned long   ld_lock;          /* Contents of EV5 LD_LOCK register*/
+	unsigned long   shadow[8];        /* Shadow reg. 8-14, 25           */
+	unsigned long   paltemp[24];      /* PAL TEMP REGS.                 */
+	unsigned long   exc_addr;         /* Address of excepting instruction*/
+	unsigned long   exc_sum;          /* Summary of arithmetic traps.   */
+	unsigned long   exc_mask;         /* Exception mask (from exc_sum). */
+	unsigned long   pal_base;         /* Base address for PALcode.      */
+	unsigned long   isr;              /* Interrupt Status Reg.          */
+	unsigned long   icsr;             /* CURRENT SETUP OF EV5 IBOX      */
+	unsigned long   ic_perr_stat;     /* I-CACHE Reg. <11> set Data parity
+							 <12> set TAG parity*/
+	unsigned long   dc_perr_stat;     /* D-CACHE error Reg. Bits set to 1:
+						     <2> Data error in bank 0
+						     <3> Data error in bank 1
+						     <4> Tag error in bank 0
+						     <5> Tag error in bank 1 */
+	unsigned long   va;               /* Effective VA of fault or miss. */
+	unsigned long   mm_stat;          /* Holds the reason for D-stream
+					     fault or D-cache parity errors */
+	unsigned long   sc_addr;          /* Address that was being accessed
+					     when EV5 detected Secondary cache
+					     failure.                 */
+	unsigned long   sc_stat;          /* Helps determine if the error was
+					     TAG/Data parity(Secondary Cache)*/
+	unsigned long   bc_tag_addr;      /* Contents of EV5 BC_TAG_ADDR    */
+	unsigned long   ei_addr;          /* Physical address of any transfer
+					     that is logged in EV5 EI_STAT */
+	unsigned long   fill_syndrome;    /* For correcting ECC errors.     */
+	unsigned long   ei_stat;          /* Helps identify reason of any
+					     processor uncorrectable error
+					     at its external interface.     */
+	unsigned long   ld_lock;          /* Contents of EV5 LD_LOCK register*/
 };
 
 struct el_common_EV6_mcheck {

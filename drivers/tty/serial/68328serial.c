@@ -189,19 +189,19 @@ static void rs_stop(struct tty_struct *tty)
 
 static int rs_put_char(char ch)
 {
-        int flags, loops = 0;
+	int flags, loops = 0;
 
-        local_irq_save(flags);
+	local_irq_save(flags);
 
 	while (!(UTX & UTX_TX_AVAIL) && (loops < 1000)) {
-        	loops++;
-        	udelay(5);
-        }
+		loops++;
+		udelay(5);
+	}
 
 	UTX_TXDATA = ch;
-        udelay(5);
-        local_irq_restore(flags);
-        return 1;
+	udelay(5);
+	local_irq_restore(flags);
+	return 1;
 }
 
 static void rs_start(struct tty_struct *tty)
@@ -251,7 +251,7 @@ static void receive_chars(struct m68k_serial *info, unsigned short rx)
 
 	/*
 	 * This do { } while() loop will get ALL chars out of Rx FIFO
-         */
+	 */
 #ifndef CONFIG_XCOPILOT_BUGS
 	do {
 #endif
@@ -389,7 +389,7 @@ static int startup(struct m68k_serial * info)
 	 */
 #ifdef USE_INTS
 	uart->ustcnt = USTCNT_UEN | USTCNT_RXEN |
-                 USTCNT_RX_INTR_MASK | USTCNT_TX_INTR_MASK;
+		 USTCNT_RX_INTR_MASK | USTCNT_TX_INTR_MASK;
 #else
 	uart->ustcnt = USTCNT_UEN | USTCNT_RXEN | USTCNT_RX_INTR_MASK;
 #endif
@@ -462,24 +462,24 @@ struct {
 };
 #else
  hw_baud_table[18] = {
-                 {0,0}, /* 0 */
-                 {0,0}, /* 50 */
-                 {0,0}, /* 75 */
-                 {0,0}, /* 110 */
-                 {0,0}, /* 134 */
-                 {0,0}, /* 150 */
-                 {0,0}, /* 200 */
-                 {0,0}, /* 300 */
-                 {7,0x26}, /* 600 */
-                 {6,0x26}, /* 1200 */
-                 {0,0}, /* 1800 */
-                 {5,0x26}, /* 2400 */
-                 {4,0x26}, /* 4800 */
-                 {3,0x26}, /* 9600 */
-                 {2,0x26}, /* 19200 */
-                 {1,0x26}, /* 38400 */
-                 {0,0x26}, /* 57600 */
-                 {1,0x38}, /* 115200 */
+		 {0,0}, /* 0 */
+		 {0,0}, /* 50 */
+		 {0,0}, /* 75 */
+		 {0,0}, /* 110 */
+		 {0,0}, /* 134 */
+		 {0,0}, /* 150 */
+		 {0,0}, /* 200 */
+		 {0,0}, /* 300 */
+		 {7,0x26}, /* 600 */
+		 {6,0x26}, /* 1200 */
+		 {0,0}, /* 1800 */
+		 {5,0x26}, /* 2400 */
+		 {4,0x26}, /* 4800 */
+		 {3,0x26}, /* 9600 */
+		 {2,0x26}, /* 19200 */
+		 {1,0x26}, /* 38400 */
+		 {0,0x26}, /* 57600 */
+		 {1,0x38}, /* 115200 */
 };
 #endif
 /* rate = 1036800 / ((65 - prescale) * (1<<divider)) */
@@ -506,9 +506,9 @@ static void change_speed(struct m68k_serial *info)
 	uart->ustcnt = ustcnt & ~USTCNT_TXEN;
 
 	i = cflag & CBAUD;
-        if (i & CBAUDEX) {
-                i = (i & ~CBAUDEX) + B38400;
-        }
+	if (i & CBAUDEX) {
+		i = (i & ~CBAUDEX) + B38400;
+	}
 
 	info->baud = baud_table[i];
 	uart->ubaud = PUT_FIELD(UBAUD_DIVIDE,    hw_baud_table[i].divisor) |
@@ -898,16 +898,16 @@ static int get_lsr_info(struct m68k_serial * info, unsigned int *value)
 static void send_break(struct m68k_serial * info, unsigned int duration)
 {
 	m68328_uart *uart = &uart_addr[info->line];
-        unsigned long flags;
-        if (!info->port)
-                return;
-        local_irq_save(flags);
+	unsigned long flags;
+	if (!info->port)
+		return;
+	local_irq_save(flags);
 #ifdef USE_INTS
 	uart->utx.w |= UTX_SEND_BREAK;
 	msleep_interruptible(duration);
 	uart->utx.w &= ~UTX_SEND_BREAK;
 #endif
-        local_irq_restore(flags);
+	local_irq_restore(flags);
 }
 
 static int rs_ioctl(struct tty_struct *tty,
@@ -1160,7 +1160,7 @@ static int block_til_ready(struct tty_struct *tty, struct file * filp,
 		}
 		if (!(info->flags & S_CLOSING) && do_clocal)
 			break;
-                if (signal_pending(current)) {
+		if (signal_pending(current)) {
 			retval = -ERESTARTSYS;
 			break;
 		}
@@ -1302,7 +1302,7 @@ rs68328_init(void)
 			    rs_interrupt,
 			    0,
 			    "M68328_UART", info))
-                panic("Unable to attach 68328 serial interrupt\n");
+		panic("Unable to attach 68328 serial interrupt\n");
 	}
 	local_irq_restore(flags);
 	return 0;
@@ -1381,9 +1381,9 @@ void m68328_console_write (struct console *co, const char *str,
 	if (!m68328_console_initted)
 		m68328_set_baud();
     while (count--) {
-        if (*str == '\n')
-           rs_put_char('\r');
-        rs_put_char( *str++ );
+	if (*str == '\n')
+	   rs_put_char('\r');
+	rs_put_char( *str++ );
     }
 }
 

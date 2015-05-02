@@ -65,8 +65,8 @@
 #define CFGTBL_BusType_Fibre2G  0x00000200l
 typedef struct _vals32
 {
-        __u32   lower;
-        __u32   upper;
+	__u32   lower;
+	__u32   upper;
 } vals32;
 
 typedef union _u64bit

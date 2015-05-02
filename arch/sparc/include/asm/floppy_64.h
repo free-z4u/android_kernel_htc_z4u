@@ -736,8 +736,8 @@ static unsigned long __init sun_floppy_init(void)
 		return 0;
 	}
 
-        sun_fdops.fd_inb = sun_82077_fd_inb;
-        sun_fdops.fd_outb = sun_82077_fd_outb;
+	sun_fdops.fd_inb = sun_82077_fd_inb;
+	sun_fdops.fd_outb = sun_82077_fd_outb;
 
 	can_use_virtual_dma = use_virtual_dma = 1;
 	sun_fdops.fd_enable_dma = sun_fd_enable_dma;
@@ -752,7 +752,7 @@ static unsigned long __init sun_floppy_init(void)
 
 	sun_fdops.fd_eject = sun_fd_eject;
 
-        fdc_status = (unsigned long) &sun_fdc->status_82077;
+	fdc_status = (unsigned long) &sun_fdc->status_82077;
 
 	/* Success... */
 	allowed_drive_mask = 0x01;

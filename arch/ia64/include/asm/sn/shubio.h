@@ -2894,8 +2894,8 @@ typedef union ii_ippr_u {
  * 0, 8 - 0xF
  */
 #define IIO_IOPRB(_x)	(IIO_IOPRB_0 + ( ( (_x) < HUB_WIDGET_ID_MIN ? \
-                	(_x) : \
-                	(_x) - (HUB_WIDGET_ID_MIN-1)) << 3) )
+			(_x) : \
+			(_x) - (HUB_WIDGET_ID_MIN-1)) << 3) )
 
 /* GFX Flow Control Node/Widget Register */
 #define IIO_IGFX_W_NUM_BITS	4	/* size of widget num field */
@@ -2970,7 +2970,7 @@ typedef union ii_ippr_u {
 #define IIO_ICRB_0              IIO_ICRB0_A
 #define IIO_ICRB_ADDR_SHFT	2	/* Shift to get proper address */
 /* XXX - This is now tuneable:
-        #define IIO_FIRST_PC_ENTRY 12
+	#define IIO_FIRST_PC_ENTRY 12
  */
 
 #define IIO_ICRB_A(_x)	((u64)(IIO_ICRB_0 + (6 * IIO_ICRB_OFFSET * (_x))))
@@ -3260,7 +3260,7 @@ typedef ii_icrb0_e_u_t icrbe_t;
 #define IIO_WSTAT_TXRETRY_MASK  0x7F		/* should be 0xFF?? */
 #define IIO_WSTAT_TXRETRY_SHFT  16
 #define IIO_WSTAT_TXRETRY_CNT(w)	(((w) >> IIO_WSTAT_TXRETRY_SHFT) & \
-                          		IIO_WSTAT_TXRETRY_MASK)
+			  		IIO_WSTAT_TXRETRY_MASK)
 
 /* Number of II perf. counters we can multiplex at once */
 

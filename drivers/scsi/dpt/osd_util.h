@@ -136,7 +136,7 @@
 #if defined (SNI_MIPS) || defined (_DPT_SOLARIS)
    #if defined (_DPT_BIG_ENDIAN)
 	#if !defined (_DPT_STRICT_ALIGN)
-            #define _DPT_STRICT_ALIGN
+	    #define _DPT_STRICT_ALIGN
 	#endif
    #endif
 #endif

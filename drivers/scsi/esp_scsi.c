@@ -2269,7 +2269,7 @@ static void esp_set_clock_params(struct esp *esp)
 	 *    We use a time out period of 250ms (ESP_BUS_TIMEOUT).
 	 *
 	 * c) Imperical constants for synchronous offset and transfer period
-         *    register values
+	 *    register values
 	 *
 	 *    This entails the smallest and largest sync period we could ever
 	 *    handle on this ESP.

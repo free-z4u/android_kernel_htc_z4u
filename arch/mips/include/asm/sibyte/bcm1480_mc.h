@@ -64,8 +64,8 @@
 #define V_BCM1480_MC_CS_MODE_DEFAULT        V_BCM1480_MC_CS_MODE(0)
 
 #define V_BCM1480_MC_CONFIG_DEFAULT         (V_BCM1480_MC_INTLV0_DEFAULT  | \
-                                     V_BCM1480_MC_INTLV1_DEFAULT  | \
-                                     V_BCM1480_MC_INTLV2_DEFAULT  | \
+				     V_BCM1480_MC_INTLV1_DEFAULT  | \
+				     V_BCM1480_MC_INTLV2_DEFAULT  | \
 				     V_BCM1480_MC_CS_MODE_DEFAULT)
 
 #define K_BCM1480_MC_CS01_MODE		    0x03
@@ -447,7 +447,7 @@
 #endif
 
 #define V_BCM1480_MC_DRAMMODE_DEFAULT	V_BCM1480_MC_EMODE_DEFAULT | V_BCM1480_MC_MODE_DEFAULT | V_BCM1480_MC_DRAM_TYPE_JEDEC | \
-                                V_BCM1480_MC_PG_POLICY(K_BCM1480_MC_PG_POLICY_CAS_TIME_CHK)
+				V_BCM1480_MC_PG_POLICY(K_BCM1480_MC_PG_POLICY_CAS_TIME_CHK)
 
 /*
  * Memory Clock Configuration Register (Table 92)
@@ -814,19 +814,19 @@
 #define M_BCM1480_MC_tR2R		    _SB_MAKEMASK1(62)
 
 #define V_BCM1480_MC_TIMING_DEFAULT         (M_BCM1480_MC_tR2R | \
-                                     V_BCM1480_MC_tFIFO_DEFAULT | \
-                                     V_BCM1480_MC_tR2W_DEFAULT | \
-                                     V_BCM1480_MC_tW2R_DEFAULT | \
-                                     V_BCM1480_MC_tRFC_DEFAULT | \
-                                     V_BCM1480_MC_tRCr_DEFAULT | \
-                                     V_BCM1480_MC_tRCw_DEFAULT | \
-                                     V_BCM1480_MC_tRRD_DEFAULT | \
-                                     V_BCM1480_MC_tRP_DEFAULT | \
-                                     V_BCM1480_MC_tCwD_DEFAULT | \
-                                     V_BCM1480_MC_tWR_DEFAULT | \
-                                     M_BCM1480_MC_tCrDh | \
-                                     V_BCM1480_MC_tCL_DEFAULT | \
-                                     V_BCM1480_MC_tRCD_DEFAULT)
+				     V_BCM1480_MC_tFIFO_DEFAULT | \
+				     V_BCM1480_MC_tR2W_DEFAULT | \
+				     V_BCM1480_MC_tW2R_DEFAULT | \
+				     V_BCM1480_MC_tRFC_DEFAULT | \
+				     V_BCM1480_MC_tRCr_DEFAULT | \
+				     V_BCM1480_MC_tRCw_DEFAULT | \
+				     V_BCM1480_MC_tRRD_DEFAULT | \
+				     V_BCM1480_MC_tRP_DEFAULT | \
+				     V_BCM1480_MC_tCwD_DEFAULT | \
+				     V_BCM1480_MC_tWR_DEFAULT | \
+				     M_BCM1480_MC_tCrDh | \
+				     V_BCM1480_MC_tCL_DEFAULT | \
+				     V_BCM1480_MC_tRCD_DEFAULT)
 
 /*
  * SDRAM Timing Register 2

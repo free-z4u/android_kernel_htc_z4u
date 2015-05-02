@@ -31,10 +31,10 @@
 
 /* The argument structure */
 struct blkpg_ioctl_arg {
-        int op;
-        int flags;
-        int datalen;
-        void __user *data;
+	int op;
+	int flags;
+	int datalen;
+	void __user *data;
 };
 
 /* The subfunctions (for the op field) */

@@ -274,28 +274,28 @@ void msm_sensor_start_stream(struct msm_sensor_ctrl_t *s_ctrl)
 }
 
 static int32_t msm_sensor_is_stream_already_stop(struct msm_camera_i2c_client *i2c_client,
-                                                 struct msm_camera_i2c_reg_conf *reg_conf_tbl,
-                                                 uint16_t reg_conf_tbl_size,
-                                                 enum msm_camera_i2c_data_type data_type)
+						 struct msm_camera_i2c_reg_conf *reg_conf_tbl,
+						 uint16_t reg_conf_tbl_size,
+						 enum msm_camera_i2c_data_type data_type)
 {
     int32_t already_stop = 0;
     uint32_t i, rc;
     uint16_t info_value;
 
     for (i=0; i < reg_conf_tbl_size; ++i) {
-        rc = msm_camera_i2c_read(i2c_client, reg_conf_tbl[i].reg_addr, &info_value, data_type);
-        if (rc < 0) {
-            pr_err("%s: i2c_read_b 0x%x fail\n", __func__, reg_conf_tbl[i].reg_addr);
-            break;
-        } else {
-            if (reg_conf_tbl[i].reg_data != info_value) {
-                CDBG("%s: stream isn't already stopped\n", __func__);
-                break;
-            }
-        }
+	rc = msm_camera_i2c_read(i2c_client, reg_conf_tbl[i].reg_addr, &info_value, data_type);
+	if (rc < 0) {
+	    pr_err("%s: i2c_read_b 0x%x fail\n", __func__, reg_conf_tbl[i].reg_addr);
+	    break;
+	} else {
+	    if (reg_conf_tbl[i].reg_data != info_value) {
+		CDBG("%s: stream isn't already stopped\n", __func__);
+		break;
+	    }
+	}
     }
     if (i == reg_conf_tbl_size) {
-        already_stop = 1;
+	already_stop = 1;
     }
     return already_stop;
 }
@@ -307,32 +307,32 @@ void msm_sensor_stop_stream(struct msm_sensor_ctrl_t *s_ctrl)
 
     if ((s_ctrl->sensordata->htc_image == HTC_CAMERA_IMAGE_YUSHANII_BOARD) && (s_ctrl->msm_sensor_reg->stop_stream_conf_yushanii))
     {
-        already_stop = msm_sensor_is_stream_already_stop(s_ctrl->sensor_i2c_client,
-                                                         s_ctrl->msm_sensor_reg->stop_stream_conf_yushanii,
-                                                         s_ctrl->msm_sensor_reg->stop_stream_conf_size_yushanii,
-                                                         s_ctrl->msm_sensor_reg->default_data_type);
-        if (!already_stop) {
-            msm_camera_i2c_write_tbl(
-            s_ctrl->sensor_i2c_client,
-            s_ctrl->msm_sensor_reg->stop_stream_conf_yushanii,
-            s_ctrl->msm_sensor_reg->stop_stream_conf_size_yushanii,
-            s_ctrl->msm_sensor_reg->default_data_type);
-        }
+	already_stop = msm_sensor_is_stream_already_stop(s_ctrl->sensor_i2c_client,
+							 s_ctrl->msm_sensor_reg->stop_stream_conf_yushanii,
+							 s_ctrl->msm_sensor_reg->stop_stream_conf_size_yushanii,
+							 s_ctrl->msm_sensor_reg->default_data_type);
+	if (!already_stop) {
+	    msm_camera_i2c_write_tbl(
+	    s_ctrl->sensor_i2c_client,
+	    s_ctrl->msm_sensor_reg->stop_stream_conf_yushanii,
+	    s_ctrl->msm_sensor_reg->stop_stream_conf_size_yushanii,
+	    s_ctrl->msm_sensor_reg->default_data_type);
+	}
     } else {
-        already_stop = msm_sensor_is_stream_already_stop(s_ctrl->sensor_i2c_client,
-                                                         s_ctrl->msm_sensor_reg->stop_stream_conf,
-                                                         s_ctrl->msm_sensor_reg->stop_stream_conf_size,
-                                                         s_ctrl->msm_sensor_reg->default_data_type);
-        if (!already_stop) {
-            msm_camera_i2c_write_tbl(
-            s_ctrl->sensor_i2c_client,
-            s_ctrl->msm_sensor_reg->stop_stream_conf,
-            s_ctrl->msm_sensor_reg->stop_stream_conf_size,
-            s_ctrl->msm_sensor_reg->default_data_type);
-        }
+	already_stop = msm_sensor_is_stream_already_stop(s_ctrl->sensor_i2c_client,
+							 s_ctrl->msm_sensor_reg->stop_stream_conf,
+							 s_ctrl->msm_sensor_reg->stop_stream_conf_size,
+							 s_ctrl->msm_sensor_reg->default_data_type);
+	if (!already_stop) {
+	    msm_camera_i2c_write_tbl(
+	    s_ctrl->sensor_i2c_client,
+	    s_ctrl->msm_sensor_reg->stop_stream_conf,
+	    s_ctrl->msm_sensor_reg->stop_stream_conf_size,
+	    s_ctrl->msm_sensor_reg->default_data_type);
+	}
     }
     if (!already_stop) {
-        msleep(80);
+	msleep(80);
     }
 }
 
@@ -616,9 +616,9 @@ inline static int32_t msm_sensor_rawchip_set_size(struct msm_sensor_ctrl_t *s_ct
 #else
     rawchip_data.datatype = s_ctrl->curr_csic_params->data_format;
 #endif
-        CDBG("datatype = %d\n", rawchip_data.datatype);
+	CDBG("datatype = %d\n", rawchip_data.datatype);
     rawchip_data.lane_cnt = s_ctrl->curr_csic_params->lane_cnt;
-        CDBG("lane_cnt = %d\n", rawchip_data.lane_cnt);
+	CDBG("lane_cnt = %d\n", rawchip_data.lane_cnt);
     rawchip_data.pixel_clk = s_ctrl->msm_sensor_reg->output_settings[res].op_pixel_clk;
 
     if (strcmp(rawchip_data.sensor_name, "ov5693") == 0)
@@ -628,42 +628,42 @@ inline static int32_t msm_sensor_rawchip_set_size(struct msm_sensor_ctrl_t *s_ct
     CDBG("mirror_flip = %d\n", rawchip_data.mirror_flip);
 
     rawchip_data.width = s_ctrl->msm_sensor_reg->output_settings[res].x_output;
-        CDBG("width = %d\n", rawchip_data.width);
+	CDBG("width = %d\n", rawchip_data.width);
     rawchip_data.height = s_ctrl->msm_sensor_reg->output_settings[res].y_output;
-        CDBG("height = %d\n", rawchip_data.height);
+	CDBG("height = %d\n", rawchip_data.height);
     rawchip_data.line_length_pclk = s_ctrl->msm_sensor_reg->output_settings[res].line_length_pclk;
-        CDBG("line_length_pclk = %d\n", rawchip_data.line_length_pclk);
+	CDBG("line_length_pclk = %d\n", rawchip_data.line_length_pclk);
     rawchip_data.frame_length_lines = s_ctrl->msm_sensor_reg->output_settings[res].frame_length_lines;
-        CDBG("frame_length_lines = %d\n", rawchip_data.frame_length_lines);
+	CDBG("frame_length_lines = %d\n", rawchip_data.frame_length_lines);
     rawchip_data.x_addr_start = s_ctrl->msm_sensor_reg->output_settings[res].x_addr_start;
-        CDBG("x_addr_start = %d\n", rawchip_data.x_addr_start);
+	CDBG("x_addr_start = %d\n", rawchip_data.x_addr_start);
     rawchip_data.y_addr_start = s_ctrl->msm_sensor_reg->output_settings[res].y_addr_start;
-        CDBG("y_addr_start = %d\n", rawchip_data.y_addr_start);
+	CDBG("y_addr_start = %d\n", rawchip_data.y_addr_start);
     rawchip_data.x_addr_end = s_ctrl->msm_sensor_reg->output_settings[res].x_addr_end;
-        CDBG("x_addr_end = %d\n", rawchip_data.x_addr_end);
+	CDBG("x_addr_end = %d\n", rawchip_data.x_addr_end);
     rawchip_data.y_addr_end = s_ctrl->msm_sensor_reg->output_settings[res].y_addr_end;
-        CDBG("y_addr_end = %d\n", rawchip_data.y_addr_end);
+	CDBG("y_addr_end = %d\n", rawchip_data.y_addr_end);
     rawchip_data.x_even_inc = s_ctrl->msm_sensor_reg->output_settings[res].x_even_inc;
-        CDBG("x_even_inc = %d\n", rawchip_data.x_even_inc);
+	CDBG("x_even_inc = %d\n", rawchip_data.x_even_inc);
     rawchip_data.x_odd_inc = s_ctrl->msm_sensor_reg->output_settings[res].x_odd_inc;
-        CDBG("x_odd_inc = %d\n", rawchip_data.x_odd_inc);
+	CDBG("x_odd_inc = %d\n", rawchip_data.x_odd_inc);
     rawchip_data.y_even_inc = s_ctrl->msm_sensor_reg->output_settings[res].y_even_inc;
-        CDBG("y_even_inc = %d\n", rawchip_data.y_even_inc);
+	CDBG("y_even_inc = %d\n", rawchip_data.y_even_inc);
     rawchip_data.y_odd_inc = s_ctrl->msm_sensor_reg->output_settings[res].y_odd_inc;
-        CDBG("y_odd_inc = %d\n", rawchip_data.y_odd_inc);
+	CDBG("y_odd_inc = %d\n", rawchip_data.y_odd_inc);
     rawchip_data.binning_rawchip = s_ctrl->msm_sensor_reg->output_settings[res].binning_rawchip;
-        CDBG("binning_rawchip = %d\n", rawchip_data.binning_rawchip);
+	CDBG("binning_rawchip = %d\n", rawchip_data.binning_rawchip);
 
     rawchip_data.fullsize_width = s_ctrl->msm_sensor_reg->output_settings[MSM_SENSOR_RES_FULL].x_output;
-        CDBG("fullsize_width = %d\n", rawchip_data.fullsize_width);
+	CDBG("fullsize_width = %d\n", rawchip_data.fullsize_width);
     rawchip_data.fullsize_height = s_ctrl->msm_sensor_reg->output_settings[MSM_SENSOR_RES_FULL].y_output;
-        CDBG("fullsize_height = %d\n", rawchip_data.fullsize_height);
+	CDBG("fullsize_height = %d\n", rawchip_data.fullsize_height);
     rawchip_data.fullsize_line_length_pclk =
-        s_ctrl->msm_sensor_reg->output_settings[MSM_SENSOR_RES_FULL].line_length_pclk;
-        CDBG("fullsize_line_length_pclk = %d\n", rawchip_data.fullsize_line_length_pclk);
+	s_ctrl->msm_sensor_reg->output_settings[MSM_SENSOR_RES_FULL].line_length_pclk;
+	CDBG("fullsize_line_length_pclk = %d\n", rawchip_data.fullsize_line_length_pclk);
     rawchip_data.fullsize_frame_length_lines =
-        s_ctrl->msm_sensor_reg->output_settings[MSM_SENSOR_RES_FULL].frame_length_lines;
-        CDBG("rawchip_data.fullsize_frame_length_lines = %d\n", rawchip_data.fullsize_frame_length_lines);
+	s_ctrl->msm_sensor_reg->output_settings[MSM_SENSOR_RES_FULL].frame_length_lines;
+	CDBG("rawchip_data.fullsize_frame_length_lines = %d\n", rawchip_data.fullsize_frame_length_lines);
     rawchip_data.use_rawchip = s_ctrl->sensordata->use_rawchip;
 
     rc = rawchip_set_size(rawchip_data);
@@ -688,8 +688,8 @@ static int oem_sensor_init1(void *arg)
     s_ctrl->curr_csic_params = s_ctrl->csic_params[res];
     CDBG("CSI config in progress\n");
     v4l2_subdev_notify(&s_ctrl->sensor_v4l2_subdev,
-        NOTIFY_CSIC_CFG,
-        s_ctrl->curr_csic_params);
+	NOTIFY_CSIC_CFG,
+	s_ctrl->curr_csic_params);
     CDBG("CSI config is done\n");
     mb();
     msleep(20);
@@ -697,12 +697,12 @@ static int oem_sensor_init1(void *arg)
     msm_sensor_write_init_settings(s_ctrl);
 
     if (s_ctrl->sensordata->use_rawchip) {
-        ktime_get_ts(&ts_start);
-        msm_sensor_rawchip_set_size(s_ctrl, res);
-        ktime_get_ts(&ts_end);
+	ktime_get_ts(&ts_start);
+	msm_sensor_rawchip_set_size(s_ctrl, res);
+	ktime_get_ts(&ts_end);
 
-        res = (ts_end.tv_sec-ts_start.tv_sec)*1000+(ts_end.tv_nsec-ts_start.tv_nsec)/1000000;
-        pr_info("%s: rawchip_set_size:%ld ms\n", __func__, (long)res);
+	res = (ts_end.tv_sec-ts_start.tv_sec)*1000+(ts_end.tv_nsec-ts_start.tv_nsec)/1000000;
+	pr_info("%s: rawchip_set_size:%ld ms\n", __func__, (long)res);
     }
     mutex_unlock(s_ctrl->sensor_first_mutex);
     pr_info("%s: X", __func__);
@@ -710,7 +710,7 @@ static int oem_sensor_init1(void *arg)
 }
 
 int32_t msm_sensor_setting_parallel1(struct msm_sensor_ctrl_t *s_ctrl,
-                                     int update_type, int res)
+				     int update_type, int res)
 {
     int32_t rc = 0;
 
@@ -719,52 +719,52 @@ int32_t msm_sensor_setting_parallel1(struct msm_sensor_ctrl_t *s_ctrl,
     CDBG("%s: called\n", __func__);
 
     if (update_type == MSM_SENSOR_REG_INIT) {
-        CDBG("Register INIT\n");
-        mutex_lock(s_ctrl->sensor_first_mutex);
-        tsk_sensor_init = kthread_create(oem_sensor_init1, s_ctrl, "oem_sensor_init1");
-        if (IS_ERR(tsk_sensor_init)) {
-            pr_err("%s: kthread_create failed", __func__);
-            rc = PTR_ERR(tsk_sensor_init);
-            tsk_sensor_init = NULL;
-            mutex_unlock(s_ctrl->sensor_first_mutex);
-        } else
-            wake_up_process(tsk_sensor_init);
+	CDBG("Register INIT\n");
+	mutex_lock(s_ctrl->sensor_first_mutex);
+	tsk_sensor_init = kthread_create(oem_sensor_init1, s_ctrl, "oem_sensor_init1");
+	if (IS_ERR(tsk_sensor_init)) {
+	    pr_err("%s: kthread_create failed", __func__);
+	    rc = PTR_ERR(tsk_sensor_init);
+	    tsk_sensor_init = NULL;
+	    mutex_unlock(s_ctrl->sensor_first_mutex);
+	} else
+	    wake_up_process(tsk_sensor_init);
     } else if (update_type == MSM_SENSOR_UPDATE_PERIODIC) {
-        CDBG("PERIODIC : %d\n", res);
-        mutex_lock(s_ctrl->sensor_first_mutex);
+	CDBG("PERIODIC : %d\n", res);
+	mutex_lock(s_ctrl->sensor_first_mutex);
 
-        s_ctrl->func_tbl->sensor_stop_stream(s_ctrl);
+	s_ctrl->func_tbl->sensor_stop_stream(s_ctrl);
 
-        msm_sensor_write_conf_array(
-            s_ctrl->sensor_i2c_client,
-            s_ctrl->msm_sensor_reg->mode_settings, res);
-        msleep(30);
+	msm_sensor_write_conf_array(
+	    s_ctrl->sensor_i2c_client,
+	    s_ctrl->msm_sensor_reg->mode_settings, res);
+	msleep(30);
 
-        if (s_ctrl->curr_csic_params != s_ctrl->csic_params[res]) {
-            s_ctrl->curr_csic_params = s_ctrl->csic_params[res];
-            CDBG("CSI config in progress\n");
-            v4l2_subdev_notify(&s_ctrl->sensor_v4l2_subdev,
-                NOTIFY_CSIC_CFG,
-                s_ctrl->curr_csic_params);
-            CDBG("CSI config is done\n");
-            mb();
-            msleep(20);
-        }
+	if (s_ctrl->curr_csic_params != s_ctrl->csic_params[res]) {
+	    s_ctrl->curr_csic_params = s_ctrl->csic_params[res];
+	    CDBG("CSI config in progress\n");
+	    v4l2_subdev_notify(&s_ctrl->sensor_v4l2_subdev,
+		NOTIFY_CSIC_CFG,
+		s_ctrl->curr_csic_params);
+	    CDBG("CSI config is done\n");
+	    mb();
+	    msleep(20);
+	}
 
-        v4l2_subdev_notify(&s_ctrl->sensor_v4l2_subdev,
-            NOTIFY_PCLK_CHANGE,
-            &s_ctrl->sensordata->pdata->ioclk.vfe_clk_rate);
+	v4l2_subdev_notify(&s_ctrl->sensor_v4l2_subdev,
+	    NOTIFY_PCLK_CHANGE,
+	    &s_ctrl->sensordata->pdata->ioclk.vfe_clk_rate);
 
-        if (s_ctrl->sensordata->use_rawchip) {
-            ktime_get_ts(&ts_start);
-            rc = msm_sensor_rawchip_set_size(s_ctrl, res);
-            ktime_get_ts(&ts_end);
-            pr_info("%s: %ld ms\n", __func__,
-                (ts_end.tv_sec-ts_start.tv_sec)*1000+(ts_end.tv_nsec-ts_start.tv_nsec)/1000000);
-        }
-        s_ctrl->func_tbl->sensor_start_stream(s_ctrl);
+	if (s_ctrl->sensordata->use_rawchip) {
+	    ktime_get_ts(&ts_start);
+	    rc = msm_sensor_rawchip_set_size(s_ctrl, res);
+	    ktime_get_ts(&ts_end);
+	    pr_info("%s: %ld ms\n", __func__,
+		(ts_end.tv_sec-ts_start.tv_sec)*1000+(ts_end.tv_nsec-ts_start.tv_nsec)/1000000);
+	}
+	s_ctrl->func_tbl->sensor_start_stream(s_ctrl);
 
-        mutex_unlock(s_ctrl->sensor_first_mutex);
+	mutex_unlock(s_ctrl->sensor_first_mutex);
     }
     return rc;
 }

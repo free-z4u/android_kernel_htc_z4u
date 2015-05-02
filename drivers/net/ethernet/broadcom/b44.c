@@ -1718,7 +1718,7 @@ static void __b44_set_rx_mode(struct net_device *dev)
 			__b44_cam_write(bp, zero, i);
 
 		bw32(bp, B44_RXCONFIG, val);
-        	val = br32(bp, B44_CAM_CTRL);
+		val = br32(bp, B44_CAM_CTRL);
 	        bw32(bp, B44_CAM_CTRL, val | CAM_CTRL_ENABLE);
 	}
 }

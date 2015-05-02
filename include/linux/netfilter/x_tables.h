@@ -291,7 +291,7 @@ struct xt_match {
 	u_int8_t revision;
 
 	/* Return true or false: return FALSE and set *hotdrop = 1 to
-           force immediate packet drop. */
+	   force immediate packet drop. */
 	/* Arguments changed since 2.6.9, as this must now handle
 	   non-linear skb, using skb_header_pointer and
 	   skb_ip_make_writable. */
@@ -336,8 +336,8 @@ struct xt_target {
 			       const struct xt_action_param *);
 
 	/* Called when user tries to insert an entry of this type:
-           hook_mask is a bitmask of hooks from which it can be
-           called. */
+	   hook_mask is a bitmask of hooks from which it can be
+	   called. */
 	/* Should return 0 on success or an error code otherwise (-Exxxx). */
 	int (*checkentry)(const struct xt_tgchk_param *);
 

@@ -167,7 +167,7 @@ volatile int pcic_trapped;
 
 /* forward */
 unsigned int pcic_build_device_irq(struct platform_device *op,
-                                   unsigned int real_irq);
+				   unsigned int real_irq);
 
 #define CONFIG_CMD(bus, device_fn, where) (0x80000000 | (((unsigned int)bus) << 16) | (((unsigned int)device_fn) << 8) | (where & ~3))
 
@@ -845,7 +845,7 @@ static struct irq_chip pcic_irq = {
 };
 
 unsigned int pcic_build_device_irq(struct platform_device *op,
-                                   unsigned int real_irq)
+				   unsigned int real_irq)
 {
 	unsigned int irq;
 	unsigned long mask;

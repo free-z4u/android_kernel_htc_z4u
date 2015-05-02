@@ -83,11 +83,11 @@ struct snd_pcm_plugin {
 };
 
 int snd_pcm_plugin_build(struct snd_pcm_substream *handle,
-                         const char *name,
-                         struct snd_pcm_plugin_format *src_format,
-                         struct snd_pcm_plugin_format *dst_format,
-                         size_t extra,
-                         struct snd_pcm_plugin **ret);
+			 const char *name,
+			 struct snd_pcm_plugin_format *src_format,
+			 struct snd_pcm_plugin_format *dst_format,
+			 size_t extra,
+			 struct snd_pcm_plugin **ret);
 int snd_pcm_plugin_free(struct snd_pcm_plugin *plugin);
 int snd_pcm_plugin_clear(struct snd_pcm_plugin **first);
 int snd_pcm_plug_alloc(struct snd_pcm_substream *plug, snd_pcm_uframes_t frames);

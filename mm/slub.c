@@ -2504,10 +2504,10 @@ static void __slab_free(struct kmem_cache *s, struct page *page,
 		 * The list lock was not taken therefore no list
 		 * activity can be necessary.
 		 */
-                if (was_frozen)
-                        stat(s, FREE_FROZEN);
-                return;
-        }
+		if (was_frozen)
+			stat(s, FREE_FROZEN);
+		return;
+	}
 
 	/*
 	 * was_frozen may have been set after we acquired the list_lock in
@@ -2517,7 +2517,7 @@ static void __slab_free(struct kmem_cache *s, struct page *page,
 		stat(s, FREE_FROZEN);
 	else {
 		if (unlikely(!inuse && n->nr_partial > s->min_partial))
-                        goto slab_empty;
+			goto slab_empty;
 
 		/*
 		 * Objects left in the slab. If it was not on the partial list before

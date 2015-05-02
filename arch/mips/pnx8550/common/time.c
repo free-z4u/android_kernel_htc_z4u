@@ -122,17 +122,17 @@ __init void plat_time_init(void)
 	write_c0_config7(configPR);
 
 
-        /* PLL0 sets MIPS clock (PLL1 <=> TM1, PLL6 <=> TM2, PLL5 <=> mem) */
-        /* (but only if CLK_MIPS_CTL select value [bits 3:1] is 1:  FIXME) */
+	/* PLL0 sets MIPS clock (PLL1 <=> TM1, PLL6 <=> TM2, PLL5 <=> mem) */
+	/* (but only if CLK_MIPS_CTL select value [bits 3:1] is 1:  FIXME) */
 
-        n = (PNX8550_CM_PLL0_CTL & PNX8550_CM_PLL_N_MASK) >> 16;
-        m = (PNX8550_CM_PLL0_CTL & PNX8550_CM_PLL_M_MASK) >> 8;
-        p = (PNX8550_CM_PLL0_CTL & PNX8550_CM_PLL_P_MASK) >> 2;
+	n = (PNX8550_CM_PLL0_CTL & PNX8550_CM_PLL_N_MASK) >> 16;
+	m = (PNX8550_CM_PLL0_CTL & PNX8550_CM_PLL_M_MASK) >> 8;
+	p = (PNX8550_CM_PLL0_CTL & PNX8550_CM_PLL_P_MASK) >> 2;
 	pow2p = (1 << p);
 
 	db_assert(m != 0 && pow2p != 0);
 
-        /*
+	/*
 	 * Compute the frequency as in the PNX8550 User Manual 1.0, p.186
 	 * (a.k.a. 8-10).  Divide by HZ for a timer offset that results in
 	 * HZ timer interrupts per second.

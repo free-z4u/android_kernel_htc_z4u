@@ -199,7 +199,7 @@ static struct platform_driver ep93xx_rtc_driver = {
 
 static int __init ep93xx_rtc_init(void)
 {
-        return platform_driver_probe(&ep93xx_rtc_driver, ep93xx_rtc_probe);
+	return platform_driver_probe(&ep93xx_rtc_driver, ep93xx_rtc_probe);
 }
 
 static void __exit ep93xx_rtc_exit(void)

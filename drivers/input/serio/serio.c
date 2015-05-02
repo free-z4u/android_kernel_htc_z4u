@@ -991,8 +991,8 @@ irqreturn_t serio_interrupt(struct serio *serio,
 
 	spin_lock_irqsave(&serio->lock, flags);
 
-        if (likely(serio->drv)) {
-                ret = serio->drv->interrupt(serio, data, dfl);
+	if (likely(serio->drv)) {
+		ret = serio->drv->interrupt(serio, data, dfl);
 	} else if (!dfl && device_is_registered(&serio->dev)) {
 		serio_rescan(serio);
 		ret = IRQ_HANDLED;

@@ -355,7 +355,7 @@ const struct exception_table_entry *search_module_dbetables(unsigned long addr)
 	spin_unlock_irqrestore(&dbe_lock, flags);
 
 	/* Now, if we found one, we are running inside it now, hence
-           we cannot unload the module, hence no refcnt needed. */
+	   we cannot unload the module, hence no refcnt needed. */
 	return e;
 }
 

@@ -216,7 +216,7 @@ static u32 ipw2100_debug_level = IPW_DL_NONE;
 do { \
 	if (ipw2100_debug_level & (level)) { \
 		printk(KERN_DEBUG "ipw2100: %c %s ", \
-                       in_interrupt() ? 'I' : 'U',  __func__); \
+		       in_interrupt() ? 'I' : 'U',  __func__); \
 		printk(message); \
 	} \
 } while (0)
@@ -917,7 +917,7 @@ static int ipw2100_wait_for_card_state(struct ipw2100_priv *priv, int state)
 /*********************************************************************
     Procedure   :   sw_reset_and_clock
     Purpose     :   Asserts s/w reset, asserts clock initialization
-                    and waits for clock stabilization
+		    and waits for clock stabilization
  ********************************************************************/
 static int sw_reset_and_clock(struct ipw2100_priv *priv)
 {
@@ -970,13 +970,13 @@ static int sw_reset_and_clock(struct ipw2100_priv *priv)
 /*********************************************************************
     Procedure   :   ipw2100_download_firmware
     Purpose     :   Initiaze adapter after power on.
-                    The sequence is:
-                    1. assert s/w reset first!
-                    2. awake clocks & wait for clock stabilization
-                    3. hold ARC (don't ask me why...)
-                    4. load Dino ucode and reset/clock init again
-                    5. zero-out shared mem
-                    6. download f/w
+		    The sequence is:
+		    1. assert s/w reset first!
+		    2. awake clocks & wait for clock stabilization
+		    3. hold ARC (don't ask me why...)
+		    4. load Dino ucode and reset/clock init again
+		    5. zero-out shared mem
+		    6. download f/w
  *******************************************************************/
 static int ipw2100_download_firmware(struct ipw2100_priv *priv)
 {
@@ -8412,7 +8412,7 @@ static void ipw2100_wx_event_work(struct work_struct *work)
 #define IPW2100_FW_MAJOR(x) (x & 0xff)
 
 #define IPW2100_FW_VERSION ((IPW2100_FW_MINOR_VERSION << 8) | \
-                             IPW2100_FW_MAJOR_VERSION)
+			     IPW2100_FW_MAJOR_VERSION)
 
 #define IPW2100_FW_PREFIX "ipw2100-" __stringify(IPW2100_FW_MAJOR_VERSION) \
 "." __stringify(IPW2100_FW_MINOR_VERSION)

@@ -85,7 +85,7 @@ config ETRAX_WATCHDOG_NICE_DOGGY
 config ETRAX_FAST_TIMER
        bool "Enable ETRAX fast timer API"
        help
-         This options enables the API to a fast timer implementation using
+	 This options enables the API to a fast timer implementation using
 	 timer1 to get sub jiffie resolution timers (primarily one-shot
 	 timers).
 	 This is needed if CONFIG_ETRAX_SERIAL_FAST_TIMER is enabled.
@@ -134,9 +134,9 @@ config ETRAXFS
 	  Support CRIS V32.
 
 config CRIS_MACH_ARTPEC3
-        bool "ARTPEC-3"
-        help
-          Support Axis ARTPEC-3.
+	bool "ARTPEC-3"
+	help
+	  Support Axis ARTPEC-3.
 
 endchoice
 

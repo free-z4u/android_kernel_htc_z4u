@@ -66,14 +66,14 @@ void lmc_trace(struct net_device *dev, char *msg){
     unsigned long j = jiffies + 3; /* Wait for 50 ms */
 
     if(in_interrupt()){
-        printk("%s: * %s\n", dev->name, msg);
+	printk("%s: * %s\n", dev->name, msg);
 //        while(time_before(jiffies, j+10))
 //            ;
     }
     else {
-        printk("%s: %s\n", dev->name, msg);
-        while(time_before(jiffies, j))
-            schedule();
+	printk("%s: %s\n", dev->name, msg);
+	while(time_before(jiffies, j))
+	    schedule();
     }
 #endif
 }

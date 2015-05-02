@@ -1359,7 +1359,7 @@ static void xmon_show_stack(unsigned long sp, unsigned long lr,
 				       sp + REGS_OFFSET);
 				break;
 			}
-                        printf("--- Exception: %lx %s at ", regs.trap,
+			printf("--- Exception: %lx %s at ", regs.trap,
 			       getvecname(TRAP(&regs)));
 			pc = regs.nip;
 			lr = regs.link;
@@ -2148,45 +2148,45 @@ print_address(unsigned long addr)
 void
 dump_log_buf(void)
 {
-        const unsigned long size = 128;
-        unsigned long end, addr;
-        unsigned char buf[size + 1];
+	const unsigned long size = 128;
+	unsigned long end, addr;
+	unsigned char buf[size + 1];
 
-        addr = 0;
-        buf[size] = '\0';
+	addr = 0;
+	buf[size] = '\0';
 
-        if (setjmp(bus_error_jmp) != 0) {
-                printf("Unable to lookup symbol __log_buf!\n");
-                return;
-        }
+	if (setjmp(bus_error_jmp) != 0) {
+		printf("Unable to lookup symbol __log_buf!\n");
+		return;
+	}
 
-        catch_memory_errors = 1;
-        sync();
-        addr = kallsyms_lookup_name("__log_buf");
+	catch_memory_errors = 1;
+	sync();
+	addr = kallsyms_lookup_name("__log_buf");
 
-        if (! addr)
-                printf("Symbol __log_buf not found!\n");
-        else {
-                end = addr + (1 << CONFIG_LOG_BUF_SHIFT);
-                while (addr < end) {
-                        if (! mread(addr, buf, size)) {
-                                printf("Can't read memory at address 0x%lx\n", addr);
-                                break;
-                        }
+	if (! addr)
+		printf("Symbol __log_buf not found!\n");
+	else {
+		end = addr + (1 << CONFIG_LOG_BUF_SHIFT);
+		while (addr < end) {
+			if (! mread(addr, buf, size)) {
+				printf("Can't read memory at address 0x%lx\n", addr);
+				break;
+			}
 
-                        printf("%s", buf);
+			printf("%s", buf);
 
-                        if (strlen(buf) < size)
-                                break;
+			if (strlen(buf) < size)
+				break;
 
-                        addr += size;
-                }
-        }
+			addr += size;
+		}
+	}
 
-        sync();
-        /* wait a little while to see if we get a machine check */
-        __delay(200);
-        catch_memory_errors = 0;
+	sync();
+	/* wait a little while to see if we get a machine check */
+	__delay(200);
+	catch_memory_errors = 0;
 }
 
 /*

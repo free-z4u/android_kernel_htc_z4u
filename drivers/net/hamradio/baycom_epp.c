@@ -169,7 +169,7 @@ static struct net_device *baycom_device[NR_PORTS];
 struct baycom_state {
 	int magic;
 
-        struct pardevice *pdev;
+	struct pardevice *pdev;
 	struct net_device *dev;
 	unsigned int work_running;
 	struct delayed_work run_work;
@@ -185,24 +185,24 @@ struct baycom_state {
 		unsigned int loopback;
 	} cfg;
 
-        struct hdlcdrv_channel_params ch_params;
+	struct hdlcdrv_channel_params ch_params;
 
-        struct {
+	struct {
 		unsigned int bitbuf, bitstream, numbits, state;
 		unsigned char *bufptr;
 		int bufcnt;
 		unsigned char buf[TXBUFFER_SIZE];
-        } hdlcrx;
+	} hdlcrx;
 
-        struct {
+	struct {
 		int calibrate;
-                int slotcnt;
+		int slotcnt;
 		int flags;
 		enum { tx_idle = 0, tx_keyup, tx_data, tx_tail } state;
 		unsigned char *bufptr;
 		int bufcnt;
 		unsigned char buf[TXBUFFER_SIZE];
-        } hdlctx;
+	} hdlctx;
 
 	unsigned int ptt_keyed;
 	struct sk_buff *skb;  /* next transmit packet  */
@@ -308,7 +308,7 @@ static int eppconfig(struct baycom_state *bc)
 {
 	char modearg[256];
 	char portarg[16];
-        char *argv[] = { eppconfig_path, "-s", "-p", portarg, "-m", modearg,
+	char *argv[] = { eppconfig_path, "-s", "-p", portarg, "-m", modearg,
 			 NULL };
 
 	/* set up arguments */
@@ -371,7 +371,7 @@ static void encode_hdlc(struct baycom_state *bc)
 	struct sk_buff *skb;
 	unsigned char *wp, *bp;
 	int pkt_len;
-        unsigned bitstream, notbitstream, bitbuf, numbit, crc;
+	unsigned bitstream, notbitstream, bitbuf, numbit, crc;
 	unsigned char crcarr[2];
 	int j;
 
@@ -562,13 +562,13 @@ static int receive(struct net_device *dev, int cnt)
 {
 	struct baycom_state *bc = netdev_priv(dev);
 	struct parport *pp = bc->pdev->port;
-        unsigned int bitbuf, notbitstream, bitstream, numbits, state;
+	unsigned int bitbuf, notbitstream, bitstream, numbits, state;
 	unsigned char tmp[128];
-        unsigned char *cp;
+	unsigned char *cp;
 	int cnt2, ret = 0;
 	int j;
 
-        numbits = bc->hdlcrx.numbits;
+	numbits = bc->hdlcrx.numbits;
 	state = bc->hdlcrx.state;
 	bitstream = bc->hdlcrx.bitstream;
 	bitbuf = bc->hdlcrx.bitbuf;
@@ -624,7 +624,7 @@ static int receive(struct net_device *dev, int cnt)
 			}
 		}
 	}
-        bc->hdlcrx.numbits = numbits;
+	bc->hdlcrx.numbits = numbits;
 	bc->hdlcrx.state = state;
 	bc->hdlcrx.bitstream = bitstream;
 	bc->hdlcrx.bitbuf = bitbuf;
@@ -804,12 +804,12 @@ static int baycom_set_mac_address(struct net_device *dev, void *addr)
 
 static void epp_wakeup(void *handle)
 {
-        struct net_device *dev = (struct net_device *)handle;
-        struct baycom_state *bc = netdev_priv(dev);
+	struct net_device *dev = (struct net_device *)handle;
+	struct baycom_state *bc = netdev_priv(dev);
 
-        printk(KERN_DEBUG "baycom_epp: %s: why am I being woken up?\n", dev->name);
-        if (!parport_claim(bc->pdev))
-                printk(KERN_DEBUG "baycom_epp: %s: I'm broken.\n", dev->name);
+	printk(KERN_DEBUG "baycom_epp: %s: why am I being woken up?\n", dev->name);
+	if (!parport_claim(bc->pdev))
+		printk(KERN_DEBUG "baycom_epp: %s: I'm broken.\n", dev->name);
 }
 
 /* --------------------------------------------------------------------- */
@@ -826,43 +826,43 @@ static void epp_wakeup(void *handle)
 static int epp_open(struct net_device *dev)
 {
 	struct baycom_state *bc = netdev_priv(dev);
-        struct parport *pp = parport_find_base(dev->base_addr);
+	struct parport *pp = parport_find_base(dev->base_addr);
 	unsigned int i, j;
 	unsigned char tmp[128];
 	unsigned char stat;
 	unsigned long tstart;
 
-        if (!pp) {
-                printk(KERN_ERR "%s: parport at 0x%lx unknown\n", bc_drvname, dev->base_addr);
-                return -ENXIO;
-        }
+	if (!pp) {
+		printk(KERN_ERR "%s: parport at 0x%lx unknown\n", bc_drvname, dev->base_addr);
+		return -ENXIO;
+	}
 #if 0
-        if (pp->irq < 0) {
-                printk(KERN_ERR "%s: parport at 0x%lx has no irq\n", bc_drvname, pp->base);
+	if (pp->irq < 0) {
+		printk(KERN_ERR "%s: parport at 0x%lx has no irq\n", bc_drvname, pp->base);
 		parport_put_port(pp);
-                return -ENXIO;
-        }
+		return -ENXIO;
+	}
 #endif
 	if ((~pp->modes) & (PARPORT_MODE_TRISTATE | PARPORT_MODE_PCSPP | PARPORT_MODE_SAFEININT)) {
-                printk(KERN_ERR "%s: parport at 0x%lx cannot be used\n",
+		printk(KERN_ERR "%s: parport at 0x%lx cannot be used\n",
 		       bc_drvname, pp->base);
 		parport_put_port(pp);
-                return -EIO;
+		return -EIO;
 	}
 	memset(&bc->modem, 0, sizeof(bc->modem));
-        bc->pdev = parport_register_device(pp, dev->name, NULL, epp_wakeup,
+	bc->pdev = parport_register_device(pp, dev->name, NULL, epp_wakeup,
 					   NULL, PARPORT_DEV_EXCL, dev);
 	parport_put_port(pp);
-        if (!bc->pdev) {
-                printk(KERN_ERR "%s: cannot register parport at 0x%lx\n", bc_drvname, pp->base);
-                return -ENXIO;
-        }
-        if (parport_claim(bc->pdev)) {
-                printk(KERN_ERR "%s: parport at 0x%lx busy\n", bc_drvname, pp->base);
-                parport_unregister_device(bc->pdev);
-                return -EBUSY;
-        }
-        dev->irq = /*pp->irq*/ 0;
+	if (!bc->pdev) {
+		printk(KERN_ERR "%s: cannot register parport at 0x%lx\n", bc_drvname, pp->base);
+		return -ENXIO;
+	}
+	if (parport_claim(bc->pdev)) {
+		printk(KERN_ERR "%s: parport at 0x%lx busy\n", bc_drvname, pp->base);
+		parport_unregister_device(bc->pdev);
+		return -EBUSY;
+	}
+	dev->irq = /*pp->irq*/ 0;
 	INIT_DELAYED_WORK(&bc->run_work, epp_bh);
 	bc->work_running = 1;
 	bc->modem = EPP_CONVENTIONAL;
@@ -931,8 +931,8 @@ static int epp_open(struct net_device *dev)
  epptimeout:
 	printk(KERN_ERR "%s: epp timeout during bitrate probe\n", bc_drvname);
 	parport_write_control(pp, 0); /* reset the adapter */
-        parport_release(bc->pdev);
-        parport_unregister_device(bc->pdev);
+	parport_release(bc->pdev);
+	parport_unregister_device(bc->pdev);
 	return -EIO;
 }
 
@@ -950,8 +950,8 @@ static int epp_close(struct net_device *dev)
 	tmp[0] = 0;
 	pp->ops->epp_write_addr(pp, tmp, 1, 0);
 	parport_write_control(pp, 0); /* reset the adapter */
-        parport_release(bc->pdev);
-        parport_unregister_device(bc->pdev);
+	parport_release(bc->pdev);
+	parport_unregister_device(bc->pdev);
 	if (bc->skb)
 		dev_kfree_skb(bc->skb);
 	bc->skb = NULL;
@@ -1267,11 +1267,11 @@ module_exit(cleanup_baycomepp);
 
 static int __init baycom_epp_setup(char *str)
 {
-        static unsigned __initdata nr_dev = 0;
+	static unsigned __initdata nr_dev = 0;
 	int ints[2];
 
-        if (nr_dev >= NR_PORTS)
-                return 0;
+	if (nr_dev >= NR_PORTS)
+		return 0;
 	str = get_options(str, 2, ints);
 	if (ints[0] < 1)
 		return 0;

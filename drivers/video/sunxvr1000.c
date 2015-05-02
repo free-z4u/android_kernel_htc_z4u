@@ -80,9 +80,9 @@ static int __devinit gfb_set_fbinfo(struct gfb_info *gp)
 
 	/* Fill fix common fields */
 	strlcpy(info->fix.id, "gfb", sizeof(info->fix.id));
-        info->fix.smem_start = gp->fb_base_phys;
-        info->fix.smem_len = gp->fb_size;
-        info->fix.type = FB_TYPE_PACKED_PIXELS;
+	info->fix.smem_start = gp->fb_base_phys;
+	info->fix.smem_len = gp->fb_size;
+	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	if (gp->depth == 32 || gp->depth == 24)
 		info->fix.visual = FB_VISUAL_TRUECOLOR;
 	else
@@ -108,7 +108,7 @@ static int __devinit gfb_set_fbinfo(struct gfb_info *gp)
 		return -ENOMEM;
 	}
 
-        return 0;
+	return 0;
 }
 
 static int __devinit gfb_probe(struct platform_device *op)
@@ -165,7 +165,7 @@ err_unmap_fb:
 	of_iounmap(&op->resource[6], gp->fb_base, gp->fb_size);
 
 err_release_fb:
-        framebuffer_release(info);
+	framebuffer_release(info);
 
 err_out:
 	return err;
@@ -182,7 +182,7 @@ static int __devexit gfb_remove(struct platform_device *op)
 
 	of_iounmap(&op->resource[6], gp->fb_base, gp->fb_size);
 
-        framebuffer_release(info);
+	framebuffer_release(info);
 
 	dev_set_drvdata(&op->dev, NULL);
 

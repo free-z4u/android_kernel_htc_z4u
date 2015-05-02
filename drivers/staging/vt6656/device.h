@@ -822,11 +822,11 @@ typedef struct __device_info {
     //--
 
 #ifdef WPA_SUPPLICANT_DRIVER_WEXT_SUPPORT
-        BOOL                 bwextstep0;
-        BOOL                 bwextstep1;
-        BOOL                 bwextstep2;
-        BOOL                 bwextstep3;
-        BOOL                 bWPASuppWextEnabled;
+	BOOL                 bwextstep0;
+	BOOL                 bwextstep1;
+	BOOL                 bwextstep2;
+	BOOL                 bwextstep3;
+	BOOL                 bWPASuppWextEnabled;
 #endif
 
 #ifdef HOSTAP
@@ -850,10 +850,10 @@ typedef struct __device_info {
 #define EnqueueRCB(_Head, _Tail, _RCB)                  \
 {                                                       \
     if (!_Head) {                                       \
-        _Head = _RCB;                                   \
+	_Head = _RCB;                                   \
     }                                                   \
     else {                                              \
-        _Tail->Next = _RCB;                             \
+	_Tail->Next = _RCB;                             \
     }                                                   \
     _RCB->Next = NULL;                                  \
     _Tail = _RCB;                                       \
@@ -863,7 +863,7 @@ typedef struct __device_info {
 {                                                       \
     PRCB   RCB = Head;                                  \
     if (!RCB->Next) {                                   \
-        Tail = NULL;                                    \
+	Tail = NULL;                                    \
     }                                                   \
     Head = RCB->Next;                                   \
 }
@@ -871,9 +871,9 @@ typedef struct __device_info {
 
 #define ADD_ONE_WITH_WRAP_AROUND(uVar, uModulo) {   \
     if ((uVar) >= ((uModulo) - 1))                  \
-        (uVar) = 0;                                 \
+	(uVar) = 0;                                 \
     else                                            \
-        (uVar)++;                                   \
+	(uVar)++;                                   \
 }
 
 
@@ -895,7 +895,7 @@ typedef struct __device_info {
 #define MP_TEST_FLAGS(_M, _F)            (((_M)->Flags & (_F)) == (_F))
 
 #define MP_IS_READY(_M)        (((_M)->Flags & \
-                                 (fMP_DISCONNECTED | fMP_RESET_IN_PROGRESS | fMP_HALT_IN_PROGRESS | fMP_INIT_IN_PROGRESS | fMP_SURPRISE_REMOVED)) == 0)
+				 (fMP_DISCONNECTED | fMP_RESET_IN_PROGRESS | fMP_HALT_IN_PROGRESS | fMP_INIT_IN_PROGRESS | fMP_SURPRISE_REMOVED)) == 0)
 
 /*---------------------  Export Functions  --------------------------*/
 

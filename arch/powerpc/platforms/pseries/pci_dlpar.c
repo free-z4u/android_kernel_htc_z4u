@@ -34,7 +34,7 @@
 
 static struct pci_bus *
 find_bus_among_children(struct pci_bus *bus,
-                        struct device_node *dn)
+			struct device_node *dn)
 {
 	struct pci_bus *child = NULL;
 	struct list_head *tmp;

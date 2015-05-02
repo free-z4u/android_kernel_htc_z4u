@@ -74,7 +74,7 @@ static const char igbvf_gstrings_test[][ETH_GSTRING_LEN] = {
 #define IGBVF_TEST_LEN ARRAY_SIZE(igbvf_gstrings_test)
 
 static int igbvf_get_settings(struct net_device *netdev,
-                              struct ethtool_cmd *ecmd)
+			      struct ethtool_cmd *ecmd)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 	struct e1000_hw *hw = &adapter->hw;
@@ -111,19 +111,19 @@ static int igbvf_get_settings(struct net_device *netdev,
 }
 
 static int igbvf_set_settings(struct net_device *netdev,
-                              struct ethtool_cmd *ecmd)
+			      struct ethtool_cmd *ecmd)
 {
 	return -EOPNOTSUPP;
 }
 
 static void igbvf_get_pauseparam(struct net_device *netdev,
-                                 struct ethtool_pauseparam *pause)
+				 struct ethtool_pauseparam *pause)
 {
 	return;
 }
 
 static int igbvf_set_pauseparam(struct net_device *netdev,
-                                struct ethtool_pauseparam *pause)
+				struct ethtool_pauseparam *pause)
 {
 	return -EOPNOTSUPP;
 }
@@ -147,7 +147,7 @@ static int igbvf_get_regs_len(struct net_device *netdev)
 }
 
 static void igbvf_get_regs(struct net_device *netdev,
-                           struct ethtool_regs *regs, void *p)
+			   struct ethtool_regs *regs, void *p)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 	struct e1000_hw *hw = &adapter->hw;
@@ -176,19 +176,19 @@ static int igbvf_get_eeprom_len(struct net_device *netdev)
 }
 
 static int igbvf_get_eeprom(struct net_device *netdev,
-                            struct ethtool_eeprom *eeprom, u8 *bytes)
+			    struct ethtool_eeprom *eeprom, u8 *bytes)
 {
 	return -EOPNOTSUPP;
 }
 
 static int igbvf_set_eeprom(struct net_device *netdev,
-                            struct ethtool_eeprom *eeprom, u8 *bytes)
+			    struct ethtool_eeprom *eeprom, u8 *bytes)
 {
 	return -EOPNOTSUPP;
 }
 
 static void igbvf_get_drvinfo(struct net_device *netdev,
-                              struct ethtool_drvinfo *drvinfo)
+			      struct ethtool_drvinfo *drvinfo)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 
@@ -202,7 +202,7 @@ static void igbvf_get_drvinfo(struct net_device *netdev,
 }
 
 static void igbvf_get_ringparam(struct net_device *netdev,
-                                struct ethtool_ringparam *ring)
+				struct ethtool_ringparam *ring)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 	struct igbvf_ring *tx_ring = adapter->tx_ring;
@@ -215,7 +215,7 @@ static void igbvf_get_ringparam(struct net_device *netdev,
 }
 
 static int igbvf_set_ringparam(struct net_device *netdev,
-                               struct ethtool_ringparam *ring)
+			       struct ethtool_ringparam *ring)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 	struct igbvf_ring *temp_ring;
@@ -308,7 +308,7 @@ static int igbvf_link_test(struct igbvf_adapter *adapter, u64 *data)
 }
 
 static void igbvf_diag_test(struct net_device *netdev,
-                            struct ethtool_test *eth_test, u64 *data)
+			    struct ethtool_test *eth_test, u64 *data)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 
@@ -326,20 +326,20 @@ static void igbvf_diag_test(struct net_device *netdev,
 }
 
 static void igbvf_get_wol(struct net_device *netdev,
-                          struct ethtool_wolinfo *wol)
+			  struct ethtool_wolinfo *wol)
 {
 	wol->supported = 0;
 	wol->wolopts = 0;
 }
 
 static int igbvf_set_wol(struct net_device *netdev,
-                         struct ethtool_wolinfo *wol)
+			 struct ethtool_wolinfo *wol)
 {
 	return -EOPNOTSUPP;
 }
 
 static int igbvf_get_coalesce(struct net_device *netdev,
-                              struct ethtool_coalesce *ec)
+			      struct ethtool_coalesce *ec)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 
@@ -352,7 +352,7 @@ static int igbvf_get_coalesce(struct net_device *netdev,
 }
 
 static int igbvf_set_coalesce(struct net_device *netdev,
-                              struct ethtool_coalesce *ec)
+			      struct ethtool_coalesce *ec)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 	struct e1000_hw *hw = &adapter->hw;
@@ -396,8 +396,8 @@ static int igbvf_nway_reset(struct net_device *netdev)
 
 
 static void igbvf_get_ethtool_stats(struct net_device *netdev,
-                                    struct ethtool_stats *stats,
-                                    u64 *data)
+				    struct ethtool_stats *stats,
+				    u64 *data)
 {
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
 	int i;
@@ -428,7 +428,7 @@ static int igbvf_get_sset_count(struct net_device *dev, int stringset)
 }
 
 static void igbvf_get_strings(struct net_device *netdev, u32 stringset,
-                              u8 *data)
+			      u8 *data)
 {
 	u8 *p = data;
 	int i;

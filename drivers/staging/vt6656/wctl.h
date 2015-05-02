@@ -85,9 +85,9 @@
 
 #define ADD_ONE_WITH_WRAP_AROUND(uVar, uModulo) {   \
     if ((uVar) >= ((uModulo) - 1))                  \
-        (uVar) = 0;                                 \
+	(uVar) = 0;                                 \
     else                                            \
-        (uVar)++;                                   \
+	(uVar)++;                                   \
 }
 
 /*---------------------  Export Classes  ----------------------------*/

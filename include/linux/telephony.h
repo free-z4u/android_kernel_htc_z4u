@@ -96,14 +96,14 @@ typedef enum {
 #define PHONE_CAPABILITIES_CHECK        _IOW ('q', 0x82, struct phone_capability *)
 
 typedef struct {
-        char month[3];
-        char day[3];
-        char hour[3];
-        char min[3];
-        int numlen;
-        char number[11];
-        int namelen;
-        char name[80];
+	char month[3];
+	char day[3];
+	char hour[3];
+	char min[3];
+	int numlen;
+	char number[11];
+	int namelen;
+	char name[80];
 } PHONE_CID;
 
 #define PHONE_RING			_IO  ('q', 0x83)
@@ -189,8 +189,8 @@ typedef enum {
 
 struct phone_codec_data
 {
-        phone_codec type;
-        unsigned short buf_min, buf_opt, buf_max;
+	phone_codec type;
+	unsigned short buf_min, buf_opt, buf_max;
 };
 
 #define PHONE_QUERY_CODEC               _IOWR ('q', 0xA7, struct phone_codec_data *)

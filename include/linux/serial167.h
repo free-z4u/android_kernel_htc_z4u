@@ -7,10 +7,10 @@
  */
 
 struct cyclades_monitor {
-        unsigned long           int_count;
-        unsigned long           char_count;
-        unsigned long           char_max;
-        unsigned long           char_last;
+	unsigned long           int_count;
+	unsigned long           char_count;
+	unsigned long           char_max;
+	unsigned long           char_last;
 };
 
 /*
@@ -46,11 +46,11 @@ struct cyclades_port {
 	int			xmit_head;
 	int			xmit_tail;
 	int			xmit_cnt;
-        int                     default_threshold;
-        int                     default_timeout;
+	int                     default_threshold;
+	int                     default_timeout;
 	wait_queue_head_t	open_wait;
 	wait_queue_head_t	close_wait;
-        struct cyclades_monitor mon;
+	struct cyclades_monitor mon;
 };
 
 #define CYCLADES_MAGIC  0x4359

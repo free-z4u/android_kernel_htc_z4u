@@ -108,15 +108,15 @@ typedef unsigned long io_port;	/* type definition for an 'io port address' */
 /* SCC statistical information */
 
 struct scc_stat {
-        long rxints;            /* Receiver interrupts */
-        long txints;            /* Transmitter interrupts */
-        long exints;            /* External/status interrupts */
-        long spints;            /* Special receiver interrupts */
+	long rxints;            /* Receiver interrupts */
+	long txints;            /* Transmitter interrupts */
+	long exints;            /* External/status interrupts */
+	long spints;            /* Special receiver interrupts */
 
-        long txframes;          /* Packets sent */
-        long rxframes;          /* Number of Frames Actually Received */
-        long rxerrs;            /* CRC Errors */
-        long txerrs;		/* KISS errors */
+	long txframes;          /* Packets sent */
+	long rxframes;          /* Number of Frames Actually Received */
+	long rxerrs;            /* CRC Errors */
+	long txerrs;		/* KISS errors */
 
 	unsigned int nospace;	/* "Out of buffers" */
 	unsigned int rx_over;	/* Receiver Overruns */
@@ -232,13 +232,13 @@ struct scc_channel {
 	unsigned char status;		/* Copy of R0 at last external interrupt */
 	unsigned char dcd;		/* DCD status */
 
-        struct scc_kiss kiss;		/* control structure for KISS params */
-        struct scc_stat stat;		/* statistical information */
-        struct scc_modem modem; 	/* modem information */
+	struct scc_kiss kiss;		/* control structure for KISS params */
+	struct scc_stat stat;		/* statistical information */
+	struct scc_modem modem; 	/* modem information */
 
-        struct sk_buff_head tx_queue;	/* next tx buffer */
-        struct sk_buff *rx_buff;	/* pointer to frame currently received */
-        struct sk_buff *tx_buff;	/* pointer to frame currently transmitted */
+	struct sk_buff_head tx_queue;	/* next tx buffer */
+	struct sk_buff *rx_buff;	/* pointer to frame currently received */
+	struct sk_buff *tx_buff;	/* pointer to frame currently transmitted */
 
 	/* Timer */
 	struct timer_list tx_t;		/* tx timer for this channel */

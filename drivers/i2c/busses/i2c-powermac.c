@@ -2,7 +2,7 @@
     i2c Support for Apple SMU Controller
 
     Copyright (c) 2005 Benjamin Herrenschmidt, IBM Corp.
-                       <benh@kernel.crashing.org>
+		       <benh@kernel.crashing.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,16 +65,16 @@ static s32 i2c_powermac_smbus_xfer(	struct i2c_adapter*	adap,
 	}
 
 	switch (size) {
-        case I2C_SMBUS_QUICK:
+	case I2C_SMBUS_QUICK:
 		buf = NULL;
 		len = 0;
 	    	break;
-        case I2C_SMBUS_BYTE:
-        case I2C_SMBUS_BYTE_DATA:
+	case I2C_SMBUS_BYTE:
+	case I2C_SMBUS_BYTE_DATA:
 		buf = &data->byte;
 		len = 1;
 	    	break;
-        case I2C_SMBUS_WORD_DATA:
+	case I2C_SMBUS_WORD_DATA:
 		if (!read) {
 			local[0] = data->word & 0xff;
 			local[1] = (data->word >> 8) & 0xff;
@@ -94,7 +94,7 @@ static s32 i2c_powermac_smbus_xfer(	struct i2c_adapter*	adap,
 	 * is). For now, I assume writes are a single stream and reads have
 	 * a repeat start/addr phase (but not stop in between)
 	 */
-        case I2C_SMBUS_BLOCK_DATA:
+	case I2C_SMBUS_BLOCK_DATA:
 		buf = data->block;
 		len = data->block[0] + 1;
 		break;
@@ -103,7 +103,7 @@ static s32 i2c_powermac_smbus_xfer(	struct i2c_adapter*	adap,
 		len = data->block[0];
 		break;
 
-        default:
+	default:
 		return -EINVAL;
 	}
 

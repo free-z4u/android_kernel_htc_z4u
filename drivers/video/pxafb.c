@@ -82,7 +82,7 @@ static int pxafb_activate_var(struct fb_var_screeninfo *var,
 				struct pxafb_info *);
 static void set_ctrlr_state(struct pxafb_info *fbi, u_int state);
 static void setup_base_frame(struct pxafb_info *fbi,
-                             struct fb_var_screeninfo *var, int branch);
+			     struct fb_var_screeninfo *var, int branch);
 static int setup_frame_dma(struct pxafb_info *fbi, int dma, int pal,
 			   unsigned long offset, size_t size);
 
@@ -1102,8 +1102,8 @@ static int setup_frame_dma(struct pxafb_info *fbi, int dma, int pal,
 }
 
 static void setup_base_frame(struct pxafb_info *fbi,
-                             struct fb_var_screeninfo *var,
-                             int branch)
+			     struct fb_var_screeninfo *var,
+			     int branch)
 {
 	struct fb_fix_screeninfo *fix = &fbi->fb.fix;
 	int nbytes, dma, pal, bpp = var->bits_per_pixel;

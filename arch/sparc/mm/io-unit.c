@@ -94,7 +94,7 @@ static unsigned long iounit_get_area(struct iounit_struct *iounit, unsigned long
 	unsigned long rotor, scan, limit;
 	iopte_t iopte;
 
-        npages = ((vaddr & ~PAGE_MASK) + size + (PAGE_SIZE-1)) >> PAGE_SHIFT;
+	npages = ((vaddr & ~PAGE_MASK) + size + (PAGE_SIZE-1)) >> PAGE_SHIFT;
 
 	/* A tiny bit of magic ingredience :) */
 	switch (npages) {

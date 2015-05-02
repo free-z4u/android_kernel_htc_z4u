@@ -269,7 +269,7 @@ enum {
 
 #define SCTP_MIB_MAX    __SCTP_MIB_MAX
 struct sctp_mib {
-        unsigned long   mibs[SCTP_MIB_MAX];
+	unsigned long   mibs[SCTP_MIB_MAX];
 };
 
 
@@ -569,15 +569,15 @@ for (pos = chunk->subh.fwdtsn_hdr->skip;\
 /* Add tv1 to tv2. */
 #define TIMEVAL_ADD(tv1, tv2) \
 ({ \
-        suseconds_t usecs = (tv2).tv_usec + (tv1).tv_usec; \
-        time_t secs = (tv2).tv_sec + (tv1).tv_sec; \
+	suseconds_t usecs = (tv2).tv_usec + (tv1).tv_usec; \
+	time_t secs = (tv2).tv_sec + (tv1).tv_sec; \
 \
-        if (usecs >= 1000000) { \
-                usecs -= 1000000; \
-                secs++; \
-        } \
-        (tv2).tv_sec = secs; \
-        (tv2).tv_usec = usecs; \
+	if (usecs >= 1000000) { \
+		usecs -= 1000000; \
+		secs++; \
+	} \
+	(tv2).tv_sec = secs; \
+	(tv2).tv_usec = usecs; \
 })
 
 /* External references. */

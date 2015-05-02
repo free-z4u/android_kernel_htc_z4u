@@ -909,7 +909,7 @@ static void ixj_pstn_state(IXJ *j)
 		daaint.bitreg.RMR = 1;
 		daaint.bitreg.SI_1 = j->m_DAAShadowRegs.SOP_REGS.SOP.cr1.bitreg.RMR;
 		if(ixjdebug & 0x0008) {
-                        printk(KERN_INFO "IXJ DAA RMR /dev/phone%d was %s for %ld\n", j->board, XR0.bitreg.RMR?"on":"off", jiffies - j->pstn_last_rmr);
+			printk(KERN_INFO "IXJ DAA RMR /dev/phone%d was %s for %ld\n", j->board, XR0.bitreg.RMR?"on":"off", jiffies - j->pstn_last_rmr);
 		}
 		j->pstn_prev_rmr = j->pstn_last_rmr;
 		j->pstn_last_rmr = jiffies;
@@ -2110,13 +2110,13 @@ static int ixj_open(struct phone_device *p, struct file *file_p)
 	if (!j->DSPbase)
 		return -ENODEV;
 
-        if (file_p->f_mode & FMODE_READ) {
+	if (file_p->f_mode & FMODE_READ) {
 		if(!j->readers) {
 	                j->readers++;
-        	} else {
-                	return -EBUSY;
+		} else {
+			return -EBUSY;
 		}
-        }
+	}
 
 	if (file_p->f_mode & FMODE_WRITE) {
 		if(!j->writers) {
@@ -2735,10 +2735,10 @@ static void alaw2ulaw(unsigned char *buff, unsigned long len)
 		0xCF, 0xCF, 0xCE, 0xCE, 0xD2, 0xD3, 0xD0, 0xD1
 	};
 
-        while (len--)
-        {
-                *buff = table_alaw2ulaw[*(unsigned char *)buff];
-                buff++;
+	while (len--)
+	{
+		*buff = table_alaw2ulaw[*(unsigned char *)buff];
+		buff++;
 	}
 }
 
@@ -2871,7 +2871,7 @@ static ssize_t ixj_write(struct file *file_p, const char __user *buf, size_t cou
 		return -EFAULT;
 	}
        if(j->play_codec == ALAW)
-               alaw2ulaw(j->write_buffer_wp, min(count, j->write_buffer_size));
+	       alaw2ulaw(j->write_buffer_wp, min(count, j->write_buffer_size));
 	j->flags.inwrite = 0;
 	return min(count, j->write_buffer_size);
 }
@@ -3625,7 +3625,7 @@ static int idle(IXJ *j)
 		j->rec_mode = -1;
 		j->flags.recording = 0;
 		return 1;
-        }
+	}
 }
 
 static int set_base_frame(IXJ *j, int size)
@@ -4176,7 +4176,7 @@ static void ixj_aec_start(IXJ *j, int level)
 			break;
 
 		case AEC_AGC:
-                        /* First we have to put the AEC into advance auto mode so that AGC will not conflict with it */
+			/* First we have to put the AEC into advance auto mode so that AGC will not conflict with it */
 			ixj_WriteDSPCommand(0x0002, j);	/* Attenuation scaling factor of 2 */
 
 			ixj_WriteDSPCommand(0xE011, j);
@@ -4735,7 +4735,7 @@ static int SCI_Prepare(IXJ *j)
 static int ixj_get_mixer(long val, IXJ *j)
 {
 	int reg = (val & 0x1F00) >> 8;
-        return j->mix.vol[reg];
+	return j->mix.vol[reg];
 }
 
 static int ixj_mixer(long val, IXJ *j)
@@ -4745,8 +4745,8 @@ static int ixj_mixer(long val, IXJ *j)
 	bytes.high = (val & 0x1F00) >> 8;
 	bytes.low = val & 0x00FF;
 
-        /* save mixer value so we can get back later on */
-        j->mix.vol[bytes.high] = bytes.low;
+	/* save mixer value so we can get back later on */
+	j->mix.vol[bytes.high] = bytes.low;
 
 	outb_p(bytes.high & 0x1F, j->XILINXbase + 0x03);	/* Load Mixer Address */
 
@@ -5885,7 +5885,7 @@ static int ixj_build_filter_cadence(IXJ *j, IXJ_FILTER_CADENCE __user * cp)
 			printk(KERN_INFO "Could not allocate memory for cadence or could not copy cadence to kernel\n");
 		}
 		return PTR_ERR(lcp);
-        }
+	}
 	if (lcp->filter > 5) {
 		if(ixjdebug & 0x0001) {
 			printk(KERN_INFO "Cadence out of range\n");
@@ -5967,7 +5967,7 @@ static void add_caps(IXJ *j)
 		j->caplist[j->caps].cap = speaker;
 		j->caplist[j->caps].handle = j->caps;
 		j->caps++;
-        default:
+	default:
      		break;
 	}
 
@@ -5980,7 +5980,7 @@ static void add_caps(IXJ *j)
 		j->caplist[j->caps].handle = j->caps;
 		j->caps++;
 		break;
-        default:
+	default:
      		break;
 	}
 
@@ -5993,7 +5993,7 @@ static void add_caps(IXJ *j)
 		j->caplist[j->caps].handle = j->caps;
 		j->caps++;
 		break;
-        default:
+	default:
      		break;
 	}
 
@@ -6177,10 +6177,10 @@ static long do_ixj_ioctl(struct file *file_p, unsigned int cmd, unsigned long ar
 		}
 		ixj_write_cidcw(j);
 		break;
-        /* Binary compatbility */
-        case OLD_PHONE_RING_START:
-                arg = 0;
-                /* Fall through */
+	/* Binary compatbility */
+	case OLD_PHONE_RING_START:
+		arg = 0;
+		/* Fall through */
  	case PHONE_RING_START:
 		if(arg) {
 			if (copy_from_user(&j->cid_send, argp, sizeof(PHONE_CID))) {
@@ -6473,43 +6473,43 @@ static long do_ixj_ioctl(struct file *file_p, unsigned int cmd, unsigned long ar
 	case PHONE_CPT_STOP:
 		ixj_cpt_stop(j);
 		break;
-        case PHONE_QUERY_CODEC:
-        {
-                struct phone_codec_data pd;
-                int val;
-                int proto_size[] = {
-                        -1,
-                        12, 10, 16, 9, 8, 48, 5,
-                        40, 40, 80, 40, 40, 6
-                };
-                if(copy_from_user(&pd, argp, sizeof(pd))) {
-                        retval = -EFAULT;
+	case PHONE_QUERY_CODEC:
+	{
+		struct phone_codec_data pd;
+		int val;
+		int proto_size[] = {
+			-1,
+			12, 10, 16, 9, 8, 48, 5,
+			40, 40, 80, 40, 40, 6
+		};
+		if(copy_from_user(&pd, argp, sizeof(pd))) {
+			retval = -EFAULT;
 			break;
 		}
-                if(pd.type<1 || pd.type>13) {
-                        retval = -EPROTONOSUPPORT;
+		if(pd.type<1 || pd.type>13) {
+			retval = -EPROTONOSUPPORT;
 			break;
 		}
-                if(pd.type<G729)
-                        val=proto_size[pd.type];
-                else switch(j->baseframe.low)
-                {
-                        case 0xA0:val=2*proto_size[pd.type];break;
-                        case 0x50:val=proto_size[pd.type];break;
-                        default:val=proto_size[pd.type]*3;break;
-                }
-                pd.buf_min=pd.buf_max=pd.buf_opt=val;
-                if(copy_to_user(argp, &pd, sizeof(pd)))
-                        retval = -EFAULT;
-        	break;
-        }
+		if(pd.type<G729)
+			val=proto_size[pd.type];
+		else switch(j->baseframe.low)
+		{
+			case 0xA0:val=2*proto_size[pd.type];break;
+			case 0x50:val=proto_size[pd.type];break;
+			default:val=proto_size[pd.type]*3;break;
+		}
+		pd.buf_min=pd.buf_max=pd.buf_opt=val;
+		if(copy_to_user(argp, &pd, sizeof(pd)))
+			retval = -EFAULT;
+		break;
+	}
 	case IXJCTL_DSP_IDLE:
 		idle(j);
 		break;
 	case IXJCTL_MIXER:
-                if ((arg & 0xff) == 0xff)
+		if ((arg & 0xff) == 0xff)
 			retval = ixj_get_mixer(arg, j);
-                else
+		else
 			ixj_mixer(arg, j);
 		break;
 	case IXJCTL_DAA_COEFF_SET:
@@ -6690,14 +6690,14 @@ static int ixj_fasync(int fd, struct file *file_p, int mode)
 
 static const struct file_operations ixj_fops =
 {
-        .owner          = THIS_MODULE,
-        .read           = ixj_enhanced_read,
-        .write          = ixj_enhanced_write,
-        .poll           = ixj_poll,
-        .unlocked_ioctl = ixj_ioctl,
-        .release        = ixj_release,
-        .fasync         = ixj_fasync,
-        .llseek	 = default_llseek,
+	.owner          = THIS_MODULE,
+	.read           = ixj_enhanced_read,
+	.write          = ixj_enhanced_write,
+	.poll           = ixj_poll,
+	.unlocked_ioctl = ixj_ioctl,
+	.release        = ixj_release,
+	.fasync         = ixj_fasync,
+	.llseek	 = default_llseek,
 };
 
 static int ixj_linetest(IXJ *j)
@@ -6784,9 +6784,9 @@ static int ixj_selfprobe(IXJ *j)
 	int cnt;
 	BYTES bytes;
 
-        init_waitqueue_head(&j->poll_q);
-        init_waitqueue_head(&j->read_q);
-        init_waitqueue_head(&j->write_q);
+	init_waitqueue_head(&j->poll_q);
+	init_waitqueue_head(&j->read_q);
+	init_waitqueue_head(&j->write_q);
 
 	while(atomic_read(&j->DSPWrite) > 0)
 		atomic_dec(&j->DSPWrite);
@@ -7411,12 +7411,12 @@ static int ixj_get_status_proc(char *buf)
 			len += sprintf(buf + len, "\nDry Buffer %ld", j->drybuffer);
 			len += sprintf(buf + len, "\nRead Waits %ld", j->read_wait);
 			len += sprintf(buf + len, "\nWrite Waits %ld", j->write_wait);
-                        len += sprintf(buf + len, "\nStatus Waits %ld", j->statuswait);
-                        len += sprintf(buf + len, "\nStatus Wait Fails %ld", j->statuswaitfail);
-                        len += sprintf(buf + len, "\nPControl Waits %ld", j->pcontrolwait);
-                        len += sprintf(buf + len, "\nPControl Wait Fails %ld", j->pcontrolwaitfail);
-                        len += sprintf(buf + len, "\nIs Control Ready Checks %ld", j->iscontrolready);
-                        len += sprintf(buf + len, "\nIs Control Ready Check failures %ld", j->iscontrolreadyfail);
+			len += sprintf(buf + len, "\nStatus Waits %ld", j->statuswait);
+			len += sprintf(buf + len, "\nStatus Wait Fails %ld", j->statuswaitfail);
+			len += sprintf(buf + len, "\nPControl Waits %ld", j->pcontrolwait);
+			len += sprintf(buf + len, "\nPControl Wait Fails %ld", j->pcontrolwaitfail);
+			len += sprintf(buf + len, "\nIs Control Ready Checks %ld", j->iscontrolready);
+			len += sprintf(buf + len, "\nIs Control Ready Check failures %ld", j->iscontrolreadyfail);
 
 #endif
 			len += sprintf(buf + len, "\n");
@@ -7426,15 +7426,15 @@ static int ixj_get_status_proc(char *buf)
 }
 
 static int ixj_read_proc(char *page, char **start, off_t off,
-                              int count, int *eof, void *data)
+			      int count, int *eof, void *data)
 {
-        int len = ixj_get_status_proc(page);
-        if (len <= off+count) *eof = 1;
-        *start = page + off;
-        len -= off;
-        if (len>count) len = count;
-        if (len<0) len = 0;
-        return len;
+	int len = ixj_get_status_proc(page);
+	if (len <= off+count) *eof = 1;
+	*start = page + off;
+	len -= off;
+	if (len>count) len = count;
+	if (len<0) len = 0;
+	return len;
 }
 
 
@@ -7587,7 +7587,7 @@ MODULE_LICENSE("GPL");
 
 static void __exit ixj_exit(void)
 {
-        cleanup();
+	cleanup();
 }
 
 static IXJ *new_ixj(unsigned long port)
@@ -7611,7 +7611,7 @@ static int __init ixj_probe_isapnp(int *cnt)
 {
 	int probe = 0;
 	int func = 0x110;
-        struct pnp_dev *dev = NULL, *old_dev = NULL;
+	struct pnp_dev *dev = NULL, *old_dev = NULL;
 
 	while (1) {
 		do {

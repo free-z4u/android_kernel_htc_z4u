@@ -1799,7 +1799,7 @@ static int ewrk3_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 		break;
 	case EWRK3_GET_STATS: { /* Get the driver statistics */
 		struct ewrk3_stats *tmp_stats =
-        		kmalloc(sizeof(lp->pktStats), GFP_KERNEL);
+			kmalloc(sizeof(lp->pktStats), GFP_KERNEL);
 		if (!tmp_stats) {
 			status = -ENOMEM;
 			break;

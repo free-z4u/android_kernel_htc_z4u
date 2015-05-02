@@ -385,8 +385,8 @@ int mmu_emu_handle_fault (unsigned long vaddr, int read_flag, int kernel_fault)
 //todo: next line should check for valid pmd properly.
 	if (!pte) {
 //                printk ("mmu_emu_handle_fault: invalid pmd\n");
-                return 0;
-        }
+		return 0;
+	}
 
 	pte = (pte_t *) __va ((unsigned long)(pte + offset));
 

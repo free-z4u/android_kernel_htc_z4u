@@ -68,10 +68,10 @@ enum parport_pc_pci_cards {
 struct parport_pc_pci {
 	int numports;
 	struct { /* BAR (base address registers) numbers in the config
-                    space header */
+		    space header */
 		int lo;
 		int hi; /* -1 if not there, >6 for offset-method (max
-                           BAR is 6) */
+			   BAR is 6) */
 	} addr[4];
 
 	/* If set, this is called immediately after pci_enable_device.
@@ -526,8 +526,8 @@ static int __devinit parport_register (struct pci_dev *dev,
 			io_hi = pci_resource_start (dev, hi);
 		else if (hi > 6)
 			io_lo += hi; /* Reinterpret the meaning of
-                                        "hi" as an offset (see SYBA
-                                        def.) */
+					"hi" as an offset (see SYBA
+					def.) */
 		/* TODO: test if sharing interrupts works */
 		irq = dev->irq;
 		if (irq == IRQ_NONE) {

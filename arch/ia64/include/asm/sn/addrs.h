@@ -156,17 +156,17 @@
 	((((u64)(NASID_GET(x))) << 40) | NODE_OFFSET(x))
 
 #define SH2_NETWORK_BANK_OFFSET(x) 					\
-        ((u64)(x) & ((1UL << (sn_hub_info->nasid_shift - 4)) -1))
+	((u64)(x) & ((1UL << (sn_hub_info->nasid_shift - 4)) -1))
 
 #define SH2_NETWORK_BANK_SELECT(x) 					\
-        ((((u64)(x) & (0x3UL << (sn_hub_info->nasid_shift - 4)))	\
-        	>> (sn_hub_info->nasid_shift - 4)) << 36)
+	((((u64)(x) & (0x3UL << (sn_hub_info->nasid_shift - 4)))	\
+		>> (sn_hub_info->nasid_shift - 4)) << 36)
 
 #define SH2_NETWORK_ADDRESS(x) 						\
 	(SH2_NETWORK_BANK_OFFSET(x) | SH2_NETWORK_BANK_SELECT(x))
 
 #define SH2_TIO_PHYS_TO_DMA(x) 						\
-        (((u64)(NASID_GET(x)) << 40) | 	SH2_NETWORK_ADDRESS(x))
+	(((u64)(NASID_GET(x)) << 40) | 	SH2_NETWORK_ADDRESS(x))
 
 #define PHYS_TO_TIODMA(x)						\
 	(is_shub1() ? SH1_TIO_PHYS_TO_DMA(x) : SH2_TIO_PHYS_TO_DMA(x))

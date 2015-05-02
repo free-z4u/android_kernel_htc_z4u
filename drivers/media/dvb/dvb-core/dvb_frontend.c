@@ -2415,7 +2415,7 @@ int dvb_register_frontend(struct dvb_adapter* dvb,
 	 * first supported delivery system (ops->delsys[0])
 	 */
 
-        fe->dtv_property_cache.delivery_system = fe->ops.delsys[0];
+	fe->dtv_property_cache.delivery_system = fe->ops.delsys[0];
 	dvb_frontend_clear_cache(fe);
 
 	mutex_unlock(&frontend_mutex);

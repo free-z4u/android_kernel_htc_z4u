@@ -97,7 +97,7 @@
 struct irlap_info {
 	__u8 caddr;   /* Connection address */
 	__u8 control; /* Frame type */
-        __u8 cmd;
+	__u8 cmd;
 
 	__u32 saddr;
 	__u32 daddr;

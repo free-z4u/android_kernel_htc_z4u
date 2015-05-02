@@ -843,7 +843,7 @@ static inline int zd_iowrite16_locked(struct zd_chip *chip, u16 value,
 }
 
 int zd_iowrite16a_locked(struct zd_chip *chip,
-                         const struct zd_ioreq16 *ioreqs, unsigned int count);
+			 const struct zd_ioreq16 *ioreqs, unsigned int count);
 
 int _zd_iowrite32v_locked(struct zd_chip *chip, const struct zd_ioreq32 *ioreqs,
 			  unsigned int count);

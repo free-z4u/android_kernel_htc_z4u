@@ -171,7 +171,7 @@ static void __init dmi_save_uuid(const struct dmi_header *dm, int slot, int inde
 
 	sprintf(s, "%pUB", d);
 
-        dmi_ident[slot] = s;
+	dmi_ident[slot] = s;
 }
 
 static void __init dmi_save_type(const struct dmi_header *dm, int slot, int index)

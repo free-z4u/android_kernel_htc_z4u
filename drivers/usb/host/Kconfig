@@ -205,8 +205,8 @@ config USB_EHCI_TEGRA
        depends on USB_EHCI_HCD && ARCH_TEGRA
        select USB_EHCI_ROOT_HUB_TT
        help
-         This driver enables support for the internal USB Host Controllers
-         found in NVIDIA Tegra SoCs. The controllers are EHCI compliant.
+	 This driver enables support for the internal USB Host Controllers
+	 found in NVIDIA Tegra SoCs. The controllers are EHCI compliant.
 
 config USB_EHCI_HCD_PPC_OF
 	bool "EHCI support for PPC USB controller on OF platform bus"
@@ -570,7 +570,7 @@ config USB_SL811_HCD
 	help
 	  The SL811HS is a single-port USB controller that supports either
 	  host side or peripheral side roles.  Enable this option if your
-	  board has this chip, and you want to use it as a host controller. 
+	  board has this chip, and you want to use it as a host controller.
 	  If unsure, say N.
 
 	  To compile this driver as a module, choose M here: the
@@ -662,11 +662,11 @@ config USB_IMX21_HCD
        tristate "i.MX21 HCD support"
        depends on USB && ARM && ARCH_MXC
        help
-         This driver enables support for the on-chip USB host in the
-         i.MX21 processor.
+	 This driver enables support for the on-chip USB host in the
+	 i.MX21 processor.
 
-         To compile this driver as a module, choose M here: the
-         module will be called "imx21-hcd".
+	 To compile this driver as a module, choose M here: the
+	 module will be called "imx21-hcd".
 
 config USB_OCTEON_EHCI
 	bool "Octeon on-chip EHCI support"

@@ -55,7 +55,7 @@ static int ncp_symlink_readpage(struct file *file, struct page *page)
 		goto failEIO;
 
 	error=ncp_read_kernel(NCP_SERVER(inode),NCP_FINFO(inode)->file_handle,
-                         0,NCP_MAX_SYMLINK_SIZE,rawlink,&length);
+			 0,NCP_MAX_SYMLINK_SIZE,rawlink,&length);
 
 	ncp_inode_close(inode);
 	/* Close file handle if no other users... */

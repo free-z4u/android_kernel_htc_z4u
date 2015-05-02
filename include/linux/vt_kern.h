@@ -176,7 +176,7 @@ extern int vt_do_kbkeycode_ioctl(int cmd, struct kbkeycode __user *user_kbkc,
 extern int vt_do_kdsk_ioctl(int cmd, struct kbentry __user *user_kbe,
 					int perm, int console);
 extern int vt_do_kdgkb_ioctl(int cmd, struct kbsentry __user *user_kdgkb,
-                                        int perm);
+					int perm);
 extern int vt_do_kdskled(int console, int cmd, unsigned long arg, int perm);
 extern int vt_do_kdgkbmode(int console);
 extern int vt_do_kdgkbmeta(int console);

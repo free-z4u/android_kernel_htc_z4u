@@ -375,24 +375,24 @@ static inline void memmove32_col(void *dst, void *src, u32 mask, u32 h, u32 byte
 {
 	u32 *s, *d, v;
 
-        s = src;
-        d = dst;
-        do {
-                v = (*s++ & mask) | (*d  & ~mask);
-                *d++ = v;
+	s = src;
+	d = dst;
+	do {
+		v = (*s++ & mask) | (*d  & ~mask);
+		*d++ = v;
 #if BPL > 2
-                v = (*s++ & mask) | (*d  & ~mask);
-                *d++ = v;
+		v = (*s++ & mask) | (*d  & ~mask);
+		*d++ = v;
 #endif
 #if BPL > 4
-                v = (*s++ & mask) | (*d  & ~mask);
-                *d++ = v;
-                v = (*s++ & mask) | (*d  & ~mask);
-                *d++ = v;
+		v = (*s++ & mask) | (*d  & ~mask);
+		*d++ = v;
+		v = (*s++ & mask) | (*d  & ~mask);
+		*d++ = v;
 #endif
-                d = (u32 *)((u8 *)d + bytes);
-                s = (u32 *)((u8 *)s + bytes);
-        } while (--h);
+		d = (u32 *)((u8 *)d + bytes);
+		s = (u32 *)((u8 *)s + bytes);
+	} while (--h);
 }
 
 #endif

@@ -68,11 +68,11 @@ wildfire_init_hose(int qbbno, int hoseno)
 	hose->io_space = alloc_resource();
 	hose->mem_space = alloc_resource();
 
-        /* This is for userland consumption. */
-        hose->sparse_mem_base = 0;
-        hose->sparse_io_base  = 0;
-        hose->dense_mem_base  = WILDFIRE_MEM(qbbno, hoseno);
-        hose->dense_io_base   = WILDFIRE_IO(qbbno, hoseno);
+	/* This is for userland consumption. */
+	hose->sparse_mem_base = 0;
+	hose->sparse_io_base  = 0;
+	hose->dense_mem_base  = WILDFIRE_MEM(qbbno, hoseno);
+	hose->dense_io_base   = WILDFIRE_IO(qbbno, hoseno);
 
 	hose->config_space_base = WILDFIRE_CONF(qbbno, hoseno);
 	hose->index = (qbbno << 3) + hoseno;
@@ -98,20 +98,20 @@ wildfire_init_hose(int qbbno, int hoseno)
 	wildfire_dump_pci_regs(qbbno, hoseno);
 #endif
 
-        /*
-         * Set up the PCI to main memory translation windows.
-         *
-         * Note: Window 3 is scatter-gather only
-         *
-         * Window 0 is scatter-gather 8MB at 8MB (for isa)
+	/*
+	 * Set up the PCI to main memory translation windows.
+	 *
+	 * Note: Window 3 is scatter-gather only
+	 *
+	 * Window 0 is scatter-gather 8MB at 8MB (for isa)
 	 * Window 1 is direct access 1GB at 1GB
 	 * Window 2 is direct access 1GB at 2GB
-         * Window 3 is scatter-gather 128MB at 3GB
-         * ??? We ought to scale window 3 memory.
-         *
-         */
-        hose->sg_isa = iommu_arena_new(hose, 0x00800000, 0x00800000, 0);
-        hose->sg_pci = iommu_arena_new(hose, 0xc0000000, 0x08000000, 0);
+	 * Window 3 is scatter-gather 128MB at 3GB
+	 * ??? We ought to scale window 3 memory.
+	 *
+	 */
+	hose->sg_isa = iommu_arena_new(hose, 0x00800000, 0x00800000, 0);
+	hose->sg_pci = iommu_arena_new(hose, 0xc0000000, 0x08000000, 0);
 
 	pci = WILDFIRE_pci(qbbno, hoseno);
 
@@ -242,7 +242,7 @@ wildfire_hardware_probe(void)
 			temp >>= 4;
 		}
 		wildfire_gp_mask = wildfire_soft_qbb_mask;
-        }
+	}
 
 	/* Next determine each QBBs resources. */
 	for (soft_qbb = 0; soft_qbb < WILDFIRE_MAX_QBB; soft_qbb++) {

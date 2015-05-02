@@ -1908,12 +1908,12 @@ static ssize_t snd_timer_user_read(struct file *file, char __user *buffer,
 
 static unsigned int snd_timer_user_poll(struct file *file, poll_table * wait)
 {
-        unsigned int mask;
-        struct snd_timer_user *tu;
+	unsigned int mask;
+	struct snd_timer_user *tu;
 
-        tu = file->private_data;
+	tu = file->private_data;
 
-        poll_wait(file, &tu->qchange_sleep, wait);
+	poll_wait(file, &tu->qchange_sleep, wait);
 
 	mask = 0;
 	if (tu->qused)

@@ -402,13 +402,13 @@ apne_get_8390_hdr(struct net_device *dev, struct e8390_pkt_hdr *hdr, int ring_pa
     outb(E8390_RREAD+E8390_START, nic_base + NE_CMD);
 
     if (ei_status.word16) {
-        ptrs = (short*)hdr;
-        for(cnt = 0; cnt < (sizeof(struct e8390_pkt_hdr)>>1); cnt++)
-            *ptrs++ = inw(NE_BASE + NE_DATAPORT);
+	ptrs = (short*)hdr;
+	for(cnt = 0; cnt < (sizeof(struct e8390_pkt_hdr)>>1); cnt++)
+	    *ptrs++ = inw(NE_BASE + NE_DATAPORT);
     } else {
-        ptrc = (char*)hdr;
-        for(cnt = 0; cnt < sizeof(struct e8390_pkt_hdr); cnt++)
-            *ptrc++ = inb(NE_BASE + NE_DATAPORT);
+	ptrc = (char*)hdr;
+	for(cnt = 0; cnt < sizeof(struct e8390_pkt_hdr); cnt++)
+	    *ptrc++ = inb(NE_BASE + NE_DATAPORT);
     }
 
     outb(ENISR_RDC, nic_base + NE_EN0_ISR);	/* Ack intr. */
@@ -449,14 +449,14 @@ apne_block_input(struct net_device *dev, int count, struct sk_buff *skb, int rin
     if (ei_status.word16) {
       ptrs = (short*)buf;
       for (cnt = 0; cnt < (count>>1); cnt++)
-        *ptrs++ = inw(NE_BASE + NE_DATAPORT);
+	*ptrs++ = inw(NE_BASE + NE_DATAPORT);
       if (count & 0x01) {
 	buf[count-1] = inb(NE_BASE + NE_DATAPORT);
       }
     } else {
       ptrc = (char*)buf;
       for (cnt = 0; cnt < count; cnt++)
-        *ptrc++ = inb(NE_BASE + NE_DATAPORT);
+	*ptrc++ = inb(NE_BASE + NE_DATAPORT);
     }
 
     outb(ENISR_RDC, nic_base + NE_EN0_ISR);	/* Ack intr. */
@@ -500,12 +500,12 @@ apne_block_output(struct net_device *dev, int count,
 
     outb(E8390_RWRITE+E8390_START, nic_base + NE_CMD);
     if (ei_status.word16) {
-        ptrs = (short*)buf;
-        for (cnt = 0; cnt < count>>1; cnt++)
-            outw(*ptrs++, NE_BASE+NE_DATAPORT);
+	ptrs = (short*)buf;
+	for (cnt = 0; cnt < count>>1; cnt++)
+	    outw(*ptrs++, NE_BASE+NE_DATAPORT);
     } else {
-        ptrc = (char*)buf;
-        for (cnt = 0; cnt < count; cnt++)
+	ptrc = (char*)buf;
+	for (cnt = 0; cnt < count; cnt++)
 	    outb(*ptrc++, NE_BASE + NE_DATAPORT);
     }
 
@@ -528,16 +528,16 @@ static irqreturn_t apne_interrupt(int irq, void *dev_id)
     unsigned char pcmcia_intreq;
 
     if (!(gayle.inten & GAYLE_IRQ_IRQ))
-        return IRQ_NONE;
+	return IRQ_NONE;
 
     pcmcia_intreq = pcmcia_get_intreq();
 
     if (!(pcmcia_intreq & GAYLE_IRQ_IRQ)) {
-        pcmcia_ack_int(pcmcia_intreq);
-        return IRQ_NONE;
+	pcmcia_ack_int(pcmcia_intreq);
+	return IRQ_NONE;
     }
     if (ei_debug > 3)
-        printk("pcmcia intreq = %x\n", pcmcia_intreq);
+	printk("pcmcia intreq = %x\n", pcmcia_intreq);
     pcmcia_disable_irq();			/* to get rid of the sti() within ei_interrupt */
     ei_interrupt(irq, dev_id);
     pcmcia_ack_int(pcmcia_get_intreq());

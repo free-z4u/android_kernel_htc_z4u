@@ -190,7 +190,7 @@ static struct usb_driver mts_usb_driver = {
 	do { MTS_DEBUG_GOT_HERE(); \
 	     MTS_DEBUG("transfer = 0x%x context = 0x%x\n",(int)transfer,(int)context ); \
 	     MTS_DEBUG("status = 0x%x data-length = 0x%x sent = 0x%x\n",transfer->status,(int)context->data_length, (int)transfer->actual_length ); \
-             mts_debug_dump(context->instance);\
+	     mts_debug_dump(context->instance);\
 	   } while(0)
 #else
 
@@ -462,12 +462,12 @@ static void mts_command_done( struct urb *transfer )
 		        /* We are being killed */
 			MTS_DEBUG_GOT_HERE();
 			context->srb->result = DID_ABORT<<16;
-                } else {
+		} else {
 		        /* A genuine error has occurred */
 			MTS_DEBUG_GOT_HERE();
 
 		        context->srb->result = DID_ERROR<<16;
-                }
+		}
 		mts_transfer_cleanup(transfer);
 
 		return;
@@ -502,9 +502,9 @@ static void mts_do_sg (struct urb* transfer)
 	                                          scsi_sg_count(context->srb));
 
 	if (unlikely(status)) {
-                context->srb->result = (status == -ENOENT ? DID_ABORT : DID_ERROR)<<16;
+		context->srb->result = (status == -ENOENT ? DID_ABORT : DID_ERROR)<<16;
 		mts_transfer_cleanup(transfer);
-        }
+	}
 
 	sg = scsi_sglist(context->srb);
 	context->fragment++;

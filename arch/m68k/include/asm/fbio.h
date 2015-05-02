@@ -47,21 +47,21 @@
 /* fbio ioctls */
 /* Returned by FBIOGTYPE */
 struct  fbtype {
-        int     fb_type;        /* fb type, see above */
-        int     fb_height;      /* pixels */
-        int     fb_width;       /* pixels */
-        int     fb_depth;
-        int     fb_cmsize;      /* color map entries */
-        int     fb_size;        /* fb size in bytes */
+	int     fb_type;        /* fb type, see above */
+	int     fb_height;      /* pixels */
+	int     fb_width;       /* pixels */
+	int     fb_depth;
+	int     fb_cmsize;      /* color map entries */
+	int     fb_size;        /* fb size in bytes */
 };
 #define FBIOGTYPE _IOR('F', 0, struct fbtype)
 
 struct  fbcmap {
-        int             index;          /* first element (0 origin) */
-        int             count;
-        unsigned char   __user *red;
-        unsigned char   __user *green;
-        unsigned char   __user *blue;
+	int             index;          /* first element (0 origin) */
+	int             count;
+	unsigned char   __user *red;
+	unsigned char   __user *green;
+	unsigned char   __user *blue;
 };
 
 #ifdef __KERNEL__
@@ -78,17 +78,17 @@ struct  fbcmap {
 #define FB_ATTR_NEMUTYPES       4
 
 struct fbsattr {
-        int     flags;
-        int     emu_type;	/* -1 if none */
-        int     dev_specific[FB_ATTR_NDEVSPECIFIC];
+	int     flags;
+	int     emu_type;	/* -1 if none */
+	int     dev_specific[FB_ATTR_NDEVSPECIFIC];
 };
 
 struct fbgattr {
-        int     real_type;	/* real frame buffer type */
-        int     owner;		/* unknown */
-        struct fbtype fbtype;	/* real frame buffer fbtype */
-        struct fbsattr sattr;
-        int     emu_types[FB_ATTR_NEMUTYPES]; /* supported emulations */
+	int     real_type;	/* real frame buffer type */
+	int     owner;		/* unknown */
+	struct fbtype fbtype;	/* real frame buffer fbtype */
+	struct fbsattr sattr;
+	int     emu_types[FB_ATTR_NEMUTYPES]; /* supported emulations */
 };
 #define FBIOSATTR  _IOW('F', 5, struct fbgattr) /* Unsupported: */
 #define FBIOGATTR  _IOR('F', 6, struct fbgattr)	/* supported */
@@ -97,14 +97,14 @@ struct fbgattr {
 #define FBIOGVIDEO _IOR('F', 8, int)
 
 struct fbcursor {
-        short set;              /* what to set, choose from the list above */
-        short enable;           /* cursor on/off */
-        struct fbcurpos pos;    /* cursor position */
-        struct fbcurpos hot;    /* cursor hot spot */
-        struct fbcmap cmap;     /* color map info */
-        struct fbcurpos size;   /* cursor bit map size */
-        char __user *image;     /* cursor image bits */
-        char __user *mask;      /* cursor mask bits */
+	short set;              /* what to set, choose from the list above */
+	short enable;           /* cursor on/off */
+	struct fbcurpos pos;    /* cursor position */
+	struct fbcurpos hot;    /* cursor hot spot */
+	struct fbcmap cmap;     /* color map info */
+	struct fbcurpos size;   /* cursor bit map size */
+	char __user *image;     /* cursor image bits */
+	char __user *mask;      /* cursor mask bits */
 };
 
 /* set/get cursor attributes/shape */
@@ -171,12 +171,12 @@ struct fb_wid_list {
 
 struct mdi_cfginfo {
 	int     mdi_ncluts;     /* Number of implemented CLUTs in this MDI */
-        int     mdi_type;       /* FBTYPE name */
-        int     mdi_height;     /* height */
-        int     mdi_width;      /* width */
-        int     mdi_size;       /* available ram */
-        int     mdi_mode;       /* 8bpp, 16bpp or 32bpp */
-        int     mdi_pixfreq;    /* pixel clock (from PROM) */
+	int     mdi_type;       /* FBTYPE name */
+	int     mdi_height;     /* height */
+	int     mdi_width;      /* width */
+	int     mdi_size;       /* available ram */
+	int     mdi_mode;       /* 8bpp, 16bpp or 32bpp */
+	int     mdi_pixfreq;    /* pixel clock (from PROM) */
 };
 
 /* SparcLinux specific ioctl for the MDI, should be replaced for

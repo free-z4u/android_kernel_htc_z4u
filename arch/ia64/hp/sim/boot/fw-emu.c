@@ -197,28 +197,28 @@ sal_emulator (long index, unsigned long in1, unsigned long in2,
 		 * the size of the read.  The value that is read is
 		 * returned via the general register r9.
 		 */
-                outl(BUILD_CMD(in1), 0xCF8);
-                if (in2 == 1)                           /* Reading byte  */
-                        r9 = inb(0xCFC + ((REG_OFFSET(in1) & 3)));
-                else if (in2 == 2)                      /* Reading word  */
-                        r9 = inw(0xCFC + ((REG_OFFSET(in1) & 2)));
-                else                                    /* Reading dword */
-                        r9 = inl(0xCFC);
-                status = PCIBIOS_SUCCESSFUL;
+		outl(BUILD_CMD(in1), 0xCF8);
+		if (in2 == 1)                           /* Reading byte  */
+			r9 = inb(0xCFC + ((REG_OFFSET(in1) & 3)));
+		else if (in2 == 2)                      /* Reading word  */
+			r9 = inw(0xCFC + ((REG_OFFSET(in1) & 2)));
+		else                                    /* Reading dword */
+			r9 = inl(0xCFC);
+		status = PCIBIOS_SUCCESSFUL;
 	} else if (index == SAL_PCI_CONFIG_WRITE) {
 	      	/*
 		 * in1 contains the PCI configuration address, in2 the
 		 * size of the write, and in3 the actual value to be
 		 * written out.
 		 */
-                outl(BUILD_CMD(in1), 0xCF8);
-                if (in2 == 1)                           /* Writing byte  */
-                        outb(in3, 0xCFC + ((REG_OFFSET(in1) & 3)));
-                else if (in2 == 2)                      /* Writing word  */
-                        outw(in3, 0xCFC + ((REG_OFFSET(in1) & 2)));
-                else                                    /* Writing dword */
-                        outl(in3, 0xCFC);
-                status = PCIBIOS_SUCCESSFUL;
+		outl(BUILD_CMD(in1), 0xCF8);
+		if (in2 == 1)                           /* Writing byte  */
+			outb(in3, 0xCFC + ((REG_OFFSET(in1) & 3)));
+		else if (in2 == 2)                      /* Writing word  */
+			outw(in3, 0xCFC + ((REG_OFFSET(in1) & 2)));
+		else                                    /* Writing dword */
+			outl(in3, 0xCFC);
+		status = PCIBIOS_SUCCESSFUL;
 #endif /* CONFIG_PCI */
 	} else if (index == SAL_UPDATE_PAL) {
 		;
@@ -312,8 +312,8 @@ sys_fw_init (const char *args, int arglen)
 	sal_systab->entry_count = 1;
 
 #ifdef CONFIG_IA64_GENERIC
-        strcpy(sal_systab->oem_id, "Generic");
-        strcpy(sal_systab->product_id, "IA-64 system");
+	strcpy(sal_systab->oem_id, "Generic");
+	strcpy(sal_systab->product_id, "IA-64 system");
 #endif
 
 #ifdef CONFIG_IA64_HP_SIM

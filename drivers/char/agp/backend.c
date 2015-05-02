@@ -253,10 +253,10 @@ EXPORT_SYMBOL(agp_alloc_bridge);
 
 void agp_put_bridge(struct agp_bridge_data *bridge)
 {
-        kfree(bridge);
+	kfree(bridge);
 
-        if (list_empty(&agp_bridges))
-                agp_bridge = NULL;
+	if (list_empty(&agp_bridges))
+		agp_bridge = NULL;
 }
 EXPORT_SYMBOL(agp_put_bridge);
 

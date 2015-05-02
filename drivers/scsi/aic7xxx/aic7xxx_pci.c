@@ -643,8 +643,8 @@ ahc_9005_subdevinfo_valid(uint16_t device, uint16_t vendor,
 	result = 0;
 	if (vendor == 0x9005
 	 && subvendor == 0x9005
-         && subdevice != device
-         && SUBID_9005_TYPE_KNOWN(subdevice) != 0) {
+	 && subdevice != device
+	 && SUBID_9005_TYPE_KNOWN(subdevice) != 0) {
 
 		switch (SUBID_9005_TYPE(subdevice)) {
 		case SUBID_9005_TYPE_MB:

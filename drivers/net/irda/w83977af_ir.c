@@ -88,7 +88,7 @@ static struct w83977af_ir *dev_self[] = { NULL, NULL, NULL, NULL};
 
 /* Some prototypes */
 static int  w83977af_open(int i, unsigned int iobase, unsigned int irq,
-                          unsigned int dma);
+			  unsigned int dma);
 static int  w83977af_close(struct w83977af_ir *self);
 static int  w83977af_probe(int iobase, int irq, int dma);
 static int  w83977af_dma_receive(struct w83977af_ir *self);
@@ -112,7 +112,7 @@ static int  w83977af_net_ioctl(struct net_device *dev, struct ifreq *rq, int cmd
  */
 static int __init w83977af_init(void)
 {
-        int i;
+	int i;
 
 	IRDA_DEBUG(0, "%s()\n", __func__ );
 
@@ -133,7 +133,7 @@ static void __exit w83977af_cleanup(void)
 {
 	int i;
 
-        IRDA_DEBUG(4, "%s()\n", __func__ );
+	IRDA_DEBUG(4, "%s()\n", __func__ );
 
 	for (i=0; i < ARRAY_SIZE(dev_self); i++) {
 		if (dev_self[i])
@@ -158,7 +158,7 @@ static int w83977af_open(int i, unsigned int iobase, unsigned int irq,
 			 unsigned int dma)
 {
 	struct net_device *dev;
-        struct w83977af_ir *self;
+	struct w83977af_ir *self;
 	int err;
 
 	IRDA_DEBUG(0, "%s()\n", __func__ );
@@ -191,10 +191,10 @@ static int w83977af_open(int i, unsigned int iobase, unsigned int irq,
 
 	/* Initialize IO */
 	self->io.fir_base   = iobase;
-        self->io.irq       = irq;
-        self->io.fir_ext   = CHIP_IO_EXTENT;
-        self->io.dma       = dma;
-        self->io.fifo_size = 32;
+	self->io.irq       = irq;
+	self->io.fir_ext   = CHIP_IO_EXTENT;
+	self->io.dma       = dma;
+	self->io.fifo_size = 32;
 
 	/* Initialize QoS for this device */
 	irda_init_max_qos_capabilies(&self->qos);
@@ -277,7 +277,7 @@ static int w83977af_close(struct w83977af_ir *self)
 
 	IRDA_DEBUG(0, "%s()\n", __func__ );
 
-        iobase = self->io.fir_base;
+	iobase = self->io.fir_base;
 
 #ifdef CONFIG_USE_W977_PNP
 	/* enter PnP configuration mode */
@@ -570,7 +570,7 @@ static void w83977af_dma_write(struct w83977af_ir *self, int iobase)
 	unsigned long flags;
 	__u8 hcr;
 #endif
-        IRDA_DEBUG(4, "%s(), len=%d\n", __func__ , self->tx_buff.len);
+	IRDA_DEBUG(4, "%s(), len=%d\n", __func__ , self->tx_buff.len);
 
 	/* Save current set */
 	set = inb(iobase+SSR);

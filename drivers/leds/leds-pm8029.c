@@ -166,18 +166,18 @@ static ssize_t pm8029_led_blink_store(struct device *dev,
 			break;
 		case 2:
 			cancel_delayed_work_sync(&ldata->blink_work);
-                        atomic_set(&ldata->blink, BLINK_64MS_PER_2S);
-                        queue_delayed_work(led_wq, &ldata->blink_work, msecs_to_jiffies(314));
-                        break;
+			atomic_set(&ldata->blink, BLINK_64MS_PER_2S);
+			queue_delayed_work(led_wq, &ldata->blink_work, msecs_to_jiffies(314));
+			break;
 		case 3:
 			cancel_delayed_work_sync(&ldata->blink_work);
 			atomic_set(&ldata->blink, BLINK_64MS_PER_2S);
-                        queue_delayed_work(led_wq, &ldata->blink_work, msecs_to_jiffies(1000));
-                        break;
+			queue_delayed_work(led_wq, &ldata->blink_work, msecs_to_jiffies(1000));
+			break;
 		case 4:
 			atomic_set(&ldata->blink, BLINK_1S_PER_2S);
-                        pm8029_led_control(ldata);
-                        break;
+			pm8029_led_control(ldata);
+			break;
 		default:
 			return -EINVAL;
 	}
@@ -190,10 +190,10 @@ static ssize_t pm8029_led_blink_show(struct device *dev,
 				char *buf)
 {
 	struct pm8029_led_data *ldata;
-        struct led_classdev *led_cdev;
+	struct led_classdev *led_cdev;
 
-        led_cdev = (struct led_classdev *) dev_get_drvdata(dev);
-        ldata = container_of(led_cdev, struct pm8029_led_data, ldev);
+	led_cdev = (struct led_classdev *) dev_get_drvdata(dev);
+	ldata = container_of(led_cdev, struct pm8029_led_data, ldev);
 
 	return sprintf(buf, "%d\n", atomic_read(&ldata->blink));
 }
@@ -386,27 +386,27 @@ static int pm8029_led_probe(struct platform_device *pdev)
 	}
 
 
-        for (i = 0; i < pdata->num_leds; i++) {
-                ret = device_create_file(ldata[i].ldev.dev, &dev_attr_off_timer);
-                if (ret < 0){
-                        LED_ERR_LOG("%s: Failed to vreate attr off_timer [%d]\n",
-                                        __func__, i);
-                        goto err_register_attr_off_timer;
-                }
+	for (i = 0; i < pdata->num_leds; i++) {
+		ret = device_create_file(ldata[i].ldev.dev, &dev_attr_off_timer);
+		if (ret < 0){
+			LED_ERR_LOG("%s: Failed to vreate attr off_timer [%d]\n",
+					__func__, i);
+			goto err_register_attr_off_timer;
+		}
 		INIT_DELAYED_WORK(&ldata[i].blink_work, led_do_blink);
 		INIT_WORK(&ldata[i].off_timer_work, led_work_func);
 		alarm_init(&ldata[i].off_timer_alarm,
 			ANDROID_ALARM_ELAPSED_REALTIME_WAKEUP,
 			led_alarm_handler);
-        }
+	}
 
 	LED_INFO_LOG("%s: probe ok!\n",__func__);
 	return 0;
 
 err_register_attr_off_timer:
 	for (i--; i >= 0; i--) {
-                device_remove_file(ldata[i].ldev.dev, &dev_attr_off_timer);
-        }
+		device_remove_file(ldata[i].ldev.dev, &dev_attr_off_timer);
+	}
 
 err_register_attr_blink:
 	i = pdata->num_leds;

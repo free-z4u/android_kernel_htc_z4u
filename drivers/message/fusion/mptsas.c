@@ -1197,7 +1197,7 @@ static int
 mptsas_taskmgmt_complete(MPT_ADAPTER *ioc, MPT_FRAME_HDR *mf, MPT_FRAME_HDR *mr)
 {
 	MPT_SCSI_HOST	*hd = shost_priv(ioc->sh);
-        struct list_head *head = &hd->target_reset_list;
+	struct list_head *head = &hd->target_reset_list;
 	u8		id, channel;
 	struct mptsas_target_reset_event	*target_reset_list;
 	SCSITaskMgmtReply_t *pScsiTmReply;
@@ -5200,7 +5200,7 @@ mptsas_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 			ioc->name);
 		error = -1;
 		goto out_mptsas_probe;
-        }
+	}
 
 	spin_lock_irqsave(&ioc->FreeQlock, flags);
 

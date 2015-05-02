@@ -32,16 +32,16 @@
 #define H8300_GPIO_OUTPUT 1
 
 #define H8300_GPIO_RESERVE(port, bits) \
-        h8300_reserved_gpio(port, bits)
+	h8300_reserved_gpio(port, bits)
 
 #define H8300_GPIO_FREE(port, bits) \
-        h8300_free_gpio(port, bits)
+	h8300_free_gpio(port, bits)
 
 #define H8300_GPIO_DDR(port, bit, dir) \
-        h8300_set_gpio_dir(((port) << 8) | (bit), dir)
+	h8300_set_gpio_dir(((port) << 8) | (bit), dir)
 
 #define H8300_GPIO_GETDIR(port, bit) \
-        h8300_get_gpio_dir(((port) << 8) | (bit))
+	h8300_get_gpio_dir(((port) << 8) | (bit))
 
 extern int h8300_reserved_gpio(int port, int bits);
 extern int h8300_free_gpio(int port, int bits);

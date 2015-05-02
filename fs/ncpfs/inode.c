@@ -711,12 +711,12 @@ static int ncp_fill_super(struct super_block *sb, void *raw_data, int silent)
 	server->name_space[finfo.volume] = NW_NS_DOS;
 
 	error = -ENOMEM;
-        root_inode = ncp_iget(sb, &finfo);
-        if (!root_inode)
+	root_inode = ncp_iget(sb, &finfo);
+	if (!root_inode)
 		goto out_disconnect;
 	DPRINTK("ncp_fill_super: root vol=%d\n", NCP_FINFO(root_inode)->volNumber);
 	sb->s_root = d_make_root(root_inode);
-        if (!sb->s_root)
+	if (!sb->s_root)
 		goto out_disconnect;
 	return 0;
 
@@ -898,14 +898,14 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 	memset(&info, 0, sizeof(info));
 
 #if 1
-        if ((attr->ia_valid & ATTR_MODE) != 0)
-        {
+	if ((attr->ia_valid & ATTR_MODE) != 0)
+	{
 		umode_t newmode = attr->ia_mode;
 
 		info_mask |= DM_ATTRIBUTES;
 
-                if (S_ISDIR(inode->i_mode)) {
-                	newmode &= server->m.dir_mode;
+		if (S_ISDIR(inode->i_mode)) {
+			newmode &= server->m.dir_mode;
 		} else {
 #ifdef CONFIG_NCPFS_EXTRAS
 			if (server->m.flags & NCP_MOUNT_EXTRAS) {
@@ -918,10 +918,10 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 			} else
 #endif
 				newmode &= server->m.file_mode;
-                }
-                if (newmode & S_IWUGO)
-                	info.attributes &= ~(aRONLY|aRENAMEINHIBIT|aDELETEINHIBIT);
-                else
+		}
+		if (newmode & S_IWUGO)
+			info.attributes &= ~(aRONLY|aRENAMEINHIBIT|aDELETEINHIBIT);
+		else
 			info.attributes |=  (aRONLY|aRENAMEINHIBIT|aDELETEINHIBIT);
 
 #ifdef CONFIG_NCPFS_NFS_NS
@@ -945,7 +945,7 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 			}
 		}
 #endif
-        }
+	}
 #endif
 
 	/* Do SIZE before attributes, otherwise mtime together with size does not work...

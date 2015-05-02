@@ -211,8 +211,8 @@ struct ip_mc_list {
 #define IGMPV3_MASK(value, nb) ((nb)>=32 ? (value) : ((1<<(nb))-1) & (value))
 #define IGMPV3_EXP(thresh, nbmant, nbexp, value) \
 	((value) < (thresh) ? (value) : \
-        ((IGMPV3_MASK(value, nbmant) | (1<<(nbmant))) << \
-         (IGMPV3_MASK((value) >> (nbmant), nbexp) + (nbexp))))
+	((IGMPV3_MASK(value, nbmant) | (1<<(nbmant))) << \
+	 (IGMPV3_MASK((value) >> (nbmant), nbexp) + (nbexp))))
 
 #define IGMPV3_QQIC(value) IGMPV3_EXP(0x80, 4, 3, value)
 #define IGMPV3_MRC(value) IGMPV3_EXP(0x80, 4, 3, value)

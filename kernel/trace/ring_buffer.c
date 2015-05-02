@@ -287,7 +287,7 @@ unsigned ring_buffer_event_length(struct ring_buffer_event *event)
 		return length;
 	length -= RB_EVNT_HDR_SIZE;
 	if (length > RB_MAX_SMALL_DATA + sizeof(event->array[0]))
-                length -= sizeof(event->array[0]);
+		length -= sizeof(event->array[0]);
 	return length;
 }
 EXPORT_SYMBOL_GPL(ring_buffer_event_length);

@@ -84,7 +84,7 @@ static bool spr_allowed(struct kvm_vcpu *vcpu, enum priv_level level)
 }
 
 int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                           unsigned int inst, int *advance)
+			   unsigned int inst, int *advance)
 {
 	int emulated = EMULATE_DONE;
 
@@ -269,7 +269,7 @@ int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
 }
 
 void kvmppc_set_bat(struct kvm_vcpu *vcpu, struct kvmppc_bat *bat, bool upper,
-                    u32 val)
+		    u32 val)
 {
 	if (upper) {
 		/* Upper BAT */

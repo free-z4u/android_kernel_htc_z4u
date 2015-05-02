@@ -2102,7 +2102,7 @@ static void sym_setwide(struct sym_hcb *np, int target, u_char wide)
  */
 static void
 sym_setsync(struct sym_hcb *np, int target,
-            u_char ofs, u_char per, u_char div, u_char fak)
+	    u_char ofs, u_char per, u_char div, u_char fak)
 {
 	struct sym_tcb *tp = &np->target[target];
 	struct scsi_target *starget = tp->starget;
@@ -2135,7 +2135,7 @@ sym_setsync(struct sym_hcb *np, int target,
  */
 static void
 sym_setpprot(struct sym_hcb *np, int target, u_char opts, u_char ofs,
-             u_char per, u_char wide, u_char div, u_char fak)
+	     u_char per, u_char wide, u_char div, u_char fak)
 {
 	struct sym_tcb *tp = &np->target[target];
 	struct scsi_target *starget = tp->starget;
@@ -2406,7 +2406,7 @@ static void sym_int_ma (struct sym_hcb *np)
 	u32	*vdsp;
 	u32	oadr, olen;
 	u32	*tblp;
-        u32	newcmd;
+	u32	newcmd;
 	u_int	delta;
 	u_char	cmd;
 	u_char	hflags, hflags0;
@@ -3726,7 +3726,7 @@ static int sym_evaluate_dp(struct sym_hcb *np, struct sym_ccb *cp, u32 scr, int 
 	 *  Save the extreme pointer if needed.
 	 */
 	if (dp_sg > cp->ext_sg ||
-            (dp_sg == cp->ext_sg && dp_ofs > cp->ext_ofs)) {
+	    (dp_sg == cp->ext_sg && dp_ofs > cp->ext_ofs)) {
 		cp->ext_sg  = dp_sg;
 		cp->ext_ofs = dp_ofs;
 	}

@@ -793,7 +793,7 @@ static int __devinit snd_mts64_rawmidi_create(struct snd_card *card)
 	strcpy(rmidi->name, CARD_NAME);
 	rmidi->info_flags = SNDRV_RAWMIDI_INFO_OUTPUT |
 		            SNDRV_RAWMIDI_INFO_INPUT |
-                            SNDRV_RAWMIDI_INFO_DUPLEX;
+			    SNDRV_RAWMIDI_INFO_DUPLEX;
 
 	mts->rmidi = rmidi;
 

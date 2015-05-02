@@ -47,7 +47,7 @@ extern void dvma_free(void *vaddr);
    byte boundaries */
 #define DVMA_REGION_SIZE 0x10000
 #define DVMA_ALIGN(addr) (((addr)+DVMA_REGION_SIZE-1) & \
-                         ~(DVMA_REGION_SIZE-1))
+			 ~(DVMA_REGION_SIZE-1))
 
 /* virt <-> phys conversions */
 #define dvma_vtop(x) ((unsigned long)(x) & 0xffffff)
@@ -202,9 +202,9 @@ extern struct Linux_SBus_DMA *dma_chain;
 #define DMA_PUNTFIFO(regs) ((((regs)->cond_reg) |= DMA_FIFO_INV))
 #define DMA_SETSTART(regs, addr)  ((((regs)->st_addr) = (char *) addr))
 #define DMA_BEGINDMA_W(regs) \
-        ((((regs)->cond_reg |= (DMA_ST_WRITE|DMA_ENABLE|DMA_INT_ENAB))))
+	((((regs)->cond_reg |= (DMA_ST_WRITE|DMA_ENABLE|DMA_INT_ENAB))))
 #define DMA_BEGINDMA_R(regs) \
-        ((((regs)->cond_reg |= ((DMA_ENABLE|DMA_INT_ENAB)&(~DMA_ST_WRITE)))))
+	((((regs)->cond_reg |= ((DMA_ENABLE|DMA_INT_ENAB)&(~DMA_ST_WRITE)))))
 
 /* For certain DMA chips, we need to disable ints upon irq entry
  * and turn them back on when we are done.  So in any ESP interrupt
@@ -212,7 +212,7 @@ extern struct Linux_SBus_DMA *dma_chain;
  * when leaving the handler.  You have been warned...
  */
 #define DMA_IRQ_ENTRY(dma, dregs) do { \
-        if(DMA_ISBROKEN(dma)) DMA_INTSOFF(dregs); \
+	if(DMA_ISBROKEN(dma)) DMA_INTSOFF(dregs); \
    } while (0)
 
 #define DMA_IRQ_EXIT(dma, dregs) do { \

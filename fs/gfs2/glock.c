@@ -776,7 +776,7 @@ int gfs2_glock_get(struct gfs2_sbd *sdp, u64 number,
 
 	mapping = gfs2_glock2aspace(gl);
 	if (mapping) {
-                mapping->a_ops = &gfs2_meta_aops;
+		mapping->a_ops = &gfs2_meta_aops;
 		mapping->host = s->s_bdev->bd_inode;
 		mapping->flags = 0;
 		mapping_set_gfp_mask(mapping, GFP_NOFS);
@@ -871,8 +871,8 @@ void gfs2_holder_uninit(struct gfs2_holder *gh)
 
 static int gfs2_glock_holder_wait(void *word)
 {
-        schedule();
-        return 0;
+	schedule();
+	return 0;
 }
 
 static int gfs2_glock_demote_wait(void *word)
@@ -1791,7 +1791,7 @@ static int gfs2_sbstats_seq_show(struct seq_file *seq, void *iter_ptr)
 		   (index == 0) ? "cpu": gfs2_stype[subindex]);
 
 	for_each_possible_cpu(i) {
-                const struct gfs2_pcpu_lkstats *lkstats = per_cpu_ptr(sdp->sd_lkstats, i);
+		const struct gfs2_pcpu_lkstats *lkstats = per_cpu_ptr(sdp->sd_lkstats, i);
 		if (index == 0) {
 			value = i;
 		} else {

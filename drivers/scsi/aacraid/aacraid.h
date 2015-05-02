@@ -255,14 +255,14 @@ struct aac_qhdr {
  */
 
 enum aac_queue_types {
-        HostNormCmdQueue = 0,	/* Adapter to host normal priority command traffic */
-        HostHighCmdQueue,	/* Adapter to host high priority command traffic */
-        AdapNormCmdQueue,	/* Host to adapter normal priority command traffic */
-        AdapHighCmdQueue,	/* Host to adapter high priority command traffic */
-        HostNormRespQueue,	/* Adapter to host normal priority response traffic */
-        HostHighRespQueue,	/* Adapter to host high priority response traffic */
-        AdapNormRespQueue,	/* Host to adapter normal priority response traffic */
-        AdapHighRespQueue	/* Host to adapter high priority response traffic */
+	HostNormCmdQueue = 0,	/* Adapter to host normal priority command traffic */
+	HostHighCmdQueue,	/* Adapter to host high priority command traffic */
+	AdapNormCmdQueue,	/* Host to adapter normal priority command traffic */
+	AdapHighCmdQueue,	/* Host to adapter high priority command traffic */
+	HostNormRespQueue,	/* Adapter to host normal priority response traffic */
+	HostHighRespQueue,	/* Adapter to host high priority response traffic */
+	AdapNormRespQueue,	/* Host to adapter normal priority response traffic */
+	AdapHighRespQueue	/* Host to adapter high priority response traffic */
 };
 
 /*

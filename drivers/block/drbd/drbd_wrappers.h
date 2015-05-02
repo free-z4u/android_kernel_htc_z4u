@@ -47,8 +47,8 @@ static inline void drbd_generic_make_request(struct drbd_conf *mdev,
 
 static inline int drbd_crypto_is_hash(struct crypto_tfm *tfm)
 {
-        return (crypto_tfm_alg_type(tfm) & CRYPTO_ALG_TYPE_HASH_MASK)
-                == CRYPTO_ALG_TYPE_HASH;
+	return (crypto_tfm_alg_type(tfm) & CRYPTO_ALG_TYPE_HASH_MASK)
+		== CRYPTO_ALG_TYPE_HASH;
 }
 
 #ifndef __CHECKER__

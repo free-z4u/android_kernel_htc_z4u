@@ -3,5 +3,5 @@ config BCM_WIMAX
        depends on USB && NET && EXPERIMENTAL
        default N
        help
-         This is an experimental driver for the Beceem WIMAX chipset used
+	 This is an experimental driver for the Beceem WIMAX chipset used
 	 by Sprint 4G.

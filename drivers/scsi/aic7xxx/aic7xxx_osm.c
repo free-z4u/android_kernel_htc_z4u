@@ -1695,22 +1695,22 @@ ahc_send_async(struct ahc_softc *ahc, char channel,
 		spi_display_xfer_agreement(starget);
 		break;
 	}
-        case AC_SENT_BDR:
+	case AC_SENT_BDR:
 	{
 		WARN_ON(lun != CAM_LUN_WILDCARD);
 		scsi_report_device_reset(ahc->platform_data->host,
 					 channel - 'A', target);
 		break;
 	}
-        case AC_BUS_RESET:
+	case AC_BUS_RESET:
 		if (ahc->platform_data->host != NULL) {
 			scsi_report_bus_reset(ahc->platform_data->host,
 					      channel - 'A');
 		}
-                break;
-        default:
-                panic("ahc_send_async: Unexpected async event");
-        }
+		break;
+	default:
+		panic("ahc_send_async: Unexpected async event");
+	}
 }
 
 /*

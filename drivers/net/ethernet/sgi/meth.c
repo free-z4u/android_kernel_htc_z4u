@@ -241,7 +241,7 @@ static int meth_init_rx_ring(struct meth_private *priv)
 				       METH_RX_BUFF_SIZE, DMA_FROM_DEVICE);
 		mace->eth.rx_fifo = priv->rx_ring_dmas[i];
 	}
-        priv->rx_write = 0;
+	priv->rx_write = 0;
 	return 0;
 }
 static void meth_free_tx_ring(struct meth_private *priv)

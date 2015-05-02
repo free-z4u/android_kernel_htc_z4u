@@ -809,7 +809,7 @@ void __init pmb_init(void)
 
 bool __in_29bit_mode(void)
 {
-        return (__raw_readl(PMB_PASCR) & PASCR_SE) == 0;
+	return (__raw_readl(PMB_PASCR) & PASCR_SE) == 0;
 }
 
 static int pmb_seq_show(struct seq_file *file, void *iter)

@@ -34,7 +34,7 @@
     /* unsigned int left, right;  int amount, dest; */		\
     if (amount == 0) dest = right;				\
     else dest = ((((unsigned) left)&0x7fffffff) << (32-(amount))) |	\
-          ((unsigned) right >> (amount))
+	  ((unsigned) right >> (amount))
 
 /* amount must be between 0 and 32 (non-inclusive) */
 #define Variable_shift_double(left,right,amount,dest)		\

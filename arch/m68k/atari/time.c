@@ -116,50 +116,50 @@ int atari_mste_hwclk( int op, struct rtc_time *t )
     mste_rtc.mode=(mste_rtc.mode & ~1);
 
     if (op) {
-        /* write: prepare values */
+	/* write: prepare values */
 
-        val.sec_ones = t->tm_sec % 10;
-        val.sec_tens = t->tm_sec / 10;
-        val.min_ones = t->tm_min % 10;
-        val.min_tens = t->tm_min / 10;
-        hour = t->tm_hour;
-        if (!hr24) {
+	val.sec_ones = t->tm_sec % 10;
+	val.sec_tens = t->tm_sec / 10;
+	val.min_ones = t->tm_min % 10;
+	val.min_tens = t->tm_min / 10;
+	hour = t->tm_hour;
+	if (!hr24) {
 	    if (hour > 11)
 		hour += 20 - 12;
 	    if (hour == 0 || hour == 20)
 		hour += 12;
-        }
-        val.hr_ones = hour % 10;
-        val.hr_tens = hour / 10;
-        val.day_ones = t->tm_mday % 10;
-        val.day_tens = t->tm_mday / 10;
-        val.mon_ones = (t->tm_mon+1) % 10;
-        val.mon_tens = (t->tm_mon+1) / 10;
-        year = t->tm_year - 80;
-        val.year_ones = year % 10;
-        val.year_tens = year / 10;
-        val.weekday = t->tm_wday;
-        mste_write(&val);
-        mste_rtc.mode=(mste_rtc.mode | 1);
-        val.year_ones = (year % 4);	/* leap year register */
-        mste_rtc.mode=(mste_rtc.mode & ~1);
+	}
+	val.hr_ones = hour % 10;
+	val.hr_tens = hour / 10;
+	val.day_ones = t->tm_mday % 10;
+	val.day_tens = t->tm_mday / 10;
+	val.mon_ones = (t->tm_mon+1) % 10;
+	val.mon_tens = (t->tm_mon+1) / 10;
+	year = t->tm_year - 80;
+	val.year_ones = year % 10;
+	val.year_tens = year / 10;
+	val.weekday = t->tm_wday;
+	mste_write(&val);
+	mste_rtc.mode=(mste_rtc.mode | 1);
+	val.year_ones = (year % 4);	/* leap year register */
+	mste_rtc.mode=(mste_rtc.mode & ~1);
     }
     else {
-        mste_read(&val);
-        t->tm_sec = val.sec_ones + val.sec_tens * 10;
-        t->tm_min = val.min_ones + val.min_tens * 10;
-        hour = val.hr_ones + val.hr_tens * 10;
+	mste_read(&val);
+	t->tm_sec = val.sec_ones + val.sec_tens * 10;
+	t->tm_min = val.min_ones + val.min_tens * 10;
+	hour = val.hr_ones + val.hr_tens * 10;
 	if (!hr24) {
 	    if (hour == 12 || hour == 12 + 20)
 		hour -= 12;
 	    if (hour >= 20)
-                hour += 12 - 20;
-        }
+		hour += 12 - 20;
+	}
 	t->tm_hour = hour;
 	t->tm_mday = val.day_ones + val.day_tens * 10;
-        t->tm_mon  = val.mon_ones + val.mon_tens * 10 - 1;
-        t->tm_year = val.year_ones + val.year_tens * 10 + 80;
-        t->tm_wday = val.weekday;
+	t->tm_mon  = val.mon_ones + val.mon_tens * 10 - 1;
+	t->tm_year = val.year_ones + val.year_tens * 10 + 80;
+	t->tm_wday = val.weekday;
     }
     return 0;
 }
@@ -172,20 +172,20 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
     int pm = 0;
 
     ctrl = RTC_READ(RTC_CONTROL); /* control registers are
-                                   * independent from the UIP */
+				   * independent from the UIP */
 
     if (op) {
-        /* write: prepare values */
+	/* write: prepare values */
 
-        sec  = t->tm_sec;
-        min  = t->tm_min;
-        hour = t->tm_hour;
-        day  = t->tm_mday;
-        mon  = t->tm_mon + 1;
-        year = t->tm_year - atari_rtc_year_offset;
-        wday = t->tm_wday + (t->tm_wday >= 0);
+	sec  = t->tm_sec;
+	min  = t->tm_min;
+	hour = t->tm_hour;
+	day  = t->tm_mday;
+	mon  = t->tm_mon + 1;
+	year = t->tm_year - atari_rtc_year_offset;
+	wday = t->tm_wday + (t->tm_wday >= 0);
 
-        if (!(ctrl & RTC_24H)) {
+	if (!(ctrl & RTC_24H)) {
 	    if (hour > 11) {
 		pm = 0x80;
 		if (hour != 12)
@@ -193,9 +193,9 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
 	    }
 	    else if (hour == 0)
 		hour = 12;
-        }
+	}
 
-        if (!(ctrl & RTC_DM_BINARY)) {
+	if (!(ctrl & RTC_DM_BINARY)) {
 	    sec = bin2bcd(sec);
 	    min = bin2bcd(min);
 	    hour = bin2bcd(hour);
@@ -204,7 +204,7 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
 	    year = bin2bcd(year);
 	    if (wday >= 0)
 		wday = bin2bcd(wday);
-        }
+	}
     }
 
     /* Reading/writing the clock registers is a bit critical due to
@@ -229,30 +229,30 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
     local_irq_save(flags);
     RTC_WRITE( RTC_CONTROL, ctrl | RTC_SET );
     if (!op) {
-        sec  = RTC_READ( RTC_SECONDS );
-        min  = RTC_READ( RTC_MINUTES );
-        hour = RTC_READ( RTC_HOURS );
-        day  = RTC_READ( RTC_DAY_OF_MONTH );
-        mon  = RTC_READ( RTC_MONTH );
-        year = RTC_READ( RTC_YEAR );
-        wday = RTC_READ( RTC_DAY_OF_WEEK );
+	sec  = RTC_READ( RTC_SECONDS );
+	min  = RTC_READ( RTC_MINUTES );
+	hour = RTC_READ( RTC_HOURS );
+	day  = RTC_READ( RTC_DAY_OF_MONTH );
+	mon  = RTC_READ( RTC_MONTH );
+	year = RTC_READ( RTC_YEAR );
+	wday = RTC_READ( RTC_DAY_OF_WEEK );
     }
     else {
-        RTC_WRITE( RTC_SECONDS, sec );
-        RTC_WRITE( RTC_MINUTES, min );
-        RTC_WRITE( RTC_HOURS, hour + pm);
-        RTC_WRITE( RTC_DAY_OF_MONTH, day );
-        RTC_WRITE( RTC_MONTH, mon );
-        RTC_WRITE( RTC_YEAR, year );
-        if (wday >= 0) RTC_WRITE( RTC_DAY_OF_WEEK, wday );
+	RTC_WRITE( RTC_SECONDS, sec );
+	RTC_WRITE( RTC_MINUTES, min );
+	RTC_WRITE( RTC_HOURS, hour + pm);
+	RTC_WRITE( RTC_DAY_OF_MONTH, day );
+	RTC_WRITE( RTC_MONTH, mon );
+	RTC_WRITE( RTC_YEAR, year );
+	if (wday >= 0) RTC_WRITE( RTC_DAY_OF_WEEK, wday );
     }
     RTC_WRITE( RTC_CONTROL, ctrl & ~RTC_SET );
     local_irq_restore(flags);
 
     if (!op) {
-        /* read: adjust values */
+	/* read: adjust values */
 
-        if (hour & 0x80) {
+	if (hour & 0x80) {
 	    hour &= ~0x80;
 	    pm = 1;
 	}
@@ -265,22 +265,22 @@ int atari_tt_hwclk( int op, struct rtc_time *t )
 	    mon = bcd2bin(mon);
 	    year = bcd2bin(year);
 	    wday = bcd2bin(wday);
-        }
+	}
 
-        if (!(ctrl & RTC_24H)) {
+	if (!(ctrl & RTC_24H)) {
 	    if (!pm && hour == 12)
 		hour = 0;
 	    else if (pm && hour != 12)
 		hour += 12;
-        }
+	}
 
-        t->tm_sec  = sec;
-        t->tm_min  = min;
-        t->tm_hour = hour;
-        t->tm_mday = day;
-        t->tm_mon  = mon - 1;
-        t->tm_year = year + atari_rtc_year_offset;
-        t->tm_wday = wday - 1;
+	t->tm_sec  = sec;
+	t->tm_min  = min;
+	t->tm_hour = hour;
+	t->tm_mday = day;
+	t->tm_mon  = mon - 1;
+	t->tm_year = year + atari_rtc_year_offset;
+	t->tm_wday = wday - 1;
     }
 
     return( 0 );
@@ -296,17 +296,17 @@ int atari_mste_set_clock_mmss (unsigned long nowtime)
     mste_read(&val);
     rtc_minutes= val.min_ones + val.min_tens * 10;
     if ((rtc_minutes < real_minutes
-         ? real_minutes - rtc_minutes
-         : rtc_minutes - real_minutes) < 30)
+	 ? real_minutes - rtc_minutes
+	 : rtc_minutes - real_minutes) < 30)
     {
-        val.sec_ones = real_seconds % 10;
-        val.sec_tens = real_seconds / 10;
-        val.min_ones = real_minutes % 10;
-        val.min_tens = real_minutes / 10;
-        mste_write(&val);
+	val.sec_ones = real_seconds % 10;
+	val.sec_tens = real_seconds / 10;
+	val.min_ones = real_minutes % 10;
+	val.min_tens = real_minutes / 10;
+	mste_write(&val);
     }
     else
-        return -1;
+	return -1;
     return 0;
 }
 
@@ -330,19 +330,19 @@ int atari_tt_set_clock_mmss (unsigned long nowtime)
        with hour overflow.  This avoids messing with unknown time zones
        but requires your RTC not to be off by more than 30 minutes.  */
     if ((rtc_minutes < real_minutes
-         ? real_minutes - rtc_minutes
-         : rtc_minutes - real_minutes) < 30)
-        {
-            if (!(save_control & RTC_DM_BINARY))
-                {
+	 ? real_minutes - rtc_minutes
+	 : rtc_minutes - real_minutes) < 30)
+	{
+	    if (!(save_control & RTC_DM_BINARY))
+		{
 		    real_seconds = bin2bcd(real_seconds);
 		    real_minutes = bin2bcd(real_minutes);
-                }
-            RTC_WRITE (RTC_SECONDS, real_seconds);
-            RTC_WRITE (RTC_MINUTES, real_minutes);
-        }
+		}
+	    RTC_WRITE (RTC_SECONDS, real_seconds);
+	    RTC_WRITE (RTC_MINUTES, real_minutes);
+	}
     else
-        retval = -1;
+	retval = -1;
 
     RTC_WRITE (RTC_FREQ_SELECT, save_freq_select);
     RTC_WRITE (RTC_CONTROL, save_control);

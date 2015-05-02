@@ -173,7 +173,7 @@ static int aty_dsp_gt(const struct fb_info *info, u32 bpp, struct pll_ct *pll)
 		(1 << (vshift - xshift));
 
 /*    if (bpp == 0)
-        dsp_on = ((multiplier * 20 << vshift) + divider) / divider;
+	dsp_on = ((multiplier * 20 << vshift) + divider) / divider;
     else */
 	{
 		dsp_on = ((multiplier << vshift) + divider) / divider;

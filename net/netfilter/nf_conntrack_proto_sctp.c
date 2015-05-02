@@ -575,16 +575,16 @@ static int sctp_timeout_nlattr_to_obj(struct nlattr *tb[], void *data)
 static int
 sctp_timeout_obj_to_nlattr(struct sk_buff *skb, const void *data)
 {
-        const unsigned int *timeouts = data;
+	const unsigned int *timeouts = data;
 	int i;
 
 	for (i=CTA_TIMEOUT_SCTP_UNSPEC+1; i<CTA_TIMEOUT_SCTP_MAX+1; i++)
 	        NLA_PUT_BE32(skb, i, htonl(timeouts[i] / HZ));
 
-        return 0;
+	return 0;
 
 nla_put_failure:
-        return -ENOSPC;
+	return -ENOSPC;
 }
 
 static const struct nla_policy

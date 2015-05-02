@@ -136,7 +136,7 @@ struct dsp_generic_scb {
 	   Initialized by the host R/O for the DSP task
 	*/
 	u32  strm_rs_config; /* REQUIRED */
-               //
+	       //
 	/* On mixer input streams: indicates mixer input stream configuration
 	   On Tees, this is copied from the stream being snooped
 
@@ -147,15 +147,15 @@ struct dsp_generic_scb {
 	u32  strm_buf_ptr; /* REQUIRED  */
 
 	/* On mixer input streams: points to next mixer input and is updated by the
-                                   mixer subroutine in the "parent" DSP task
+				   mixer subroutine in the "parent" DSP task
 				   (least-significant 16 bits are preserved, unused)
 
-           On Tees, the pointer is copied from the stream being snooped on
+	   On Tees, the pointer is copied from the stream being snooped on
 	   initialization, and, subsequently, it is copied into the
 	   stream being snooped.
 
 	   On wavetable/3D voices: the strmBufPtr will use all 32 bits to allow for
-                                   fractional phase accumulation
+				   fractional phase accumulation
 
 	   Fractional increment per output sample in the input sample buffer
 
@@ -171,7 +171,7 @@ struct dsp_generic_scb {
 
 	   Current volumes update by the DSP task
 	   On mixer input streams: required & updated by the mixer subroutine in the
-                                   "parent" DSP task
+				   "parent" DSP task
 
 	   On Tees, both current & target volumes are copied up on initialization,
 	   and, subsequently, the target volume is copied up while the current
@@ -317,7 +317,7 @@ struct dsp_timing_master_scb {
 	/* Initial values are xxxx:0000
 	   hi: Current CODEC output FIFO pointer
 	       (0 to 0x0f)
-           lo: Flag indicating that the CODEC
+	   lo: Flag indicating that the CODEC
 	       FIFO is sync'd (host clears to
 	       resynchronize the FIFO pointer
 	       upon start/restart)
@@ -328,7 +328,7 @@ struct dsp_timing_master_scb {
 	)
 
 	/* Init. 8000:0005 for 44.1k
-                 8000:0001 for 48k
+		 8000:0001 for 48k
 	   hi: Fractional sample accumulator 0.16b
 	   lo: Number of frames remaining to be
 	       processed in the current group of
@@ -340,7 +340,7 @@ struct dsp_timing_master_scb {
 	)
 
 	/* Init. 0001:0005 for 44.1k
-                 0000:0001 for 48k
+		 0000:0001 for 48k
 	   hi: Fractional sample correction factor 0.16b
 	       to be added every frameGroupLength frames
 	       to correct for truncation error in
@@ -353,7 +353,7 @@ struct dsp_timing_master_scb {
 	)
 
 	/* Init. 44.1k*65536/8k = 0x00058333 for 44.1k
-                 48k*65536/8k = 0x00060000 for 48k
+		 48k*65536/8k = 0x00060000 for 48k
 	   16b.16b integer.frac approximation to the
 	   number of samples to output each frame.
 	   (approximation must be floor, to insure */
@@ -380,14 +380,14 @@ struct dsp_codec_output_scb {
 	u32 strm_buf_ptr;   /* REQUIRED */
 
 	/* NOTE: The CODEC output task reads samples from the first task on its
-                 sublist at the stream buffer pointer (init. to lag DMA destination
+		 sublist at the stream buffer pointer (init. to lag DMA destination
 		 address word).  After the required number of samples is transferred,
 		 the CODEC output task advances sub_list_ptr->strm_buf_ptr past the samples
 		 consumed.
 	*/
 
 	/* Init. 0000:0010 for SDout
-                 0060:0010 for SDout2
+		 0060:0010 for SDout2
 		 0080:0010 for SDout3
 	   hi: Base IO address of FIFO to which
 	       the left-channel samples are to
@@ -443,16 +443,16 @@ struct dsp_codec_input_scb {
 	u32 strm_buf_ptr;   /* REQUIRED */
 
 	/* NOTE: The CODEC input task reads samples from the hardware FIFO
-                 sublist at the DMA source address word (sub_list_ptr->basic_req.saw).
-                 After the required number of samples is transferred, the CODEC
-                 output task advances sub_list_ptr->basic_req.saw past the samples
-                 consumed.  SPuD must initialize the sub_list_ptr->basic_req.saw
-                 to point half-way around from the initial sub_list_ptr->strm_nuf_ptr
-                 to allow for lag/lead.
+		 sublist at the DMA source address word (sub_list_ptr->basic_req.saw).
+		 After the required number of samples is transferred, the CODEC
+		 output task advances sub_list_ptr->basic_req.saw past the samples
+		 consumed.  SPuD must initialize the sub_list_ptr->basic_req.saw
+		 to point half-way around from the initial sub_list_ptr->strm_nuf_ptr
+		 to allow for lag/lead.
 	*/
 
 	/* Init. 0000:0010 for SDout
-                 0060:0010 for SDout2
+		 0060:0010 for SDout2
 		 0080:0010 for SDout3
 	   hi: Base IO address of FIFO to which
 	       the left-channel samples are to
@@ -822,7 +822,7 @@ struct dsp_async_codec_input_scb {
 	u32 istrm_buf_ptr;
 
 	/* Init. 0000:8042: for ASER1
-                 0000:8044: for ASER2  */
+		 0000:8044: for ASER2  */
 	___DSP_DUAL_16BIT_ALLOC(
 	    io_stat_reg_addr,
 	    iofifo_pointer
@@ -1198,15 +1198,15 @@ struct dsp_filter_scb {
 	u32  strm_buf_ptr;       /* 0x0C */
 
 	___DSP_DUAL_16BIT_ALLOC(
-              b0_right,          /* 0x0D */
+	      b0_right,          /* 0x0D */
 	      b0_left
 	)
 	___DSP_DUAL_16BIT_ALLOC(
-              b1_right,          /* 0x0E */
+	      b1_right,          /* 0x0E */
 	      b1_left
 	)
 	___DSP_DUAL_16BIT_ALLOC(
-              b2_right,          /* 0x0F */
+	      b2_right,          /* 0x0F */
 	      b2_left
 	)
 };

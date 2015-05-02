@@ -509,8 +509,8 @@ int tp3780I_QueryAbilities(THINKPAD_BD_DATA * pBDData, MW_ABILITIES * pAbilities
 }
 
 int tp3780I_ReadWriteDspDStore(THINKPAD_BD_DATA * pBDData, unsigned int uOpcode,
-                               void __user *pvBuffer, unsigned int uCount,
-                               unsigned long ulDSPAddr)
+			       void __user *pvBuffer, unsigned int uCount,
+			       unsigned long ulDSPAddr)
 {
 	int retval = 0;
 	DSP_3780I_CONFIG_SETTINGS *pSettings = &pBDData->rDspSettings;
@@ -545,8 +545,8 @@ int tp3780I_ReadWriteDspDStore(THINKPAD_BD_DATA * pBDData, unsigned int uOpcode,
 
 
 int tp3780I_ReadWriteDspIStore(THINKPAD_BD_DATA * pBDData, unsigned int uOpcode,
-                               void __user *pvBuffer, unsigned int uCount,
-                               unsigned long ulDSPAddr)
+			       void __user *pvBuffer, unsigned int uCount,
+			       unsigned long ulDSPAddr)
 {
 	int retval = 0;
 	DSP_3780I_CONFIG_SETTINGS *pSettings = &pBDData->rDspSettings;

@@ -133,15 +133,15 @@ static struct inode *jffs2_nfs_get_inode(struct super_block *sb, uint64_t ino,
 static struct dentry *jffs2_fh_to_dentry(struct super_block *sb, struct fid *fid,
 					 int fh_len, int fh_type)
 {
-        return generic_fh_to_dentry(sb, fid, fh_len, fh_type,
-                                    jffs2_nfs_get_inode);
+	return generic_fh_to_dentry(sb, fid, fh_len, fh_type,
+				    jffs2_nfs_get_inode);
 }
 
 static struct dentry *jffs2_fh_to_parent(struct super_block *sb, struct fid *fid,
 					 int fh_len, int fh_type)
 {
-        return generic_fh_to_parent(sb, fid, fh_len, fh_type,
-                                    jffs2_nfs_get_inode);
+	return generic_fh_to_parent(sb, fid, fh_len, fh_type,
+				    jffs2_nfs_get_inode);
 }
 
 static struct dentry *jffs2_get_parent(struct dentry *child)

@@ -52,8 +52,8 @@ static int ir_rc5_decode(struct rc_dev *dev, struct ir_raw_event ev)
 	u8 toggle;
 	u32 scancode;
 
-        if (!(dev->raw->enabled_protocols & RC_TYPE_RC5))
-                return 0;
+	if (!(dev->raw->enabled_protocols & RC_TYPE_RC5))
+		return 0;
 
 	if (!is_timing_event(ev)) {
 		if (ev.reset)

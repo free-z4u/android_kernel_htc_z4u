@@ -47,16 +47,16 @@
 #undef DEBUG
 
 #define ugeth_printk(level, format, arg...)  \
-        printk(level format "\n", ## arg)
+	printk(level format "\n", ## arg)
 
 #define ugeth_dbg(format, arg...)            \
-        ugeth_printk(KERN_DEBUG , format , ## arg)
+	ugeth_printk(KERN_DEBUG , format , ## arg)
 #define ugeth_err(format, arg...)            \
-        ugeth_printk(KERN_ERR , format , ## arg)
+	ugeth_printk(KERN_ERR , format , ## arg)
 #define ugeth_info(format, arg...)           \
-        ugeth_printk(KERN_INFO , format , ## arg)
+	ugeth_printk(KERN_INFO , format , ## arg)
 #define ugeth_warn(format, arg...)           \
-        ugeth_printk(KERN_WARNING , format , ## arg)
+	ugeth_printk(KERN_WARNING , format , ## arg)
 
 #ifdef UGETH_VERBOSE_DEBUG
 #define ugeth_vdbg ugeth_dbg
@@ -418,7 +418,7 @@ static int hw_clear_addr_in_paddr(struct ucc_geth_private *ugeth, u8 paddr_num)
 }
 
 static void hw_add_addr_in_hash(struct ucc_geth_private *ugeth,
-                                u8 *p_enet_addr)
+				u8 *p_enet_addr)
 {
 	struct ucc_geth_82xx_address_filtering_pram __iomem *p_82xx_addr_filt;
 	u32 cecr_subblock;

@@ -39,7 +39,7 @@ static inline void get_sizes(jpeg_cmd_enc_cfg *cmd, uint32_t *luma_size,
 }
 
 static inline int verify_jpeg_cmd_enc_cfg(struct msm_adsp_module *module,
-                             		  void *cmd_data, size_t cmd_size)
+			     		  void *cmd_data, size_t cmd_size)
 {
 	jpeg_cmd_enc_cfg *cmd = (jpeg_cmd_enc_cfg *)cmd_data;
 	uint32_t luma_size, chroma_size;

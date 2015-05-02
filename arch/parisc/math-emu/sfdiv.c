@@ -74,9 +74,9 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 					 * are infinity
 					 */
 					if (Is_invalidtrap_enabled())
-                                		return(INVALIDEXCEPTION);
-                                	Set_invalidflag();
-                                	Sgl_makequietnan(result);
+						return(INVALIDEXCEPTION);
+					Set_invalidflag();
+					Sgl_makequietnan(result);
 					*dstptr = result;
 					return(NOEXCEPTION);
 				}
@@ -89,35 +89,35 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 			}
 		}
 		else {
-                	/*
-                 	 * is NaN; signaling or quiet?
-                 	 */
-                	if (Sgl_isone_signaling(opnd1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Sgl_set_quiet(opnd1);
-                	}
+			/*
+		 	 * is NaN; signaling or quiet?
+		 	 */
+			if (Sgl_isone_signaling(opnd1)) {
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Sgl_set_quiet(opnd1);
+			}
 			/*
 			 * is second operand a signaling NaN?
 			 */
 			else if (Sgl_is_signalingnan(opnd2)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Sgl_set_quiet(opnd2);
-                		*dstptr = opnd2;
-                		return(NOEXCEPTION);
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Sgl_set_quiet(opnd2);
+				*dstptr = opnd2;
+				return(NOEXCEPTION);
 			}
-                	/*
-                 	 * return quiet NaN
-                 	 */
-                	*dstptr = opnd1;
-                	return(NOEXCEPTION);
+			/*
+		 	 * return quiet NaN
+		 	 */
+			*dstptr = opnd1;
+			return(NOEXCEPTION);
 		}
 	}
 	/*
@@ -132,21 +132,21 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
-                /*
-                 * is NaN; signaling or quiet?
-                 */
-                if (Sgl_isone_signaling(opnd2)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Sgl_set_quiet(opnd2);
-                }
-                /*
-                 * return quiet NaN
-                 */
-                *dstptr = opnd2;
-                return(NOEXCEPTION);
+		/*
+		 * is NaN; signaling or quiet?
+		 */
+		if (Sgl_isone_signaling(opnd2)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Sgl_set_quiet(opnd2);
+		}
+		/*
+		 * return quiet NaN
+		 */
+		*dstptr = opnd2;
+		return(NOEXCEPTION);
 	}
 	/*
 	 * check for division by zero
@@ -155,15 +155,15 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 		if (Sgl_iszero_exponentmantissa(opnd1)) {
 			/* invalid since both operands are zero */
 			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        Set_invalidflag();
-                        Sgl_makequietnan(result);
+			Set_invalidflag();
+			Sgl_makequietnan(result);
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
 		if (Is_divisionbyzerotrap_enabled())
-                        return(DIVISIONBYZEROEXCEPTION);
-                Set_divisionbyzeroflag();
-                Sgl_setinfinity_exponentmantissa(result);
+			return(DIVISIONBYZEROEXCEPTION);
+		Set_divisionbyzeroflag();
+		Sgl_setinfinity_exponentmantissa(result);
 		*dstptr = result;
 		return(NOEXCEPTION);
 	}
@@ -186,9 +186,9 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
-                /* is denormalized; want to normalize */
-                Sgl_clear_signexponent(opnd1);
-                Sgl_leftshiftby1(opnd1);
+		/* is denormalized; want to normalize */
+		Sgl_clear_signexponent(opnd1);
+		Sgl_leftshiftby1(opnd1);
 		Sgl_normalize(opnd1,dest_exponent);
 	}
 	/* opnd2 needs to have hidden bit set with msb in hidden bit */
@@ -196,9 +196,9 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 		Sgl_clear_signexponent_set_hidden(opnd2);
 	}
 	else {
-                /* is denormalized; want to normalize */
-                Sgl_clear_signexponent(opnd2);
-                Sgl_leftshiftby1(opnd2);
+		/* is denormalized; want to normalize */
+		Sgl_clear_signexponent(opnd2);
+		Sgl_leftshiftby1(opnd2);
 		while(Sgl_iszero_hiddenhigh7mantissa(opnd2)) {
 			Sgl_leftshiftby8(opnd2);
 			dest_exponent += 8;
@@ -279,45 +279,45 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 	}
 	Sgl_set_mantissa(result,opnd3);
 
-        /*
-         * Test for overflow
-         */
+	/*
+	 * Test for overflow
+	 */
 	if (dest_exponent >= SGL_INFINITY_EXPONENT) {
-                /* trap if OVERFLOWTRAP enabled */
-                if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Sgl_setwrapped_exponent(result,dest_exponent,ovfl);
-                        *dstptr = result;
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return(OVERFLOWEXCEPTION | INEXACTEXCEPTION);
-                            else Set_inexactflag();
-                        return(OVERFLOWEXCEPTION);
-                }
+		/* trap if OVERFLOWTRAP enabled */
+		if (Is_overflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(result,dest_exponent,ovfl);
+			*dstptr = result;
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return(OVERFLOWEXCEPTION | INEXACTEXCEPTION);
+			    else Set_inexactflag();
+			return(OVERFLOWEXCEPTION);
+		}
 		Set_overflowflag();
-                /* set result to infinity or largest number */
+		/* set result to infinity or largest number */
 		Sgl_setoverflow(result);
 		inexact = TRUE;
 	}
-        /*
-         * Test for underflow
-         */
+	/*
+	 * Test for underflow
+	 */
 	else if (dest_exponent <= 0) {
-                /* trap if UNDERFLOWTRAP enabled */
-                if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Sgl_setwrapped_exponent(result,dest_exponent,unfl);
-                        *dstptr = result;
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return(UNDERFLOWEXCEPTION | INEXACTEXCEPTION);
-                            else Set_inexactflag();
-                        return(UNDERFLOWEXCEPTION);
-                }
+		/* trap if UNDERFLOWTRAP enabled */
+		if (Is_underflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(result,dest_exponent,unfl);
+			*dstptr = result;
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return(UNDERFLOWEXCEPTION | INEXACTEXCEPTION);
+			    else Set_inexactflag();
+			return(UNDERFLOWEXCEPTION);
+		}
 
 		/* Determine if should set underflow flag */
 		is_tiny = TRUE;
@@ -327,7 +327,7 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 				if (Sgl_iszero_sign(result)) {
 					Sgl_increment(opnd3);
 					if (Sgl_isone_hiddenoverflow(opnd3))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Sgl_decrement(opnd3);
 				}
 				break;
@@ -335,7 +335,7 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 				if (Sgl_isone_sign(result)) {
 					Sgl_increment(opnd3);
 					if (Sgl_isone_hiddenoverflow(opnd3))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Sgl_decrement(opnd3);
 				}
 				break;
@@ -344,16 +344,16 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 				    Sgl_isone_lowmantissa(opnd3))) {
 				      	Sgl_increment(opnd3);
 					if (Sgl_isone_hiddenoverflow(opnd3))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Sgl_decrement(opnd3);
 				}
 				break;
 			}
 		}
 
-                /*
-                 * denormalize result or set to signed zero
-                 */
+		/*
+		 * denormalize result or set to signed zero
+		 */
 		stickybit = inexact;
 		Sgl_denormalize(opnd3,dest_exponent,guardbit,stickybit,inexact);
 
@@ -377,8 +377,8 @@ sgl_fdiv (sgl_floating_point * srcptr1, sgl_floating_point * srcptr2,
 				}
 				break;
 			}
-                	if (is_tiny) Set_underflowflag();
-                }
+			if (is_tiny) Set_underflowflag();
+		}
 		Sgl_set_exponentmantissa(result,opnd3);
 	}
 	else Sgl_set_exponent(result,dest_exponent);

@@ -320,11 +320,11 @@ tsunami_init_one_pchip(tsunami_pchip *pchip, int index)
 	 */
 	hose->sg_isa = iommu_arena_new(hose, 0x00800000, 0x00800000, 0);
 	/* Initially set for 4 PTEs, but will be overridden to 64K for ISA. */
-        hose->sg_isa->align_entry = 4;
+	hose->sg_isa->align_entry = 4;
 
 	hose->sg_pci = iommu_arena_new(hose, 0x40000000,
 				       size_for_memory(0x40000000), 0);
-        hose->sg_pci->align_entry = 4; /* Tsunami caches 4 PTEs at a time */
+	hose->sg_pci->align_entry = 4; /* Tsunami caches 4 PTEs at a time */
 
 	__direct_map_base = 0x80000000;
 	__direct_map_size = 0x80000000;

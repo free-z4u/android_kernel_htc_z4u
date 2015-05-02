@@ -199,9 +199,9 @@
 
 /* Structure/enum declaration ------------------------------- */
 struct tx_desc {
-        __le32 tdes0, tdes1, tdes2, tdes3; /* Data for the card */
-        char *tx_buf_ptr;               /* Data for us */
-        struct tx_desc *next_tx_desc;
+	__le32 tdes0, tdes1, tdes2, tdes3; /* Data for the card */
+	char *tx_buf_ptr;               /* Data for us */
+	struct tx_desc *next_tx_desc;
 } __attribute__(( aligned(32) ));
 
 struct rx_desc {

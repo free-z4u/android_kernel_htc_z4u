@@ -485,11 +485,11 @@ bool s_bAL7230Init (unsigned long dwIoBase)
     VNSvOutPortB(dwIoBase + MAC_REG_SOFTPWRCTL, 0);
 
     MACvWordRegBitsOn(dwIoBase, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPECTI  |
-                                                     SOFTPWRCTL_TXPEINV));
+						     SOFTPWRCTL_TXPEINV));
     BBvPowerSaveModeOFF(dwIoBase); //RobertYu:20050106, have DC value for Calibration
 
     for (ii = 0; ii < CB_AL7230_INIT_SEQ; ii++)
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[ii]);
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[ii]);
 
     // PLL On
     MACvWordRegBitsOn(dwIoBase, MAC_REG_SOFTPWRCTL, SOFTPWRCTL_SWPE3);
@@ -503,9 +503,9 @@ bool s_bAL7230Init (unsigned long dwIoBase)
     bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[CB_AL7230_INIT_SEQ-1]); //TXDCOC:diable, RCK:diable
 
     MACvWordRegBitsOn(dwIoBase, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPE3    |
-                                                     SOFTPWRCTL_SWPE2    |
-                                                     SOFTPWRCTL_SWPECTI  |
-                                                     SOFTPWRCTL_TXPEINV));
+						     SOFTPWRCTL_SWPE2    |
+						     SOFTPWRCTL_SWPECTI  |
+						     SOFTPWRCTL_TXPEINV));
 
     BBvPowerSaveModeON(dwIoBase); // RobertYu:20050106
 
@@ -631,14 +631,14 @@ bool IFRFbWriteEmbeded (unsigned long dwIoBase, unsigned long dwData)
 
     // W_MAX_TIMEOUT is the timeout period
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_IFREGCTL, &dwValue);
-        if (dwValue & IFREGCTL_DONE)
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_IFREGCTL, &dwValue);
+	if (dwValue & IFREGCTL_DONE)
+	    break;
     }
 
     if (ww == W_MAX_TIMEOUT) {
 //        DBG_PORT80_ALWAYS(0x32);
-        return false;
+	return false;
     }
     return true;
 }
@@ -695,7 +695,7 @@ bool RFbAL2230Init (unsigned long dwIoBase)
     VNSvOutPortB(dwIoBase + MAC_REG_SOFTPWRCTL, 0);
 
     MACvWordRegBitsOn(dwIoBase, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPECTI  |
-                                                     SOFTPWRCTL_TXPEINV));
+						     SOFTPWRCTL_TXPEINV));
 //2008-8-21 chester <add>
     // PLL  Off
 
@@ -709,7 +709,7 @@ bool RFbAL2230Init (unsigned long dwIoBase)
 
 
     for (ii = 0; ii < CB_AL2230_INIT_SEQ; ii++)
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL2230InitTable[ii]);
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL2230InitTable[ii]);
 //2008-8-21 chester <add>
 MACvTimer0MicroSDelay(dwIoBase, 30); //delay 30 us
 
@@ -724,9 +724,9 @@ MACvTimer0MicroSDelay(dwIoBase, 30); //delay 30 us
     bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL2230InitTable[CB_AL2230_INIT_SEQ-1]);
 
     MACvWordRegBitsOn(dwIoBase, MAC_REG_SOFTPWRCTL, (SOFTPWRCTL_SWPE3    |
-                                                     SOFTPWRCTL_SWPE2    |
-                                                     SOFTPWRCTL_SWPECTI  |
-                                                     SOFTPWRCTL_TXPEINV));
+						     SOFTPWRCTL_SWPE2    |
+						     SOFTPWRCTL_SWPECTI  |
+						     SOFTPWRCTL_TXPEINV));
 
     //3-wire control for power saving mode
     VNSvOutPortB(dwIoBase + MAC_REG_PSPWRSIG, (PSSIG_WPE3 | PSSIG_WPE2)); //1100 0000
@@ -813,21 +813,21 @@ bool RFbInit (
 {
 bool bResult = true;
     switch (pDevice->byRFType) {
-        case RF_AIROHA :
-        case RF_AL2230S:
-            pDevice->byMaxPwrLevel = AL2230_PWR_IDX_LEN;
-            bResult = RFbAL2230Init(pDevice->PortOffset);
-            break;
-        case RF_AIROHA7230 :
-            pDevice->byMaxPwrLevel = AL7230_PWR_IDX_LEN;
-            bResult = s_bAL7230Init(pDevice->PortOffset);
-            break;
-        case RF_NOTHING :
-            bResult = true;
-            break;
-        default :
-            bResult = false;
-            break;
+	case RF_AIROHA :
+	case RF_AL2230S:
+	    pDevice->byMaxPwrLevel = AL2230_PWR_IDX_LEN;
+	    bResult = RFbAL2230Init(pDevice->PortOffset);
+	    break;
+	case RF_AIROHA7230 :
+	    pDevice->byMaxPwrLevel = AL7230_PWR_IDX_LEN;
+	    bResult = s_bAL7230Init(pDevice->PortOffset);
+	    break;
+	case RF_NOTHING :
+	    bResult = true;
+	    break;
+	default :
+	    bResult = false;
+	    break;
     }
     return bResult;
 }
@@ -852,12 +852,12 @@ bool RFbShutDown (
 bool bResult = true;
 
     switch (pDevice->byRFType) {
-        case RF_AIROHA7230 :
-            bResult = IFRFbWriteEmbeded (pDevice->PortOffset, 0x1ABAEF00+(BY_AL7230_REG_LEN<<3)+IFREGCTL_REGW);
-            break;
-        default :
-            bResult = true;
-            break;
+	case RF_AIROHA7230 :
+	    bResult = IFRFbWriteEmbeded (pDevice->PortOffset, 0x1ABAEF00+(BY_AL7230_REG_LEN<<3)+IFREGCTL_REGW);
+	    break;
+	default :
+	    bResult = true;
+	    break;
     }
     return bResult;
 }
@@ -880,21 +880,21 @@ bool RFbSelectChannel (unsigned long dwIoBase, unsigned char byRFType, unsigned 
 bool bResult = true;
     switch (byRFType) {
 
-        case RF_AIROHA :
-        case RF_AL2230S:
-            bResult = RFbAL2230SelectChannel(dwIoBase, byChannel);
-            break;
-        //{{ RobertYu: 20050104
-        case RF_AIROHA7230 :
-            bResult = s_bAL7230SelectChannel(dwIoBase, byChannel);
-            break;
-        //}} RobertYu
-        case RF_NOTHING :
-            bResult = true;
-            break;
-        default:
-            bResult = false;
-            break;
+	case RF_AIROHA :
+	case RF_AL2230S:
+	    bResult = RFbAL2230SelectChannel(dwIoBase, byChannel);
+	    break;
+	//{{ RobertYu: 20050104
+	case RF_AIROHA7230 :
+	    bResult = s_bAL7230SelectChannel(dwIoBase, byChannel);
+	    break;
+	//}} RobertYu
+	case RF_NOTHING :
+	    bResult = true;
+	    break;
+	default:
+	    bResult = false;
+	    break;
     }
     return bResult;
 }
@@ -919,63 +919,63 @@ bool RFvWriteWakeProgSyn (unsigned long dwIoBase, unsigned char byRFType, unsign
 
     VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, 0);
     switch (byRFType) {
-        case RF_AIROHA:
-        case RF_AL2230S:
+	case RF_AIROHA:
+	case RF_AL2230S:
 
-            if (uChannel > CB_MAX_CHANNEL_24G)
-                return false;
+	    if (uChannel > CB_MAX_CHANNEL_24G)
+		return false;
 
-            byInitCount = CB_AL2230_INIT_SEQ + 2; // Init Reg + Channel Reg (2)
-            bySleepCount = 0;
-            if (byInitCount > (MISCFIFO_SYNDATASIZE - bySleepCount)) {
-                return false;
-            }
+	    byInitCount = CB_AL2230_INIT_SEQ + 2; // Init Reg + Channel Reg (2)
+	    bySleepCount = 0;
+	    if (byInitCount > (MISCFIFO_SYNDATASIZE - bySleepCount)) {
+		return false;
+	    }
 
-            for (ii = 0; ii < CB_AL2230_INIT_SEQ; ii++ ) {
-                MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL2230InitTable[ii]);
-            }
-            MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL2230ChannelTable0[uChannel-1]);
-            ii ++;
-            MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL2230ChannelTable1[uChannel-1]);
-            break;
+	    for (ii = 0; ii < CB_AL2230_INIT_SEQ; ii++ ) {
+		MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL2230InitTable[ii]);
+	    }
+	    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL2230ChannelTable0[uChannel-1]);
+	    ii ++;
+	    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL2230ChannelTable1[uChannel-1]);
+	    break;
 
-        //{{ RobertYu: 20050104
-        // Need to check, PLLON need to be low for channel setting
-        case RF_AIROHA7230:
-            byInitCount = CB_AL7230_INIT_SEQ + 3; // Init Reg + Channel Reg (3)
-            bySleepCount = 0;
-            if (byInitCount > (MISCFIFO_SYNDATASIZE - bySleepCount)) {
-                return false;
-            }
+	//{{ RobertYu: 20050104
+	// Need to check, PLLON need to be low for channel setting
+	case RF_AIROHA7230:
+	    byInitCount = CB_AL7230_INIT_SEQ + 3; // Init Reg + Channel Reg (3)
+	    bySleepCount = 0;
+	    if (byInitCount > (MISCFIFO_SYNDATASIZE - bySleepCount)) {
+		return false;
+	    }
 
-            if (uChannel <= CB_MAX_CHANNEL_24G)
-            {
-                for (ii = 0; ii < CB_AL7230_INIT_SEQ; ii++ ) {
-                    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230InitTable[ii]);
-                }
-            }
-            else
-            {
-                for (ii = 0; ii < CB_AL7230_INIT_SEQ; ii++ ) {
-                    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230InitTableAMode[ii]);
-                }
-            }
+	    if (uChannel <= CB_MAX_CHANNEL_24G)
+	    {
+		for (ii = 0; ii < CB_AL7230_INIT_SEQ; ii++ ) {
+		    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230InitTable[ii]);
+		}
+	    }
+	    else
+	    {
+		for (ii = 0; ii < CB_AL7230_INIT_SEQ; ii++ ) {
+		    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230InitTableAMode[ii]);
+		}
+	    }
 
-            MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230ChannelTable0[uChannel-1]);
-            ii ++;
-            MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230ChannelTable1[uChannel-1]);
-            ii ++;
-            MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230ChannelTable2[uChannel-1]);
-            break;
-        //}} RobertYu
+	    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230ChannelTable0[uChannel-1]);
+	    ii ++;
+	    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230ChannelTable1[uChannel-1]);
+	    ii ++;
+	    MACvSetMISCFifo(dwIoBase, (unsigned short)(MISCFIFO_SYNDATA_IDX + ii), dwAL7230ChannelTable2[uChannel-1]);
+	    break;
+	//}} RobertYu
 
-        case RF_NOTHING :
-            return true;
-            break;
+	case RF_NOTHING :
+	    return true;
+	    break;
 
-        default:
-            return false;
-            break;
+	default:
+	    return false;
+	    break;
     }
 
     MACvSetMISCFifo(dwIoBase, MISCFIFO_SYNINFO_IDX, (unsigned long )MAKEWORD(bySleepCount, byInitCount));
@@ -1008,10 +1008,10 @@ unsigned char byDec = 0;
 unsigned char byPwrdBm = 0;
 
     if (pDevice->dwDiagRefCount != 0) {
-        return true;
+	return true;
     }
     if ((uCH < 1) || (uCH > CB_MAX_CHANNEL)) {
-        return false;
+	return false;
     }
 
     switch (uRATE) {
@@ -1019,8 +1019,8 @@ unsigned char byPwrdBm = 0;
     case RATE_2M:
     case RATE_5M:
     case RATE_11M:
-        byPwr = pDevice->abyCCKPwrTbl[uCH];
-        byPwrdBm = pDevice->abyCCKDefaultPwr[uCH];
+	byPwr = pDevice->abyCCKPwrTbl[uCH];
+	byPwrdBm = pDevice->abyCCKDefaultPwr[uCH];
 //PLICE_DEBUG->
 	//byPwr+=5;
 //PLICE_DEBUG <-
@@ -1030,24 +1030,24 @@ unsigned char byPwrdBm = 0;
     case RATE_6M:
     case RATE_9M:
     case RATE_18M:
-        byPwr = pDevice->abyOFDMPwrTbl[uCH];
-        if (pDevice->byRFType == RF_UW2452) {
-            byDec = byPwr + 14;
-        } else {
-            byDec = byPwr + 10;
-        }
-        if (byDec >= pDevice->byMaxPwrLevel) {
-            byDec = pDevice->byMaxPwrLevel-1;
-        }
-        if (pDevice->byRFType == RF_UW2452) {
-            byPwrdBm = byDec - byPwr;
-            byPwrdBm /= 3;
-        } else {
-            byPwrdBm = byDec - byPwr;
-            byPwrdBm >>= 1;
-        }
-        byPwrdBm += pDevice->abyOFDMDefaultPwr[uCH];
-        byPwr = byDec;
+	byPwr = pDevice->abyOFDMPwrTbl[uCH];
+	if (pDevice->byRFType == RF_UW2452) {
+	    byDec = byPwr + 14;
+	} else {
+	    byDec = byPwr + 10;
+	}
+	if (byDec >= pDevice->byMaxPwrLevel) {
+	    byDec = pDevice->byMaxPwrLevel-1;
+	}
+	if (pDevice->byRFType == RF_UW2452) {
+	    byPwrdBm = byDec - byPwr;
+	    byPwrdBm /= 3;
+	} else {
+	    byPwrdBm = byDec - byPwr;
+	    byPwrdBm >>= 1;
+	}
+	byPwrdBm += pDevice->abyOFDMDefaultPwr[uCH];
+	byPwr = byDec;
 //PLICE_DEBUG->
 	//byPwr+=5;
 //PLICE_DEBUG<-
@@ -1058,8 +1058,8 @@ unsigned char byPwrdBm = 0;
     case RATE_36M:
     case RATE_48M:
     case RATE_54M:
-        byPwr = pDevice->abyOFDMPwrTbl[uCH];
-        byPwrdBm = pDevice->abyOFDMDefaultPwr[uCH];
+	byPwr = pDevice->abyOFDMPwrTbl[uCH];
+	byPwrdBm = pDevice->abyOFDMDefaultPwr[uCH];
 //PLICE_DEBUG->
 	//byPwr+=5;
 //PLICE_DEBUG<-
@@ -1071,47 +1071,47 @@ unsigned char byPwrdBm = 0;
 
     // 802.11h TPC
     if (pDevice->bLinkPass == true) {
-        // do not over local constraint
-        if (byPwrdBm > pDevice->abyLocalPwr[uCH]) {
-            pDevice->byCurPwrdBm = pDevice->abyLocalPwr[uCH];
-            byDec = byPwrdBm - pDevice->abyLocalPwr[uCH];
-            if (pDevice->byRFType == RF_UW2452) {
-                byDec *= 3;
-            } else {
-                byDec <<= 1;
-            }
-            if (byPwr > byDec) {
-                byPwr -= byDec;
-            } else {
-                byPwr = 0;
-            }
-        } else {
-            pDevice->byCurPwrdBm = byPwrdBm;
-        }
+	// do not over local constraint
+	if (byPwrdBm > pDevice->abyLocalPwr[uCH]) {
+	    pDevice->byCurPwrdBm = pDevice->abyLocalPwr[uCH];
+	    byDec = byPwrdBm - pDevice->abyLocalPwr[uCH];
+	    if (pDevice->byRFType == RF_UW2452) {
+		byDec *= 3;
+	    } else {
+		byDec <<= 1;
+	    }
+	    if (byPwr > byDec) {
+		byPwr -= byDec;
+	    } else {
+		byPwr = 0;
+	    }
+	} else {
+	    pDevice->byCurPwrdBm = byPwrdBm;
+	}
     } else {
-        // do not over regulatory constraint
-        if (byPwrdBm > pDevice->abyRegPwr[uCH]) {
-            pDevice->byCurPwrdBm = pDevice->abyRegPwr[uCH];
-            byDec = byPwrdBm - pDevice->abyRegPwr[uCH];
-            if (pDevice->byRFType == RF_UW2452) {
-                byDec *= 3;
-            } else {
-                byDec <<= 1;
-            }
-            if (byPwr > byDec) {
-                byPwr -= byDec;
-            } else {
-                byPwr = 0;
-            }
-        } else {
-            pDevice->byCurPwrdBm = byPwrdBm;
-        }
+	// do not over regulatory constraint
+	if (byPwrdBm > pDevice->abyRegPwr[uCH]) {
+	    pDevice->byCurPwrdBm = pDevice->abyRegPwr[uCH];
+	    byDec = byPwrdBm - pDevice->abyRegPwr[uCH];
+	    if (pDevice->byRFType == RF_UW2452) {
+		byDec *= 3;
+	    } else {
+		byDec <<= 1;
+	    }
+	    if (byPwr > byDec) {
+		byPwr -= byDec;
+	    } else {
+		byPwr = 0;
+	    }
+	} else {
+	    pDevice->byCurPwrdBm = byPwrdBm;
+	}
     }
 #endif
 
 //    if (pDevice->byLocalID <= REV_ID_VT3253_B1) {
     if (pDevice->byCurPwr == byPwr) {
-        return true;
+	return true;
     }
     bResult = RFbRawSetPower(pDevice, byPwr, uRATE);
 //    }
@@ -1145,43 +1145,43 @@ bool bResult = true;
 unsigned long dwMax7230Pwr = 0;
 
     if (byPwr >=  pDevice->byMaxPwrLevel) {
-        return (false);
+	return (false);
     }
     switch (pDevice->byRFType) {
 
-        case RF_AIROHA :
-            bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, dwAL2230PowerTable[byPwr]);
-            if (uRATE <= RATE_11M) {
-                bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x0001B400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            } else {
-                bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            }
-            break;
+	case RF_AIROHA :
+	    bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, dwAL2230PowerTable[byPwr]);
+	    if (uRATE <= RATE_11M) {
+		bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x0001B400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+	    } else {
+		bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+	    }
+	    break;
 
 
-        case RF_AL2230S :
-            bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, dwAL2230PowerTable[byPwr]);
-            if (uRATE <= RATE_11M) {
-                bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x040C1400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-                bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x00299B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            }else {
-                bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-                bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x00099B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
-            }
+	case RF_AL2230S :
+	    bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, dwAL2230PowerTable[byPwr]);
+	    if (uRATE <= RATE_11M) {
+		bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x040C1400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+		bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x00299B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+	    }else {
+		bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x0005A400+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+		bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, 0x00099B00+(BY_AL2230_REG_LEN<<3)+IFREGCTL_REGW);
+	    }
 
-            break;
+	    break;
 
-        case RF_AIROHA7230:
-            //  0x080F1B00 for 3 wire control TxGain(D10) and 0x31 as TX Gain value
-            dwMax7230Pwr = 0x080C0B00 | ( (byPwr) << 12 ) |
-                           (BY_AL7230_REG_LEN << 3 )  | IFREGCTL_REGW;
+	case RF_AIROHA7230:
+	    //  0x080F1B00 for 3 wire control TxGain(D10) and 0x31 as TX Gain value
+	    dwMax7230Pwr = 0x080C0B00 | ( (byPwr) << 12 ) |
+			   (BY_AL7230_REG_LEN << 3 )  | IFREGCTL_REGW;
 
-            bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, dwMax7230Pwr);
-            break;
+	    bResult &= IFRFbWriteEmbeded(pDevice->PortOffset, dwMax7230Pwr);
+	    break;
 
 
-        default :
-            break;
+	default :
+	    break;
     }
     return bResult;
 }
@@ -1214,13 +1214,13 @@ RFvRSSITodBm (
     unsigned char abyAIROHARF[4] = {0, 18, 0, 40};
 
     switch (pDevice->byRFType) {
-        case RF_AIROHA:
-        case RF_AL2230S:
-        case RF_AIROHA7230: //RobertYu: 20040104
-            a = abyAIROHARF[byIdx];
-            break;
-        default:
-            break;
+	case RF_AIROHA:
+	case RF_AL2230S:
+	case RF_AIROHA7230: //RobertYu: 20040104
+	    a = abyAIROHARF[byIdx];
+	    break;
+	default:
+	    break;
     }
 
     *pldBm = -1 * (a + b * 2);
@@ -1243,25 +1243,25 @@ bool RFbAL7230SelectChannelPostProcess (unsigned long dwIoBase, unsigned char by
 
     if( (byOldChannel <= CB_MAX_CHANNEL_24G) && (byNewChannel > CB_MAX_CHANNEL_24G) )
     {
-        // Change from 2.4G to 5G
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[2]); //Reg2
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[3]); //Reg3
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[5]); //Reg5
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[7]); //Reg7
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[10]);//Reg10
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[12]);//Reg12
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[15]);//Reg15
+	// Change from 2.4G to 5G
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[2]); //Reg2
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[3]); //Reg3
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[5]); //Reg5
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[7]); //Reg7
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[10]);//Reg10
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[12]);//Reg12
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTableAMode[15]);//Reg15
     }
     else if( (byOldChannel > CB_MAX_CHANNEL_24G) && (byNewChannel <= CB_MAX_CHANNEL_24G) )
     {
-        // change from 5G to 2.4G
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[2]); //Reg2
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[3]); //Reg3
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[5]); //Reg5
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[7]); //Reg7
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[10]);//Reg10
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[12]);//Reg12
-        bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[15]);//Reg15
+	// change from 5G to 2.4G
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[2]); //Reg2
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[3]); //Reg3
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[5]); //Reg5
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[7]); //Reg7
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[10]);//Reg10
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[12]);//Reg12
+	bResult &= IFRFbWriteEmbeded(dwIoBase, dwAL7230InitTable[15]);//Reg15
     }
 
     return bResult;

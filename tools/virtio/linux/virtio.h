@@ -143,7 +143,7 @@ static inline void clear_bit(int nr, volatile unsigned long *addr)
 
 static inline int test_bit(int nr, const volatile unsigned long *addr)
 {
-        return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
 }
 
 /* The only feature we care to support */

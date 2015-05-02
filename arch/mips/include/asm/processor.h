@@ -251,9 +251,9 @@ struct thread_struct {
 #endif /* CONFIG_CPU_CAVIUM_OCTEON */
 
 #define INIT_THREAD  {						\
-        /*							\
-         * Saved main processor registers			\
-         */							\
+	/*							\
+	 * Saved main processor registers			\
+	 */							\
 	.reg16			= 0,				\
 	.reg17			= 0,				\
 	.reg18			= 0,				\

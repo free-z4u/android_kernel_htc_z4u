@@ -226,7 +226,7 @@ int rpaphp_get_drc_props(struct device_node *dn, int *drc_index,
 	for (i = 0; i < indexes[0]; i++) {
 		if ((unsigned int) indexes[i + 1] == *my_index) {
 			if (drc_name)
-                		*drc_name = name_tmp;
+				*drc_name = name_tmp;
 			if (drc_type)
 				*drc_type = type_tmp;
 			if (drc_index)

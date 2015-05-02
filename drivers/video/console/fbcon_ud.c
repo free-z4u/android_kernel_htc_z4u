@@ -243,8 +243,8 @@ static void ud_clear_margins(struct vc_data *vc, struct fb_info *info,
 	if (bh) {
 		region.dy = info->var.yoffset;
 		region.dx = info->var.xoffset;
-                region.height  = bh;
-                region.width = info->var.xres;
+		region.height  = bh;
+		region.width = info->var.xres;
 		info->fbops->fb_fillrect(info, &region);
 	}
 }

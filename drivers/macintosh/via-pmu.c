@@ -831,7 +831,7 @@ static int pmu_irqstats_proc_show(struct seq_file *m, void *v)
 		"Ghost interrupt (zero len)",
 		"Empty interrupt (empty mask)",
 		"Max irqs in a row"
-        };
+	};
 
 	for (i=0; i<11; i++) {
 		seq_printf(m, " %2u: %10u (%s)\n",
@@ -1424,7 +1424,7 @@ next:
 				query_batt_timer = BATTERY_POLLING_COUNT;
 			}
 		}
-        }
+	}
 	else if ((1 << pirq) & PMU_INT_ENVIRONMENT) {
 		if (pmu_battery_count)
 			query_battery_state();

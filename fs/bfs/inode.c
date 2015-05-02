@@ -119,12 +119,12 @@ static int bfs_write_inode(struct inode *inode, struct writeback_control *wbc)
 {
 	struct bfs_sb_info *info = BFS_SB(inode->i_sb);
 	unsigned int ino = (u16)inode->i_ino;
-        unsigned long i_sblock;
+	unsigned long i_sblock;
 	struct bfs_inode *di;
 	struct buffer_head *bh;
 	int err = 0;
 
-        dprintf("ino=%08x\n", ino);
+	dprintf("ino=%08x\n", ino);
 
 	di = find_inode(inode->i_sb, ino, &bh);
 	if (IS_ERR(di))
@@ -145,7 +145,7 @@ static int bfs_write_inode(struct inode *inode, struct writeback_control *wbc)
 	di->i_atime = cpu_to_le32(inode->i_atime.tv_sec);
 	di->i_mtime = cpu_to_le32(inode->i_mtime.tv_sec);
 	di->i_ctime = cpu_to_le32(inode->i_ctime.tv_sec);
-        i_sblock = BFS_I(inode)->i_sblock;
+	i_sblock = BFS_I(inode)->i_sblock;
 	di->i_sblock = cpu_to_le32(i_sblock);
 	di->i_eblock = cpu_to_le32(BFS_I(inode)->i_eblock);
 	di->i_eoffset = cpu_to_le32(i_sblock * BFS_BSIZE + inode->i_size - 1);
@@ -189,13 +189,13 @@ static void bfs_evict_inode(struct inode *inode)
 	mark_buffer_dirty(bh);
 	brelse(bh);
 
-        if (bi->i_dsk_ino) {
+	if (bi->i_dsk_ino) {
 		if (bi->i_sblock)
 			info->si_freeb += bi->i_eblock + 1 - bi->i_sblock;
 		info->si_freei++;
 		clear_bit(ino, info->si_imap);
 		dump_imap("delete_inode", s);
-        }
+	}
 
 	/*
 	 * If this was the last file, make the previous block
@@ -474,7 +474,7 @@ static int __init init_bfs_fs(void)
 	int err = init_inodecache();
 	if (err)
 		goto out1;
-        err = register_filesystem(&bfs_fs_type);
+	err = register_filesystem(&bfs_fs_type);
 	if (err)
 		goto out;
 	return 0;

@@ -417,11 +417,11 @@ static int __init dtlk_dev_probe(void)
 			       DTLK_IO_EXTENT - 1,
 			       sp->rom_version, sp->serial_number);
 
-                        /* put LPC port into known state, so
+			/* put LPC port into known state, so
 			   dtlk_readable() gives valid result */
 			outb_p(0xff, dtlk_port_lpc);
 
-                        /* INIT string and index marker */
+			/* INIT string and index marker */
 			dtlk_write_bytes("\036\1@\0\0012I\r", 8);
 			/* posting an index takes 18 msec.  Here, we
 			   wait up to 100 msec to see whether it

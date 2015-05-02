@@ -68,7 +68,7 @@ struct iga_par {
 struct fb_info fb_info;
 
 struct fb_fix_screeninfo igafb_fix __initdata = {
-        .id		= "IGA 1682",
+	.id		= "IGA 1682",
 	.type		= FB_TYPE_PACKED_PIXELS,
 	.mmio_len 	= 1000
 };
@@ -177,15 +177,15 @@ struct fb_var_screeninfo default_var_1280x1024 __initdata = {
 static inline unsigned int iga_inb(struct iga_par *par, unsigned int reg,
 				   unsigned int idx)
 {
-        pci_outb(par, idx, reg);
-        return pci_inb(par, reg + 1);
+	pci_outb(par, idx, reg);
+	return pci_inb(par, reg + 1);
 }
 
 static inline void iga_outb(struct iga_par *par, unsigned char val,
 			    unsigned int reg, unsigned int idx )
 {
-        pci_outb(par, idx, reg);
-        pci_outb(par, val, reg+1);
+	pci_outb(par, idx, reg);
+	pci_outb(par, val, reg+1);
 }
 
 #endif /* CONFIG_SPARC */
@@ -196,7 +196,7 @@ static inline void iga_outb(struct iga_par *par, unsigned char val,
  */
 static void iga_blank_border(struct iga_par *par)
 {
-        int i;
+	int i;
 #if 0
 	/*
 	 * PROM does this for us, so keep this code as a reminder
@@ -274,19 +274,19 @@ static int igafb_mmap(struct fb_info *info,
 #endif /* CONFIG_SPARC */
 
 static int igafb_setcolreg(unsigned regno, unsigned red, unsigned green,
-                           unsigned blue, unsigned transp,
-                           struct fb_info *info)
+			   unsigned blue, unsigned transp,
+			   struct fb_info *info)
 {
-        /*
-         *  Set a single color register. The values supplied are
-         *  already rounded down to the hardware's capabilities
-         *  (according to the entries in the `var' structure). Return
-         *  != 0 for invalid regno.
-         */
+	/*
+	 *  Set a single color register. The values supplied are
+	 *  already rounded down to the hardware's capabilities
+	 *  (according to the entries in the `var' structure). Return
+	 *  != 0 for invalid regno.
+	 */
 	struct iga_par *par = (struct iga_par *)info->par;
 
-        if (regno >= info->cmap.len)
-                return 1;
+	if (regno >= info->cmap.len)
+		return 1;
 
 	pci_outb(par, regno, DAC_W_INDEX);
 	pci_outb(par, red,   DAC_DATA);
@@ -330,27 +330,27 @@ static struct fb_ops igafb_ops = {
 
 static int __init iga_init(struct fb_info *info, struct iga_par *par)
 {
-        char vramsz = iga_inb(par, IGA_EXT_CNTRL, IGA_IDX_EXT_BUS_CNTL)
+	char vramsz = iga_inb(par, IGA_EXT_CNTRL, IGA_IDX_EXT_BUS_CNTL)
 		                                         & MEM_SIZE_ALIAS;
 	int video_cmap_len;
 
-        switch (vramsz) {
-        case MEM_SIZE_1M:
-                info->fix.smem_len = 0x100000;
-                break;
-        case MEM_SIZE_2M:
-                info->fix.smem_len = 0x200000;
-                break;
-        case MEM_SIZE_4M:
-        case MEM_SIZE_RESERVED:
-                info->fix.smem_len = 0x400000;
-                break;
-        }
+	switch (vramsz) {
+	case MEM_SIZE_1M:
+		info->fix.smem_len = 0x100000;
+		break;
+	case MEM_SIZE_2M:
+		info->fix.smem_len = 0x200000;
+		break;
+	case MEM_SIZE_4M:
+	case MEM_SIZE_RESERVED:
+		info->fix.smem_len = 0x400000;
+		break;
+	}
 
-        if (info->var.bits_per_pixel > 8)
-                video_cmap_len = 16;
-        else
-                video_cmap_len = 256;
+	if (info->var.bits_per_pixel > 8)
+		video_cmap_len = 16;
+	else
+		video_cmap_len = 256;
 
 	info->fbops = &igafb_ops;
 	info->flags = FBINFO_DEFAULT;
@@ -370,25 +370,25 @@ static int __init iga_init(struct fb_info *info, struct iga_par *par)
 
 static int __init igafb_init(void)
 {
-        struct fb_info *info;
-        struct pci_dev *pdev;
-        struct iga_par *par;
+	struct fb_info *info;
+	struct pci_dev *pdev;
+	struct iga_par *par;
 	unsigned long addr;
 	int size, iga2000 = 0;
 
 	if (fb_get_options("igafb", NULL))
 		return -ENODEV;
 
-        pdev = pci_get_device(PCI_VENDOR_ID_INTERG,
-                               PCI_DEVICE_ID_INTERG_1682, 0);
+	pdev = pci_get_device(PCI_VENDOR_ID_INTERG,
+			       PCI_DEVICE_ID_INTERG_1682, 0);
 	if (pdev == NULL) {
 		/*
 		 * XXX We tried to use cyber2000fb.c for IGS 2000.
 		 * But it does not initialize the chip in JavaStation-E, alas.
 		 */
-        	pdev = pci_get_device(PCI_VENDOR_ID_INTERG, 0x2000, 0);
-        	if(pdev == NULL) {
-        	        return -ENXIO;
+		pdev = pci_get_device(PCI_VENDOR_ID_INTERG, 0x2000, 0);
+		if(pdev == NULL) {
+		        return -ENXIO;
 		}
 		iga2000 = 1;
 	}
@@ -398,23 +398,23 @@ static int __init igafb_init(void)
 	size = sizeof(struct iga_par) + sizeof(u32)*16;
 
 	info = framebuffer_alloc(size, &pdev->dev);
-        if (!info) {
-                printk("igafb_init: can't alloc fb_info\n");
+	if (!info) {
+		printk("igafb_init: can't alloc fb_info\n");
 		 pci_dev_put(pdev);
-                return -ENOMEM;
-        }
+		return -ENOMEM;
+	}
 
 	par = info->par;
 
 	if ((addr = pdev->resource[0].start) == 0) {
-                printk("igafb_init: no memory start\n");
+		printk("igafb_init: no memory start\n");
 		kfree(info);
 		pci_dev_put(pdev);
 		return -ENXIO;
 	}
 
 	if ((info->screen_base = ioremap(addr, 1024*1024*2)) == 0) {
-                printk("igafb_init: can't remap %lx[2M]\n", addr);
+		printk("igafb_init: can't remap %lx[2M]\n", addr);
 		kfree(info);
 		pci_dev_put(pdev);
 		return -ENXIO;
@@ -448,7 +448,7 @@ static int __init igafb_init(void)
 		igafb_fix.mmio_start = 0x30000000;	/* XXX */
 	}
 	if ((par->io_base = (int) ioremap(igafb_fix.mmio_start, igafb_fix.smem_len)) == 0) {
-                printk("igafb_init: can't remap %lx[4K]\n", igafb_fix.mmio_start);
+		printk("igafb_init: can't remap %lx[4K]\n", igafb_fix.mmio_start);
 		iounmap((void *)info->screen_base);
 		kfree(info);
 		pci_dev_put(pdev);
@@ -478,44 +478,44 @@ static int __init igafb_init(void)
 	 */
 	{
 		struct device_node *dp = pci_device_to_OF_node(pdev);
-                int node = dp->node;
-                int width = prom_getintdefault(node, "width", 1024);
-                int height = prom_getintdefault(node, "height", 768);
-                int depth = prom_getintdefault(node, "depth", 8);
-                switch (width) {
-                    case 1024:
-                        if (height == 768)
-                            default_var = default_var_1024x768;
-                        break;
-                    case 1152:
-                        if (height == 900)
-                            default_var = default_var_1152x900;
-                        break;
-                    case 1280:
-                        if (height == 1024)
-                            default_var = default_var_1280x1024;
-                        break;
-                    default:
-                        break;
-                }
+		int node = dp->node;
+		int width = prom_getintdefault(node, "width", 1024);
+		int height = prom_getintdefault(node, "height", 768);
+		int depth = prom_getintdefault(node, "depth", 8);
+		switch (width) {
+		    case 1024:
+			if (height == 768)
+			    default_var = default_var_1024x768;
+			break;
+		    case 1152:
+			if (height == 900)
+			    default_var = default_var_1152x900;
+			break;
+		    case 1280:
+			if (height == 1024)
+			    default_var = default_var_1280x1024;
+			break;
+		    default:
+			break;
+		}
 
-                switch (depth) {
-                    case 8:
-                        default_var.bits_per_pixel = 8;
-                        break;
-                    case 16:
-                        default_var.bits_per_pixel = 16;
-                        break;
-                    case 24:
-                        default_var.bits_per_pixel = 24;
-                        break;
-                    case 32:
-                        default_var.bits_per_pixel = 32;
-                        break;
-                    default:
-                        break;
-                }
-            }
+		switch (depth) {
+		    case 8:
+			default_var.bits_per_pixel = 8;
+			break;
+		    case 16:
+			default_var.bits_per_pixel = 16;
+			break;
+		    case 24:
+			default_var.bits_per_pixel = 24;
+			break;
+		    case 32:
+			default_var.bits_per_pixel = 32;
+			break;
+		    default:
+			break;
+		}
+	    }
 
 #endif
 	igafb_fix.smem_start = (unsigned long) info->screen_base;
@@ -532,7 +532,7 @@ static int __init igafb_init(void)
 		kfree(par->mmap_map);
 		kfree(info);
 		return -ENODEV;
-        }
+	}
 
 #ifdef CONFIG_SPARC
 	    /*
@@ -562,7 +562,7 @@ static int __init igafb_setup(char *options)
     char *this_opt;
 
     if (!options || !*options)
-        return 0;
+	return 0;
 
     while ((this_opt = strsep(&options, ",")) != NULL) {
     }

@@ -718,7 +718,7 @@ static inline int get_presence_status(struct controller *ctrl,
 
 static inline int wait_for_ctrl_irq(struct controller *ctrl)
 {
-        DECLARE_WAITQUEUE(wait, current);
+	DECLARE_WAITQUEUE(wait, current);
 	int retval = 0;
 
 	dbg("%s - start\n", __func__);

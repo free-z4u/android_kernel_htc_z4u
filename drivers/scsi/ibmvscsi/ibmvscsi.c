@@ -1217,7 +1217,7 @@ static int ibmvscsi_eh_abort_handler(struct scsi_cmnd *cmd)
 	}
 
 	sdev_printk(KERN_INFO, cmd->device,
-                    "aborting command. lun 0x%llx, tag 0x%llx\n",
+		    "aborting command. lun 0x%llx, tag 0x%llx\n",
 		    (((u64) lun) << 48), (u64) found_evt);
 
 	wait_for_completion(&evt->comp);

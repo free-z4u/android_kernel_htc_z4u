@@ -57,8 +57,8 @@
 // which is NOT really a floating point number.
 typedef union tagUQuadWord {
     struct {
-        unsigned int dwLowDword;
-        unsigned int dwHighDword;
+	unsigned int dwLowDword;
+	unsigned int dwHighDword;
     } u;
     double      DoNotUseThisField;
 } UQuadWord;

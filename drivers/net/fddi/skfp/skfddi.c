@@ -1181,7 +1181,7 @@ static void send_queued_packets(struct s_smc *smc)
 			txd->txd_os.dma_addr = dma_address;	// save dma mapping
 		}
 		hwm_tx_frag(smc, skb->data, dma_address, skb->len,
-                      frame_status | FIRST_FRAG | LAST_FRAG | EN_IRQ_EOF);
+		      frame_status | FIRST_FRAG | LAST_FRAG | EN_IRQ_EOF);
 
 		if (!(frame_status & LAN_TX)) {		// local only frame
 			pci_unmap_single(&bp->pdev, dma_address,

@@ -76,8 +76,8 @@ static s32 ixgbe_get_invariants_X540(struct ixgbe_hw *hw)
  *  @autoneg_wait_to_complete: true when waiting for completion is needed
  **/
 static s32 ixgbe_setup_mac_link_X540(struct ixgbe_hw *hw,
-                                     ixgbe_link_speed speed, bool autoneg,
-                                     bool autoneg_wait_to_complete)
+				     ixgbe_link_speed speed, bool autoneg,
+				     bool autoneg_wait_to_complete)
 {
 	return hw->phy.ops.setup_link_speed(hw, speed, autoneg,
 	                                    autoneg_wait_to_complete);
@@ -810,7 +810,7 @@ static struct ixgbe_mac_operations mac_ops_X540 = {
 	.clear_hw_cntrs         = &ixgbe_clear_hw_cntrs_generic,
 	.get_media_type         = &ixgbe_get_media_type_X540,
 	.get_supported_physical_layer =
-                                  &ixgbe_get_supported_physical_layer_X540,
+				  &ixgbe_get_supported_physical_layer_X540,
 	.enable_rx_dma          = &ixgbe_enable_rx_dma_generic,
 	.get_mac_addr           = &ixgbe_get_mac_addr_generic,
 	.get_san_mac_addr       = &ixgbe_get_san_mac_addr_generic,

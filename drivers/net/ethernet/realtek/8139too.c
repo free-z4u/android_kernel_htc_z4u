@@ -11,7 +11,7 @@
 
 	-----<snip>-----
 
-        	Written 1997-2001 by Donald Becker.
+		Written 1997-2001 by Donald Becker.
 		This software may be used and distributed according to the
 		terms of the GNU General Public License (GPL), incorporated
 		herein by reference.  Drivers based on or derived from this
@@ -118,8 +118,8 @@
 
 /* Default Message level */
 #define RTL8139_DEF_MSG_ENABLE   (NETIF_MSG_DRV   | \
-                                 NETIF_MSG_PROBE  | \
-                                 NETIF_MSG_LINK)
+				 NETIF_MSG_PROBE  | \
+				 NETIF_MSG_LINK)
 
 
 /* define to 1, 2 or 3 to enable copious debugging info */
@@ -133,10 +133,10 @@
 #  define assert(expr) do {} while (0)
 #else
 #  define assert(expr) \
-        if (unlikely(!(expr))) {				\
+	if (unlikely(!(expr))) {				\
 		pr_err("Assertion failed! %s,%s,%s,line=%d\n",	\
 		       #expr, __FILE__, __func__, __LINE__);	\
-        }
+	}
 #endif
 
 
@@ -386,12 +386,12 @@ enum rx_mode_bits {
 
 /* Bits in TxConfig. */
 enum tx_config_bits {
-        /* Interframe Gap Time. Only TxIFG96 doesn't violate IEEE 802.3 */
-        TxIFGShift	= 24,
-        TxIFG84		= (0 << TxIFGShift), /* 8.4us / 840ns (10 / 100Mbps) */
-        TxIFG88		= (1 << TxIFGShift), /* 8.8us / 880ns (10 / 100Mbps) */
-        TxIFG92		= (2 << TxIFGShift), /* 9.2us / 920ns (10 / 100Mbps) */
-        TxIFG96		= (3 << TxIFGShift), /* 9.6us / 960ns (10 / 100Mbps) */
+	/* Interframe Gap Time. Only TxIFG96 doesn't violate IEEE 802.3 */
+	TxIFGShift	= 24,
+	TxIFG84		= (0 << TxIFGShift), /* 8.4us / 840ns (10 / 100Mbps) */
+	TxIFG88		= (1 << TxIFGShift), /* 8.8us / 880ns (10 / 100Mbps) */
+	TxIFG92		= (2 << TxIFGShift), /* 9.2us / 920ns (10 / 100Mbps) */
+	TxIFG96		= (3 << TxIFGShift), /* 9.6us / 960ns (10 / 100Mbps) */
 
 	TxLoopBack	= (1 << 18) | (1 << 17), /* enable loopback test mode */
 	TxCRC		= (1 << 16),	/* DISABLE Tx pkt CRC append */

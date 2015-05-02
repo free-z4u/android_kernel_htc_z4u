@@ -72,7 +72,7 @@ static int zd1201_fw_upload(struct usb_device *dev, int apfw)
 	}
 
 	data = fw_entry->data;
-        len = fw_entry->size;
+	len = fw_entry->size;
 
 	buf = kmalloc(1024, GFP_ATOMIC);
 	if (!buf)

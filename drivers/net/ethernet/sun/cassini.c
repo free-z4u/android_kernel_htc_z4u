@@ -1409,7 +1409,7 @@ static cas_page_t *cas_page_swap(struct cas *cp, const int ring,
 static void cas_clean_rxds(struct cas *cp)
 {
 	/* only clean ring 0 as ring 1 is used for spare buffers */
-        struct cas_rx_desc *rxd = cp->init_rxds[0];
+	struct cas_rx_desc *rxd = cp->init_rxds[0];
 	int i, size;
 
 	/* release all rx flows */
@@ -1929,7 +1929,7 @@ static inline void cas_tx_ringN(struct cas *cp, int ring, int limit)
 static void cas_tx(struct net_device *dev, struct cas *cp,
 		   u32 status)
 {
-        int limit, ring;
+	int limit, ring;
 #ifdef USE_TX_COMPWB
 	u64 compwb = le64_to_cpu(cp->init_block->tx_compwb);
 #endif

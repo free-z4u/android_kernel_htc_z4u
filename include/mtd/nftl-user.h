@@ -46,8 +46,8 @@ struct nftl_uci1 {
 } __attribute__((packed));
 
 struct nftl_uci2 {
-        __u16 FoldMark;
-        __u16 FoldMark1;
+	__u16 FoldMark;
+	__u16 FoldMark1;
 	__u32 unused;
 } __attribute__((packed));
 

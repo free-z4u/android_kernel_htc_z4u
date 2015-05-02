@@ -111,7 +111,7 @@ struct islpci_mgmtframe {
 	struct net_device *ndev;      /* pointer to network device */
 	pimfor_header_t *header;      /* payload header, points into buf */
 	void *data;		      /* payload ex header, points into buf */
-        struct work_struct ws;	      /* argument for schedule_work() */
+	struct work_struct ws;	      /* argument for schedule_work() */
 	char buf[0];		      /* fragment buffer */
 };
 
@@ -126,14 +126,14 @@ islpci_mgt_cleanup_transmit(struct net_device *ndev);
 
 int
 islpci_mgt_transaction(struct net_device *ndev,
-                       int operation, unsigned long oid,
+		       int operation, unsigned long oid,
 		       void *senddata, int sendlen,
 		       struct islpci_mgmtframe **recvframe);
 
 static inline void
 islpci_mgt_release(struct islpci_mgmtframe *frame)
 {
-        kfree(frame);
+	kfree(frame);
 }
 
 #endif				/* _ISLPCI_MGT_H */

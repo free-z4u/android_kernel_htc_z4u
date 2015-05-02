@@ -2539,7 +2539,7 @@ int soc_new_pcm(struct snd_soc_pcm_runtime *rtd, int num)
 		goto out;
 	}
 
-        /* setup any hostless PCMs - i.e. no host IO is performed */
+	/* setup any hostless PCMs - i.e. no host IO is performed */
 	if (rtd->dai_link->no_host_mode) {
 		if (substream[SNDRV_PCM_STREAM_PLAYBACK]) {
 			substream[SNDRV_PCM_STREAM_PLAYBACK]->hw_no_buffer = 1;
@@ -2716,11 +2716,11 @@ static ssize_t soc_dpcm_state_read_file(struct file *file, char __user *user_buf
 		offset += soc_dpcm_show_state(fe, SNDRV_PCM_STREAM_CAPTURE,
 					buf + offset, out_count - offset);
 
-        ret = simple_read_from_buffer(user_buf, count, ppos, buf, offset);
+	ret = simple_read_from_buffer(user_buf, count, ppos, buf, offset);
 
-        kfree(buf);
+	kfree(buf);
 
-        return ret;
+	return ret;
 }
 
 static const struct file_operations soc_dpcm_state_fops = {

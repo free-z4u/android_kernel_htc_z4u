@@ -565,7 +565,7 @@ static int __init do_elmc_probe(struct net_device *dev)
 	   but it works, so I'll go with it. */
 
 #ifndef ELMC_MULTICAST
-        dev->flags&=~IFF_MULTICAST;     /* Multicast doesn't work */
+	dev->flags&=~IFF_MULTICAST;     /* Multicast doesn't work */
 #endif
 
 	retval = register_netdev(dev);

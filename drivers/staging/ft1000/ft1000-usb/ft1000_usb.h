@@ -136,8 +136,8 @@ struct ft1000_info {
     int (*ft1000_reset)(struct net_device *dev);
     u16 DSPInfoBlk[MAX_DSP_SESS_REC];
     union {
-        u16 Rec[MAX_DSP_SESS_REC];
-        u32 MagRec[MAX_DSP_SESS_REC/2];
+	u16 Rec[MAX_DSP_SESS_REC];
+	u32 MagRec[MAX_DSP_SESS_REC/2];
     } DSPSess;
 	unsigned short tempbuf[32];
 	char netdevname[IFNAMSIZ];

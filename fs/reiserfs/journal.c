@@ -54,9 +54,9 @@
 
 /* gets a struct reiserfs_journal_list * from a list head */
 #define JOURNAL_LIST_ENTRY(h) (list_entry((h), struct reiserfs_journal_list, \
-                               j_list))
+			       j_list))
 #define JOURNAL_WORK_ENTRY(h) (list_entry((h), struct reiserfs_journal_list, \
-                               j_working_list))
+			       j_working_list))
 
 /* the number of mounted filesystems.  This is used to decide when to
 ** start and kill the commit workqueue
@@ -1589,7 +1589,7 @@ static int flush_journal_list(struct super_block *s,
 }
 
 static int test_transaction(struct super_block *s,
-                            struct reiserfs_journal_list *jl)
+			    struct reiserfs_journal_list *jl)
 {
 	struct reiserfs_journal_cnode *cn;
 
@@ -2622,7 +2622,7 @@ static int journal_init_dev(struct super_block *super,
 static int check_advise_trans_params(struct super_block *sb,
 				     struct reiserfs_journal *journal)
 {
-        if (journal->j_trans_max) {
+	if (journal->j_trans_max) {
 	        /* Non-default journal params.
 		   Do sanity check for them. */
 	        int ratio = 1;
@@ -2647,7 +2647,7 @@ static int check_advise_trans_params(struct super_block *sb,
 		}
 	} else {
 		/* Default journal params.
-                   The file system was created by old version
+		   The file system was created by old version
 		   of mkreiserfs, so some fields contain zeros,
 		   and we need to advise proper values for them */
 		if (sb->s_blocksize != REISERFS_STANDARD_BLKSIZE) {
@@ -2816,7 +2816,7 @@ int journal_init(struct super_block *sb, const char *j_dev_name,
 		                 "too large for available memory. Usually "
 		                 "this is due to a journal that is too large.",
 		                 sizeof (struct reiserfs_journal_cnode) * num_cnodes);
-        	goto free_and_return;
+		goto free_and_return;
 	}
 
 	init_journal_hash(sb);
@@ -3927,7 +3927,7 @@ static int do_journal_end(struct reiserfs_transaction_handle *th,
 	BUG_ON(!th->t_trans_id);
 
 	/* protect flush_older_commits from doing mistakes if the
-           transaction ID counter gets overflowed.  */
+	   transaction ID counter gets overflowed.  */
 	if (th->t_trans_id == ~0U)
 		flags |= FLUSH_ALL | COMMIT_NOW | WAIT;
 	flush = flags & FLUSH_ALL;

@@ -465,7 +465,7 @@ static void n_hdlc_send_frames(struct n_hdlc *n_hdlc, struct tty_struct *tty)
 	n_hdlc->tbusy = 0;
 	spin_unlock_irqrestore(&n_hdlc->tx_buf_list.spinlock, flags);
 
-        if (n_hdlc->woke_up)
+	if (n_hdlc->woke_up)
 	  goto check_again;
 
 	if (debuglevel >= DEBUG_LEVEL_INFO)

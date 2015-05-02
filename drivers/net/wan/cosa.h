@@ -38,11 +38,11 @@
 #define SR_RX_RDY       0x80    /* receiver data ready */
 
 #define SR_UP_REQUEST   0x02    /* request from SRP to transfer data
-                                   up to PC */
+				   up to PC */
 #define SR_DOWN_REQUEST 0x01    /* SRP is able to transfer data down
-                                   from PC to SRP */
+				   from PC to SRP */
 #define SR_END_OF_TRANSFER      0x03    /* SRP signalize end of
-                                           transfer (up or down) */
+					   transfer (up or down) */
 
 #define SR_CMD_FROM_SRP_MASK    0x03    /* mask to get SRP command */
 

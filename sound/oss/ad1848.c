@@ -1786,7 +1786,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 					id = ad_read(devc, 25);
 				DDB(printk("ad1848_detect() - step J (%02x/%02x)\n", id, ad_read(devc, 25)));
 
-                                if ((id & 0xe7) == 0x80) {
+				if ((id & 0xe7) == 0x80) {
 					/*
 					 * It must be a CS4231 or AD1845. The register I23 of
 					 * CS4231 is undefined and it appears to be read only.
@@ -1887,11 +1887,11 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 
 					default: /* maybe */
 						DDB(printk("ad1848: I25 = %02x/%02x\n", ad_read(devc, 25), ad_read(devc, 25) & 0xe7));
-                                                if (optiC930)
-                                                {
-                                                        devc->chip_name = "82C930";
-                                                        devc->model = MD_C930;
-                                                }
+						if (optiC930)
+						{
+							devc->chip_name = "82C930";
+							devc->model = MD_C930;
+						}
 						else
 						{
 							devc->chip_name = "CS4231";
@@ -2839,24 +2839,24 @@ static struct {
 	unsigned short	card_vendor, card_device,
 			vendor, function;
 	short mss_io, irq, dma, dma2;   /* index into isapnp table */
-        int type;
+	int type;
 } ad1848_isapnp_list[] __initdata = {
 	{"CMI 8330 SoundPRO",
 		ISAPNP_VENDOR('C','M','I'), ISAPNP_DEVICE(0x0001),
 		ISAPNP_VENDOR('@','@','@'), ISAPNP_FUNCTION(0x0001),
 		0, 0, 0,-1, 0},
-        {"CS4232 based card",
-                ISAPNP_ANY_ID, ISAPNP_ANY_ID,
+	{"CS4232 based card",
+		ISAPNP_ANY_ID, ISAPNP_ANY_ID,
 		ISAPNP_VENDOR('C','S','C'), ISAPNP_FUNCTION(0x0000),
 		0, 0, 0, 1, 0},
-        {"CS4232 based card",
-                ISAPNP_ANY_ID, ISAPNP_ANY_ID,
+	{"CS4232 based card",
+		ISAPNP_ANY_ID, ISAPNP_ANY_ID,
 		ISAPNP_VENDOR('C','S','C'), ISAPNP_FUNCTION(0x0100),
 		0, 0, 0, 1, 0},
-        {"OPL3-SA2 WSS mode",
-        	ISAPNP_ANY_ID, ISAPNP_ANY_ID,
+	{"OPL3-SA2 WSS mode",
+		ISAPNP_ANY_ID, ISAPNP_ANY_ID,
 		ISAPNP_VENDOR('Y','M','H'), ISAPNP_FUNCTION(0x0021),
-                1, 0, 0, 1, 1},
+		1, 0, 0, 1, 1},
 	{"Advanced Gravis InterWave Audio",
 		ISAPNP_VENDOR('G','R','V'), ISAPNP_DEVICE(0x0001),
 		ISAPNP_VENDOR('G','R','V'), ISAPNP_FUNCTION(0x0000),
@@ -2867,12 +2867,12 @@ static struct {
 static struct isapnp_device_id id_table[] __devinitdata = {
 	{	ISAPNP_VENDOR('C','M','I'), ISAPNP_DEVICE(0x0001),
 		ISAPNP_VENDOR('@','@','@'), ISAPNP_FUNCTION(0x0001), 0 },
-        {       ISAPNP_ANY_ID, ISAPNP_ANY_ID,
+	{       ISAPNP_ANY_ID, ISAPNP_ANY_ID,
 		ISAPNP_VENDOR('C','S','C'), ISAPNP_FUNCTION(0x0000), 0 },
-        {       ISAPNP_ANY_ID, ISAPNP_ANY_ID,
+	{       ISAPNP_ANY_ID, ISAPNP_ANY_ID,
 		ISAPNP_VENDOR('C','S','C'), ISAPNP_FUNCTION(0x0100), 0 },
 	/* The main driver for this card is opl3sa2
-        {       ISAPNP_ANY_ID, ISAPNP_ANY_ID,
+	{       ISAPNP_ANY_ID, ISAPNP_ANY_ID,
 		ISAPNP_VENDOR('Y','M','H'), ISAPNP_FUNCTION(0x0021), 0 },
 	*/
 	{	ISAPNP_VENDOR('G','R','V'), ISAPNP_DEVICE(0x0001),
@@ -2917,7 +2917,7 @@ static struct pnp_dev __init *ad1848_init_generic(struct pnp_card *bus,
 				hw_config->dma2 = pnp_dma(ad1848_dev, ad1848_isapnp_list[slot].dma2);
 			else
 				hw_config->dma2 = -1;
-                        hw_config->card_subtype = ad1848_isapnp_list[slot].type;
+			hw_config->card_subtype = ad1848_isapnp_list[slot].type;
 		} else
 			return(NULL);
 	} else
@@ -3050,7 +3050,7 @@ module_exit(cleanup_ad1848);
 #ifndef MODULE
 static int __init setup_ad1848(char *str)
 {
-        /* io, irq, dma, dma2, type */
+	/* io, irq, dma, dma2, type */
 	int ints[6];
 
 	str = get_options(str, ARRAY_SIZE(ints), ints);

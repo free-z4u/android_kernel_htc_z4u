@@ -946,7 +946,7 @@ static struct clocksource lguest_clock = {
  * just applied the patch.
  */
 static int lguest_clockevent_set_next_event(unsigned long delta,
-                                           struct clock_event_device *evt)
+					   struct clock_event_device *evt)
 {
 	/* FIXME: I don't think this can ever happen, but James tells me he had
 	 * to put this code in.  Maybe we should remove it now.  Anyone? */
@@ -963,7 +963,7 @@ static int lguest_clockevent_set_next_event(unsigned long delta,
 }
 
 static void lguest_clockevent_set_mode(enum clock_event_mode mode,
-                                      struct clock_event_device *evt)
+				      struct clock_event_device *evt)
 {
 	switch (mode) {
 	case CLOCK_EVT_MODE_UNUSED:

@@ -52,7 +52,7 @@ host_to_fcp_swap(uint8_t *fcp, uint32_t bsize)
        uint32_t iter = bsize >> 2;
 
        for (; iter ; iter--)
-               *ofcp++ = swab32(*ifcp++);
+	       *ofcp++ = swab32(*ifcp++);
 
        return fcp;
 }

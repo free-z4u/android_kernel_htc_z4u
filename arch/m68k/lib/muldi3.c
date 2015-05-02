@@ -55,10 +55,10 @@ Boston, MA 02111-1307, USA.  */
 
 #define umul_ppmm(w1, w0, u, v) \
   __asm__ ("mulu%.l %3,%1:%0"						\
-           : "=d" ((USItype)(w0)),					\
-             "=d" ((USItype)(w1))					\
-           : "%0" ((USItype)(u)),					\
-             "dmi" ((USItype)(v)))
+	   : "=d" ((USItype)(w0)),					\
+	     "=d" ((USItype)(w1))					\
+	   : "%0" ((USItype)(u)),					\
+	     "dmi" ((USItype)(v)))
 
 #endif
 

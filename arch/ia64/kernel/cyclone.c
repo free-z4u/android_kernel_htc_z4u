@@ -27,11 +27,11 @@ static cycle_t read_cyclone(struct clocksource *cs)
 }
 
 static struct clocksource clocksource_cyclone = {
-        .name           = "cyclone",
-        .rating         = 300,
-        .read           = read_cyclone,
-        .mask           = (1LL << 40) - 1,
-        .flags          = CLOCK_SOURCE_IS_CONTINUOUS,
+	.name           = "cyclone",
+	.rating         = 300,
+	.read           = read_cyclone,
+	.mask           = (1LL << 40) - 1,
+	.flags          = CLOCK_SOURCE_IS_CONTINUOUS,
 };
 
 int __init init_cyclone_clock(void)

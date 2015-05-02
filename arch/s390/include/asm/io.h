@@ -28,9 +28,9 @@ static inline unsigned long virt_to_phys(volatile void * address)
 		 "	lra	%0,0(%1)\n"
 		 "	jz	0f\n"
 		 "	la	%0,0\n"
-                 "0:"
+		 "0:"
 		 : "=a" (real_address) : "a" (address) : "cc");
-        return real_address;
+	return real_address;
 }
 
 static inline void * phys_to_virt(unsigned long address)

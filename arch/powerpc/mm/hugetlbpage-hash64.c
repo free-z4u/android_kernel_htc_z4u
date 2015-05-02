@@ -118,7 +118,7 @@ repeat:
 
 				ppc_md.hpte_remove(hpte_group);
 				goto repeat;
-                        }
+			}
 		}
 
 		/*

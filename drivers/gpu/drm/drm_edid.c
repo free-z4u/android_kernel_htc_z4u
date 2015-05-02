@@ -1474,7 +1474,7 @@ void drm_edid_to_eld(struct drm_connector *connector, struct edid *edid)
 				memcpy(eld + 20 + mnl, &db[1], dbl);
 				break;
 			case SPEAKER_BLOCK:
-                                /* Speaker Allocation Data Block */
+				/* Speaker Allocation Data Block */
 				eld[7] = db[1];
 				break;
 			case VENDOR_BLOCK:

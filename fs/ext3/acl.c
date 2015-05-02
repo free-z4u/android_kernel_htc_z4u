@@ -293,7 +293,7 @@ ext3_acl_chmod(struct inode *inode)
 	struct posix_acl *acl;
 	handle_t *handle;
 	int retries = 0;
-        int error;
+	int error;
 
 	if (S_ISLNK(inode->i_mode))
 		return -EOPNOTSUPP;

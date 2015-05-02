@@ -115,7 +115,7 @@ static int irtty_change_speed(struct sir_dev *dev, unsigned speed)
 {
 	struct sirtty_cb *priv = dev->priv;
 	struct tty_struct *tty;
-        struct ktermios old_termios;
+	struct ktermios old_termios;
 	int cflag;
 
 	IRDA_ASSERT(priv != NULL, return -1;);

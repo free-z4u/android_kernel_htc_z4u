@@ -102,14 +102,14 @@
 
 /* LED ioctl */
 #define IO_LEDACTIVE_SET 0x7 /* set active led
-                              * 0=off, 1=green, 2=red, 3=yellow */
+			      * 0=off, 1=green, 2=red, 3=yellow */
 
 /* GPIO direction ioctl's */
 #define IO_READDIR    0x8  /* Read direction 0=input 1=output  (obsolete) */
 #define IO_SETINPUT   0x9  /* Set direction for bits set, 0=unchanged 1=input,
-                              returns mask with current inputs (obsolete) */
+			      returns mask with current inputs (obsolete) */
 #define IO_SETOUTPUT  0xA  /* Set direction for bits set, 0=unchanged 1=output,
-                              returns mask with current outputs (obsolete)*/
+			      returns mask with current outputs (obsolete)*/
 
 /* LED ioctl extended */
 #define IO_LED_SETBIT 0xB

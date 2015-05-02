@@ -119,7 +119,7 @@ static int bw_print_buffer(char *page, struct bw_stats_struct *stats)
 		       (int)G_SCD_BERR_RID(stats->status),
 		       (int)G_SCD_BERR_DCODE(stats->status));
 	/* XXXKW indicate multiple errors between printings, or stats
-           collection (or both)? */
+	   collection (or both)? */
 	if (stats->status & M_SCD_BERR_MULTERRS)
 		len += sprintf(page+len, "Multiple errors observed since last check.\n");
 	if (stats->status_printed) {

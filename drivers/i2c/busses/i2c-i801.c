@@ -4,7 +4,7 @@
     <mdsxyz123@yahoo.com>
     Copyright (C) 2007 - 2012  Jean Delvare <khali@linux-fr.org>
     Copyright (C) 2010         Intel Corporation,
-                               David Woodhouse <dwmw2@infradead.org>
+			       David Woodhouse <dwmw2@infradead.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 /*
   Supports the following Intel I/O Controller Hubs (ICH):
 
-                                  I/O                     Block   I2C
-                                  region  SMBus   Block   proc.   block
+				  I/O                     Block   I2C
+				  region  SMBus   Block   proc.   block
   Chip name             PCI ID    size    PEC     buffer  call    read
   ----------------------------------------------------------------------
   82801AA  (ICH)        0x2413     16      no      no      no      no

@@ -116,7 +116,7 @@ extern void change_bit(unsigned long nr, volatile void *addr);
  */
 #define __test_and_clear_bit(nr, addr)				\
 ({								\
-        volatile unsigned char *_a = (unsigned char *)(addr);	\
+	volatile unsigned char *_a = (unsigned char *)(addr);	\
 	const unsigned shift = (nr) & 7;			\
 	unsigned epsw;						\
 	_a += (nr) >> 3;					\

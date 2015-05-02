@@ -81,8 +81,8 @@ static const int event_map[] = {
 #define C(x)	PERF_COUNT_HW_CACHE_##x
 
 static const int cache_events[PERF_COUNT_HW_CACHE_MAX]
-                             [PERF_COUNT_HW_CACHE_OP_MAX]
-                             [PERF_COUNT_HW_CACHE_RESULT_MAX] =
+			     [PERF_COUNT_HW_CACHE_OP_MAX]
+			     [PERF_COUNT_HW_CACHE_RESULT_MAX] =
 {
 	[C(L1D)] = {	/* Data bank A */
 		[C(OP_READ)] = {

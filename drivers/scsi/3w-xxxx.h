@@ -4,7 +4,7 @@
    Written By: Adam Radford <linuxraid@lsi.com>
    Modifications By: Joel Jacobson <linux@3ware.com>
    		     Arnaldo Carvalho de Melo <acme@conectiva.com.br>
-                     Brad Strand <linux@3ware.com>
+		     Brad Strand <linux@3ware.com>
 
    Copyright (C) 1999-2010 3ware Inc.
 
@@ -98,7 +98,7 @@ static char *tw_aen_string[] = {
 static unsigned char tw_sense_table[][4] =
 {
   /* Codes for newer firmware */
-                            // ATA Error                    SCSI Error
+			    // ATA Error                    SCSI Error
   {0x01, 0x03, 0x13, 0x00}, // Address mark not found       Address mark not found for data field
   {0x04, 0x0b, 0x00, 0x00}, // Aborted command              Aborted command
   {0x10, 0x0b, 0x14, 0x00}, // ID not found                 Recorded entity not found
@@ -111,7 +111,7 @@ static unsigned char tw_sense_table[][4] =
   {0x09, 0x02, 0x04, 0x00}, // Unrecovered disk error       Not ready
 
   /* Codes for older firmware */
-                            // 3ware Error                  SCSI Error
+			    // 3ware Error                  SCSI Error
   {0x51, 0x0b, 0x00, 0x00}  // Unspecified                  Aborted command
 };
 
@@ -217,8 +217,8 @@ static unsigned char tw_sense_table[][4] =
 #define TW_MAX_RESET_TRIES		      3
 #define TW_UNIT_INFORMATION_TABLE_BASE	      0x300
 #define TW_MAX_CMDS_PER_LUN		      254 /* 254 for io, 1 for
-                                                     chrdev ioctl, one for
-                                                     internal aen post */
+						     chrdev ioctl, one for
+						     internal aen post */
 #define TW_BLOCK_SIZE			      0x200 /* 512-byte blocks */
 #define TW_IOCTL                              0x80
 #define TW_UNIT_ONLINE                        1

@@ -291,14 +291,14 @@ static void par96_interrupt(void *dev_id)
 	local_irq_enable();
 	hdlcdrv_transmitter(dev, &bc->hdrv);
 	hdlcdrv_receiver(dev, &bc->hdrv);
-        local_irq_disable();
+	local_irq_disable();
 }
 
 /* --------------------------------------------------------------------- */
 
 static void par96_wakeup(void *handle)
 {
-        struct net_device *dev = (struct net_device *)handle;
+	struct net_device *dev = (struct net_device *)handle;
 	struct baycom_state *bc = netdev_priv(dev);
 
 	printk(KERN_DEBUG "baycom_par: %s: why am I being woken up?\n", dev->name);
@@ -347,7 +347,7 @@ static int par96_open(struct net_device *dev)
 	pp = bc->pdev->port;
 	dev->irq = pp->irq;
 	pp->ops->data_forward(pp);
-        bc->hdrv.par.bitrate = 9600;
+	bc->hdrv.par.bitrate = 9600;
 	pp->ops->write_data(pp, PAR96_PTT | PAR97_POWER); /* switch off PTT */
 	pp->ops->enable_irq(pp);
 	printk(KERN_INFO "%s: par96 at iobase 0x%lx irq %u options 0x%x\n",
@@ -555,16 +555,16 @@ module_exit(cleanup_baycompar);
 
 static int __init baycom_par_setup(char *str)
 {
-        static unsigned nr_dev;
+	static unsigned nr_dev;
 	int ints[2];
 
-        if (nr_dev >= NR_PORTS)
-                return 0;
-        str = get_options(str, 2, ints);
-        if (ints[0] < 1)
-                return 0;
-        mode[nr_dev] = str;
-        iobase[nr_dev] = ints[1];
+	if (nr_dev >= NR_PORTS)
+		return 0;
+	str = get_options(str, 2, ints);
+	if (ints[0] < 1)
+		return 0;
+	mode[nr_dev] = str;
+	iobase[nr_dev] = ints[1];
 	nr_dev++;
 	return 1;
 }

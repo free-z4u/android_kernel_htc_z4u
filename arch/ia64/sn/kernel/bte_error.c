@@ -238,7 +238,7 @@ void bte_error_handler(unsigned long _nodepda)
  */
 void
 bte_crb_error_handler(cnodeid_t cnode, int btenum,
-                      int crbnum, ioerror_t * ioe, int bteop)
+		      int crbnum, ioerror_t * ioe, int bteop)
 {
 	struct bteinfo_s *bte;
 

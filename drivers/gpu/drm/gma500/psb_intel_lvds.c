@@ -83,10 +83,10 @@ static u32 psb_intel_lvds_get_max_backlight(struct drm_device *dev)
 	ret = (ret &  BACKLIGHT_MODULATION_FREQ_MASK) >>
 					BACKLIGHT_MODULATION_FREQ_SHIFT;
 
-        ret *= 2;	/* Return a 16bit range as needed for setting */
-        if (ret == 0)
-                dev_err(dev->dev, "BL bug: Reg %08x save %08X\n",
-                        REG_READ(BLC_PWM_CTL), dev_priv->regs.saveBLC_PWM_CTL);
+	ret *= 2;	/* Return a 16bit range as needed for setting */
+	if (ret == 0)
+		dev_err(dev->dev, "BL bug: Reg %08x save %08X\n",
+			REG_READ(BLC_PWM_CTL), dev_priv->regs.saveBLC_PWM_CTL);
 	return ret;
 }
 
@@ -160,7 +160,7 @@ static int psb_lvds_pwm_set_brightness(struct drm_device *dev, int level)
 		  (max_pwm_blc << PSB_BACKLIGHT_PWM_CTL_SHIFT) |
 		  (blc_pwm_duty_cycle));
 
-        dev_info(dev->dev, "Backlight lvds set brightness %08x\n",
+	dev_info(dev->dev, "Backlight lvds set brightness %08x\n",
 		  (max_pwm_blc << PSB_BACKLIGHT_PWM_CTL_SHIFT) |
 		  (blc_pwm_duty_cycle));
 
@@ -226,7 +226,7 @@ static void psb_intel_lvds_set_power(struct drm_device *dev, bool on)
 	if (!gma_power_begin(dev, true)) {
 	        dev_err(dev->dev, "set power, chip off!\n");
 		return;
-        }
+	}
 
 	if (on) {
 		REG_WRITE(PP_CONTROL, REG_READ(PP_CONTROL) |

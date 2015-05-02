@@ -462,11 +462,11 @@ static int do_rx_dma(struct atm_vcc *vcc,struct sk_buff *skb,
 		    vcc->dev->number);
 		goto trouble;
 	}
-        for (i = 0; i < j; i++) {
+	for (i = 0; i < j; i++) {
 		writel(dma[i*2],eni_dev->rx_dma+dma_wr*8);
 		writel(dma[i*2+1],eni_dev->rx_dma+dma_wr*8+4);
 		dma_wr = (dma_wr+1) & (NR_DMA_RX-1);
-        }
+	}
 	if (skb) {
 		ENI_PRV_POS(skb) = eni_vcc->descr+size+1;
 		skb_queue_tail(&eni_dev->rx_queue,skb);
@@ -1151,13 +1151,13 @@ DPRINTK("doing direct send\n"); /* @@@ well, this doesn't work anyway */
 	    (size/(ATM_CELL_PAYLOAD/4)),tx->send+tx->tx_pos*4);
 /*printk("dsc = 0x%08lx\n",(unsigned long) readl(tx->send+tx->tx_pos*4));*/
 	writel((vcc->vci << MID_SEG_VCI_SHIFT) |
-            (aal5 ? 0 : (skb->data[3] & 0xf)) |
+	    (aal5 ? 0 : (skb->data[3] & 0xf)) |
 	    (ATM_SKB(skb)->atm_options & ATM_ATMOPT_CLP ? MID_SEG_CLP : 0),
 	    tx->send+((tx->tx_pos+1) & (tx->words-1))*4);
 	DPRINTK("size: %d, len:%d\n",size,skb->len);
 	if (aal5)
 		writel(skb->len,tx->send+
-                    ((tx->tx_pos+size-AAL5_TRAILER) & (tx->words-1))*4);
+		    ((tx->tx_pos+size-AAL5_TRAILER) & (tx->words-1))*4);
 	j = j >> 1;
 	for (i = 0; i < j; i++) {
 		writel(eni_dev->dma[i*2],eni_dev->tx_dma+dma_wr*8);

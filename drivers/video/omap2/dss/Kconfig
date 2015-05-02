@@ -1,7 +1,7 @@
 menuconfig OMAP2_DSS
-        tristate "OMAP2+ Display Subsystem support"
-        depends on ARCH_OMAP2PLUS
-        help
+	tristate "OMAP2+ Display Subsystem support"
+	depends on ARCH_OMAP2PLUS
+	help
 	  OMAP2+ Display Subsystem support.
 
 if OMAP2_DSS
@@ -19,7 +19,7 @@ config OMAP2_VRAM_SIZE
 	  in the board file.
 
 config OMAP2_DSS_DEBUG_SUPPORT
-        bool "Debug support"
+	bool "Debug support"
 	default y
 	help
 	  This enables debug messages. You need to enable printing
@@ -44,7 +44,7 @@ config OMAP2_DSS_DPI
 
 config OMAP2_DSS_RFBI
 	bool "RFBI support"
-        default n
+	default n
 	help
 	  MIPI DBI support (RFBI, Remote Framebuffer Interface, in Texas
 	  Instrument's terminology).
@@ -56,14 +56,14 @@ config OMAP2_DSS_RFBI
 
 config OMAP2_DSS_VENC
 	bool "VENC support"
-        default y
+	default y
 	help
 	  OMAP Video Encoder support for S-Video and composite TV-out.
 
 config OMAP4_DSS_HDMI
 	bool "HDMI support"
 	depends on ARCH_OMAP4
-        default y
+	default y
 	help
 	  HDMI Interface. This adds the High Definition Multimedia Interface.
 	  See http://www.hdmi.org/ for HDMI specification.
@@ -71,7 +71,7 @@ config OMAP4_DSS_HDMI
 config OMAP2_DSS_SDI
 	bool "SDI support"
 	depends on ARCH_OMAP3
-        default n
+	default n
 	help
 	  SDI (Serial Display Interface) support.
 
@@ -81,7 +81,7 @@ config OMAP2_DSS_SDI
 config OMAP2_DSS_DSI
 	bool "DSI support"
 	depends on ARCH_OMAP3 || ARCH_OMAP4
-        default n
+	default n
 	help
 	  MIPI DSI (Display Serial Interface) support.
 

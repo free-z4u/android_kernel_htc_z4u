@@ -91,7 +91,7 @@ typedef __u16 __bitwise __fs16;
 #define SBLOCK_PIGGY    262144
 #define SBLOCKSIZE        8192
 #define SBLOCKSEARCH \
-        { SBLOCK_UFS2, SBLOCK_UFS1, SBLOCK_FLOPPY, SBLOCK_PIGGY, -1 }
+	{ SBLOCK_UFS2, SBLOCK_UFS1, SBLOCK_FLOPPY, SBLOCK_PIGGY, -1 }
 
 
 /* HP specific MAGIC values */
@@ -770,7 +770,7 @@ struct ufs_sb_private_info {
 	__s64	s_qfmask;	/* ~usb_fmask */
 	__s32	s_postblformat;	/* format of positional layout tables */
 	__s32	s_nrpos;	/* number of rotational positions */
-        __s32	s_postbloff;	/* (__s16) rotation block list head */
+	__s32	s_postbloff;	/* (__s16) rotation block list head */
 	__s32	s_rotbloff;	/* (__u8) blocks for each rotation */
 
 	__u32	s_fpbmask;	/* fragments per block mask */

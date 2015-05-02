@@ -1215,9 +1215,9 @@ void pmac_pci_fixup_pciata(struct pci_dev* dev)
        u8 progif = 0;
 
        /*
-        * On PowerMacs, we try to switch any PCI ATA controller to
+	* On PowerMacs, we try to switch any PCI ATA controller to
 	* fully native mode
-        */
+	*/
 	if (!machine_is(powermac))
 		return;
 

@@ -2167,7 +2167,7 @@ MODULE_PARM_DESC(vram, "System RAM to allocate to framebuffer in MiB"
 		 " (default=4)");
 module_param(voffset, int, 0);
 MODULE_PARM_DESC(voffset, "at what offset to place start of framebuffer "
-                 "memory (0 to maximum aperture size), in MiB (default = 48)");
+		 "memory (0 to maximum aperture size), in MiB (default = 48)");
 module_param(bpp, int, 0);
 MODULE_PARM_DESC(bpp, "Color depth for display in bits per pixel"
 		 " (default = 8)");

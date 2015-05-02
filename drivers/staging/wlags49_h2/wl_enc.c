@@ -124,35 +124,35 @@ int wl_wep_code( char *szCrypt, char *szDest, void *Data, int nLen )
 	    k = szData[i] ^ ( bits + i );
 
 
-        switch( i % 3 ) {
+	switch( i % 3 ) {
 
-        case 0 :
+	case 0 :
 
-            szDest[t]   = ((k & 0xFC) >> 2) + CH_START ;
+	    szDest[t]   = ((k & 0xFC) >> 2) + CH_START ;
 			szDest[t+1] = ((k & 0x03) << 4) + CH_START ;
 	        szDest[t+2] = '\0';
 
-            break;
+	    break;
 
 
-        case 1 :
+	case 1 :
 
-            szDest[t]  += (( k & 0xF0 ) >> 4 );
+	    szDest[t]  += (( k & 0xF0 ) >> 4 );
 			szDest[t+1] = (( k & 0x0F ) << 2 ) + CH_START ;
 	        szDest[t+2] = '\0';
 
-            break;
+	    break;
 
 
-        case 2 :
+	case 2 :
 
-            szDest[t]  += (( k & 0xC0 ) >> 6 );
+	    szDest[t]  += (( k & 0xC0 ) >> 6 );
 			szDest[t+1] = ( k & 0x3F ) + CH_START ;
 	        szDest[t+2] = '\0';
 	        t++;
 
-            break;
-        }
+	    break;
+	}
     }
 
     return( strlen( szDest )) ;
@@ -203,20 +203,20 @@ int wl_wep_decode( char *szCrypt, void *Dest, char *szData )
       switch( i % 3 ) {
       case 0 :
 
-          szDest[i] = ((( szData[t]-CH_START ) & 0x3f ) << 2 ) +
-                      ((( szData[t+1]-CH_START ) & 0x30 ) >> 4 );
+	  szDest[i] = ((( szData[t]-CH_START ) & 0x3f ) << 2 ) +
+		      ((( szData[t+1]-CH_START ) & 0x30 ) >> 4 );
 	      break;
 
 
       case 1 :
-          szDest[i] = ((( szData[t]-CH_START ) & 0x0f ) << 4 ) +
-                      ((( szData[t+1]-CH_START ) & 0x3c ) >> 2 );
+	  szDest[i] = ((( szData[t]-CH_START ) & 0x0f ) << 4 ) +
+		      ((( szData[t+1]-CH_START ) & 0x3c ) >> 2 );
 	      break;
 
 
       case 2 :
-          szDest[i] = ((( szData[t]-CH_START ) & 0x03 ) << 6 ) +
-                       (( szData[t+1]-CH_START ) & 0x3f );
+	  szDest[i] = ((( szData[t]-CH_START ) & 0x03 ) << 6 ) +
+		       (( szData[t+1]-CH_START ) & 0x3f );
 	      t++;
 	      break;
       }

@@ -54,12 +54,12 @@ static const void *__init get_config(u16 tag, size_t len,
 
 const void *__init __omap_get_config(u16 tag, size_t len, int nr)
 {
-        return get_config(tag, len, nr, NULL);
+	return get_config(tag, len, nr, NULL);
 }
 
 const void *__init omap_get_var_config(u16 tag, size_t *len)
 {
-        return get_config(tag, NO_LENGTH_CHECK, 0, len);
+	return get_config(tag, NO_LENGTH_CHECK, 0, len);
 }
 
 void __init omap_reserve(void)

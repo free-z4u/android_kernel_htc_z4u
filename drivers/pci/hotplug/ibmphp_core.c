@@ -461,7 +461,7 @@ static int get_max_adapter_speed_1(struct hotplug_slot *hotplug_slot, u8 * value
 					*value = SLOT_SPEED(myslot.ext_status);
 			} else
 				*value = MAX_ADAPTER_NONE;
-                }
+		}
 	}
 
 	if (flag)
@@ -622,11 +622,11 @@ int ibmphp_update_slot_info(struct slot *slot_cur)
 	info->attention_status = SLOT_ATTN(slot_cur->status,
 						slot_cur->ext_status);
 	info->latch_status = SLOT_LATCH(slot_cur->status);
-        if (!SLOT_PRESENT(slot_cur->status)) {
-                info->adapter_status = 0;
+	if (!SLOT_PRESENT(slot_cur->status)) {
+		info->adapter_status = 0;
 /*		info->max_adapter_speed_status = MAX_ADAPTER_NONE; */
 	} else {
-                info->adapter_status = 1;
+		info->adapter_status = 1;
 /*		get_max_adapter_speed_1(slot_cur->hotplug_slot,
 					&info->max_adapter_speed_status, 0); */
 	}
@@ -1174,7 +1174,7 @@ error_power:
 * HOT REMOVING ADAPTER CARD                                   *
 * INPUT: POINTER TO THE HOTPLUG SLOT STRUCTURE                *
 * OUTPUT: SUCCESS 0 ; FAILURE: UNCONFIGURE , VALIDATE         *
-          DISABLE POWER ,                                    *
+	  DISABLE POWER ,                                    *
 **************************************************************/
 static int ibmphp_disable_slot(struct hotplug_slot *hotplug_slot)
 {

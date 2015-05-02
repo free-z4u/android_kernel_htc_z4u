@@ -29,31 +29,31 @@ static struct map_info h720x_map = {
 };
 
 static struct mtd_partition h720x_partitions[] = {
-        {
-                .name = "ArMon",
-                .size = 0x00080000,
-                .offset = 0,
-                .mask_flags = MTD_WRITEABLE
-        },{
-                .name = "Env",
-                .size = 0x00040000,
-                .offset = 0x00080000,
-                .mask_flags = MTD_WRITEABLE
-        },{
-                .name = "Kernel",
-                .size = 0x00180000,
-                .offset = 0x000c0000,
-                .mask_flags = MTD_WRITEABLE
-        },{
-                .name = "Ramdisk",
-                .size = 0x00400000,
-                .offset = 0x00240000,
-                .mask_flags = MTD_WRITEABLE
-        },{
-                .name = "jffs2",
-                .size = MTDPART_SIZ_FULL,
-                .offset = MTDPART_OFS_APPEND
-        }
+	{
+		.name = "ArMon",
+		.size = 0x00080000,
+		.offset = 0,
+		.mask_flags = MTD_WRITEABLE
+	},{
+		.name = "Env",
+		.size = 0x00040000,
+		.offset = 0x00080000,
+		.mask_flags = MTD_WRITEABLE
+	},{
+		.name = "Kernel",
+		.size = 0x00180000,
+		.offset = 0x000c0000,
+		.mask_flags = MTD_WRITEABLE
+	},{
+		.name = "Ramdisk",
+		.size = 0x00400000,
+		.offset = 0x00240000,
+		.mask_flags = MTD_WRITEABLE
+	},{
+		.name = "jffs2",
+		.size = MTDPART_SIZ_FULL,
+		.offset = MTDPART_OFS_APPEND
+	}
 };
 
 #define NUM_PARTITIONS ARRAY_SIZE(h720x_partitions)

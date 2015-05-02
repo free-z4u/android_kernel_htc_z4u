@@ -454,9 +454,9 @@
 /** How many bits are available for the rate. */
 #define SIM_CONTROL_SHAPING_RATE_BITS \
   (32 - (_SIM_CONTROL_OPERATOR_BITS + \
-         SIM_CONTROL_SHAPING_SHIM_ID_BITS + \
-         SIM_CONTROL_SHAPING_TYPE_BITS + \
-         SIM_CONTROL_SHAPING_UNITS_BITS))
+	 SIM_CONTROL_SHAPING_SHIM_ID_BITS + \
+	 SIM_CONTROL_SHAPING_TYPE_BITS + \
+	 SIM_CONTROL_SHAPING_UNITS_BITS))
 
 /** Computes the value to write to SPR_SIM_CONTROL to change a bitrate. */
 #define SIM_SHAPING_SPR_ARG(shim, type, units, rate) \
@@ -464,10 +464,10 @@
    ((shim) | \
    ((type) << (SIM_CONTROL_SHAPING_SHIM_ID_BITS)) | \
    ((units) << (SIM_CONTROL_SHAPING_SHIM_ID_BITS + \
-                SIM_CONTROL_SHAPING_TYPE_BITS)) | \
+		SIM_CONTROL_SHAPING_TYPE_BITS)) | \
    ((rate) << (SIM_CONTROL_SHAPING_SHIM_ID_BITS + \
-               SIM_CONTROL_SHAPING_TYPE_BITS + \
-               SIM_CONTROL_SHAPING_UNITS_BITS))) << _SIM_CONTROL_OPERATOR_BITS)
+	       SIM_CONTROL_SHAPING_TYPE_BITS + \
+	       SIM_CONTROL_SHAPING_UNITS_BITS))) << _SIM_CONTROL_OPERATOR_BITS)
 
 
 /*

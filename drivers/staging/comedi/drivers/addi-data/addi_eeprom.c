@@ -654,7 +654,7 @@ void v_EepromSendCommand76(unsigned int dw_Address, unsigned int dw_EepromComman
 void v_EepromCs76Read(unsigned int dw_Address, unsigned short w_offset, unsigned short *pw_Value)
 {
 
-        char c_BitPos = 0;
+	char c_BitPos = 0;
 
 	unsigned int dw_RegisterValue = 0;
 

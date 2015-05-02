@@ -281,7 +281,7 @@ struct net_device_stats *wl_stats( struct net_device *dev )
 
     /* If pStats is still NULL, then the device is not a WDS port */
     if( pStats == NULL ) {
-        pStats = &( lp->stats );
+	pStats = &( lp->stats );
     }
 
     wl_unlock( lp, &flags );
@@ -339,9 +339,9 @@ int wl_open(struct net_device *dev)
 	DBG_TRACE( DbgInfo, "Enabling Port 0\n" );
 	status = wl_enable( lp );
 
-        if( status != HCF_SUCCESS ) {
-            DBG_TRACE( DbgInfo, "Enable port 0 failed: 0x%x\n", status );
-        }
+	if( status != HCF_SUCCESS ) {
+	    DBG_TRACE( DbgInfo, "Enable port 0 failed: 0x%x\n", status );
+	}
     }
 
     // Holding the lock too long, make a gap to allow other processes
@@ -373,13 +373,13 @@ int wl_open(struct net_device *dev)
 	WL_WDS_NETIF_CARRIER_ON( lp );
 
 	lp->is_handling_int = WL_HANDLING_INT; // Start handling interrupts
-        wl_act_int_on( lp );
+	wl_act_int_on( lp );
 
 	netif_start_queue( dev );
 	WL_WDS_NETIF_START_QUEUE( lp );
     } else {
-        wl_hcf_error( dev, status );		/* Report the error */
-        netif_device_detach( dev );		/* Stop the device and queue */
+	wl_hcf_error( dev, status );		/* Report the error */
+	netif_device_detach( dev );		/* Stop the device and queue */
     }
 
     wl_unlock( lp, &flags );
@@ -425,10 +425,10 @@ int wl_close( struct net_device *dev )
     WL_WDS_NETIF_CARRIER_OFF( lp );
 
     /* Shutdown the adapter:
-            Disable adapter interrupts
-            Stop Tx/Rx
-            Update statistics
-            Set low power mode
+	    Disable adapter interrupts
+	    Stop Tx/Rx
+	    Update statistics
+	    Set low power mode
     */
 
     wl_lock( lp, &flags );
@@ -687,50 +687,50 @@ int wl_send( struct wl_private *lp )
     DBG_FUNC( "wl_send" );
 
     if( lp == NULL ) {
-        DBG_ERROR( DbgInfo, "Private adapter struct is NULL\n" );
-        return FALSE;
+	DBG_ERROR( DbgInfo, "Private adapter struct is NULL\n" );
+	return FALSE;
     }
     if( lp->dev == NULL ) {
-        DBG_ERROR( DbgInfo, "net_device struct in wl_private is NULL\n" );
-        return FALSE;
+	DBG_ERROR( DbgInfo, "net_device struct in wl_private is NULL\n" );
+	return FALSE;
     }
 
     /* Check for the availability of FIDs; if none are available, don't take any
        frames off the txQ */
     if( lp->hcfCtx.IFB_RscInd == 0 ) {
-        return FALSE;
+	return FALSE;
     }
 
     /* Reclaim the TxQ Elements and place them back on the free queue */
     if( !list_empty( &( lp->txQ[0] ))) {
-        element = lp->txQ[0].next;
+	element = lp->txQ[0].next;
 
-        txF = (WVLAN_LFRAME * )list_entry( element, WVLAN_LFRAME, node );
-        if( txF != NULL ) {
-            lp->txF.skb  = txF->frame.skb;
-            lp->txF.port = txF->frame.port;
+	txF = (WVLAN_LFRAME * )list_entry( element, WVLAN_LFRAME, node );
+	if( txF != NULL ) {
+	    lp->txF.skb  = txF->frame.skb;
+	    lp->txF.port = txF->frame.port;
 
-            txF->frame.skb  = NULL;
-            txF->frame.port = 0;
+	    txF->frame.skb  = NULL;
+	    txF->frame.port = 0;
 
-            list_del( &( txF->node ));
-            list_add( element, &( lp->txFree ));
+	    list_del( &( txF->node ));
+	    list_add( element, &( lp->txFree ));
 
-            lp->txQ_count--;
+	    lp->txQ_count--;
 
-            if( lp->txQ_count < TX_Q_LOW_WATER_MARK ) {
-                if( lp->netif_queue_on == FALSE ) {
-                    DBG_TX( DbgInfo, "Kickstarting Q: %d\n", lp->txQ_count );
-                    netif_wake_queue( lp->dev );
-                    WL_WDS_NETIF_WAKE_QUEUE( lp );
-                    lp->netif_queue_on = TRUE;
-                }
-            }
-        }
+	    if( lp->txQ_count < TX_Q_LOW_WATER_MARK ) {
+		if( lp->netif_queue_on == FALSE ) {
+		    DBG_TX( DbgInfo, "Kickstarting Q: %d\n", lp->txQ_count );
+		    netif_wake_queue( lp->dev );
+		    WL_WDS_NETIF_WAKE_QUEUE( lp );
+		    lp->netif_queue_on = TRUE;
+		}
+	    }
+	}
     }
 
     if( lp->txF.skb == NULL ) {
-        return FALSE;
+	return FALSE;
     }
 
     /* If the device has resources (FIDs) available, then Tx the packet */
@@ -745,30 +745,30 @@ int wl_send( struct wl_private *lp )
     status = hcf_send_msg( &( lp->hcfCtx ), desc, lp->txF.port );
 
     if( status == HCF_SUCCESS ) {
-        lp->dev->trans_start = jiffies;
+	lp->dev->trans_start = jiffies;
 
-        DBG_TX( DbgInfo, "Transmit...\n" );
+	DBG_TX( DbgInfo, "Transmit...\n" );
 
-        if( lp->txF.port == HCF_PORT_0 ) {
-            lp->stats.tx_packets++;
-            lp->stats.tx_bytes += lp->txF.skb->len;
-        }
+	if( lp->txF.port == HCF_PORT_0 ) {
+	    lp->stats.tx_packets++;
+	    lp->stats.tx_bytes += lp->txF.skb->len;
+	}
 
 #ifdef USE_WDS
-        else
-        {
-            lp->wds_port[(( lp->txF.port >> 8 ) - 1)].stats.tx_packets++;
-            lp->wds_port[(( lp->txF.port >> 8 ) - 1)].stats.tx_bytes += lp->txF.skb->len;
-        }
+	else
+	{
+	    lp->wds_port[(( lp->txF.port >> 8 ) - 1)].stats.tx_packets++;
+	    lp->wds_port[(( lp->txF.port >> 8 ) - 1)].stats.tx_bytes += lp->txF.skb->len;
+	}
 
 #endif  /* USE_WDS */
 
-        /* Free the skb and perform queue cleanup, as the buffer was
-            transmitted successfully */
-        dev_kfree_skb( lp->txF.skb );
+	/* Free the skb and perform queue cleanup, as the buffer was
+	    transmitted successfully */
+	dev_kfree_skb( lp->txF.skb );
 
-        lp->txF.skb = NULL;
-        lp->txF.port = 0;
+	lp->txF.skb = NULL;
+	lp->txF.port = 0;
     }
 
     return TRUE;
@@ -808,58 +808,58 @@ int wl_tx( struct sk_buff *skb, struct net_device *dev, int port )
     wl_lock( lp, &flags );
 
     if( lp->flags & WVLAN2_UIL_BUSY ) {
-        DBG_WARNING( DbgInfo, "UIL has device blocked\n" );
-        /* Start dropping packets here??? */
+	DBG_WARNING( DbgInfo, "UIL has device blocked\n" );
+	/* Start dropping packets here??? */
 	wl_unlock( lp, &flags );
-        return 1;
+	return 1;
     }
 
 #ifdef USE_RTS
     if( lp->useRTS == 1 ) {
-        DBG_PRINT( "RTS: we're getting a Tx...\n" );
+	DBG_PRINT( "RTS: we're getting a Tx...\n" );
 	wl_unlock( lp, &flags );
-        return 1;
+	return 1;
     }
 #endif  /* USE_RTS */
 
     if( !lp->use_dma ) {
-        /* Get an element from the queue */
-        element = lp->txFree.next;
-        txF = (WVLAN_LFRAME *)list_entry( element, WVLAN_LFRAME, node );
-        if( txF == NULL ) {
-            DBG_ERROR( DbgInfo, "Problem with list_entry\n" );
+	/* Get an element from the queue */
+	element = lp->txFree.next;
+	txF = (WVLAN_LFRAME *)list_entry( element, WVLAN_LFRAME, node );
+	if( txF == NULL ) {
+	    DBG_ERROR( DbgInfo, "Problem with list_entry\n" );
 	    wl_unlock( lp, &flags );
-            return 1;
-        }
-        /* Fill out the frame */
-        txF->frame.skb = skb;
-        txF->frame.port = port;
-        /* Move the frame to the txQ */
-        /* NOTE: Here's where we would do priority queueing */
-        list_del( &( txF->node ));
-        list_add( &( txF->node ), &( lp->txQ[0] ));
+	    return 1;
+	}
+	/* Fill out the frame */
+	txF->frame.skb = skb;
+	txF->frame.port = port;
+	/* Move the frame to the txQ */
+	/* NOTE: Here's where we would do priority queueing */
+	list_del( &( txF->node ));
+	list_add( &( txF->node ), &( lp->txQ[0] ));
 
-        lp->txQ_count++;
-        if( lp->txQ_count >= DEFAULT_NUM_TX_FRAMES ) {
-            DBG_TX( DbgInfo, "Q Full: %d\n", lp->txQ_count );
-            if( lp->netif_queue_on == TRUE ) {
-                netif_stop_queue( lp->dev );
-                WL_WDS_NETIF_STOP_QUEUE( lp );
-                lp->netif_queue_on = FALSE;
-            }
-        }
+	lp->txQ_count++;
+	if( lp->txQ_count >= DEFAULT_NUM_TX_FRAMES ) {
+	    DBG_TX( DbgInfo, "Q Full: %d\n", lp->txQ_count );
+	    if( lp->netif_queue_on == TRUE ) {
+		netif_stop_queue( lp->dev );
+		WL_WDS_NETIF_STOP_QUEUE( lp );
+		lp->netif_queue_on = FALSE;
+	    }
+	}
     }
     wl_act_int_off( lp ); /* Disable Interrupts */
 
     /* Send the data to the hardware using the appropriate method */
 #ifdef ENABLE_DMA
     if( lp->use_dma ) {
-        wl_send_dma( lp, skb, port );
+	wl_send_dma( lp, skb, port );
     }
     else
 #endif
     {
-        wl_send( lp );
+	wl_send( lp );
     }
     /* Re-enable Interrupts, release the spinlock and return */
     wl_act_int_on( lp );
@@ -903,53 +903,53 @@ int wl_rx(struct net_device *dev)
     if(!( lp->flags & WVLAN2_UIL_BUSY )) {
 
 #ifdef USE_RTS
-        if( lp->useRTS == 1 ) {
-            DBG_PRINT( "RTS: We're getting an Rx...\n" );
-            return -EIO;
-        }
+	if( lp->useRTS == 1 ) {
+	    DBG_PRINT( "RTS: We're getting an Rx...\n" );
+	    return -EIO;
+	}
 #endif  /* USE_RTS */
 
-        /* Read the HFS_STAT register from the lookahead buffer */
-        hfs_stat = (hcf_16)(( lp->lookAheadBuf[HFS_STAT] ) |
-                            ( lp->lookAheadBuf[HFS_STAT + 1] << 8 ));
+	/* Read the HFS_STAT register from the lookahead buffer */
+	hfs_stat = (hcf_16)(( lp->lookAheadBuf[HFS_STAT] ) |
+			    ( lp->lookAheadBuf[HFS_STAT + 1] << 8 ));
 
-        /* Make sure the frame isn't bad */
-        if(( hfs_stat & HFS_STAT_ERR ) != HCF_SUCCESS ) {
-            DBG_WARNING( DbgInfo, "HFS_STAT_ERROR (0x%x) in Rx Packet\n",
-                         lp->lookAheadBuf[HFS_STAT] );
-            return -EIO;
-        }
+	/* Make sure the frame isn't bad */
+	if(( hfs_stat & HFS_STAT_ERR ) != HCF_SUCCESS ) {
+	    DBG_WARNING( DbgInfo, "HFS_STAT_ERROR (0x%x) in Rx Packet\n",
+			 lp->lookAheadBuf[HFS_STAT] );
+	    return -EIO;
+	}
 
-        /* Determine what port this packet is for */
-        port = ( hfs_stat >> 8 ) & 0x0007;
-        DBG_RX( DbgInfo, "Rx frame for port %d\n", port );
+	/* Determine what port this packet is for */
+	port = ( hfs_stat >> 8 ) & 0x0007;
+	DBG_RX( DbgInfo, "Rx frame for port %d\n", port );
 
-        pktlen = lp->hcfCtx.IFB_RxLen;
-        if (pktlen != 0) {
-            skb = ALLOC_SKB(pktlen);
-            if (skb != NULL) {
-                /* Set the netdev based on the port */
-                switch( port ) {
+	pktlen = lp->hcfCtx.IFB_RxLen;
+	if (pktlen != 0) {
+	    skb = ALLOC_SKB(pktlen);
+	    if (skb != NULL) {
+		/* Set the netdev based on the port */
+		switch( port ) {
 #ifdef USE_WDS
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                    skb->dev = lp->wds_port[port-1].dev;
-                    break;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		    skb->dev = lp->wds_port[port-1].dev;
+		    break;
 #endif  /* USE_WDS */
 
-                case 0:
-                default:
-                    skb->dev = dev;
-                    break;
-                }
+		case 0:
+		default:
+		    skb->dev = dev;
+		    break;
+		}
 
-                desc = &( lp->desc_rx );
+		desc = &( lp->desc_rx );
 
-                desc->next_desc_addr = NULL;
+		desc->next_desc_addr = NULL;
 
 /*
 #define BLOCK_INPUT(buf, len) \
@@ -958,63 +958,63 @@ int wl_rx(struct net_device *dev)
     status = hcf_rcv_msg(&(lp->hcfCtx), desc, 0)
 */
 
-                GET_PACKET( skb->dev, skb, pktlen );
+		GET_PACKET( skb->dev, skb, pktlen );
 
-                if( status == HCF_SUCCESS ) {
-                    netif_rx( skb );
+		if( status == HCF_SUCCESS ) {
+		    netif_rx( skb );
 
-                    if( port == 0 ) {
-                        lp->stats.rx_packets++;
-                        lp->stats.rx_bytes += pktlen;
-                    }
+		    if( port == 0 ) {
+			lp->stats.rx_packets++;
+			lp->stats.rx_bytes += pktlen;
+		    }
 #ifdef USE_WDS
-                    else
-                    {
-                        lp->wds_port[port-1].stats.rx_packets++;
-                        lp->wds_port[port-1].stats.rx_bytes += pktlen;
-                    }
+		    else
+		    {
+			lp->wds_port[port-1].stats.rx_packets++;
+			lp->wds_port[port-1].stats.rx_bytes += pktlen;
+		    }
 #endif  /* USE_WDS */
 
-                    dev->last_rx = jiffies;
+		    dev->last_rx = jiffies;
 
 #ifdef WIRELESS_EXT
 #ifdef WIRELESS_SPY
-                    if( lp->spydata.spy_number > 0 ) {
-                        char *srcaddr = skb->mac.raw + MAC_ADDR_SIZE;
+		    if( lp->spydata.spy_number > 0 ) {
+			char *srcaddr = skb->mac.raw + MAC_ADDR_SIZE;
 
-                        wl_spy_gather( dev, srcaddr );
-                    }
+			wl_spy_gather( dev, srcaddr );
+		    }
 #endif /* WIRELESS_SPY */
 #endif /* WIRELESS_EXT */
-                } else {
-                    DBG_ERROR( DbgInfo, "Rx request to card FAILED\n" );
+		} else {
+		    DBG_ERROR( DbgInfo, "Rx request to card FAILED\n" );
 
-                    if( port == 0 ) {
-                        lp->stats.rx_dropped++;
-                    }
+		    if( port == 0 ) {
+			lp->stats.rx_dropped++;
+		    }
 #ifdef USE_WDS
-                    else
-                    {
-                        lp->wds_port[port-1].stats.rx_dropped++;
-                    }
+		    else
+		    {
+			lp->wds_port[port-1].stats.rx_dropped++;
+		    }
 #endif  /* USE_WDS */
 
-                    dev_kfree_skb( skb );
-                }
-            } else {
-                DBG_ERROR( DbgInfo, "Could not alloc skb\n" );
+		    dev_kfree_skb( skb );
+		}
+	    } else {
+		DBG_ERROR( DbgInfo, "Could not alloc skb\n" );
 
-                if( port == 0 ) {
-                    lp->stats.rx_dropped++;
-                }
+		if( port == 0 ) {
+		    lp->stats.rx_dropped++;
+		}
 #ifdef USE_WDS
-                else
-                {
-                    lp->wds_port[port-1].stats.rx_dropped++;
-                }
+		else
+		{
+		    lp->wds_port[port-1].stats.rx_dropped++;
+		}
 #endif  /* USE_WDS */
-            }
-        }
+	    }
+	}
     }
 
     return 0;
@@ -1056,18 +1056,18 @@ void wl_multicast( struct net_device *dev )
     DBG_PARAM( DbgInfo, "dev", "%s (0x%p)", dev->name, dev );
 
     if( !wl_adapter_is_open( dev )) {
-        DBG_LEAVE( DbgInfo );
-        return;
+	DBG_LEAVE( DbgInfo );
+	return;
     }
 
 #if DBG
     if( DBG_FLAGS( DbgInfo ) & DBG_PARAM_ON ) {
-        DBG_PRINT("  flags: %s%s%s\n",
-            ( dev->flags & IFF_PROMISC ) ? "Promiscous " : "",
-            ( dev->flags & IFF_MULTICAST ) ? "Multicast " : "",
-            ( dev->flags & IFF_ALLMULTI ) ? "All-Multicast" : "" );
+	DBG_PRINT("  flags: %s%s%s\n",
+	    ( dev->flags & IFF_PROMISC ) ? "Promiscous " : "",
+	    ( dev->flags & IFF_MULTICAST ) ? "Multicast " : "",
+	    ( dev->flags & IFF_ALLMULTI ) ? "All-Multicast" : "" );
 
-        DBG_PRINT( "  mc_count: %d\n", netdev_mc_count(dev));
+	DBG_PRINT( "  mc_count: %d\n", netdev_mc_count(dev));
 
 	netdev_for_each_mc_addr(ha, dev)
 	DBG_PRINT("    %pM (%d)\n", ha->addr, dev->addr_len);
@@ -1077,75 +1077,75 @@ void wl_multicast( struct net_device *dev )
     if(!( lp->flags & WVLAN2_UIL_BUSY )) {
 
 #ifdef USE_RTS
-        if( lp->useRTS == 1 ) {
-            DBG_TRACE( DbgInfo, "Skipping multicast, in RTS mode\n" );
+	if( lp->useRTS == 1 ) {
+	    DBG_TRACE( DbgInfo, "Skipping multicast, in RTS mode\n" );
 
-            DBG_LEAVE( DbgInfo );
-            return;
-        }
+	    DBG_LEAVE( DbgInfo );
+	    return;
+	}
 #endif  /* USE_RTS */
 
-        wl_lock( lp, &flags );
-        wl_act_int_off( lp );
+	wl_lock( lp, &flags );
+	wl_act_int_off( lp );
 
 		if ( CNV_INT_TO_LITTLE( lp->hcfCtx.IFB_FWIdentity.comp_id ) == COMP_ID_FW_STA  ) {
-            if( dev->flags & IFF_PROMISC ) {
-                /* Enable promiscuous mode */
-                lp->ltvRecord.len       = 2;
-                lp->ltvRecord.typ       = CFG_PROMISCUOUS_MODE;
-                lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 1 );
-                DBG_PRINT( "Enabling Promiscuous mode (IFF_PROMISC)\n" );
-                hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
-            }
-            else if ((netdev_mc_count(dev) > HCF_MAX_MULTICAST) ||
-                    ( dev->flags & IFF_ALLMULTI )) {
-                /* Shutting off this filter will enable all multicast frames to
-                   be sent up from the device; however, this is a static RID, so
-                   a call to wl_apply() is needed */
-                lp->ltvRecord.len       = 2;
-                lp->ltvRecord.typ       = CFG_CNF_RX_ALL_GROUP_ADDR;
-                lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 0 );
-                DBG_PRINT( "Enabling all multicast mode (IFF_ALLMULTI)\n" );
-                hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
-                wl_apply( lp );
-            }
-            else if (!netdev_mc_empty(dev)) {
-                /* Set the multicast addresses */
-                lp->ltvRecord.len = ( netdev_mc_count(dev) * 3 ) + 1;
-                lp->ltvRecord.typ = CFG_GROUP_ADDR;
+	    if( dev->flags & IFF_PROMISC ) {
+		/* Enable promiscuous mode */
+		lp->ltvRecord.len       = 2;
+		lp->ltvRecord.typ       = CFG_PROMISCUOUS_MODE;
+		lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 1 );
+		DBG_PRINT( "Enabling Promiscuous mode (IFF_PROMISC)\n" );
+		hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
+	    }
+	    else if ((netdev_mc_count(dev) > HCF_MAX_MULTICAST) ||
+		    ( dev->flags & IFF_ALLMULTI )) {
+		/* Shutting off this filter will enable all multicast frames to
+		   be sent up from the device; however, this is a static RID, so
+		   a call to wl_apply() is needed */
+		lp->ltvRecord.len       = 2;
+		lp->ltvRecord.typ       = CFG_CNF_RX_ALL_GROUP_ADDR;
+		lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 0 );
+		DBG_PRINT( "Enabling all multicast mode (IFF_ALLMULTI)\n" );
+		hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
+		wl_apply( lp );
+	    }
+	    else if (!netdev_mc_empty(dev)) {
+		/* Set the multicast addresses */
+		lp->ltvRecord.len = ( netdev_mc_count(dev) * 3 ) + 1;
+		lp->ltvRecord.typ = CFG_GROUP_ADDR;
 
 		x = 0;
 		netdev_for_each_mc_addr(ha, dev)
-                    memcpy(&(lp->ltvRecord.u.u8[x++ * ETH_ALEN]),
+		    memcpy(&(lp->ltvRecord.u.u8[x++ * ETH_ALEN]),
 			   ha->addr, ETH_ALEN);
-                DBG_PRINT( "Setting multicast list\n" );
-                hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
-            } else {
-                /* Disable promiscuous mode */
-                lp->ltvRecord.len       = 2;
-                lp->ltvRecord.typ       = CFG_PROMISCUOUS_MODE;
-                lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 0 );
-                DBG_PRINT( "Disabling Promiscuous mode\n" );
-                hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
+		DBG_PRINT( "Setting multicast list\n" );
+		hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
+	    } else {
+		/* Disable promiscuous mode */
+		lp->ltvRecord.len       = 2;
+		lp->ltvRecord.typ       = CFG_PROMISCUOUS_MODE;
+		lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 0 );
+		DBG_PRINT( "Disabling Promiscuous mode\n" );
+		hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
 
-                /* Disable multicast mode */
-                lp->ltvRecord.len = 2;
-                lp->ltvRecord.typ = CFG_GROUP_ADDR;
-                DBG_PRINT( "Disabling Multicast mode\n" );
-                hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
+		/* Disable multicast mode */
+		lp->ltvRecord.len = 2;
+		lp->ltvRecord.typ = CFG_GROUP_ADDR;
+		DBG_PRINT( "Disabling Multicast mode\n" );
+		hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
 
-                /* Turning on this filter will prevent all multicast frames from
-                   being sent up from the device; however, this is a static RID,
-                   so a call to wl_apply() is needed */
-                lp->ltvRecord.len       = 2;
-                lp->ltvRecord.typ       = CFG_CNF_RX_ALL_GROUP_ADDR;
-                lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 1 );
-                DBG_PRINT( "Disabling all multicast mode (IFF_ALLMULTI)\n" );
-                hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
-                wl_apply( lp );
-            }
-        }
-        wl_act_int_on( lp );
+		/* Turning on this filter will prevent all multicast frames from
+		   being sent up from the device; however, this is a static RID,
+		   so a call to wl_apply() is needed */
+		lp->ltvRecord.len       = 2;
+		lp->ltvRecord.typ       = CFG_CNF_RX_ALL_GROUP_ADDR;
+		lp->ltvRecord.u.u16[0]  = CNV_INT_TO_LITTLE( 1 );
+		DBG_PRINT( "Disabling all multicast mode (IFF_ALLMULTI)\n" );
+		hcf_put_info( &( lp->hcfCtx ), (LTVP)&( lp->ltvRecord ));
+		wl_apply( lp );
+	    }
+	}
+	wl_act_int_on( lp );
 	wl_unlock( lp, &flags );
     }
     DBG_LEAVE( DbgInfo );
@@ -1223,7 +1223,7 @@ struct net_device * wl_device_alloc( void )
     /* Alloc a net_device struct */
     dev = alloc_etherdev(sizeof(struct wl_private));
     if (!dev)
-        return NULL;
+	return NULL;
 
     /* Initialize the 'next' pointer in the struct. Currently only used for PCI,
        but do it here just in case it's used for other buses in the future */
@@ -1234,7 +1234,7 @@ struct net_device * wl_device_alloc( void )
     if( dev->mtu > MTU_MAX )
     {
 	    DBG_WARNING( DbgInfo, "%s: MTU set too high, limiting to %d.\n",
-                        dev->name, MTU_MAX );
+			dev->name, MTU_MAX );
     	dev->mtu = MTU_MAX;
     }
 
@@ -1508,29 +1508,29 @@ void wl_wds_device_alloc( struct wl_private *lp )
        so that user space apps can use these virtual devices to specify the
        port on which to Tx/Rx */
     for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-        struct net_device *dev_wds = NULL;
+	struct net_device *dev_wds = NULL;
 
-        dev_wds = kmalloc( sizeof( struct net_device ), GFP_KERNEL );
-        memset( dev_wds, 0, sizeof( struct net_device ));
+	dev_wds = kmalloc( sizeof( struct net_device ), GFP_KERNEL );
+	memset( dev_wds, 0, sizeof( struct net_device ));
 
-        ether_setup( dev_wds );
+	ether_setup( dev_wds );
 
-        lp->wds_port[count].dev = dev_wds;
+	lp->wds_port[count].dev = dev_wds;
 
-        /* Re-use wl_init for all the devices, as it currently does nothing, but
-           is required. Re-use the stats/tx_timeout handler for all as well; the
-           WDS port which is requesting these operations can be determined by
-           the net_device pointer. Set the private member of all devices to point
-           to the same net_device struct; that way, all information gets
-           funnelled through the one "real" net_device. Name the WDS ports
-           "wds<n>" */
-        lp->wds_port[count].dev->init           = &wl_init;
-        lp->wds_port[count].dev->get_stats      = &wl_stats;
-        lp->wds_port[count].dev->tx_timeout     = &wl_tx_timeout;
-        lp->wds_port[count].dev->watchdog_timeo = TX_TIMEOUT;
-        lp->wds_port[count].dev->priv           = lp;
+	/* Re-use wl_init for all the devices, as it currently does nothing, but
+	   is required. Re-use the stats/tx_timeout handler for all as well; the
+	   WDS port which is requesting these operations can be determined by
+	   the net_device pointer. Set the private member of all devices to point
+	   to the same net_device struct; that way, all information gets
+	   funnelled through the one "real" net_device. Name the WDS ports
+	   "wds<n>" */
+	lp->wds_port[count].dev->init           = &wl_init;
+	lp->wds_port[count].dev->get_stats      = &wl_stats;
+	lp->wds_port[count].dev->tx_timeout     = &wl_tx_timeout;
+	lp->wds_port[count].dev->watchdog_timeo = TX_TIMEOUT;
+	lp->wds_port[count].dev->priv           = lp;
 
-        sprintf( lp->wds_port[count].dev->name, "wds%d", count );
+	sprintf( lp->wds_port[count].dev->name, "wds%d", count );
     }
 
     /* Register the Tx handlers */
@@ -1574,19 +1574,19 @@ void wl_wds_device_dealloc( struct wl_private *lp )
     DBG_ENTER( DbgInfo );
 
     for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-        struct net_device *dev_wds = NULL;
+	struct net_device *dev_wds = NULL;
 
-        dev_wds = lp->wds_port[count].dev;
+	dev_wds = lp->wds_port[count].dev;
 
-        if( dev_wds != NULL ) {
-            if( dev_wds->flags & IFF_UP ) {
-                dev_close( dev_wds );
-                dev_wds->flags &= ~( IFF_UP | IFF_RUNNING );
-            }
+	if( dev_wds != NULL ) {
+	    if( dev_wds->flags & IFF_UP ) {
+		dev_close( dev_wds );
+		dev_wds->flags &= ~( IFF_UP | IFF_RUNNING );
+	    }
 
-            free_netdev(dev_wds);
-            lp->wds_port[count].dev = NULL;
-        }
+	    free_netdev(dev_wds);
+	    lp->wds_port[count].dev = NULL;
+	}
     }
 
     DBG_LEAVE( DbgInfo );
@@ -1618,13 +1618,13 @@ void wl_wds_netif_start_queue( struct wl_private *lp )
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
-        for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-            if( lp->wds_port[count].is_registered &&
-                lp->wds_port[count].netif_queue_on == FALSE ) {
-                netif_start_queue( lp->wds_port[count].dev );
-                lp->wds_port[count].netif_queue_on = TRUE;
-            }
-        }
+	for( count = 0; count < NUM_WDS_PORTS; count++ ) {
+	    if( lp->wds_port[count].is_registered &&
+		lp->wds_port[count].netif_queue_on == FALSE ) {
+		netif_start_queue( lp->wds_port[count].dev );
+		lp->wds_port[count].netif_queue_on = TRUE;
+	    }
+	}
     }
 
     return;
@@ -1655,13 +1655,13 @@ void wl_wds_netif_stop_queue( struct wl_private *lp )
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
-        for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-            if( lp->wds_port[count].is_registered &&
-                lp->wds_port[count].netif_queue_on == TRUE ) {
-                netif_stop_queue( lp->wds_port[count].dev );
-                lp->wds_port[count].netif_queue_on = FALSE;
-            }
-        }
+	for( count = 0; count < NUM_WDS_PORTS; count++ ) {
+	    if( lp->wds_port[count].is_registered &&
+		lp->wds_port[count].netif_queue_on == TRUE ) {
+		netif_stop_queue( lp->wds_port[count].dev );
+		lp->wds_port[count].netif_queue_on = FALSE;
+	    }
+	}
     }
 
     return;
@@ -1692,13 +1692,13 @@ void wl_wds_netif_wake_queue( struct wl_private *lp )
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
-        for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-            if( lp->wds_port[count].is_registered &&
-                lp->wds_port[count].netif_queue_on == FALSE ) {
-                netif_wake_queue( lp->wds_port[count].dev );
-                lp->wds_port[count].netif_queue_on = TRUE;
-            }
-        }
+	for( count = 0; count < NUM_WDS_PORTS; count++ ) {
+	    if( lp->wds_port[count].is_registered &&
+		lp->wds_port[count].netif_queue_on == FALSE ) {
+		netif_wake_queue( lp->wds_port[count].dev );
+		lp->wds_port[count].netif_queue_on = TRUE;
+	    }
+	}
     }
 
     return;
@@ -1729,11 +1729,11 @@ void wl_wds_netif_carrier_on( struct wl_private *lp )
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
-        for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-            if( lp->wds_port[count].is_registered ) {
-                netif_carrier_on( lp->wds_port[count].dev );
-            }
-        }
+	for( count = 0; count < NUM_WDS_PORTS; count++ ) {
+	    if( lp->wds_port[count].is_registered ) {
+		netif_carrier_on( lp->wds_port[count].dev );
+	    }
+	}
     }
 
     return;
@@ -1764,11 +1764,11 @@ void wl_wds_netif_carrier_off( struct wl_private *lp )
     /*------------------------------------------------------------------------*/
 
     if( lp != NULL ) {
-        for( count = 0; count < NUM_WDS_PORTS; count++ ) {
-            if( lp->wds_port[count].is_registered ) {
-                netif_carrier_off( lp->wds_port[count].dev );
-            }
-        }
+	for( count = 0; count < NUM_WDS_PORTS; count++ ) {
+	    if( lp->wds_port[count].is_registered ) {
+		netif_carrier_off( lp->wds_port[count].dev );
+	    }
+	}
     }
 
     return;
@@ -1809,22 +1809,22 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
 
     if( lp == NULL )
     {
-        DBG_ERROR( DbgInfo, "Private adapter struct is NULL\n" );
-        return FALSE;
+	DBG_ERROR( DbgInfo, "Private adapter struct is NULL\n" );
+	return FALSE;
     }
 
     if( lp->dev == NULL )
     {
-        DBG_ERROR( DbgInfo, "net_device struct in wl_private is NULL\n" );
-        return FALSE;
+	DBG_ERROR( DbgInfo, "net_device struct in wl_private is NULL\n" );
+	return FALSE;
     }
 
     /* AGAIN, ALL THE QUEUEING DONE HERE IN I/O MODE IS NOT PERFORMED */
 
     if( skb == NULL )
     {
-        DBG_WARNING (DbgInfo, "Nothing to send.\n");
-        return FALSE;
+	DBG_WARNING (DbgInfo, "Nothing to send.\n");
+	return FALSE;
     }
 
     len = skb->len;
@@ -1834,14 +1834,14 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
 
     if( desc == NULL )
     {
-        if( lp->netif_queue_on == TRUE ) {
-            netif_stop_queue( lp->dev );
-            WL_WDS_NETIF_STOP_QUEUE( lp );
-            lp->netif_queue_on = FALSE;
+	if( lp->netif_queue_on == TRUE ) {
+	    netif_stop_queue( lp->dev );
+	    WL_WDS_NETIF_STOP_QUEUE( lp );
+	    lp->netif_queue_on = FALSE;
 
-            dev_kfree_skb( skb );
-            return 0;
-        }
+	    dev_kfree_skb( skb );
+	    return 0;
+	}
     }
 
     SET_BUF_CNT( desc, /*HCF_DMA_FD_CNT*/HFS_ADDR_DEST );
@@ -1851,8 +1851,8 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
 
     if( desc_next->buf_addr == NULL )
     {
-        DBG_ERROR( DbgInfo, "DMA descriptor buf_addr is NULL\n" );
-        return FALSE;
+	DBG_ERROR( DbgInfo, "DMA descriptor buf_addr is NULL\n" );
+	return FALSE;
     }
 
     /* Copy the payload into the DMA packet */
@@ -1864,7 +1864,7 @@ int wl_send_dma( struct wl_private *lp, struct sk_buff *skb, int port )
     hcf_dma_tx_put( &( lp->hcfCtx ), desc, 0 );
 
     /* Free the skb and perform queue cleanup, as the buffer was
-            transmitted successfully */
+	    transmitted successfully */
     dev_kfree_skb( skb );
 
     return TRUE;
@@ -1907,26 +1907,26 @@ int wl_rx_dma( struct net_device *dev )
 	!( lp->flags & WVLAN2_UIL_BUSY )) {
 
 #ifdef USE_RTS
-        if( lp->useRTS == 1 ) {
-            DBG_PRINT( "RTS: We're getting an Rx...\n" );
-            return -EIO;
-        }
+	if( lp->useRTS == 1 ) {
+	    DBG_PRINT( "RTS: We're getting an Rx...\n" );
+	    return -EIO;
+	}
 #endif  /* USE_RTS */
 
-        //if( lp->dma.status == 0 )
-        //{
-            desc = hcf_dma_rx_get( &( lp->hcfCtx ));
+	//if( lp->dma.status == 0 )
+	//{
+	    desc = hcf_dma_rx_get( &( lp->hcfCtx ));
 
-            if( desc != NULL )
-            {
-                /* Check and see if we rcvd. a WMP frame */
-                /*
-                if((( *(hcf_8 *)&desc->buf_addr[HFS_STAT] ) &
-                    ( HFS_STAT_MSG_TYPE | HFS_STAT_ERR )) == HFS_STAT_WMP_MSG )
-                {
-                    DBG_TRACE( DbgInfo, "Got a WMP frame\n" );
+	    if( desc != NULL )
+	    {
+		/* Check and see if we rcvd. a WMP frame */
+		/*
+		if((( *(hcf_8 *)&desc->buf_addr[HFS_STAT] ) &
+		    ( HFS_STAT_MSG_TYPE | HFS_STAT_ERR )) == HFS_STAT_WMP_MSG )
+		{
+		    DBG_TRACE( DbgInfo, "Got a WMP frame\n" );
 
-                    x.len = sizeof( CFG_MB_INFO_RANGE2_STRCT ) / sizeof( hcf_16 );
+		    x.len = sizeof( CFG_MB_INFO_RANGE2_STRCT ) / sizeof( hcf_16 );
 				    x.typ = CFG_MB_INFO;
 				    x.base_typ = CFG_WMP;
 				    x.frag_cnt = 2;
@@ -1935,99 +1935,99 @@ int wl_rx_dma( struct net_device *dev )
 				    x.frag_buf[1].frag_len  = ( GET_BUF_CNT( descp->next_desc_addr ) + 1 ) / sizeof( hcf_16 );
 				    x.frag_buf[1].frag_addr = (hcf_8 *) descp->next_desc_addr->buf_addr ;
 
-                    hcf_put_info( &( lp->hcfCtx ), (LTVP)&x );
-                }
-                */
+		    hcf_put_info( &( lp->hcfCtx ), (LTVP)&x );
+		}
+		*/
 
-                desc_next = desc->next_desc_addr;
+		desc_next = desc->next_desc_addr;
 
-                /* Make sure the buffer isn't empty */
-                if( GET_BUF_CNT( desc ) == 0 ) {
-                    DBG_WARNING( DbgInfo, "Buffer is empty!\n" );
+		/* Make sure the buffer isn't empty */
+		if( GET_BUF_CNT( desc ) == 0 ) {
+		    DBG_WARNING( DbgInfo, "Buffer is empty!\n" );
 
-                    /* Give the descriptor back to the HCF */
-                    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
-                    return -EIO;
-                }
+		    /* Give the descriptor back to the HCF */
+		    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
+		    return -EIO;
+		}
 
-                /* Read the HFS_STAT register from the lookahead buffer */
-                hfs_stat = (hcf_16)( desc->buf_addr[HFS_STAT/2] );
+		/* Read the HFS_STAT register from the lookahead buffer */
+		hfs_stat = (hcf_16)( desc->buf_addr[HFS_STAT/2] );
 
-                /* Make sure the frame isn't bad */
-                if(( hfs_stat & HFS_STAT_ERR ) != HCF_SUCCESS )
-                {
-                    DBG_WARNING( DbgInfo, "HFS_STAT_ERROR (0x%x) in Rx Packet\n",
-                                desc->buf_addr[HFS_STAT/2] );
+		/* Make sure the frame isn't bad */
+		if(( hfs_stat & HFS_STAT_ERR ) != HCF_SUCCESS )
+		{
+		    DBG_WARNING( DbgInfo, "HFS_STAT_ERROR (0x%x) in Rx Packet\n",
+				desc->buf_addr[HFS_STAT/2] );
 
-                    /* Give the descriptor back to the HCF */
-                    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
-                    return -EIO;
-                }
+		    /* Give the descriptor back to the HCF */
+		    hcf_dma_rx_put( &( lp->hcfCtx ), desc );
+		    return -EIO;
+		}
 
-                /* Determine what port this packet is for */
-                port = ( hfs_stat >> 8 ) & 0x0007;
-                DBG_RX( DbgInfo, "Rx frame for port %d\n", port );
+		/* Determine what port this packet is for */
+		port = ( hfs_stat >> 8 ) & 0x0007;
+		DBG_RX( DbgInfo, "Rx frame for port %d\n", port );
 
-                pktlen = GET_BUF_CNT(desc_next);
-                if (pktlen != 0) {
-                    skb = ALLOC_SKB(pktlen);
-                    if (skb != NULL) {
-                        switch( port ) {
+		pktlen = GET_BUF_CNT(desc_next);
+		if (pktlen != 0) {
+		    skb = ALLOC_SKB(pktlen);
+		    if (skb != NULL) {
+			switch( port ) {
 #ifdef USE_WDS
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5:
-                        case 6:
-                            skb->dev = lp->wds_port[port-1].dev;
-                            break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			    skb->dev = lp->wds_port[port-1].dev;
+			    break;
 #endif  /* USE_WDS */
 
-                        case 0:
-                        default:
-                            skb->dev = dev;
-                            break;
-                        }
+			case 0:
+			default:
+			    skb->dev = dev;
+			    break;
+			}
 
-                        GET_PACKET_DMA( skb->dev, skb, pktlen );
+			GET_PACKET_DMA( skb->dev, skb, pktlen );
 
-                        /* Give the descriptor back to the HCF */
-                        hcf_dma_rx_put( &( lp->hcfCtx ), desc );
+			/* Give the descriptor back to the HCF */
+			hcf_dma_rx_put( &( lp->hcfCtx ), desc );
 
-                        netif_rx( skb );
+			netif_rx( skb );
 
-                        if( port == 0 ) {
-                            lp->stats.rx_packets++;
-                            lp->stats.rx_bytes += pktlen;
-                        }
+			if( port == 0 ) {
+			    lp->stats.rx_packets++;
+			    lp->stats.rx_bytes += pktlen;
+			}
 #ifdef USE_WDS
-                        else
-                        {
-                            lp->wds_port[port-1].stats.rx_packets++;
-                            lp->wds_port[port-1].stats.rx_bytes += pktlen;
-                        }
+			else
+			{
+			    lp->wds_port[port-1].stats.rx_packets++;
+			    lp->wds_port[port-1].stats.rx_bytes += pktlen;
+			}
 #endif  /* USE_WDS */
 
-                        dev->last_rx = jiffies;
+			dev->last_rx = jiffies;
 
-                    } else {
-                        DBG_ERROR( DbgInfo, "Could not alloc skb\n" );
+		    } else {
+			DBG_ERROR( DbgInfo, "Could not alloc skb\n" );
 
-                        if( port == 0 )
+			if( port == 0 )
 	                    {
 	                        lp->stats.rx_dropped++;
 	                    }
 #ifdef USE_WDS
-                        else
-                        {
-                            lp->wds_port[port-1].stats.rx_dropped++;
-                        }
+			else
+			{
+			    lp->wds_port[port-1].stats.rx_dropped++;
+			}
 #endif  /* USE_WDS */
-                    }
-                }
-            }
-        //}
+		    }
+		}
+	    }
+	//}
     }
 
     return 0;

@@ -135,7 +135,7 @@ config USB_SERIAL_CYPRESS_M8
 
 	  Supported microcontrollers in the CY4601 family are:
 		CY7C63741 CY7C63742 CY7C63743 CY7C64013
-	
+
 	  To compile this driver as a module, choose M here: the
 	  module will be called cypress_m8.
 
@@ -250,17 +250,17 @@ config USB_SERIAL_F81232
 config USB_SERIAL_GARMIN
        tristate "USB Garmin GPS driver"
        help
-         Say Y here if you want to connect to your Garmin GPS.
-         Should work with most Garmin GPS devices which have a native USB port.
+	 Say Y here if you want to connect to your Garmin GPS.
+	 Should work with most Garmin GPS devices which have a native USB port.
 
-         See <http://sourceforge.net/projects/garmin-gps> for the latest
-         version of the driver.
+	 See <http://sourceforge.net/projects/garmin-gps> for the latest
+	 version of the driver.
 
-         To compile this driver as a module, choose M here: the
-         module will be called garmin_gps.
+	 To compile this driver as a module, choose M here: the
+	 module will be called garmin_gps.
 
 config USB_SERIAL_IPW
-        tristate "USB IPWireless (3G UMTS TDD) Driver"
+	tristate "USB IPWireless (3G UMTS TDD) Driver"
 	select USB_SERIAL_WWAN
 	help
 	  Say Y here if you want to use a IPWireless USB modem such as
@@ -398,20 +398,20 @@ config USB_SERIAL_KLSI
 	  module will be called kl5kusb105.
 
 config USB_SERIAL_KOBIL_SCT
-        tristate "USB KOBIL chipcard reader"
-        ---help---
-          Say Y here if you want to use one of the following KOBIL USB chipcard
-          readers:
+	tristate "USB KOBIL chipcard reader"
+	---help---
+	  Say Y here if you want to use one of the following KOBIL USB chipcard
+	  readers:
 
-            - USB TWIN
-            - KAAN Standard Plus
-            - KAAN SIM
-            - SecOVID Reader Plus
-            - B1 Professional
-            - KAAN Professional
+	    - USB TWIN
+	    - KAAN Standard Plus
+	    - KAAN SIM
+	    - SecOVID Reader Plus
+	    - B1 Professional
+	    - KAAN Professional
 
-          Note that you need a current CT-API.
-          To compile this driver as a module, choose M here: the
+	  Note that you need a current CT-API.
+	  To compile this driver as a module, choose M here: the
 	  module will be called kobil_sct.
 
 config USB_SERIAL_MCT_U232
@@ -495,7 +495,7 @@ config USB_SERIAL_OTI6858
 	tristate "USB Ours Technology Inc. OTi-6858 USB To RS232 Bridge Controller"
 	help
 	  Say Y here if you want to use the OTi-6858 single port USB to serial
-          converter device.
+	  converter device.
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called oti6858.
@@ -531,12 +531,12 @@ config USB_SERIAL_SPCP8X5
 	  module will be called spcp8x5.
 
 config USB_SERIAL_HP4X
-        tristate "USB HP4x Calculators support"
-        help
-          Say Y here if you want to use an Hewlett-Packard 4x Calculator.
+	tristate "USB HP4x Calculators support"
+	help
+	  Say Y here if you want to use an Hewlett-Packard 4x Calculator.
 
-          To compile this driver as a module, choose M here: the
-          module will be called hp4x.
+	  To compile this driver as a module, choose M here: the
+	  module will be called hp4x.
 
 config USB_SERIAL_SAFE
 	tristate "USB Safe Serial (Encapsulated) Driver"
@@ -645,12 +645,12 @@ config USB_SERIAL_OPTICON
 	  module will be called opticon.
 
 config USB_SERIAL_VIVOPAY_SERIAL
-        tristate "USB ViVOpay serial interface driver"
-        help
-          Say Y here if you want to use a ViVOtech ViVOpay USB device.
+	tristate "USB ViVOpay serial interface driver"
+	help
+	  Say Y here if you want to use a ViVOtech ViVOpay USB device.
 
-          To compile this driver as a module, choose M here: the
-          module will be called vivopay-serial.
+	  To compile this driver as a module, choose M here: the
+	  module will be called vivopay-serial.
 
 config USB_SERIAL_ZIO
 	tristate "ZIO Motherboard USB serial interface driver"

@@ -44,8 +44,8 @@ static int kvmapf = 1;
 
 static int parse_no_kvmapf(char *arg)
 {
-        kvmapf = 0;
-        return 0;
+	kvmapf = 0;
+	return 0;
 }
 
 early_param("no-kvmapf", parse_no_kvmapf);
@@ -53,8 +53,8 @@ early_param("no-kvmapf", parse_no_kvmapf);
 static int steal_acc = 1;
 static int parse_no_stealacc(char *arg)
 {
-        steal_acc = 0;
-        return 0;
+	steal_acc = 0;
+	return 0;
 }
 
 early_param("no-steal-acc", parse_no_stealacc);
@@ -396,7 +396,7 @@ static int __cpuinit kvm_cpu_notify(struct notifier_block *self,
 }
 
 static struct notifier_block __cpuinitdata kvm_cpu_notifier = {
-        .notifier_call  = kvm_cpu_notify,
+	.notifier_call  = kvm_cpu_notify,
 };
 #endif
 

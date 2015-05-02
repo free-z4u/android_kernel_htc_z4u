@@ -112,7 +112,7 @@ print_insn_spu (unsigned long insn, unsigned long memaddr)
       printf("%s", index->mnemonic);
       if (tag == M_BI || tag == M_BISL || tag == M_IRET || tag == M_BISLED
 	  || tag == M_BIHNZ || tag == M_BIHZ || tag == M_BINZ || tag == M_BIZ
-          || tag == M_SYNC || tag == M_HBR)
+	  || tag == M_SYNC || tag == M_HBR)
 	{
 	  int fb = (insn >> (32-18)) & 0x7f;
 	  if (fb & 0x40)

@@ -78,7 +78,7 @@ static inline int crisv32_io_rd(struct crisv32_iopin* iopin)
 }
 
 int crisv32_io_get(struct crisv32_iopin* iopin,
-                   unsigned int port, unsigned int pin);
+		   unsigned int port, unsigned int pin);
 int crisv32_io_get_name(struct crisv32_iopin* iopin,
 			const char *name);
 
@@ -130,10 +130,10 @@ int crisv32_io_get_name(struct crisv32_iopin* iopin,
 #define CRIS_LED_ACTIVE_SET_R(x) \
 	crisv32_io_set(&crisv32_led2_red, !(x));
 #define CRIS_LED_DISK_WRITE(x) \
-         do{\
+	 do{\
 		crisv32_io_set(&crisv32_led3_green, !(x)); \
 		crisv32_io_set(&crisv32_led3_red, !(x));   \
-        }while(0)
+	}while(0)
 #define CRIS_LED_DISK_READ(x) \
 	crisv32_io_set(&crisv32_led3_green, !(x));
 

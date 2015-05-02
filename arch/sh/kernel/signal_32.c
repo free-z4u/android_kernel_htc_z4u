@@ -227,7 +227,7 @@ asmlinkage int sys_sigreturn(unsigned long r4, unsigned long r5,
 	sigset_t set;
 	int r0;
 
-        /* Always make any pending restarted system calls return -EINTR */
+	/* Always make any pending restarted system calls return -EINTR */
 	current_thread_info()->restart_block.fn = do_no_restart_syscall;
 
 	if (!access_ok(VERIFY_READ, frame, sizeof(*frame)))

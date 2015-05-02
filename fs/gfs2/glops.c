@@ -144,7 +144,7 @@ static void rgrp_go_sync(struct gfs2_glock *gl)
 	gfs2_log_flush(gl->gl_sbd, gl);
 	filemap_fdatawrite(metamapping);
 	error = filemap_fdatawait(metamapping);
-        mapping_set_error(metamapping, error);
+	mapping_set_error(metamapping, error);
 	gfs2_ail_empty_gl(gl);
 
 	spin_lock(&gl->gl_spin);

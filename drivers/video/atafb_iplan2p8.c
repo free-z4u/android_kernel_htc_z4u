@@ -240,7 +240,7 @@ void atafb_iplan2p8_copyarea(struct fb_info *info, u_long next_line,
 }
 
 void atafb_iplan2p8_fillrect(struct fb_info *info, u_long next_line, u32 color,
-                             int sy, int sx, int height, int width)
+			     int sy, int sx, int height, int width)
 {
 	u32 *dest;
 	int rows, i;

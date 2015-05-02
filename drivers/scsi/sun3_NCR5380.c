@@ -2735,7 +2735,7 @@ static int NCR5380_abort(struct scsi_cmnd *cmd)
     if (hostdata->connected) {
 	local_irq_restore(flags);
 	ABRT_PRINTK("scsi%d: abort failed, command connected.\n", HOSTNO);
-        return SCSI_ABORT_SNOOZE;
+	return SCSI_ABORT_SNOOZE;
     }
 
 /*
@@ -2765,11 +2765,11 @@ static int NCR5380_abort(struct scsi_cmnd *cmd)
 
     for (tmp = (struct scsi_cmnd *) hostdata->disconnected_queue; tmp;
 	 tmp = NEXT(tmp))
-        if (cmd == tmp) {
-            local_irq_restore(flags);
+	if (cmd == tmp) {
+	    local_irq_restore(flags);
 	    ABRT_PRINTK("scsi%d: aborting disconnected command.\n", HOSTNO);
 
-            if (NCR5380_select (instance, cmd, (int) cmd->tag))
+	    if (NCR5380_select (instance, cmd, (int) cmd->tag))
 		return SCSI_ABORT_BUSY;
 
 	    ABRT_PRINTK("scsi%d: nexus reestablished.\n", HOSTNO);

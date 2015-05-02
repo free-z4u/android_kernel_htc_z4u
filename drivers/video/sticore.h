@@ -42,7 +42,7 @@
 #define PTR_STI(p)	( phys_to_virt((unsigned long)p) )
 #define STI_CALL(func, flags, inptr, outptr, glob_cfg)	\
        ({						\
-               pdc_sti_call( func, STI_PTR(flags),	\
+	       pdc_sti_call( func, STI_PTR(flags),	\
 				   STI_PTR(inptr),	\
 				   STI_PTR(outptr),	\
 				   STI_PTR(glob_cfg));	\
@@ -244,12 +244,12 @@ struct sti_rom_font {
 /* sticore internal font handling */
 
 struct sti_cooked_font {
-        struct sti_rom_font *raw;
+	struct sti_rom_font *raw;
 	struct sti_cooked_font *next_font;
 };
 
 struct sti_cooked_rom {
-        struct sti_rom *raw;
+	struct sti_rom *raw;
 	struct sti_cooked_font *font_start;
 };
 

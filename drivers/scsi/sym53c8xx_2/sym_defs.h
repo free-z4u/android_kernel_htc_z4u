@@ -98,9 +98,9 @@ struct sym_reg {
 /*00*/  u8	nc_scntl0;	/* full arb., ena parity, par->ATN  */
 
 /*01*/  u8	nc_scntl1;	/* no reset                         */
-        #define   ISCON   0x10  /* connected to scsi		    */
-        #define   CRST    0x08  /* force reset                      */
-        #define   IARB    0x02  /* immediate arbitration            */
+	#define   ISCON   0x10  /* connected to scsi		    */
+	#define   CRST    0x08  /* force reset                      */
+	#define   IARB    0x02  /* immediate arbitration            */
 
 /*02*/  u8	nc_scntl2;	/* no disconnect expected           */
 	#define   SDU     0x80  /* cmd: disconnect will raise error */
@@ -141,33 +141,33 @@ struct sym_reg {
 /*0b*/  u8	nc_sbcl;
 
 /*0c*/  u8	nc_dstat;
-        #define   DFE     0x80  /* sta: dma fifo empty              */
-        #define   MDPE    0x40  /* int: master data parity error    */
-        #define   BF      0x20  /* int: script: bus fault           */
-        #define   ABRT    0x10  /* int: script: command aborted     */
-        #define   SSI     0x08  /* int: script: single step         */
-        #define   SIR     0x04  /* int: script: interrupt instruct. */
-        #define   IID     0x01  /* int: script: illegal instruct.   */
+	#define   DFE     0x80  /* sta: dma fifo empty              */
+	#define   MDPE    0x40  /* int: master data parity error    */
+	#define   BF      0x20  /* int: script: bus fault           */
+	#define   ABRT    0x10  /* int: script: command aborted     */
+	#define   SSI     0x08  /* int: script: single step         */
+	#define   SIR     0x04  /* int: script: interrupt instruct. */
+	#define   IID     0x01  /* int: script: illegal instruct.   */
 
 /*0d*/  u8	nc_sstat0;
-        #define   ILF     0x80  /* sta: data in SIDL register lsb   */
-        #define   ORF     0x40  /* sta: data in SODR register lsb   */
-        #define   OLF     0x20  /* sta: data in SODL register lsb   */
-        #define   AIP     0x10  /* sta: arbitration in progress     */
-        #define   LOA     0x08  /* sta: arbitration lost            */
-        #define   WOA     0x04  /* sta: arbitration won             */
-        #define   IRST    0x02  /* sta: scsi reset signal           */
-        #define   SDP     0x01  /* sta: scsi parity signal          */
+	#define   ILF     0x80  /* sta: data in SIDL register lsb   */
+	#define   ORF     0x40  /* sta: data in SODR register lsb   */
+	#define   OLF     0x20  /* sta: data in SODL register lsb   */
+	#define   AIP     0x10  /* sta: arbitration in progress     */
+	#define   LOA     0x08  /* sta: arbitration lost            */
+	#define   WOA     0x04  /* sta: arbitration won             */
+	#define   IRST    0x02  /* sta: scsi reset signal           */
+	#define   SDP     0x01  /* sta: scsi parity signal          */
 
 /*0e*/  u8	nc_sstat1;
 	#define   FF3210  0xf0	/* sta: bytes in the scsi fifo      */
 
 /*0f*/  u8	nc_sstat2;
-        #define   ILF1    0x80  /* sta: data in SIDL register msb[W]*/
-        #define   ORF1    0x40  /* sta: data in SODR register msb[W]*/
-        #define   OLF1    0x20  /* sta: data in SODL register msb[W]*/
-        #define   DM      0x04  /* sta: DIFFSENS mismatch (895/6 only) */
-        #define   LDSC    0x02  /* sta: disconnect & reconnect      */
+	#define   ILF1    0x80  /* sta: data in SIDL register msb[W]*/
+	#define   ORF1    0x40  /* sta: data in SODR register msb[W]*/
+	#define   OLF1    0x20  /* sta: data in SODL register msb[W]*/
+	#define   DM      0x04  /* sta: DIFFSENS mismatch (895/6 only) */
+	#define   LDSC    0x02  /* sta: disconnect & reconnect      */
 
 /*10*/  u8	nc_dsa;		/* --> Base page                    */
 /*11*/  u8	nc_dsa1;
@@ -175,19 +175,19 @@ struct sym_reg {
 /*13*/  u8	nc_dsa3;
 
 /*14*/  u8	nc_istat;	/* --> Main Command and status      */
-        #define   CABRT   0x80  /* cmd: abort current operation     */
-        #define   SRST    0x40  /* mod: reset chip                  */
-        #define   SIGP    0x20  /* r/w: message from host to script */
-        #define   SEM     0x10  /* r/w: message between host + script  */
-        #define   CON     0x08  /* sta: connected to scsi           */
-        #define   INTF    0x04  /* sta: int on the fly (reset by wr)*/
-        #define   SIP     0x02  /* sta: scsi-interrupt              */
-        #define   DIP     0x01  /* sta: host/script interrupt       */
+	#define   CABRT   0x80  /* cmd: abort current operation     */
+	#define   SRST    0x40  /* mod: reset chip                  */
+	#define   SIGP    0x20  /* r/w: message from host to script */
+	#define   SEM     0x10  /* r/w: message between host + script  */
+	#define   CON     0x08  /* sta: connected to scsi           */
+	#define   INTF    0x04  /* sta: int on the fly (reset by wr)*/
+	#define   SIP     0x02  /* sta: scsi-interrupt              */
+	#define   DIP     0x01  /* sta: host/script interrupt       */
 
 /*15*/  u8	nc_istat1;	/* 896 only */
-        #define   FLSH    0x04  /* sta: chip is flushing            */
-        #define   SCRUN   0x02  /* sta: scripts are running         */
-        #define   SIRQD   0x01  /* r/w: disable INT pin             */
+	#define   FLSH    0x04  /* sta: chip is flushing            */
+	#define   SCRUN   0x02  /* sta: scripts are running         */
+	#define   SIRQD   0x01  /* r/w: disable INT pin             */
 
 /*16*/  u8	nc_mbox0;	/* 896 only */
 /*17*/  u8	nc_mbox1;	/* 896 only */
@@ -254,18 +254,18 @@ struct sym_reg {
 
 /*40*/  u16	nc_sien;	/* -->: interrupt enable            */
 /*42*/  u16	nc_sist;	/* <--: interrupt status            */
-        #define   SBMC    0x1000/* sta: SCSI Bus Mode Change (895/6 only) */
-        #define   STO     0x0400/* sta: timeout (select)            */
-        #define   GEN     0x0200/* sta: timeout (general)           */
-        #define   HTH     0x0100/* sta: timeout (handshake)         */
-        #define   MA      0x80  /* sta: phase mismatch              */
-        #define   CMP     0x40  /* sta: arbitration complete        */
-        #define   SEL     0x20  /* sta: selected by another device  */
-        #define   RSL     0x10  /* sta: reselected by another device*/
-        #define   SGE     0x08  /* sta: gross error (over/underflow)*/
-        #define   UDC     0x04  /* sta: unexpected disconnect       */
-        #define   RST     0x02  /* sta: scsi bus reset detected     */
-        #define   PAR     0x01  /* sta: scsi parity error           */
+	#define   SBMC    0x1000/* sta: SCSI Bus Mode Change (895/6 only) */
+	#define   STO     0x0400/* sta: timeout (select)            */
+	#define   GEN     0x0200/* sta: timeout (general)           */
+	#define   HTH     0x0100/* sta: timeout (handshake)         */
+	#define   MA      0x80  /* sta: phase mismatch              */
+	#define   CMP     0x40  /* sta: arbitration complete        */
+	#define   SEL     0x20  /* sta: selected by another device  */
+	#define   RSL     0x10  /* sta: reselected by another device*/
+	#define   SGE     0x08  /* sta: gross error (over/underflow)*/
+	#define   UDC     0x04  /* sta: unexpected disconnect       */
+	#define   RST     0x02  /* sta: scsi bus reset detected     */
+	#define   PAR     0x01  /* sta: scsi parity error           */
 
 /*44*/  u8	nc_slpar;
 /*45*/  u8	nc_swide;
@@ -363,7 +363,7 @@ struct sym_reg {
 /*d7*/	u8	nc_ia3;
 /*d8*/	u32	nc_sbc;		/* SCSI Byte Count (3 bytes only)   */
 /*dc*/	u32	nc_csbc;	/* Cumulative SCSI Byte Count       */
-                                /* Following for C1010 only         */
+				/* Following for C1010 only         */
 /*e0*/	u16    nc_crcpad;	/* CRC Value                        */
 /*e2*/	u8     nc_crccntl0;	/* CRC control register             */
 	#define   SNDCRC  0x10	/* Send CRC Request                 */
@@ -444,8 +444,8 @@ struct sym_reg {
 #endif
 
 struct sym_tblmove {
-        u32  size;
-        u32  addr;
+	u32  size;
+	u32  addr;
 };
 
 /*-----------------------------------------------------------
@@ -476,10 +476,10 @@ struct sym_tblmove {
 #endif
 
 struct sym_tblsel {
-        u_char  sel_scntl4;	/* C1010 only */
-        u_char  sel_sxfer;
-        u_char  sel_id;
-        u_char  sel_scntl3;
+	u_char  sel_scntl4;	/* C1010 only */
+	u_char  sel_sxfer;
+	u_char  sel_id;
+	u_char  sel_scntl3;
 };
 
 #define SCR_JMP_REL     0x04000000
@@ -582,13 +582,13 @@ struct sym_tblsel {
 #define SCR_REG_OFS(ofs) ((((ofs) & 0x7f) << 16ul) + ((ofs) & 0x80))
 
 #define SCR_SFBR_REG(reg,op,data) \
-        (0x68000000 | (SCR_REG_OFS(REG(reg))) | (op) | (((data)&0xff)<<8ul))
+	(0x68000000 | (SCR_REG_OFS(REG(reg))) | (op) | (((data)&0xff)<<8ul))
 
 #define SCR_REG_SFBR(reg,op,data) \
-        (0x70000000 | (SCR_REG_OFS(REG(reg))) | (op) | (((data)&0xff)<<8ul))
+	(0x70000000 | (SCR_REG_OFS(REG(reg))) | (op) | (((data)&0xff)<<8ul))
 
 #define SCR_REG_REG(reg,op,data) \
-        (0x78000000 | (SCR_REG_OFS(REG(reg))) | (op) | (((data)&0xff)<<8ul))
+	(0x78000000 | (SCR_REG_OFS(REG(reg))) | (op) | (((data)&0xff)<<8ul))
 
 
 #define      SCR_LOAD   0x00000000
@@ -629,7 +629,7 @@ struct sym_tblsel {
 	SCR_REG_REG(reg,SCR_LOAD,data)
 
 #define SCR_LOAD_SFBR(data) \
-        (SCR_REG_SFBR (gpreg, SCR_LOAD, data))
+	(SCR_REG_SFBR (gpreg, SCR_LOAD, data))
 
 /*-----------------------------------------------------------
  *
@@ -654,10 +654,10 @@ struct sym_tblsel {
 #define SCR_DSA_REL2	0x10000000
 
 #define SCR_LOAD_R(reg, how, n) \
-        (0xe1000000 | how | (SCR_REG_OFS2(REG(reg))) | (n))
+	(0xe1000000 | how | (SCR_REG_OFS2(REG(reg))) | (n))
 
 #define SCR_STORE_R(reg, how, n) \
-        (0xe0000000 | how | (SCR_REG_OFS2(REG(reg))) | (n))
+	(0xe0000000 | how | (SCR_REG_OFS2(REG(reg))) | (n))
 
 #define SCR_LOAD_ABS(reg, n)	SCR_LOAD_R(reg, SCR_NO_FLUSH2, n)
 #define SCR_LOAD_REL(reg, n)	SCR_LOAD_R(reg, SCR_NO_FLUSH2|SCR_DSA_REL2, n)

@@ -1,63 +1,63 @@
 /*
-        pf.c    (c) 1997-8  Grant R. Guenther <grant@torque.net>
-                            Under the terms of the GNU General Public License.
+	pf.c    (c) 1997-8  Grant R. Guenther <grant@torque.net>
+			    Under the terms of the GNU General Public License.
 
-        This is the high-level driver for parallel port ATAPI disk
-        drives based on chips supported by the paride module.
+	This is the high-level driver for parallel port ATAPI disk
+	drives based on chips supported by the paride module.
 
-        By default, the driver will autoprobe for a single parallel
-        port ATAPI disk drive, but if their individual parameters are
-        specified, the driver can handle up to 4 drives.
+	By default, the driver will autoprobe for a single parallel
+	port ATAPI disk drive, but if their individual parameters are
+	specified, the driver can handle up to 4 drives.
 
-        The behaviour of the pf driver can be altered by setting
-        some parameters from the insmod command line.  The following
-        parameters are adjustable:
+	The behaviour of the pf driver can be altered by setting
+	some parameters from the insmod command line.  The following
+	parameters are adjustable:
 
-            drive0      These four arguments can be arrays of
-            drive1      1-7 integers as follows:
-            drive2
-            drive3      <prt>,<pro>,<uni>,<mod>,<slv>,<lun>,<dly>
+	    drive0      These four arguments can be arrays of
+	    drive1      1-7 integers as follows:
+	    drive2
+	    drive3      <prt>,<pro>,<uni>,<mod>,<slv>,<lun>,<dly>
 
-                        Where,
+			Where,
 
-                <prt>   is the base of the parallel port address for
-                        the corresponding drive.  (required)
+		<prt>   is the base of the parallel port address for
+			the corresponding drive.  (required)
 
-                <pro>   is the protocol number for the adapter that
-                        supports this drive.  These numbers are
-                        logged by 'paride' when the protocol modules
-                        are initialised.  (0 if not given)
+		<pro>   is the protocol number for the adapter that
+			supports this drive.  These numbers are
+			logged by 'paride' when the protocol modules
+			are initialised.  (0 if not given)
 
-                <uni>   for those adapters that support chained
-                        devices, this is the unit selector for the
-                        chain of devices on the given port.  It should
-                        be zero for devices that don't support chaining.
-                        (0 if not given)
+		<uni>   for those adapters that support chained
+			devices, this is the unit selector for the
+			chain of devices on the given port.  It should
+			be zero for devices that don't support chaining.
+			(0 if not given)
 
-                <mod>   this can be -1 to choose the best mode, or one
-                        of the mode numbers supported by the adapter.
-                        (-1 if not given)
+		<mod>   this can be -1 to choose the best mode, or one
+			of the mode numbers supported by the adapter.
+			(-1 if not given)
 
-                <slv>   ATAPI CDroms can be jumpered to master or slave.
-                        Set this to 0 to choose the master drive, 1 to
-                        choose the slave, -1 (the default) to choose the
-                        first drive found.
+		<slv>   ATAPI CDroms can be jumpered to master or slave.
+			Set this to 0 to choose the master drive, 1 to
+			choose the slave, -1 (the default) to choose the
+			first drive found.
 
 		<lun>   Some ATAPI devices support multiple LUNs.
-                        One example is the ATAPI PD/CD drive from
-                        Matshita/Panasonic.  This device has a
-                        CD drive on LUN 0 and a PD drive on LUN 1.
-                        By default, the driver will search for the
-                        first LUN with a supported device.  Set
-                        this parameter to force it to use a specific
-                        LUN.  (default -1)
+			One example is the ATAPI PD/CD drive from
+			Matshita/Panasonic.  This device has a
+			CD drive on LUN 0 and a PD drive on LUN 1.
+			By default, the driver will search for the
+			first LUN with a supported device.  Set
+			this parameter to force it to use a specific
+			LUN.  (default -1)
 
-                <dly>   some parallel ports require the driver to
-                        go more slowly.  -1 sets a default value that
-                        should work with the chosen protocol.  Otherwise,
-                        set this to a small integer, the larger it is
-                        the slower the port i/o.  In some cases, setting
-                        this to zero will speed up the device. (default -1)
+		<dly>   some parallel ports require the driver to
+			go more slowly.  -1 sets a default value that
+			should work with the chosen protocol.  Otherwise,
+			set this to a small integer, the larger it is
+			the slower the port i/o.  In some cases, setting
+			this to zero will speed up the device. (default -1)
 
 	    major	You may use this parameter to overide the
 			default major number (47) that this driver
@@ -69,34 +69,34 @@
 			device (in /proc output, for instance).
 			(default "pf").
 
-            cluster     The driver will attempt to aggregate requests
-                        for adjacent blocks into larger multi-block
-                        clusters.  The maximum cluster size (in 512
-                        byte sectors) is set with this parameter.
-                        (default 64)
+	    cluster     The driver will attempt to aggregate requests
+			for adjacent blocks into larger multi-block
+			clusters.  The maximum cluster size (in 512
+			byte sectors) is set with this parameter.
+			(default 64)
 
-            verbose     This parameter controls the amount of logging
-                        that the driver will do.  Set it to 0 for
-                        normal operation, 1 to see autoprobe progress
-                        messages, or 2 to see additional debugging
-                        output.  (default 0)
+	    verbose     This parameter controls the amount of logging
+			that the driver will do.  Set it to 0 for
+			normal operation, 1 to see autoprobe progress
+			messages, or 2 to see additional debugging
+			output.  (default 0)
 
 	    nice        This parameter controls the driver's use of
 			idle CPU time, at the expense of some speed.
 
-        If this driver is built into the kernel, you can use the
-        following command line parameters, with the same values
-        as the corresponding module parameters listed above:
+	If this driver is built into the kernel, you can use the
+	following command line parameters, with the same values
+	as the corresponding module parameters listed above:
 
-            pf.drive0
-            pf.drive1
-            pf.drive2
-            pf.drive3
+	    pf.drive0
+	    pf.drive1
+	    pf.drive2
+	    pf.drive3
 	    pf.cluster
-            pf.nice
+	    pf.nice
 
-        In addition, you can use the parameter pf.disable to disable
-        the driver entirely.
+	In addition, you can use the parameter pf.disable to disable
+	the driver entirely.
 
 */
 

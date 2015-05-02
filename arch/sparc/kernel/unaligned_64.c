@@ -249,11 +249,11 @@ static void kernel_mna_trap_fault(int fixup_tstate_asi)
 
 		address = compute_effective_address(regs, insn,
 						    ((insn >> 25) & 0x1f));
-        	if (address < PAGE_SIZE) {
-                	printk(KERN_ALERT "Unable to handle kernel NULL "
+		if (address < PAGE_SIZE) {
+			printk(KERN_ALERT "Unable to handle kernel NULL "
 			       "pointer dereference in mna handler");
-        	} else
-                	printk(KERN_ALERT "Unable to handle kernel paging "
+		} else
+			printk(KERN_ALERT "Unable to handle kernel paging "
 			       "request in mna handler");
 	        printk(KERN_ALERT " at virtual address %016lx\n",address);
 		printk(KERN_ALERT "current->{active_,}mm->context = %016lx\n",

@@ -51,8 +51,8 @@ struct sysctl_data_s {
 #define IR_ARG_INT              0x00    /* 4-byte integer (big-endian)  */
 #define IR_ARG_ASCII            0x01    /* null-terminated ASCII string */
 #define IR_ARG_UNKNOWN          0x80    /* unknown data type.  The low
-                                         * 7 bits will contain the data
-                                         * length.                      */
+					 * 7 bits will contain the data
+					 * length.                      */
 #define IR_ARG_UNKNOWN_LENGTH_MASK	0x7f
 
 

@@ -100,7 +100,7 @@ int rtas_read_config(struct pci_bus *bus, unsigned int devfn, int offset,
 	unsigned long addr = (offset & 0xff) | ((devfn & 0xff) << 8)
 		| (((bus->number - hose->first_busno) & 0xff) << 16)
 		| (hose->global_number << 24);
-        int ret = -1;
+	int ret = -1;
 	int rval;
 
 	rval = rtas_call(rtas_token("read-pci-config"), 2, 2, &ret, addr, len);

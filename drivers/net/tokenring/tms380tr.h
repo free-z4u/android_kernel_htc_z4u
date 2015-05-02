@@ -186,7 +186,7 @@ void tms380tr_wait(unsigned long time);
 					 * status.
 					 */
 #define STS_IRQ_TRANSMIT_STATUS	0x000C	/* SSB is updated with transmit
-                                         * status
+					 * status
 					 */
 #define STS_IRQ_RECEIVE_PENDING	0x000E	/* Not used in MAC-only microcode */
 #define STS_IRQ_MASK		0x000F	/* = STS_ERROR_MASK. */
@@ -194,7 +194,7 @@ void tms380tr_wait(unsigned long time);
 
 /* TRANSMIT_STATUS completion code: (SSB.Parm[0]) */
 #define COMMAND_COMPLETE	0x0080	/* TRANSMIT command completed
-                                         * (avoid this!) issue another transmit
+					 * (avoid this!) issue another transmit
 					 * to send additional frames.
 					 */
 #define FRAME_COMPLETE		0x0040	/* Frame has been transmitted;
@@ -932,7 +932,7 @@ struct s_TPL {	/* Transmit Parameter List (align on even word boundaries) */
 					 */
 
 #define ADAPTER_CLOSED (LOBE_WIRE_FAULT | AUTO_REMOVAL_ERROR |\
-                        REMOVE_RECEIVED)
+			REMOVE_RECEIVED)
 
 /* Adapter_check_block.Status field bit assignments: */
 #define DIO_PARITY              0x8000  /* Adapter detects bad parity

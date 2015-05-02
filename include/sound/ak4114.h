@@ -195,7 +195,7 @@ void snd_ak4114_reg_write(struct ak4114 *ak4114, unsigned char reg, unsigned cha
 void snd_ak4114_reinit(struct ak4114 *ak4114);
 int snd_ak4114_build(struct ak4114 *ak4114,
 		     struct snd_pcm_substream *playback_substream,
-                     struct snd_pcm_substream *capture_substream);
+		     struct snd_pcm_substream *capture_substream);
 int snd_ak4114_external_rate(struct ak4114 *ak4114);
 int snd_ak4114_check_rate_and_errors(struct ak4114 *ak4114, unsigned int flags);
 

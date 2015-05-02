@@ -86,11 +86,11 @@
 	;;											\
 .mem.offset 0,0; st8.spill [r16]=r8,16;								\
 .mem.offset 8,0; st8.spill [r17]=r9,16;								\
-        ;;											\
+	;;											\
 .mem.offset 0,0; st8.spill [r16]=r10,24;							\
 	movl r8=XSI_PRECOVER_IFS;								\
 .mem.offset 8,0; st8.spill [r17]=r11,24;							\
-        ;;											\
+	;;											\
 	/* xen special handling for possibly lazy cover */					\
 	/* SAVE_MIN case in dispatch_ia32_handler: mov r30=r0 */				\
 	ld8 r30=[r8];										\

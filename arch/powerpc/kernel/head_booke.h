@@ -173,7 +173,7 @@
  * Exception vectors.
  */
 #define	START_EXCEPTION(label)						     \
-        .align 5;              						     \
+	.align 5;              						     \
 label:
 
 #define FINISH_EXCEPTION(func)					\

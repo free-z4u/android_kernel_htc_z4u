@@ -58,7 +58,7 @@ MODULE_SUPPORTED_DEVICE("{{ALSA, MIDI serial u16550}}");
 #define SNDRV_SERIAL_MAX_ADAPTOR SNDRV_SERIAL_GENERIC
 static char *adaptor_names[] = {
 	"Soundcanvas",
-        "MS-124T",
+	"MS-124T",
 	"MS-124W S/A",
 	"MS-124W M/B",
 	"Generic"
@@ -142,7 +142,7 @@ struct snd_uart16550 {
 
 	/* parameter for using of write loop */
 	short int fifo_limit;	/* used in uart16550 */
-        short int fifo_count;	/* used in uart16550 */
+	short int fifo_count;	/* used in uart16550 */
 
 	/* type of adaptor */
 	int adaptor;
@@ -158,9 +158,9 @@ struct snd_uart16550 {
 	/* write buffer and its writing/reading position */
 	unsigned char tx_buff[TX_BUFF_SIZE];
 	int buff_in_count;
-        int buff_in;
-        int buff_out;
-        int drop_on_full;
+	int buff_in;
+	int buff_out;
+	int drop_on_full;
 
 	/* wait timer */
 	unsigned int timer_running:1;

@@ -150,7 +150,7 @@ void kvmppc_core_dequeue_dec(struct kvm_vcpu *vcpu)
 }
 
 void kvmppc_core_queue_external(struct kvm_vcpu *vcpu,
-                                struct kvm_interrupt *irq)
+				struct kvm_interrupt *irq)
 {
 	unsigned int vec = BOOK3S_INTERRUPT_EXTERNAL;
 
@@ -161,7 +161,7 @@ void kvmppc_core_queue_external(struct kvm_vcpu *vcpu,
 }
 
 void kvmppc_core_dequeue_external(struct kvm_vcpu *vcpu,
-                                  struct kvm_interrupt *irq)
+				  struct kvm_interrupt *irq)
 {
 	kvmppc_book3s_dequeue_irqprio(vcpu, BOOK3S_INTERRUPT_EXTERNAL);
 	kvmppc_book3s_dequeue_irqprio(vcpu, BOOK3S_INTERRUPT_EXTERNAL_LEVEL);
@@ -472,7 +472,7 @@ int kvm_arch_vcpu_ioctl_set_fpu(struct kvm_vcpu *vcpu, struct kvm_fpu *fpu)
 }
 
 int kvm_arch_vcpu_ioctl_translate(struct kvm_vcpu *vcpu,
-                                  struct kvm_translation *tr)
+				  struct kvm_translation *tr)
 {
 	return 0;
 }

@@ -351,8 +351,8 @@ static int pccard_set_socket(struct pcmcia_socket *sock, socket_state_t *state)
 		control |= I365_PC_RESET;
 	exca_write_byte(slot, I365_INTCTL, control);
 
-        cscint = 0;
-        exca_write_byte(slot, I365_CSCINT, cscint);
+	cscint = 0;
+	exca_write_byte(slot, I365_CSCINT, cscint);
 	exca_read_byte(slot, I365_CSC);	/* clear CardStatus change */
 	if (state->csc_mask != 0)
 		cscint |= socket->csc_irq << 8;
@@ -369,7 +369,7 @@ static int pccard_set_socket(struct pcmcia_socket *sock, socket_state_t *state)
 		cscint |= I365_CSC_READY;
 	if (state->csc_mask & SS_DETECT)
 		cscint |= I365_CSC_DETECT;
-        exca_write_byte(slot, I365_CSCINT, cscint);
+	exca_write_byte(slot, I365_CSCINT, cscint);
 
 	spin_unlock_irq(&socket->lock);
 

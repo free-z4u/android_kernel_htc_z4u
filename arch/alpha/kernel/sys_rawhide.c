@@ -137,15 +137,15 @@ rawhide_srm_device_interrupt(unsigned long vector)
 
 	irq = (vector - 0x800) >> 4;
 
-        /*
-         * The RAWHIDE SRM console reports PCI interrupts with a vector
+	/*
+	 * The RAWHIDE SRM console reports PCI interrupts with a vector
 	 * 0x80 *higher* than one might expect, as PCI IRQ 0 (ie bit 0)
 	 * shows up as IRQ 24, etc, etc. We adjust it down by 8 to have
 	 * it line up with the actual bit numbers from the REQ registers,
 	 * which is how we manage the interrupts/mask. Sigh...
 	 *
 	 * Also, PCI #1 interrupts are offset some more... :-(
-         */
+	 */
 
 	if (irq == 52) {
 		/* SCSI on PCI1 is special.  */

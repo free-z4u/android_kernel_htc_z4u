@@ -676,7 +676,7 @@ int hp_sdc_request_timer_irq(hp_sdc_irqhook *callback)
 	hp_sdc.timer = callback;
 	/* Enable interrupts from the timers */
 	hp_sdc.im &= ~HP_SDC_IM_FH;
-        hp_sdc.im &= ~HP_SDC_IM_PT;
+	hp_sdc.im &= ~HP_SDC_IM_PT;
 	hp_sdc.im &= ~HP_SDC_IM_TIMERS;
 	hp_sdc.set_im = 1;
 	write_unlock_irq(&hp_sdc.hook_lock);
@@ -856,7 +856,7 @@ static int __init hp_sdc_init(void)
 	memset(&hp_sdc.tq, 0, sizeof(hp_sdc.tq));
 
 	hp_sdc.wcurr		= -1;
-        hp_sdc.rcurr		= -1;
+	hp_sdc.rcurr		= -1;
 	hp_sdc.rqty		= 0;
 
 	hp_sdc.dev_err = -ENODEV;
@@ -873,7 +873,7 @@ static int __init hp_sdc_init(void)
 
 #if defined(__hppa__)
 	errstr = "IO not available for";
-        if (request_region(hp_sdc.data_io, 2, hp_sdc_driver.name))
+	if (request_region(hp_sdc.data_io, 2, hp_sdc_driver.name))
 		goto err0;
 #endif
 
@@ -1103,7 +1103,7 @@ static int __init hp_sdc_register(void)
 		printk(KERN_INFO PREFIX "Old style SDC (1820-%s).\n",
 		       (hp_sdc.r11 & HP_SDC_CFG_REV) ? "3300" : "2564/3087");
 
-        return 0;
+	return 0;
 }
 
 module_init(hp_sdc_register);

@@ -186,7 +186,7 @@ int etrax_gpio_wake_up_check(void)
 {
 	struct gpio_private *priv;
 	unsigned long data = 0;
-        int ret = 0;
+	int ret = 0;
 	unsigned long flags;
 
 	spin_lock_irqsave(&gpio_lock, flags);
@@ -201,12 +201,12 @@ int etrax_gpio_wake_up_check(void)
 		    (~data & priv->lowalarm)) {
 			DP(printk("etrax_gpio_wake_up_check %i\n",priv->minor));
 			wake_up_interruptible(&priv->alarm_wq);
-                        ret = 1;
+			ret = 1;
 		}
 		priv = priv->next;
 	}
 	spin_unlock_irqrestore(&gpio_lock, flags);
-        return ret;
+	return ret;
 }
 
 static irqreturn_t
@@ -214,9 +214,9 @@ gpio_poll_timer_interrupt(int irq, void *dev_id)
 {
 	if (gpio_some_alarms) {
 		etrax_gpio_wake_up_check();
-                return IRQ_HANDLED;
+		return IRQ_HANDLED;
 	}
-        return IRQ_NONE;
+	return IRQ_NONE;
 }
 
 static irqreturn_t
@@ -242,7 +242,7 @@ gpio_interrupt(int irq, void *dev_id)
 	if (gpio_some_alarms)
 		return IRQ_RETVAL(etrax_gpio_wake_up_check());
 
-        return IRQ_NONE;
+	return IRQ_NONE;
 }
 
 static void gpio_write_bit(struct gpio_private *priv,
@@ -503,7 +503,7 @@ static long gpio_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	unsigned long flags;
 	unsigned long val;
-        int ret = 0;
+	int ret = 0;
 
 	struct gpio_private *priv = file->private_data;
 	if (_IOC_TYPE(cmd) != ETRAXGPIO_IOCTYPE)

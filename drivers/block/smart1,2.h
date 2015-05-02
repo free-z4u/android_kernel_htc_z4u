@@ -41,7 +41,7 @@
  */
 static void smart4_submit_command(ctlr_info_t *h, cmdlist_t *c)
 {
-        writel(c->busaddr, h->vaddr + S42XX_REQUEST_PORT_OFFSET);
+	writel(c->busaddr, h->vaddr + S42XX_REQUEST_PORT_OFFSET);
 }
 
 /*
@@ -56,7 +56,7 @@ static void smart4_intr_mask(ctlr_info_t *h, unsigned long val)
 		writel(0, h->vaddr + S42XX_REPLY_INTR_MASK_OFFSET);
 	} else /* Turn them off */
 	{
-        	writel( S42XX_INTR_OFF,
+		writel( S42XX_INTR_OFF,
 			h->vaddr + S42XX_REPLY_INTR_MASK_OFFSET);
 	}
 }
@@ -69,7 +69,7 @@ static void smart4_intr_mask(ctlr_info_t *h, unsigned long val)
 static unsigned long smart4_fifo_full(ctlr_info_t *h)
 {
 
-        return (!readl(h->vaddr + S42XX_REQUEST_PORT_OFFSET));
+	return (!readl(h->vaddr + S42XX_REQUEST_PORT_OFFSET));
 }
 
 /* This type of controller returns -1 if the fifo is empty,

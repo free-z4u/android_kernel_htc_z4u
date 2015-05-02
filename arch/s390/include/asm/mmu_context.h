@@ -88,9 +88,9 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 #define deactivate_mm(tsk,mm)	do { } while (0)
 
 static inline void activate_mm(struct mm_struct *prev,
-                               struct mm_struct *next)
+			       struct mm_struct *next)
 {
-        switch_mm(prev, next, current);
+	switch_mm(prev, next, current);
 }
 
 #endif /* __S390_MMU_CONTEXT_H */

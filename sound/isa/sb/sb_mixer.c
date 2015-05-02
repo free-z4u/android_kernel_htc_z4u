@@ -657,15 +657,15 @@ static struct sbmix_elem snd_dt019x_controls[] = {
 };
 
 static unsigned char snd_dt019x_init_values[][2] = {
-        { SB_DT019X_MASTER_DEV, 0 },
-        { SB_DT019X_PCM_DEV, 0 },
-        { SB_DT019X_SYNTH_DEV, 0 },
-        { SB_DT019X_CD_DEV, 0 },
-        { SB_DT019X_MIC_DEV, 0 },	/* Includes PC-speaker in high nibble */
-        { SB_DT019X_LINE_DEV, 0 },
-        { SB_DSP4_OUTPUT_SW, 0 },
-        { SB_DT019X_OUTPUT_SW2, 0 },
-        { SB_DT019X_CAPTURE_SW, 0x06 },
+	{ SB_DT019X_MASTER_DEV, 0 },
+	{ SB_DT019X_PCM_DEV, 0 },
+	{ SB_DT019X_SYNTH_DEV, 0 },
+	{ SB_DT019X_CD_DEV, 0 },
+	{ SB_DT019X_MIC_DEV, 0 },	/* Includes PC-speaker in high nibble */
+	{ SB_DT019X_LINE_DEV, 0 },
+	{ SB_DSP4_OUTPUT_SW, 0 },
+	{ SB_DT019X_OUTPUT_SW2, 0 },
+	{ SB_DT019X_CAPTURE_SW, 0x06 },
 };
 
 /*

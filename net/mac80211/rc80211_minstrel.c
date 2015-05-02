@@ -151,7 +151,7 @@ minstrel_update_stats(struct minstrel_priv *mp, struct minstrel_sta_info *mi)
 
 static void
 minstrel_tx_status(void *priv, struct ieee80211_supported_band *sband,
-                   struct ieee80211_sta *sta, void *priv_sta,
+		   struct ieee80211_sta *sta, void *priv_sta,
 		   struct sk_buff *skb)
 {
 	struct minstrel_sta_info *mi = priv_sta;
@@ -186,7 +186,7 @@ minstrel_tx_status(void *priv, struct ieee80211_supported_band *sband,
 
 static inline unsigned int
 minstrel_get_retry_count(struct minstrel_rate *mr,
-                         struct ieee80211_tx_info *info)
+			 struct ieee80211_tx_info *info)
 {
 	unsigned int retry = mr->adjusted_retry_count;
 
@@ -375,7 +375,7 @@ init_sample_table(struct minstrel_sta_info *mi)
 
 static void
 minstrel_rate_init(void *priv, struct ieee80211_supported_band *sband,
-               struct ieee80211_sta *sta, void *priv_sta)
+	       struct ieee80211_sta *sta, void *priv_sta)
 {
 	struct minstrel_sta_info *mi = priv_sta;
 	struct minstrel_priv *mp = priv;

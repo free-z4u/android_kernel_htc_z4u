@@ -106,7 +106,7 @@ static struct syscore_ops leds_syscore_ops = {
 };
 
 static int leds_idle_notifier(struct notifier_block *nb, unsigned long val,
-                                void *data)
+				void *data)
 {
 	switch (val) {
 	case IDLE_START:

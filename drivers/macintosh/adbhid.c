@@ -418,7 +418,7 @@ adbhid_mouse_input(unsigned char *data, int nb, int autopoll)
     For Apple's standard one-button mouse protocol the data array will
     contain the following values:
 
-                BITS    COMMENTS
+		BITS    COMMENTS
     data[0] = dddd 1100 ADB command: Talk, register 0, for device dddd.
     data[1] = bxxx xxxx First button and x-axis motion.
     data[2] = byyy yyyy Second button and y-axis motion.
@@ -478,11 +478,11 @@ adbhid_mouse_input(unsigned char *data, int nb, int autopoll)
 		data[2] = (data[2] & 0x7f) | ((data[3] & 0x02) << 6);
 		data[3] = ((data[3] & 0x04) << 5);
 		break;
-            case ADBMOUSE_MACALLY2:
+	    case ADBMOUSE_MACALLY2:
 		data[3] = (data[2] & 0x80) ? 0x80 : 0x00;
 		data[2] |= 0x80;  /* Right button is mapped as button 3 */
 		nb=4;
-                break;
+		break;
 	}
 
 	input_report_key(adbhid[id]->input, BTN_LEFT,   !((data[1] >> 7) & 1));
@@ -1113,7 +1113,7 @@ init_trackpad(int id)
 	            0x0d,
 	            r1_buffer[7]);
 
-            adb_request(&req, NULL, ADBREQ_SYNC, 9,
+	    adb_request(&req, NULL, ADBREQ_SYNC, 9,
 	        ADB_WRITEREG(id,2),
 	    	    0x99,
 	    	    0x94,
@@ -1137,7 +1137,7 @@ init_trackpad(int id)
 
 	    /* Without this flush, the trackpad may be locked up */
 	    adb_request(&req, NULL, ADBREQ_SYNC, 1, ADB_FLUSH(id));
-        }
+	}
 }
 
 static void
@@ -1177,7 +1177,7 @@ init_turbomouse(int id)
 {
 	struct adb_request req;
 
-        printk(" (TurboMouse 5)");
+	printk(" (TurboMouse 5)");
 
 	adb_request(&req, NULL, ADBREQ_SYNC, 1, ADB_FLUSH(id));
 
@@ -1213,7 +1213,7 @@ init_microspeed(int id)
 {
 	struct adb_request req;
 
-        printk(" (Microspeed/MacPoint or compatible)");
+	printk(" (Microspeed/MacPoint or compatible)");
 
 	adb_request(&req, NULL, ADBREQ_SYNC, 1, ADB_FLUSH(id));
 
@@ -1221,19 +1221,19 @@ init_microspeed(int id)
 	   other compatible firmware. Bit 12 enables extended protocol.
 
 	   Register 1 Listen (4 Bytes)
-            0 -  3     Button is mouse (set also for double clicking!!!)
-            4 -  7     Button is locking (affects change speed also)
-            8 - 11     Button changes speed
-           12          1 = Extended mouse mode, 0 = normal mouse mode
-           13 - 15     unused 0
-           16 - 23     normal speed
-           24 - 31     changed speed
+	    0 -  3     Button is mouse (set also for double clicking!!!)
+	    4 -  7     Button is locking (affects change speed also)
+	    8 - 11     Button changes speed
+	   12          1 = Extended mouse mode, 0 = normal mouse mode
+	   13 - 15     unused 0
+	   16 - 23     normal speed
+	   24 - 31     changed speed
 
        Register 1 talk holds version and product identification information.
        Register 1 Talk (4 Bytes):
-            0 -  7     Product code
-            8 - 23     undefined, reserved
-           24 - 31     Version number
+	    0 -  7     Product code
+	    8 - 23     undefined, reserved
+	   24 - 31     Version number
 
        Speed 0 is max. 1 to 255 set speed in increments of 1/256 of max.
  */

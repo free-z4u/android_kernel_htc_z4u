@@ -226,7 +226,7 @@ static int vx_adjust_audio_level(struct vx_core *chip, int audio, int capture,
 	if (chip->chip_status & VX_STAT_IS_STALE)
 		return -EBUSY;
 
-        vx_init_rmh(&rmh, CMD_AUDIO_LEVEL_ADJUST);
+	vx_init_rmh(&rmh, CMD_AUDIO_LEVEL_ADJUST);
 	if (capture)
 		rmh.Cmd[0] |= COMMAND_RECORD_MASK;
 	/* Add Audio IO mask */
@@ -235,11 +235,11 @@ static int vx_adjust_audio_level(struct vx_core *chip, int audio, int capture,
 	if (info->has_level) {
 		rmh.Cmd[0] |=  VALID_AUDIO_IO_DIGITAL_LEVEL;
 		rmh.Cmd[2] |= info->level;
-        }
+	}
 	if (info->has_monitor_level) {
 		rmh.Cmd[0] |=  VALID_AUDIO_IO_MONITORING_LEVEL;
 		rmh.Cmd[2] |= ((unsigned int)info->monitor_level << 10);
-        }
+	}
 	if (info->has_mute) {
 		rmh.Cmd[0] |= VALID_AUDIO_IO_MUTE_LEVEL;
 		if (info->mute)
@@ -264,7 +264,7 @@ static int vx_read_audio_level(struct vx_core *chip, int audio, int capture,
 	struct vx_rmh rmh;
 
 	memset(info, 0, sizeof(*info));
-        vx_init_rmh(&rmh, CMD_GET_AUDIO_LEVELS);
+	vx_init_rmh(&rmh, CMD_GET_AUDIO_LEVELS);
 	if (capture)
 		rmh.Cmd[0] |= COMMAND_RECORD_MASK;
 	/* Add Audio IO mask */
@@ -389,7 +389,7 @@ static int vx_get_audio_vu_meter(struct vx_core *chip, int audio, int capture, s
 	if (capture)
 		rmh.Cmd[0] |= COMMAND_RECORD_MASK;
 
-        /* Add Audio IO mask */
+	/* Add Audio IO mask */
 	rmh.Cmd[1] = 0;
 	for (i = 0; i < VU_METER_CHANNELS; i++)
 		rmh.Cmd[1] |= 1 << (audio + i);
@@ -796,7 +796,7 @@ static int vx_iec958_get(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_valu
 	ucontrol->value.iec958.status[2] = (chip->uer_bits >> 16) & 0xff;
 	ucontrol->value.iec958.status[3] = (chip->uer_bits >> 24) & 0xff;
 	mutex_unlock(&chip->mixer_mutex);
-        return 0;
+	return 0;
 }
 
 static int vx_iec958_mask_get(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
@@ -805,7 +805,7 @@ static int vx_iec958_mask_get(struct snd_kcontrol *kcontrol, struct snd_ctl_elem
 	ucontrol->value.iec958.status[1] = 0xff;
 	ucontrol->value.iec958.status[2] = 0xff;
 	ucontrol->value.iec958.status[3] = 0xff;
-        return 0;
+	return 0;
 }
 
 static int vx_iec958_put(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)

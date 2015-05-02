@@ -52,33 +52,33 @@ Supports:
 Configuration options - PCI224:
   [0] - PCI bus of device (optional).
   [1] - PCI slot of device (optional).
-          If bus/slot is not specified, the first available PCI device
-          will be used.
+	  If bus/slot is not specified, the first available PCI device
+	  will be used.
   [2] - Select available ranges according to jumper LK1.  All channels
-        are set to the same range:
-        0=Jumper position 1-2 (factory default), 4 software-selectable
-          internal voltage references, giving 4 bipolar and 4 unipolar
-          ranges:
-            [-10V,+10V], [-5V,+5V], [-2.5V,+2.5V], [-1.25V,+1.25V],
-            [0,+10V], [0,+5V], [0,+2.5V], [0,1.25V].
-        1=Jumper position 2-3, 1 external voltage reference, giving
-          1 bipolar and 1 unipolar range:
-            [-Vext,+Vext], [0,+Vext].
+	are set to the same range:
+	0=Jumper position 1-2 (factory default), 4 software-selectable
+	  internal voltage references, giving 4 bipolar and 4 unipolar
+	  ranges:
+	    [-10V,+10V], [-5V,+5V], [-2.5V,+2.5V], [-1.25V,+1.25V],
+	    [0,+10V], [0,+5V], [0,+2.5V], [0,1.25V].
+	1=Jumper position 2-3, 1 external voltage reference, giving
+	  1 bipolar and 1 unipolar range:
+	    [-Vext,+Vext], [0,+Vext].
 
 Configuration options - PCI234:
   [0] - PCI bus of device (optional).
   [1] - PCI slot of device (optional).
-          If bus/slot is not specified, the first available PCI device
-          will be used.
+	  If bus/slot is not specified, the first available PCI device
+	  will be used.
   [2] - Select internal or external voltage reference according to
-        jumper LK1.  This affects all channels:
-        0=Jumper position 1-2 (factory default), Vref=5V internal.
-        1=Jumper position 2-3, Vref=Vext external.
+	jumper LK1.  This affects all channels:
+	0=Jumper position 1-2 (factory default), Vref=5V internal.
+	1=Jumper position 2-3, Vref=Vext external.
   [3] - Select channel 0 range according to jumper LK2:
-        0=Jumper position 2-3 (factory default), range [-2*Vref,+2*Vref]
-          (10V bipolar when options[2]=0).
-        1=Jumper position 1-2, range [-Vref,+Vref]
-          (5V bipolar when options[2]=0).
+	0=Jumper position 2-3 (factory default), range [-2*Vref,+2*Vref]
+	  (10V bipolar when options[2]=0).
+	1=Jumper position 1-2, range [-Vref,+Vref]
+	  (5V bipolar when options[2]=0).
   [4] - Select channel 1 range according to jumper LK3: cf. options[3].
   [5] - Select channel 2 range according to jumper LK4: cf. options[3].
   [6] - Select channel 3 range according to jumper LK5: cf. options[3].

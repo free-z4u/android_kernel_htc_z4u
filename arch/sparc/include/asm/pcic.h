@@ -16,15 +16,15 @@
 #include <asm/pbm.h>
 
 struct linux_pcic {
-        void __iomem            *pcic_regs;
-        unsigned long           pcic_io;
-        void __iomem            *pcic_config_space_addr;
-        void __iomem            *pcic_config_space_data;
+	void __iomem            *pcic_regs;
+	unsigned long           pcic_io;
+	void __iomem            *pcic_config_space_addr;
+	void __iomem            *pcic_config_space_data;
 	struct resource		pcic_res_regs;
 	struct resource		pcic_res_io;
 	struct resource		pcic_res_cfg_addr;
 	struct resource		pcic_res_cfg_data;
-        struct linux_pbm_info   pbm;
+	struct linux_pbm_info   pbm;
 	struct pcic_ca2irq	*pcic_imap;
 	int			pcic_imdim;
 };
@@ -112,7 +112,7 @@ static inline void sun4m_pci_init_IRQ(void) {}
 #define PCI_USER_TIMER_CONFIG           0xc5    /* 8  bits */
 #define PCI_COUNTER_IRQ                 0xc6    /* 8  bits */
 #define  PCI_COUNTER_IRQ_SET(sys_irq, cpu_irq)  ((((sys_irq) & 0xf) << 4) | \
-                                                  ((cpu_irq) & 0xf))
+						  ((cpu_irq) & 0xf))
 #define  PCI_COUNTER_IRQ_SYS(v)                 (((v) >> 4) & 0xf)
 #define  PCI_COUNTER_IRQ_CPU(v)                 ((v) & 0xf)
 #define PCI_PIO_ERROR_COMMAND           0xc7    /* 8  bits */

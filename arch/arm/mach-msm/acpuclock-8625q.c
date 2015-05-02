@@ -433,7 +433,7 @@ static int acpuclk_8625q_set_rate(int cpu, unsigned long rate,
 		rc = clk_enable(pll_clk[tgt_s->pll].clk);
 		current_acpu_rate = tgt_s->a11clk_khz;
 #ifdef CONFIG_HTC_ACPU_DEBUG
-                        msm_proc_comm(PCOM_BACKUP_CPU_AXI_RATE, (unsigned*)&tgt_s->a11clk_khz, (unsigned*)&tgt_s->axiclk_khz);
+			msm_proc_comm(PCOM_BACKUP_CPU_AXI_RATE, (unsigned*)&tgt_s->a11clk_khz, (unsigned*)&tgt_s->axiclk_khz);
 #endif
 		if (rc < 0) {
 			pr_err("PLL%d enable failed (%d)\n",

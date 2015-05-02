@@ -706,7 +706,7 @@ static int __devexit madgemc_remove(struct device *device)
 {
 	struct net_device *dev = dev_get_drvdata(device);
 	struct net_local *tp;
-        struct card_info *card;
+	struct card_info *card;
 
 	BUG_ON(!dev);
 

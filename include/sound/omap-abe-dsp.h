@@ -13,7 +13,7 @@
 
 struct omap4_abe_dsp_pdata {
 	/* Return context loss count due to PM states changing */
-        int (*get_context_loss_count)(struct device *dev);
+	int (*get_context_loss_count)(struct device *dev);
 };
 
 #endif

@@ -29,11 +29,11 @@ config IOMMU_PGTABLES_L2
 	bool "Allow SMMU page tables in the L2 cache (Experimental)"
 	depends on MSM_IOMMU && MMU && SMP && CPU_DCACHE_DISABLE=n
 	default y
-        help
-         Improves TLB miss latency at the expense of potential L2 pollution.
-         However, with large multimedia buffers, the TLB should mostly contain
-         section mappings and TLB misses should be quite infrequent.
-         Most people can probably say Y here.
+	help
+	 Improves TLB miss latency at the expense of potential L2 pollution.
+	 However, with large multimedia buffers, the TLB should mostly contain
+	 section mappings and TLB misses should be quite infrequent.
+	 Most people can probably say Y here.
 
 # AMD IOMMU support
 config AMD_IOMMU
@@ -143,10 +143,10 @@ config OMAP_IOMMU_DEBUG
        tristate "Export OMAP IOMMU/IOVMM internals in DebugFS"
        depends on OMAP_IOVMM && DEBUG_FS
        help
-         Select this to see extensive information about
-         the internal state of OMAP IOMMU/IOVMM in debugfs.
+	 Select this to see extensive information about
+	 the internal state of OMAP IOMMU/IOVMM in debugfs.
 
-         Say N unless you know you need this.
+	 Say N unless you know you need this.
 
 config TEGRA_IOMMU_GART
 	bool "Tegra GART IOMMU Support"

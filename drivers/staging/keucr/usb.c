@@ -72,7 +72,7 @@ static int eucr_resume(struct usb_interface *iface)
 	mutex_unlock(&us->dev_mutex);
 
 
-         us->Power_IsResum = true;
+	 us->Power_IsResum = true;
 	//
 	//us->SD_Status.Ready = 0; //??
     	us->SM_Status = *(PSM_STATUS)&tmp;

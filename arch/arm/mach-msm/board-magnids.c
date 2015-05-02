@@ -153,31 +153,31 @@ static void __init register_i2c_devices(void)
 #if defined(CONFIG_INPUT_CAPELLA_CM3629)
 #define MAGNIDS_GPIO_PROXIMITY_INT 36
 static struct cm3629_platform_data cm36282_pdata = {
-        .model = CAPELLA_CM36282,
-        .ps_select = CM3629_PS1_ONLY,
-        .intr = MAGNIDS_GPIO_PROXIMITY_INT,
-        .levels = {12, 14, 16, 476, 1130, 3922, 6795, 9795, 12795, 65535},
-        .golden_adc = 0x131B,
-        .power = NULL,
-        .cm3629_slave_address = 0xC0>>1,
-        .ps_calibration_rule = 1,
-        .ps1_thd_set = 0x08,
-        .ps1_thh_diff = 2,
-        .ps1_thd_no_cal = 0xF1,
-        .ps1_thd_with_cal = 0x08,
-        .ps_conf1_val = CM3629_PS_DR_1_320 | CM3629_PS_IT_1_6T |
-                        CM3629_PS1_PERS_1,
-        .ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
-                        CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
-        .ps_conf3_val = CM3629_PS2_PROL_32,
+	.model = CAPELLA_CM36282,
+	.ps_select = CM3629_PS1_ONLY,
+	.intr = MAGNIDS_GPIO_PROXIMITY_INT,
+	.levels = {12, 14, 16, 476, 1130, 3922, 6795, 9795, 12795, 65535},
+	.golden_adc = 0x131B,
+	.power = NULL,
+	.cm3629_slave_address = 0xC0>>1,
+	.ps_calibration_rule = 1,
+	.ps1_thd_set = 0x08,
+	.ps1_thh_diff = 2,
+	.ps1_thd_no_cal = 0xF1,
+	.ps1_thd_with_cal = 0x08,
+	.ps_conf1_val = CM3629_PS_DR_1_320 | CM3629_PS_IT_1_6T |
+			CM3629_PS1_PERS_1,
+	.ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
+			CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
+	.ps_conf3_val = CM3629_PS2_PROL_32,
 
 };
 
 static struct i2c_board_info i2c_cm36282_devices[] = {
 	{
 		I2C_BOARD_INFO(CM3629_I2C_NAME,0xC0 >> 1),
-        .platform_data = &cm36282_pdata,
-        .irq = MSM_GPIO_TO_INT(MAGNIDS_GPIO_PROXIMITY_INT),
+	.platform_data = &cm36282_pdata,
+	.irq = MSM_GPIO_TO_INT(MAGNIDS_GPIO_PROXIMITY_INT),
 	},
 };
 #endif
@@ -351,22 +351,22 @@ static int msm_hsusb_pmic_notif_init(void (*callback)(int online), int init)
 static int phy_init_settings[] =
 {	0x0c, 0x31,
 	0x28, 0x31,
-        -1
+	-1
 };
 #endif
 
 static struct msm_otg_platform_data msm_otg_pdata = {
-        .vbus_power              = msm_hsusb_vbus_power,
-        .rpc_connect             = hsusb_rpc_connect,
-        .pemp_level              = PRE_EMPHASIS_WITH_20_PERCENT,
-        .cdr_autoreset           = CDR_AUTO_RESET_DISABLE,
-        .drv_ampl                = HS_DRV_AMPLITUDE_DEFAULT,
-        .se1_gating              = SE1_GATING_DISABLE,
-        .ldo_init                = msm_hsusb_ldo_init,
-        .ldo_enable              = msm_hsusb_ldo_enable,
-        .chg_init                = hsusb_chg_init,
-        .chg_connected           = hsusb_chg_connected,
-        .chg_vbus_draw           = hsusb_chg_vbus_draw,
+	.vbus_power              = msm_hsusb_vbus_power,
+	.rpc_connect             = hsusb_rpc_connect,
+	.pemp_level              = PRE_EMPHASIS_WITH_20_PERCENT,
+	.cdr_autoreset           = CDR_AUTO_RESET_DISABLE,
+	.drv_ampl                = HS_DRV_AMPLITUDE_DEFAULT,
+	.se1_gating              = SE1_GATING_DISABLE,
+	.ldo_init                = msm_hsusb_ldo_init,
+	.ldo_enable              = msm_hsusb_ldo_enable,
+	.chg_init                = hsusb_chg_init,
+	.chg_connected           = hsusb_chg_connected,
+	.chg_vbus_draw           = hsusb_chg_vbus_draw,
 };
 
 #ifdef CONFIG_USB_GADGET_MSM_72K
@@ -689,12 +689,12 @@ static struct i2c_board_info i2c_tps65200_devices[] = {
 #ifdef CONFIG_SUPPORT_DQ_BATTERY
 static int __init check_dq_setup(char *str)
 {
-        if (!strcmp(str, "PASS"))
-                tps65200_data.dq_result = 1;
-        else
-                tps65200_data.dq_result = 0;
+	if (!strcmp(str, "PASS"))
+		tps65200_data.dq_result = 1;
+	else
+		tps65200_data.dq_result = 0;
 
-        return 1;
+	return 1;
 }
 __setup("androidboot.dq=", check_dq_setup);
 #endif
@@ -1311,7 +1311,7 @@ static struct platform_device htc_headset_one_wire = {
        .name   = "HTC_HEADSET_1WIRE",
        .id     = -1,
        .dev    = {
-               .platform_data  = &htc_headset_1wire_data,
+	       .platform_data  = &htc_headset_1wire_data,
        },
 };
 
@@ -2197,8 +2197,8 @@ static void __init msm7x2x_init(void)
 		msm8x25_kgsl_3d0_init();
 	/* FIXME: board_mfg_mode is not ready yet */
 #if 0
-        /*usb driver won't be loaded in MFG 58 station and gift mode*/
-        if (!(board_mfg_mode() == 6 || board_mfg_mode() == 7))
+	/*usb driver won't be loaded in MFG 58 station and gift mode*/
+	if (!(board_mfg_mode() == 6 || board_mfg_mode() == 7))
 #endif
 		magnids_add_usb_devices();
 
@@ -2209,15 +2209,15 @@ static void __init msm7x2x_init(void)
     int status;
 	status = gpio_request(GPIO_PS_2V8, "PS_2V85_EN");
     if (status) {
-            pr_err("%s:Failed to request GPIO %d\n", __func__,
-                            GPIO_PS_2V8);
+	    pr_err("%s:Failed to request GPIO %d\n", __func__,
+			    GPIO_PS_2V8);
     } else {
-            status = gpio_direction_output(GPIO_PS_2V8,1);
-            pr_info("PS_2V85 status = %d\n",status);
-            if (!status)
-                    status = gpio_get_value(GPIO_PS_2V8);
-            gpio_free(GPIO_PS_2V8);
-            pr_info("PS_2V85 status = %d\n",status);
+	    status = gpio_direction_output(GPIO_PS_2V8,1);
+	    pr_info("PS_2V85 status = %d\n",status);
+	    if (!status)
+		    status = gpio_get_value(GPIO_PS_2V8);
+	    gpio_free(GPIO_PS_2V8);
+	    pr_info("PS_2V85 status = %d\n",status);
     }
 
 	status = gpio_request(MAGNIDS_GPIO_PROXIMITY_INT, "PS_INT");
@@ -2228,7 +2228,7 @@ static void __init msm7x2x_init(void)
 				GPIO_CFG_INPUT, GPIO_CFG_PULL_UP,
 				GPIO_CFG_2MA), GPIO_CFG_ENABLE);
 		pr_info("MAGNIDS_GPIO_PROXIMITY_INT status = %d\n",status);
-        gpio_free(MAGNIDS_GPIO_PROXIMITY_INT);
+	gpio_free(MAGNIDS_GPIO_PROXIMITY_INT);
 	}
 
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,

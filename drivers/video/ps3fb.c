@@ -140,48 +140,48 @@ struct ps3fb_par {
 static const struct fb_videomode ps3fb_modedb[] = {
     /* 60 Hz broadcast modes (modes "1" to "5") */
     {
-        /* 480i */
-        "480i", 60, 576, 384, 74074, 130, 89, 78, 57, 63, 6,
-        FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
+	/* 480i */
+	"480i", 60, 576, 384, 74074, 130, 89, 78, 57, 63, 6,
+	FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
     },    {
-        /* 480p */
-        "480p", 60, 576, 384, 37037, 130, 89, 78, 57, 63, 6,
-        FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
+	/* 480p */
+	"480p", 60, 576, 384, 37037, 130, 89, 78, 57, 63, 6,
+	FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
     },    {
-        /* 720p */
-        "720p", 60, 1124, 644, 13481, 298, 148, 57, 44, 80, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
+	/* 720p */
+	"720p", 60, 1124, 644, 13481, 298, 148, 57, 44, 80, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
     },    {
-        /* 1080i */
-        "1080i", 60, 1688, 964, 13481, 264, 160, 94, 62, 88, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
+	/* 1080i */
+	"1080i", 60, 1688, 964, 13481, 264, 160, 94, 62, 88, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
     },    {
-        /* 1080p */
-        "1080p", 60, 1688, 964, 6741, 264, 160, 94, 62, 88, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
+	/* 1080p */
+	"1080p", 60, 1688, 964, 6741, 264, 160, 94, 62, 88, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
     },
 
     /* 50 Hz broadcast modes (modes "6" to "10") */
     {
-        /* 576i */
-        "576i", 50, 576, 460, 74074, 142, 83, 97, 63, 63, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
+	/* 576i */
+	"576i", 50, 576, 460, 74074, 142, 83, 97, 63, 63, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
     },    {
-        /* 576p */
-        "576p", 50, 576, 460, 37037, 142, 83, 97, 63, 63, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
+	/* 576p */
+	"576p", 50, 576, 460, 37037, 142, 83, 97, 63, 63, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
     },    {
-        /* 720p */
-        "720p", 50, 1124, 644, 13468, 298, 478, 57, 44, 80, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
+	/* 720p */
+	"720p", 50, 1124, 644, 13468, 298, 478, 57, 44, 80, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
     },    {
-        /* 1080i */
-        "1080i", 50, 1688, 964, 13468, 264, 600, 94, 62, 88, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
+	/* 1080i */
+	"1080i", 50, 1688, 964, 13468, 264, 600, 94, 62, 88, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_INTERLACED
     },    {
-        /* 1080p */
-        "1080p", 50, 1688, 964, 6734, 264, 600, 94, 62, 88, 5,
-        FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
+	/* 1080p */
+	"1080p", 50, 1688, 964, 6734, 264, 600, 94, 62, 88, 5,
+	FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED
     },
 
     [FIRST_NATIVE_MODE_INDEX] =

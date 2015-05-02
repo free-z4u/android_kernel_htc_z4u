@@ -1307,7 +1307,7 @@ static int reset_rm2(struct r_port *info, void __user *arg)
 		reset = 1;
 
 	if (rcktpt_type[info->board] != ROCKET_TYPE_MODEMII &&
-            rcktpt_type[info->board] != ROCKET_TYPE_MODEMIII)
+	    rcktpt_type[info->board] != ROCKET_TYPE_MODEMIII)
 		return -EINVAL;
 
 	if (info->ctlp->BusType == isISA)
@@ -1623,10 +1623,10 @@ static int rp_write(struct tty_struct *tty,
 	if (!tty->stopped && !tty->hw_stopped && info->xmit_fifo_room < count)
 		info->xmit_fifo_room = TXFIFO_SIZE - sGetTxCnt(cp);
 
-        /*
+	/*
 	 *  If the write queue for the port is empty, and there is FIFO space, stuff bytes
 	 *  into FIFO.  Use the write queue for temp storage.
-         */
+	 */
 	if (!tty->stopped && !tty->hw_stopped && info->xmit_cnt == 0 && info->xmit_fifo_room > 0) {
 		c = min(count, info->xmit_fifo_room);
 		b = buf;
@@ -2306,7 +2306,7 @@ static int __init rp_init(void)
 
 	/*
 	 *  OK, let's probe each of the controllers looking for boards.  Any boards found
-         *  will be initialized here.
+	 *  will be initialized here.
 	 */
 	isa_boards_found = 0;
 	pci_boards_found = 0;
@@ -2374,72 +2374,72 @@ static void rp_cleanup_module(void)
 /***************************************************************************
 Function: sInitController
 Purpose:  Initialization of controller global registers and controller
-          structure.
+	  structure.
 Call:     sInitController(CtlP,CtlNum,MudbacIO,AiopIOList,AiopIOListSize,
-                          IRQNum,Frequency,PeriodicOnly)
-          CONTROLLER_T *CtlP; Ptr to controller structure
-          int CtlNum; Controller number
-          ByteIO_t MudbacIO; Mudbac base I/O address.
-          ByteIO_t *AiopIOList; List of I/O addresses for each AIOP.
-             This list must be in the order the AIOPs will be found on the
-             controller.  Once an AIOP in the list is not found, it is
-             assumed that there are no more AIOPs on the controller.
-          int AiopIOListSize; Number of addresses in AiopIOList
-          int IRQNum; Interrupt Request number.  Can be any of the following:
-                         0: Disable global interrupts
-                         3: IRQ 3
-                         4: IRQ 4
-                         5: IRQ 5
-                         9: IRQ 9
-                         10: IRQ 10
-                         11: IRQ 11
-                         12: IRQ 12
-                         15: IRQ 15
-          Byte_t Frequency: A flag identifying the frequency
-                   of the periodic interrupt, can be any one of the following:
-                      FREQ_DIS - periodic interrupt disabled
-                      FREQ_137HZ - 137 Hertz
-                      FREQ_69HZ - 69 Hertz
-                      FREQ_34HZ - 34 Hertz
-                      FREQ_17HZ - 17 Hertz
-                      FREQ_9HZ - 9 Hertz
-                      FREQ_4HZ - 4 Hertz
-                   If IRQNum is set to 0 the Frequency parameter is
-                   overidden, it is forced to a value of FREQ_DIS.
-          int PeriodicOnly: 1 if all interrupts except the periodic
-                               interrupt are to be blocked.
-                            0 is both the periodic interrupt and
-                               other channel interrupts are allowed.
-                            If IRQNum is set to 0 the PeriodicOnly parameter is
-                               overidden, it is forced to a value of 0.
+			  IRQNum,Frequency,PeriodicOnly)
+	  CONTROLLER_T *CtlP; Ptr to controller structure
+	  int CtlNum; Controller number
+	  ByteIO_t MudbacIO; Mudbac base I/O address.
+	  ByteIO_t *AiopIOList; List of I/O addresses for each AIOP.
+	     This list must be in the order the AIOPs will be found on the
+	     controller.  Once an AIOP in the list is not found, it is
+	     assumed that there are no more AIOPs on the controller.
+	  int AiopIOListSize; Number of addresses in AiopIOList
+	  int IRQNum; Interrupt Request number.  Can be any of the following:
+			 0: Disable global interrupts
+			 3: IRQ 3
+			 4: IRQ 4
+			 5: IRQ 5
+			 9: IRQ 9
+			 10: IRQ 10
+			 11: IRQ 11
+			 12: IRQ 12
+			 15: IRQ 15
+	  Byte_t Frequency: A flag identifying the frequency
+		   of the periodic interrupt, can be any one of the following:
+		      FREQ_DIS - periodic interrupt disabled
+		      FREQ_137HZ - 137 Hertz
+		      FREQ_69HZ - 69 Hertz
+		      FREQ_34HZ - 34 Hertz
+		      FREQ_17HZ - 17 Hertz
+		      FREQ_9HZ - 9 Hertz
+		      FREQ_4HZ - 4 Hertz
+		   If IRQNum is set to 0 the Frequency parameter is
+		   overidden, it is forced to a value of FREQ_DIS.
+	  int PeriodicOnly: 1 if all interrupts except the periodic
+			       interrupt are to be blocked.
+			    0 is both the periodic interrupt and
+			       other channel interrupts are allowed.
+			    If IRQNum is set to 0 the PeriodicOnly parameter is
+			       overidden, it is forced to a value of 0.
 Return:   int: Number of AIOPs on the controller, or CTLID_NULL if controller
-               initialization failed.
+	       initialization failed.
 
 Comments:
-          If periodic interrupts are to be disabled but AIOP interrupts
-          are allowed, set Frequency to FREQ_DIS and PeriodicOnly to 0.
+	  If periodic interrupts are to be disabled but AIOP interrupts
+	  are allowed, set Frequency to FREQ_DIS and PeriodicOnly to 0.
 
-          If interrupts are to be completely disabled set IRQNum to 0.
+	  If interrupts are to be completely disabled set IRQNum to 0.
 
-          Setting Frequency to FREQ_DIS and PeriodicOnly to 1 is an
-          invalid combination.
+	  Setting Frequency to FREQ_DIS and PeriodicOnly to 1 is an
+	  invalid combination.
 
-          This function performs initialization of global interrupt modes,
-          but it does not actually enable global interrupts.  To enable
-          and disable global interrupts use functions sEnGlobalInt() and
-          sDisGlobalInt().  Enabling of global interrupts is normally not
-          done until all other initializations are complete.
+	  This function performs initialization of global interrupt modes,
+	  but it does not actually enable global interrupts.  To enable
+	  and disable global interrupts use functions sEnGlobalInt() and
+	  sDisGlobalInt().  Enabling of global interrupts is normally not
+	  done until all other initializations are complete.
 
-          Even if interrupts are globally enabled, they must also be
-          individually enabled for each channel that is to generate
-          interrupts.
+	  Even if interrupts are globally enabled, they must also be
+	  individually enabled for each channel that is to generate
+	  interrupts.
 
 Warnings: No range checking on any of the parameters is done.
 
-          No context switches are allowed while executing this function.
+	  No context switches are allowed while executing this function.
 
-          After this function all AIOPs on the controller are disabled,
-          they can be enabled with sEnAiop().
+	  After this function all AIOPs on the controller are disabled,
+	  they can be enabled with sEnAiop().
 */
 static int sInitController(CONTROLLER_T * CtlP, int CtlNum, ByteIO_t MudbacIO,
 			   ByteIO_t * AiopIOList, int AiopIOListSize,
@@ -2508,71 +2508,71 @@ static int sInitController(CONTROLLER_T * CtlP, int CtlNum, ByteIO_t MudbacIO,
 /***************************************************************************
 Function: sPCIInitController
 Purpose:  Initialization of controller global registers and controller
-          structure.
+	  structure.
 Call:     sPCIInitController(CtlP,CtlNum,AiopIOList,AiopIOListSize,
-                          IRQNum,Frequency,PeriodicOnly)
-          CONTROLLER_T *CtlP; Ptr to controller structure
-          int CtlNum; Controller number
-          ByteIO_t *AiopIOList; List of I/O addresses for each AIOP.
-             This list must be in the order the AIOPs will be found on the
-             controller.  Once an AIOP in the list is not found, it is
-             assumed that there are no more AIOPs on the controller.
-          int AiopIOListSize; Number of addresses in AiopIOList
-          int IRQNum; Interrupt Request number.  Can be any of the following:
-                         0: Disable global interrupts
-                         3: IRQ 3
-                         4: IRQ 4
-                         5: IRQ 5
-                         9: IRQ 9
-                         10: IRQ 10
-                         11: IRQ 11
-                         12: IRQ 12
-                         15: IRQ 15
-          Byte_t Frequency: A flag identifying the frequency
-                   of the periodic interrupt, can be any one of the following:
-                      FREQ_DIS - periodic interrupt disabled
-                      FREQ_137HZ - 137 Hertz
-                      FREQ_69HZ - 69 Hertz
-                      FREQ_34HZ - 34 Hertz
-                      FREQ_17HZ - 17 Hertz
-                      FREQ_9HZ - 9 Hertz
-                      FREQ_4HZ - 4 Hertz
-                   If IRQNum is set to 0 the Frequency parameter is
-                   overidden, it is forced to a value of FREQ_DIS.
-          int PeriodicOnly: 1 if all interrupts except the periodic
-                               interrupt are to be blocked.
-                            0 is both the periodic interrupt and
-                               other channel interrupts are allowed.
-                            If IRQNum is set to 0 the PeriodicOnly parameter is
-                               overidden, it is forced to a value of 0.
+			  IRQNum,Frequency,PeriodicOnly)
+	  CONTROLLER_T *CtlP; Ptr to controller structure
+	  int CtlNum; Controller number
+	  ByteIO_t *AiopIOList; List of I/O addresses for each AIOP.
+	     This list must be in the order the AIOPs will be found on the
+	     controller.  Once an AIOP in the list is not found, it is
+	     assumed that there are no more AIOPs on the controller.
+	  int AiopIOListSize; Number of addresses in AiopIOList
+	  int IRQNum; Interrupt Request number.  Can be any of the following:
+			 0: Disable global interrupts
+			 3: IRQ 3
+			 4: IRQ 4
+			 5: IRQ 5
+			 9: IRQ 9
+			 10: IRQ 10
+			 11: IRQ 11
+			 12: IRQ 12
+			 15: IRQ 15
+	  Byte_t Frequency: A flag identifying the frequency
+		   of the periodic interrupt, can be any one of the following:
+		      FREQ_DIS - periodic interrupt disabled
+		      FREQ_137HZ - 137 Hertz
+		      FREQ_69HZ - 69 Hertz
+		      FREQ_34HZ - 34 Hertz
+		      FREQ_17HZ - 17 Hertz
+		      FREQ_9HZ - 9 Hertz
+		      FREQ_4HZ - 4 Hertz
+		   If IRQNum is set to 0 the Frequency parameter is
+		   overidden, it is forced to a value of FREQ_DIS.
+	  int PeriodicOnly: 1 if all interrupts except the periodic
+			       interrupt are to be blocked.
+			    0 is both the periodic interrupt and
+			       other channel interrupts are allowed.
+			    If IRQNum is set to 0 the PeriodicOnly parameter is
+			       overidden, it is forced to a value of 0.
 Return:   int: Number of AIOPs on the controller, or CTLID_NULL if controller
-               initialization failed.
+	       initialization failed.
 
 Comments:
-          If periodic interrupts are to be disabled but AIOP interrupts
-          are allowed, set Frequency to FREQ_DIS and PeriodicOnly to 0.
+	  If periodic interrupts are to be disabled but AIOP interrupts
+	  are allowed, set Frequency to FREQ_DIS and PeriodicOnly to 0.
 
-          If interrupts are to be completely disabled set IRQNum to 0.
+	  If interrupts are to be completely disabled set IRQNum to 0.
 
-          Setting Frequency to FREQ_DIS and PeriodicOnly to 1 is an
-          invalid combination.
+	  Setting Frequency to FREQ_DIS and PeriodicOnly to 1 is an
+	  invalid combination.
 
-          This function performs initialization of global interrupt modes,
-          but it does not actually enable global interrupts.  To enable
-          and disable global interrupts use functions sEnGlobalInt() and
-          sDisGlobalInt().  Enabling of global interrupts is normally not
-          done until all other initializations are complete.
+	  This function performs initialization of global interrupt modes,
+	  but it does not actually enable global interrupts.  To enable
+	  and disable global interrupts use functions sEnGlobalInt() and
+	  sDisGlobalInt().  Enabling of global interrupts is normally not
+	  done until all other initializations are complete.
 
-          Even if interrupts are globally enabled, they must also be
-          individually enabled for each channel that is to generate
-          interrupts.
+	  Even if interrupts are globally enabled, they must also be
+	  individually enabled for each channel that is to generate
+	  interrupts.
 
 Warnings: No range checking on any of the parameters is done.
 
-          No context switches are allowed while executing this function.
+	  No context switches are allowed while executing this function.
 
-          After this function all AIOPs on the controller are disabled,
-          they can be enabled with sEnAiop().
+	  After this function all AIOPs on the controller are disabled,
+	  they can be enabled with sEnAiop().
 */
 static int sPCIInitController(CONTROLLER_T * CtlP, int CtlNum,
 			      ByteIO_t * AiopIOList, int AiopIOListSize,
@@ -2629,10 +2629,10 @@ static int sPCIInitController(CONTROLLER_T * CtlP, int CtlNum,
 Function: sReadAiopID
 Purpose:  Read the AIOP idenfication number directly from an AIOP.
 Call:     sReadAiopID(io)
-          ByteIO_t io: AIOP base I/O address
+	  ByteIO_t io: AIOP base I/O address
 Return:   int: Flag AIOPID_XXXX if a valid AIOP is found, where X
-                 is replace by an identifying number.
-          Flag AIOPID_NULL if no valid AIOP is found
+		 is replace by an identifying number.
+	  Flag AIOPID_NULL if no valid AIOP is found
 Warnings: No context switches are allowed while executing this function.
 
 */
@@ -2652,14 +2652,14 @@ static int sReadAiopID(ByteIO_t io)
 /***************************************************************************
 Function: sReadAiopNumChan
 Purpose:  Read the number of channels available in an AIOP directly from
-          an AIOP.
+	  an AIOP.
 Call:     sReadAiopNumChan(io)
-          WordIO_t io: AIOP base I/O address
+	  WordIO_t io: AIOP base I/O address
 Return:   int: The number of channels available
 Comments: The number of channels is determined by write/reads from identical
-          offsets within the SRAM address spaces for channels 0 and 4.
-          If the channel 4 space is mirrored to channel 0 it is a 4 channel
-          AIOP, otherwise it is an 8 channel.
+	  offsets within the SRAM address spaces for channels 0 and 4.
+	  If the channel 4 space is mirrored to channel 0 it is a 4 channel
+	  AIOP, otherwise it is an 8 channel.
 Warnings: No context switches are allowed while executing this function.
 */
 static int sReadAiopNumChan(WordIO_t io)
@@ -2682,16 +2682,16 @@ static int sReadAiopNumChan(WordIO_t io)
 Function: sInitChan
 Purpose:  Initialization of a channel and channel structure
 Call:     sInitChan(CtlP,ChP,AiopNum,ChanNum)
-          CONTROLLER_T *CtlP; Ptr to controller structure
-          CHANNEL_T *ChP; Ptr to channel structure
-          int AiopNum; AIOP number within controller
-          int ChanNum; Channel number within AIOP
+	  CONTROLLER_T *CtlP; Ptr to controller structure
+	  CHANNEL_T *ChP; Ptr to channel structure
+	  int AiopNum; AIOP number within controller
+	  int ChanNum; Channel number within AIOP
 Return:   int: 1 if initialization succeeded, 0 if it fails because channel
-               number exceeds number of channels available in AIOP.
+	       number exceeds number of channels available in AIOP.
 Comments: This function must be called before a channel can be used.
 Warnings: No range checking on any of the parameters is done.
 
-          No context switches are allowed while executing this function.
+	  No context switches are allowed while executing this function.
 */
 static int sInitChan(CONTROLLER_T * CtlP, CHANNEL_T * ChP, int AiopNum,
 		     int ChanNum)
@@ -2827,19 +2827,19 @@ static int sInitChan(CONTROLLER_T * CtlP, CHANNEL_T * ChP, int AiopNum,
 Function: sStopRxProcessor
 Purpose:  Stop the receive processor from processing a channel.
 Call:     sStopRxProcessor(ChP)
-          CHANNEL_T *ChP; Ptr to channel structure
+	  CHANNEL_T *ChP; Ptr to channel structure
 
 Comments: The receive processor can be started again with sStartRxProcessor().
-          This function causes the receive processor to skip over the
-          stopped channel.  It does not stop it from processing other channels.
+	  This function causes the receive processor to skip over the
+	  stopped channel.  It does not stop it from processing other channels.
 
 Warnings: No context switches are allowed while executing this function.
 
-          Do not leave the receive processor stopped for more than one
-          character time.
+	  Do not leave the receive processor stopped for more than one
+	  character time.
 
-          After calling this function a delay of 4 uS is required to ensure
-          that the receive processor is no longer processing this channel.
+	  After calling this function a delay of 4 uS is required to ensure
+	  that the receive processor is no longer processing this channel.
 */
 static void sStopRxProcessor(CHANNEL_T * ChP)
 {
@@ -2856,14 +2856,14 @@ static void sStopRxProcessor(CHANNEL_T * ChP)
 Function: sFlushRxFIFO
 Purpose:  Flush the Rx FIFO
 Call:     sFlushRxFIFO(ChP)
-          CHANNEL_T *ChP; Ptr to channel structure
+	  CHANNEL_T *ChP; Ptr to channel structure
 Return:   void
 Comments: To prevent data from being enqueued or dequeued in the Tx FIFO
-          while it is being flushed the receive processor is stopped
-          and the transmitter is disabled.  After these operations a
-          4 uS delay is done before clearing the pointers to allow
-          the receive processor to stop.  These items are handled inside
-          this function.
+	  while it is being flushed the receive processor is stopped
+	  and the transmitter is disabled.  After these operations a
+	  4 uS delay is done before clearing the pointers to allow
+	  the receive processor to stop.  These items are handled inside
+	  this function.
 Warnings: No context switches are allowed while executing this function.
 */
 static void sFlushRxFIFO(CHANNEL_T * ChP)
@@ -2898,14 +2898,14 @@ static void sFlushRxFIFO(CHANNEL_T * ChP)
 Function: sFlushTxFIFO
 Purpose:  Flush the Tx FIFO
 Call:     sFlushTxFIFO(ChP)
-          CHANNEL_T *ChP; Ptr to channel structure
+	  CHANNEL_T *ChP; Ptr to channel structure
 Return:   void
 Comments: To prevent data from being enqueued or dequeued in the Tx FIFO
-          while it is being flushed the receive processor is stopped
-          and the transmitter is disabled.  After these operations a
-          4 uS delay is done before clearing the pointers to allow
-          the receive processor to stop.  These items are handled inside
-          this function.
+	  while it is being flushed the receive processor is stopped
+	  and the transmitter is disabled.  After these operations a
+	  4 uS delay is done before clearing the pointers to allow
+	  the receive processor to stop.  These items are handled inside
+	  this function.
 Warnings: No context switches are allowed while executing this function.
 */
 static void sFlushTxFIFO(CHANNEL_T * ChP)
@@ -2939,8 +2939,8 @@ static void sFlushTxFIFO(CHANNEL_T * ChP)
 Function: sWriteTxPrioByte
 Purpose:  Write a byte of priority transmit data to a channel
 Call:     sWriteTxPrioByte(ChP,Data)
-          CHANNEL_T *ChP; Ptr to channel structure
-          Byte_t Data; The transmit data byte
+	  CHANNEL_T *ChP; Ptr to channel structure
+	  Byte_t Data; The transmit data byte
 
 Return:   int: 1 if the bytes is successfully written, otherwise 0.
 
@@ -2982,33 +2982,33 @@ static int sWriteTxPrioByte(CHANNEL_T * ChP, Byte_t Data)
 Function: sEnInterrupts
 Purpose:  Enable one or more interrupts for a channel
 Call:     sEnInterrupts(ChP,Flags)
-          CHANNEL_T *ChP; Ptr to channel structure
-          Word_t Flags: Interrupt enable flags, can be any combination
-             of the following flags:
-                TXINT_EN:   Interrupt on Tx FIFO empty
-                RXINT_EN:   Interrupt on Rx FIFO at trigger level (see
-                            sSetRxTrigger())
-                SRCINT_EN:  Interrupt on SRC (Special Rx Condition)
-                MCINT_EN:   Interrupt on modem input change
-                CHANINT_EN: Allow channel interrupt signal to the AIOP's
-                            Interrupt Channel Register.
+	  CHANNEL_T *ChP; Ptr to channel structure
+	  Word_t Flags: Interrupt enable flags, can be any combination
+	     of the following flags:
+		TXINT_EN:   Interrupt on Tx FIFO empty
+		RXINT_EN:   Interrupt on Rx FIFO at trigger level (see
+			    sSetRxTrigger())
+		SRCINT_EN:  Interrupt on SRC (Special Rx Condition)
+		MCINT_EN:   Interrupt on modem input change
+		CHANINT_EN: Allow channel interrupt signal to the AIOP's
+			    Interrupt Channel Register.
 Return:   void
 Comments: If an interrupt enable flag is set in Flags, that interrupt will be
-          enabled.  If an interrupt enable flag is not set in Flags, that
-          interrupt will not be changed.  Interrupts can be disabled with
-          function sDisInterrupts().
+	  enabled.  If an interrupt enable flag is not set in Flags, that
+	  interrupt will not be changed.  Interrupts can be disabled with
+	  function sDisInterrupts().
 
-          This function sets the appropriate bit for the channel in the AIOP's
-          Interrupt Mask Register if the CHANINT_EN flag is set.  This allows
-          this channel's bit to be set in the AIOP's Interrupt Channel Register.
+	  This function sets the appropriate bit for the channel in the AIOP's
+	  Interrupt Mask Register if the CHANINT_EN flag is set.  This allows
+	  this channel's bit to be set in the AIOP's Interrupt Channel Register.
 
-          Interrupts must also be globally enabled before channel interrupts
-          will be passed on to the host.  This is done with function
-          sEnGlobalInt().
+	  Interrupts must also be globally enabled before channel interrupts
+	  will be passed on to the host.  This is done with function
+	  sEnGlobalInt().
 
-          In some cases it may be desirable to disable interrupts globally but
-          enable channel interrupts.  This would allow the global interrupt
-          status register to be used to determine which AIOPs need service.
+	  In some cases it may be desirable to disable interrupts globally but
+	  enable channel interrupts.  This would allow the global interrupt
+	  status register to be used to determine which AIOPs need service.
 */
 static void sEnInterrupts(CHANNEL_T * ChP, Word_t Flags)
 {
@@ -3033,26 +3033,26 @@ static void sEnInterrupts(CHANNEL_T * ChP, Word_t Flags)
 Function: sDisInterrupts
 Purpose:  Disable one or more interrupts for a channel
 Call:     sDisInterrupts(ChP,Flags)
-          CHANNEL_T *ChP; Ptr to channel structure
-          Word_t Flags: Interrupt flags, can be any combination
-             of the following flags:
-                TXINT_EN:   Interrupt on Tx FIFO empty
-                RXINT_EN:   Interrupt on Rx FIFO at trigger level (see
-                            sSetRxTrigger())
-                SRCINT_EN:  Interrupt on SRC (Special Rx Condition)
-                MCINT_EN:   Interrupt on modem input change
-                CHANINT_EN: Disable channel interrupt signal to the
-                            AIOP's Interrupt Channel Register.
+	  CHANNEL_T *ChP; Ptr to channel structure
+	  Word_t Flags: Interrupt flags, can be any combination
+	     of the following flags:
+		TXINT_EN:   Interrupt on Tx FIFO empty
+		RXINT_EN:   Interrupt on Rx FIFO at trigger level (see
+			    sSetRxTrigger())
+		SRCINT_EN:  Interrupt on SRC (Special Rx Condition)
+		MCINT_EN:   Interrupt on modem input change
+		CHANINT_EN: Disable channel interrupt signal to the
+			    AIOP's Interrupt Channel Register.
 Return:   void
 Comments: If an interrupt flag is set in Flags, that interrupt will be
-          disabled.  If an interrupt flag is not set in Flags, that
-          interrupt will not be changed.  Interrupts can be enabled with
-          function sEnInterrupts().
+	  disabled.  If an interrupt flag is not set in Flags, that
+	  interrupt will not be changed.  Interrupts can be enabled with
+	  function sEnInterrupts().
 
-          This function clears the appropriate bit for the channel in the AIOP's
-          Interrupt Mask Register if the CHANINT_EN flag is set.  This blocks
-          this channel's bit from being set in the AIOP's Interrupt Channel
-          Register.
+	  This function clears the appropriate bit for the channel in the AIOP's
+	  Interrupt Mask Register if the CHANINT_EN flag is set.  This blocks
+	  this channel's bit from being set in the AIOP's Interrupt Channel
+	  Register.
 */
 static void sDisInterrupts(CHANNEL_T * ChP, Word_t Flags)
 {

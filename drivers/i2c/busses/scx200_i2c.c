@@ -125,7 +125,7 @@ module_exit(scx200_i2c_cleanup);
 
 /*
     Local variables:
-        compile-command: "make -k -C ../.. SUBDIRS=drivers/i2c modules"
-        c-basic-offset: 8
+	compile-command: "make -k -C ../.. SUBDIRS=drivers/i2c modules"
+	c-basic-offset: 8
     End:
 */

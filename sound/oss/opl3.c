@@ -1243,7 +1243,7 @@ module_exit(cleanup_opl3);
 #ifndef MODULE
 static int __init setup_opl3(char *str)
 {
-        /* io  */
+	/* io  */
 	int ints[2];
 
 	str = get_options(str, ARRAY_SIZE(ints), ints);

@@ -763,7 +763,7 @@ set_timings_mdma(ide_drive_t *drive, int intf_type, u32 *timings, u32 *timings2,
 		if ((accessTicks > 1) &&
 		    ((accessTime - IDE_SYSCLK_NS/2) >= origAccessTime) &&
 		    ((recTime - IDE_SYSCLK_NS/2) >= origRecTime)) {
-            		halfTick = 1;
+	    		halfTick = 1;
 			accessTicks--;
 		}
 		*timings = ((*timings) & ~TR_33_MDMA_MASK) |

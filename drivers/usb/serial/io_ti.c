@@ -2497,12 +2497,12 @@ static int edge_get_icount(struct tty_struct *tty,
 	icount->rng = ic->rng;
 	icount->dcd = ic->dcd;
 	icount->tx = ic->tx;
-        icount->rx = ic->rx;
-        icount->frame = ic->frame;
-        icount->parity = ic->parity;
-        icount->overrun = ic->overrun;
-        icount->brk = ic->brk;
-        icount->buf_overrun = ic->buf_overrun;
+	icount->rx = ic->rx;
+	icount->frame = ic->frame;
+	icount->parity = ic->parity;
+	icount->overrun = ic->overrun;
+	icount->brk = ic->brk;
+	icount->buf_overrun = ic->buf_overrun;
 	return 0;
 }
 

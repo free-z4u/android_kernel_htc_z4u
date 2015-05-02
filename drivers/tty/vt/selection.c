@@ -193,7 +193,7 @@ int set_selection(const struct tiocl_selection __user *sel, struct tty_struct *t
 	      mouse_report(tty, sel_mode & TIOCL_SELBUTTONMASK, xs, ys);
 	      return 0;
 	  }
-        }
+	}
 
 	if (ps > pe)	/* make sel_start <= sel_end */
 	{

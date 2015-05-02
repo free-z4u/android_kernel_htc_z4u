@@ -483,7 +483,7 @@ struct o2nm_cluster_attribute {
 };
 
 static ssize_t o2nm_cluster_attr_write(const char *page, ssize_t count,
-                                       unsigned int *val)
+				       unsigned int *val)
 {
 	unsigned long tmp;
 	char *p = (char *)page;
@@ -661,8 +661,8 @@ static struct configfs_attribute *o2nm_cluster_attrs[] = {
 	NULL,
 };
 static ssize_t o2nm_cluster_show(struct config_item *item,
-                                 struct configfs_attribute *attr,
-                                 char *page)
+				 struct configfs_attribute *attr,
+				 char *page)
 {
 	struct o2nm_cluster *cluster = to_o2nm_cluster(item);
 	struct o2nm_cluster_attribute *o2nm_cluster_attr =
@@ -675,8 +675,8 @@ static ssize_t o2nm_cluster_show(struct config_item *item,
 }
 
 static ssize_t o2nm_cluster_store(struct config_item *item,
-                                  struct configfs_attribute *attr,
-                                  const char *page, size_t count)
+				  struct configfs_attribute *attr,
+				  const char *page, size_t count)
 {
 	struct o2nm_cluster *cluster = to_o2nm_cluster(item);
 	struct o2nm_cluster_attribute *o2nm_cluster_attr =

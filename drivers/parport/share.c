@@ -544,10 +544,10 @@ parport_register_device(struct parport *port, const char *name,
 	}
 
 	/* We up our own module reference count, and that of the port
-           on which a device is to be registered, to ensure that
-           neither of us gets unloaded while we sleep in (e.g.)
-           kmalloc.
-         */
+	   on which a device is to be registered, to ensure that
+	   neither of us gets unloaded while we sleep in (e.g.)
+	   kmalloc.
+	 */
 	if (!try_module_get(port->ops->owner)) {
 		return NULL;
 	}
@@ -598,8 +598,8 @@ parport_register_device(struct parport *port, const char *name,
 
 	tmp->next = port->physport->devices;
 	wmb(); /* Make sure that tmp->next is written before it's
-                  added to the list; see comments marked 'no locking
-                  required' */
+		  added to the list; see comments marked 'no locking
+		  required' */
 	if (port->physport->devices)
 		port->physport->devices->prev = tmp;
 	port->physport->devices = tmp;
@@ -794,7 +794,7 @@ int parport_claim(struct pardevice *dev)
 
 		if (port->cad != oldcad) {
 			/* I think we'll actually deadlock rather than
-                           get here, but just in case.. */
+			   get here, but just in case.. */
 			printk(KERN_WARNING
 			       "%s: %s released port when preempted!\n",
 			       port->name, oldcad->name);

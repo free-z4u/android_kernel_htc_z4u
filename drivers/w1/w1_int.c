@@ -109,13 +109,13 @@ int w1_add_master_device(struct w1_bus_master *master)
 	struct w1_netlink_msg msg;
 	int id, found;
 
-        /* validate minimum functionality */
-        if (!(master->touch_bit && master->reset_bus) &&
-            !(master->write_bit && master->read_bit) &&
+	/* validate minimum functionality */
+	if (!(master->touch_bit && master->reset_bus) &&
+	    !(master->write_bit && master->read_bit) &&
 	    !(master->write_byte && master->read_byte && master->reset_bus)) {
 		printk(KERN_ERR "w1_add_master_device: invalid function set\n");
 		return(-EINVAL);
-        }
+	}
 	/* While it would be electrically possible to make a device that
 	 * generated a strong pullup in bit bang mode, only hardare that
 	 * controls 1-wire time frames are even expected to support a strong

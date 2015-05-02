@@ -73,7 +73,7 @@ start_bootloader (void)
 	 * S.Eranian: extract the commandline argument from the simulator
 	 *
 	 * The expected format is as follows:
-         *
+	 *
 	 *	kernelname args...
 	 *
 	 * Both are optional but you can't have the second one without the first.

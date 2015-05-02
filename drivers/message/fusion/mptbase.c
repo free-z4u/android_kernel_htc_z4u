@@ -5102,7 +5102,7 @@ mptbase_sas_persist_operation(MPT_ADAPTER *ioc, u8 persist_opcode)
 		printk(KERN_DEBUG "%s: no msg frames!\n", __func__);
 		ret = -1;
 		goto out;
-        }
+	}
 
 	mpi_hdr = (MPIHeader_t *) mf;
 	sasIoUnitCntrReq = (SasIoUnitControlRequest_t *)mf;

@@ -235,10 +235,10 @@ static int do_hardware_modes (ctl_table *table, int write,
 
 #define PARPORT_PORT_DIR(CHILD) { .procname = NULL, .mode = 0555, .child = CHILD }
 #define PARPORT_PARPORT_DIR(CHILD) { .procname = "parport", \
-                                     .mode = 0555, .child = CHILD }
+				     .mode = 0555, .child = CHILD }
 #define PARPORT_DEV_DIR(CHILD) { .procname = "dev", .mode = 0555, .child = CHILD }
 #define PARPORT_DEVICES_ROOT_DIR  {  .procname = "devices", \
-                                    .mode = 0555, .child = NULL }
+				    .mode = 0555, .child = NULL }
 
 static const unsigned long parport_min_timeslice_value =
 PARPORT_MIN_TIMESLICE_VALUE;
@@ -264,7 +264,7 @@ struct parport_sysctl_table {
 
 static const struct parport_sysctl_table parport_sysctl_template = {
 	.sysctl_header = NULL,
-        {
+	{
 		{
 			.procname	= "spintime",
 			.data		= NULL,
@@ -423,7 +423,7 @@ struct parport_default_sysctl_table
 {
 	struct ctl_table_header *sysctl_header;
 	ctl_table vars[3];
-        ctl_table default_dir[2];
+	ctl_table default_dir[2];
 	ctl_table parport_dir[2];
 	ctl_table dev_dir[2];
 };

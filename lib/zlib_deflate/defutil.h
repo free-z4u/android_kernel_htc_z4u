@@ -39,12 +39,12 @@
 /* Data structure describing a single value and its code string. */
 typedef struct ct_data_s {
     union {
-        ush  freq;       /* frequency count */
-        ush  code;       /* bit string */
+	ush  freq;       /* frequency count */
+	ush  code;       /* bit string */
     } fc;
     union {
-        ush  dad;        /* father node in Huffman tree */
-        ush  len;        /* length of bit string */
+	ush  dad;        /* father node in Huffman tree */
+	ush  len;        /* length of bit string */
     } dl;
 } ct_data;
 
@@ -80,7 +80,7 @@ typedef struct deflate_state {
     Byte  method;        /* STORED (for zip only) or DEFLATED */
     int   last_flush;    /* value of flush param for previous deflate call */
 
-                /* used by deflate.c: */
+		/* used by deflate.c: */
 
     uInt  w_size;        /* LZ77 window size (32K by default) */
     uInt  w_bits;        /* log2(w_size)  (8..16) */
@@ -163,7 +163,7 @@ typedef struct deflate_state {
 
     int nice_match; /* Stop searching when current match exceeds this */
 
-                /* used by trees.c: */
+		/* used by trees.c: */
     /* Didn't use ct_data typedef below to suppress compiler warning */
     struct ct_data_s dyn_ltree[HEAP_SIZE];   /* literal and length tree */
     struct ct_data_s dyn_dtree[2*D_CODES+1]; /* distance tree */
@@ -272,7 +272,7 @@ typedef struct deflate_workspace {
  * distances are limited to MAX_DIST instead of WSIZE.
  */
 
-        /* in trees.c */
+	/* in trees.c */
 void zlib_tr_init         (deflate_state *s);
 int  zlib_tr_tally        (deflate_state *s, unsigned dist, unsigned lc);
 ulg  zlib_tr_flush_block  (deflate_state *s, char *buf, ulg stored_len,
@@ -302,8 +302,8 @@ static inline unsigned bi_reverse(unsigned code, /* the value to invert */
 {
     register unsigned res = 0;
     do {
-        res |= code & 1;
-        code >>= 1, res <<= 1;
+	res |= code & 1;
+	code >>= 1, res <<= 1;
     } while (--len > 0);
     return res >> 1;
 }
@@ -314,13 +314,13 @@ static inline unsigned bi_reverse(unsigned code, /* the value to invert */
 static inline void bi_flush(deflate_state *s)
 {
     if (s->bi_valid == 16) {
-        put_short(s, s->bi_buf);
-        s->bi_buf = 0;
-        s->bi_valid = 0;
+	put_short(s, s->bi_buf);
+	s->bi_buf = 0;
+	s->bi_valid = 0;
     } else if (s->bi_valid >= 8) {
-        put_byte(s, (Byte)s->bi_buf);
-        s->bi_buf >>= 8;
-        s->bi_valid -= 8;
+	put_byte(s, (Byte)s->bi_buf);
+	s->bi_buf >>= 8;
+	s->bi_valid -= 8;
     }
 }
 
@@ -330,9 +330,9 @@ static inline void bi_flush(deflate_state *s)
 static inline void bi_windup(deflate_state *s)
 {
     if (s->bi_valid > 8) {
-        put_short(s, s->bi_buf);
+	put_short(s, s->bi_buf);
     } else if (s->bi_valid > 0) {
-        put_byte(s, (Byte)s->bi_buf);
+	put_byte(s, (Byte)s->bi_buf);
     }
     s->bi_buf = 0;
     s->bi_valid = 0;

@@ -158,9 +158,9 @@ static unsigned int rotr1(unsigned int a)
     unsigned int b;
 
     if ((a & 0x01) == 0x01) {
-        b = (a >> 1) | 0x8000;
+	b = (a >> 1) | 0x8000;
     } else {
-        b = (a >> 1) & 0x7fff;
+	b = (a >> 1) & 0x7fff;
     }
     b = b % 65536;
     return b;
@@ -213,13 +213,13 @@ void TKIPvMixKey(
 
     /* Phase 1, step 2 */
     for (i=0; i<8; i++) {
-        j = 2*(i & 1);
-        p1k[0] = (p1k[0] + tkip_sbox((p1k[4] ^ ((256*pbyTKey[1+j]) + pbyTKey[j])) % 65536)) % 65536;
-        p1k[1] = (p1k[1] + tkip_sbox((p1k[0] ^ ((256*pbyTKey[5+j]) + pbyTKey[4+j])) % 65536)) % 65536;
-        p1k[2] = (p1k[2] + tkip_sbox((p1k[1] ^ ((256*pbyTKey[9+j]) + pbyTKey[8+j])) % 65536)) % 65536;
-        p1k[3] = (p1k[3] + tkip_sbox((p1k[2] ^ ((256*pbyTKey[13+j]) + pbyTKey[12+j])) % 65536)) % 65536;
-        p1k[4] = (p1k[4] + tkip_sbox((p1k[3] ^ (((256*pbyTKey[1+j]) + pbyTKey[j]))) % 65536)) % 65536;
-        p1k[4] = (p1k[4] + i) % 65536;
+	j = 2*(i & 1);
+	p1k[0] = (p1k[0] + tkip_sbox((p1k[4] ^ ((256*pbyTKey[1+j]) + pbyTKey[j])) % 65536)) % 65536;
+	p1k[1] = (p1k[1] + tkip_sbox((p1k[0] ^ ((256*pbyTKey[5+j]) + pbyTKey[4+j])) % 65536)) % 65536;
+	p1k[2] = (p1k[2] + tkip_sbox((p1k[1] ^ ((256*pbyTKey[9+j]) + pbyTKey[8+j])) % 65536)) % 65536;
+	p1k[3] = (p1k[3] + tkip_sbox((p1k[2] ^ ((256*pbyTKey[13+j]) + pbyTKey[12+j])) % 65536)) % 65536;
+	p1k[4] = (p1k[4] + tkip_sbox((p1k[3] ^ (((256*pbyTKey[1+j]) + pbyTKey[j]))) % 65536)) % 65536;
+	p1k[4] = (p1k[4] + i) % 65536;
     }
 
     /* Phase 2, Step 1 */

@@ -293,14 +293,14 @@ static __be32 nlm4svc_proc_cancel_msg(struct svc_rqst *rqstp, struct nlm_args *a
 }
 
 static __be32 nlm4svc_proc_unlock_msg(struct svc_rqst *rqstp, struct nlm_args *argp,
-                                               void            *resp)
+					       void            *resp)
 {
 	dprintk("lockd: UNLOCK_MSG    called\n");
 	return nlm4svc_callback(rqstp, NLMPROC_UNLOCK_RES, argp, nlm4svc_proc_unlock);
 }
 
 static __be32 nlm4svc_proc_granted_msg(struct svc_rqst *rqstp, struct nlm_args *argp,
-                                                void            *resp)
+						void            *resp)
 {
 	dprintk("lockd: GRANTED_MSG   called\n");
 	return nlm4svc_callback(rqstp, NLMPROC_GRANTED_RES, argp, nlm4svc_proc_granted);
@@ -428,15 +428,15 @@ nlm4svc_proc_sm_notify(struct svc_rqst *rqstp, struct nlm_reboot *argp,
  */
 static __be32
 nlm4svc_proc_granted_res(struct svc_rqst *rqstp, struct nlm_res  *argp,
-                                                void            *resp)
+						void            *resp)
 {
-        if (!nlmsvc_ops)
-                return rpc_success;
+	if (!nlmsvc_ops)
+		return rpc_success;
 
-        dprintk("lockd: GRANTED_RES   called\n");
+	dprintk("lockd: GRANTED_RES   called\n");
 
-        nlmsvc_grant_reply(&argp->cookie, argp->status);
-        return rpc_success;
+	nlmsvc_grant_reply(&argp->cookie, argp->status);
+	return rpc_success;
 }
 
 

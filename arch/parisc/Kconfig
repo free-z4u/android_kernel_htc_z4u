@@ -68,7 +68,7 @@ config TIME_LOW_RES
 	default y
 
 config HAVE_LATENCYTOP_SUPPORT
-        def_bool y
+	def_bool y
 
 # unless you want to implement ACPI on PA-RISC ... ;-)
 config PM

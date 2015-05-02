@@ -79,8 +79,8 @@ typedef struct kl_config_hdr {
  +------------+       +--------------------------------+
  | errinfo    |--+
  +------------+  |    +--------------------------------+
-                 +--->|r/l brd errinfo,compt err flags |
-                      +--------------------------------+
+		 +--->|r/l brd errinfo,compt err flags |
+		      +--------------------------------+
 
  *
  * Each BOARD consists of COMPONENTs and the BOARD structure has
@@ -136,7 +136,7 @@ typedef struct kl_config_hdr {
 					    and the non-graphics widget boards */
 #define KLCLASS_ROUTER	0x30             /* Router board */
 #define KLCLASS_MIDPLANE 0x40            /* We need to treat this as a board
-                                            so that we can record error info */
+					    so that we can record error info */
 #define KLCLASS_IOBRICK	0x70		/* IP35 iobrick */
 #define KLCLASS_MAX	8		/* Bump this if a new CLASS is added */
 
@@ -182,18 +182,18 @@ typedef struct lboard_s {
 	unsigned char 	struct_type;      /* type of structure, local or remote */
 	unsigned char 	brd_type;         /* type+class */
 	unsigned char 	brd_sversion;     /* version of this structure */
-        unsigned char 	brd_brevision;    /* board revision */
-        unsigned char 	brd_promver;      /* board prom version, if any */
+	unsigned char 	brd_brevision;    /* board revision */
+	unsigned char 	brd_promver;      /* board prom version, if any */
  	unsigned char 	brd_flags;        /* Enabled, Disabled etc */
 	unsigned char 	brd_slot;         /* slot number */
 	unsigned short	brd_debugsw;      /* Debug switches */
 	geoid_t		brd_geoid;	  /* geo id */
 	partid_t 	brd_partition;    /* Partition number */
-        unsigned short 	brd_diagval;      /* diagnostic value */
-        unsigned short 	brd_diagparm;     /* diagnostic parameter */
-        unsigned char 	brd_inventory;    /* inventory history */
-        unsigned char 	brd_numcompts;    /* Number of components */
-        nic_t         	brd_nic;          /* Number in CAN */
+	unsigned short 	brd_diagval;      /* diagnostic value */
+	unsigned short 	brd_diagparm;     /* diagnostic parameter */
+	unsigned char 	brd_inventory;    /* inventory history */
+	unsigned char 	brd_numcompts;    /* Number of components */
+	nic_t         	brd_nic;          /* Number in CAN */
 	nasid_t		brd_nasid;        /* passed parameter */
 	klconf_off_t 	brd_compts[MAX_COMPTS_PER_BRD]; /* pointers to COMPONENTS */
 	klconf_off_t 	brd_errinfo;      /* Board's error information */
@@ -214,25 +214,25 @@ typedef struct lboard_s {
  */
 
 typedef struct klinfo_s {                  /* Generic info */
-        unsigned char   struct_type;       /* type of this structure */
-        unsigned char   struct_version;    /* version of this structure */
-        unsigned char   flags;            /* Enabled, disabled etc */
-        unsigned char   revision;         /* component revision */
-        unsigned short  diagval;          /* result of diagnostics */
-        unsigned short  diagparm;         /* diagnostic parameter */
-        unsigned char   inventory;        /* previous inventory status */
-        unsigned short  partid;		   /* widget part number */
+	unsigned char   struct_type;       /* type of this structure */
+	unsigned char   struct_version;    /* version of this structure */
+	unsigned char   flags;            /* Enabled, disabled etc */
+	unsigned char   revision;         /* component revision */
+	unsigned short  diagval;          /* result of diagnostics */
+	unsigned short  diagparm;         /* diagnostic parameter */
+	unsigned char   inventory;        /* previous inventory status */
+	unsigned short  partid;		   /* widget part number */
 	nic_t 		nic;              /* MUst be aligned properly */
-        unsigned char   physid;           /* physical id of component */
-        unsigned int    virtid;           /* virtual id as seen by system */
+	unsigned char   physid;           /* physical id of component */
+	unsigned int    virtid;           /* virtual id as seen by system */
 	unsigned char	widid;	          /* Widget id - if applicable */
 	nasid_t		nasid;            /* node number - from parent */
 	char		pad1;		  /* pad out structure. */
 	char		pad2;		  /* pad out structure. */
 	void		*data;
-        klconf_off_t	errinfo;          /* component specific errors */
-        unsigned short  pad3;             /* pci fields have moved over to */
-        unsigned short  pad4;             /* klbri_t */
+	klconf_off_t	errinfo;          /* component specific errors */
+	unsigned short  pad3;             /* pci fields have moved over to */
+	unsigned short  pad4;             /* klbri_t */
 } klinfo_t ;
 
 
@@ -240,7 +240,7 @@ static inline lboard_t *find_lboard_next(lboard_t * brd)
 {
 	if (brd && brd->brd_next_any)
 		return NODE_OFFSET_TO_LBOARD(NASID_GET(brd), brd->brd_next_any);
-        return NULL;
+	return NULL;
 }
 
 #endif /* _ASM_IA64_SN_KLCONFIG_H */

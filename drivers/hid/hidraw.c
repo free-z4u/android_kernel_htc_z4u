@@ -553,8 +553,8 @@ int __init hidraw_init(void)
 		goto out;
 	}
 
-        cdev_init(&hidraw_cdev, &hidraw_ops);
-        cdev_add(&hidraw_cdev, dev_id, HIDRAW_MAX_DEVICES);
+	cdev_init(&hidraw_cdev, &hidraw_ops);
+	cdev_add(&hidraw_cdev, dev_id, HIDRAW_MAX_DEVICES);
 out:
 	return result;
 }

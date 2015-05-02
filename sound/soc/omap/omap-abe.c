@@ -861,7 +861,7 @@ static int omap_abe_dai_hw_params(struct snd_pcm_substream *substream,
 					&dma_sink);
 			abe_read_port_address(MM_UL_PORT, &dma_params);
 		}
-        break;
+	break;
 	case ABE_FRONTEND_DAI_LP_MEDIA:
 		return 0;
 	break;
@@ -873,7 +873,7 @@ static int omap_abe_dai_hw_params(struct snd_pcm_substream *substream,
 					&dma_sink);
 			abe_read_port_address(MM_UL2_PORT, &dma_params);
 		}
-        break;
+	break;
 	case ABE_FRONTEND_DAI_VOICE:
 		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
 			abe_connect_cbpr_dmareq_port(VX_DL_PORT, &format, ABE_CBPR1_IDX,
@@ -884,7 +884,7 @@ static int omap_abe_dai_hw_params(struct snd_pcm_substream *substream,
 					&dma_sink);
 			abe_read_port_address(VX_UL_PORT, &dma_params);
 		}
-        break;
+	break;
 	case ABE_FRONTEND_DAI_TONES:
 		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
 			abe_connect_cbpr_dmareq_port(TONES_DL_PORT, &format, ABE_CBPR5_IDX,
@@ -892,7 +892,7 @@ static int omap_abe_dai_hw_params(struct snd_pcm_substream *substream,
 			abe_read_port_address(TONES_DL_PORT, &dma_params);
 		} else
 			return -EINVAL;
-        break;
+	break;
 	case ABE_FRONTEND_DAI_VIBRA:
 		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
 			abe_connect_cbpr_dmareq_port(VIB_DL_PORT, &format, ABE_CBPR6_IDX,
@@ -916,7 +916,7 @@ static int omap_abe_dai_hw_params(struct snd_pcm_substream *substream,
 			abe_connect_serial_port(VX_UL_PORT, &format, MCBSP2_TX);
 			abe_read_port_address(VX_UL_PORT, &dma_params);
 		}
-        break;
+	break;
 	}
 
 	/* configure frontend SDMA data */

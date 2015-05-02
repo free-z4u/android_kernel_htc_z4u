@@ -392,14 +392,14 @@ static int ufs_alloc_lastblock(struct inode *inode)
 	lastpage = ufs_get_locked_page(mapping, lastfrag >>
 				       (PAGE_CACHE_SHIFT - inode->i_blkbits));
        if (IS_ERR(lastpage)) {
-               err = -EIO;
-               goto out;
+	       err = -EIO;
+	       goto out;
        }
 
        end = lastfrag & ((1 << (PAGE_CACHE_SHIFT - inode->i_blkbits)) - 1);
        bh = page_buffers(lastpage);
        for (i = 0; i < end; ++i)
-               bh = bh->b_this_page;
+	       bh = bh->b_this_page;
 
 
        err = ufs_getfrag_block(inode, lastfrag, bh, 1);

@@ -1012,7 +1012,7 @@ static void quirk_mediagx_master(struct pci_dev *dev)
 	if (reg & 2) {
 		reg &= ~2;
 		dev_info(&dev->dev, "Fixup for MediaGX/Geode Slave Disconnect Boundary (0x41=0x%02x)\n", reg);
-                pci_write_config_byte(dev, 0x41, reg);
+		pci_write_config_byte(dev, 0x41, reg);
 	}
 }
 DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_CYRIX,	PCI_DEVICE_ID_CYRIX_PCI_MASTER, quirk_mediagx_master);
@@ -1232,11 +1232,11 @@ static void __init asus_hides_smbus_hostbridge(struct pci_dev *dev)
 				asus_hides_smbus = 1;
 			}
        } else if (unlikely(dev->subsystem_vendor == PCI_VENDOR_ID_SAMSUNG)) {
-               if (dev->device ==  PCI_DEVICE_ID_INTEL_82855PM_HB)
-                       switch(dev->subsystem_device) {
-                       case 0xC00C: /* Samsung P35 notebook */
-                               asus_hides_smbus = 1;
-                       }
+	       if (dev->device ==  PCI_DEVICE_ID_INTEL_82855PM_HB)
+		       switch(dev->subsystem_device) {
+		       case 0xC00C: /* Samsung P35 notebook */
+			       asus_hides_smbus = 1;
+		       }
 	} else if (unlikely(dev->subsystem_vendor == PCI_VENDOR_ID_COMPAQ)) {
 		if (dev->device == PCI_DEVICE_ID_INTEL_82855PM_HB)
 			switch(dev->subsystem_device) {

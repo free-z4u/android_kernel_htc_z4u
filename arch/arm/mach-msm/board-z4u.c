@@ -280,7 +280,7 @@ static struct i2c_board_info i2c_bma250_devices_evt[] = {
 
 
 struct rt5501_platform_data rt5501_data = {
-         .gpio_rt5501_spk_en = CPLD_EXT_GPIO_AUD_HP_EN,
+	 .gpio_rt5501_spk_en = CPLD_EXT_GPIO_AUD_HP_EN,
 };
 
 static struct i2c_board_info msm_i2c_gsbi1_rt5501_info[] = {
@@ -302,11 +302,11 @@ static struct i2c_board_info msm_i2c_gsbi1_tfa9887_info[] = {
 #if defined(CONFIG_I2C_CPLD)
 
 static struct i2c_board_info i2c_cpld_devices[] = {
-        {
-                I2C_BOARD_INFO("cpld",0x70),
+	{
+		I2C_BOARD_INFO("cpld",0x70),
 
-               .irq = MSM_GPIO_TO_INT(Z4U_GPIO_CPLD_INT),
-        },
+	       .irq = MSM_GPIO_TO_INT(Z4U_GPIO_CPLD_INT),
+	},
 };
 #endif
 
@@ -900,8 +900,8 @@ static struct platform_device android_usb_device = {
 
 static int __init board_serialno_setup(char *serialno)
 {
-        android_usb_pdata.serial_number = serialno;
-        return 1;
+	android_usb_pdata.serial_number = serialno;
+	return 1;
 }
 __setup("androidboot.serialno=", board_serialno_setup);
 
@@ -1314,40 +1314,40 @@ static struct platform_device htc_battery_pdev = {
 
 
 static struct resource ram_console_resources[] = {
-        {
-                .start  = MSM_RAM_CONSOLE_BASE,
-                .end    = MSM_RAM_CONSOLE_BASE + MSM_RAM_CONSOLE_SIZE - 1,
-                .flags  = IORESOURCE_MEM,
-        },
+	{
+		.start  = MSM_RAM_CONSOLE_BASE,
+		.end    = MSM_RAM_CONSOLE_BASE + MSM_RAM_CONSOLE_SIZE - 1,
+		.flags  = IORESOURCE_MEM,
+	},
 };
 
 static struct platform_device ram_console_device = {
-        .name           = "ram_console",
-        .id             = -1,
-        .num_resources  = ARRAY_SIZE(ram_console_resources),
-        .resource       = ram_console_resources,
+	.name           = "ram_console",
+	.id             = -1,
+	.num_resources  = ARRAY_SIZE(ram_console_resources),
+	.resource       = ram_console_resources,
 };
 
 static struct gpio_led gpio_exp_leds_config[] = {
-        {
-                .name = "button-backlight",
-                .gpio = 107,
-                .active_low = 0,
-                .retain_state_suspended = 0,
-                .default_state = LEDS_GPIO_DEFSTATE_OFF,
-        },
+	{
+		.name = "button-backlight",
+		.gpio = 107,
+		.active_low = 0,
+		.retain_state_suspended = 0,
+		.default_state = LEDS_GPIO_DEFSTATE_OFF,
+	},
 };
 static struct gpio_led_platform_data gpio_leds_pdata = {
-        .num_leds = ARRAY_SIZE(gpio_exp_leds_config),
-        .leds = gpio_exp_leds_config,
+	.num_leds = ARRAY_SIZE(gpio_exp_leds_config),
+	.leds = gpio_exp_leds_config,
 };
 
 static struct platform_device gpio_leds = {
-        .name             = "leds-gpio",
-        .id                     = -1,
-        .dev               = {
-                .platform_data = &gpio_leds_pdata,
-        },
+	.name             = "leds-gpio",
+	.id                     = -1,
+	.dev               = {
+		.platform_data = &gpio_leds_pdata,
+	},
 };
 
 /* battery parameters */
@@ -1655,8 +1655,8 @@ static int aic3254_lowlevel_init(void)
 
 static struct i2c_board_info i2c_aic3254_devices[] = {
     {
-        I2C_BOARD_INFO(AIC3254_I2C_NAME, \
-                AIC3254_I2C_ADDR),
+	I2C_BOARD_INFO(AIC3254_I2C_NAME, \
+		AIC3254_I2C_ADDR),
     },
 };
 #endif
@@ -1782,31 +1782,31 @@ static struct i2c_board_info i2c2_info[] __initdata = {
 };
 #ifdef CONFIG_LEDS_PM8029
 static struct pm8029_led_config pm_led_config[] = {
-        {
-                .name = "green",
-                .bank = PMIC8029_GPIO1,
-                .init_pwm_brightness = 255,
-                .flag = FIX_BRIGHTNESS,
-        },
-        {
-                .name = "amber",
-                .bank = PMIC8029_GPIO2,
-                .init_pwm_brightness = 240,
-                .flag = FIX_BRIGHTNESS,
-        }
+	{
+		.name = "green",
+		.bank = PMIC8029_GPIO1,
+		.init_pwm_brightness = 255,
+		.flag = FIX_BRIGHTNESS,
+	},
+	{
+		.name = "amber",
+		.bank = PMIC8029_GPIO2,
+		.init_pwm_brightness = 240,
+		.flag = FIX_BRIGHTNESS,
+	}
 };
 
 static struct pm8029_led_platform_data pm8029_leds_data = {
-        .led_config = pm_led_config,
-        .num_leds = ARRAY_SIZE(pm_led_config),
+	.led_config = pm_led_config,
+	.num_leds = ARRAY_SIZE(pm_led_config),
 };
 
 static struct platform_device pm8029_leds = {
-        .name   = "leds-pm8029",
-        .id     = -1,
-        .dev    = {
-                .platform_data  = &pm8029_leds_data,
-        },
+	.name   = "leds-pm8029",
+	.id     = -1,
+	.dev    = {
+		.platform_data  = &pm8029_leds_data,
+	},
 };
 #endif
 
@@ -1860,7 +1860,7 @@ static struct platform_device htc_headset_one_wire = {
        .name   = "HTC_HEADSET_1WIRE",
        .id     = -1,
        .dev    = {
-               .platform_data  = &htc_headset_1wire_data,
+	       .platform_data  = &htc_headset_1wire_data,
        },
 };
 
@@ -2361,53 +2361,53 @@ int flashlight_control(int mode)
 #endif
 
 static struct TPS61310_flashlight_platform_data tps61310_pdata = {
-        .tps61310_strb0 = CPLD_EXT_GPIO_FLASH_EN,
-        .tps61310_strb1 = CPLD_EXT_GPIO_TORCH_FLASH,
-        .led_count = 1,
-        .flash_duration_ms = 600,
+	.tps61310_strb0 = CPLD_EXT_GPIO_FLASH_EN,
+	.tps61310_strb1 = CPLD_EXT_GPIO_TORCH_FLASH,
+	.led_count = 1,
+	.flash_duration_ms = 600,
 	.cpld = 1,
 	.mode_pin_suspend_state_low = 1,
 };
 static struct i2c_board_info tps61310_i2c_info[] = {
-        {
-                I2C_BOARD_INFO("TPS61310_FLASHLIGHT", 0x66 >> 1),
-                .platform_data = &tps61310_pdata,
-        },
+	{
+		I2C_BOARD_INFO("TPS61310_FLASHLIGHT", 0x66 >> 1),
+		.platform_data = &tps61310_pdata,
+	},
 };
 #endif
 
 #if defined(CONFIG_INPUT_CAPELLA_CM3629)
 #define Z4U_GPIO_PROXIMITY_INT       (36)
 static uint8_t cm3629_mapping_table[] = {0x0, 0x3, 0x6, 0x9, 0xC,
-                        0xF, 0x12, 0x15, 0x18, 0x1B,
-                        0x1E, 0x21, 0x24, 0x27, 0x2A,
-                        0x2D, 0x30, 0x33, 0x36, 0x39,
-                        0x3C, 0x3F, 0x43, 0x47, 0x4B,
-                        0x4F, 0x53, 0x57, 0x5B, 0x5F,
-                        0x63, 0x67, 0x6B, 0x70, 0x75,
-                        0x7A, 0x7F, 0x84, 0x89, 0x8E,
-                        0x93, 0x98, 0x9D, 0xA2, 0xA8,
-                        0xAE, 0xB4, 0xBA, 0xC0, 0xC6,
-                        0xCC, 0xD3, 0xDA, 0xE1, 0xE8,
-                        0xEF, 0xF6, 0xFF};
+			0xF, 0x12, 0x15, 0x18, 0x1B,
+			0x1E, 0x21, 0x24, 0x27, 0x2A,
+			0x2D, 0x30, 0x33, 0x36, 0x39,
+			0x3C, 0x3F, 0x43, 0x47, 0x4B,
+			0x4F, 0x53, 0x57, 0x5B, 0x5F,
+			0x63, 0x67, 0x6B, 0x70, 0x75,
+			0x7A, 0x7F, 0x84, 0x89, 0x8E,
+			0x93, 0x98, 0x9D, 0xA2, 0xA8,
+			0xAE, 0xB4, 0xBA, 0xC0, 0xC6,
+			0xCC, 0xD3, 0xDA, 0xE1, 0xE8,
+			0xEF, 0xF6, 0xFF};
 
 static struct cm3629_platform_data cm36282_pdata = {
-        .model = CAPELLA_CM36282,
-        .ps_select = CM3629_PS1_ONLY,
-        .intr = Z4U_GPIO_PROXIMITY_INT,
-        .levels = {9, 33, 58, 250, 587, 3009, 4806, 9740, 14675, 65535},
-        .golden_adc = 0xD9A,
-        .power = NULL,
-        .cm3629_slave_address = 0xC0>>1,
-        .ps1_thd_set = 0x07,
-        .ps1_thd_no_cal = 0xF1,
-        .ps1_thd_with_cal = 0x07,
-        .ps_calibration_rule = 1,
-        .ps_conf1_val = CM3629_PS_DR_1_320 | CM3629_PS_IT_1_6T |
-                        CM3629_PS1_PERS_1,
-        .ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
-                        CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
-        .ps_conf3_val = CM3629_PS2_PROL_32,
+	.model = CAPELLA_CM36282,
+	.ps_select = CM3629_PS1_ONLY,
+	.intr = Z4U_GPIO_PROXIMITY_INT,
+	.levels = {9, 33, 58, 250, 587, 3009, 4806, 9740, 14675, 65535},
+	.golden_adc = 0xD9A,
+	.power = NULL,
+	.cm3629_slave_address = 0xC0>>1,
+	.ps1_thd_set = 0x07,
+	.ps1_thd_no_cal = 0xF1,
+	.ps1_thd_with_cal = 0x07,
+	.ps_calibration_rule = 1,
+	.ps_conf1_val = CM3629_PS_DR_1_320 | CM3629_PS_IT_1_6T |
+			CM3629_PS1_PERS_1,
+	.ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
+			CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
+	.ps_conf3_val = CM3629_PS2_PROL_32,
 		.dark_level = 3,
 		.dynamical_threshold = 1,
 		.mapping_table = cm3629_mapping_table,
@@ -2415,11 +2415,11 @@ static struct cm3629_platform_data cm36282_pdata = {
 };
 
 static struct i2c_board_info i2c_cm36282_devices[] = {
-        {
-                I2C_BOARD_INFO(CM3629_I2C_NAME,0xC0 >> 1),
-        .platform_data = &cm36282_pdata,
-        .irq = MSM_GPIO_TO_INT(Z4U_GPIO_PROXIMITY_INT),
-        },
+	{
+		I2C_BOARD_INFO(CM3629_I2C_NAME,0xC0 >> 1),
+	.platform_data = &cm36282_pdata,
+	.irq = MSM_GPIO_TO_INT(Z4U_GPIO_PROXIMITY_INT),
+	},
 };
 
 #endif
@@ -2538,89 +2538,89 @@ static void cp3_reset(void)
 
 void msm8625Q_init_uart3(void)
 {
-        gpio_tlmm_config(UART3_RX, GPIO_CFG_ENABLE);
-        gpio_tlmm_config(UART3_TX, GPIO_CFG_ENABLE);
+	gpio_tlmm_config(UART3_RX, GPIO_CFG_ENABLE);
+	gpio_tlmm_config(UART3_TX, GPIO_CFG_ENABLE);
 }
 
 struct gps_vreg_info {
-        const char *vreg_id;
-        unsigned int level_min;
-        unsigned int level_max;
-        unsigned int pmapp_id;
-        unsigned int is_vreg_pin_controlled;
-        struct regulator *reg;
+	const char *vreg_id;
+	unsigned int level_min;
+	unsigned int level_max;
+	unsigned int pmapp_id;
+	unsigned int is_vreg_pin_controlled;
+	struct regulator *reg;
 };
 
 static struct gps_vreg_info vreg_info[] = {
-        {"rftx",     2700000, 2700000, 22, 1, NULL}
+	{"rftx",     2700000, 2700000, 22, 1, NULL}
 };
 
 int gps_1530_lna_power_enable(int on)
 {
-        struct regulator_bulk_data regs[ARRAY_SIZE(vreg_info)];
-        int i = 0, rc = 0, index;
+	struct regulator_bulk_data regs[ARRAY_SIZE(vreg_info)];
+	int i = 0, rc = 0, index;
 
 	printk(KERN_INFO "gps_1530_lna_power_enable");
 
-        for (i = 0; i < ARRAY_SIZE(regs); i++) {
-                regs[i].supply = vreg_info[i].vreg_id;
-                regs[i].min_uV = vreg_info[i].level_min;
-                regs[i].max_uV = vreg_info[i].level_max;
-        }
+	for (i = 0; i < ARRAY_SIZE(regs); i++) {
+		regs[i].supply = vreg_info[i].vreg_id;
+		regs[i].min_uV = vreg_info[i].level_min;
+		regs[i].max_uV = vreg_info[i].level_max;
+	}
 
-        rc = regulator_bulk_get(NULL, ARRAY_SIZE(regs), regs);
-        if (rc) {
-                pr_err("%s: could not get regulators: %d\n", __func__, rc);
-                goto out;
-        }
+	rc = regulator_bulk_get(NULL, ARRAY_SIZE(regs), regs);
+	if (rc) {
+		pr_err("%s: could not get regulators: %d\n", __func__, rc);
+		goto out;
+	}
 
-        for (i = 0; i < ARRAY_SIZE(regs); i++)
-                vreg_info[i].reg = regs[i].consumer;
+	for (i = 0; i < ARRAY_SIZE(regs); i++)
+		vreg_info[i].reg = regs[i].consumer;
 
-        for ( index=0 ; index < ARRAY_SIZE(vreg_info); index++) {
+	for ( index=0 ; index < ARRAY_SIZE(vreg_info); index++) {
 		if (on) {
 			rc = regulator_set_voltage(vreg_info[index].reg,
-        			vreg_info[index].level_min,
-                		vreg_info[index].level_max);
-        		if (rc) {
-                                pr_err("%s:%s set voltage failed %d\n",
-                                        __func__, vreg_info[index].vreg_id, rc);
-                                goto reg_disable;
-                        }
+				vreg_info[index].level_min,
+				vreg_info[index].level_max);
+			if (rc) {
+				pr_err("%s:%s set voltage failed %d\n",
+					__func__, vreg_info[index].vreg_id, rc);
+				goto reg_disable;
+			}
 
-                        rc = regulator_enable(vreg_info[index].reg);
-                        if (rc) {
-                                pr_err("%s:%s vreg enable failed %d\n",
-                                        __func__, vreg_info[index].vreg_id, rc);
-                                goto reg_disable;
-                        }
+			rc = regulator_enable(vreg_info[index].reg);
+			if (rc) {
+				pr_err("%s:%s vreg enable failed %d\n",
+					__func__, vreg_info[index].vreg_id, rc);
+				goto reg_disable;
+			}
 		}else {
 
-                        rc = regulator_disable(vreg_info[index].reg);
-                        if (rc) {
-                                pr_err("%s:%s vreg disable failed %d\n",
-                                        __func__,
-                                        vreg_info[index].vreg_id, rc);
-                                goto reg_disable;
-                        }
+			rc = regulator_disable(vreg_info[index].reg);
+			if (rc) {
+				pr_err("%s:%s vreg disable failed %d\n",
+					__func__,
+					vreg_info[index].vreg_id, rc);
+				goto reg_disable;
+			}
 		}
 	}
 
 	return rc;
 reg_disable:
-        while (index) {
+	while (index) {
 	        index--;
-                regulator_disable(vreg_info[index].reg);
-                regulator_put(vreg_info[index].reg);
-        }
+		regulator_disable(vreg_info[index].reg);
+		regulator_put(vreg_info[index].reg);
+	}
 out:
-        return rc;
+	return rc;
 }
 EXPORT_SYMBOL(gps_1530_lna_power_enable);
 
 void gps_1530_1v8_on(void)
 {
-        int ret;
+	int ret;
 
        	cpld_gpio_config(CPLD_EXT_GPIO_GPS_1V8_EN,  CPLD_GPIO_OUT);
        	ret = cpld_gpio_write(CPLD_EXT_GPIO_GPS_1V8_EN, 1);
@@ -2630,16 +2630,16 @@ EXPORT_SYMBOL(gps_1530_1v8_on);
 
 void gps_1530_uart_on(int on)
 {
-        if (on)
-        {
-                gpio_tlmm_config(UART3_RX, GPIO_CFG_ENABLE);
-                gpio_tlmm_config(UART3_TX, GPIO_CFG_ENABLE);
-        }else {
-                gpio_tlmm_config(UART3_RX_SLEEP, GPIO_CFG_DISABLE);
-                gpio_tlmm_config(UART3_TX_SLEEP, GPIO_CFG_DISABLE);
-                gpio_tlmm_config(UART3_RTS_SLEEP, GPIO_CFG_DISABLE);
-                gpio_tlmm_config(UART3_CTS_SLEEP, GPIO_CFG_DISABLE);
-        }
+	if (on)
+	{
+		gpio_tlmm_config(UART3_RX, GPIO_CFG_ENABLE);
+		gpio_tlmm_config(UART3_TX, GPIO_CFG_ENABLE);
+	}else {
+		gpio_tlmm_config(UART3_RX_SLEEP, GPIO_CFG_DISABLE);
+		gpio_tlmm_config(UART3_TX_SLEEP, GPIO_CFG_DISABLE);
+		gpio_tlmm_config(UART3_RTS_SLEEP, GPIO_CFG_DISABLE);
+		gpio_tlmm_config(UART3_CTS_SLEEP, GPIO_CFG_DISABLE);
+	}
 }
 EXPORT_SYMBOL(gps_1530_uart_on);
 #endif
@@ -2666,9 +2666,9 @@ static void __init msm_z4u_init(void)
 		msm7627a_device_i2c_init();
 
 #if defined(CONFIG_I2C_CPLD)
-        i2c_register_board_info(3,
-                                i2c_cpld_devices,
-                                ARRAY_SIZE(i2c_cpld_devices));
+	i2c_register_board_info(3,
+				i2c_cpld_devices,
+				ARRAY_SIZE(i2c_cpld_devices));
 #endif
 
 	qrd7627a_uart1dm_config();
@@ -2751,9 +2751,9 @@ static void __init msm_z4u_init(void)
 	#endif
 
 #ifdef CONFIG_FLASHLIGHT_TPS61310
-        i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
-                                tps61310_i2c_info,
-                                ARRAY_SIZE(tps61310_i2c_info));
+	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
+				tps61310_i2c_info,
+				ARRAY_SIZE(tps61310_i2c_info));
 #endif
 
 	/*register gpio expander here*/
@@ -2791,8 +2791,8 @@ static void __init msm_z4u_init(void)
 	}
 
 
-        i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
-                i2c_cm36282_devices, ARRAY_SIZE(i2c_cm36282_devices));
+	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
+		i2c_cm36282_devices, ARRAY_SIZE(i2c_cm36282_devices));
 	z4u_camera_init();
 
 	msm7x25a_kgsl_3d0_init();
@@ -2848,13 +2848,13 @@ static void __init qrd7627a_init_early(void)
 }
 
 MACHINE_START(Z4U, "z4u")
-        .atag_offset    = PHYS_OFFSET + 0x100,
-        .fixup          = z4u_fixup,
-        .map_io         = msm8625_map_io,
-        .reserve        = msm8625_reserve,
-        .init_irq       = msm8625_init_irq,
-        .init_machine   = msm_z4u_init,
-        .timer          = &msm_timer,
-        .init_early     = qrd7627a_init_early,
-        .handle_irq     = gic_handle_irq,
+	.atag_offset    = PHYS_OFFSET + 0x100,
+	.fixup          = z4u_fixup,
+	.map_io         = msm8625_map_io,
+	.reserve        = msm8625_reserve,
+	.init_irq       = msm8625_init_irq,
+	.init_machine   = msm_z4u_init,
+	.timer          = &msm_timer,
+	.init_early     = qrd7627a_init_early,
+	.handle_irq     = gic_handle_irq,
 MACHINE_END

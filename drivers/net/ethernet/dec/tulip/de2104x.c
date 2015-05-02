@@ -67,8 +67,8 @@ MODULE_PARM_DESC (debug, "de2104x bitmapped message enable number");
 
 /* Set the copy breakpoint for the copy-only-tiny-buffer Rx structure. */
 #if defined(__alpha__) || defined(__arm__) || defined(__hppa__) || \
-        defined(CONFIG_SPARC) || defined(__ia64__) ||		   \
-        defined(__sh__) || defined(__mips__)
+	defined(CONFIG_SPARC) || defined(__ia64__) ||		   \
+	defined(__sh__) || defined(__mips__)
 static int rx_copybreak = 1518;
 #else
 static int rx_copybreak = 100;

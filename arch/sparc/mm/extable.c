@@ -62,7 +62,7 @@ search_extable(const struct exception_table_entry *start,
 		walk++;
 	}
 
-        return NULL;
+	return NULL;
 }
 
 #ifdef CONFIG_MODULES

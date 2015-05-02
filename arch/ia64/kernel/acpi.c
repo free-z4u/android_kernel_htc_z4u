@@ -176,7 +176,7 @@ void __init __acpi_unmap_table(char *map, unsigned long size)
 }
 
 /* --------------------------------------------------------------------------
-                            Boot-time Table Parsing
+			    Boot-time Table Parsing
    -------------------------------------------------------------------------- */
 
 static int available_cpus __initdata;

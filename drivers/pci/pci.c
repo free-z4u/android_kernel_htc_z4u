@@ -508,7 +508,7 @@ static inline bool platform_pci_power_manageable(struct pci_dev *dev)
 }
 
 static inline int platform_pci_set_power_state(struct pci_dev *dev,
-                                                pci_power_t t)
+						pci_power_t t)
 {
 	return pci_platform_pm ? pci_platform_pm->set_state(dev, t) : -ENOSYS;
 }

@@ -812,7 +812,7 @@ struct comedi_subdevice *s,struct comedi_insn *insn,unsigned int *data)						 |
 +----------------------------------------------------------------------------+
 | Input Parameters  : unsigned char_ b_BoardHandle  : Handle of board APCI-1710       |
 |                     unsigned char_ b_ModulNbr   CR_AREF(chanspec)  : Selected module number (0 to 3) |
-                                  data[0]  ENABle/Disable chrono
+				  data[0]  ENABle/Disable chrono
 |                     unsigned char_ b_CycleMode    : Selected the chronometer        |
 |                                  data[1]           acquisition mode                |
 |                     unsigned char_ b_InterruptEnable : Enable or disable the        |
@@ -836,7 +836,7 @@ struct comedi_subdevice *s,struct comedi_insn *insn,unsigned int *data)						 |
 |                     -6: Interrupt parameter is wrong                       |
 |                     -7: Interrupt function not initialised.                |
 |                         See function "i_APCI1710_SetBoardIntRoutineX"
-                      -8: data[0] wrong input    |
+		      -8: data[0] wrong input    |
 +----------------------------------------------------------------------------+
 */
 
@@ -1795,7 +1795,7 @@ int i_APCI1710_ConvertChronoValue(struct comedi_device *dev,
 |                     an output low.                                         |
 +----------------------------------------------------------------------------+
 | Input Parameters  : unsigned char_ b_BoardHandle   : Handle of board APCI-1710
-                        data[0] : Chl ON, Chl OFF , Chl Read , Port Read
+			data[0] : Chl ON, Chl OFF , Chl Read , Port Read
 
 |                     unsigned char_ b_ModulNbr  CR_AREF    : Selected module number (0 to 3)|
 |                     unsigned char_ b_OutputChannel CR_CHAN : Selection from digital output  |

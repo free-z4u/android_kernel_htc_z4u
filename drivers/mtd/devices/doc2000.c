@@ -952,8 +952,8 @@ static int doc_read_oob(struct mtd_info *mtd, loff_t ofs,
 
 	ops->retlen = len;
 	/* Reading the full OOB data drops us off of the end of the page,
-         * causing the flash device to go into busy mode, so we need
-         * to wait until ready 11.4.1 and Toshiba TC58256FT docs */
+	 * causing the flash device to go into busy mode, so we need
+	 * to wait until ready 11.4.1 and Toshiba TC58256FT docs */
 
 	ret = DoC_WaitReady(this);
 

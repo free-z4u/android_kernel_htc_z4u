@@ -66,7 +66,7 @@ static void shx3_smp_setup(void)
 		__cpu_logical_map[num] = i;
 	}
 
-        printk(KERN_INFO "Detected %i available secondary CPU(s)\n", num);
+	printk(KERN_INFO "Detected %i available secondary CPU(s)\n", num);
 }
 
 static void shx3_prepare_cpus(unsigned int max_cpus)

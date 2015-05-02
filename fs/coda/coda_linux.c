@@ -37,7 +37,7 @@ char * coda_f2s(struct CodaFid *f)
 int coda_iscontrol(const char *name, size_t length)
 {
 	return ((CODA_CONTROLLEN == length) &&
-                (strncmp(name, CODA_CONTROL, CODA_CONTROLLEN) == 0));
+		(strncmp(name, CODA_CONTROL, CODA_CONTROLLEN) == 0));
 }
 
 /* recognize /coda inode */
@@ -75,33 +75,33 @@ unsigned short coda_flags_to_cflags(unsigned short flags)
 /* utility functions below */
 void coda_vattr_to_iattr(struct inode *inode, struct coda_vattr *attr)
 {
-        int inode_type;
-        /* inode's i_flags, i_ino are set by iget
-           XXX: is this all we need ??
-           */
-        switch (attr->va_type) {
-        case C_VNON:
-                inode_type  = 0;
-                break;
-        case C_VREG:
-                inode_type = S_IFREG;
-                break;
-        case C_VDIR:
-                inode_type = S_IFDIR;
-                break;
-        case C_VLNK:
-                inode_type = S_IFLNK;
-                break;
-        default:
-                inode_type = 0;
-        }
+	int inode_type;
+	/* inode's i_flags, i_ino are set by iget
+	   XXX: is this all we need ??
+	   */
+	switch (attr->va_type) {
+	case C_VNON:
+		inode_type  = 0;
+		break;
+	case C_VREG:
+		inode_type = S_IFREG;
+		break;
+	case C_VDIR:
+		inode_type = S_IFDIR;
+		break;
+	case C_VLNK:
+		inode_type = S_IFLNK;
+		break;
+	default:
+		inode_type = 0;
+	}
 	inode->i_mode |= inode_type;
 
 	if (attr->va_mode != (u_short) -1)
 	        inode->i_mode = attr->va_mode | inode_type;
-        if (attr->va_uid != -1)
+	if (attr->va_uid != -1)
 	        inode->i_uid = (uid_t) attr->va_uid;
-        if (attr->va_gid != -1)
+	if (attr->va_gid != -1)
 	        inode->i_gid = (gid_t) attr->va_gid;
 	if (attr->va_nlink != -1)
 		set_nlink(inode, attr->va_nlink);
@@ -113,7 +113,7 @@ void coda_vattr_to_iattr(struct inode *inode, struct coda_vattr *attr)
 	        inode->i_atime = attr->va_atime;
 	if (attr->va_mtime.tv_sec != -1)
 	        inode->i_mtime = attr->va_mtime;
-        if (attr->va_ctime.tv_sec != -1)
+	if (attr->va_ctime.tv_sec != -1)
 	        inode->i_ctime = attr->va_ctime;
 }
 
@@ -128,65 +128,65 @@ void coda_vattr_to_iattr(struct inode *inode, struct coda_vattr *attr)
 
 void coda_iattr_to_vattr(struct iattr *iattr, struct coda_vattr *vattr)
 {
-        unsigned int valid;
+	unsigned int valid;
 
-        /* clean out */
+	/* clean out */
 	vattr->va_mode = -1;
-        vattr->va_uid = (vuid_t) -1;
-        vattr->va_gid = (vgid_t) -1;
-        vattr->va_size = (off_t) -1;
+	vattr->va_uid = (vuid_t) -1;
+	vattr->va_gid = (vgid_t) -1;
+	vattr->va_size = (off_t) -1;
 	vattr->va_atime.tv_sec = (time_t) -1;
 	vattr->va_atime.tv_nsec =  (time_t) -1;
-        vattr->va_mtime.tv_sec = (time_t) -1;
-        vattr->va_mtime.tv_nsec = (time_t) -1;
+	vattr->va_mtime.tv_sec = (time_t) -1;
+	vattr->va_mtime.tv_nsec = (time_t) -1;
 	vattr->va_ctime.tv_sec = (time_t) -1;
 	vattr->va_ctime.tv_nsec = (time_t) -1;
-        vattr->va_type = C_VNON;
+	vattr->va_type = C_VNON;
 	vattr->va_fileid = -1;
 	vattr->va_gen = -1;
 	vattr->va_bytes = -1;
 	vattr->va_nlink = -1;
 	vattr->va_blocksize = -1;
 	vattr->va_rdev = -1;
-        vattr->va_flags = 0;
+	vattr->va_flags = 0;
 
-        /* determine the type */
+	/* determine the type */
 #if 0
-        mode = iattr->ia_mode;
-                if ( S_ISDIR(mode) ) {
-                vattr->va_type = C_VDIR;
-        } else if ( S_ISREG(mode) ) {
-                vattr->va_type = C_VREG;
-        } else if ( S_ISLNK(mode) ) {
-                vattr->va_type = C_VLNK;
-        } else {
-                /* don't do others */
-                vattr->va_type = C_VNON;
-        }
+	mode = iattr->ia_mode;
+		if ( S_ISDIR(mode) ) {
+		vattr->va_type = C_VDIR;
+	} else if ( S_ISREG(mode) ) {
+		vattr->va_type = C_VREG;
+	} else if ( S_ISLNK(mode) ) {
+		vattr->va_type = C_VLNK;
+	} else {
+		/* don't do others */
+		vattr->va_type = C_VNON;
+	}
 #endif
 
-        /* set those vattrs that need change */
-        valid = iattr->ia_valid;
-        if ( valid & ATTR_MODE ) {
-                vattr->va_mode = iattr->ia_mode;
+	/* set those vattrs that need change */
+	valid = iattr->ia_valid;
+	if ( valid & ATTR_MODE ) {
+		vattr->va_mode = iattr->ia_mode;
 	}
-        if ( valid & ATTR_UID ) {
-                vattr->va_uid = (vuid_t) iattr->ia_uid;
+	if ( valid & ATTR_UID ) {
+		vattr->va_uid = (vuid_t) iattr->ia_uid;
 	}
-        if ( valid & ATTR_GID ) {
-                vattr->va_gid = (vgid_t) iattr->ia_gid;
+	if ( valid & ATTR_GID ) {
+		vattr->va_gid = (vgid_t) iattr->ia_gid;
 	}
-        if ( valid & ATTR_SIZE ) {
-                vattr->va_size = iattr->ia_size;
+	if ( valid & ATTR_SIZE ) {
+		vattr->va_size = iattr->ia_size;
 	}
-        if ( valid & ATTR_ATIME ) {
-                vattr->va_atime = iattr->ia_atime;
+	if ( valid & ATTR_ATIME ) {
+		vattr->va_atime = iattr->ia_atime;
 	}
-        if ( valid & ATTR_MTIME ) {
-                vattr->va_mtime = iattr->ia_mtime;
+	if ( valid & ATTR_MTIME ) {
+		vattr->va_mtime = iattr->ia_mtime;
 	}
-        if ( valid & ATTR_CTIME ) {
-                vattr->va_ctime = iattr->ia_ctime;
+	if ( valid & ATTR_CTIME ) {
+		vattr->va_ctime = iattr->ia_ctime;
 	}
 }
 

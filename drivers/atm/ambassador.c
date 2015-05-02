@@ -778,7 +778,7 @@ static void drain_rx_pools (amb_dev * dev) {
 }
 
 static void fill_rx_pool (amb_dev * dev, unsigned char pool,
-                                 gfp_t priority)
+				 gfp_t priority)
 {
   rx_in rx;
   amb_rxq * rxq;

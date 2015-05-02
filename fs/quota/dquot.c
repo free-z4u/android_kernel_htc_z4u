@@ -817,7 +817,7 @@ struct dquot *dqget(struct super_block *sb, unsigned int id, int type)
 	unsigned int hashent = hashfn(sb, id, type);
 	struct dquot *dquot = NULL, *empty = NULL;
 
-        if (!sb_has_quota_active(sb, type))
+	if (!sb_has_quota_active(sb, type))
 		return NULL;
 we_slept:
 	spin_lock(&dq_list_lock);
@@ -1245,7 +1245,7 @@ static int check_idq(struct dquot *dquot, qsize_t inodes,
 
 	if (dquot->dq_dqb.dqb_ihardlimit &&
 	    newinodes > dquot->dq_dqb.dqb_ihardlimit &&
-            !ignore_hardlimit(dquot)) {
+	    !ignore_hardlimit(dquot)) {
 		prepare_warning(warn, dquot, QUOTA_NL_IHARDWARN);
 		return -EDQUOT;
 	}
@@ -1254,7 +1254,7 @@ static int check_idq(struct dquot *dquot, qsize_t inodes,
 	    newinodes > dquot->dq_dqb.dqb_isoftlimit &&
 	    dquot->dq_dqb.dqb_itime &&
 	    get_seconds() >= dquot->dq_dqb.dqb_itime &&
-            !ignore_hardlimit(dquot)) {
+	    !ignore_hardlimit(dquot)) {
 		prepare_warning(warn, dquot, QUOTA_NL_ISOFTLONGWARN);
 		return -EDQUOT;
 	}
@@ -1286,7 +1286,7 @@ static int check_bdq(struct dquot *dquot, qsize_t space, int prealloc,
 
 	if (dquot->dq_dqb.dqb_bhardlimit &&
 	    tspace > dquot->dq_dqb.dqb_bhardlimit &&
-            !ignore_hardlimit(dquot)) {
+	    !ignore_hardlimit(dquot)) {
 		if (!prealloc)
 			prepare_warning(warn, dquot, QUOTA_NL_BHARDWARN);
 		return -EDQUOT;
@@ -1296,7 +1296,7 @@ static int check_bdq(struct dquot *dquot, qsize_t space, int prealloc,
 	    tspace > dquot->dq_dqb.dqb_bsoftlimit &&
 	    dquot->dq_dqb.dqb_btime &&
 	    get_seconds() >= dquot->dq_dqb.dqb_btime &&
-            !ignore_hardlimit(dquot)) {
+	    !ignore_hardlimit(dquot)) {
 		if (!prealloc)
 			prepare_warning(warn, dquot, QUOTA_NL_BSOFTLONGWARN);
 		return -EDQUOT;
@@ -1380,7 +1380,7 @@ static void __dquot_initialize(struct inode *inode, int type)
 	qsize_t rsv;
 
 	/* First test before acquiring mutex - solves deadlocks when we
-         * re-enter the quota code and are already holding the mutex */
+	 * re-enter the quota code and are already holding the mutex */
 	if (!dquot_active(inode))
 		return;
 
@@ -1619,7 +1619,7 @@ int dquot_alloc_inode(const struct inode *inode)
 	struct dquot * const *dquots = inode->i_dquot;
 
 	/* First test before acquiring mutex - solves deadlocks when we
-         * re-enter the quota code and are already holding the mutex */
+	 * re-enter the quota code and are already holding the mutex */
 	if (!dquot_active(inode))
 		return 0;
 	for (cnt = 0; cnt < MAXQUOTAS; cnt++)
@@ -1690,7 +1690,7 @@ void __dquot_free_space(struct inode *inode, qsize_t number, int flags)
 	int reserve = flags & DQUOT_SPACE_RESERVE;
 
 	/* First test before acquiring mutex - solves deadlocks when we
-         * re-enter the quota code and are already holding the mutex */
+	 * re-enter the quota code and are already holding the mutex */
 	if (!dquot_active(inode)) {
 		inode_decr_space(inode, number, reserve);
 		return;
@@ -1734,7 +1734,7 @@ void dquot_free_inode(const struct inode *inode)
 	struct dquot * const *dquots = inode->i_dquot;
 
 	/* First test before acquiring mutex - solves deadlocks when we
-         * re-enter the quota code and are already holding the mutex */
+	 * re-enter the quota code and are already holding the mutex */
 	if (!dquot_active(inode))
 		return;
 
@@ -1780,7 +1780,7 @@ int __dquot_transfer(struct inode *inode, struct dquot **transfer_to)
 	struct dquot_warn warn_from_space[MAXQUOTAS];
 
 	/* First test before acquiring mutex - solves deadlocks when we
-         * re-enter the quota code and are already holding the mutex */
+	 * re-enter the quota code and are already holding the mutex */
 	if (IS_NOQUOTA(inode))
 		return 0;
 	/* Initialize the arrays */

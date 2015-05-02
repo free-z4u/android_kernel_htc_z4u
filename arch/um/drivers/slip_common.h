@@ -13,7 +13,7 @@
 #define SLIP_ESC_ESC         0335	/* ESC ESC_ESC means ESC 'data'	*/
 
 static inline int slip_unesc(unsigned char c, unsigned char *buf, int *pos,
-                             int *esc)
+			     int *esc)
 {
 	int ret;
 

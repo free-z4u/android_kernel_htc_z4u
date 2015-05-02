@@ -99,7 +99,7 @@ struct dlmfs_inode_private {
 static inline struct dlmfs_inode_private *
 DLMFS_I(struct inode *inode)
 {
-        return container_of(inode,
+	return container_of(inode,
 			    struct dlmfs_inode_private,
 			    ip_vfs_inode);
 }

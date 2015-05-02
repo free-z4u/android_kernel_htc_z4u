@@ -143,10 +143,10 @@ extern int swiotlb_late_init_with_default_size (size_t size);
 
 #ifdef ASSERT_PDIR_SANITY
 #define ASSERT(expr) \
-        if(!(expr)) { \
-                printk( "\n" __FILE__ ":%d: Assertion " #expr " failed!\n",__LINE__); \
-                panic(#expr); \
-        }
+	if(!(expr)) { \
+		printk( "\n" __FILE__ ":%d: Assertion " #expr " failed!\n",__LINE__); \
+		panic(#expr); \
+	}
 #else
 #define ASSERT(expr)
 #endif

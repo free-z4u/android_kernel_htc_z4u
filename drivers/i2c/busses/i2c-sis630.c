@@ -122,7 +122,7 @@ static inline void sis630_write(u8 reg, u8 data)
 
 static int sis630_transaction_start(struct i2c_adapter *adap, int size, u8 *oldclock)
 {
-        int temp;
+	int temp;
 
 	/* Make sure the SMBus host is ready to start transmitting. */
 	if ((temp = sis630_read(SMB_CNT) & 0x03) != 0x00) {
@@ -133,10 +133,10 @@ static int sis630_transaction_start(struct i2c_adapter *adap, int size, u8 *oldc
 		if ((temp = sis630_read(SMB_CNT) & 0x03) != 0x00) {
 			dev_dbg(&adap->dev, "Failed! (%02x)\n", temp);
 			return -EBUSY;
-                } else {
+		} else {
 			dev_dbg(&adap->dev, "Successful!\n");
 		}
-        }
+	}
 
 	/* save old clock, so we can prevent machine for hung */
 	*oldclock = sis630_read(SMB_CNT);
@@ -404,7 +404,7 @@ static int __devinit sis630_setup(struct pci_dev *sis630_dev)
 	if (dummy) {
 		pci_dev_put(dummy);
 	}
-        else if (force) {
+	else if (force) {
 		dev_err(&sis630_dev->dev, "WARNING: Can't detect SIS630 compatible device, but "
 			"loading because of force option enabled\n");
  	}

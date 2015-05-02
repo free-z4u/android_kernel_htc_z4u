@@ -244,7 +244,7 @@ void omap1_pm_suspend(void)
 	 * and register state are preserved across power saves.
 	 * We have to save and restore very little register state to
 	 * idle the omap.
-         *
+	 *
 	 * Save interrupt, MPUI, ARM and UPLD control registers.
 	 */
 

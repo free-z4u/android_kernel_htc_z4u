@@ -109,13 +109,13 @@ struct x2_header {
 #define P54U_PIPE_NUMBER 9
 
 enum p54u_pipe_addr {
-        P54U_PIPE_DATA = 0x01,
-        P54U_PIPE_MGMT = 0x02,
-        P54U_PIPE_3 = 0x03,
-        P54U_PIPE_4 = 0x04,
-        P54U_PIPE_BRG = 0x0d,
-        P54U_PIPE_DEV = 0x0e,
-        P54U_PIPE_INT = 0x0f
+	P54U_PIPE_DATA = 0x01,
+	P54U_PIPE_MGMT = 0x02,
+	P54U_PIPE_3 = 0x03,
+	P54U_PIPE_4 = 0x04,
+	P54U_PIPE_BRG = 0x0d,
+	P54U_PIPE_DEV = 0x0e,
+	P54U_PIPE_INT = 0x0f
 };
 
 struct p54u_rx_info {

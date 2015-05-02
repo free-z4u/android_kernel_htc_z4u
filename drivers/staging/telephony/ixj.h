@@ -65,8 +65,8 @@ typedef struct {
 } BYTES;
 
 typedef union {
-        BYTES bytes;
-        short word;
+	BYTES bytes;
+	short word;
 } IXJ_WORD;
 
 typedef struct{
@@ -1197,13 +1197,13 @@ typedef struct {
 	int aec_level;
 	int cid_play_aec_level;
 	int readers, writers;
-        wait_queue_head_t poll_q;
-        wait_queue_head_t read_q;
+	wait_queue_head_t poll_q;
+	wait_queue_head_t read_q;
 	char *read_buffer, *read_buffer_end;
 	char *read_convert_buffer;
 	size_t read_buffer_size;
 	unsigned int read_buffer_ready;
-        wait_queue_head_t write_q;
+	wait_queue_head_t write_q;
 	char *write_buffer, *write_buffer_end;
 	char *write_convert_buffer;
 	size_t write_buffer_size;
@@ -1263,7 +1263,7 @@ typedef struct {
 	unsigned char fskz;
 	unsigned char fskphase;
 	unsigned char fskcnt;
-        unsigned int cidsize;
+	unsigned int cidsize;
 	unsigned int cidcnt;
 	unsigned long pstn_cid_received;
 	PHONE_CID cid;

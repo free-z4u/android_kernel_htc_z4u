@@ -123,7 +123,7 @@ struct kvm_irq_level {
 struct kvm_irqchip {
 	__u32 chip_id;
 	__u32 pad;
-        union {
+	union {
 		char dummy[512];  /* reserving space */
 #ifdef __KVM_HAVE_PIT
 		struct kvm_pic_state pic;

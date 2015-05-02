@@ -210,10 +210,10 @@ static int __init nsc_ircc_init(void)
 	int i = 0;
 
 	ret = platform_driver_register(&nsc_ircc_driver);
-        if (ret) {
-                IRDA_ERROR("%s, Can't register driver!\n", driver_name);
-                return ret;
-        }
+	if (ret) {
+		IRDA_ERROR("%s, Can't register driver!\n", driver_name);
+		return ret;
+	}
 
  	/* Register with PnP subsystem to detect disable ports */
 	ret = pnp_register_driver(&nsc_ircc_pnp_driver);
@@ -400,10 +400,10 @@ static int __init nsc_ircc_open(chipio_t *info)
 	/* Initialize IO */
 	self->io.cfg_base  = info->cfg_base;
 	self->io.fir_base  = info->fir_base;
-        self->io.irq       = info->irq;
-        self->io.fir_ext   = CHIP_IO_EXTENT;
-        self->io.dma       = info->dma;
-        self->io.fifo_size = 32;
+	self->io.irq       = info->irq;
+	self->io.fir_ext   = CHIP_IO_EXTENT;
+	self->io.dma       = info->dma;
+	self->io.fifo_size = 32;
 
 	/* Reserve the ioports that we need */
 	ret = request_region(self->io.fir_base, self->io.fir_ext, driver_name);
@@ -522,7 +522,7 @@ static int __exit nsc_ircc_close(struct nsc_ircc_cb *self)
 
 	IRDA_ASSERT(self != NULL, return -1;);
 
-        iobase = self->io.fir_base;
+	iobase = self->io.fir_base;
 
 	platform_device_unregister(self->pldev);
 
@@ -1662,7 +1662,7 @@ static int nsc_ircc_dma_xmit_complete(struct nsc_ircc_cb *self)
 
 	/* Disable DMA */
 	switch_bank(iobase, BANK0);
-        outb(inb(iobase+MCR) & ~MCR_DMA_EN, iobase+MCR);
+	outb(inb(iobase+MCR) & ~MCR_DMA_EN, iobase+MCR);
 
 	/* Check for underrun! */
 	if (inb(iobase+ASCR) & ASCR_TXUR) {

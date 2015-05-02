@@ -318,7 +318,7 @@ int phs_init(PPHS_DEVICE_EXTENSION pPhsdeviceExtension,PMINI_ADAPTER Adapter)
 		{
 			BCM_DEBUG_PRINT(Adapter,DBG_TYPE_OTHERS, PHS_DISPATCH, DBG_LVL_ALL, "\nAllocation failed");
 			free_phs_serviceflow_rules(pPhsdeviceExtension->
-                pstServiceFlowPhsRulesTable);
+		pstServiceFlowPhsRulesTable);
 			pPhsdeviceExtension->pstServiceFlowPhsRulesTable = NULL;
 			return -ENOMEM;
 		}
@@ -543,7 +543,7 @@ ULONG PhsDeleteClassifierRule(IN void* pvContext,IN B_UINT16 uiVcid ,IN B_UINT16
 		}
 
 		nClsidIndex = GetClassifierEntry(pstServiceFlowEntry->pstClassifierTable,
-                  uiClsId, eActiveClassifierRuleContext, &pstClassifierEntry);
+		  uiClsId, eActiveClassifierRuleContext, &pstClassifierEntry);
 		if((nClsidIndex != PHS_INVALID_TABLE_INDEX) && (!pstClassifierEntry->bUnclassifiedPHSRule))
 		{
 			if(pstClassifierEntry->pstPhsRule)
@@ -558,7 +558,7 @@ ULONG PhsDeleteClassifierRule(IN void* pvContext,IN B_UINT16 uiVcid ,IN B_UINT16
 		}
 
 		nClsidIndex = GetClassifierEntry(pstServiceFlowEntry->pstClassifierTable,
-                    uiClsId,eOldClassifierRuleContext,&pstClassifierEntry);
+		    uiClsId,eOldClassifierRuleContext,&pstClassifierEntry);
 
 	   if((nClsidIndex != PHS_INVALID_TABLE_INDEX) && (!pstClassifierEntry->bUnclassifiedPHSRule))
 		{
@@ -615,28 +615,28 @@ ULONG PhsDeleteSFRules(IN void* pvContext,IN B_UINT16 uiVcid)
 				if(pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex].pstPhsRule)
 				{
 					if(pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex]
-                                                        .pstPhsRule->u8RefCnt)
+							.pstPhsRule->u8RefCnt)
 						pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex]
 						                                    .pstPhsRule->u8RefCnt--;
 					if(0==pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex]
-                                                          .pstPhsRule->u8RefCnt)
+							  .pstPhsRule->u8RefCnt)
 						kfree(pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex].pstPhsRule);
 					    pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex]
-                                        .pstPhsRule = NULL;
+					.pstPhsRule = NULL;
 				}
 				memset(&pstClassifierRulesTable->stActivePhsRulesList[nClsidIndex], 0, sizeof(S_CLASSIFIER_ENTRY));
 				if(pstClassifierRulesTable->stOldPhsRulesList[nClsidIndex].pstPhsRule)
 				{
 					if(pstClassifierRulesTable->stOldPhsRulesList[nClsidIndex]
-                                        .pstPhsRule->u8RefCnt)
+					.pstPhsRule->u8RefCnt)
 						pstClassifierRulesTable->stOldPhsRulesList[nClsidIndex]
 						                  .pstPhsRule->u8RefCnt--;
 					if(0 == pstClassifierRulesTable->stOldPhsRulesList[nClsidIndex]
-                                        .pstPhsRule->u8RefCnt)
+					.pstPhsRule->u8RefCnt)
 						kfree(pstClassifierRulesTable
 						      ->stOldPhsRulesList[nClsidIndex].pstPhsRule);
 					pstClassifierRulesTable->stOldPhsRulesList[nClsidIndex]
-                              .pstPhsRule = NULL;
+			      .pstPhsRule = NULL;
 				}
 				memset(&pstClassifierRulesTable->stOldPhsRulesList[nClsidIndex], 0, sizeof(S_CLASSIFIER_ENTRY));
 			}
@@ -713,7 +713,7 @@ ULONG PhsCompress(IN void* pvContext,
 	}
 
 	nClsidIndex = GetClassifierEntry(pstServiceFlowEntry->pstClassifierTable,
-                uiClsId,eActiveClassifierRuleContext,&pstClassifierEntry);
+		uiClsId,eActiveClassifierRuleContext,&pstClassifierEntry);
 
     if(nClsidIndex == PHS_INVALID_TABLE_INDEX)
 	{
@@ -780,7 +780,7 @@ ULONG PhsDeCompress(IN void* pvContext,
 	UINT phsi;
     PMINI_ADAPTER Adapter = GET_BCM_ADAPTER(gblpnetdev);
 	PPHS_DEVICE_EXTENSION pDeviceExtension=
-        (PPHS_DEVICE_EXTENSION)pvContext;
+	(PPHS_DEVICE_EXTENSION)pvContext;
 
 	*pInHeaderSize = 0;
 
@@ -809,7 +809,7 @@ ULONG PhsDeCompress(IN void* pvContext,
 	}
 
 	nPhsRuleIndex = GetPhsRuleEntry(pstServiceFlowEntry->pstClassifierTable,phsi,
-          eActiveClassifierRuleContext,&pstPhsRule);
+	  eActiveClassifierRuleContext,&pstPhsRule);
 	if(nPhsRuleIndex == PHS_INVALID_TABLE_INDEX)
 	{
 		//Phs Rule does not exist in  active rules table. Lets try in the old rules table.
@@ -823,7 +823,7 @@ ULONG PhsDeCompress(IN void* pvContext,
 	}
 
 	*pInHeaderSize = phs_decompress((PUCHAR)pvInputBuffer,
-            (PUCHAR)pvOutputBuffer,pstPhsRule,pOutHeaderSize);
+	    (PUCHAR)pvOutputBuffer,pstPhsRule,pOutHeaderSize);
 
 	pstPhsRule->PHSModifiedBytes += *pOutHeaderSize - *pInHeaderSize - 1;
 
@@ -855,9 +855,9 @@ static void free_phs_serviceflow_rules(S_SERVICEFLOW_TABLE *psServiceFlowRulesTa
 		for(i=0;i<MAX_SERVICEFLOWS;i++)
 		{
 			S_SERVICEFLOW_ENTRY stServiceFlowEntry =
-                psServiceFlowRulesTable->stSFList[i];
+		psServiceFlowRulesTable->stSFList[i];
 			S_CLASSIFIER_TABLE *pstClassifierRulesTable =
-                stServiceFlowEntry.pstClassifierTable;
+		stServiceFlowEntry.pstClassifierTable;
 
 			if(pstClassifierRulesTable)
 			{
@@ -866,22 +866,22 @@ static void free_phs_serviceflow_rules(S_SERVICEFLOW_TABLE *psServiceFlowRulesTa
 					if(pstClassifierRulesTable->stActivePhsRulesList[j].pstPhsRule)
 					{
 						if(pstClassifierRulesTable->stActivePhsRulesList[j].pstPhsRule
-                                                                                        ->u8RefCnt)
+											->u8RefCnt)
 							pstClassifierRulesTable->stActivePhsRulesList[j].pstPhsRule
   							                                                ->u8RefCnt--;
 						if(0==pstClassifierRulesTable->stActivePhsRulesList[j].pstPhsRule
-                                                                ->u8RefCnt)
+								->u8RefCnt)
 							kfree(pstClassifierRulesTable->stActivePhsRulesList[j].pstPhsRule);
 						pstClassifierRulesTable->stActivePhsRulesList[j].pstPhsRule = NULL;
 					}
 					if(pstClassifierRulesTable->stOldPhsRulesList[j].pstPhsRule)
 					{
 						if(pstClassifierRulesTable->stOldPhsRulesList[j].pstPhsRule
-                                                                ->u8RefCnt)
+								->u8RefCnt)
 							pstClassifierRulesTable->stOldPhsRulesList[j].pstPhsRule
 							                                          ->u8RefCnt--;
 						if(0==pstClassifierRulesTable->stOldPhsRulesList[j].pstPhsRule
-                                                                      ->u8RefCnt)
+								      ->u8RefCnt)
 							kfree(pstClassifierRulesTable->stOldPhsRulesList[j].pstPhsRule);
 						pstClassifierRulesTable->stOldPhsRulesList[j].pstPhsRule = NULL;
 					}
@@ -949,8 +949,8 @@ UINT GetServiceFlowEntry(IN S_SERVICEFLOW_TABLE *psServiceFlowTable,
 
 
 UINT GetClassifierEntry(IN S_CLASSIFIER_TABLE *pstClassifierTable,
-        IN B_UINT32 uiClsid,E_CLASSIFIER_ENTRY_CONTEXT eClsContext,
-        OUT S_CLASSIFIER_ENTRY **ppstClassifierEntry)
+	IN B_UINT32 uiClsid,E_CLASSIFIER_ENTRY_CONTEXT eClsContext,
+	OUT S_CLASSIFIER_ENTRY **ppstClassifierEntry)
 {
 	int  i;
 	S_CLASSIFIER_ENTRY *psClassifierRules = NULL;
@@ -1013,8 +1013,8 @@ static UINT GetPhsRuleEntry(IN S_CLASSIFIER_TABLE *pstClassifierTable,
 }
 
 UINT CreateSFToClassifierRuleMapping(IN B_UINT16 uiVcid,IN B_UINT16  uiClsId,
-                      IN S_SERVICEFLOW_TABLE *psServiceFlowTable,S_PHS_RULE *psPhsRule,
-                      B_UINT8 u8AssociatedPHSI)
+		      IN S_SERVICEFLOW_TABLE *psServiceFlowTable,S_PHS_RULE *psPhsRule,
+		      B_UINT8 u8AssociatedPHSI)
 {
 
     S_CLASSIFIER_TABLE *psaClassifiertable = NULL;
@@ -1050,8 +1050,8 @@ UINT CreateSFToClassifierRuleMapping(IN B_UINT16 uiVcid,IN B_UINT16  uiClsId,
 }
 
 UINT CreateClassiferToPHSRuleMapping(IN B_UINT16 uiVcid,
-            IN B_UINT16  uiClsId,IN S_SERVICEFLOW_ENTRY *pstServiceFlowEntry,
-              S_PHS_RULE *psPhsRule,B_UINT8 u8AssociatedPHSI)
+	    IN B_UINT16  uiClsId,IN S_SERVICEFLOW_ENTRY *pstServiceFlowEntry,
+	      S_PHS_RULE *psPhsRule,B_UINT8 u8AssociatedPHSI)
 {
 	S_CLASSIFIER_ENTRY *pstClassifierEntry = NULL;
 	UINT uiStatus =PHS_SUCCESS;
@@ -1179,17 +1179,17 @@ static UINT CreateClassifierPHSRule(IN B_UINT16  uiClsId,
 		  Continue to search for a free location to add the rule
 		*/
 		for(iClassifierIndex = 0; iClassifierIndex <
-            MAX_PHSRULE_PER_SF; iClassifierIndex++)
+	    MAX_PHSRULE_PER_SF; iClassifierIndex++)
 		{
 			if(eClsContext == eActiveClassifierRuleContext)
 			{
 				psClassifierRules =
-              &psaClassifiertable->stActivePhsRulesList[iClassifierIndex];
+	      &psaClassifiertable->stActivePhsRulesList[iClassifierIndex];
 			}
 			else
 			{
 				psClassifierRules =
-                &psaClassifiertable->stOldPhsRulesList[iClassifierIndex];
+		&psaClassifiertable->stOldPhsRulesList[iClassifierIndex];
 			}
 
 			if(!psClassifierRules->bUsed)
@@ -1210,16 +1210,16 @@ static UINT CreateClassifierPHSRule(IN B_UINT16  uiClsId,
 		{
 			//Lets replace the oldest rule if we are looking in old Rule table
 			if(psaClassifiertable->uiOldestPhsRuleIndex >=
-                MAX_PHSRULE_PER_SF)
+		MAX_PHSRULE_PER_SF)
 			{
 				psaClassifiertable->uiOldestPhsRuleIndex =0;
 			}
 
 			iClassifierIndex = psaClassifiertable->uiOldestPhsRuleIndex;
 			psClassifierRules =
-              &psaClassifiertable->stOldPhsRulesList[iClassifierIndex];
+	      &psaClassifiertable->stOldPhsRulesList[iClassifierIndex];
 
-          (psaClassifiertable->uiOldestPhsRuleIndex)++;
+	  (psaClassifiertable->uiOldestPhsRuleIndex)++;
 		}
 	}
 
@@ -1229,7 +1229,7 @@ static UINT CreateClassifierPHSRule(IN B_UINT16  uiClsId,
 		{
 			psClassifierRules->pstPhsRule = kmalloc(sizeof(S_PHS_RULE),GFP_KERNEL);
 
-          if(NULL == psClassifierRules->pstPhsRule)
+	  if(NULL == psClassifierRules->pstPhsRule)
 				return ERR_PHSRULE_MEMALLOC_FAIL;
 		}
 
@@ -1238,14 +1238,14 @@ static UINT CreateClassifierPHSRule(IN B_UINT16  uiClsId,
 		psClassifierRules->u8PHSI = psPhsRule->u8PHSI;
 		psClassifierRules->bUnclassifiedPHSRule = psPhsRule->bUnclassifiedPHSRule;
 
-        /* Update The PHS rule */
+	/* Update The PHS rule */
 		memcpy(psClassifierRules->pstPhsRule,
 		    psPhsRule, sizeof(S_PHS_RULE));
 	}
 	else
 	{
 		nStatus = UpdateClassifierPHSRule(uiClsId,psClassifierRules,
-            psaClassifiertable,psPhsRule,u8AssociatedPHSI);
+	    psaClassifiertable,psPhsRule,u8AssociatedPHSI);
 	}
 	return nStatus;
 }
@@ -1442,13 +1442,13 @@ int phs_decompress(unsigned char *in_buf,unsigned char *out_buf,
 		{
 			*out_buf = *phsf;
 			BCM_DEBUG_PRINT(Adapter,DBG_TYPE_OTHERS, PHS_RECEIVE,DBG_LVL_ALL,"\nDECOMP:In phss  %d phsf %d ouput %d",
-              phss,*phsf,*out_buf);
+	      phss,*phsf,*out_buf);
 		}
 		else
 		{
 			*out_buf = *in_buf;
 			BCM_DEBUG_PRINT(Adapter,DBG_TYPE_OTHERS, PHS_RECEIVE,DBG_LVL_ALL,"\nDECOMP:In phss  %d input %d ouput %d",
-            phss,*in_buf,*out_buf);
+	    phss,*in_buf,*out_buf);
 			in_buf++;
 			size++;
 		}
@@ -1515,7 +1515,7 @@ static int phs_compress(S_PHS_RULE  *phs_rule,unsigned char *in_buf
 	//To copy PHSI
 	out_buf++;
 	supress = verify_suppress_phsf(in_buf,out_buf,phs_rule->u8PHSF,
-        phs_rule->u8PHSM, phs_rule->u8PHSS, phs_rule->u8PHSV,new_header_size);
+	phs_rule->u8PHSM, phs_rule->u8PHSS, phs_rule->u8PHSV,new_header_size);
 
 	if(supress == STATUS_PHS_COMPRESSED)
 	{

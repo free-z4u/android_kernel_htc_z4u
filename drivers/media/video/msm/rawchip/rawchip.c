@@ -761,8 +761,8 @@ int rawchip_match_id(void)
 		}
 		if (rc < 0)
 			continue;
-        else
-            rawchip_id = chipid;
+	else
+	    rawchip_id = chipid;
 
 		pr_info("rawchip id: 0x%x requested id: 0x%x\n", chipid, rawchip_info.rawchip_id_info->rawchip_id);
 		if (chipid != rawchip_info.rawchip_id_info->rawchip_id) {

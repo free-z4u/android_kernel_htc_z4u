@@ -551,7 +551,7 @@ static struct usb_driver synusb_driver = {
 module_usb_driver(synusb_driver);
 
 MODULE_AUTHOR("Rob Miller <rob@inpharmatica.co.uk>, "
-              "Ron Lee <ron@debian.org>, "
-              "Jan Steinhoff <cpad@jan-steinhoff.de>");
+	      "Ron Lee <ron@debian.org>, "
+	      "Jan Steinhoff <cpad@jan-steinhoff.de>");
 MODULE_DESCRIPTION("Synaptics USB device driver");
 MODULE_LICENSE("GPL");

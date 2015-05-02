@@ -48,11 +48,11 @@
 	s : status bit
 	r : detected and set for the actual command response
 	x : detected and set during command execution. the host must poll
-            the card by sending status command in order to read these bits.
+	    the card by sending status command in order to read these bits.
   Clear condition
 	a : according to the card state
 	b : always related to the previous command. Reception of
-            a valid command will clear it (with a delay of one command)
+	    a valid command will clear it (with a delay of one command)
 	c : clear by read
  */
 

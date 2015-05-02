@@ -33,13 +33,13 @@ unsigned long epld_virt;
 
 static irqreturn_t cayman_interrupt_smsc(int irq, void *dev_id)
 {
-        printk(KERN_INFO "CAYMAN: spurious SMSC interrupt\n");
+	printk(KERN_INFO "CAYMAN: spurious SMSC interrupt\n");
 	return IRQ_NONE;
 }
 
 static irqreturn_t cayman_interrupt_pci2(int irq, void *dev_id)
 {
-        printk(KERN_INFO "CAYMAN: spurious PCI interrupt, IRQ %d\n", irq);
+	printk(KERN_INFO "CAYMAN: spurious PCI interrupt, IRQ %d\n", irq);
 	return IRQ_NONE;
 }
 

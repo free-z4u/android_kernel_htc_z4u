@@ -284,7 +284,7 @@ int dlm_recover_directory(struct dlm_ls *ls)
 				count++;
 			}
 		}
-         done:
+	 done:
 		;
 	}
 

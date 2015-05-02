@@ -1062,7 +1062,7 @@ snd_azf3328_put_mixer(struct snd_kcontrol *kcontrol,
 			SET_CHAN_LEFT|SET_CHAN_RIGHT,
 			0);
 	else
-        	snd_azf3328_mixer_outw(chip, reg.reg, nreg);
+		snd_azf3328_mixer_outw(chip, reg.reg, nreg);
 
 	snd_azf3328_dbgmixer("put: %02x to %02lx|%02lx, "
 			     "oreg %04x; shift %02d|%02d -> nreg %04x; after: %04x\n",
@@ -1086,19 +1086,19 @@ snd_azf3328_info_mixer_enum(struct snd_kcontrol *kcontrol,
 	static const char * const texts3[] = {
 		"Mic", "CD", "Video", "Aux",
 		"Line", "Mix", "Mix Mono", "Phone"
-        };
+	};
 	static const char * const texts4[] = {
 		"pre 3D", "post 3D"
-        };
+	};
 	struct azf3328_mixer_reg reg;
 	const char * const *p = NULL;
 
 	snd_azf3328_mixer_reg_decode(&reg, kcontrol->private_value);
-        uinfo->type = SNDRV_CTL_ELEM_TYPE_ENUMERATED;
-        uinfo->count = (reg.reg == IDX_MIXER_REC_SELECT) ? 2 : 1;
-        uinfo->value.enumerated.items = reg.enum_c;
-        if (uinfo->value.enumerated.item > reg.enum_c - 1U)
-                uinfo->value.enumerated.item = reg.enum_c - 1U;
+	uinfo->type = SNDRV_CTL_ELEM_TYPE_ENUMERATED;
+	uinfo->count = (reg.reg == IDX_MIXER_REC_SELECT) ? 2 : 1;
+	uinfo->value.enumerated.items = reg.enum_c;
+	if (uinfo->value.enumerated.item > reg.enum_c - 1U)
+		uinfo->value.enumerated.item = reg.enum_c - 1U;
 	if (reg.reg == IDX_MIXER_ADVCTL2) {
 		switch(reg.lchan_shift) {
 		case 8: /* modem out sel */
@@ -1116,36 +1116,36 @@ snd_azf3328_info_mixer_enum(struct snd_kcontrol *kcontrol,
 		p = texts3;
 
 	strcpy(uinfo->value.enumerated.name, p[uinfo->value.enumerated.item]);
-        return 0;
+	return 0;
 }
 
 static int
 snd_azf3328_get_mixer_enum(struct snd_kcontrol *kcontrol,
 			   struct snd_ctl_elem_value *ucontrol)
 {
-        struct snd_azf3328 *chip = snd_kcontrol_chip(kcontrol);
+	struct snd_azf3328 *chip = snd_kcontrol_chip(kcontrol);
 	struct azf3328_mixer_reg reg;
-        unsigned short val;
+	unsigned short val;
 
 	snd_azf3328_mixer_reg_decode(&reg, kcontrol->private_value);
 	val = snd_azf3328_mixer_inw(chip, reg.reg);
 	if (reg.reg == IDX_MIXER_REC_SELECT) {
-        	ucontrol->value.enumerated.item[0] = (val >> 8) & (reg.enum_c - 1);
-        	ucontrol->value.enumerated.item[1] = (val >> 0) & (reg.enum_c - 1);
+		ucontrol->value.enumerated.item[0] = (val >> 8) & (reg.enum_c - 1);
+		ucontrol->value.enumerated.item[1] = (val >> 0) & (reg.enum_c - 1);
 	} else
-        	ucontrol->value.enumerated.item[0] = (val >> reg.lchan_shift) & (reg.enum_c - 1);
+		ucontrol->value.enumerated.item[0] = (val >> reg.lchan_shift) & (reg.enum_c - 1);
 
 	snd_azf3328_dbgmixer("get_enum: %02x is %04x -> %d|%d (shift %02d, enum_c %d)\n",
 		reg.reg, val, ucontrol->value.enumerated.item[0], ucontrol->value.enumerated.item[1],
 		reg.lchan_shift, reg.enum_c);
-        return 0;
+	return 0;
 }
 
 static int
 snd_azf3328_put_mixer_enum(struct snd_kcontrol *kcontrol,
 			   struct snd_ctl_elem_value *ucontrol)
 {
-        struct snd_azf3328 *chip = snd_kcontrol_chip(kcontrol);
+	struct snd_azf3328 *chip = snd_kcontrol_chip(kcontrol);
 	struct azf3328_mixer_reg reg;
 	u16 oreg, nreg, val;
 
@@ -1153,16 +1153,16 @@ snd_azf3328_put_mixer_enum(struct snd_kcontrol *kcontrol,
 	oreg = snd_azf3328_mixer_inw(chip, reg.reg);
 	val = oreg;
 	if (reg.reg == IDX_MIXER_REC_SELECT) {
-        	if (ucontrol->value.enumerated.item[0] > reg.enum_c - 1U ||
-            	ucontrol->value.enumerated.item[1] > reg.enum_c - 1U)
-                	return -EINVAL;
-        	val = (ucontrol->value.enumerated.item[0] << 8) |
-        	      (ucontrol->value.enumerated.item[1] << 0);
+		if (ucontrol->value.enumerated.item[0] > reg.enum_c - 1U ||
+	    	ucontrol->value.enumerated.item[1] > reg.enum_c - 1U)
+			return -EINVAL;
+		val = (ucontrol->value.enumerated.item[0] << 8) |
+		      (ucontrol->value.enumerated.item[1] << 0);
 	} else {
-        	if (ucontrol->value.enumerated.item[0] > reg.enum_c - 1U)
-                	return -EINVAL;
+		if (ucontrol->value.enumerated.item[0] > reg.enum_c - 1U)
+			return -EINVAL;
 		val &= ~((reg.enum_c - 1) << reg.lchan_shift);
-        	val |= (ucontrol->value.enumerated.item[0] << reg.lchan_shift);
+		val |= (ucontrol->value.enumerated.item[0] << reg.lchan_shift);
 	}
 	snd_azf3328_mixer_outw(chip, reg.reg, val);
 	nreg = val;
@@ -1230,8 +1230,8 @@ static struct snd_kcontrol_new snd_azf3328_mixer_controls[] __devinitdata = {
 };
 
 static u16 __devinitdata snd_azf3328_init_values[][2] = {
-        { IDX_MIXER_PLAY_MASTER,	MIXER_MUTE_MASK|0x1f1f },
-        { IDX_MIXER_MODEMOUT,		MIXER_MUTE_MASK|0x1f1f },
+	{ IDX_MIXER_PLAY_MASTER,	MIXER_MUTE_MASK|0x1f1f },
+	{ IDX_MIXER_MODEMOUT,		MIXER_MUTE_MASK|0x1f1f },
 	{ IDX_MIXER_BASSTREBLE,		0x0000 },
 	{ IDX_MIXER_PCBEEP,		MIXER_MUTE_MASK|0x1f1f },
 	{ IDX_MIXER_MODEMIN,		MIXER_MUTE_MASK|0x1f1f },
@@ -1240,9 +1240,9 @@ static u16 __devinitdata snd_azf3328_init_values[][2] = {
 	{ IDX_MIXER_CDAUDIO,		MIXER_MUTE_MASK|0x1f1f },
 	{ IDX_MIXER_VIDEO,		MIXER_MUTE_MASK|0x1f1f },
 	{ IDX_MIXER_AUX,		MIXER_MUTE_MASK|0x1f1f },
-        { IDX_MIXER_WAVEOUT,		MIXER_MUTE_MASK|0x1f1f },
-        { IDX_MIXER_FMSYNTH,		MIXER_MUTE_MASK|0x1f1f },
-        { IDX_MIXER_REC_VOLUME,		MIXER_MUTE_MASK|0x0707 },
+	{ IDX_MIXER_WAVEOUT,		MIXER_MUTE_MASK|0x1f1f },
+	{ IDX_MIXER_FMSYNTH,		MIXER_MUTE_MASK|0x1f1f },
+	{ IDX_MIXER_REC_VOLUME,		MIXER_MUTE_MASK|0x0707 },
 };
 
 static int __devinit
@@ -1531,7 +1531,7 @@ snd_azf3328_pcm_prepare(struct snd_pcm_substream *substream)
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct snd_azf3328_codec_data *codec = runtime->private_data;
 #if 0
-        unsigned int size = snd_pcm_lib_buffer_bytes(substream);
+	unsigned int size = snd_pcm_lib_buffer_bytes(substream);
 	unsigned int count = snd_pcm_lib_period_bytes(substream);
 #endif
 
@@ -1695,15 +1695,15 @@ snd_azf3328_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 			) & ~DMA_RESUME
 		);
 		break;
-        case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
 		snd_printk(KERN_ERR "FIXME: SNDRV_PCM_TRIGGER_PAUSE_PUSH NIY!\n");
-                break;
-        case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+		break;
+	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
 		snd_printk(KERN_ERR "FIXME: SNDRV_PCM_TRIGGER_PAUSE_RELEASE NIY!\n");
-                break;
-        default:
+		break;
+	default:
 		snd_printk(KERN_ERR "FIXME: unknown trigger mode!\n");
-                return -EINVAL;
+		return -EINVAL;
 	}
 
 	snd_azf3328_dbgcallleave();
@@ -2015,7 +2015,7 @@ snd_azf3328_interrupt(int irq, void *dev_id)
 
 	status = snd_azf3328_ctrl_inb(chip, IDX_IO_IRQSTATUS);
 
-        /* fast path out, to ease interrupt sharing */
+	/* fast path out, to ease interrupt sharing */
 	if (!(status &
 		(IRQ_PLAYBACK|IRQ_RECORDING|IRQ_I2S_OUT
 		|IRQ_GAMEPORT|IRQ_MPU401|IRQ_TIMER)
@@ -2036,7 +2036,7 @@ snd_azf3328_interrupt(int irq, void *dev_id)
 		if (chip->timer)
 			snd_timer_interrupt(chip->timer, chip->timer->sticks);
 		/* ACK timer */
-                spin_lock(&chip->reg_lock);
+		spin_lock(&chip->reg_lock);
 		snd_azf3328_ctrl_outb(chip, IDX_IO_TIMER_VALUE + 3, 0x07);
 		spin_unlock(&chip->reg_lock);
 		snd_azf3328_dbgcodec("azt3328: timer IRQ\n");

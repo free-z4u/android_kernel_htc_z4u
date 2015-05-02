@@ -103,13 +103,13 @@ int dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
 static inline
 int dma_supported(struct device *dev, u64 mask)
 {
-        /*
-         * we fall back to GFP_DMA when the mask isn't all 1s,
-         * so we can't guarantee allocations that must be
-         * within a tighter range than GFP_DMA..
-         */
-        if (mask < 0x00ffffff)
-                return 0;
+	/*
+	 * we fall back to GFP_DMA when the mask isn't all 1s,
+	 * so we can't guarantee allocations that must be
+	 * within a tighter range than GFP_DMA..
+	 */
+	if (mask < 0x00ffffff)
+		return 0;
 
 	return 1;
 }

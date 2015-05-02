@@ -210,24 +210,24 @@ static void __init parisc_proc_mkdir(void)
 			proc_gsc_root = proc_mkdir("bus/gsc", NULL);
 		}
 		break;
-        case pcxt_:
-        case pcxu:
-        case pcxu_:
-        case pcxw:
-        case pcxw_:
-        case pcxw2:
-                if (NULL == proc_runway_root)
-                {
-                        proc_runway_root = proc_mkdir("bus/runway", NULL);
-                }
-                break;
+	case pcxt_:
+	case pcxu:
+	case pcxu_:
+	case pcxw:
+	case pcxw_:
+	case pcxw2:
+		if (NULL == proc_runway_root)
+		{
+			proc_runway_root = proc_mkdir("bus/runway", NULL);
+		}
+		break;
 	case mako:
 	case mako2:
-                if (NULL == proc_mckinley_root)
-                {
-                        proc_mckinley_root = proc_mkdir("bus/mckinley", NULL);
-                }
-                break;
+		if (NULL == proc_mckinley_root)
+		{
+			proc_mckinley_root = proc_mkdir("bus/mckinley", NULL);
+		}
+		break;
 	default:
 		/* FIXME: this was added to prevent the compiler
 		 * complaining about missing pcx, pcxs and pcxt

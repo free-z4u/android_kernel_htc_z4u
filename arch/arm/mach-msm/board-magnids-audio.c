@@ -27,9 +27,9 @@ void magnids_mic_bias_enable(int en, int shift)
     pr_aud_info("%s: %d\n", __func__, en);
 
     if (en) {
-        ioext_gpio_set_value(MAGNIDS_IOEXP_AUDIO_2V85_EN,1);
+	ioext_gpio_set_value(MAGNIDS_IOEXP_AUDIO_2V85_EN,1);
     } else {
-        ioext_gpio_set_value(MAGNIDS_IOEXP_AUDIO_2V85_EN,0);
+	ioext_gpio_set_value(MAGNIDS_IOEXP_AUDIO_2V85_EN,0);
     }
 }
 

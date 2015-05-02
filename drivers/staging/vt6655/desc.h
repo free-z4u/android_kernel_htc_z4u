@@ -89,7 +89,7 @@
 
 // max transmit or receive buffer size
 #define CB_MAX_BUF_SIZE     2900U       // max buffer size
-                                        // NOTE: must be multiple of 4
+					// NOTE: must be multiple of 4
 #define CB_MAX_TX_BUF_SIZE          CB_MAX_BUF_SIZE // max Tx buffer size
 #define CB_MAX_RX_BUF_SIZE_NORMAL   CB_MAX_BUF_SIZE // max Rx buffer size when not use Multi-RD
 
@@ -101,10 +101,10 @@
 #define CB_MIN_TX_DESC      16          // min # of tx descriptor
 
 #define CB_MAX_RECEIVED_PACKETS     16  // max # of received packets at one time
-                                        // limit our receive routine to indicating
-                                        // this many at a time for 2 reasons:
-                                        // 1. driver flow control to protocol layer
-                                        // 2. limit the time used in ISR routine
+					// limit our receive routine to indicating
+					// this many at a time for 2 reasons:
+					// 1. driver flow control to protocol layer
+					// 2. limit the time used in ISR routine
 
 #define CB_EXTRA_RD_NUM     32          // default # of Extra RD
 #define CB_RD_NUM           32          // default # of RD
@@ -234,10 +234,10 @@ static inline PDEVICE_RD_INFO alloc_rd_info(void) {
     PDEVICE_RD_INFO  ptr;
     ptr = kmalloc(sizeof(DEVICE_RD_INFO), GFP_ATOMIC);
     if (ptr == NULL)
-        return NULL;
+	return NULL;
     else {
-        memset(ptr,0,sizeof(DEVICE_RD_INFO));
-        return ptr;
+	memset(ptr,0,sizeof(DEVICE_RD_INFO));
+	return ptr;
     }
 }
 */
@@ -259,7 +259,7 @@ typedef struct tagRDES0 {
 	union {
 		volatile u16    f15Reserved;
 		struct {
-            volatile u8 f8Reserved1;
+	    volatile u8 f8Reserved1;
 			volatile u8 f1Owner:1;
 			volatile u8 f7Reserved:7;
 		} __attribute__ ((__packed__));
@@ -319,7 +319,7 @@ typedef struct tagTDES0 {
 	union {
 		volatile u16    f15Txtime;
 		struct {
-            volatile u8 f8Reserved1;
+	    volatile u8 f8Reserved1;
 			volatile u8 f1Owner:1;
 			volatile u8 f7Reserved:7;
 		} __attribute__ ((__packed__));
@@ -364,10 +364,10 @@ static inline PDEVICE_TD_INFO alloc_td_info(void) {
     PDEVICE_TD_INFO  ptr;
     ptr = kmalloc(sizeof(DEVICE_TD_INFO),GFP_ATOMIC);
     if (ptr == NULL)
-        return NULL;
+	return NULL;
     else {
-        memset(ptr,0,sizeof(DEVICE_TD_INFO));
-        return ptr;
+	memset(ptr,0,sizeof(DEVICE_TD_INFO));
+	return ptr;
     }
 }
 */

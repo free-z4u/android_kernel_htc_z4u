@@ -135,7 +135,7 @@ void pdacf_reinit(struct snd_pdacf *chip, int resume)
 }
 
 static void pdacf_proc_read(struct snd_info_entry * entry,
-                            struct snd_info_buffer *buffer)
+			    struct snd_info_buffer *buffer)
 {
 	struct snd_pdacf *chip = entry->private_data;
 	u16 tmp;

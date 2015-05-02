@@ -338,7 +338,7 @@ static u16 INFTL_foldchain(struct INFTLrecord *inftl, unsigned thisVUC, unsigned
 
 		/*
 		 * Copy only in non free block (free blocks can only
-                 * happen in case of media errors or deleted blocks).
+		 * happen in case of media errors or deleted blocks).
 		 */
 		if (BlockMap[block] == BLOCK_NIL)
 			continue;

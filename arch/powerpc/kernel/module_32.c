@@ -109,10 +109,10 @@ static unsigned long get_plt_size(const Elf32_Ehdr *hdr,
 	unsigned i;
 
 	/* Everything marked ALLOC (this includes the exported
-           symbols) */
+	   symbols) */
 	for (i = 1; i < hdr->e_shnum; i++) {
 		/* If it's called *.init*, and we're not init, we're
-                   not interested */
+		   not interested */
 		if ((strstr(secstrings + sechdrs[i].sh_name, ".init") != 0)
 		    != is_init)
 			continue;

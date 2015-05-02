@@ -48,7 +48,7 @@ static inline bool is_crashed_pfn_valid(unsigned long pfn)
  * space in non-atomic context.
  */
 ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
-                               size_t csize, unsigned long offset, int userbuf)
+			       size_t csize, unsigned long offset, int userbuf)
 {
 	void  *vaddr;
 

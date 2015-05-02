@@ -137,7 +137,7 @@ static struct net_device_ops sk_isa_netdev_ops __read_mostly;
 static int __init setup_card(struct net_device *dev, struct device *pdev)
 {
 	struct net_local *tp;
-        static int versionprinted;
+	static int versionprinted;
 	const unsigned *port;
 	int j, err = 0;
 
@@ -195,11 +195,11 @@ static int __init setup_card(struct net_device *dev, struct device *pdev)
 			if (!request_irq(dev->irq, tms380tr_interrupt, 0,
 				isa_cardname, dev))
 				break;
-                }
+		}
 
-                if(irqlist[j] == 0)
-                {
-                        printk(KERN_INFO "skisa.c: AutoSelect no IRQ available\n");
+		if(irqlist[j] == 0)
+		{
+			printk(KERN_INFO "skisa.c: AutoSelect no IRQ available\n");
 			goto out3;
 		}
 	}
@@ -217,7 +217,7 @@ static int __init setup_card(struct net_device *dev, struct device *pdev)
 		if (request_irq(dev->irq, tms380tr_interrupt, 0,
 			isa_cardname, dev))
 		{
-                        printk(KERN_INFO "skisa.c: Selected IRQ %d not available\n",
+			printk(KERN_INFO "skisa.c: Selected IRQ %d not available\n",
 				dev->irq);
 			goto out3;
 		}
@@ -228,7 +228,7 @@ static int __init setup_card(struct net_device *dev, struct device *pdev)
 		for(j = 0; dmalist[j] != 0; j++)
 		{
 			dev->dma = dmalist[j];
-                        if (!request_dma(dev->dma, isa_cardname))
+			if (!request_dma(dev->dma, isa_cardname))
 				break;
 		}
 
@@ -245,13 +245,13 @@ static int __init setup_card(struct net_device *dev, struct device *pdev)
 				break;
 		if (dmalist[j] == 0)
 		{
-                        printk(KERN_INFO "skisa.c: Illegal DMA %d specified\n",
+			printk(KERN_INFO "skisa.c: Illegal DMA %d specified\n",
 				dev->dma);
 			goto out2;
 		}
 		if (request_dma(dev->dma, isa_cardname))
 		{
-                        printk(KERN_INFO "skisa.c: Selected DMA %d not available\n",
+			printk(KERN_INFO "skisa.c: Selected DMA %d not available\n",
 				dev->dma);
 			goto out2;
 		}

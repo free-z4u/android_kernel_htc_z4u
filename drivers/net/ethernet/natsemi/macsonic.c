@@ -201,7 +201,7 @@ static int __devinit macsonic_init(struct net_device *dev)
 	struct sonic_local* lp = netdev_priv(dev);
 
 	/* Allocate the entire chunk of memory for the descriptors.
-           Note that this cannot cross a 64K boundary. */
+	   Note that this cannot cross a 64K boundary. */
 	if ((lp->descriptors = dma_alloc_coherent(lp->device,
 	            SIZEOF_SONIC_DESC * SONIC_BUS_SCALE(lp->dma_bitmode),
 	            &lp->descriptors_laddr, GFP_KERNEL)) == NULL) {
@@ -241,9 +241,9 @@ static int __devinit macsonic_init(struct net_device *dev)
 }
 
 #define INVALID_MAC(mac) (memcmp(mac, "\x08\x00\x07", 3) && \
-                          memcmp(mac, "\x00\xA0\x40", 3) && \
-                          memcmp(mac, "\x00\x80\x19", 3) && \
-                          memcmp(mac, "\x00\x05\x02", 3))
+			  memcmp(mac, "\x00\xA0\x40", 3) && \
+			  memcmp(mac, "\x00\x80\x19", 3) && \
+			  memcmp(mac, "\x00\x05\x02", 3))
 
 static void __devinit mac_onboard_sonic_ethernet_addr(struct net_device *dev)
 {

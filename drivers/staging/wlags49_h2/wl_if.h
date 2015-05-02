@@ -71,7 +71,7 @@
 #define MAX_LTV_BUF_SIZE            (512 - (sizeof(hcf_16) * 2))
 
 #define HCF_TALLIES_SIZE            (sizeof(CFG_HERMES_TALLIES_STRCT) + \
-                                     (sizeof(hcf_16) * 2))
+				     (sizeof(hcf_16) * 2))
 
 #define HCF_MAX_MULTICAST           16
 #define HCF_MAX_NAME_LEN            32
@@ -188,9 +188,9 @@ typedef struct
     hcf_16      typ;
     union
     {
-        hcf_8       u8[MAX_LTV_BUF_SIZE / sizeof(hcf_8)];
-        hcf_16      u16[MAX_LTV_BUF_SIZE / sizeof(hcf_16)];
-        hcf_32      u32[MAX_LTV_BUF_SIZE / sizeof(hcf_32)];
+	hcf_8       u8[MAX_LTV_BUF_SIZE / sizeof(hcf_8)];
+	hcf_16      u16[MAX_LTV_BUF_SIZE / sizeof(hcf_16)];
+	hcf_32      u32[MAX_LTV_BUF_SIZE / sizeof(hcf_32)];
     } u;
 }
 ltv_t;
@@ -200,7 +200,7 @@ struct uilreq
 {
     union
     {
-        char    ifrn_name[IFNAMSIZ];
+	char    ifrn_name[IFNAMSIZ];
     } ifr_ifrn;
 
     IFBP        hcfCtx;
@@ -219,7 +219,7 @@ struct rtsreq
 {
     union
     {
-        char    ifrn_name[IFNAMSIZ];
+	char    ifrn_name[IFNAMSIZ];
     }
     ifr_ifrn;
 

@@ -1496,11 +1496,11 @@ unsigned long ext2_count_free_blocks (struct super_block * sb)
 		desc_count, bitmap_count);
 	return bitmap_count;
 #else
-        for (i = 0; i < EXT2_SB(sb)->s_groups_count; i++) {
-                desc = ext2_get_group_desc (sb, i, NULL);
-                if (!desc)
-                        continue;
-                desc_count += le16_to_cpu(desc->bg_free_blocks_count);
+	for (i = 0; i < EXT2_SB(sb)->s_groups_count; i++) {
+		desc = ext2_get_group_desc (sb, i, NULL);
+		if (!desc)
+			continue;
+		desc_count += le16_to_cpu(desc->bg_free_blocks_count);
 	}
 	return desc_count;
 #endif

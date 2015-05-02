@@ -120,9 +120,9 @@ struct s_comet_reg
     VINT32 sigx_cfg;         /* 50  SIGX Cfg/Change of Signaling State */
     VINT32 sigx_acc_cos;     /* 51  SIGX uP Access Sts/Change of Signaling State */
     VINT32 sigx_iac_cos;     /* 52  SIGX Channel Indirect
-                              * Addr/Ctl/Change of Signaling State */
+			      * Addr/Ctl/Change of Signaling State */
     VINT32 sigx_idb_cos;     /* 53  SIGX Channel Indirect Data
-                              * Buffer/Change of Signaling State */
+			      * Buffer/Change of Signaling State */
 
     VINT32 t1_xbas_cfg;      /* 54  T1 XBAS Cfg */
     VINT32 t1_xbas_altx;     /* 55  T1 XBAS Alarm TX */
@@ -156,15 +156,15 @@ struct s_comet_reg
     VINT32 t1_tpsc_cfg;      /* 6C  TPSC Cfg */
     VINT32 t1_tpsc_sts;      /* 6D  TPSC uP Access Sts */
     VINT32 t1_tpsc_ciaddr;   /* 6E  TPSC Channel Indirect
-                                          * Addr/Ctl */
+					  * Addr/Ctl */
     VINT32 t1_tpsc_cidata;   /* 6F  TPSC Channel Indirect Data
-                                          * Buffer */
+					  * Buffer */
     VINT32 t1_rpsc_cfg;      /* 70  RPSC Cfg */
     VINT32 t1_rpsc_sts;      /* 71  RPSC uP Access Sts */
     VINT32 t1_rpsc_ciaddr;   /* 72  RPSC Channel Indirect
-                                          * Addr/Ctl */
+					  * Addr/Ctl */
     VINT32 t1_rpsc_cidata;   /* 73  RPSC Channel Indirect Data
-                                          * Buffer */
+					  * Buffer */
     VINT32 __res74;          /* 74     Reserved */
     VINT32 __res75;          /* 75     Reserved */
     VINT32 __res76;          /* 76     Reserved */
@@ -186,7 +186,7 @@ struct s_comet_reg
     VINT32 e1_tran_ien;      /* 84  E1 TRAN Intr Enable */
     VINT32 e1_tran_ists;     /* 85  E1 TRAN Intr Sts */
     VINT32 e1_tran_nats;     /* 86  E1 TRAN National Bit Codeword
-                                          * Select */
+					  * Select */
     VINT32 e1_tran_nat;      /* 87  E1 TRAN National Bit Codeword */
     VINT32 __res88;          /* 88     Reserved */
     VINT32 __res89;          /* 89     Reserved */
@@ -280,7 +280,7 @@ struct s_comet_reg
     VINT32 rlps_idata1;      /* DA  RLPS Indirect Data, 8-15 */
     VINT32 rlps_idata0;      /* DB  RLPS Indirect Data, 0-7 */
     VINT32 rlps_eqvr;        /* DC  RLPS Equalizer Voltage Reference
-                              *    (E1 missing) */
+			      *    (E1 missing) */
     VINT32 _rlps_resDD;      /* DD     RLPS Reserved */
     VINT32 _rlps_resDE;      /* DE     RLPS Reserved */
     VINT32 _rlps_resDF;      /* DF     RLPS Reserved */

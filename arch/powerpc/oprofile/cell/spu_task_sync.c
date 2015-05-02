@@ -453,14 +453,14 @@ static struct notifier_block spu_active = {
 
 static int number_of_online_nodes(void)
 {
-        u32 cpu; u32 tmp;
-        int nodes = 0;
-        for_each_online_cpu(cpu) {
-                tmp = cbe_cpu_to_node(cpu) + 1;
-                if (tmp > nodes)
-                        nodes++;
-        }
-        return nodes;
+	u32 cpu; u32 tmp;
+	int nodes = 0;
+	for_each_online_cpu(cpu) {
+		tmp = cbe_cpu_to_node(cpu) + 1;
+		if (tmp > nodes)
+			nodes++;
+	}
+	return nodes;
 }
 
 static int oprofile_spu_buff_create(void)

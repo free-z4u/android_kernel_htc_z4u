@@ -47,35 +47,35 @@
    http://www.lsi.com
 
    Note: This version of the driver does not contain a bundled firmware
-         image.
+	 image.
 
    History
    -------
    2.26.02.000 - Driver cleanup for kernel submission.
    2.26.02.001 - Replace schedule_timeout() calls with msleep().
    2.26.02.002 - Add support for PAE mode.
-                 Add lun support.
-                 Fix twa_remove() to free irq handler/unregister_chrdev()
-                 before shutting down card.
-                 Change to new 'change_queue_depth' api.
-                 Fix 'handled=1' ISR usage, remove bogus IRQ check.
-                 Remove un-needed eh_abort handler.
-                 Add support for embedded firmware error strings.
+		 Add lun support.
+		 Fix twa_remove() to free irq handler/unregister_chrdev()
+		 before shutting down card.
+		 Change to new 'change_queue_depth' api.
+		 Fix 'handled=1' ISR usage, remove bogus IRQ check.
+		 Remove un-needed eh_abort handler.
+		 Add support for embedded firmware error strings.
    2.26.02.003 - Correctly handle single sgl's with use_sg=1.
    2.26.02.004 - Add support for 9550SX controllers.
    2.26.02.005 - Fix use_sg == 0 mapping on systems with 4GB or higher.
    2.26.02.006 - Fix 9550SX pchip reset timeout.
-                 Add big endian support.
+		 Add big endian support.
    2.26.02.007 - Disable local interrupts during kmap/unmap_atomic().
    2.26.02.008 - Free irq handler in __twa_shutdown().
-                 Serialize reset code.
-                 Add support for 9650SE controllers.
+		 Serialize reset code.
+		 Add support for 9650SE controllers.
    2.26.02.009 - Fix dma mask setting to fallback to 32-bit if 64-bit fails.
    2.26.02.010 - Add support for 9690SA controllers.
    2.26.02.011 - Increase max AENs drained to 256.
-                 Add MSI support and "use_msi" module parameter.
-                 Fix bug in twa_get_param() on 4GB+.
-                 Use pci_resource_len() for ioremap().
+		 Add MSI support and "use_msi" module parameter.
+		 Fix bug in twa_get_param() on 4GB+.
+		 Use pci_resource_len() for ioremap().
    2.26.02.012 - Add power management support.
    2.26.02.013 - Fix bug in twa_load_sgl().
    2.26.02.014 - Force 60 second timeout default.
@@ -504,7 +504,7 @@ static void twa_aen_sync_time(TW_Device_Extension *tw_dev, int request_id)
 	param->parameter_size_bytes = cpu_to_le16(4);
 
 	/* Convert system time in UTC to local time seconds since last
-           Sunday 12:00AM */
+	   Sunday 12:00AM */
 	do_gettimeofday(&utc);
 	local_time = (u32)(utc.tv_sec - (sys_tz.tz_minuteswest * 60));
 	schedulertime = local_time - (3 * 86400);

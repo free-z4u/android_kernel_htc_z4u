@@ -230,7 +230,7 @@ nv50_fifo_create_context(struct nouveau_channel *chan)
 	struct drm_device *dev = chan->dev;
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct nouveau_gpuobj *ramfc = NULL;
-        uint64_t ib_offset = chan->pushbuf_base + chan->dma.ib_base * 4;
+	uint64_t ib_offset = chan->pushbuf_base + chan->dma.ib_base * 4;
 	unsigned long flags;
 	int ret;
 
@@ -283,7 +283,7 @@ nv50_fifo_create_context(struct nouveau_channel *chan)
 	nv_wo32(ramfc, 0x3c, 0x403f6078);
 	nv_wo32(ramfc, 0x50, lower_32_bits(ib_offset));
 	nv_wo32(ramfc, 0x54, upper_32_bits(ib_offset) |
-                drm_order(chan->dma.ib_max + 1) << 16);
+		drm_order(chan->dma.ib_max + 1) << 16);
 
 	if (dev_priv->chipset != 0x50) {
 		nv_wo32(chan->ramin, 0, chan->id);

@@ -103,9 +103,9 @@ static int igbvf_desc_unused(struct igbvf_ring *ring)
  * @skb: pointer to sk_buff to be indicated to stack
  **/
 static void igbvf_receive_skb(struct igbvf_adapter *adapter,
-                              struct net_device *netdev,
-                              struct sk_buff *skb,
-                              u32 status, u16 vlan)
+			      struct net_device *netdev,
+			      struct sk_buff *skb,
+			      u32 status, u16 vlan)
 {
 	if (status & E1000_RXD_STAT_VP) {
 		u16 vid = le16_to_cpu(vlan) & E1000_RXD_SPC_VLAN_MASK;
@@ -116,7 +116,7 @@ static void igbvf_receive_skb(struct igbvf_adapter *adapter,
 }
 
 static inline void igbvf_rx_checksum_adv(struct igbvf_adapter *adapter,
-                                         u32 status_err, struct sk_buff *skb)
+					 u32 status_err, struct sk_buff *skb)
 {
 	skb_checksum_none_assert(skb);
 
@@ -146,7 +146,7 @@ static inline void igbvf_rx_checksum_adv(struct igbvf_adapter *adapter,
  * @cleaned_count: number of buffers to repopulate
  **/
 static void igbvf_alloc_rx_buffers(struct igbvf_ring *rx_ring,
-                                   int cleaned_count)
+				   int cleaned_count)
 {
 	struct igbvf_adapter *adapter = rx_ring->adapter;
 	struct net_device *netdev = adapter->netdev;
@@ -241,7 +241,7 @@ no_buffers:
  * is no guarantee that everything was cleaned
  **/
 static bool igbvf_clean_rx_irq(struct igbvf_adapter *adapter,
-                               int *work_done, int work_to_do)
+			       int *work_done, int work_to_do)
 {
 	struct igbvf_ring *rx_ring = adapter->rx_ring;
 	struct net_device *netdev = adapter->netdev;
@@ -382,7 +382,7 @@ next_desc:
 }
 
 static void igbvf_put_txbuf(struct igbvf_adapter *adapter,
-                            struct igbvf_buffer *buffer_info)
+			    struct igbvf_buffer *buffer_info)
 {
 	if (buffer_info->dma) {
 		if (buffer_info->mapped_as_page)
@@ -411,7 +411,7 @@ static void igbvf_put_txbuf(struct igbvf_adapter *adapter,
  * Return 0 on success, negative on failure
  **/
 int igbvf_setup_tx_resources(struct igbvf_adapter *adapter,
-                             struct igbvf_ring *tx_ring)
+			     struct igbvf_ring *tx_ring)
 {
 	struct pci_dev *pdev = adapter->pdev;
 	int size;
@@ -909,7 +909,7 @@ static irqreturn_t igbvf_intr_msix_rx(int irq, void *data)
 #define IGBVF_NO_QUEUE -1
 
 static void igbvf_assign_vector(struct igbvf_adapter *adapter, int rx_queue,
-                                int tx_queue, int msix_vector)
+				int tx_queue, int msix_vector)
 {
 	struct e1000_hw *hw = &adapter->hw;
 	u32 ivar, index;
@@ -1875,8 +1875,8 @@ static void igbvf_watchdog_task(struct work_struct *work)
 #define IGBVF_TX_FLAGS_VLAN_SHIFT       16
 
 static int igbvf_tso(struct igbvf_adapter *adapter,
-                     struct igbvf_ring *tx_ring,
-                     struct sk_buff *skb, u32 tx_flags, u8 *hdr_len)
+		     struct igbvf_ring *tx_ring,
+		     struct sk_buff *skb, u32 tx_flags, u8 *hdr_len)
 {
 	struct e1000_adv_tx_context_desc *context_desc;
 	unsigned int i;
@@ -1955,8 +1955,8 @@ static int igbvf_tso(struct igbvf_adapter *adapter,
 }
 
 static inline bool igbvf_tx_csum(struct igbvf_adapter *adapter,
-                                 struct igbvf_ring *tx_ring,
-                                 struct sk_buff *skb, u32 tx_flags)
+				 struct igbvf_ring *tx_ring,
+				 struct sk_buff *skb, u32 tx_flags)
 {
 	struct e1000_adv_tx_context_desc *context_desc;
 	unsigned int i;
@@ -2042,9 +2042,9 @@ static int igbvf_maybe_stop_tx(struct net_device *netdev, int size)
 #define IGBVF_MAX_DATA_PER_TXD  (1 << IGBVF_MAX_TXD_PWR)
 
 static inline int igbvf_tx_map_adv(struct igbvf_adapter *adapter,
-                                   struct igbvf_ring *tx_ring,
-                                   struct sk_buff *skb,
-                                   unsigned int first)
+				   struct igbvf_ring *tx_ring,
+				   struct sk_buff *skb,
+				   unsigned int first)
 {
 	struct igbvf_buffer *buffer_info;
 	struct pci_dev *pdev = adapter->pdev;
@@ -2120,9 +2120,9 @@ dma_error:
 }
 
 static inline void igbvf_tx_queue_adv(struct igbvf_adapter *adapter,
-                                      struct igbvf_ring *tx_ring,
-                                      int tx_flags, int count, u32 paylen,
-                                      u8 hdr_len)
+				      struct igbvf_ring *tx_ring,
+				      int tx_flags, int count, u32 paylen,
+				      u8 hdr_len)
 {
 	union e1000_adv_tx_desc *tx_desc = NULL;
 	struct igbvf_buffer *buffer_info;
@@ -2200,9 +2200,9 @@ static netdev_tx_t igbvf_xmit_frame_ring_adv(struct sk_buff *skb,
 
 	/*
 	 * need: count + 4 desc gap to keep tail from touching
-         *       + 2 desc gap to keep tail from touching head,
-         *       + 1 desc for skb->data,
-         *       + 1 desc for context descriptor,
+	 *       + 2 desc gap to keep tail from touching head,
+	 *       + 1 desc for skb->data,
+	 *       + 1 desc for context descriptor,
 	 * head, otherwise try next time
 	 */
 	if (igbvf_maybe_stop_tx(netdev, skb_shinfo(skb)->nr_frags + 4)) {
@@ -2476,7 +2476,7 @@ static void igbvf_netpoll(struct net_device *netdev)
  * this device has been detected.
  */
 static pci_ers_result_t igbvf_io_error_detected(struct pci_dev *pdev,
-                                                pci_channel_state_t state)
+						pci_channel_state_t state)
 {
 	struct net_device *netdev = pci_get_drvdata(pdev);
 	struct igbvf_adapter *adapter = netdev_priv(netdev);
@@ -2598,7 +2598,7 @@ static const struct net_device_ops igbvf_netdev_ops = {
  * and a hardware reset occur.
  **/
 static int __devinit igbvf_probe(struct pci_dev *pdev,
-                                 const struct pci_device_id *ent)
+				 const struct pci_device_id *ent)
 {
 	struct net_device *netdev;
 	struct igbvf_adapter *adapter;

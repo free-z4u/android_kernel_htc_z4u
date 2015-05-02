@@ -213,8 +213,8 @@ static void ccw_clear_margins(struct vc_data *vc, struct fb_info *info,
 	if (bh) {
 		region.dx = info->var.xoffset + bs;
 		region.dy = 0;
-                region.height = info->var.yres_virtual;
-                region.width = bh;
+		region.height = info->var.yres_virtual;
+		region.width = bh;
 		info->fbops->fb_fillrect(info, &region);
 	}
 }

@@ -741,7 +741,7 @@ lba_fixup_bus(struct pci_bus *bus)
 		bus->bridge_ctl &= ~(status & PCI_STATUS_FAST_BACK);
 #endif
 
-                /*
+		/*
 		** P2PB's have no IRQs. ignore them.
 		*/
 		if ((dev->class >> 8) == PCI_CLASS_BRIDGE_PCI)
@@ -1308,7 +1308,7 @@ lba_hw_init(struct lba_device *d)
 	}
 
 	/* Set HF mode as the default (vs. -1 mode). */
-        stat = READ_REG32(d->hba.base_addr + LBA_STAT_CTL);
+	stat = READ_REG32(d->hba.base_addr + LBA_STAT_CTL);
 	WRITE_REG32(stat | HF_ENABLE, d->hba.base_addr + LBA_STAT_CTL);
 
 	/*
@@ -1409,8 +1409,8 @@ lba_driver_probe(struct parisc_device *dev)
 		major = func_class >> 4, minor = func_class & 0xf;
 
 		/* We could use one printk for both Elroy and Mercury,
-                 * but for the mask for func_class.
-                 */
+		 * but for the mask for func_class.
+		 */
 		printk(KERN_INFO "%s version TR%d.%d (0x%x) found at 0x%lx\n",
 		       IS_MERCURY(dev) ? "Mercury" : "Quicksilver", major,
 		       minor, func_class, (long)dev->hpa.start);

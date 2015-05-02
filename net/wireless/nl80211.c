@@ -6653,9 +6653,9 @@ static int nl80211_update_ft_ies(struct sk_buff *skb, struct genl_info *info)
 
 
 struct sk_buff *__cfg80211_alloc_reply_skb(struct wiphy *wiphy,
-                                          enum nl80211_commands cmd,
-                                          enum nl80211_attrs attr,
-                                          int approxlen)
+					  enum nl80211_commands cmd,
+					  enum nl80211_attrs attr,
+					  int approxlen)
 {
 	struct cfg80211_registered_device *rdev = wiphy_to_dev(wiphy);
 
@@ -6678,7 +6678,7 @@ static int nl80211_vendor_cmd(struct sk_buff *skb, struct genl_info *info)
 	struct net_device *dev = NULL;
 
 	if (info->attrs[NL80211_ATTR_IFINDEX]) {
-                ifindex = nla_get_u32(info->attrs[NL80211_ATTR_IFINDEX]);
+		ifindex = nla_get_u32(info->attrs[NL80211_ATTR_IFINDEX]);
 		dev = dev_get_by_index(genl_info_net(info), ifindex);
 
 		if (!dev)

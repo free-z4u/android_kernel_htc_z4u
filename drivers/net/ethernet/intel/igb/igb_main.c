@@ -205,7 +205,7 @@ static void igb_netpoll(struct net_device *);
 static unsigned int max_vfs = 0;
 module_param(max_vfs, uint, 0);
 MODULE_PARM_DESC(max_vfs, "Maximum number of virtual functions to allocate "
-                 "per physical function");
+		 "per physical function");
 #endif /* CONFIG_PCI_IOV */
 
 static pci_ers_result_t igb_io_error_detected(struct pci_dev *,
@@ -1170,7 +1170,7 @@ err_out:
 }
 
 static void igb_map_rx_ring_to_vector(struct igb_adapter *adapter,
-                                      int ring_idx, int v_idx)
+				      int ring_idx, int v_idx)
 {
 	struct igb_q_vector *q_vector = adapter->q_vector[v_idx];
 
@@ -1183,7 +1183,7 @@ static void igb_map_rx_ring_to_vector(struct igb_adapter *adapter,
 }
 
 static void igb_map_tx_ring_to_vector(struct igb_adapter *adapter,
-                                      int ring_idx, int v_idx)
+				      int ring_idx, int v_idx)
 {
 	struct igb_q_vector *q_vector = adapter->q_vector[v_idx];
 
@@ -2746,7 +2746,7 @@ void igb_setup_tctl(struct igb_adapter *adapter)
  * Configure a transmit ring after a reset.
  **/
 void igb_configure_tx_ring(struct igb_adapter *adapter,
-                           struct igb_ring *ring)
+			   struct igb_ring *ring)
 {
 	struct e1000_hw *hw = &adapter->hw;
 	u32 txdctl = 0;
@@ -3043,7 +3043,7 @@ void igb_setup_rctl(struct igb_adapter *adapter)
 }
 
 static inline int igb_set_vf_rlpml(struct igb_adapter *adapter, int size,
-                                   int vfn)
+				   int vfn)
 {
 	struct e1000_hw *hw = &adapter->hw;
 	u32 vmolr;
@@ -3132,7 +3132,7 @@ static inline void igb_set_vmolr(struct igb_adapter *adapter,
  * Configure the Rx unit of the MAC after a reset.
  **/
 void igb_configure_rx_ring(struct igb_adapter *adapter,
-                           struct igb_ring *ring)
+			   struct igb_ring *ring)
 {
 	struct e1000_hw *hw = &adapter->hw;
 	u64 rdba = ring->dma;
@@ -3705,7 +3705,7 @@ static void igb_watchdog_task(struct work_struct *work)
 {
 	struct igb_adapter *adapter = container_of(work,
 	                                           struct igb_adapter,
-                                                   watchdog_task);
+						   watchdog_task);
 	struct e1000_hw *hw = &adapter->hw;
 	struct net_device *netdev = adapter->netdev;
 	u32 link;
@@ -4965,7 +4965,7 @@ static int __igb_notify_dca(struct device *dev, void *data)
 }
 
 static int igb_notify_dca(struct notifier_block *nb, unsigned long event,
-                          void *p)
+			  void *p)
 {
 	int ret_val;
 
@@ -5731,8 +5731,8 @@ static int igb_poll(struct napi_struct *napi, int budget)
  * into a hwtstamp which can be used by the upper level timestamping functions
  */
 static void igb_systim_to_hwtstamp(struct igb_adapter *adapter,
-                                   struct skb_shared_hwtstamps *shhwtstamps,
-                                   u64 regval)
+				   struct skb_shared_hwtstamps *shhwtstamps,
+				   u64 regval)
 {
 	u64 ns;
 
@@ -6995,7 +6995,7 @@ static void igb_io_resume(struct pci_dev *pdev)
 }
 
 static void igb_rar_set_qsel(struct igb_adapter *adapter, u8 *addr, u32 index,
-                             u8 qsel)
+			     u8 qsel)
 {
 	u32 rar_low, rar_high;
 	struct e1000_hw *hw = &adapter->hw;
@@ -7022,7 +7022,7 @@ static void igb_rar_set_qsel(struct igb_adapter *adapter, u8 *addr, u32 index,
 }
 
 static int igb_set_vf_mac(struct igb_adapter *adapter,
-                          int vf, unsigned char *mac_addr)
+			  int vf, unsigned char *mac_addr)
 {
 	struct e1000_hw *hw = &adapter->hw;
 	/* VF MAC addresses start at end of receive addresses and moves

@@ -485,7 +485,7 @@ enum {
 
 struct ide_drive_s {
 	char		name[4];	/* drive name, such as "hda" */
-        char            driver_req[10];	/* requests specific driver */
+	char            driver_req[10];	/* requests specific driver */
 
 	struct request_queue	*queue;	/* request queue */
 
@@ -512,8 +512,8 @@ struct ide_drive_s {
 	u8	waiting_for_dma;	/* dma currently in progress */
 	u8	dma;			/* atapi dma flag */
 
-        u8	init_speed;	/* transfer rate set at boot */
-        u8	current_speed;	/* current transfer rate set */
+	u8	init_speed;	/* transfer rate set at boot */
+	u8	current_speed;	/* current transfer rate set */
 	u8	desired_speed;	/* desired transfer rate set */
 	u8	pio_mode;	/* for ->set_pio_mode _only_ */
 	u8	dma_mode;	/* for ->set_dma_mode _only_ */

@@ -279,79 +279,79 @@ int Media_D_WriteSector(PFDO_DEVICE_EXTENSION fdoExt, DWORD start,WORD count,BYT
     //    return(ErrCode);
 
     if (Conv_D_MediaAddr(fdoExt, start))
-        return(ErrCode);
+	return(ErrCode);
 
     //ENE_Print("Media_D_WriteSector --- Sector = %x\n", Media.Sector);
     if (Check_D_FirstSect())
     {
-        if (Media_D_CopyBlockHead(fdoExt))
-        {
-            ErrCode = ERR_WriteFault;
-            return(ErrCode);
-        }
+	if (Media_D_CopyBlockHead(fdoExt))
+	{
+	    ErrCode = ERR_WriteFault;
+	    return(ErrCode);
+	}
     }
 
     while(1)
     {
-        if (!Check_D_FirstSect())
-        {
-            if (Assign_D_WriteBlock())
-                return(ErrCode);
-        }
+	if (!Check_D_FirstSect())
+	{
+	    if (Assign_D_WriteBlock())
+		return(ErrCode);
+	}
 
-        len = Ssfdc.MaxSectors - Media.Sector;
-        if (count > len)
-           bn = len;
-        else
-           bn = count;
-        //for(i=0;i<SECTSIZE;i++)
-        //    SectBuf[i]=*buf++;
+	len = Ssfdc.MaxSectors - Media.Sector;
+	if (count > len)
+	   bn = len;
+	else
+	   bn = count;
+	//for(i=0;i<SECTSIZE;i++)
+	//    SectBuf[i]=*buf++;
 
-        //if (Media_D_WriteOneSect(fdoExt, SectBuf))
-        if (Media_D_WriteOneSect(fdoExt, bn, buf))
-        {
-            ErrCode = ERR_WriteFault;
-            return(ErrCode);
-        }
+	//if (Media_D_WriteOneSect(fdoExt, SectBuf))
+	if (Media_D_WriteOneSect(fdoExt, bn, buf))
+	{
+	    ErrCode = ERR_WriteFault;
+	    return(ErrCode);
+	}
 
-        Media.Sector += bn - 1;
+	Media.Sector += bn - 1;
 
-        if (!Check_D_LastSect())
-        {
-            if (Release_D_ReadBlock(fdoExt))
+	if (!Check_D_LastSect())
+	{
+	    if (Release_D_ReadBlock(fdoExt))
 
-            {    if (ErrCode==ERR_HwError)
-                {
-                    ErrCode = ERR_WriteFault;
-                    return(ErrCode);
-                }
-            }
-        }
+	    {    if (ErrCode==ERR_HwError)
+		{
+		    ErrCode = ERR_WriteFault;
+		    return(ErrCode);
+		}
+	    }
+	}
 
-        count -= bn;
+	count -= bn;
 
-        if (count<=0)
-            break;
+	if (count<=0)
+	    break;
 
-        buf += bn * SECTSIZE;
+	buf += bn * SECTSIZE;
 
-        //if (--count<=0)
-        //    break;
+	//if (--count<=0)
+	//    break;
 
-        if (Inc_D_MediaAddr(fdoExt))
-            return(ErrCode);
+	if (Inc_D_MediaAddr(fdoExt))
+	    return(ErrCode);
     }
 
     if (!Check_D_LastSect())
-        return(NO_ERROR);
+	return(NO_ERROR);
 
     if (Inc_D_MediaAddr(fdoExt))
-        return(ErrCode);
+	return(ErrCode);
 
     if (Media_D_CopyBlockTail(fdoExt))
     {
-        ErrCode = ERR_WriteFault;
-        return(ErrCode);
+	ErrCode = ERR_WriteFault;
+	return(ErrCode);
     }
 
     return(NO_ERROR);
@@ -507,15 +507,15 @@ int Media_D_OneSectWriteNext(PFDO_DEVICE_EXTENSION fdoExt, BYTE *buf)
 int Media_D_OneSectWriteFlush(PFDO_DEVICE_EXTENSION fdoExt)
 {
     if (!Check_D_LastSect())
-        return(NO_ERROR);
+	return(NO_ERROR);
 
     if (Inc_D_MediaAddr(fdoExt))
-        return(ErrCode);
+	return(ErrCode);
 
     if (Media_D_CopyBlockTail(fdoExt))
     {
-        ErrCode = ERR_WriteFault;
-        return(ErrCode);
+	ErrCode = ERR_WriteFault;
+	return(ErrCode);
     }
 
     return(NO_ERROR);
@@ -834,7 +834,7 @@ int Check_D_FirstSect(void)
     ADDRESS_T   bb = (ADDRESS_T) &Media;
 
     if (!Media.Sector)
-        return(SMSUCCESS);
+	return(SMSUCCESS);
 
     return(ERROR);
 }
@@ -846,7 +846,7 @@ int Check_D_LastSect(void)
     ADDRESS_T   bb = (ADDRESS_T) &Media;
 
     if (Media.Sector<(Ssfdc.MaxSectors-1))
-        return(ERROR);
+	return(ERROR);
 
     return(SMSUCCESS);
 }
@@ -904,27 +904,27 @@ int Media_D_WriteOneSect(PFDO_DEVICE_EXTENSION fdoExt, WORD count, BYTE *buf)
     ADDRESS_T   bb = (ADDRESS_T) &Media;
 
     if (!Write_D_PhyOneSect(fdoExt, count, buf))
-        return(SMSUCCESS);
+	return(SMSUCCESS);
     if (ErrCode==ERR_HwError)
-        return(ERROR);
+	return(ERROR);
 
     for(retry=1; retry<2; retry++)
     {
-        if (Reassign_D_BlockHead(fdoExt))
-        {
-            if (ErrCode==ERR_HwError)
-                return(ERROR);
-            continue;
-        }
+	if (Reassign_D_BlockHead(fdoExt))
+	{
+	    if (ErrCode==ERR_HwError)
+		return(ERROR);
+	    continue;
+	}
 
-        if (!Write_D_PhyOneSect(fdoExt, count, buf))
-            return(SMSUCCESS);
-        if (ErrCode==ERR_HwError)
-            return(ERROR);
+	if (!Write_D_PhyOneSect(fdoExt, count, buf))
+	    return(SMSUCCESS);
+	if (ErrCode==ERR_HwError)
+	    return(ERROR);
     }
 
     if (Release_D_WriteBlock(fdoExt))
-        return(ERROR);
+	return(ERROR);
 
     ErrCode        = ERR_WriteFault;
     MediaChange = ERROR;
@@ -939,10 +939,10 @@ int Media_D_CopyBlockHead(PFDO_DEVICE_EXTENSION fdoExt)
 
     for(retry=0; retry<2; retry++)
     {
-        if (!Copy_D_BlockHead(fdoExt))
-            return(SMSUCCESS);
-        if (ErrCode==ERR_HwError)
-            return(ERROR);
+	if (!Copy_D_BlockHead(fdoExt))
+	    return(SMSUCCESS);
+	if (ErrCode==ERR_HwError)
+	    return(ERROR);
     }
 
     MediaChange = ERROR;
@@ -955,27 +955,27 @@ int Media_D_CopyBlockTail(PFDO_DEVICE_EXTENSION fdoExt)
     DWORD retry;
 
     if (!Copy_D_BlockTail(fdoExt))
-        return(SMSUCCESS);
+	return(SMSUCCESS);
     if (ErrCode==ERR_HwError)
-        return(ERROR);
+	return(ERROR);
 
     for(retry=1; retry<2; retry++)
     {
-        if (Reassign_D_BlockHead(fdoExt))
-        {
-            if (ErrCode==ERR_HwError)
-                return(ERROR);
-            continue;
-        }
+	if (Reassign_D_BlockHead(fdoExt))
+	{
+	    if (ErrCode==ERR_HwError)
+		return(ERROR);
+	    continue;
+	}
 
-        if (!Copy_D_BlockTail(fdoExt))
-            return(SMSUCCESS);
-        if (ErrCode==ERR_HwError)
-            return(ERROR);
+	if (!Copy_D_BlockTail(fdoExt))
+	    return(SMSUCCESS);
+	if (ErrCode==ERR_HwError)
+	    return(ERROR);
     }
 
     if (Release_D_WriteBlock(fdoExt))
-        return(ERROR);
+	return(ERROR);
 
     ErrCode        = ERR_WriteFault;
     MediaChange = ERROR;
@@ -1124,23 +1124,23 @@ int Copy_D_BlockHead(PFDO_DEVICE_EXTENSION fdoExt)
 
     sect=Media.Sector;
     if (Assign_D_WriteBlock())
-        return(ERROR);
+	return(ERROR);
 
     for(Media.Sector=0; Media.Sector<sect; Media.Sector++)
     {
-        if (Copy_D_PhyOneSect(fdoExt))
-        {
-            if (ErrCode==ERR_HwError)
-                return(ERROR);
-            if (Release_D_WriteBlock(fdoExt))
-                return(ERROR);
+	if (Copy_D_PhyOneSect(fdoExt))
+	{
+	    if (ErrCode==ERR_HwError)
+		return(ERROR);
+	    if (Release_D_WriteBlock(fdoExt))
+		return(ERROR);
 
-            ErrCode = ERR_WriteFault;
-            Media.PhyBlock=ReadBlock;
-            Media.Sector=sect;
+	    ErrCode = ERR_WriteFault;
+	    Media.PhyBlock=ReadBlock;
+	    Media.Sector=sect;
 
-            return(ERROR);
-        }
+	    return(ERROR);
+	}
     }
 
     Media.PhyBlock=WriteBlock;
@@ -1157,20 +1157,20 @@ int Copy_D_BlockTail(PFDO_DEVICE_EXTENSION fdoExt)
 
     for(sect=Media.Sector; Media.Sector<Ssfdc.MaxSectors; Media.Sector++)
     {
-        if (Copy_D_PhyOneSect(fdoExt))
-        {
-            if (ErrCode==ERR_HwError)
-                return(ERROR);
+	if (Copy_D_PhyOneSect(fdoExt))
+	{
+	    if (ErrCode==ERR_HwError)
+		return(ERROR);
 
-            Media.PhyBlock=WriteBlock;
-            Media.Sector=sect;
+	    Media.PhyBlock=WriteBlock;
+	    Media.Sector=sect;
 
-            return(ERROR);
-        }
+	    return(ERROR);
+	}
     }
 
     if (Release_D_ReadBlock(fdoExt))
-        return(ERROR);
+	return(ERROR);
 
     Media.PhyBlock=WriteBlock;
     Media.Sector=sect;
@@ -1191,32 +1191,32 @@ int Reassign_D_BlockHead(PFDO_DEVICE_EXTENSION fdoExt)
     sect=Media.Sector;
 
     if (Assign_D_WriteBlock())
-        return(ERROR);
+	return(ERROR);
 
     SectCopyMode=REQ_FAIL;
 
     for(Media.Sector=0; Media.Sector<sect; Media.Sector++)
     {
-        if (Copy_D_PhyOneSect(fdoExt))
-        {
-            if (ErrCode==ERR_HwError)
-                return(ERROR);
-            if (Release_D_WriteBlock(fdoExt))
-                return(ERROR);
+	if (Copy_D_PhyOneSect(fdoExt))
+	{
+	    if (ErrCode==ERR_HwError)
+		return(ERROR);
+	    if (Release_D_WriteBlock(fdoExt))
+		return(ERROR);
 
-            ErrCode = ERR_WriteFault;
-            SectCopyMode=mode;
-            WriteBlock=ReadBlock;
-            ReadBlock=block;
-            Media.Sector=sect;
-            Media.PhyBlock=WriteBlock;
+	    ErrCode = ERR_WriteFault;
+	    SectCopyMode=mode;
+	    WriteBlock=ReadBlock;
+	    ReadBlock=block;
+	    Media.Sector=sect;
+	    Media.PhyBlock=WriteBlock;
 
-            return(ERROR);
-        }
+	    return(ERROR);
+	}
     }
 
     if (Release_D_ReadBlock(fdoExt))
-        return(ERROR);
+	return(ERROR);
 
     SectCopyMode=mode;
     ReadBlock=block;
@@ -1474,7 +1474,7 @@ int Set_D_PhyFmtValue(struct us_data *us)
 //
     //if (Set_D_SsfdcModel(idcode[1]))
     if (Set_D_SsfdcModel(us->SM_DeviceID))
-        return(ERROR);
+	return(ERROR);
 
 //    //Use Multi-function pin to differentiate SM and xD.
 //    UserDefData_1 = ReadPCIReg(fdoExt->BusID, fdoExt->DevID, fdoExt->FuncID, PCI_REG_USER_DEF) & 0x80;

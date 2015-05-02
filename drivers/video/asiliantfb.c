@@ -312,7 +312,7 @@ static int asiliantfb_setcolreg(u_int regno, u_int red, u_int green, u_int blue,
 	green >>= 8;
 	blue >>= 8;
 
-        /* Set hardware palete */
+	/* Set hardware palete */
 	writeb(regno, mmio_base + 0x790);
 	udelay(1);
 	writeb(red, mmio_base + 0x791);
@@ -360,7 +360,7 @@ static struct chips_init_reg chips_init_sr[] =
 
 static struct chips_init_reg chips_init_gr[] =
 {
-        {0x03, 0x00},		/* Data rotate */
+	{0x03, 0x00},		/* Data rotate */
 	{0x05, 0x00},		/* Graphics mode */
 	{0x06, 0x01},		/* Miscellaneous */
 	{0x08, 0x00}		/* Bit mask */

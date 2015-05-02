@@ -612,7 +612,7 @@ static int nsp32_selection_autoscsi(struct scsi_cmnd *SCpnt)
 		SCpnt->result = DID_BUS_BUSY << 16;
 		status = 1;
 		goto out;
-        }
+	}
 
 	/*
 	 * clear execph
@@ -629,7 +629,7 @@ static int nsp32_selection_autoscsi(struct scsi_cmnd *SCpnt)
 	 */
 	for (i = 0; i < SCpnt->cmd_len; i++) {
 		nsp32_write1(base, COMMAND_DATA, SCpnt->cmnd[i]);
-        }
+	}
 	nsp32_dbg(NSP32_DEBUG_CDB_CONTENTS, "CDB[0]=[0x%x]", SCpnt->cmnd[0]);
 
 	/*
@@ -789,7 +789,7 @@ static int nsp32_arbitration(struct scsi_cmnd *SCpnt, unsigned int base)
 		nsp32_dbg(NSP32_DEBUG_AUTOSCSI, "arbit timeout");
 		SCpnt->result = DID_NO_CONNECT << 16;
 		status = FALSE;
-        }
+	}
 
 	/*
 	 * clear Arbit
@@ -1497,7 +1497,7 @@ static int nsp32_proc_info(struct Scsi_Host *host, char *buffer, char **start,
 	SPRINTF("SDTR status\n");
 	for (id = 0; id < ARRAY_SIZE(data->target); id++) {
 
-                SPRINTF("id %d: ", id);
+		SPRINTF("id %d: ", id);
 
 		if (id == host->this_id) {
 			SPRINTF("----- NinjaSCSI-32 host adapter\n");
@@ -1533,8 +1533,8 @@ static int nsp32_proc_info(struct Scsi_Host *host, char *buffer, char **start,
 
 	if(thislength < 0) {
 		*start = NULL;
-                return 0;
-        }
+		return 0;
+	}
 
 
 	thislength = min(thislength, length);
@@ -2767,16 +2767,16 @@ static int nsp32_detect(struct pci_dev *pdev)
 		goto free_sg_list;
 	}
 
-        /*
-         * PCI IO register
-         */
+	/*
+	 * PCI IO register
+	 */
 	res = request_region(host->io_port, host->n_io_port, "nsp32");
 	if (res == NULL) {
 		nsp32_msg(KERN_ERR,
 			  "I/O region 0x%lx+0x%lx is already used",
 			  data->BaseAddress, data->NumAddress);
 		goto free_irq;
-        }
+	}
 
 	ret = scsi_add_host(host, &pdev->dev);
 	if (ret) {
@@ -2931,7 +2931,7 @@ static void nsp32_do_bus_reset(nsp32_hw_data *data)
 	for(i = 0; i < 5; i++) {
 		intrdat = nsp32_read2(base, IRQ_STATUS); /* dummy read */
 		nsp32_dbg(NSP32_DEBUG_BUSRESET, "irq:1: 0x%x", intrdat);
-        }
+	}
 
 	data->CurrentSC = NULL;
 }
@@ -3389,7 +3389,7 @@ static int __devinit nsp32_probe(struct pci_dev *pdev, const struct pci_device_i
 
 	nsp32_dbg(NSP32_DEBUG_REGISTER, "enter");
 
-        ret = pci_enable_device(pdev);
+	ret = pci_enable_device(pdev);
 	if (ret) {
 		nsp32_msg(KERN_ERR, "failed to enable pci device");
 		return ret;
@@ -3424,7 +3424,7 @@ static void __devexit nsp32_remove(struct pci_dev *pdev)
 
 	nsp32_dbg(NSP32_DEBUG_REGISTER, "enter");
 
-        scsi_remove_host(host);
+	scsi_remove_host(host);
 
 	nsp32_release(host);
 

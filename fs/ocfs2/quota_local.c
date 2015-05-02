@@ -753,7 +753,7 @@ static int ocfs2_local_read_info(struct super_block *sb, int type)
 		}
 
 		status = ocfs2_recovery_load_quota(lqinode, ldinfo, type,
-                                                   &rec->r_list[type]);
+						   &rec->r_list[type]);
 		if (status < 0) {
 			mlog_errno(status);
 			goto out_err;

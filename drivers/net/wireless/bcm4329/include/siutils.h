@@ -115,7 +115,7 @@ typedef void (*gpio_handler_t)(uint32 stat, void *arg);
 
 
 extern si_t *si_attach(uint pcidev, osl_t *osh, void *regs, uint bustype,
-                       void *sdh, char **vars, uint *varsz);
+		       void *sdh, char **vars, uint *varsz);
 extern si_t *si_kattach(osl_t *osh);
 extern void si_detach(si_t *sih);
 extern bool si_pci_war16165(si_t *sih);

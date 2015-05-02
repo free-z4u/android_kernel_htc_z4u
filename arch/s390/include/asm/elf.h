@@ -49,41 +49,41 @@
 #define R_390_PLTOFF64		36	/* 16 bit offset from GOT to PLT. */
 #define R_390_TLS_LOAD		37	/* Tag for load insn in TLS code. */
 #define R_390_TLS_GDCALL	38	/* Tag for function call in general
-                                           dynamic TLS code.  */
+					   dynamic TLS code.  */
 #define R_390_TLS_LDCALL	39	/* Tag for function call in local
-                                           dynamic TLS code.  */
+					   dynamic TLS code.  */
 #define R_390_TLS_GD32		40	/* Direct 32 bit for general dynamic
-                                           thread local data.  */
+					   thread local data.  */
 #define R_390_TLS_GD64		41	/* Direct 64 bit for general dynamic
-                                           thread local data.  */
+					   thread local data.  */
 #define R_390_TLS_GOTIE12	42	/* 12 bit GOT offset for static TLS
-                                           block offset.  */
+					   block offset.  */
 #define R_390_TLS_GOTIE32	43	/* 32 bit GOT offset for static TLS
-                                           block offset.  */
+					   block offset.  */
 #define R_390_TLS_GOTIE64	44	/* 64 bit GOT offset for static TLS
-                                           block offset.  */
+					   block offset.  */
 #define R_390_TLS_LDM32		45	/* Direct 32 bit for local dynamic
-                                           thread local data in LD code.  */
+					   thread local data in LD code.  */
 #define R_390_TLS_LDM64		46	/* Direct 64 bit for local dynamic
-                                           thread local data in LD code.  */
+					   thread local data in LD code.  */
 #define R_390_TLS_IE32		47	/* 32 bit address of GOT entry for
-                                           negated static TLS block offset.  */
+					   negated static TLS block offset.  */
 #define R_390_TLS_IE64		48	/* 64 bit address of GOT entry for
-                                           negated static TLS block offset.  */
+					   negated static TLS block offset.  */
 #define R_390_TLS_IEENT		49	/* 32 bit rel. offset to GOT entry for
-                                           negated static TLS block offset.  */
+					   negated static TLS block offset.  */
 #define R_390_TLS_LE32		50	/* 32 bit negated offset relative to
-                                           static TLS block.  */
+					   static TLS block.  */
 #define R_390_TLS_LE64		51	/* 64 bit negated offset relative to
-                                           static TLS block.  */
+					   static TLS block.  */
 #define R_390_TLS_LDO32		52	/* 32 bit offset relative to TLS
-                                           block.  */
+					   block.  */
 #define R_390_TLS_LDO64		53	/* 64 bit offset relative to TLS
-                                           block.  */
+					   block.  */
 #define R_390_TLS_DTPMOD	54	/* ID of module containing symbol.  */
 #define R_390_TLS_DTPOFF	55	/* Offset in TLS block.  */
 #define R_390_TLS_TPOFF		56	/* Negate offset in static TLS
-                                           block.  */
+					   block.  */
 #define R_390_20		57	/* Direct 20 bit.  */
 #define R_390_GOT20		58	/* 20 bit GOT offset.  */
 #define R_390_GOTPLT20		59	/* 20 bit offset to jump slot.  */
@@ -140,7 +140,7 @@ extern unsigned int vdso_enabled;
  */
 #define elf_check_arch(x) \
 	(((x)->e_machine == EM_S390 || (x)->e_machine == EM_S390_OLD) \
-         && (x)->e_ident[EI_CLASS] == ELF_CLASS)
+	 && (x)->e_ident[EI_CLASS] == ELF_CLASS)
 #define compat_elf_check_arch(x) \
 	(((x)->e_machine == EM_S390 || (x)->e_machine == EM_S390_OLD) \
 	 && (x)->e_ident[EI_CLASS] == ELF_CLASS)

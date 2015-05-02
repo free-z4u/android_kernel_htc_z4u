@@ -471,7 +471,7 @@ static void i596_display_data(struct net_device *dev)
 	       &lp->scb, lp->scb.status, lp->scb.command,
 		lp->scb.cmd, lp->scb.rfd);
 	printk(KERN_ERR "   errors: crc %lx, align %lx, resource %lx,"
-               " over %lx, rcvdt %lx, short %lx\n",
+	       " over %lx, rcvdt %lx, short %lx\n",
 		lp->scb.crc_err, lp->scb.align_err, lp->scb.resource_err,
 		lp->scb.over_err, lp->scb.rcvdt_err, lp->scb.short_err);
 	cmd = lp->cmd_head;
@@ -484,7 +484,7 @@ static void i596_display_data(struct net_device *dev)
 	printk(KERN_ERR "rfd_head = %p\n", rfd);
 	do {
 		printk(KERN_ERR "   %p .stat %04x, .cmd %04x, b_next %p, rbd %p,"
-                        " count %04x\n",
+			" count %04x\n",
 			rfd, rfd->stat, rfd->cmd, rfd->b_next, rfd->rbd,
 			rfd->count);
 		rfd = rfd->v_next;

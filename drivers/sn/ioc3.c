@@ -41,16 +41,16 @@ static int nic_wait(struct ioc3_driver_data *idd)
 {
 	unsigned mcr;
 
-        do {
-                mcr = readl(&idd->vma->mcr);
-        } while (!(mcr & 2));
+	do {
+		mcr = readl(&idd->vma->mcr);
+	} while (!(mcr & 2));
 
-        return mcr & 1;
+	return mcr & 1;
 }
 
 static int nic_reset(struct ioc3_driver_data *idd)
 {
-        int presence;
+	int presence;
 	unsigned long flags;
 
 	local_irq_save(flags);
@@ -60,7 +60,7 @@ static int nic_reset(struct ioc3_driver_data *idd)
 
 	udelay(500);
 
-        return presence;
+	return presence;
 }
 
 static int nic_read_bit(struct ioc3_driver_data *idd)
@@ -335,39 +335,39 @@ static void read_mac(struct ioc3_driver_data *idd, unsigned long addr)
 
 static void probe_nic(struct ioc3_driver_data *idd)
 {
-        int save = 0, loops = 3;
-        unsigned long first, addr;
+	int save = 0, loops = 3;
+	unsigned long first, addr;
 
-        writel(GPCR_MLAN_EN, &idd->vma->gpcr_s);
+	writel(GPCR_MLAN_EN, &idd->vma->gpcr_s);
 
-        while(loops>0) {
-                idd->nic_part[0] = 0;
-                idd->nic_serial[0] = 0;
-                addr = first = nic_find(idd, &save, 0);
-                if(!first)
-                        return;
-                while(1) {
-                        if(crc8_addr(addr))
-                                break;
-                        else {
-                                switch(addr & 0xFF) {
-                                case 0x0B:
-                                        read_nic(idd, addr);
-                                        break;
-                                case 0x09:
-                                case 0x89:
-                                case 0x91:
-                                        read_mac(idd, addr);
-                                        break;
-                                }
-                        }
-                        addr = nic_find(idd, &save, addr);
-                        if(addr == first)
-                                return;
-                }
-                loops--;
-        }
-        printk(KERN_ERR "IOC3: CRC error in NIC address\n");
+	while(loops>0) {
+		idd->nic_part[0] = 0;
+		idd->nic_serial[0] = 0;
+		addr = first = nic_find(idd, &save, 0);
+		if(!first)
+			return;
+		while(1) {
+			if(crc8_addr(addr))
+				break;
+			else {
+				switch(addr & 0xFF) {
+				case 0x0B:
+					read_nic(idd, addr);
+					break;
+				case 0x09:
+				case 0x89:
+				case 0x91:
+					read_mac(idd, addr);
+					break;
+				}
+			}
+			addr = nic_find(idd, &save, addr);
+			if(addr == first)
+				return;
+		}
+		loops--;
+	}
+	printk(KERN_ERR "IOC3: CRC error in NIC address\n");
 }
 
 /* Interrupts */
@@ -619,14 +619,14 @@ ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *pci_id)
 	pci_set_master(pdev);
 
 #ifdef USE_64BIT_DMA
-        ret = pci_set_dma_mask(pdev, DMA_BIT_MASK(64));
-        if (!ret) {
-                ret = pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64));
-                if (ret < 0) {
-                        printk(KERN_WARNING "%s: Unable to obtain 64 bit DMA "
-                               "for consistent allocations\n",
+	ret = pci_set_dma_mask(pdev, DMA_BIT_MASK(64));
+	if (!ret) {
+		ret = pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64));
+		if (ret < 0) {
+			printk(KERN_WARNING "%s: Unable to obtain 64 bit DMA "
+			       "for consistent allocations\n",
 				__func__);
-                }
+		}
 	}
 #endif
 
@@ -691,9 +691,9 @@ ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *pci_id)
 	/* Initialize IOC3 */
        pci_read_config_dword(pdev, PCI_COMMAND, &pcmd);
        pci_write_config_dword(pdev, PCI_COMMAND,
-                               pcmd | PCI_COMMAND_MEMORY |
-                               PCI_COMMAND_PARITY | PCI_COMMAND_SERR |
-                               PCI_SCR_DROP_MODE_EN);
+			       pcmd | PCI_COMMAND_MEMORY |
+			       PCI_COMMAND_PARITY | PCI_COMMAND_SERR |
+			       PCI_SCR_DROP_MODE_EN);
 
 	write_ireg(idd, ~0, IOC3_W_IEC);
 	writel(~0, &idd->vma->sio_ir);

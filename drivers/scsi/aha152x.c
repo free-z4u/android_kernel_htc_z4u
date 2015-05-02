@@ -320,7 +320,7 @@ static LIST_HEAD(aha152x_host_list);
 #define DEBUG_LEAD	KERN_DEBUG	LEAD
 #define CMDINFO(cmd) \
 			(cmd) ? ((cmd)->device->host->host_no) : -1, \
-                        (cmd) ? ((cmd)->device->id & 0x0f) : -1, \
+			(cmd) ? ((cmd)->device->id & 0x0f) : -1, \
 			(cmd) ? ((cmd)->device->lun & 0x07) : -1
 
 static inline void
@@ -1619,7 +1619,7 @@ static void busfree_run(struct Scsi_Host *shpnt)
 
 			DO_UNLOCK(flags);
 			DPRINTK(debug_done, DEBUG_LEAD "calling scsi_done(%p)\n", hostno, id, lun, ptr);
-                	ptr->scsi_done(ptr);
+			ptr->scsi_done(ptr);
 			DPRINTK(debug_done, DEBUG_LEAD "scsi_done(%p) returned\n", hostno, id, lun, ptr);
 			DO_LOCK(flags);
 		}
@@ -2209,40 +2209,40 @@ static void datai_run(struct Scsi_Host *shpnt)
 
 		if(CURRENT_SC->SCp.this_residual>0) {
 			while(fifodata>0 && CURRENT_SC->SCp.this_residual>0) {
-                        	data_count = fifodata>CURRENT_SC->SCp.this_residual ?
+				data_count = fifodata>CURRENT_SC->SCp.this_residual ?
 						CURRENT_SC->SCp.this_residual :
 						fifodata;
 				fifodata -= data_count;
 
-                        	if(data_count & 1) {
+				if(data_count & 1) {
 					DPRINTK(debug_datai, DEBUG_LEAD "8bit\n", CMDINFO(CURRENT_SC));
-                                	SETPORT(DMACNTRL0, ENDMA|_8BIT);
-                                	*CURRENT_SC->SCp.ptr++ = GETPORT(DATAPORT);
-                                	CURRENT_SC->SCp.this_residual--;
-                                	DATA_LEN++;
-                                	SETPORT(DMACNTRL0, ENDMA);
-                        	}
-
-                        	if(data_count > 1) {
-					DPRINTK(debug_datai, DEBUG_LEAD "16bit(%d)\n", CMDINFO(CURRENT_SC), data_count);
-                                	data_count >>= 1;
-                                	insw(DATAPORT, CURRENT_SC->SCp.ptr, data_count);
-                                	CURRENT_SC->SCp.ptr           += 2 * data_count;
-                                	CURRENT_SC->SCp.this_residual -= 2 * data_count;
-                                	DATA_LEN                      += 2 * data_count;
-                        	}
-
-                        	if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
-                               		/* advance to next buffer */
-                               		CURRENT_SC->SCp.buffers_residual--;
-                               		CURRENT_SC->SCp.buffer++;
-                               		CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
-                               		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+					SETPORT(DMACNTRL0, ENDMA|_8BIT);
+					*CURRENT_SC->SCp.ptr++ = GETPORT(DATAPORT);
+					CURRENT_SC->SCp.this_residual--;
+					DATA_LEN++;
+					SETPORT(DMACNTRL0, ENDMA);
 				}
-                	}
+
+				if(data_count > 1) {
+					DPRINTK(debug_datai, DEBUG_LEAD "16bit(%d)\n", CMDINFO(CURRENT_SC), data_count);
+					data_count >>= 1;
+					insw(DATAPORT, CURRENT_SC->SCp.ptr, data_count);
+					CURRENT_SC->SCp.ptr           += 2 * data_count;
+					CURRENT_SC->SCp.this_residual -= 2 * data_count;
+					DATA_LEN                      += 2 * data_count;
+				}
+
+				if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
+			       		/* advance to next buffer */
+			       		CURRENT_SC->SCp.buffers_residual--;
+			       		CURRENT_SC->SCp.buffer++;
+			       		CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+			       		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+				}
+			}
 		} else if(fifodata>0) {
 			printk(ERR_LEAD "no buffers left for %d(%d) bytes (data overrun!?)\n", CMDINFO(CURRENT_SC), fifodata, GETPORT(FIFOSTAT));
-                        SETPORT(DMACNTRL0, ENDMA|_8BIT);
+			SETPORT(DMACNTRL0, ENDMA|_8BIT);
 			while(fifodata>0) {
 				int data;
 				data=GETPORT(DATAPORT);
@@ -2250,7 +2250,7 @@ static void datai_run(struct Scsi_Host *shpnt)
 				fifodata--;
 				DATA_LEN++;
 			}
-                        SETPORT(DMACNTRL0, ENDMA|_8BIT);
+			SETPORT(DMACNTRL0, ENDMA|_8BIT);
 		}
 	}
 
@@ -3726,7 +3726,7 @@ static int __init aha152x_init(void)
 #endif
 		}
 
-          	if (checksetup(&setup[setup_count]))
+	  	if (checksetup(&setup[setup_count]))
 			setup_count++;
 		else
 			printk(KERN_ERR "aha152x: invalid module params io=0x%x, irq=%d,scsiid=%d,reconnect=%d,parity=%d,sync=%d,delay=%d,exttrans=%d\n",

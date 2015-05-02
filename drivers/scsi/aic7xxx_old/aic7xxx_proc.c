@@ -80,7 +80,7 @@ aic7xxx_set_info(char *buffer, int length, struct Scsi_Host *HBAptr)
  *-F*************************************************************************/
 int
 aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t offset, int length,
-                    int inout)
+		    int inout)
 {
   struct aic7xxx_host *p;
   struct aic_dev_data *aic_dev;
@@ -139,7 +139,7 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
   if (aic7xxx_buffer == NULL)
   {
     size = sprintf(buffer, "AIC7xxx - kmalloc error at line %d\n",
-        __LINE__);
+	__LINE__);
     return size;
   }
   aic7xxx_buffer_size = size;
@@ -163,7 +163,7 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
     {
       channel = " Channel A";
       if (p->flags & (AHC_CHNLB|AHC_CHNLC))
-        channel = (p->flags & AHC_CHNLB) ? " Channel B" : " Channel C";
+	channel = (p->flags & AHC_CHNLB) ? " Channel B" : " Channel C";
     }
     if (p->features & AHC_WIDE)
       wide = "Wide ";
@@ -171,13 +171,13 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
     {
       switch(p->chip & AHC_CHIPID_MASK)
       {
-        case AHC_AIC7892:
-        case AHC_AIC7899:
-          ultra = "Ultra-160/m LVD/SE ";
-          break;
-        default:
-          ultra = "Ultra-3 LVD/SE ";
-          break;
+	case AHC_AIC7892:
+	case AHC_AIC7899:
+	  ultra = "Ultra-160/m LVD/SE ";
+	  break;
+	default:
+	  ultra = "Ultra-3 LVD/SE ";
+	  break;
       }
     }
     else if (p->features & AHC_ULTRA2)
@@ -197,7 +197,7 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
       break;
     default:
       size += sprintf(BLS, "at PCI %d/%d/%d\n", p->pci_bus,
-        PCI_SLOT(p->pci_device_fn), PCI_FUNC(p->pci_device_fn));
+	PCI_SLOT(p->pci_device_fn), PCI_FUNC(p->pci_device_fn));
       break;
   }
   if( !(p->maddr) )
@@ -213,33 +213,33 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
     size += sprintf(BLS, "    BIOS Memory Address: 0x%08x\n", p->bios_address);
   }
   size += sprintf(BLS, " Adapter SEEPROM Config: %s\n",
-          (p->flags & AHC_SEEPROM_FOUND) ? "SEEPROM found and used." :
-         ((p->flags & AHC_USEDEFAULTS) ? "SEEPROM not found, using defaults." :
-           "SEEPROM not found, using leftover BIOS values.") );
+	  (p->flags & AHC_SEEPROM_FOUND) ? "SEEPROM found and used." :
+	 ((p->flags & AHC_USEDEFAULTS) ? "SEEPROM not found, using defaults." :
+	   "SEEPROM not found, using leftover BIOS values.") );
   size += sprintf(BLS, "      Adaptec SCSI BIOS: %s\n",
-          (p->flags & AHC_BIOS_ENABLED) ? "Enabled" : "Disabled");
+	  (p->flags & AHC_BIOS_ENABLED) ? "Enabled" : "Disabled");
   size += sprintf(BLS, "                    IRQ: %d\n", HBAptr->irq);
   size += sprintf(BLS, "                   SCBs: Active %d, Max Active %d,\n",
-            p->activescbs, p->max_activescbs);
+	    p->activescbs, p->max_activescbs);
   size += sprintf(BLS, "                         Allocated %d, HW %d, "
-            "Page %d\n", p->scb_data->numscbs, p->scb_data->maxhscbs,
-            p->scb_data->maxscbs);
+	    "Page %d\n", p->scb_data->numscbs, p->scb_data->maxhscbs,
+	    p->scb_data->maxscbs);
   if (p->flags & AHC_EXTERNAL_SRAM)
     size += sprintf(BLS, "                         Using External SCB SRAM\n");
   size += sprintf(BLS, "             Interrupts: %ld", p->isr_count);
   if (p->chip & AHC_EISA)
   {
     size += sprintf(BLS, " %s\n",
-        (p->pause & IRQMS) ? "(Level Sensitive)" : "(Edge Triggered)");
+	(p->pause & IRQMS) ? "(Level Sensitive)" : "(Edge Triggered)");
   }
   else
   {
     size += sprintf(BLS, "\n");
   }
   size += sprintf(BLS, "      BIOS Control Word: 0x%04x\n",
-            p->bios_control);
+	    p->bios_control);
   size += sprintf(BLS, "   Adapter Control Word: 0x%04x\n",
-            p->adapter_control);
+	    p->adapter_control);
   size += sprintf(BLS, "   Extended Translation: %sabled\n",
       (p->flags & AHC_EXTEND_TRANS_A) ? "En" : "Dis");
   size += sprintf(BLS, "Disconnect Enable Flags: 0x%04x\n", p->discenable);
@@ -249,7 +249,7 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
   }
   size += sprintf(BLS, "Default Tag Queue Depth: %d\n", aic7xxx_default_queue_depth);
   size += sprintf(BLS, "    Tagged Queue By Device array for aic7xxx host "
-                       "instance %d:\n", p->instance);
+		       "instance %d:\n", p->instance);
   size += sprintf(BLS, "      {");
   for(i=0; i < (MAX_TARGETS - 1); i++)
     size += sprintf(BLS, "%d,",aic7xxx_tag_info[p->instance].tag_commands[i]);
@@ -262,60 +262,60 @@ aic7xxx_proc_info ( struct Scsi_Host *HBAptr, char *buffer, char **start, off_t 
     sdptr = aic_dev->SDptr;
     tindex = sdptr->channel << 3 | sdptr->id;
     size += sprintf(BLS, "(scsi%d:%d:%d:%d)\n",
-        p->host_no, sdptr->channel, sdptr->id, sdptr->lun);
+	p->host_no, sdptr->channel, sdptr->id, sdptr->lun);
     size += sprintf(BLS, "  Device using %s/%s",
-          (aic_dev->cur.width == MSG_EXT_WDTR_BUS_16_BIT) ?
-          "Wide" : "Narrow",
-          (aic_dev->cur.offset != 0) ?
-          "Sync transfers at " : "Async transfers.\n" );
+	  (aic_dev->cur.width == MSG_EXT_WDTR_BUS_16_BIT) ?
+	  "Wide" : "Narrow",
+	  (aic_dev->cur.offset != 0) ?
+	  "Sync transfers at " : "Async transfers.\n" );
     if (aic_dev->cur.offset != 0)
     {
       struct aic7xxx_syncrate *sync_rate;
       unsigned char options = aic_dev->cur.options;
       int period = aic_dev->cur.period;
       int rate = (aic_dev->cur.width ==
-                  MSG_EXT_WDTR_BUS_16_BIT) ? 1 : 0;
+		  MSG_EXT_WDTR_BUS_16_BIT) ? 1 : 0;
 
       sync_rate = aic7xxx_find_syncrate(p, &period, 0, &options);
       if (sync_rate != NULL)
       {
-        size += sprintf(BLS, "%s MByte/sec, offset %d\n",
-                        sync_rate->rate[rate],
-                        aic_dev->cur.offset );
+	size += sprintf(BLS, "%s MByte/sec, offset %d\n",
+			sync_rate->rate[rate],
+			aic_dev->cur.offset );
       }
       else
       {
-        size += sprintf(BLS, "3.3 MByte/sec, offset %d\n",
-                        aic_dev->cur.offset );
+	size += sprintf(BLS, "3.3 MByte/sec, offset %d\n",
+			aic_dev->cur.offset );
       }
     }
     size += sprintf(BLS, "  Transinfo settings: ");
     size += sprintf(BLS, "current(%d/%d/%d/%d), ",
-                    aic_dev->cur.period,
-                    aic_dev->cur.offset,
-                    aic_dev->cur.width,
-                    aic_dev->cur.options);
+		    aic_dev->cur.period,
+		    aic_dev->cur.offset,
+		    aic_dev->cur.width,
+		    aic_dev->cur.options);
     size += sprintf(BLS, "goal(%d/%d/%d/%d), ",
-                    aic_dev->goal.period,
-                    aic_dev->goal.offset,
-                    aic_dev->goal.width,
-                    aic_dev->goal.options);
+		    aic_dev->goal.period,
+		    aic_dev->goal.offset,
+		    aic_dev->goal.width,
+		    aic_dev->goal.options);
     size += sprintf(BLS, "user(%d/%d/%d/%d)\n",
-                    p->user[tindex].period,
-                    p->user[tindex].offset,
-                    p->user[tindex].width,
-                    p->user[tindex].options);
+		    p->user[tindex].period,
+		    p->user[tindex].offset,
+		    p->user[tindex].width,
+		    p->user[tindex].options);
     if(sdptr->simple_tags)
     {
       size += sprintf(BLS, "  Tagged Command Queueing Enabled, Ordered Tags %s, Depth %d/%d\n", sdptr->ordered_tags ? "Enabled" : "Disabled", sdptr->queue_depth, aic_dev->max_q_depth);
     }
     if(aic_dev->barrier_total)
       size += sprintf(BLS, "  Total transfers %ld:\n    (%ld/%ld/%ld/%ld reads/writes/REQ_BARRIER/Ordered Tags)\n",
-        aic_dev->r_total+aic_dev->w_total, aic_dev->r_total, aic_dev->w_total,
-        aic_dev->barrier_total, aic_dev->ordered_total);
+	aic_dev->r_total+aic_dev->w_total, aic_dev->r_total, aic_dev->w_total,
+	aic_dev->barrier_total, aic_dev->ordered_total);
     else
       size += sprintf(BLS, "  Total transfers %ld:\n    (%ld/%ld reads/writes)\n",
-        aic_dev->r_total+aic_dev->w_total, aic_dev->r_total, aic_dev->w_total);
+	aic_dev->r_total+aic_dev->w_total, aic_dev->r_total, aic_dev->w_total);
     size += sprintf(BLS, "%s\n", HDRB);
     size += sprintf(BLS, "   Reads:");
     for (i = 0; i < ARRAY_SIZE(aic_dev->r_bins); i++)

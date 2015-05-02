@@ -1,5 +1,5 @@
 /*
-        Added support for the AMD Geode LX RNG
+	Added support for the AMD Geode LX RNG
 	(c) Copyright 2004-2005 Advanced Micro Devices, Inc.
 
 	derived from
@@ -9,8 +9,8 @@
 
  	derived from
 
-        Hardware driver for the AMD 768 Random Number Generator (RNG)
-        (c) Copyright 2001 Red Hat Inc <alan@redhat.com>
+	Hardware driver for the AMD 768 Random Number Generator (RNG)
+	(c) Copyright 2001 Red Hat Inc <alan@redhat.com>
 
  	derived from
 
@@ -26,7 +26,7 @@
 
 	----------------------------------------------------------
 	This software may be used and distributed according to the terms
-        of the GNU General Public License, incorporated herein by reference.
+	of the GNU General Public License, incorporated herein by reference.
 
  */
 

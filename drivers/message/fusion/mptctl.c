@@ -1009,7 +1009,7 @@ fwdl_out:
 
 	CLEAR_MGMT_STATUS(iocp->ioctl_cmds.status);
 	SET_MGMT_MSG_CONTEXT(iocp->ioctl_cmds.msg_context, 0);
-        kfree_sgl(sgl, sgl_dma, buflist, iocp);
+	kfree_sgl(sgl, sgl_dma, buflist, iocp);
 	return ret;
 }
 
@@ -1345,7 +1345,7 @@ mptctl_getiocinfo (unsigned long arg, unsigned int data_size)
 	}
 
 	/* Get number of devices
-         */
+	 */
 	karg->numDevices = 0;
 	if (ioc->sh) {
 		shost_for_each_device(sdev, ioc->sh) {
@@ -1467,7 +1467,7 @@ mptctl_gettargetinfo (unsigned long arg)
 	pdata =  (int *) pmem;
 
 	/* Get number of devices
-         */
+	 */
 	if (ioc->sh){
 		shost_for_each_device(sdev, ioc->sh) {
 			if (!maxWordsLeft)
@@ -1660,7 +1660,7 @@ mptctl_eventenable (unsigned long arg)
 		ioc->alloc_total += sz;
 
 		ioc->eventContext = 0;
-        }
+	}
 
 	/* Update the IOC event logging flag.
 	 */
@@ -1898,8 +1898,8 @@ mptctl_do_mpt_command (struct mpt_ioctl_command karg, void __user *mfPtr)
 
 	/* Get a free request frame and save the message context.
 	 */
-        if ((mf = mpt_get_msg_frame(mptctl_id, ioc)) == NULL)
-                return -EAGAIN;
+	if ((mf = mpt_get_msg_frame(mptctl_id, ioc)) == NULL)
+		return -EAGAIN;
 
 	hdr = (MPIHeader_t *) mf;
 	msgContext = le32_to_cpu(hdr->MsgContext);
@@ -2722,7 +2722,7 @@ mptctl_hp_targetinfo(unsigned long arg)
 		return -ENODEV;
 
        /* Get the data transfer speeds
-        */
+	*/
 	data_sz = ioc->spi_data.sdp0length * 4;
 	pg0_alloc = (SCSIDevicePage0_t *) pci_alloc_consistent(ioc->pcidev, data_sz, &page_dma);
 	if (pg0_alloc) {
@@ -3077,7 +3077,7 @@ static void mptctl_exit(void)
 	mpt_deregister(mptctl_taskmgmt_id);
 	mpt_deregister(mptctl_id);
 
-        mpt_device_driver_deregister(MPTCTL_DRIVER);
+	mpt_device_driver_deregister(MPTCTL_DRIVER);
 
 }
 

@@ -66,11 +66,11 @@ extern __wsum csum_and_copy_to_user(const void *src, void __user *dst,
  * checksums.
  */
 #define csum_partial_copy_from_user(src, dst, len, sum, errp)   \
-        csum_partial_copy_generic((__force const void *)(src), (dst), (len), (sum), (errp), NULL)
+	csum_partial_copy_generic((__force const void *)(src), (dst), (len), (sum), (errp), NULL)
 #endif
 
 #define csum_partial_copy_nocheck(src, dst, len, sum)   \
-        csum_partial_copy_generic((src), (dst), (len), (sum), NULL, NULL)
+	csum_partial_copy_generic((src), (dst), (len), (sum), NULL, NULL)
 
 
 /*
@@ -99,9 +99,9 @@ static inline __sum16 ip_compute_csum(const void *buff, int len)
 }
 
 static inline __wsum csum_tcpudp_nofold(__be32 saddr, __be32 daddr,
-                                     unsigned short len,
-                                     unsigned short proto,
-                                     __wsum sum)
+				     unsigned short len,
+				     unsigned short proto,
+				     __wsum sum)
 {
 #ifdef __powerpc64__
 	unsigned long s = (__force u32)sum;

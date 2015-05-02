@@ -141,7 +141,7 @@ unsigned int ui_browser__rb_tree_refresh(struct ui_browser *self)
 	int row = 0;
 
 	if (self->top == NULL)
-                self->top = rb_first(self->entries);
+		self->top = rb_first(self->entries);
 
 	nd = self->top;
 
@@ -452,7 +452,7 @@ unsigned int ui_browser__list_head_refresh(struct ui_browser *self)
 	int row = 0;
 
 	if (self->top == NULL || self->top == self->entries)
-                self->top = ui_browser__list_head_filter_entries(self, head->next);
+		self->top = ui_browser__list_head_filter_entries(self, head->next);
 
 	pos = self->top;
 

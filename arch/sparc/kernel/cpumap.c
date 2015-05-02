@@ -295,7 +295,7 @@ static struct cpuinfo_tree *build_cpuinfo_tree(void)
 }
 
 static void increment_rover(struct cpuinfo_tree *t, int node_index,
-                            int root_index, const int *rover_inc_table)
+			    int root_index, const int *rover_inc_table)
 {
 	struct cpuinfo_node *node = &t->nodes[node_index];
 	int top_level, level;

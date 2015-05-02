@@ -85,7 +85,7 @@ enum miscint_bits {
 	ENVELOPE_IRQ    = 0x00000040, PB_UNDERRUN     = 0x00000100,
 	REC_OVERRUN	= 0x00000200, MIXER_UNDERFLOW = 0x00000400,
 	MIXER_OVERFLOW  = 0x00000800, NX_SB_IRQ_DISABLE = 0x00001000,
-        ST_TARGET_REACHED = 0x00008000,
+	ST_TARGET_REACHED = 0x00008000,
 	PB_24K_MODE     = 0x00010000, ST_IRQ_EN       = 0x00800000,
 	ACGPIO_IRQ	= 0x01000000
 };
@@ -313,12 +313,12 @@ struct snd_trident_voice {
 	struct snd_pcm_substream *substream;
 	struct snd_trident_voice *extra;	/* extra PCM voice (acts as interrupt generator) */
 	unsigned int running: 1,
-            capture: 1,
-            spdif: 1,
-            foldback: 1,
-            isync: 1,
-            isync2: 1,
-            isync3: 1;
+	    capture: 1,
+	    spdif: 1,
+	    foldback: 1,
+	    isync: 1,
+	    isync2: 1,
+	    isync3: 1;
 	int foldback_chan;		/* foldback subdevice number */
 	unsigned int stimer;		/* global sample timer (to detect spurious interrupts) */
 	unsigned int spurious_threshold; /* spurious threshold */
@@ -357,7 +357,7 @@ struct snd_trident {
 
 	unsigned int device;	/* device ID */
 
-        unsigned char  bDMAStart;
+	unsigned char  bDMAStart;
 
 	unsigned long port;
 	unsigned long midi_port;
@@ -365,7 +365,7 @@ struct snd_trident {
 	unsigned int spurious_irq_count;
 	unsigned int spurious_irq_max_delta;
 
-        struct snd_trident_tlb tlb;	/* TLB entries for NX cards */
+	struct snd_trident_tlb tlb;	/* TLB entries for NX cards */
 
 	unsigned char spdif_ctrl;
 	unsigned char spdif_pcm_ctrl;
@@ -374,9 +374,9 @@ struct snd_trident {
 	struct snd_kcontrol *spdif_pcm_ctl;	/* S/PDIF settings */
 	unsigned int ac97_ctrl;
 
-        unsigned int ChanMap[2];	/* allocation map for hardware channels */
+	unsigned int ChanMap[2];	/* allocation map for hardware channels */
 
-        int ChanPCM;			/* max number of PCM channels */
+	int ChanPCM;			/* max number of PCM channels */
 	int ChanPCMcnt;			/* actual number of PCM channels */
 
 	unsigned int ac97_detect: 1;	/* 1 = AC97 in detection phase */

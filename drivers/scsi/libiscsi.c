@@ -942,7 +942,7 @@ static void iscsi_tmf_rsp(struct iscsi_conn *conn, struct iscsi_hdr *hdr)
 
 static void iscsi_send_nopout(struct iscsi_conn *conn, struct iscsi_nopin *rhdr)
 {
-        struct iscsi_nopout hdr;
+	struct iscsi_nopout hdr;
 	struct iscsi_task *task;
 
 	if (!rhdr && conn->ping_task)
@@ -2859,7 +2859,7 @@ iscsi_conn_setup(struct iscsi_cls_session *cls_session, int dd_size,
 	/* allocate login_task used for the login/text sequences */
 	spin_lock_bh(&session->lock);
 	if (!kfifo_out(&session->cmdpool.queue,
-                         (void*)&conn->login_task,
+			 (void*)&conn->login_task,
 			 sizeof(void*))) {
 		spin_unlock_bh(&session->lock);
 		goto login_task_alloc_fail;

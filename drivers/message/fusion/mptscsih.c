@@ -1307,8 +1307,8 @@ mptscsih_copy_mem_info(struct info_str *info, char *data, int len)
 	}
 
 	if (len > 0) {
-                memcpy(info->buffer + info->pos, data, len);
-                info->pos += len;
+		memcpy(info->buffer + info->pos, data, len);
+		info->pos += len;
 	}
 }
 
@@ -1676,7 +1676,7 @@ mptscsih_IssueTaskMgmt(MPT_SCSI_HOST *hd, u8 type, u8 channel, u8 id, int lun,
 	pScsiTm->TaskType = type;
 	pScsiTm->Reserved1 = 0;
 	pScsiTm->MsgFlags = (type == MPI_SCSITASKMGMT_TASKTYPE_RESET_BUS)
-                    ? MPI_SCSITASKMGMT_MSGFLAGS_LIPRESET_RESET_OPTION : 0;
+		    ? MPI_SCSITASKMGMT_MSGFLAGS_LIPRESET_RESET_OPTION : 0;
 
 	int_to_scsilun(lun, (struct scsi_lun *)pScsiTm->LUN);
 

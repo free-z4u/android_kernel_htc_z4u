@@ -384,16 +384,16 @@ static irqreturn_t armpmu_platform_irq(int irq, void *dev)
 int
 armpmu_generic_request_irq(int irq, irq_handler_t *handle_irq)
 {
-        return request_irq(irq, *handle_irq,
-                        IRQF_DISABLED | IRQF_NOBALANCING,
-                        "armpmu", NULL);
+	return request_irq(irq, *handle_irq,
+			IRQF_DISABLED | IRQF_NOBALANCING,
+			"armpmu", NULL);
 }
 
 void
 armpmu_generic_free_irq(int irq)
 {
-        if (irq >= 0)
-                free_irq(irq, NULL);
+	if (irq >= 0)
+		free_irq(irq, NULL);
 }
 
 static void
@@ -462,13 +462,13 @@ armpmu_reserve_hardware(struct arm_pmu *armpmu)
 
 		err = armpmu->request_pmu_irq(irq, &handle_irq);
 
-                if (err) {
-                        pr_warning("unable to request IRQ%d for %s perf "
-                                "counters\n", irq, armpmu->name);
+		if (err) {
+			pr_warning("unable to request IRQ%d for %s perf "
+				"counters\n", irq, armpmu->name);
 
 			armpmu_release_hardware(cpu_pmu);
-                        return err;
-                }
+			return err;
+		}
 
 		cpumask_set_cpu(i, &armpmu->active_irqs);
 	}

@@ -73,7 +73,7 @@
 
 struct exception_table_entry
 {
-        unsigned long insn, fixup;
+	unsigned long insn, fixup;
 };
 
 /* Returns 0 if exception not found and fixup otherwise.  */
@@ -143,7 +143,7 @@ __asm__ __volatile__(							\
 "3:\n\t"								\
 	"b	2b\n\t"							\
 	" mov	%3, %0\n\t"						\
-        ".previous\n\n\t"						\
+	".previous\n\n\t"						\
 	".section __ex_table,#alloc\n\t"				\
 	".align	4\n\t"							\
 	".word	1b, 3b\n\t"						\

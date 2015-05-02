@@ -624,14 +624,14 @@ config INPUT_XEN_KBDDEV_FRONTEND
 	  module will be called xen-kbdfront.
 
 config PMIC8058_OTHC
-        tristate "Qualcomm PMIC8058 OTHC support"
-        default n
-        depends on PMIC8058
-        help
-          Say Y here if you want support PMIC8058 OTHC.
+	tristate "Qualcomm PMIC8058 OTHC support"
+	default n
+	depends on PMIC8058
+	help
+	  Say Y here if you want support PMIC8058 OTHC.
 
-          To compile this driver as a module, choose M here: the
-          module will be called pmic8058-othc.
+	  To compile this driver as a module, choose M here: the
+	  module will be called pmic8058-othc.
 
 config INPUT_PMIC8058_VIBRA_MEMLESS
 	tristate "Qualcomm PM8058 vibrator support (ff-memless)"
@@ -646,15 +646,15 @@ config INPUT_PMIC8058_VIBRA_MEMLESS
 	  module will be called pmic8058-vib-memless.
 
 config BOSCH_BMA150
-        tristate "SMB380/BMA150 acceleration sensor support"
-        depends on I2C=y
-        help
-          If you say yes here you get support for Bosch Sensortec's
-          acceleration sensors SMB380/BMA150.
+	tristate "SMB380/BMA150 acceleration sensor support"
+	depends on I2C=y
+	help
+	  If you say yes here you get support for Bosch Sensortec's
+	  acceleration sensors SMB380/BMA150.
 
 config INPUT_DUMMY_KEYPAD
        tristate "Dummy Keypad driver support"
        help
-         Say Y here if you want to support dummy keypad driver, wheels etc...
+	 Say Y here if you want to support dummy keypad driver, wheels etc...
 
 endif

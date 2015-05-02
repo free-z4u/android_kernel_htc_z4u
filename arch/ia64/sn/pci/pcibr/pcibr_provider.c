@@ -24,7 +24,7 @@
 
 int
 sal_pcibr_slot_enable(struct pcibus_info *soft, int device, void *resp,
-                      char **ssdt)
+		      char **ssdt)
 {
 	struct ia64_sal_retval ret_stuff;
 	u64 busnum;

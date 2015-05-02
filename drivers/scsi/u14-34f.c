@@ -436,22 +436,22 @@ static int u14_34f_queuecommand(struct Scsi_Host *, struct scsi_cmnd *);
 static int u14_34f_eh_abort(struct scsi_cmnd *);
 static int u14_34f_eh_host_reset(struct scsi_cmnd *);
 static int u14_34f_bios_param(struct scsi_device *, struct block_device *,
-                              sector_t, int *);
+			      sector_t, int *);
 static int u14_34f_slave_configure(struct scsi_device *);
 
 static struct scsi_host_template driver_template = {
-                .name                    = "UltraStor 14F/34F rev. 8.10.00 ",
-                .detect                  = u14_34f_detect,
-                .release                 = u14_34f_release,
-                .queuecommand            = u14_34f_queuecommand,
-                .eh_abort_handler        = u14_34f_eh_abort,
-                .eh_host_reset_handler   = u14_34f_eh_host_reset,
-                .bios_param              = u14_34f_bios_param,
-                .slave_configure         = u14_34f_slave_configure,
-                .this_id                 = 7,
-                .unchecked_isa_dma       = 1,
-                .use_clustering          = ENABLE_CLUSTERING,
-                };
+		.name                    = "UltraStor 14F/34F rev. 8.10.00 ",
+		.detect                  = u14_34f_detect,
+		.release                 = u14_34f_release,
+		.queuecommand            = u14_34f_queuecommand,
+		.eh_abort_handler        = u14_34f_eh_abort,
+		.eh_host_reset_handler   = u14_34f_eh_host_reset,
+		.bios_param              = u14_34f_bios_param,
+		.slave_configure         = u14_34f_slave_configure,
+		.this_id                 = 7,
+		.unchecked_isa_dma       = 1,
+		.use_clustering          = ENABLE_CLUSTERING,
+		};
 
 #if !defined(__BIG_ENDIAN_BITFIELD) && !defined(__LITTLE_ENDIAN_BITFIELD)
 #error "Adjust your <asm/byteorder.h> defines"
@@ -554,13 +554,13 @@ struct mscp {
    unsigned char lun: 3, channel:2, target:3;
 #else
    unsigned char opcode: 3,             /* type of command */
-                 xdir: 2,               /* data transfer direction */
-                 dcn: 1,                /* disable disconnect */
-                 ca: 1,                 /* use cache (if available) */
-                 sg: 1;                 /* scatter/gather operation */
+		 xdir: 2,               /* data transfer direction */
+		 dcn: 1,                /* disable disconnect */
+		 ca: 1,                 /* use cache (if available) */
+		 sg: 1;                 /* scatter/gather operation */
    unsigned char target: 3,             /* SCSI target id */
-                 channel: 2,            /* SCSI channel number */
-                 lun: 3;                /* SCSI logical unit number */
+		 channel: 2,            /* SCSI channel number */
+		 lun: 3;                /* SCSI logical unit number */
 #endif
 
    unsigned int data_address PACKED;    /* transfer data pointer */
@@ -696,17 +696,17 @@ static int u14_34f_slave_configure(struct scsi_device *dev) {
    if (TLDEV(dev->type) && dev->tagged_supported)
 
       if (tag_mode == TAG_SIMPLE) {
-         scsi_adjust_queue_depth(dev, MSG_SIMPLE_TAG, tqd);
-         tag_suffix = ", simple tags";
-         }
+	 scsi_adjust_queue_depth(dev, MSG_SIMPLE_TAG, tqd);
+	 tag_suffix = ", simple tags";
+	 }
       else if (tag_mode == TAG_ORDERED) {
-         scsi_adjust_queue_depth(dev, MSG_ORDERED_TAG, tqd);
-         tag_suffix = ", ordered tags";
-         }
+	 scsi_adjust_queue_depth(dev, MSG_ORDERED_TAG, tqd);
+	 tag_suffix = ", ordered tags";
+	 }
       else {
-         scsi_adjust_queue_depth(dev, 0, tqd);
-         tag_suffix = ", no tags";
-         }
+	 scsi_adjust_queue_depth(dev, 0, tqd);
+	 tag_suffix = ", no tags";
+	 }
 
    else if (TLDEV(dev->type) && linked_comm) {
       scsi_adjust_queue_depth(dev, 0, tqd);
@@ -726,7 +726,7 @@ static int u14_34f_slave_configure(struct scsi_device *dev) {
       link_suffix = "";
 
    sdev_printk(KERN_INFO, dev, "cmds/lun %d%s%s.\n",
-          dev->queue_depth, link_suffix, tag_suffix);
+	  dev->queue_depth, link_suffix, tag_suffix);
 
    return FALSE;
 }
@@ -748,10 +748,10 @@ static int board_inquiry(unsigned int j) {
    unsigned long time;
 
    id_dma_addr = pci_map_single(HD(j)->pdev, HD(j)->board_id,
-                    sizeof(HD(j)->board_id), PCI_DMA_BIDIRECTIONAL);
+		    sizeof(HD(j)->board_id), PCI_DMA_BIDIRECTIONAL);
    cpp = &HD(j)->cp[0];
    cpp->cp_dma_addr = pci_map_single(HD(j)->pdev, cpp, sizeof(struct mscp),
-                                     PCI_DMA_BIDIRECTIONAL);
+				     PCI_DMA_BIDIRECTIONAL);
    memset(cpp, 0, sizeof(struct mscp) - CP_TAIL_SIZE);
    cpp->opcode = OP_HOST_ADAPTER;
    cpp->xdir = DTD_IN;
@@ -788,9 +788,9 @@ static int board_inquiry(unsigned int j) {
       }
 
    pci_unmap_single(HD(j)->pdev, cpp->cp_dma_addr, sizeof(struct mscp),
-                    PCI_DMA_BIDIRECTIONAL);
+		    PCI_DMA_BIDIRECTIONAL);
    pci_unmap_single(HD(j)->pdev, id_dma_addr, sizeof(HD(j)->board_id),
-                    PCI_DMA_BIDIRECTIONAL);
+		    PCI_DMA_BIDIRECTIONAL);
    return FALSE;
 }
 
@@ -818,17 +818,17 @@ static int port_detect \
       unsigned char heads;
       unsigned char sectors;
       } mapping_table[4] = {
-           { 16, 63 }, { 64, 32 }, { 64, 63 }, { 64, 32 }
-           };
+	   { 16, 63 }, { 64, 32 }, { 64, 63 }, { 64, 32 }
+	   };
 
    struct config_1 {
 
 #if defined(__BIG_ENDIAN_BITFIELD)
       unsigned char dma_channel: 2, interrupt:2,
-                    removable_disks_as_fixed:1, bios_segment: 3;
+		    removable_disks_as_fixed:1, bios_segment: 3;
 #else
       unsigned char bios_segment: 3, removable_disks_as_fixed: 1,
-                    interrupt: 2, dma_channel: 2;
+		    interrupt: 2, dma_channel: 2;
 #endif
 
       } config_1;
@@ -837,10 +837,10 @@ static int port_detect \
 
 #if defined(__BIG_ENDIAN_BITFIELD)
       unsigned char tfr_port: 2, bios_drive_number: 1,
-                    mapping_mode: 2, ha_scsi_id: 3;
+		    mapping_mode: 2, ha_scsi_id: 3;
 #else
       unsigned char ha_scsi_id: 3, mapping_mode: 2,
-                    bios_drive_number: 1, tfr_port: 2;
+		    bios_drive_number: 1, tfr_port: 2;
 #endif
 
       } config_2;
@@ -873,15 +873,15 @@ static int port_detect \
 
    /* Board detected, allocate its IRQ */
    if (request_irq(irq, do_interrupt_handler,
-             IRQF_DISABLED | ((subversion == ESA) ? IRQF_SHARED : 0),
-             driver_name, (void *) &sha[j])) {
+	     IRQF_DISABLED | ((subversion == ESA) ? IRQF_SHARED : 0),
+	     driver_name, (void *) &sha[j])) {
       printk("%s: unable to allocate IRQ %u, detaching.\n", name, irq);
       goto freelock;
       }
 
    if (subversion == ISA && request_dma(dma_channel, driver_name)) {
       printk("%s: unable to allocate DMA channel %u, detaching.\n",
-             name, dma_channel);
+	     name, dma_channel);
       goto freeirq;
       }
 
@@ -961,12 +961,12 @@ static int port_detect \
       HD(j)->board_id[40] = 0;
 
       if (strcmp(&HD(j)->board_id[32], "06000600")) {
-         printk("%s: %s.\n", BN(j), &HD(j)->board_id[8]);
-         printk("%s: firmware %s is outdated, FW PROM should be 28004-006.\n",
-                BN(j), &HD(j)->board_id[32]);
-         sh[j]->hostt->use_clustering = DISABLE_CLUSTERING;
-         sh[j]->sg_tablesize = MAX_SAFE_SGLIST;
-         }
+	 printk("%s: %s.\n", BN(j), &HD(j)->board_id[8]);
+	 printk("%s: firmware %s is outdated, FW PROM should be 28004-006.\n",
+		BN(j), &HD(j)->board_id[32]);
+	 sh[j]->hostt->use_clustering = DISABLE_CLUSTERING;
+	 sh[j]->sg_tablesize = MAX_SAFE_SGLIST;
+	 }
       }
 
    if (dma_channel == NO_DMA) sprintf(dma_name, "%s", "BMST");
@@ -976,15 +976,15 @@ static int port_detect \
 
    for (i = 0; i < sh[j]->can_queue; i++)
       HD(j)->cp[i].cp_dma_addr = pci_map_single(HD(j)->pdev,
-            &HD(j)->cp[i], sizeof(struct mscp), PCI_DMA_BIDIRECTIONAL);
+	    &HD(j)->cp[i], sizeof(struct mscp), PCI_DMA_BIDIRECTIONAL);
 
    for (i = 0; i < sh[j]->can_queue; i++)
       if (! ((&HD(j)->cp[i])->sglist = kmalloc(
-            sh[j]->sg_tablesize * sizeof(struct sg_list),
-            (sh[j]->unchecked_isa_dma ? GFP_DMA : 0) | GFP_ATOMIC))) {
-         printk("%s: kmalloc SGlist failed, mbox %d, detaching.\n", BN(j), i);
-         goto release;
-         }
+	    sh[j]->sg_tablesize * sizeof(struct sg_list),
+	    (sh[j]->unchecked_isa_dma ? GFP_DMA : 0) | GFP_ATOMIC))) {
+	 printk("%s: kmalloc SGlist failed, mbox %d, detaching.\n", BN(j), i);
+	 goto release;
+	 }
 
    if (max_queue_depth > MAX_TAGGED_CMD_PER_LUN)
        max_queue_depth = MAX_TAGGED_CMD_PER_LUN;
@@ -997,21 +997,21 @@ static int port_detect \
    if (j == 0) {
       printk("UltraStor 14F/34F: Copyright (C) 1994-2003 Dario Ballabio.\n");
       printk("%s config options -> of:%c, tm:%d, lc:%c, mq:%d, et:%c.\n",
-             driver_name, YESNO(have_old_firmware), tag_mode,
-             YESNO(linked_comm), max_queue_depth, YESNO(ext_tran));
+	     driver_name, YESNO(have_old_firmware), tag_mode,
+	     YESNO(linked_comm), max_queue_depth, YESNO(ext_tran));
       }
 
    printk("%s: %s 0x%03lx, BIOS 0x%05x, IRQ %u, %s, SG %d, MB %d.\n",
-          BN(j), bus_type, (unsigned long)sh[j]->io_port, (int)sh[j]->base,
-          sh[j]->irq, dma_name, sh[j]->sg_tablesize, sh[j]->can_queue);
+	  BN(j), bus_type, (unsigned long)sh[j]->io_port, (int)sh[j]->base,
+	  sh[j]->irq, dma_name, sh[j]->sg_tablesize, sh[j]->can_queue);
 
    if (sh[j]->max_id > 8 || sh[j]->max_lun > 8)
       printk("%s: wide SCSI support enabled, max_id %u, max_lun %u.\n",
-             BN(j), sh[j]->max_id, sh[j]->max_lun);
+	     BN(j), sh[j]->max_id, sh[j]->max_lun);
 
    for (i = 0; i <= sh[j]->max_channel; i++)
       printk("%s: SCSI channel %u enabled, host target ID %d.\n",
-             BN(j), i, sh[j]->this_id);
+	     BN(j), i, sh[j]->this_id);
 
    return TRUE;
 
@@ -1122,7 +1122,7 @@ static void map_dma(unsigned int i, unsigned int j) {
 
    if (SCpnt->sense_buffer)
       cpp->sense_addr = H2DEV(pci_map_single(HD(j)->pdev, SCpnt->sense_buffer,
-                           SCSI_SENSE_BUFFERSIZE, PCI_DMA_FROMDEVICE));
+			   SCSI_SENSE_BUFFERSIZE, PCI_DMA_FROMDEVICE));
 
    cpp->sense_len = SCSI_SENSE_BUFFERSIZE;
 
@@ -1160,7 +1160,7 @@ static void unmap_dma(unsigned int i, unsigned int j) {
 
    if (DEV2H(cpp->sense_addr))
       pci_unmap_single(HD(j)->pdev, DEV2H(cpp->sense_addr),
-                       DEV2H(cpp->sense_len), PCI_DMA_FROMDEVICE);
+		       DEV2H(cpp->sense_len), PCI_DMA_FROMDEVICE);
 
    scsi_dma_unmap(SCpnt);
 
@@ -1168,7 +1168,7 @@ static void unmap_dma(unsigned int i, unsigned int j) {
 
    if (DEV2H(cpp->data_address))
       pci_unmap_single(HD(j)->pdev, DEV2H(cpp->data_address),
-                       DEV2H(cpp->data_len), pci_dir);
+		       DEV2H(cpp->data_len), pci_dir);
 }
 
 static void sync_dma(unsigned int i, unsigned int j) {
@@ -1181,7 +1181,7 @@ static void sync_dma(unsigned int i, unsigned int j) {
 
    if (DEV2H(cpp->sense_addr))
       pci_dma_sync_single_for_cpu(HD(j)->pdev, DEV2H(cpp->sense_addr),
-                          DEV2H(cpp->sense_len), PCI_DMA_FROMDEVICE);
+			  DEV2H(cpp->sense_len), PCI_DMA_FROMDEVICE);
 
    if (scsi_sg_count(SCpnt))
 	   pci_dma_sync_sg_for_cpu(HD(j)->pdev, scsi_sglist(SCpnt),
@@ -1191,7 +1191,7 @@ static void sync_dma(unsigned int i, unsigned int j) {
 
    if (DEV2H(cpp->data_address))
       pci_dma_sync_single_for_cpu(HD(j)->pdev, DEV2H(cpp->data_address),
-                       DEV2H(cpp->data_len), pci_dir);
+		       DEV2H(cpp->data_len), pci_dir);
 }
 
 static void scsi_to_dev_dir(unsigned int i, unsigned int j) {
@@ -1234,16 +1234,16 @@ static void scsi_to_dev_dir(unsigned int i, unsigned int j) {
 
    for (k = 0; k < ARRAY_SIZE(data_out_cmds); k++)
       if (SCpnt->cmnd[0] == data_out_cmds[k]) {
-         cpp->xdir = DTD_OUT;
-         break;
-         }
+	 cpp->xdir = DTD_OUT;
+	 break;
+	 }
 
    if (cpp->xdir == DTD_IN)
       for (k = 0; k < ARRAY_SIZE(data_none_cmds); k++)
-         if (SCpnt->cmnd[0] == data_none_cmds[k]) {
-            cpp->xdir = DTD_NONE;
-            break;
-            }
+	 if (SCpnt->cmnd[0] == data_none_cmds[k]) {
+	    cpp->xdir = DTD_NONE;
+	    break;
+	    }
 
 }
 
@@ -1256,7 +1256,7 @@ static int u14_34f_queuecommand_lck(struct scsi_cmnd *SCpnt, void (*done)(struct
 
    if (SCpnt->host_scribble)
       panic("%s: qcomm, SCpnt %p already active.\n",
-            BN(j), SCpnt);
+	    BN(j), SCpnt);
 
    /* i is the mailbox number, look for the first free mailbox
       starting from last_cp_used */
@@ -1267,9 +1267,9 @@ static int u14_34f_queuecommand_lck(struct scsi_cmnd *SCpnt, void (*done)(struct
       if (i >= sh[j]->can_queue) i = 0;
 
       if (HD(j)->cp_stat[i] == FREE) {
-         HD(j)->last_cp_used = i;
-         break;
-         }
+	 HD(j)->last_cp_used = i;
+	 break;
+	 }
       }
 
    if (k == sh[j]->can_queue) {
@@ -1286,8 +1286,8 @@ static int u14_34f_queuecommand_lck(struct scsi_cmnd *SCpnt, void (*done)(struct
    SCpnt->host_scribble = (unsigned char *) &cpp->cpp_index;
 
    if (do_trace) printk("%s: qcomm, mbox %d, target %d.%d:%d.\n",
-                        BN(j), i, SCpnt->device->channel, SCpnt->device->id,
-                        SCpnt->device->lun);
+			BN(j), i, SCpnt->device->channel, SCpnt->device->id,
+			SCpnt->device->lun);
 
    cpp->opcode = OP_SCSI;
    cpp->channel = SCpnt->device->channel;
@@ -1304,7 +1304,7 @@ static int u14_34f_queuecommand_lck(struct scsi_cmnd *SCpnt, void (*done)(struct
    map_dma(i, j);
 
    if (linked_comm && SCpnt->device->queue_depth > 2
-                                     && TLDEV(SCpnt->device->type)) {
+				     && TLDEV(SCpnt->device->type)) {
       HD(j)->cp_stat[i] = READY;
       flush_dev(SCpnt->device, blk_rq_pos(SCpnt->request), j, FALSE);
       return 0;
@@ -1360,11 +1360,11 @@ static int u14_34f_eh_abort(struct scsi_cmnd *SCarg) {
       printk("%s: abort, mbox %d is in use.\n", BN(j), i);
 
       if (SCarg != HD(j)->cp[i].SCpnt)
-         panic("%s: abort, mbox %d, SCarg %p, cp SCpnt %p.\n",
-               BN(j), i, SCarg, HD(j)->cp[i].SCpnt);
+	 panic("%s: abort, mbox %d, SCarg %p, cp SCpnt %p.\n",
+	       BN(j), i, SCarg, HD(j)->cp[i].SCpnt);
 
       if (inb(sh[j]->io_port + REG_SYS_INTR) & IRQ_ASSERTED)
-         printk("%s: abort, mbox %d, interrupt pending.\n", BN(j), i);
+	 printk("%s: abort, mbox %d, interrupt pending.\n", BN(j), i);
 
       return FAILED;
       }
@@ -1422,41 +1422,41 @@ static int u14_34f_eh_host_reset(struct scsi_cmnd *SCarg) {
 
    for (c = 0; c <= sh[j]->max_channel; c++)
       for (k = 0; k < sh[j]->max_id; k++) {
-         HD(j)->target_redo[k][c] = TRUE;
-         HD(j)->target_to[k][c] = 0;
-         }
+	 HD(j)->target_redo[k][c] = TRUE;
+	 HD(j)->target_to[k][c] = 0;
+	 }
 
    for (i = 0; i < sh[j]->can_queue; i++) {
 
       if (HD(j)->cp_stat[i] == FREE) continue;
 
       if (HD(j)->cp_stat[i] == LOCKED) {
-         HD(j)->cp_stat[i] = FREE;
-         printk("%s: reset, locked mbox %d forced free.\n", BN(j), i);
-         continue;
-         }
+	 HD(j)->cp_stat[i] = FREE;
+	 printk("%s: reset, locked mbox %d forced free.\n", BN(j), i);
+	 continue;
+	 }
 
       if (!(SCpnt = HD(j)->cp[i].SCpnt))
-         panic("%s: reset, mbox %d, SCpnt == NULL.\n", BN(j), i);
+	 panic("%s: reset, mbox %d, SCpnt == NULL.\n", BN(j), i);
 
       if (HD(j)->cp_stat[i] == READY || HD(j)->cp_stat[i] == ABORTING) {
-         HD(j)->cp_stat[i] = ABORTING;
-         printk("%s: reset, mbox %d aborting.\n", BN(j), i);
-         }
+	 HD(j)->cp_stat[i] = ABORTING;
+	 printk("%s: reset, mbox %d aborting.\n", BN(j), i);
+	 }
 
       else {
-         HD(j)->cp_stat[i] = IN_RESET;
-         printk("%s: reset, mbox %d in reset.\n", BN(j), i);
-         }
+	 HD(j)->cp_stat[i] = IN_RESET;
+	 printk("%s: reset, mbox %d in reset.\n", BN(j), i);
+	 }
 
       if (SCpnt->host_scribble == NULL)
-         panic("%s: reset, mbox %d, garbled SCpnt.\n", BN(j), i);
+	 panic("%s: reset, mbox %d, garbled SCpnt.\n", BN(j), i);
 
       if (*(unsigned int *)SCpnt->host_scribble != i)
-         panic("%s: reset, mbox %d, index mismatch.\n", BN(j), i);
+	 panic("%s: reset, mbox %d, index mismatch.\n", BN(j), i);
 
       if (SCpnt->scsi_done == NULL)
-         panic("%s: reset, mbox %d, SCpnt->scsi_done == NULL.\n", BN(j), i);
+	 panic("%s: reset, mbox %d, SCpnt->scsi_done == NULL.\n", BN(j), i);
 
       if (SCpnt == SCarg) arg_done = TRUE;
       }
@@ -1486,33 +1486,33 @@ static int u14_34f_eh_host_reset(struct scsi_cmnd *SCarg) {
    for (i = 0; i < sh[j]->can_queue; i++) {
 
       if (HD(j)->cp_stat[i] == IN_RESET) {
-         SCpnt = HD(j)->cp[i].SCpnt;
-         unmap_dma(i, j);
-         SCpnt->result = DID_RESET << 16;
-         SCpnt->host_scribble = NULL;
+	 SCpnt = HD(j)->cp[i].SCpnt;
+	 unmap_dma(i, j);
+	 SCpnt->result = DID_RESET << 16;
+	 SCpnt->host_scribble = NULL;
 
-         /* This mailbox is still waiting for its interrupt */
-         HD(j)->cp_stat[i] = LOCKED;
+	 /* This mailbox is still waiting for its interrupt */
+	 HD(j)->cp_stat[i] = LOCKED;
 
-         printk("%s, reset, mbox %d locked, DID_RESET, done.\n", BN(j), i);
-         }
+	 printk("%s, reset, mbox %d locked, DID_RESET, done.\n", BN(j), i);
+	 }
 
       else if (HD(j)->cp_stat[i] == ABORTING) {
-         SCpnt = HD(j)->cp[i].SCpnt;
-         unmap_dma(i, j);
-         SCpnt->result = DID_RESET << 16;
-         SCpnt->host_scribble = NULL;
+	 SCpnt = HD(j)->cp[i].SCpnt;
+	 unmap_dma(i, j);
+	 SCpnt->result = DID_RESET << 16;
+	 SCpnt->host_scribble = NULL;
 
-         /* This mailbox was never queued to the adapter */
-         HD(j)->cp_stat[i] = FREE;
+	 /* This mailbox was never queued to the adapter */
+	 HD(j)->cp_stat[i] = FREE;
 
-         printk("%s, reset, mbox %d aborting, DID_RESET, done.\n", BN(j), i);
-         }
+	 printk("%s, reset, mbox %d aborting, DID_RESET, done.\n", BN(j), i);
+	 }
 
       else
 
-         /* Any other mailbox has already been set free by interrupt */
-         continue;
+	 /* Any other mailbox has already been set free by interrupt */
+	 continue;
 
       SCpnt->scsi_done(SCpnt);
       }
@@ -1528,7 +1528,7 @@ static int u14_34f_eh_host_reset(struct scsi_cmnd *SCarg) {
 }
 
 static int u14_34f_bios_param(struct scsi_device *disk,
-                 struct block_device *bdev, sector_t capacity, int *dkinfo) {
+		 struct block_device *bdev, sector_t capacity, int *dkinfo) {
    unsigned int j = 0;
    unsigned int size = capacity;
 
@@ -1544,14 +1544,14 @@ static int u14_34f_bios_param(struct scsi_device *disk,
 
 #if defined (DEBUG_GEOMETRY)
    printk ("%s: bios_param, head=%d, sec=%d, cyl=%d.\n", driver_name,
-           dkinfo[0], dkinfo[1], dkinfo[2]);
+	   dkinfo[0], dkinfo[1], dkinfo[2]);
 #endif
 
    return FALSE;
 }
 
 static void sort(unsigned long sk[], unsigned int da[], unsigned int n,
-                 unsigned int rev) {
+		 unsigned int rev) {
    unsigned int i, j, k, y;
    unsigned long x;
 
@@ -1559,24 +1559,24 @@ static void sort(unsigned long sk[], unsigned int da[], unsigned int n,
       k = i;
 
       for (j = k + 1; j < n; j++)
-         if (rev) {
-            if (sk[j] > sk[k]) k = j;
-            }
-         else {
-            if (sk[j] < sk[k]) k = j;
-            }
+	 if (rev) {
+	    if (sk[j] > sk[k]) k = j;
+	    }
+	 else {
+	    if (sk[j] < sk[k]) k = j;
+	    }
 
       if (k != i) {
-         x = sk[k]; sk[k] = sk[i]; sk[i] = x;
-         y = da[k]; da[k] = da[i]; da[i] = y;
-         }
+	 x = sk[k]; sk[k] = sk[i]; sk[i] = x;
+	 y = da[k]; da[k] = da[i]; da[i] = y;
+	 }
       }
 
    return;
    }
 
 static int reorder(unsigned int j, unsigned long cursec,
-                 unsigned int ihdlr, unsigned int il[], unsigned int n_ready) {
+		 unsigned int ihdlr, unsigned int il[], unsigned int n_ready) {
    struct scsi_cmnd *SCpnt;
    struct mscp *cpp;
    unsigned int k, n;
@@ -1593,10 +1593,10 @@ static int reorder(unsigned int j, unsigned long cursec,
 
    if (link_statistics && !(++flushcount % link_statistics))
       printk("fc %d bc %d ic %d oc %d rc %d rs %d sc %d re %d"\
-             " av %ldK as %ldK.\n", flushcount, batchcount, inputcount,
-             ovlcount, readycount, readysorted, sortcount, revcount,
-             seeknosort / (readycount + 1),
-             seeksorted / (readycount + 1));
+	     " av %ldK as %ldK.\n", flushcount, batchcount, inputcount,
+	     ovlcount, readycount, readysorted, sortcount, revcount,
+	     seeknosort / (readycount + 1),
+	     seeksorted / (readycount + 1));
 
    if (n_ready <= 1) return FALSE;
 
@@ -1619,11 +1619,11 @@ static int reorder(unsigned int j, unsigned long cursec,
       if (sl[n] > sl[n - 1]) r = FALSE;
 
       if (link_statistics) {
-         if (sl[n] > sl[n - 1])
-            seek += sl[n] - sl[n - 1];
-         else
-            seek += sl[n - 1] - sl[n];
-         }
+	 if (sl[n] > sl[n - 1])
+	    seek += sl[n] - sl[n - 1];
+	 else
+	    seek += sl[n - 1] - sl[n];
+	 }
 
       }
 
@@ -1644,7 +1644,7 @@ static int reorder(unsigned int j, unsigned long cursec,
       if (!n) continue;
 
       if ((sl[n] == sl[n - 1]) || (!rev && ((sl[n - 1] + ll[n - 1]) > sl[n]))
-          || (rev && ((sl[n] + ll[n]) > sl[n - 1]))) overlap = TRUE;
+	  || (rev && ((sl[n] + ll[n]) > sl[n - 1]))) overlap = TRUE;
       }
 
    if (overlap) sort(pl, il, n_ready, FALSE);
@@ -1662,21 +1662,21 @@ static int reorder(unsigned int j, unsigned long cursec,
 #if defined(DEBUG_LINKED_COMMANDS)
    if (link_statistics && (overlap || !(flushcount % link_statistics)))
       for (n = 0; n < n_ready; n++) {
-         k = il[n]; cpp = &HD(j)->cp[k]; SCpnt = cpp->SCpnt;
-         printk("%s %d.%d:%d mb %d fc %d nr %d sec %ld ns %u"\
-                " cur %ld s:%c r:%c rev:%c in:%c ov:%c xd %d.\n",
-                (ihdlr ? "ihdlr" : "qcomm"), SCpnt->channel, SCpnt->target,
-                SCpnt->lun, k, flushcount, n_ready,
-                blk_rq_pos(SCpnt->request), blk_rq_sectors(SCpnt->request),
+	 k = il[n]; cpp = &HD(j)->cp[k]; SCpnt = cpp->SCpnt;
+	 printk("%s %d.%d:%d mb %d fc %d nr %d sec %ld ns %u"\
+		" cur %ld s:%c r:%c rev:%c in:%c ov:%c xd %d.\n",
+		(ihdlr ? "ihdlr" : "qcomm"), SCpnt->channel, SCpnt->target,
+		SCpnt->lun, k, flushcount, n_ready,
+		blk_rq_pos(SCpnt->request), blk_rq_sectors(SCpnt->request),
 		cursec, YESNO(s), YESNO(r), YESNO(rev), YESNO(input_only),
-                YESNO(overlap), cpp->xdir);
-         }
+		YESNO(overlap), cpp->xdir);
+	 }
 #endif
    return overlap;
 }
 
 static void flush_dev(struct scsi_device *dev, unsigned long cursec, unsigned int j,
-                      unsigned int ihdlr) {
+		      unsigned int ihdlr) {
    struct scsi_cmnd *SCpnt;
    struct mscp *cpp;
    unsigned int k, n, n_ready = 0, il[MAX_MAILBOXES];
@@ -1700,13 +1700,13 @@ static void flush_dev(struct scsi_device *dev, unsigned long cursec, unsigned in
       k = il[n]; cpp = &HD(j)->cp[k]; SCpnt = cpp->SCpnt;
 
       if (wait_on_busy(sh[j]->io_port, MAXLOOP)) {
-         scmd_printk(KERN_INFO, SCpnt,
+	 scmd_printk(KERN_INFO, SCpnt,
 	 	"%s, mbox %d, adapter"
-                " busy, will abort.\n", (ihdlr ? "ihdlr" : "qcomm"),
-                k);
-         HD(j)->cp_stat[k] = ABORTING;
-         continue;
-         }
+		" busy, will abort.\n", (ihdlr ? "ihdlr" : "qcomm"),
+		k);
+	 HD(j)->cp_stat[k] = ABORTING;
+	 continue;
+	 }
 
       outl(H2DEV(cpp->cp_dma_addr), sh[j]->io_port + REG_OGM);
       outb(CMD_OGM_INTR, sh[j]->io_port + REG_LCL_INTR);
@@ -1728,13 +1728,13 @@ static irqreturn_t ihdlr(unsigned int j)
    HD(j)->iocount++;
 
    if (do_trace) printk("%s: ihdlr, enter, irq %d, count %d.\n", BN(j), irq,
-                        HD(j)->iocount);
+			HD(j)->iocount);
 
    /* Check if this board is still busy */
    if (wait_on_busy(sh[j]->io_port, 20 * MAXLOOP)) {
       outb(CMD_CLR_INTR, sh[j]->io_port + REG_SYS_INTR);
       printk("%s: ihdlr, busy timeout error,  irq %d, reg 0x%x, count %d.\n",
-             BN(j), irq, reg, HD(j)->iocount);
+	     BN(j), irq, reg, HD(j)->iocount);
       goto none;
       }
 
@@ -1749,7 +1749,7 @@ static irqreturn_t ihdlr(unsigned int j)
 
    if (i >= sh[j]->can_queue)
       panic("%s: ihdlr, invalid mscp bus address %p, cp0 %p.\n", BN(j),
-            (void *)ret, (void *)H2DEV(HD(j)->cp[0].cp_dma_addr));
+	    (void *)ret, (void *)H2DEV(HD(j)->cp[0].cp_dma_addr));
 
    cpp = &(HD(j)->cp[i]);
    spp = cpp;
@@ -1765,19 +1765,19 @@ static irqreturn_t ihdlr(unsigned int j)
    else if (HD(j)->cp_stat[i] == LOCKED) {
       HD(j)->cp_stat[i] = FREE;
       printk("%s: ihdlr, mbox %d unlocked, count %d.\n", BN(j), i,
-             HD(j)->iocount);
+	     HD(j)->iocount);
       goto handled;
       }
    else if (HD(j)->cp_stat[i] == FREE) {
       printk("%s: ihdlr, mbox %d is free, count %d.\n", BN(j), i,
-             HD(j)->iocount);
+	     HD(j)->iocount);
       goto handled;
       }
    else if (HD(j)->cp_stat[i] == IN_RESET)
       printk("%s: ihdlr, mbox %d is in reset.\n", BN(j), i);
    else if (HD(j)->cp_stat[i] != IN_USE)
       panic("%s: ihdlr, mbox %d, invalid cp_stat: %d.\n",
-            BN(j), i, HD(j)->cp_stat[i]);
+	    BN(j), i, HD(j)->cp_stat[i]);
 
    HD(j)->cp_stat[i] = FREE;
    SCpnt = cpp->SCpnt;
@@ -1786,72 +1786,72 @@ static irqreturn_t ihdlr(unsigned int j)
 
    if (SCpnt->host_scribble == NULL)
       panic("%s: ihdlr, mbox %d, SCpnt %p garbled.\n", BN(j), i,
-            SCpnt);
+	    SCpnt);
 
    if (*(unsigned int *)SCpnt->host_scribble != i)
       panic("%s: ihdlr, mbox %d, index mismatch %d.\n",
-            BN(j), i, *(unsigned int *)SCpnt->host_scribble);
+	    BN(j), i, *(unsigned int *)SCpnt->host_scribble);
 
    sync_dma(i, j);
 
    if (linked_comm && SCpnt->device->queue_depth > 2
-                                     && TLDEV(SCpnt->device->type))
+				     && TLDEV(SCpnt->device->type))
       flush_dev(SCpnt->device, blk_rq_pos(SCpnt->request), j, TRUE);
 
    tstatus = status_byte(spp->target_status);
 
 #if defined(DEBUG_GENERATE_ERRORS)
    if ((HD(j)->iocount > 500) && ((HD(j)->iocount % 200) < 2))
-                                           spp->adapter_status = 0x01;
+					   spp->adapter_status = 0x01;
 #endif
 
    switch (spp->adapter_status) {
       case ASOK:     /* status OK */
 
-         /* Forces a reset if a disk drive keeps returning BUSY */
-         if (tstatus == BUSY && SCpnt->device->type != TYPE_TAPE)
-            status = DID_ERROR << 16;
+	 /* Forces a reset if a disk drive keeps returning BUSY */
+	 if (tstatus == BUSY && SCpnt->device->type != TYPE_TAPE)
+	    status = DID_ERROR << 16;
 
-         /* If there was a bus reset, redo operation on each target */
-         else if (tstatus != GOOD && SCpnt->device->type == TYPE_DISK
-                  && HD(j)->target_redo[scmd_id(SCpnt)][scmd_channel(SCpnt)])
-            status = DID_BUS_BUSY << 16;
+	 /* If there was a bus reset, redo operation on each target */
+	 else if (tstatus != GOOD && SCpnt->device->type == TYPE_DISK
+		  && HD(j)->target_redo[scmd_id(SCpnt)][scmd_channel(SCpnt)])
+	    status = DID_BUS_BUSY << 16;
 
-         /* Works around a flaw in scsi.c */
-         else if (tstatus == CHECK_CONDITION
-                  && SCpnt->device->type == TYPE_DISK
-                  && (SCpnt->sense_buffer[2] & 0xf) == RECOVERED_ERROR)
-            status = DID_BUS_BUSY << 16;
+	 /* Works around a flaw in scsi.c */
+	 else if (tstatus == CHECK_CONDITION
+		  && SCpnt->device->type == TYPE_DISK
+		  && (SCpnt->sense_buffer[2] & 0xf) == RECOVERED_ERROR)
+	    status = DID_BUS_BUSY << 16;
 
-         else
-            status = DID_OK << 16;
+	 else
+	    status = DID_OK << 16;
 
-         if (tstatus == GOOD)
-            HD(j)->target_redo[scmd_id(SCpnt)][scmd_channel(SCpnt)] = FALSE;
+	 if (tstatus == GOOD)
+	    HD(j)->target_redo[scmd_id(SCpnt)][scmd_channel(SCpnt)] = FALSE;
 
-         if (spp->target_status && SCpnt->device->type == TYPE_DISK &&
-             (!(tstatus == CHECK_CONDITION && HD(j)->iocount <= 1000 &&
-               (SCpnt->sense_buffer[2] & 0xf) == NOT_READY)))
-            scmd_printk(KERN_INFO, SCpnt,
+	 if (spp->target_status && SCpnt->device->type == TYPE_DISK &&
+	     (!(tstatus == CHECK_CONDITION && HD(j)->iocount <= 1000 &&
+	       (SCpnt->sense_buffer[2] & 0xf) == NOT_READY)))
+	    scmd_printk(KERN_INFO, SCpnt,
 	    	"ihdlr, target_status 0x%x, sense key 0x%x.\n",
-                   spp->target_status,
-                   SCpnt->sense_buffer[2]);
+		   spp->target_status,
+		   SCpnt->sense_buffer[2]);
 
-         HD(j)->target_to[scmd_id(SCpnt)][scmd_channel(SCpnt)] = 0;
+	 HD(j)->target_to[scmd_id(SCpnt)][scmd_channel(SCpnt)] = 0;
 
-         if (HD(j)->last_retried_pid == SCpnt->serial_number) HD(j)->retries = 0;
+	 if (HD(j)->last_retried_pid == SCpnt->serial_number) HD(j)->retries = 0;
 
-         break;
+	 break;
       case ASST:     /* Selection Time Out */
 
-         if (HD(j)->target_to[scmd_id(SCpnt)][scmd_channel(SCpnt)] > 1)
-            status = DID_ERROR << 16;
-         else {
-            status = DID_TIME_OUT << 16;
-            HD(j)->target_to[scmd_id(SCpnt)][scmd_channel(SCpnt)]++;
-            }
+	 if (HD(j)->target_to[scmd_id(SCpnt)][scmd_channel(SCpnt)] > 1)
+	    status = DID_ERROR << 16;
+	 else {
+	    status = DID_TIME_OUT << 16;
+	    HD(j)->target_to[scmd_id(SCpnt)][scmd_channel(SCpnt)]++;
+	    }
 
-         break;
+	 break;
 
       /* Perform a limited number of internal retries */
       case 0x93:     /* Unexpected bus free */
@@ -1859,29 +1859,29 @@ static irqreturn_t ihdlr(unsigned int j)
       case 0x96:     /* Illegal SCSI command */
       case 0xa3:     /* SCSI bus reset error */
 
-         for (c = 0; c <= sh[j]->max_channel; c++)
-            for (k = 0; k < sh[j]->max_id; k++)
-               HD(j)->target_redo[k][c] = TRUE;
+	 for (c = 0; c <= sh[j]->max_channel; c++)
+	    for (k = 0; k < sh[j]->max_id; k++)
+	       HD(j)->target_redo[k][c] = TRUE;
 
 
       case 0x92:     /* Data over/under-run */
 
-         if (SCpnt->device->type != TYPE_TAPE
-             && HD(j)->retries < MAX_INTERNAL_RETRIES) {
+	 if (SCpnt->device->type != TYPE_TAPE
+	     && HD(j)->retries < MAX_INTERNAL_RETRIES) {
 
 #if defined(DID_SOFT_ERROR)
-            status = DID_SOFT_ERROR << 16;
+	    status = DID_SOFT_ERROR << 16;
 #else
-            status = DID_BUS_BUSY << 16;
+	    status = DID_BUS_BUSY << 16;
 #endif
 
-            HD(j)->retries++;
-            HD(j)->last_retried_pid = SCpnt->serial_number;
-            }
-         else
-            status = DID_ERROR << 16;
+	    HD(j)->retries++;
+	    HD(j)->last_retried_pid = SCpnt->serial_number;
+	    }
+	 else
+	    status = DID_ERROR << 16;
 
-         break;
+	 break;
       case 0x01:     /* Invalid command */
       case 0x02:     /* Invalid parameters */
       case 0x03:     /* Invalid data list */
@@ -1890,8 +1890,8 @@ static irqreturn_t ihdlr(unsigned int j)
       case 0x9f:     /* Unexpected command complete message error */
       case 0xff:     /* Invalid parameter in the S/G list */
       default:
-         status = DID_ERROR << 16;
-         break;
+	 status = DID_ERROR << 16;
+	 break;
       }
 
    SCpnt->result = status | spp->target_status;
@@ -1901,13 +1901,13 @@ static irqreturn_t ihdlr(unsigned int j)
 #else
    if ((spp->adapter_status != ASOK && HD(j)->iocount >  1000) ||
        (spp->adapter_status != ASOK &&
-        spp->adapter_status != ASST && HD(j)->iocount <= 1000) ||
-        do_trace || msg_byte(spp->target_status))
+	spp->adapter_status != ASST && HD(j)->iocount <= 1000) ||
+	do_trace || msg_byte(spp->target_status))
 #endif
       scmd_printk(KERN_INFO, SCpnt, "ihdlr, mbox %2d, err 0x%x:%x,"\
-             " reg 0x%x, count %d.\n",
-             i, spp->adapter_status, spp->target_status,
-             reg, HD(j)->iocount);
+	     " reg 0x%x, count %d.\n",
+	     i, spp->adapter_status, spp->target_status,
+	     reg, HD(j)->iocount);
 
    unmap_dma(i, j);
 
@@ -1917,7 +1917,7 @@ static irqreturn_t ihdlr(unsigned int j)
    SCpnt->scsi_done(SCpnt);
 
    if (do_trace) printk("%s: ihdlr, exit, irq %d, count %d.\n", BN(j), irq,
-                        HD(j)->iocount);
+			HD(j)->iocount);
 
 handled:
    return IRQ_HANDLED;
@@ -1952,7 +1952,7 @@ static int u14_34f_release(struct Scsi_Host *shpnt) {
 
    for (i = 0; i < sh[j]->can_queue; i++)
       pci_unmap_single(HD(j)->pdev, HD(j)->cp[i].cp_dma_addr,
-                     sizeof(struct mscp), PCI_DMA_BIDIRECTIONAL);
+		     sizeof(struct mscp), PCI_DMA_BIDIRECTIONAL);
 
    free_irq(sh[j]->irq, &sha[j]);
 

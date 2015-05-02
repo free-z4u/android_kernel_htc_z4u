@@ -1092,7 +1092,7 @@ static void msm_serial_hs_rx_tlet(unsigned long tlet_ptr)
 
 	if (flush == FLUSH_IGNORE) {
 		if (!msm_uport->rx_discard_flush_issued &&
-                    !msm_uport->rx.buffer_pending) {
+		    !msm_uport->rx.buffer_pending) {
 			msm_hs_start_rx_locked(uport);
 		} else {
 			msm_uport->rx_discard_flush_issued = false;

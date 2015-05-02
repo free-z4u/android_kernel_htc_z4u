@@ -211,7 +211,7 @@ void __init init_arch(bp_tag_t *bp_start)
 
 	/* Parse boot parameters */
 
-        if (bp_start)
+	if (bp_start)
 	  parse_bootparam(bp_start);
 
 	if (sysmem.nr_banks == 0) {

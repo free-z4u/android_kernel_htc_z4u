@@ -84,56 +84,56 @@ static inline unsigned char sun3_get_buserr(void)
 /* Read segmap from hardware MMU. */
 static inline unsigned long sun3_get_segmap(unsigned long addr)
 {
-        register unsigned long entry;
-        unsigned char c, sfc;
+	register unsigned long entry;
+	unsigned char c, sfc;
 
-        GET_SFC (sfc);
-        SET_SFC (FC_CONTROL);
-        GET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), c);
-        SET_SFC (sfc);
-        entry = c;
+	GET_SFC (sfc);
+	SET_SFC (FC_CONTROL);
+	GET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), c);
+	SET_SFC (sfc);
+	entry = c;
 
-        return entry;
+	return entry;
 }
 
 /* Write segmap to hardware MMU. */
 static inline void sun3_put_segmap(unsigned long addr, unsigned long entry)
 {
-        unsigned char sfc;
+	unsigned char sfc;
 
-        GET_DFC (sfc);
-        SET_DFC (FC_CONTROL);
-        SET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), entry);
+	GET_DFC (sfc);
+	SET_DFC (FC_CONTROL);
+	SET_CONTROL_BYTE (AC_SEGMAP | (addr & SUN3_CONTROL_MASK), entry);
 	SET_DFC (sfc);
 
-        return;
+	return;
 }
 
 /* Read PTE from hardware MMU. */
 static inline unsigned long sun3_get_pte(unsigned long addr)
 {
-        register unsigned long entry;
-        unsigned char sfc;
+	register unsigned long entry;
+	unsigned char sfc;
 
-        GET_SFC (sfc);
-        SET_SFC (FC_CONTROL);
-        GET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
-        SET_SFC (sfc);
+	GET_SFC (sfc);
+	SET_SFC (FC_CONTROL);
+	GET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
+	SET_SFC (sfc);
 
-        return entry;
+	return entry;
 }
 
 /* Write PTE to hardware MMU. */
 static inline void sun3_put_pte(unsigned long addr, unsigned long entry)
 {
-        unsigned char sfc;
+	unsigned char sfc;
 
-        GET_DFC (sfc);
-        SET_DFC (FC_CONTROL);
-        SET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
+	GET_DFC (sfc);
+	SET_DFC (FC_CONTROL);
+	SET_CONTROL_WORD (AC_PAGEMAP | (addr & SUN3_CONTROL_MASK), entry);
 	SET_DFC (sfc);
 
-        return;
+	return;
 }
 
 /* get current context */

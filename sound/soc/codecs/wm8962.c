@@ -1603,7 +1603,7 @@ static int wm8962_put_hp_sw(struct snd_kcontrol *kcontrol,
 	int ret;
 
 	/* Apply the update (if any) */
-        ret = snd_soc_put_volsw(kcontrol, ucontrol);
+	ret = snd_soc_put_volsw(kcontrol, ucontrol);
 	if (ret == 0)
 		return 0;
 
@@ -1630,7 +1630,7 @@ static int wm8962_put_spk_sw(struct snd_kcontrol *kcontrol,
 	int ret;
 
 	/* Apply the update (if any) */
-        ret = snd_soc_put_volsw(kcontrol, ucontrol);
+	ret = snd_soc_put_volsw(kcontrol, ucontrol);
 	if (ret == 0)
 		return 0;
 

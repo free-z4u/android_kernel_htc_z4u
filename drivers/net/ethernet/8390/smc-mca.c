@@ -55,14 +55,14 @@
 static int ultramca_open(struct net_device *dev);
 static void ultramca_reset_8390(struct net_device *dev);
 static void ultramca_get_8390_hdr(struct net_device *dev,
-                                  struct e8390_pkt_hdr *hdr,
-                                  int ring_page);
+				  struct e8390_pkt_hdr *hdr,
+				  int ring_page);
 static void ultramca_block_input(struct net_device *dev, int count,
-                                 struct sk_buff *skb,
-                                 int ring_offset);
+				 struct sk_buff *skb,
+				 int ring_offset);
 static void ultramca_block_output(struct net_device *dev, int count,
-                                  const unsigned char *buf,
-                                  const int start_page);
+				  const unsigned char *buf,
+				  const int start_page);
 static int ultramca_close_card(struct net_device *dev);
 
 #define START_PG        0x00    /* First page of TX buffer */
@@ -276,7 +276,7 @@ static int __init ultramca_probe(struct device *gen_dev)
 		 * to happen */
 		return -ENXIO;
 
-        /* Adapter found. */
+	/* Adapter found. */
 	dev  = alloc_ei_netdev();
 	if(!dev)
 		return -ENODEV;
@@ -500,7 +500,7 @@ static void ultramca_block_input(struct net_device *dev, int count, struct sk_bu
 }
 
 static void ultramca_block_output(struct net_device *dev, int count, const unsigned char *buf,
-                int start_page)
+		int start_page)
 {
 	void __iomem *shmem = ei_status.mem + ((start_page - START_PG) << 8);
 
@@ -521,7 +521,7 @@ static int ultramca_close_card(struct net_device *dev)
 
 	NS8390_init(dev, 0);
 	/* We should someday disable shared memory and change to 8-bit mode
-         * "just in case"...
+	 * "just in case"...
 	 */
 
 	return 0;

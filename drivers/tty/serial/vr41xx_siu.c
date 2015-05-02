@@ -515,7 +515,7 @@ static void siu_shutdown(struct uart_port *port)
 }
 
 static void siu_set_termios(struct uart_port *port, struct ktermios *new,
-                            struct ktermios *old)
+			    struct ktermios *old)
 {
 	tcflag_t c_cflag, c_iflag;
 	uint8_t lcr, fcr, ier;

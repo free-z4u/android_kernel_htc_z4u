@@ -55,7 +55,7 @@ INT SendControlPacket(PMINI_ADAPTER Adapter, char *pControlPacket)
 		((PLeader->PLength-1)/MAX_DEVICE_DESC_SIZE)+1))
     {
     	BCM_DEBUG_PRINT(Adapter,DBG_TYPE_TX, TX_CONTROL, DBG_LVL_ALL, "NO FREE DESCRIPTORS TO SEND CONTROL PACKET");
-        return STATUS_FAILURE;
+	return STATUS_FAILURE;
     }
 
 	/* Update the netdevice statistics */
@@ -130,7 +130,7 @@ INT SetupNextSend(PMINI_ADAPTER Adapter,  struct sk_buff *Packet, USHORT Vcid)
 	{
 		Leader.PLength = Packet->len;
 		if(skb_headroom(Packet) < LEADER_SIZE)
-        {
+	{
 			if((status = skb_cow(Packet,LEADER_SIZE)))
 			{
 				BCM_DEBUG_PRINT(Adapter,DBG_TYPE_TX, NEXT_SEND, DBG_LVL_ALL,"bcm_transmit : Failed To Increase headRoom\n");

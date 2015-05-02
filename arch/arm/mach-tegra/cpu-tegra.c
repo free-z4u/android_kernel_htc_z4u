@@ -240,7 +240,7 @@ static int __init tegra_cpufreq_init(void)
 
 static void __exit tegra_cpufreq_exit(void)
 {
-        cpufreq_unregister_driver(&tegra_cpufreq_driver);
+	cpufreq_unregister_driver(&tegra_cpufreq_driver);
 }
 
 

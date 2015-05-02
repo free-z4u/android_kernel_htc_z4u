@@ -83,10 +83,10 @@ int show_interrupts(struct seq_file *p, void *v)
 #endif
 		if (intrclass_names[i].desc)
 			seq_printf(p, "  %s", intrclass_names[i].desc);
-                seq_putc(p, '\n');
-        }
+		seq_putc(p, '\n');
+	}
 	put_online_cpus();
-        return 0;
+	return 0;
 }
 
 /*

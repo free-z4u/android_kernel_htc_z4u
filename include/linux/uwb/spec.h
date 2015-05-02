@@ -399,10 +399,10 @@ struct uwb_ie_drp_avail {
 
 /* Relinqish Request IE ([ECMA-368] section 16.8.19). */
 struct uwb_relinquish_request_ie {
-        struct uwb_ie_hdr       hdr;
-        __le16                  relinquish_req_control;
-        struct uwb_dev_addr     dev_addr;
-        struct uwb_drp_alloc    allocs[];
+	struct uwb_ie_hdr       hdr;
+	__le16                  relinquish_req_control;
+	struct uwb_dev_addr     dev_addr;
+	struct uwb_drp_alloc    allocs[];
 } __attribute__((packed));
 
 static inline int uwb_ie_relinquish_req_reason_code(struct uwb_relinquish_request_ie *ie)

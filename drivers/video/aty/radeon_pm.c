@@ -40,9 +40,9 @@
 static void radeon_reinitialize_M10(struct radeonfb_info *rinfo);
 
 struct radeon_device_id {
-        const char *ident;                     /* (arbitrary) Name */
-        const unsigned short subsystem_vendor; /* Subsystem Vendor ID */
-        const unsigned short subsystem_device; /* Subsystem Device ID */
+	const char *ident;                     /* (arbitrary) Name */
+	const unsigned short subsystem_vendor; /* Subsystem Vendor ID */
+	const unsigned short subsystem_device; /* Subsystem Device ID */
 	const enum radeon_pm_mode pm_mode_modifier; /* modify pm_mode */
 	const reinit_function_ptr new_reinit_func;   /* changed reinit_func */
 };
@@ -120,7 +120,7 @@ static int radeon_apply_workarounds(struct radeonfb_info *rinfo)
 #else  /* defined(CONFIG_PM) && defined(CONFIG_X86) */
 static inline int radeon_apply_workarounds(struct radeonfb_info *rinfo)
 {
-        return 0;
+	return 0;
 }
 #endif /* defined(CONFIG_PM) && defined(CONFIG_X86) */
 
@@ -145,46 +145,46 @@ static void radeon_pm_disable_dynamic_mode(struct radeonfb_info *rinfo)
 		        MCLK_CNTL__FORCE_YCLKB |
 			MCLK_CNTL__FORCE_AIC |
 			MCLK_CNTL__FORCE_MC);
-                OUTPLL(pllMCLK_CNTL, tmp);
+		OUTPLL(pllMCLK_CNTL, tmp);
 		return;
 	}
 	/* R100 */
 	if (!rinfo->has_CRTC2) {
-                tmp = INPLL(pllSCLK_CNTL);
-                tmp |= (SCLK_CNTL__FORCE_CP	| SCLK_CNTL__FORCE_HDP	|
+		tmp = INPLL(pllSCLK_CNTL);
+		tmp |= (SCLK_CNTL__FORCE_CP	| SCLK_CNTL__FORCE_HDP	|
 			SCLK_CNTL__FORCE_DISP1	| SCLK_CNTL__FORCE_TOP	|
-                        SCLK_CNTL__FORCE_E2	| SCLK_CNTL__FORCE_SE 	|
+			SCLK_CNTL__FORCE_E2	| SCLK_CNTL__FORCE_SE 	|
 			SCLK_CNTL__FORCE_IDCT	| SCLK_CNTL__FORCE_VIP	|
 			SCLK_CNTL__FORCE_RE	| SCLK_CNTL__FORCE_PB 	|
 			SCLK_CNTL__FORCE_TAM	| SCLK_CNTL__FORCE_TDM	|
-                        SCLK_CNTL__FORCE_RB);
-                OUTPLL(pllSCLK_CNTL, tmp);
+			SCLK_CNTL__FORCE_RB);
+		OUTPLL(pllSCLK_CNTL, tmp);
 		return;
 	}
 	/* RV350 (M10/M11) */
 	if (rinfo->family == CHIP_FAMILY_RV350) {
-                /* for RV350/M10/M11, no delays are required. */
-                tmp = INPLL(pllSCLK_CNTL2);
-                tmp |= (SCLK_CNTL2__R300_FORCE_TCL |
-                        SCLK_CNTL2__R300_FORCE_GA  |
+		/* for RV350/M10/M11, no delays are required. */
+		tmp = INPLL(pllSCLK_CNTL2);
+		tmp |= (SCLK_CNTL2__R300_FORCE_TCL |
+			SCLK_CNTL2__R300_FORCE_GA  |
 			SCLK_CNTL2__R300_FORCE_CBA);
-                OUTPLL(pllSCLK_CNTL2, tmp);
+		OUTPLL(pllSCLK_CNTL2, tmp);
 
-                tmp = INPLL(pllSCLK_CNTL);
-                tmp |= (SCLK_CNTL__FORCE_DISP2		| SCLK_CNTL__FORCE_CP		|
-                        SCLK_CNTL__FORCE_HDP		| SCLK_CNTL__FORCE_DISP1	|
-                        SCLK_CNTL__FORCE_TOP		| SCLK_CNTL__FORCE_E2		|
-                        SCLK_CNTL__R300_FORCE_VAP	| SCLK_CNTL__FORCE_IDCT    	|
+		tmp = INPLL(pllSCLK_CNTL);
+		tmp |= (SCLK_CNTL__FORCE_DISP2		| SCLK_CNTL__FORCE_CP		|
+			SCLK_CNTL__FORCE_HDP		| SCLK_CNTL__FORCE_DISP1	|
+			SCLK_CNTL__FORCE_TOP		| SCLK_CNTL__FORCE_E2		|
+			SCLK_CNTL__R300_FORCE_VAP	| SCLK_CNTL__FORCE_IDCT    	|
 			SCLK_CNTL__FORCE_VIP		| SCLK_CNTL__R300_FORCE_SR	|
 			SCLK_CNTL__R300_FORCE_PX	| SCLK_CNTL__R300_FORCE_TX	|
 			SCLK_CNTL__R300_FORCE_US	| SCLK_CNTL__FORCE_TV_SCLK	|
-                        SCLK_CNTL__R300_FORCE_SU	| SCLK_CNTL__FORCE_OV0);
-                OUTPLL(pllSCLK_CNTL, tmp);
+			SCLK_CNTL__R300_FORCE_SU	| SCLK_CNTL__FORCE_OV0);
+		OUTPLL(pllSCLK_CNTL, tmp);
 
-                tmp = INPLL(pllSCLK_MORE_CNTL);
+		tmp = INPLL(pllSCLK_MORE_CNTL);
 		tmp |= (SCLK_MORE_CNTL__FORCE_DISPREGS	| SCLK_MORE_CNTL__FORCE_MC_GUI	|
 			SCLK_MORE_CNTL__FORCE_MC_HOST);
-                OUTPLL(pllSCLK_MORE_CNTL, tmp);
+		OUTPLL(pllSCLK_MORE_CNTL, tmp);
 
 		tmp = INPLL(pllMCLK_CNTL);
 		tmp |= (MCLK_CNTL__FORCE_MCLKA |
@@ -192,16 +192,16 @@ static void radeon_pm_disable_dynamic_mode(struct radeonfb_info *rinfo)
 		        MCLK_CNTL__FORCE_YCLKA |
 		        MCLK_CNTL__FORCE_YCLKB |
 			MCLK_CNTL__FORCE_MC);
-                OUTPLL(pllMCLK_CNTL, tmp);
+		OUTPLL(pllMCLK_CNTL, tmp);
 
-                tmp = INPLL(pllVCLK_ECP_CNTL);
-                tmp &= ~(VCLK_ECP_CNTL__PIXCLK_ALWAYS_ONb  |
-                         VCLK_ECP_CNTL__PIXCLK_DAC_ALWAYS_ONb |
+		tmp = INPLL(pllVCLK_ECP_CNTL);
+		tmp &= ~(VCLK_ECP_CNTL__PIXCLK_ALWAYS_ONb  |
+			 VCLK_ECP_CNTL__PIXCLK_DAC_ALWAYS_ONb |
 			 VCLK_ECP_CNTL__R300_DISP_DAC_PIXCLK_DAC_BLANK_OFF);
-                OUTPLL(pllVCLK_ECP_CNTL, tmp);
+		OUTPLL(pllVCLK_ECP_CNTL, tmp);
 
-                tmp = INPLL(pllPIXCLKS_CNTL);
-                tmp &= ~(PIXCLKS_CNTL__PIX2CLK_ALWAYS_ONb		|
+		tmp = INPLL(pllPIXCLKS_CNTL);
+		tmp &= ~(PIXCLKS_CNTL__PIX2CLK_ALWAYS_ONb		|
 			 PIXCLKS_CNTL__PIX2CLK_DAC_ALWAYS_ONb		|
 			 PIXCLKS_CNTL__DISP_TVOUT_PIXCLK_TV_ALWAYS_ONb	|
 			 PIXCLKS_CNTL__R300_DVOCLK_ALWAYS_ONb		|
@@ -214,7 +214,7 @@ static void radeon_pm_disable_dynamic_mode(struct radeonfb_info *rinfo)
 			 PIXCLKS_CNTL__R300_PIXCLK_TVO_ALWAYS_ONb	|
 			 PIXCLKS_CNTL__R300_P2G2CLK_ALWAYS_ONb		|
 			 PIXCLKS_CNTL__R300_DISP_DAC_PIXCLK_DAC2_BLANK_OFF);
-                OUTPLL(pllPIXCLKS_CNTL, tmp);
+		OUTPLL(pllPIXCLKS_CNTL, tmp);
 
 		return;
 	}
@@ -333,16 +333,16 @@ static void radeon_pm_enable_dynamic_mode(struct radeonfb_info *rinfo)
 
 	/* R100 */
 	if (!rinfo->has_CRTC2) {
-                tmp = INPLL(pllSCLK_CNTL);
+		tmp = INPLL(pllSCLK_CNTL);
 
 		if ((INREG(CNFG_CNTL) & CFG_ATI_REV_ID_MASK) > CFG_ATI_REV_A13)
-                    tmp &= ~(SCLK_CNTL__FORCE_CP	| SCLK_CNTL__FORCE_RB);
-                tmp &= ~(SCLK_CNTL__FORCE_HDP		| SCLK_CNTL__FORCE_DISP1 |
+		    tmp &= ~(SCLK_CNTL__FORCE_CP	| SCLK_CNTL__FORCE_RB);
+		tmp &= ~(SCLK_CNTL__FORCE_HDP		| SCLK_CNTL__FORCE_DISP1 |
 			 SCLK_CNTL__FORCE_TOP		| SCLK_CNTL__FORCE_SE   |
 			 SCLK_CNTL__FORCE_IDCT		| SCLK_CNTL__FORCE_RE   |
 			 SCLK_CNTL__FORCE_PB		| SCLK_CNTL__FORCE_TAM  |
 			 SCLK_CNTL__FORCE_TDM);
-                OUTPLL(pllSCLK_CNTL, tmp);
+		OUTPLL(pllSCLK_CNTL, tmp);
 		return;
 	}
 
@@ -735,8 +735,8 @@ static void radeon_pm_disable_iopad(struct radeonfb_info *rinfo)
 	OUTREG(GPIOPAD_MASK, 0x0001ffff);
 	OUTREG(GPIOPAD_EN, 0x00000400);
 	OUTREG(GPIOPAD_A, 0x00000000);
-        OUTREG(ZV_LCDPAD_MASK, 0x00000000);
-        OUTREG(ZV_LCDPAD_EN, 0x00000000);
+	OUTREG(ZV_LCDPAD_MASK, 0x00000000);
+	OUTREG(ZV_LCDPAD_EN, 0x00000000);
       	OUTREG(ZV_LCDPAD_A, 0x00000000);
 	OUTREG(GPIO_VGA_DDC, 0x00030000);
 	OUTREG(GPIO_DVI_DDC, 0x00000000);
@@ -2606,8 +2606,8 @@ static void radeon_set_suspend(struct radeonfb_info *rinfo, int suspend)
 
 int radeonfb_pci_suspend(struct pci_dev *pdev, pm_message_t mesg)
 {
-        struct fb_info *info = pci_get_drvdata(pdev);
-        struct radeonfb_info *rinfo = info->par;
+	struct fb_info *info = pci_get_drvdata(pdev);
+	struct radeonfb_info *rinfo = info->par;
 
 	if (mesg.event == pdev->dev.power.power_state.event)
 		return 0;
@@ -2707,8 +2707,8 @@ static int radeon_check_power_loss(struct radeonfb_info *rinfo)
 
 int radeonfb_pci_resume(struct pci_dev *pdev)
 {
-        struct fb_info *info = pci_get_drvdata(pdev);
-        struct radeonfb_info *rinfo = info->par;
+	struct fb_info *info = pci_get_drvdata(pdev);
+	struct radeonfb_info *rinfo = info->par;
 	int rc = 0;
 
 	if (pdev->dev.power.power_state.event == PM_EVENT_ON)
@@ -2791,7 +2791,7 @@ int radeonfb_pci_resume(struct pci_dev *pdev)
 #ifdef CONFIG_PPC_OF__disabled
 static void radeonfb_early_resume(void *data)
 {
-        struct radeonfb_info *rinfo = data;
+	struct radeonfb_info *rinfo = data;
 
 	rinfo->no_schedule = 1;
 	pci_restore_state(rinfo->pdev);

@@ -263,7 +263,7 @@ config INFTL
 	  not use it.
 
 config RFD_FTL
-        tristate "Resident Flash Disk (Flash Translation Layer) support"
+	tristate "Resident Flash Disk (Flash Translation Layer) support"
 	depends on BLOCK
 	select MTD_BLKDEVS
 	---help---
@@ -310,7 +310,7 @@ config MTD_SWAP
 	select MTD_BLKDEVS
 	help
 	  Provides volatile block device driver on top of mtd partition
-          suitable for swapping.  The mapping of written blocks is not saved.
+	  suitable for swapping.  The mapping of written blocks is not saved.
 	  The driver provides wear leveling by storing erase counter into the
 	  OOB.
 

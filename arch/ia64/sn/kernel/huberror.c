@@ -207,11 +207,11 @@ void hub_error_init(struct hubdev_info *hubdev_info)
 void ice_error_init(struct hubdev_info *hubdev_info)
 {
 
-        if (request_irq
-            (SGI_TIO_ERROR, (void *)hub_eint_handler, IRQF_SHARED, "SN_TIO_error",
-             (void *)hubdev_info)) {
-                printk("ice_error_init: request_irq() error hubdev_info 0x%p\n",
-                       hubdev_info);
+	if (request_irq
+	    (SGI_TIO_ERROR, (void *)hub_eint_handler, IRQF_SHARED, "SN_TIO_error",
+	     (void *)hubdev_info)) {
+		printk("ice_error_init: request_irq() error hubdev_info 0x%p\n",
+		       hubdev_info);
 		return;
 	}
 	irq_set_handler(SGI_TIO_ERROR, handle_level_irq);

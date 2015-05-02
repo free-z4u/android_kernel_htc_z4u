@@ -284,38 +284,38 @@ EXPORT_SYMBOL_GPL(emergency_restart);
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
 void ps_hold_en_pull_low(void)
 {
-        int ret = -1;
-        int retry_num = 3;
+	int ret = -1;
+	int retry_num = 3;
 
-        for(; retry_num >0; retry_num--){
-                ret = cpld_gpio_write(CPLD_EXT_GPIO_PS_HOLD_EN, 0);
-                if(ret >= 0 )   break;
-        }
-        if(!retry_num)
-                printk(KERN_ERR "[SHUTDOWN] %s: fail to pull low PS_HOLD_EN.\n", __func__);
+	for(; retry_num >0; retry_num--){
+		ret = cpld_gpio_write(CPLD_EXT_GPIO_PS_HOLD_EN, 0);
+		if(ret >= 0 )   break;
+	}
+	if(!retry_num)
+		printk(KERN_ERR "[SHUTDOWN] %s: fail to pull low PS_HOLD_EN.\n", __func__);
 }
 
 
 void set_ps_hold_en(void)
 {
 #if defined(CONFIG_MACH_DUMMY)
-        if(htc_get_board_revision() <= BOARD_CPEDUG_EVT_XC)
-                ps_hold_en_pull_low();
+	if(htc_get_board_revision() <= BOARD_CPEDUG_EVT_XC)
+		ps_hold_en_pull_low();
 #endif
 
 #if defined(CONFIG_MACH_DUMMY)
-        if(htc_get_board_revision() <= BOARD_CPEDTG_EVT_XB)
-                ps_hold_en_pull_low();
+	if(htc_get_board_revision() <= BOARD_CPEDTG_EVT_XB)
+		ps_hold_en_pull_low();
 #endif
 
 #if defined(CONFIG_MACH_DUMMY)
-        if(htc_get_board_revision() <= BOARD_CPEDCG_EVT_XB)
-                ps_hold_en_pull_low();
+	if(htc_get_board_revision() <= BOARD_CPEDCG_EVT_XB)
+		ps_hold_en_pull_low();
 #endif
 
 #if defined(CONFIG_MACH_DUMMY)
-        if(htc_get_board_revision() <= BOARD_CPEU_EVT_XA)
-                ps_hold_en_pull_low();
+	if(htc_get_board_revision() <= BOARD_CPEU_EVT_XA)
+		ps_hold_en_pull_low();
 #endif
 }
 
@@ -369,7 +369,7 @@ static void kernel_shutdown_prepare(enum system_states state)
 
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
 
-        set_ps_hold_en();
+	set_ps_hold_en();
 #endif
 	blocking_notifier_call_chain(&reboot_notifier_list,
 		(state == SYSTEM_HALT)?SYS_HALT:SYS_POWER_OFF, NULL);

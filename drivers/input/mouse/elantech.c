@@ -628,14 +628,14 @@ static int elantech_packet_check_v1(struct psmouse *psmouse)
 
 static int elantech_debounce_check_v2(struct psmouse *psmouse)
 {
-        /*
-         * When we encounter packet that matches this exactly, it means the
-         * hardware is in debounce status. Just ignore the whole packet.
-         */
-        const u8 debounce_packet[] = { 0x84, 0xff, 0xff, 0x02, 0xff, 0xff };
-        unsigned char *packet = psmouse->packet;
+	/*
+	 * When we encounter packet that matches this exactly, it means the
+	 * hardware is in debounce status. Just ignore the whole packet.
+	 */
+	const u8 debounce_packet[] = { 0x84, 0xff, 0xff, 0x02, 0xff, 0xff };
+	unsigned char *packet = psmouse->packet;
 
-        return !memcmp(packet, debounce_packet, sizeof(debounce_packet));
+	return !memcmp(packet, debounce_packet, sizeof(debounce_packet));
 }
 
 static int elantech_packet_check_v2(struct psmouse *psmouse)

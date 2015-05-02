@@ -110,16 +110,16 @@ extern int savage_max_ioctl;
 #define S3_SAVAGE3D_SERIES(chip)  ((chip>=S3_SAVAGE3D) && (chip<=S3_SAVAGE_MX))
 
 #define S3_SAVAGE4_SERIES(chip)  ((chip==S3_SAVAGE4)            \
-                                  || (chip==S3_PROSAVAGE)       \
-                                  || (chip==S3_TWISTER)         \
-                                  || (chip==S3_PROSAVAGEDDR))
+				  || (chip==S3_PROSAVAGE)       \
+				  || (chip==S3_TWISTER)         \
+				  || (chip==S3_PROSAVAGEDDR))
 
 #define	S3_SAVAGE_MOBILE_SERIES(chip)	((chip==S3_SAVAGE_MX) || (chip==S3_SUPERSAVAGE))
 
 #define S3_SAVAGE_SERIES(chip)    ((chip>=S3_SAVAGE3D) && (chip<=S3_SAVAGE2000))
 
 #define S3_MOBILE_TWISTER_SERIES(chip)   ((chip==S3_TWISTER)    \
-                                          ||(chip==S3_PROSAVAGEDDR))
+					  ||(chip==S3_PROSAVAGEDDR))
 
 /* flags */
 #define SAVAGE_IS_AGP 1
@@ -465,19 +465,19 @@ extern void savage_emit_clip_rect_s4(drm_savage_private_t * dev_priv,
 		  ((uint32_t)(first) & 0xffff))
 
 #define BCI_DRAW_PRIMITIVE(n, type, skip)         \
-        BCI_WRITE(BCI_CMD_DRAW_PRIM | (type) | (skip) | \
+	BCI_WRITE(BCI_CMD_DRAW_PRIM | (type) | (skip) | \
 		  ((n) << 16))
 #define DMA_DRAW_PRIMITIVE(n, type, skip)         \
-        DMA_WRITE(BCI_CMD_DRAW_PRIM | (type) | (skip) | \
+	DMA_WRITE(BCI_CMD_DRAW_PRIM | (type) | (skip) | \
 		  ((n) << 16))
 
 #define BCI_DRAW_INDICES_S3D(n, type, i0)         \
-        BCI_WRITE(BCI_CMD_DRAW_INDEXED_PRIM | (type) |  \
+	BCI_WRITE(BCI_CMD_DRAW_INDEXED_PRIM | (type) |  \
 		  ((n) << 16) | (i0))
 
 #define BCI_DRAW_INDICES_S4(n, type, skip)        \
-        BCI_WRITE(BCI_CMD_DRAW_INDEXED_PRIM | (type) |  \
-                  (skip) | ((n) << 16))
+	BCI_WRITE(BCI_CMD_DRAW_INDEXED_PRIM | (type) |  \
+		  (skip) | ((n) << 16))
 
 #define BCI_DMA(n)	\
 	BCI_WRITE(BCI_CMD_DMA | (((n) >> 1) - 1))

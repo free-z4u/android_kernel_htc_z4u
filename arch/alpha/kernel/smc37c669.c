@@ -2491,63 +2491,63 @@ void __init SMC669_Init ( int index )
 	SMC37c669_config_mode( TRUE );
 	SMC37c669_dump_registers( );
 	SMC37c669_config_mode( FALSE );
-        SMC37c669_display_device_info( );
+	SMC37c669_display_device_info( );
 #endif
-        SMC37c669_disable_device( SERIAL_0 );
-        SMC37c669_configure_device(
-            SERIAL_0,
-            COM1_BASE,
-            COM1_IRQ,
-            -1
-        );
-        SMC37c669_enable_device( SERIAL_0 );
+	SMC37c669_disable_device( SERIAL_0 );
+	SMC37c669_configure_device(
+	    SERIAL_0,
+	    COM1_BASE,
+	    COM1_IRQ,
+	    -1
+	);
+	SMC37c669_enable_device( SERIAL_0 );
 
-        SMC37c669_disable_device( SERIAL_1 );
-        SMC37c669_configure_device(
-            SERIAL_1,
-            COM2_BASE,
-            COM2_IRQ,
-            -1
-        );
-        SMC37c669_enable_device( SERIAL_1 );
+	SMC37c669_disable_device( SERIAL_1 );
+	SMC37c669_configure_device(
+	    SERIAL_1,
+	    COM2_BASE,
+	    COM2_IRQ,
+	    -1
+	);
+	SMC37c669_enable_device( SERIAL_1 );
 
-        SMC37c669_disable_device( PARALLEL_0 );
-        SMC37c669_configure_device(
-            PARALLEL_0,
-            PARP_BASE,
-            PARP_IRQ,
-            PARP_DRQ
-        );
-        SMC37c669_enable_device( PARALLEL_0 );
+	SMC37c669_disable_device( PARALLEL_0 );
+	SMC37c669_configure_device(
+	    PARALLEL_0,
+	    PARP_BASE,
+	    PARP_IRQ,
+	    PARP_DRQ
+	);
+	SMC37c669_enable_device( PARALLEL_0 );
 
-        SMC37c669_disable_device( FLOPPY_0 );
-        SMC37c669_configure_device(
-            FLOPPY_0,
-            FDC_BASE,
-            FDC_IRQ,
-            FDC_DRQ
-        );
-        SMC37c669_enable_device( FLOPPY_0 );
+	SMC37c669_disable_device( FLOPPY_0 );
+	SMC37c669_configure_device(
+	    FLOPPY_0,
+	    FDC_BASE,
+	    FDC_IRQ,
+	    FDC_DRQ
+	);
+	SMC37c669_enable_device( FLOPPY_0 );
 
 	/* Wake up sometimes forgotten floppy, especially on DP264. */
 	outb(0xc, 0x3f2);
 
-        SMC37c669_disable_device( IDE_0 );
+	SMC37c669_disable_device( IDE_0 );
 
 #if SMC_DEBUG
 	SMC37c669_config_mode( TRUE );
 	SMC37c669_dump_registers( );
 	SMC37c669_config_mode( FALSE );
-        SMC37c669_display_device_info( );
+	SMC37c669_display_device_info( );
 #endif
 	local_irq_restore(flags);
-        printk( "SMC37c669 Super I/O Controller found @ 0x%p\n",
+	printk( "SMC37c669 Super I/O Controller found @ 0x%p\n",
 		SMC_base );
     }
     else {
 	local_irq_restore(flags);
 #if SMC_DEBUG
-        printk( "No SMC37c669 Super I/O Controller found\n" );
+	printk( "No SMC37c669 Super I/O Controller found\n" );
 #endif
     }
 }

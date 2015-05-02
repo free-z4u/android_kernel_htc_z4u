@@ -85,7 +85,7 @@ int __init hp300_parse_bootinfo(const struct bi_record *record)
 		/* serial port address: ignored here */
 		break;
 
-        default:
+	default:
 		unknown = 1;
 	}
 

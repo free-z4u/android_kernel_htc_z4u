@@ -23,10 +23,10 @@
    Computation, 68, 225 (1999), 261--269:
    http://www.iro.umontreal.ca/~lecuyer/myftp/papers/tausme2.ps
 
-        ... the k_j most significant bits of z_j must be non-
-        zero, for each j. (Note: this restriction also applies to the
-        computer code given in [4], but was mistakenly not mentioned in
-        that paper.)
+	... the k_j most significant bits of z_j must be non-
+	zero, for each j. (Note: this restriction also applies to the
+	computer code given in [4], but was mistakenly not mentioned in
+	that paper.)
 
    This affects the seeding procedure by imposing the requirement
    s1 > 1, s2 > 7, s3 > 15.

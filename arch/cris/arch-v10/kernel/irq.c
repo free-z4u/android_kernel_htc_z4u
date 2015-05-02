@@ -197,8 +197,8 @@ init_IRQ(void)
 
 	*R_VECT_MASK_CLR = 0xffffffff;
 
-        for (i = 0; i < 256; i++)
-               etrax_irv->v[i] = weird_irq;
+	for (i = 0; i < 256; i++)
+	       etrax_irv->v[i] = weird_irq;
 
 	/* Initialize IRQ handler descriptors. */
 	for(i = 2; i < NR_IRQS; i++) {
@@ -207,13 +207,13 @@ init_IRQ(void)
 		set_int_vector(i, interrupt[i]);
 	}
 
-        /* the entries in the break vector contain actual code to be
-           executed by the associated break handler, rather than just a jump
-           address. therefore we need to setup a default breakpoint handler
-           for all breakpoints */
+	/* the entries in the break vector contain actual code to be
+	   executed by the associated break handler, rather than just a jump
+	   address. therefore we need to setup a default breakpoint handler
+	   for all breakpoints */
 
 	for (i = 0; i < 16; i++)
-                set_break_vector(i, do_sigtrap);
+		set_break_vector(i, do_sigtrap);
 
 	/* except IRQ 15 which is the multiple-IRQ handler on Etrax100 */
 
@@ -232,10 +232,10 @@ init_IRQ(void)
 
 	set_break_vector(13, system_call);
 
-        /* setup a breakpoint handler for debugging used for both user and
-           kernel mode debugging  (which is why it is not inside an ifdef
-           CONFIG_ETRAX_KGDB) */
-        set_break_vector(8, gdb_handle_breakpoint);
+	/* setup a breakpoint handler for debugging used for both user and
+	   kernel mode debugging  (which is why it is not inside an ifdef
+	   CONFIG_ETRAX_KGDB) */
+	set_break_vector(8, gdb_handle_breakpoint);
 
 #ifdef CONFIG_ETRAX_KGDB
 	/* setup kgdb if its enabled, and break into the debugger */

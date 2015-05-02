@@ -70,7 +70,7 @@ extern int sysctl_ieee_emulation_warnings;
 #define HAVE_ARCH_PICK_MMAP_LAYOUT
 
 typedef struct {
-        __u32 ar4;
+	__u32 ar4;
 } mm_segment_t;
 
 /*
@@ -79,12 +79,12 @@ typedef struct {
 struct thread_struct {
 	s390_fp_regs fp_regs;
 	unsigned int  acrs[NUM_ACRS];
-        unsigned long ksp;              /* kernel stack pointer             */
+	unsigned long ksp;              /* kernel stack pointer             */
 	mm_segment_t mm_segment;
 	unsigned long gmap_addr;	/* address of last gmap fault. */
 	struct per_regs per_user;	/* User specified PER registers */
 	struct per_event per_event;	/* Cause of the last PER trap */
-        /* pfault_wait is used to block the process on a pfault event */
+	/* pfault_wait is used to block the process on a pfault event */
 	unsigned long pfault_wait;
 	struct list_head list;
 };
@@ -153,7 +153,7 @@ extern void show_code(struct pt_regs *regs);
 
 unsigned long get_wchan(struct task_struct *p);
 #define task_pt_regs(tsk) ((struct pt_regs *) \
-        (task_stack_page(tsk) + THREAD_SIZE) - 1)
+	(task_stack_page(tsk) + THREAD_SIZE) - 1)
 #define KSTK_EIP(tsk)	(task_pt_regs(tsk)->psw.addr)
 #define KSTK_ESP(tsk)	(task_pt_regs(tsk)->gprs[15])
 
@@ -247,15 +247,15 @@ static inline unsigned long __rewind_psw(psw_t psw, unsigned long ilc)
  */
 static inline void __noreturn disabled_wait(unsigned long code)
 {
-        unsigned long ctl_buf;
-        psw_t dw_psw;
+	unsigned long ctl_buf;
+	psw_t dw_psw;
 
 	dw_psw.mask = PSW_MASK_BASE | PSW_MASK_WAIT | PSW_MASK_BA | PSW_MASK_EA;
-        dw_psw.addr = code;
-        /*
-         * Store status and then load disabled wait psw,
-         * the processor is dead afterwards
-         */
+	dw_psw.addr = code;
+	/*
+	 * Store status and then load disabled wait psw,
+	 * the processor is dead afterwards
+	 */
 #ifndef __s390x__
 	asm volatile(
 		"	stctl	0,0,0(%2)\n"

@@ -67,9 +67,9 @@
 #define CREG_STAT_RXSERR      0x00000001  /* Receive SBUS Error ACK    */
 
 #define CREG_STAT_ERRORS      (CREG_STAT_BERROR|CREG_STAT_TXDERROR|CREG_STAT_TXLERR|   \
-                               CREG_STAT_TXPERR|CREG_STAT_TXSERR|CREG_STAT_RXDROP|     \
-                               CREG_STAT_RXSMALL|CREG_STAT_RXLERR|CREG_STAT_RXPERR|    \
-                               CREG_STAT_RXSERR)
+			       CREG_STAT_TXPERR|CREG_STAT_TXSERR|CREG_STAT_RXDROP|     \
+			       CREG_STAT_RXSMALL|CREG_STAT_RXLERR|CREG_STAT_RXPERR|    \
+			       CREG_STAT_RXSERR)
 
 #define CREG_QMASK_TXDERROR   0x00080000  /* TXD error                 */
 #define CREG_QMASK_TXLERR     0x00040000  /* TX late error             */
@@ -256,7 +256,7 @@ struct be_txd {
 #define PREV_TX(num)       (((num) - 1) & (TX_RING_SIZE - 1))
 
 #define TX_BUFFS_AVAIL(bp)                                    \
-        (((bp)->tx_old <= (bp)->tx_new) ?                     \
+	(((bp)->tx_old <= (bp)->tx_new) ?                     \
 	  (bp)->tx_old + (TX_RING_SIZE - 1) - (bp)->tx_new :  \
 			    (bp)->tx_old - (bp)->tx_new - 1)
 
@@ -319,7 +319,7 @@ struct bigmac {
 
 /* We use this to acquire receive skb's that we can DMA directly into. */
 #define ALIGNED_RX_SKB_ADDR(addr) \
-        ((((unsigned long)(addr) + (64 - 1)) & ~(64 - 1)) - (unsigned long)(addr))
+	((((unsigned long)(addr) + (64 - 1)) & ~(64 - 1)) - (unsigned long)(addr))
 
 static inline struct sk_buff *big_mac_alloc_skb(unsigned int length, gfp_t gfp_flags)
 {

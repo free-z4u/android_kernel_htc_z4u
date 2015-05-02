@@ -1704,7 +1704,7 @@ EXPORT_SYMBOL(register_console);
 
 int unregister_console(struct console *console)
 {
-        struct console *a, *b;
+	struct console *a, *b;
 	int res = 1;
 
 #ifdef CONFIG_A11Y_BRAILLE_CONSOLE

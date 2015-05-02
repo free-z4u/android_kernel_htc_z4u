@@ -27,12 +27,12 @@ void tegra_apb_writel(u32 value, unsigned long offset);
 
 static inline u32 tegra_apb_readl(unsigned long offset)
 {
-        return readl(IO_TO_VIRT(offset));
+	return readl(IO_TO_VIRT(offset));
 }
 
 static inline void tegra_apb_writel(u32 value, unsigned long offset)
 {
-        writel(value, IO_TO_VIRT(offset));
+	writel(value, IO_TO_VIRT(offset));
 }
 #endif
 

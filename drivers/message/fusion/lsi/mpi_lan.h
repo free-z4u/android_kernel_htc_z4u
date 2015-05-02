@@ -164,36 +164,36 @@ typedef struct _MSG_LAN_RESET_REPLY
 #define LAN_REPLY_FORM_SHIFT                    (27)
 
 #define GET_LAN_PACKET_LENGTH(x)    (((x) & LAN_REPLY_PACKET_LENGTH_MASK)   \
-                                        >> LAN_REPLY_PACKET_LENGTH_SHIFT)
+					>> LAN_REPLY_PACKET_LENGTH_SHIFT)
 
 #define SET_LAN_PACKET_LENGTH(x, lth)                                       \
-            ((x) = ((x) & ~LAN_REPLY_PACKET_LENGTH_MASK) |                  \
-                            (((lth) << LAN_REPLY_PACKET_LENGTH_SHIFT) &     \
-                                        LAN_REPLY_PACKET_LENGTH_MASK))
+	    ((x) = ((x) & ~LAN_REPLY_PACKET_LENGTH_MASK) |                  \
+			    (((lth) << LAN_REPLY_PACKET_LENGTH_SHIFT) &     \
+					LAN_REPLY_PACKET_LENGTH_MASK))
 
 #define GET_LAN_BUCKET_CONTEXT(x)   (((x) & LAN_REPLY_BUCKET_CONTEXT_MASK)  \
-                                        >> LAN_REPLY_BUCKET_CONTEXT_SHIFT)
+					>> LAN_REPLY_BUCKET_CONTEXT_SHIFT)
 
 #define SET_LAN_BUCKET_CONTEXT(x, ctx)                                      \
-            ((x) = ((x) & ~LAN_REPLY_BUCKET_CONTEXT_MASK) |                 \
-                            (((ctx) << LAN_REPLY_BUCKET_CONTEXT_SHIFT) &    \
-                                        LAN_REPLY_BUCKET_CONTEXT_MASK))
+	    ((x) = ((x) & ~LAN_REPLY_BUCKET_CONTEXT_MASK) |                 \
+			    (((ctx) << LAN_REPLY_BUCKET_CONTEXT_SHIFT) &    \
+					LAN_REPLY_BUCKET_CONTEXT_MASK))
 
 #define GET_LAN_BUFFER_CONTEXT(x)   (((x) & LAN_REPLY_BUFFER_CONTEXT_MASK)  \
-                                        >> LAN_REPLY_BUFFER_CONTEXT_SHIFT)
+					>> LAN_REPLY_BUFFER_CONTEXT_SHIFT)
 
 #define SET_LAN_BUFFER_CONTEXT(x, ctx)                                      \
-            ((x) = ((x) & ~LAN_REPLY_BUFFER_CONTEXT_MASK) |                 \
-                            (((ctx) << LAN_REPLY_BUFFER_CONTEXT_SHIFT) &    \
-                                        LAN_REPLY_BUFFER_CONTEXT_MASK))
+	    ((x) = ((x) & ~LAN_REPLY_BUFFER_CONTEXT_MASK) |                 \
+			    (((ctx) << LAN_REPLY_BUFFER_CONTEXT_SHIFT) &    \
+					LAN_REPLY_BUFFER_CONTEXT_MASK))
 
 #define GET_LAN_FORM(x)             (((x) & LAN_REPLY_FORM_MASK)            \
-                                        >> LAN_REPLY_FORM_SHIFT)
+					>> LAN_REPLY_FORM_SHIFT)
 
 #define SET_LAN_FORM(x, frm)                                                \
-            ((x) = ((x) & ~LAN_REPLY_FORM_MASK) |                           \
-                            (((frm) << LAN_REPLY_FORM_SHIFT) &              \
-                                        LAN_REPLY_FORM_MASK))
+	    ((x) = ((x) & ~LAN_REPLY_FORM_MASK) |                           \
+			    (((frm) << LAN_REPLY_FORM_SHIFT) &              \
+					LAN_REPLY_FORM_MASK))
 
 
 /****************************************************************************/

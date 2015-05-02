@@ -392,15 +392,15 @@ static inline bool seqid_mutating_err(u32 err)
  */
 enum nfs_ftype4 {
 	NF4BAD		= 0,
-        NF4REG          = 1,    /* Regular File */
-        NF4DIR          = 2,    /* Directory */
-        NF4BLK          = 3,    /* Special File - block device */
-        NF4CHR          = 4,    /* Special File - character device */
-        NF4LNK          = 5,    /* Symbolic Link */
-        NF4SOCK         = 6,    /* Special File - socket */
-        NF4FIFO         = 7,    /* Special File - fifo */
-        NF4ATTRDIR      = 8,    /* Attribute Directory */
-        NF4NAMEDATTR    = 9     /* Named Attribute */
+	NF4REG          = 1,    /* Regular File */
+	NF4DIR          = 2,    /* Directory */
+	NF4BLK          = 3,    /* Special File - block device */
+	NF4CHR          = 4,    /* Special File - character device */
+	NF4LNK          = 5,    /* Symbolic Link */
+	NF4SOCK         = 6,    /* Special File - socket */
+	NF4FIFO         = 7,    /* Special File - fifo */
+	NF4ATTRDIR      = 8,    /* Attribute Directory */
+	NF4NAMEDATTR    = 9     /* Named Attribute */
 };
 
 enum open_claim_type4 {

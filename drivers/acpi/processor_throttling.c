@@ -661,7 +661,7 @@ static int acpi_processor_get_tsd(struct acpi_processor *pr)
 }
 
 /* --------------------------------------------------------------------------
-                              Throttling Control
+			      Throttling Control
    -------------------------------------------------------------------------- */
 static int acpi_processor_get_throttling_fadt(struct acpi_processor *pr)
 {

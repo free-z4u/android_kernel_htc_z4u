@@ -144,17 +144,17 @@ ahc_format_transinfo(struct info_str *info, struct ahc_transinfo *tinfo)
 	u_int freq;
 	u_int mb;
 
-        speed = 3300;
-        freq = 0;
+	speed = 3300;
+	freq = 0;
 	if (tinfo->offset != 0) {
 		freq = ahc_calc_syncsrate(tinfo->period);
 		speed = freq;
 	}
 	speed *= (0x01 << tinfo->width);
-        mb = speed / 1000;
-        if (mb > 0)
+	mb = speed / 1000;
+	if (mb > 0)
 		copy_info(info, "%d.%03dMB/s transfers", mb, speed % 1000);
-        else
+	else
 		copy_info(info, "%dKB/s transfers", speed);
 
 	if (freq != 0) {

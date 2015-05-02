@@ -69,13 +69,13 @@ unsigned char ETHbyGetHashIndexByCrc32 (unsigned char *pbyMultiAddr)
 
     // get the least 6-bits from CRC generator
     byTmpHash = (unsigned char)(CRCdwCrc32(pbyMultiAddr, ETH_ALEN,
-            0xFFFFFFFFL) & 0x3F);
+	    0xFFFFFFFFL) & 0x3F);
     // reverse most bit to least bit
     for (ii = 0; ii < (sizeof(byTmpHash) * 8); ii++) {
-        byHash <<= 1;
-        if (byTmpHash & 0x01)
-            byHash |= 1;
-        byTmpHash >>= 1;
+	byHash <<= 1;
+	if (byTmpHash & 0x01)
+	    byHash |= 1;
+	byTmpHash >>= 1;
     }
 
     // adjust 6-bits to the right most
@@ -102,7 +102,7 @@ bool ETHbIsBufferCrc32Ok (unsigned char *pbyBuffer, unsigned int cbFrameLength)
 
     dwCRC = CRCdwGetCrc32(pbyBuffer, cbFrameLength - 4);
     if (cpu_to_le32(*((unsigned long *)(pbyBuffer + cbFrameLength - 4))) != dwCRC) {
-        return false;
+	return false;
     }
     return true;
 }

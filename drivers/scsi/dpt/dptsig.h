@@ -48,10 +48,10 @@ typedef unsigned int sigINT;
 #if (defined(_DPT_BIG_ENDIAN))
 # define sigWORDLittleEndian(x) ((((x)&0xFF)<<8)|(((x)>>8)&0xFF))
 # define sigLONGLittleEndian(x) \
-        ((((x)&0xFF)<<24) |             \
-         (((x)&0xFF00)<<8) |    \
-         (((x)&0xFF0000L)>>8) | \
-         (((x)&0xFF000000L)>>24))
+	((((x)&0xFF)<<24) |             \
+	 (((x)&0xFF00)<<8) |    \
+	 (((x)&0xFF0000L)>>8) | \
+	 (((x)&0xFF000000L)>>24))
 #else
 # define sigWORDLittleEndian(x) (x)
 # define sigLONGLittleEndian(x) (x)

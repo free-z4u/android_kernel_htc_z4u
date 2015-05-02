@@ -8149,12 +8149,12 @@ static struct snd_soc_codec_driver soc_codec_dev_tabla = {
 	.reg_cache_size = TABLA_CACHE_SIZE,
 	.reg_cache_default = tabla_reg_defaults,
 	.reg_word_size = 1,
-        .controls = tabla_snd_controls,
-        .num_controls = ARRAY_SIZE(tabla_snd_controls),
-        .dapm_widgets = tabla_dapm_widgets,
-        .num_dapm_widgets = ARRAY_SIZE(tabla_dapm_widgets),
-        .dapm_routes = audio_map,
-        .num_dapm_routes = ARRAY_SIZE(audio_map),
+	.controls = tabla_snd_controls,
+	.num_controls = ARRAY_SIZE(tabla_snd_controls),
+	.dapm_widgets = tabla_dapm_widgets,
+	.num_dapm_widgets = ARRAY_SIZE(tabla_dapm_widgets),
+	.dapm_routes = audio_map,
+	.num_dapm_routes = ARRAY_SIZE(audio_map),
 };
 
 #ifdef CONFIG_PM

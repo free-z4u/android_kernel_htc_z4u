@@ -362,12 +362,12 @@ good_area:
 	if (error_code & 0x40000000) /* no translation? */
 		_tlbil_va(address, 0, 0, 0);
 
-        /* The MPC8xx seems to always set 0x80000000, which is
-         * "undefined".  Of those that can be set, this is the only
-         * one which seems bad.
-         */
+	/* The MPC8xx seems to always set 0x80000000, which is
+	 * "undefined".  Of those that can be set, this is the only
+	 * one which seems bad.
+	 */
 	if (error_code & 0x10000000)
-                /* Guarded storage error. */
+		/* Guarded storage error. */
 		goto bad_area;
 #endif /* CONFIG_8xx */
 

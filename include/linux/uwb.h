@@ -509,7 +509,7 @@ struct uwb_rc *uwb_rc_get_by_grandpa(const struct device *);
 void uwb_rc_put(struct uwb_rc *rc);
 
 typedef void (*uwb_rc_cmd_cb_f)(struct uwb_rc *rc, void *arg,
-                                struct uwb_rceb *reply, ssize_t reply_size);
+				struct uwb_rceb *reply, ssize_t reply_size);
 
 int uwb_rc_cmd_async(struct uwb_rc *rc, const char *cmd_name,
 		     struct uwb_rccb *cmd, size_t cmd_size,

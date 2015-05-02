@@ -212,15 +212,15 @@ struct register_image
 	unsigned int     sp;   /* 0x38 Stack pointer */
 	unsigned int     pc;   /* 0x3C Program counter */
 
-        unsigned char    p0;   /* 0x40 8-bit zero-register */
+	unsigned char    p0;   /* 0x40 8-bit zero-register */
 	unsigned char    vr;   /* 0x41 Version register */
 
-        unsigned short   p4;   /* 0x42 16-bit zero-register */
+	unsigned short   p4;   /* 0x42 16-bit zero-register */
 	unsigned short  ccr;   /* 0x44 Condition code register */
 
 	unsigned int    mof;   /* 0x46 Multiply overflow register */
 
-        unsigned int     p8;   /* 0x4A 32-bit zero-register */
+	unsigned int     p8;   /* 0x4A 32-bit zero-register */
 	unsigned int    ibr;   /* 0x4E Interrupt base register */
 	unsigned int    irp;   /* 0x52 Interrupt return pointer */
 	unsigned int    srp;   /* 0x56 Subroutine return pointer */
@@ -491,11 +491,11 @@ gdb_cris_strtol (const char *s, char **endptr, int base)
 	for (s1 = (char*)s; (sd = gdb_cris_memchr(hex_asc, *s1, base)) != NULL; ++s1)
 		x = x * base + (sd - hex_asc);
 
-        if (endptr)
-        {
-                /* Unconverted suffix is stored in endptr unless endptr is NULL. */
-                *endptr = s1;
-        }
+	if (endptr)
+	{
+		/* Unconverted suffix is stored in endptr unless endptr is NULL. */
+		*endptr = s1;
+	}
 
 	return x;
 }
@@ -558,18 +558,18 @@ write_register (int regno, char *val)
 	int status = SUCCESS;
 	registers *current_reg = &reg;
 
-        if (regno >= R0 && regno <= PC) {
+	if (regno >= R0 && regno <= PC) {
 		/* 32-bit register with simple offset. */
 		hex2mem ((unsigned char *)current_reg + regno * sizeof(unsigned int),
 			 val, sizeof(unsigned int));
 	}
-        else if (regno == P0 || regno == VR || regno == P4 || regno == P8) {
+	else if (regno == P0 || regno == VR || regno == P4 || regno == P8) {
 		/* Do not support read-only registers. */
 		status = E02;
 	}
-        else if (regno == CCR) {
+	else if (regno == CCR) {
 		/* 16 bit register with complex offset. (P4 is read-only, P6 is not implemented,
-                   and P7 (MOF) is 32 bits in ETRAX 100LX. */
+		   and P7 (MOF) is 32 bits in ETRAX 100LX. */
 		hex2mem ((unsigned char *)&(current_reg->ccr) + (regno-CCR) * sizeof(unsigned short),
 			 val, sizeof(unsigned short));
 	}
@@ -578,7 +578,7 @@ write_register (int regno, char *val)
 		hex2mem ((unsigned char *)&(current_reg->ibr) + (regno-IBR) * sizeof(unsigned int),
 			 val, sizeof(unsigned int));
 	}
-        else {
+	else {
 		/* Do not support nonexisting or unimplemented registers (P2, P3, and P6). */
 		status = E05;
 	}
@@ -631,25 +631,25 @@ read_register (char regno, unsigned int *valptr)
 	if (regno >= R0 && regno <= PC) {
 		/* 32-bit register with simple offset. */
 		*valptr = *(unsigned int *)((char *)current_reg + regno * sizeof(unsigned int));
-                return SUCCESS;
+		return SUCCESS;
 	}
 	else if (regno == P0 || regno == VR) {
 		/* 8 bit register with complex offset. */
 		*valptr = (unsigned int)(*(unsigned char *)
-                                         ((char *)&(current_reg->p0) + (regno-P0) * sizeof(char)));
-                return SUCCESS;
+					 ((char *)&(current_reg->p0) + (regno-P0) * sizeof(char)));
+		return SUCCESS;
 	}
 	else if (regno == P4 || regno == CCR) {
 		/* 16 bit register with complex offset. */
 		*valptr = (unsigned int)(*(unsigned short *)
-                                         ((char *)&(current_reg->p4) + (regno-P4) * sizeof(unsigned short)));
-                return SUCCESS;
+					 ((char *)&(current_reg->p4) + (regno-P4) * sizeof(unsigned short)));
+		return SUCCESS;
 	}
 	else if (regno >= MOF && regno <= USP) {
 		/* 32 bit register with complex offset. */
 		*valptr = *(unsigned int *)((char *)&(current_reg->p8)
-                                            + (regno-P8) * sizeof(unsigned int));
-                return SUCCESS;
+					    + (regno-P8) * sizeof(unsigned int));
+		return SUCCESS;
 	}
 	else {
 		/* Do not support nonexisting or unimplemented registers (P2, P3, and P6). */
@@ -684,21 +684,21 @@ mem2hex(char *buf, unsigned char *mem, int count)
 	int i;
 	int ch;
 
-        if (mem == NULL) {
-                /* Bogus read from m0. FIXME: What constitutes a valid address? */
-                for (i = 0; i < count; i++) {
-                        *buf++ = '0';
-                        *buf++ = '0';
-                }
-        } else {
-                /* Valid mem address. */
-                for (i = 0; i < count; i++) {
-                        ch = *mem++;
+	if (mem == NULL) {
+		/* Bogus read from m0. FIXME: What constitutes a valid address? */
+		for (i = 0; i < count; i++) {
+			*buf++ = '0';
+			*buf++ = '0';
+		}
+	} else {
+		/* Valid mem address. */
+		for (i = 0; i < count; i++) {
+			ch = *mem++;
 			buf = hex_byte_pack(buf, ch);
-                }
-        }
+		}
+	}
 
-        /* Terminate properly. */
+	/* Terminate properly. */
 	*buf = '\0';
 	return (buf);
 }
@@ -840,22 +840,22 @@ putpacket(char *buffer)
 void
 putDebugString (const unsigned char *str, int length)
 {
-        remcomOutBuffer[0] = 'O';
-        mem2hex(&remcomOutBuffer[1], (unsigned char *)str, length);
-        putpacket(remcomOutBuffer);
+	remcomOutBuffer[0] = 'O';
+	mem2hex(&remcomOutBuffer[1], (unsigned char *)str, length);
+	putpacket(remcomOutBuffer);
 }
 
 /********************************** Handle exceptions ************************/
 /* Build and send a response packet in order to inform the host the
    stub is stopped. TAAn...:r...;n...:r...;n...:r...;
-                    AA = signal number
-                    n... = register number (hex)
-                    r... = register contents
-                    n... = `thread'
-                    r... = thread process ID.  This is a hex integer.
-                    n... = other string not starting with valid hex digit.
-                    gdb should ignore this n,r pair and go on to the next.
-                    This way we can extend the protocol. */
+		    AA = signal number
+		    n... = register number (hex)
+		    r... = register contents
+		    n... = `thread'
+		    r... = thread process ID.  This is a hex integer.
+		    n... = other string not starting with valid hex digit.
+		    gdb should ignore this n,r pair and go on to the next.
+		    This way we can extend the protocol. */
 static void
 stub_is_stopped(int sigval)
 {
@@ -878,16 +878,16 @@ stub_is_stopped(int sigval)
 	for (regno = R0; regno <= USP; regno++) {
 		/* Store n...:r...; for the registers in the buffer. */
 
-                status = read_register (regno, &reg_cont);
+		status = read_register (regno, &reg_cont);
 
 		if (status == SUCCESS) {
 			ptr = hex_byte_pack(ptr, regno);
-                        *ptr++ = ':';
+			*ptr++ = ':';
 
-                        ptr = mem2hex(ptr, (unsigned char *)&reg_cont,
-                                      register_size[regno]);
-                        *ptr++ = ';';
-                }
+			ptr = mem2hex(ptr, (unsigned char *)&reg_cont,
+				      register_size[regno]);
+			*ptr++ = ';';
+		}
 
 	}
 
@@ -1025,12 +1025,12 @@ handle_exception (int sigval)
 				   retrieve 108 byte from base address 6000120a.
 				   Failure: void. */
 				{
-                                        char *suffix;
+					char *suffix;
 					unsigned char *addr = (unsigned char *)gdb_cris_strtol(&remcomInBuffer[1],
-                                                                                               &suffix, 16);                                        int length = gdb_cris_strtol(suffix+1, 0, 16);
+											       &suffix, 16);                                        int length = gdb_cris_strtol(suffix+1, 0, 16);
 
-                                        mem2hex(remcomOutBuffer, addr, length);
-                                }
+					mem2hex(remcomOutBuffer, addr, length);
+				}
 				break;
 
 			case 'X':
@@ -1309,7 +1309,7 @@ kgdb_handle_breakpoint:
   move     $irp,[reg+0x52]  ; P10,
   move     $srp,[reg+0x56]  ; P11,
   move     $dtp0,[reg+0x5A] ; P12, register BAR, assembler might not know BAR
-                            ; P13, register DCCR already saved
+			    ; P13, register DCCR already saved
 ;; Due to the old assembler-versions BRP might not be recognized
   .word 0xE670              ; move brp,r0
 ;; Static (compiled) breakpoints must return to the next instruction in order
@@ -1402,7 +1402,7 @@ kgdb_handle_serial:
   move     $irp,[reg+0x52]  ; P10,
   move     $srp,[reg+0x56]  ; P11,
   move     $dtp0,[reg+0x5A] ; P12, register BAR, assembler might not know BAR
-                            ; P13, register DCCR already saved
+			    ; P13, register DCCR already saved
 ;; Due to the old assembler-versions BRP might not be recognized
   .word 0xE670              ; move brp,r0
   move.d   $r0,[reg+0x62]   ; Save the return address in BRP
@@ -1473,7 +1473,7 @@ kgdb_init(void)
 {
 	/* could initialize debug port as well but it's done in head.S already... */
 
-        /* breakpoint handler is now set in irq.c */
+	/* breakpoint handler is now set in irq.c */
 	set_int_vector(8, kgdb_handle_serial);
 
 	enableDebugIRQ();

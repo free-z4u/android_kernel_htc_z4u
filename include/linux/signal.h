@@ -356,15 +356,15 @@ int unhandled_signal(struct task_struct *tsk, int sig);
 	rt_sigmask(SIGTTIN)   |  rt_sigmask(SIGTTOU)   )
 
 #define SIG_KERNEL_COREDUMP_MASK (\
-        rt_sigmask(SIGQUIT)   |  rt_sigmask(SIGILL)    | \
+	rt_sigmask(SIGQUIT)   |  rt_sigmask(SIGILL)    | \
 	rt_sigmask(SIGTRAP)   |  rt_sigmask(SIGABRT)   | \
-        rt_sigmask(SIGFPE)    |  rt_sigmask(SIGSEGV)   | \
+	rt_sigmask(SIGFPE)    |  rt_sigmask(SIGSEGV)   | \
 	rt_sigmask(SIGBUS)    |  rt_sigmask(SIGSYS)    | \
-        rt_sigmask(SIGXCPU)   |  rt_sigmask(SIGXFSZ)   | \
+	rt_sigmask(SIGXCPU)   |  rt_sigmask(SIGXFSZ)   | \
 	SIGEMT_MASK				       )
 
 #define SIG_KERNEL_IGNORE_MASK (\
-        rt_sigmask(SIGCONT)   |  rt_sigmask(SIGCHLD)   | \
+	rt_sigmask(SIGCONT)   |  rt_sigmask(SIGCHLD)   | \
 	rt_sigmask(SIGWINCH)  |  rt_sigmask(SIGURG)    )
 
 #define sig_kernel_only(sig) \

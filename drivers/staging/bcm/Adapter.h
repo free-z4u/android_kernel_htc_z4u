@@ -322,9 +322,9 @@ typedef struct _TARGET_PARAMS
        // EEPROM Param Location
        B_UINT32  m_u32EEPROMFlag;
        /* BINARY TYPE - 4th MSByte:
-        * Interface Type -  3rd MSByte:
-        * Vendor Type - 2nd MSByte
-        */
+	* Interface Type -  3rd MSByte:
+	* Vendor Type - 2nd MSByte
+	*/
        // Unused - LSByte
       B_UINT32   m_u32Customize;
       B_UINT32   m_u32ConfigBW;  /* In Hz */
@@ -484,11 +484,11 @@ struct _MINI_ADAPTER
 	/* Interface Specific */
 	PVOID				pvInterfaceAdapter;
 	int (*bcm_file_download)( PVOID,
-                        struct file *,
-                        unsigned int);
+			struct file *,
+			unsigned int);
 	int (*bcm_file_readback_from_chip)( PVOID,
-                        struct file *,
-                        unsigned int);
+			struct file *,
+			unsigned int);
 	INT (*interface_rdm)(PVOID,
 			UINT ,
 			PVOID ,

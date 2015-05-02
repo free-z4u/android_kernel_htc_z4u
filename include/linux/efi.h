@@ -487,7 +487,7 @@ static inline char *
 efi_guid_unparse(efi_guid_t *guid, char *out)
 {
 	sprintf(out, "%pUl", guid->b);
-        return out;
+	return out;
 }
 
 extern void efi_init (void);

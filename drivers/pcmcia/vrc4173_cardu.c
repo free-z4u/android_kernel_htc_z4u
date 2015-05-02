@@ -49,8 +49,8 @@ static int vrc4173_cardu_slots;
 static vrc4173_socket_t cardu_sockets[CARDU_MAX_SOCKETS];
 
 extern struct socket_info_t *pcmcia_register_socket (int slot,
-                                                     struct pccard_operations *vtable,
-                                                     int use_bus_pm);
+						     struct pccard_operations *vtable,
+						     int use_bus_pm);
 extern void pcmcia_unregister_socket(struct socket_info_t *s);
 
 static inline uint8_t exca_readb(vrc4173_socket_t *socket, uint16_t offset)
@@ -142,8 +142,8 @@ static int cardu_init(unsigned int slot)
 }
 
 static int cardu_register_callback(unsigned int sock,
-                                           void (*handler)(void *, unsigned int),
-                                           void * info)
+					   void (*handler)(void *, unsigned int),
+					   void * info)
 {
 	vrc4173_socket_t *socket = &cardu_sockets[sock];
 
@@ -457,7 +457,7 @@ static void cardu_interrupt(int irq, void *dev_id)
 }
 
 static int __devinit vrc4173_cardu_probe(struct pci_dev *dev,
-                                         const struct pci_device_id *ent)
+					 const struct pci_device_id *ent)
 {
 	vrc4173_socket_t *socket;
 	unsigned long start, len, flags;
@@ -565,7 +565,7 @@ __setup("vrc4173_cardu=", vrc4173_cardu_setup);
 
 static DEFINE_PCI_DEVICE_TABLE(vrc4173_cardu_id_table) = {
 	{ PCI_DEVICE(PCI_VENDOR_ID_NEC, PCI_DEVICE_ID_NEC_NAPCCARD) },
-        {0, }
+	{0, }
 };
 
 static struct pci_driver vrc4173_cardu_driver = {

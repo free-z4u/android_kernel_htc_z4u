@@ -492,7 +492,7 @@ static int __init tfa9887l_init(void)
 {
 	pr_info("%s\n", __func__);
 	mutex_init(&spk_ampl_lock);
-        dspl_enabled = 0;
+	dspl_enabled = 0;
 	return i2c_add_driver(&tfa9887l_driver);
 }
 

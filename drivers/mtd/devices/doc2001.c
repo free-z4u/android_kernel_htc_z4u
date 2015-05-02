@@ -425,7 +425,7 @@ static int doc_read (struct mtd_info *mtd, loff_t from, size_t len,
 
 	/* Let the caller know we completed it */
 	*retlen = len;
-        ret = 0;
+	ret = 0;
 
 	/* Read the ECC data from Spare Data Area,
 	   see Reed-Solomon EDC/ECC 11.1 */

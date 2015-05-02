@@ -28,7 +28,7 @@ void default_idle(void)
 	if (!need_resched() && !cris_hlt_counter) {
 	        /* Halt until exception. */
 		__asm__ volatile("ei    \n\t"
-                                 "halt      ");
+				 "halt      ");
 	}
 	local_irq_enable();
 }
@@ -77,7 +77,7 @@ hard_reset_now(void)
 	wd_ctrl.cnt = 1;	/* Minimum time. */
 	wd_ctrl.cmd = regk_timer_start;
 
-        arch_enable_nmi();
+	arch_enable_nmi();
 	REG_WR(timer, regi_timer0, rw_wd_ctrl, wd_ctrl);
 }
 #endif
@@ -109,14 +109,14 @@ kernel_thread(int (*fn)(void *), void * arg, unsigned long flags)
 
 	memset(&regs, 0, sizeof(regs));
 
-        /* Don't use r10 since that is set to 0 in copy_thread. */
+	/* Don't use r10 since that is set to 0 in copy_thread. */
 	regs.r11 = (unsigned long) fn;
 	regs.r12 = (unsigned long) arg;
 	regs.erp = (unsigned long) kernel_thread_helper;
 	regs.ccs = 1 << (I_CCS_BITNR + CCS_SHIFT);
 
 	/* Create the new process. */
-        return do_fork(flags | CLONE_VM | CLONE_UNTRACED, 0, &regs, 0, NULL, NULL);
+	return do_fork(flags | CLONE_VM | CLONE_UNTRACED, 0, &regs, 0, NULL, NULL);
 }
 
 /*
@@ -145,8 +145,8 @@ copy_thread(unsigned long clone_flags, unsigned long usp,
 	 */
 	childregs = task_pt_regs(p);
 	*childregs = *regs;	/* Struct copy of pt_regs. */
-        p->set_child_tid = p->clear_child_tid = NULL;
-        childregs->r10 = 0;	/* Child returns 0 after a fork/clone. */
+	p->set_child_tid = p->clear_child_tid = NULL;
+	childregs->r10 = 0;	/* Child returns 0 after a fork/clone. */
 
 	/* Set a new TLS ?
 	 * The TLS is in $mof because it is the 5th argument to sys_clone.
@@ -250,7 +250,7 @@ get_wchan(struct task_struct *p)
 void show_regs(struct pt_regs * regs)
 {
 	unsigned long usp = rdusp();
-        printk("ERP: %08lx SRP: %08lx  CCS: %08lx USP: %08lx MOF: %08lx\n",
+	printk("ERP: %08lx SRP: %08lx  CCS: %08lx USP: %08lx MOF: %08lx\n",
 		regs->erp, regs->srp, regs->ccs, usp, regs->mof);
 
 	printk(" r0: %08lx  r1: %08lx   r2: %08lx  r3: %08lx\n",

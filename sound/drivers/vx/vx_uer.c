@@ -49,7 +49,7 @@ static int vx_modify_board_inputs(struct vx_core *chip)
 	struct vx_rmh rmh;
 
 	vx_init_rmh(&rmh, CMD_RESYNC_AUDIO_INPUTS);
-        rmh.Cmd[0] |= 1 << 0; /* reference: AUDIO 0 */
+	rmh.Cmd[0] |= 1 << 0; /* reference: AUDIO 0 */
 	return vx_send_msg(chip, &rmh);
 }
 
@@ -130,7 +130,7 @@ static int vx_read_uer_status(struct vx_core *chip, unsigned int *mode)
 			freq = 48000;
 			break;
 		}
-        }
+	}
 	if (val & VX_SUER_DATA_PRESENT_MASK)
 		/* bit 0 corresponds to consumer/professional bit */
 		*mode = vx_read_one_cbit(chip, 0) ?

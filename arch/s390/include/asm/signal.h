@@ -27,7 +27,7 @@ struct pt_regs;
 typedef unsigned long old_sigset_t;             /* at least 32 bits */
 
 typedef struct {
-        unsigned long sig[_NSIG_WORDS];
+	unsigned long sig[_NSIG_WORDS];
 } sigset_t;
 
 #else
@@ -119,21 +119,21 @@ typedef unsigned long sigset_t;
 
 #ifdef __KERNEL__
 struct old_sigaction {
-        __sighandler_t sa_handler;
-        old_sigset_t sa_mask;
-        unsigned long sa_flags;
-        void (*sa_restorer)(void);
+	__sighandler_t sa_handler;
+	old_sigset_t sa_mask;
+	unsigned long sa_flags;
+	void (*sa_restorer)(void);
 };
 
 struct sigaction {
-        __sighandler_t sa_handler;
-        unsigned long sa_flags;
-        void (*sa_restorer)(void);
-        sigset_t sa_mask;               /* mask last for extensibility */
+	__sighandler_t sa_handler;
+	unsigned long sa_flags;
+	void (*sa_restorer)(void);
+	sigset_t sa_mask;               /* mask last for extensibility */
 };
 
 struct k_sigaction {
-        struct sigaction sa;
+	struct sigaction sa;
 };
 
 #define ptrace_signal_deliver(regs, cookie) do { } while (0)
@@ -142,17 +142,17 @@ struct k_sigaction {
 /* Here we must cater to libcs that poke about in kernel headers.  */
 
 struct sigaction {
-        union {
-          __sighandler_t _sa_handler;
-          void (*_sa_sigaction)(int, struct siginfo *, void *);
-        } _u;
+	union {
+	  __sighandler_t _sa_handler;
+	  void (*_sa_sigaction)(int, struct siginfo *, void *);
+	} _u;
 #ifndef __s390x__ /* lovely */
-        sigset_t sa_mask;
-        unsigned long sa_flags;
-        void (*sa_restorer)(void);
+	sigset_t sa_mask;
+	unsigned long sa_flags;
+	void (*sa_restorer)(void);
 #else  /* __s390x__ */
-        unsigned long sa_flags;
-        void (*sa_restorer)(void);
+	unsigned long sa_flags;
+	void (*sa_restorer)(void);
 	sigset_t sa_mask;
 #endif /* __s390x__ */
 };
@@ -163,9 +163,9 @@ struct sigaction {
 #endif /* __KERNEL__ */
 
 typedef struct sigaltstack {
-        void __user *ss_sp;
-        int ss_flags;
-        size_t ss_size;
+	void __user *ss_sp;
+	int ss_flags;
+	size_t ss_size;
 } stack_t;
 
 

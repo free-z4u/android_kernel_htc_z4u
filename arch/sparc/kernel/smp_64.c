@@ -431,7 +431,7 @@ again:
 	: "r" (pstate), "i" (PSTATE_IE), "i" (ASI_INTR_W),
 	  "r" (data0), "r" (data1), "r" (data2), "r" (target),
 	  "r" (0x10), "0" (tmp)
-        : "g1");
+	: "g1");
 
 	/* NOTE: PSTATE_IE is still clear. */
 	stuck = 100000;

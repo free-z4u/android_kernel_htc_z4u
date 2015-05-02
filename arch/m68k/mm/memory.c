@@ -257,7 +257,7 @@ void cache_push (unsigned long paddr, int len)
 	int tmp = PAGE_SIZE;
 
 	/*
-         * on 68040 or 68060, push cache lines for pages in the range;
+	 * on 68040 or 68060, push cache lines for pages in the range;
 	 * on the '040 this also invalidates the pushed lines, but not on
 	 * the '060!
 	 */

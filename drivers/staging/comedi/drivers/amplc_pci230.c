@@ -36,8 +36,8 @@ Status: works
 Configuration options:
   [0] - PCI bus of device (optional).
   [1] - PCI slot of device (optional).
-          If bus/slot is not specified, the first available PCI device
-          will be used.
+	  If bus/slot is not specified, the first available PCI device
+	  will be used.
 
 Configuring a "amplc_pci230" will match any supported card and it will
 choose the best match, picking the "+" models if possible.  Configuring
@@ -48,10 +48,10 @@ a PCI230+ card.  Configuring a "pci260+" will match a PCI260+ card.
 
 Subdevices:
 
-                PCI230(+)    PCI260(+)
-                ---------    ---------
+		PCI230(+)    PCI260(+)
+		---------    ---------
   Subdevices       3            1
-        0          AI           AI
+	0          AI           AI
 	1          AO
 	2          DIO
 
@@ -99,23 +99,23 @@ AI Commands:
   +---------+--------------+-----------+------------+----------+
 
   Note 1: If AI command and AO command are used simultaneously, only
-          one may have scan_begin_src == TRIG_TIMER.
+	  one may have scan_begin_src == TRIG_TIMER.
 
   Note 2: For PCI230 and PCI230+, scan_begin_src == TRIG_EXT uses
-          DIO channel 16 (pin 49) which will need to be configured as
-          a digital input.  For PCI260+, the EXTTRIG/EXTCONVCLK input
-          (pin 17) is used instead.  For PCI230, scan_begin_src ==
-          TRIG_EXT is not supported.  The trigger is a rising edge
-          on the input.
+	  DIO channel 16 (pin 49) which will need to be configured as
+	  a digital input.  For PCI260+, the EXTTRIG/EXTCONVCLK input
+	  (pin 17) is used instead.  For PCI230, scan_begin_src ==
+	  TRIG_EXT is not supported.  The trigger is a rising edge
+	  on the input.
 
   Note 3: For convert_src == TRIG_EXT, the EXTTRIG/EXTCONVCLK input
-          (pin 25 on PCI230(+), pin 17 on PCI260(+)) is used.  The
-          convert_arg value is interpreted as follows:
+	  (pin 25 on PCI230(+), pin 17 on PCI260(+)) is used.  The
+	  convert_arg value is interpreted as follows:
 
-            convert_arg == (CR_EDGE | 0) => rising edge
-            convert_arg == (CR_EDGE | CR_INVERT | 0) => falling edge
-            convert_arg == 0 => falling edge (backwards compatibility)
-            convert_arg == 1 => rising edge (backwards compatibility)
+	    convert_arg == (CR_EDGE | 0) => rising edge
+	    convert_arg == (CR_EDGE | CR_INVERT | 0) => falling edge
+	    convert_arg == 0 => falling edge (backwards compatibility)
+	    convert_arg == 1 => rising edge (backwards compatibility)
 
   All entries in the channel list must use the same analogue reference.
   If the analogue reference is not AREF_DIFF (not differential) each
@@ -152,15 +152,15 @@ AO Commands:
   +---------+--------------+-----------+------------+----------+
 
   Note 1: If AI command and AO command are used simultaneously, only
-          one may have scan_begin_src == TRIG_TIMER.
+	  one may have scan_begin_src == TRIG_TIMER.
 
   Note 2: scan_begin_src == TRIG_EXT is only supported if the card is
-          configured as a PCI230+ and is only supported on later
-          versions of the card.  As a card configured as a PCI230+ is
-          not guaranteed to support external triggering, please consider
-          this support to be a bonus.  It uses the EXTTRIG/ EXTCONVCLK
-          input (PCI230+ pin 25).  Triggering will be on the rising edge
-          unless the CR_INVERT flag is set in scan_begin_arg.
+	  configured as a PCI230+ and is only supported on later
+	  versions of the card.  As a card configured as a PCI230+ is
+	  not guaranteed to support external triggering, please consider
+	  this support to be a bonus.  It uses the EXTTRIG/ EXTCONVCLK
+	  input (PCI230+ pin 25).  Triggering will be on the rising edge
+	  unless the CR_INVERT flag is set in scan_begin_arg.
 
   The channels in the channel sequence must be in ascending order with
   no repeats.  All entries in the channel sequence must use the same

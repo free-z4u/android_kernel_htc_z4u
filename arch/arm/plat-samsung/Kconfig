@@ -37,7 +37,7 @@ config S3C_BOOT_UART_FORCE_FIFO
        bool "Force UART FIFO on during boot process"
        default y
        help
-         Say Y here to force the UART FIFOs on during the kernel
+	 Say Y here to force the UART FIFOs on during the kernel
 	 uncompressor
 
 
@@ -63,7 +63,7 @@ config SAMSUNG_CLKSRC
 config SAMSUNG_IRQ_VIC_TIMER
        bool
        help
-         Internal configuration to build the VIC timer interrupt code.
+	 Internal configuration to build the VIC timer interrupt code.
 
 # options for gpio configuration support
 
@@ -312,7 +312,7 @@ config S3C_PM_DEBUG_LED_SMDK
        bool "SMDK LED suspend/resume debugging"
        depends on PM && (MACH_SMDK6410)
        help
-         Say Y here to enable the use of the SMDK LEDs on the baseboard
+	 Say Y here to enable the use of the SMDK LEDs on the baseboard
 	 for debugging of the state of the suspend and resume process.
 
 	 Note, this currently only works for S3C64XX based SMDK boards.

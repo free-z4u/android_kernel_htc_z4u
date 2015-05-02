@@ -322,7 +322,7 @@ int __net_init ip_vs_protocol_net_init(struct net *net)
 	int i, ret;
 	static struct ip_vs_protocol *protos[] = {
 #ifdef CONFIG_IP_VS_PROTO_TCP
-        &ip_vs_protocol_tcp,
+	&ip_vs_protocol_tcp,
 #endif
 #ifdef CONFIG_IP_VS_PROTO_UDP
 	&ip_vs_protocol_udp,

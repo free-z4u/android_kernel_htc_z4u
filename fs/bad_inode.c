@@ -24,13 +24,13 @@ static loff_t bad_file_llseek(struct file *file, loff_t offset, int origin)
 static ssize_t bad_file_read(struct file *filp, char __user *buf,
 			size_t size, loff_t *ppos)
 {
-        return -EIO;
+	return -EIO;
 }
 
 static ssize_t bad_file_write(struct file *filp, const char __user *buf,
 			size_t siz, loff_t *ppos)
 {
-        return -EIO;
+	return -EIO;
 }
 
 static ssize_t bad_file_aio_read(struct kiocb *iocb, const struct iovec *iov,

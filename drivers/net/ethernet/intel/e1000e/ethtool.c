@@ -788,7 +788,7 @@ static int e1000_reg_test(struct e1000_adapter *adapter, u64 *data)
 	case e1000_80003es2lan:
 		toggle = 0x7FFFF3FF;
 		break;
-        default:
+	default:
 		toggle = 0x7FFFF033;
 		break;
 	}

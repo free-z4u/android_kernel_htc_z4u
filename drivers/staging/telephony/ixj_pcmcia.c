@@ -45,7 +45,7 @@ static void ixj_detach(struct pcmcia_device *link)
 
 	ixj_cs_release(link);
 
-        kfree(link->priv);
+	kfree(link->priv);
 }
 
 static void ixj_get_serial(struct pcmcia_device * link, IXJ * j)

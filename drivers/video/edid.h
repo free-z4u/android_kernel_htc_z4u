@@ -58,16 +58,16 @@
 #define DESCRIPTOR_DATA				5
 
 #define UPPER_NIBBLE( x ) \
-        (((128|64|32|16) & (x)) >> 4)
+	(((128|64|32|16) & (x)) >> 4)
 
 #define LOWER_NIBBLE( x ) \
-        ((1|2|4|8) & (x))
+	((1|2|4|8) & (x))
 
 #define COMBINE_HI_8LO( hi, lo ) \
-        ( (((unsigned)hi) << 8) | (unsigned)lo )
+	( (((unsigned)hi) << 8) | (unsigned)lo )
 
 #define COMBINE_HI_4LO( hi, lo ) \
-        ( (((unsigned)hi) << 4) | (unsigned)lo )
+	( (((unsigned)hi) << 4) | (unsigned)lo )
 
 #define PIXEL_CLOCK_LO     (unsigned)block[ 0 ]
 #define PIXEL_CLOCK_HI     (unsigned)block[ 1 ]

@@ -163,7 +163,7 @@ static int sticon_scroll(struct vc_data *conp, int t, int b, int dir, int count)
     struct sti_struct *sti = sticon_sti;
 
     if (vga_is_gfx)
-        return 0;
+	return 0;
 
     sticon_cursor(conp, CM_ERASE);
 

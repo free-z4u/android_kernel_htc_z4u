@@ -16,15 +16,15 @@ struct bootmem_data_t; /* stupid forward decl. */
 extern pg_data_t node_data[];
 
 #define alpha_pa_to_nid(pa)		\
-        (alpha_mv.pa_to_nid 		\
+	(alpha_mv.pa_to_nid 		\
 	 ? alpha_mv.pa_to_nid(pa)	\
 	 : (0))
 #define node_mem_start(nid)		\
-        (alpha_mv.node_mem_start 	\
+	(alpha_mv.node_mem_start 	\
 	 ? alpha_mv.node_mem_start(nid) \
 	 : (0UL))
 #define node_mem_size(nid)		\
-        (alpha_mv.node_mem_size 	\
+	(alpha_mv.node_mem_size 	\
 	 ? alpha_mv.node_mem_size(nid) 	\
 	 : ((nid) ? (0UL) : (~0UL)))
 

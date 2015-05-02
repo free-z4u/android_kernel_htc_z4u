@@ -977,8 +977,8 @@ static irqreturn_t mace_interrupt(int irq, void *dev_id)
       lp->mace_stats.xmtrc += (xmtrc & MACE_XMTRC_XMTRC);
 
       if (
-        (xmtfs = inb(ioaddr + AM2150_MACE_BASE + MACE_XMTFS)) &
-        MACE_XMTFS_XMTSV /* Transmit Status Valid */
+	(xmtfs = inb(ioaddr + AM2150_MACE_BASE + MACE_XMTFS)) &
+	MACE_XMTFS_XMTSV /* Transmit Status Valid */
       ) {
 	lp->mace_stats.xmtsv++;
 
@@ -1012,7 +1012,7 @@ static irqreturn_t mace_interrupt(int irq, void *dev_id)
 	    /* Retry error: transmit aborted after 16 attempts */
 	    lp->mace_stats.rtry++;
 	  }
-        } /* if (xmtfs & ~MACE_XMTFS_XMTSV) */
+	} /* if (xmtfs & ~MACE_XMTFS_XMTSV) */
 
       } /* if (xmtfs & MACE_XMTFS_XMTSV) */
 
@@ -1023,30 +1023,30 @@ static irqreturn_t mace_interrupt(int irq, void *dev_id)
 
     if (status & ~MACE_IMR_DEFAULT & ~MACE_IR_RCVINT & ~MACE_IR_XMTINT) {
       if (status & MACE_IR_JAB) {
-        /* Jabber Error.  Excessive transmit duration (20-150ms). */
-        lp->mace_stats.jab++;
+	/* Jabber Error.  Excessive transmit duration (20-150ms). */
+	lp->mace_stats.jab++;
       }
       if (status & MACE_IR_BABL) {
-        /* Babble Error.  >1518 bytes transmitted. */
-        lp->mace_stats.babl++;
+	/* Babble Error.  >1518 bytes transmitted. */
+	lp->mace_stats.babl++;
       }
       if (status & MACE_IR_CERR) {
 	/* Collision Error.  CERR indicates the absence of the
 	   Signal Quality Error Test message after a packet
 	   transmission. */
-        lp->mace_stats.cerr++;
+	lp->mace_stats.cerr++;
       }
       if (status & MACE_IR_RCVCCO) {
-        /* Receive Collision Count Overflow; */
-        lp->mace_stats.rcvcco++;
+	/* Receive Collision Count Overflow; */
+	lp->mace_stats.rcvcco++;
       }
       if (status & MACE_IR_RNTPCO) {
-        /* Runt Packet Count Overflow */
-        lp->mace_stats.rntpco++;
+	/* Runt Packet Count Overflow */
+	lp->mace_stats.rntpco++;
       }
       if (status & MACE_IR_MPCO) {
-        /* Missed Packet Count Overflow */
-        lp->mace_stats.mpco++;
+	/* Missed Packet Count Overflow */
+	lp->mace_stats.mpco++;
       }
     } /* if (status & ~MACE_IMR_DEFAULT & ~MACE_IR_RCVINT & ~MACE_IR_XMTINT) */
 
@@ -1079,26 +1079,26 @@ static int mace_rx(struct net_device *dev, unsigned char RxCnt)
     if (rx_status & MACE_RCVFS_RCVSTS) { /* Error, update stats. */
       lp->linux_stats.rx_errors++;
       if (rx_status & MACE_RCVFS_OFLO) {
-        lp->mace_stats.oflo++;
+	lp->mace_stats.oflo++;
       }
       if (rx_status & MACE_RCVFS_CLSN) {
-        lp->mace_stats.clsn++;
+	lp->mace_stats.clsn++;
       }
       if (rx_status & MACE_RCVFS_FRAM) {
 	lp->mace_stats.fram++;
       }
       if (rx_status & MACE_RCVFS_FCS) {
-        lp->mace_stats.fcs++;
+	lp->mace_stats.fcs++;
       }
     } else {
       short pkt_len = (rx_status & ~MACE_RCVFS_RCVSTS) - 4;
-        /* Auto Strip is off, always subtract 4 */
+	/* Auto Strip is off, always subtract 4 */
       struct sk_buff *skb;
 
       lp->mace_stats.rfs_rntpc += inb(ioaddr + AM2150_RCV);
-        /* runt packet count */
+	/* runt packet count */
       lp->mace_stats.rfs_rcvcc += inb(ioaddr + AM2150_RCV);
-        /* rcv collision count */
+	/* rcv collision count */
 
       pr_debug("    receiving packet size 0x%X rx_status"
 	    " 0x%X.\n", pkt_len, rx_status);

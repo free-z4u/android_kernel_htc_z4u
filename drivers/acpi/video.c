@@ -314,7 +314,7 @@ static const struct thermal_cooling_device_ops video_cooling_ops = {
 };
 
 /* --------------------------------------------------------------------------
-                               Video Management
+			       Video Management
    -------------------------------------------------------------------------- */
 
 static int
@@ -938,7 +938,7 @@ static int acpi_video_bus_check(struct acpi_video_bus *video)
 }
 
 /* --------------------------------------------------------------------------
-                                 Driver Interface
+				 Driver Interface
    -------------------------------------------------------------------------- */
 
 /* device interface */

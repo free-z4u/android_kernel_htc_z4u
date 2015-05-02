@@ -94,9 +94,9 @@ int of_workarounds;
 #define OF_WA_LONGTRAIL	2	/* work around longtrail bugs */
 
 #define PROM_BUG() do {						\
-        prom_printf("kernel BUG at %s line 0x%x!\n",		\
+	prom_printf("kernel BUG at %s line 0x%x!\n",		\
 		    RELOC(__FILE__), __LINE__);			\
-        __asm__ __volatile__(".long " BUG_ILLEGAL_INSTR);	\
+	__asm__ __volatile__(".long " BUG_ILLEGAL_INSTR);	\
 } while (0)
 
 #ifdef DEBUG_PROM
@@ -109,10 +109,10 @@ int of_workarounds;
 typedef u32 prom_arg_t;
 
 struct prom_args {
-        u32 service;
-        u32 nargs;
-        u32 nret;
-        prom_arg_t args[10];
+	u32 service;
+	u32 nargs;
+	u32 nret;
+	prom_arg_t args[10];
 };
 
 struct prom_t {

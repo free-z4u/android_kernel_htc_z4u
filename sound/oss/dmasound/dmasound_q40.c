@@ -360,7 +360,7 @@ static TRANS transQ40Compressing = {
 
 static void *Q40Alloc(unsigned int size, gfp_t flags)
 {
-         return kmalloc(size, flags); /* change to vmalloc */
+	 return kmalloc(size, flags); /* change to vmalloc */
 }
 
 static void Q40Free(void *ptr, unsigned int size)
@@ -382,7 +382,7 @@ static int __init Q40IrqInit(void)
 #ifdef MODULE
 static void Q40IrqCleanUp(void)
 {
-        master_outb(0,SAMPLE_ENABLE_REG);
+	master_outb(0,SAMPLE_ENABLE_REG);
 	free_irq(Q40_IRQ_SAMPLE, Q40Interrupt);
 }
 #endif /* MODULE */
@@ -390,7 +390,7 @@ static void Q40IrqCleanUp(void)
 
 static void Q40Silence(void)
 {
-        master_outb(0,SAMPLE_ENABLE_REG);
+	master_outb(0,SAMPLE_ENABLE_REG);
 	*DAC_LEFT=*DAC_RIGHT=127;
 }
 
@@ -436,7 +436,7 @@ static void Q40PlayNextFrame(int index)
 
 static void Q40Play(void)
 {
-        unsigned long flags;
+	unsigned long flags;
 
 	if (write_sq.active || write_sq.count<=0 ) {
 		/* There's already a frame loaded */
@@ -458,8 +458,8 @@ static void Q40Play(void)
 static irqreturn_t Q40StereoInterrupt(int irq, void *dummy)
 {
 	spin_lock(&dmasound.lock);
-        if (q40_sc>1){
-            *DAC_LEFT=*q40_pp++;
+	if (q40_sc>1){
+	    *DAC_LEFT=*q40_pp++;
 	    *DAC_RIGHT=*q40_pp++;
 	    q40_sc -=2;
 	    master_outb(1,SAMPLE_CLEAR_REG);
@@ -470,8 +470,8 @@ static irqreturn_t Q40StereoInterrupt(int irq, void *dummy)
 static irqreturn_t Q40MonoInterrupt(int irq, void *dummy)
 {
 	spin_lock(&dmasound.lock);
-        if (q40_sc>0){
-            *DAC_LEFT=*q40_pp;
+	if (q40_sc>0){
+	    *DAC_LEFT=*q40_pp;
 	    *DAC_RIGHT=*q40_pp++;
 	    q40_sc --;
 	    master_outb(1,SAMPLE_CLEAR_REG);

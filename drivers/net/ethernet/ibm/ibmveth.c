@@ -502,7 +502,7 @@ static void ibmveth_cleanup(struct ibmveth_adapter *adapter)
 }
 
 static int ibmveth_register_logical_lan(struct ibmveth_adapter *adapter,
-        union ibmveth_buf_desc rxq_desc, u64 mac_address)
+	union ibmveth_buf_desc rxq_desc, u64 mac_address)
 {
 	int rc, try_again = 1;
 

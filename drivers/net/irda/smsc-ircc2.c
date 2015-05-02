@@ -362,8 +362,8 @@ static unsigned short dev_count;
 
 static inline void register_bank(int iobase, int bank)
 {
-        outb(((inb(iobase + IRCC_MASTER) & 0xf0) | (bank & 0x07)),
-               iobase + IRCC_MASTER);
+	outb(((inb(iobase + IRCC_MASTER) & 0xf0) | (bank & 0x07)),
+	       iobase + IRCC_MASTER);
 }
 
 /* PNP hotplug support */
@@ -816,7 +816,7 @@ static int smsc_ircc_net_ioctl(struct net_device *dev, struct ifreq *rq, int cmd
 	case SIOCSBANDWIDTH: /* Set bandwidth */
 		if (!capable(CAP_NET_ADMIN))
 			ret = -EPERM;
-                else {
+		else {
 			/* Make sure we are the only one touching
 			 * self->io.speed and the hardware - Jean II */
 			spin_lock_irqsave(&self->lock, flags);
@@ -1495,7 +1495,7 @@ static void smsc_ircc_sir_receive(struct smsc_ircc_cb *self)
 
 	/*
 	 * Receive all characters in Rx FIFO, unwrap and unstuff them.
-         * async_unwrap_char will deliver all found frames
+	 * async_unwrap_char will deliver all found frames
 	 */
 	do {
 		async_unwrap_char(self->netdev, &self->netdev->stats, &self->rx_buff,

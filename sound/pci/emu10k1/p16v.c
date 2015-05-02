@@ -168,7 +168,7 @@ static void snd_p16v_pcm_free_substream(struct snd_pcm_runtime *runtime)
 	struct snd_emu10k1_pcm *epcm = runtime->private_data;
 
 	if (epcm) {
-        	/* snd_printk(KERN_DEBUG "epcm free: %p\n", epcm); */
+		/* snd_printk(KERN_DEBUG "epcm free: %p\n", epcm); */
 		kfree(epcm);
 	}
 }
@@ -177,13 +177,13 @@ static void snd_p16v_pcm_free_substream(struct snd_pcm_runtime *runtime)
 static int snd_p16v_pcm_open_playback_channel(struct snd_pcm_substream *substream, int channel_id)
 {
 	struct snd_emu10k1 *emu = snd_pcm_substream_chip(substream);
-        struct snd_emu10k1_voice *channel = &(emu->p16v_voices[channel_id]);
+	struct snd_emu10k1_voice *channel = &(emu->p16v_voices[channel_id]);
 	struct snd_emu10k1_pcm *epcm;
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	int err;
 
 	epcm = kzalloc(sizeof(*epcm), GFP_KERNEL);
-        /* snd_printk(KERN_DEBUG "epcm kcalloc: %p\n", epcm); */
+	/* snd_printk(KERN_DEBUG "epcm kcalloc: %p\n", epcm); */
 
 	if (epcm == NULL)
 		return -ENOMEM;
@@ -198,10 +198,10 @@ static int snd_p16v_pcm_open_playback_channel(struct snd_pcm_substream *substrea
 
 	runtime->hw = snd_p16v_playback_hw;
 
-        channel->emu = emu;
-        channel->number = channel_id;
+	channel->emu = emu;
+	channel->number = channel_id;
 
-        channel->use=1;
+	channel->use=1;
 #if 0 /* debug */
 	snd_printk(KERN_DEBUG
 		   "p16v: open channel_id=%d, channel=%p, use=0x%x\n",
@@ -212,7 +212,7 @@ static int snd_p16v_pcm_open_playback_channel(struct snd_pcm_substream *substrea
 	/* channel->interrupt = snd_p16v_pcm_channel_interrupt; */
 	channel->epcm = epcm;
 	if ((err = snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS)) < 0)
-                return err;
+		return err;
 
 	runtime->sync.id32[0] = substream->pcm->card->number;
 	runtime->sync.id32[1] = 'P';
@@ -362,7 +362,7 @@ static int snd_p16v_pcm_prepare_playback(struct snd_pcm_substream *substream)
 		   emu->p16v_buffer.bytes);
 #endif /* debug */
 	tmp = snd_emu10k1_ptr_read(emu, A_SPDIF_SAMPLERATE, channel);
-        switch (runtime->rate) {
+	switch (runtime->rate) {
 	case 44100:
 	  snd_emu10k1_ptr_write(emu, A_SPDIF_SAMPLERATE, channel, (tmp & ~0xe0e0) | 0x8080);
 	  break;
@@ -413,7 +413,7 @@ static int snd_p16v_pcm_prepare_capture(struct snd_pcm_substream *substream)
 	       frames_to_bytes(runtime, 1));
 	*/
 	tmp = snd_emu10k1_ptr_read(emu, A_SPDIF_SAMPLERATE, channel);
-        switch (runtime->rate) {
+	switch (runtime->rate) {
 	case 44100:
 	  snd_emu10k1_ptr_write(emu, A_SPDIF_SAMPLERATE, channel, (tmp & ~0x0e00) | 0x0800);
 	  break;
@@ -470,7 +470,7 @@ static int snd_p16v_pcm_trigger_playback(struct snd_pcm_substream *substream,
 	struct snd_emu10k1_pcm *epcm;
 	int channel;
 	int result = 0;
-        struct snd_pcm_substream *s;
+	struct snd_pcm_substream *s;
 	u32 basic = 0;
 	u32 inte = 0;
 	int running = 0;
@@ -484,7 +484,7 @@ static int snd_p16v_pcm_trigger_playback(struct snd_pcm_substream *substream,
 		running = 0;
 		break;
 	}
-        snd_pcm_group_for_each_entry(s, substream) {
+	snd_pcm_group_for_each_entry(s, substream) {
 		if (snd_pcm_substream_chip(s) != emu ||
 		    s->stream != SNDRV_PCM_STREAM_PLAYBACK)
 			continue;
@@ -495,8 +495,8 @@ static int snd_p16v_pcm_trigger_playback(struct snd_pcm_substream *substream,
 		epcm->running = running;
 		basic |= (0x1<<channel);
 		inte |= (INTE2_PLAYBACK_CH_0_LOOP<<channel);
-                snd_pcm_trigger_done(s, substream);
-        }
+		snd_pcm_trigger_done(s, substream);
+	}
 	/* snd_printk(KERN_DEBUG "basic=0x%x, inte=0x%x\n", basic, inte); */
 
 	switch (cmd) {
@@ -517,7 +517,7 @@ static int snd_p16v_pcm_trigger_playback(struct snd_pcm_substream *substream,
 
 /* trigger_capture callback */
 static int snd_p16v_pcm_trigger_capture(struct snd_pcm_substream *substream,
-                                   int cmd)
+				   int cmd)
 {
 	struct snd_emu10k1 *emu = snd_pcm_substream_chip(substream);
 	struct snd_pcm_runtime *runtime = substream->runtime;
@@ -564,7 +564,7 @@ snd_p16v_pcm_pointer_playback(struct snd_pcm_substream *substream)
 	ptr2 = bytes_to_frames(runtime, ptr1);
 	ptr2+= (ptr4 >> 3) * runtime->period_size;
 	ptr=ptr2;
-        if (ptr >= runtime->buffer_size)
+	if (ptr >= runtime->buffer_size)
 		ptr -= runtime->buffer_size;
 
 	return ptr;
@@ -642,7 +642,7 @@ int __devinit snd_p16v_pcm(struct snd_emu10k1 *emu, int device, struct snd_pcm *
 	struct snd_pcm *pcm;
 	struct snd_pcm_substream *substream;
 	int err;
-        int capture=1;
+	int capture=1;
 
 	/* snd_printk(KERN_DEBUG "snd_p16v_pcm called. device=%d\n", device); */
 	emu->p16v_device_offset = device;
@@ -700,17 +700,17 @@ int __devinit snd_p16v_pcm(struct snd_emu10k1 *emu, int device, struct snd_pcm *
 static int snd_p16v_volume_info(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_info *uinfo)
 {
-        uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-        uinfo->count = 2;
-        uinfo->value.integer.min = 0;
-        uinfo->value.integer.max = 255;
-        return 0;
+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+	uinfo->count = 2;
+	uinfo->value.integer.min = 0;
+	uinfo->value.integer.max = 255;
+	return 0;
 }
 
 static int snd_p16v_volume_get(struct snd_kcontrol *kcontrol,
 			       struct snd_ctl_elem_value *ucontrol)
 {
-        struct snd_emu10k1 *emu = snd_kcontrol_chip(kcontrol);
+	struct snd_emu10k1 *emu = snd_kcontrol_chip(kcontrol);
 	int high_low = (kcontrol->private_value >> 8) & 0xff;
 	int reg = kcontrol->private_value & 0xff;
 	u32 value;
@@ -729,10 +729,10 @@ static int snd_p16v_volume_get(struct snd_kcontrol *kcontrol,
 static int snd_p16v_volume_put(struct snd_kcontrol *kcontrol,
 			       struct snd_ctl_elem_value *ucontrol)
 {
-        struct snd_emu10k1 *emu = snd_kcontrol_chip(kcontrol);
+	struct snd_emu10k1 *emu = snd_kcontrol_chip(kcontrol);
 	int high_low = (kcontrol->private_value >> 8) & 0xff;
 	int reg = kcontrol->private_value & 0xff;
-        u32 value, oval;
+	u32 value, oval;
 
 	oval = value = snd_emu10k1_ptr20_read(emu, reg, 0);
 	if (high_low == 1) {
@@ -763,7 +763,7 @@ static int snd_p16v_capture_source_info(struct snd_kcontrol *kcontrol,
 	uinfo->count = 1;
 	uinfo->value.enumerated.items = 8;
 	if (uinfo->value.enumerated.item > 7)
-                uinfo->value.enumerated.item = 7;
+		uinfo->value.enumerated.item = 7;
 	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
@@ -796,7 +796,7 @@ static int snd_p16v_capture_source_put(struct snd_kcontrol *kcontrol,
 		mask = snd_emu10k1_ptr20_read(emu, BASIC_INTERRUPT, 0) & 0xffff;
 		snd_emu10k1_ptr20_write(emu, BASIC_INTERRUPT, 0, source | mask);
 	}
-        return change;
+	return change;
 }
 
 static int snd_p16v_capture_channel_info(struct snd_kcontrol *kcontrol,
@@ -808,7 +808,7 @@ static int snd_p16v_capture_channel_info(struct snd_kcontrol *kcontrol,
 	uinfo->count = 1;
 	uinfo->value.enumerated.items = 4;
 	if (uinfo->value.enumerated.item > 3)
-                uinfo->value.enumerated.item = 3;
+		uinfo->value.enumerated.item = 3;
 	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
@@ -839,14 +839,14 @@ static int snd_p16v_capture_channel_put(struct snd_kcontrol *kcontrol,
 		tmp = snd_emu10k1_ptr20_read(emu, CAPTURE_P16V_SOURCE, 0) & 0xfffc;
 		snd_emu10k1_ptr20_write(emu, CAPTURE_P16V_SOURCE, 0, tmp | val);
 	}
-        return change;
+	return change;
 }
 static const DECLARE_TLV_DB_SCALE(snd_p16v_db_scale1, -5175, 25, 1);
 
 #define P16V_VOL(xname,xreg,xhl) { \
 	.iface = SNDRV_CTL_ELEM_IFACE_MIXER, .name = xname, \
-        .access = SNDRV_CTL_ELEM_ACCESS_READWRITE |             \
-                  SNDRV_CTL_ELEM_ACCESS_TLV_READ,               \
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE |             \
+		  SNDRV_CTL_ELEM_ACCESS_TLV_READ,               \
 	.info = snd_p16v_volume_info, \
 	.get = snd_p16v_volume_get, \
 	.put = snd_p16v_volume_put, \
@@ -883,14 +883,14 @@ static struct snd_kcontrol_new p16v_mixer_controls[] __devinitdata = {
 int __devinit snd_p16v_mixer(struct snd_emu10k1 *emu)
 {
 	int i, err;
-        struct snd_card *card = emu->card;
+	struct snd_card *card = emu->card;
 
 	for (i = 0; i < ARRAY_SIZE(p16v_mixer_controls); i++) {
 		if ((err = snd_ctl_add(card, snd_ctl_new1(&p16v_mixer_controls[i],
 							  emu))) < 0)
 			return err;
 	}
-        return 0;
+	return 0;
 }
 
 #ifdef CONFIG_PM

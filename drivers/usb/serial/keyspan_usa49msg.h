@@ -15,9 +15,9 @@
    	disclaimer.  The following copyright notice must appear immediately at
    	the beginning of all source files:
 
-        	Copyright (C) 1998-2000 InnoSys Incorporated.  All Rights Reserved
+		Copyright (C) 1998-2000 InnoSys Incorporated.  All Rights Reserved
 
-        	This file is available under a BSD-style copyright
+		This file is available under a BSD-style copyright
 
 	2. The name of InnoSys Incorporated may not be used to endorse or promote
    	products derived from this software without specific prior written

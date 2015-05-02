@@ -450,8 +450,8 @@ void local_flush_tlb_all(void)
 
 void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
 {
-        /* FIXME: Optimize this later.. */
-        flush_tlb_all();
+	/* FIXME: Optimize this later.. */
+	flush_tlb_all();
 }
 
 void __flush_tlb_global(void)

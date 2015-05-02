@@ -481,7 +481,7 @@ static int ultrastor_14f_detect(struct scsi_host_template * tpnt)
 #if (ULTRASTOR_DEBUG & UD_DETECT)
 	    printk("US14F: detect: consistency check failed\n");
 #endif
-           goto out_release_port;
+	   goto out_release_port;
 	}
 
     /* If we were TRULY paranoid, we could issue a host adapter inquiry
@@ -610,9 +610,9 @@ static int ultrastor_24f_detect(struct scsi_host_template * tpnt)
 
       shpnt = scsi_register(tpnt, 0);
       if (!shpnt) {
-             printk(KERN_WARNING "(ultrastor:) Could not register scsi device. Aborting registration.\n");
-             free_irq(config.interrupt, do_ultrastor_interrupt);
-             return FALSE;
+	     printk(KERN_WARNING "(ultrastor:) Could not register scsi device. Aborting registration.\n");
+	     free_irq(config.interrupt, do_ultrastor_interrupt);
+	     return FALSE;
       }
 
       if (request_irq(config.interrupt, do_ultrastor_interrupt, 0, "Ultrastor", shpnt))

@@ -31,10 +31,10 @@
 #define EDAC_MOD_STR      "i5000_edac"
 
 #define i5000_printk(level, fmt, arg...) \
-        edac_printk(level, "i5000", fmt, ##arg)
+	edac_printk(level, "i5000", fmt, ##arg)
 
 #define i5000_mc_printk(mci, level, fmt, arg...) \
-        edac_mc_chipset_printk(mci, level, "i5000", fmt, ##arg)
+	edac_mc_chipset_printk(mci, level, "i5000", fmt, ##arg)
 
 #ifndef PCI_DEVICE_ID_INTEL_FBD_0
 #define PCI_DEVICE_ID_INTEL_FBD_0	0x25F5

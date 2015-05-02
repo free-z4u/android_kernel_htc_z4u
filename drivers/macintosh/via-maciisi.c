@@ -318,7 +318,7 @@ maciisi_write(struct adb_request* req)
 	int i;
 
 	/* We will accept CUDA packets - the VIA sends them to us, so
-           it figures that we should be able to send them to it */
+	   it figures that we should be able to send them to it */
 	if (req->nbytes < 2 || req->data[0] > CUDA_PACKET) {
 		printk(KERN_ERR "maciisi_write: packet too small or not an ADB or CUDA packet\n");
 		req->complete = 1;
@@ -520,7 +520,7 @@ maciisi_interrupt(int irq, void* arg)
 			maciisi_state = idle;
 			if (req->reply_expected) {
 				/* Note: only set this once we've
-                                   successfully sent the packet */
+				   successfully sent the packet */
 				reading_reply = 1;
 			} else {
 				current_req = req->next;

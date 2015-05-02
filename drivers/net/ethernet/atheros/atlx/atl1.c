@@ -2058,9 +2058,9 @@ rrd_ok:
 		    atomic_read(&adapter->rrd_ring.next_to_clean);
 		value = ((rfd_next_to_use & MB_RFD_PROD_INDX_MASK) <<
 			MB_RFD_PROD_INDX_SHIFT) |
-                        ((rrd_next_to_clean & MB_RRD_CONS_INDX_MASK) <<
+			((rrd_next_to_clean & MB_RRD_CONS_INDX_MASK) <<
 			MB_RRD_CONS_INDX_SHIFT) |
-                        ((tpd_next_to_use & MB_TPD_PROD_INDX_MASK) <<
+			((tpd_next_to_use & MB_TPD_PROD_INDX_MASK) <<
 			MB_TPD_PROD_INDX_SHIFT);
 		iowrite32(value, adapter->hw.hw_addr + REG_MAILBOX);
 		spin_unlock(&adapter->mb_lock);

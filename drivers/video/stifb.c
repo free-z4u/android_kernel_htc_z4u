@@ -305,9 +305,9 @@ static void
 ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable)
 {
 	unsigned int value = enable ? 0x43000000 : 0x03000000;
-        SETUP_HW(fb);
-        WRITE_WORD(0x06000000,	fb, 0x1030);
-        WRITE_WORD(value, 	fb, 0x1038);
+	SETUP_HW(fb);
+	WRITE_WORD(0x06000000,	fb, 0x1030);
+	WRITE_WORD(value, 	fb, 0x1038);
 }
 
 static void
@@ -725,22 +725,22 @@ ngleClearOverlayPlanes(struct stifb_info *fb, int mask, int data)
 				     BA(IndexedDcd, Otc04, Ots08, AddrLong,
 					BAJustPoint(0), BINovly, BAIndexBase(0)));
 
-        NGLE_SET_TRANSFERDATA(fb, 0xffffffff);  /* Write foreground color */
+	NGLE_SET_TRANSFERDATA(fb, 0xffffffff);  /* Write foreground color */
 
-        NGLE_REALLY_SET_IMAGE_FG_COLOR(fb, data);
-        NGLE_REALLY_SET_IMAGE_PLANEMASK(fb, mask);
+	NGLE_REALLY_SET_IMAGE_FG_COLOR(fb, data);
+	NGLE_REALLY_SET_IMAGE_PLANEMASK(fb, mask);
 
-        packed_dst = 0;
-        packed_len = (fb->info.var.xres << 16) | fb->info.var.yres;
-        NGLE_SET_DSTXY(fb, packed_dst);
+	packed_dst = 0;
+	packed_len = (fb->info.var.xres << 16) | fb->info.var.yres;
+	NGLE_SET_DSTXY(fb, packed_dst);
 
-        /* Write zeroes to overlay planes */
+	/* Write zeroes to overlay planes */
 	NGLE_QUICK_SET_IMAGE_BITMAP_OP(fb,
 				       IBOvals(RopSrc, MaskAddrOffset(0),
 					       BitmapExtent08, StaticReg(0),
 					       DataDynamic, MaskOtc, BGx(0), FGx(0)));
 
-        SET_LENXY_START_RECFILL(fb, packed_len);
+	SET_LENXY_START_RECFILL(fb, packed_len);
 
 	NGLE_UNLOCK(fb);
 }
@@ -874,7 +874,7 @@ static void __init
 SETUP_HCRX(struct stifb_info *fb)
 {
 	int	hyperbowl;
-        int	nFreeFifoSlots = 0;
+	int	nFreeFifoSlots = 0;
 
 	if (fb->id != S9000_ID_HCRX)
 		return;
@@ -1022,7 +1022,7 @@ stifb_init_display(struct stifb_info *fb)
 	*/
 
 	/* Initialize the image planes. */
-        switch (id) {
+	switch (id) {
 	 case S9000_ID_HCRX:
 	    hyperResetPlanes(fb, ENABLE);
 	    break;
@@ -1037,7 +1037,7 @@ stifb_init_display(struct stifb_info *fb)
 	}
 
 	/* Clear attribute planes on non HCRX devices. */
-        switch (id) {
+	switch (id) {
 	 case S9000_ID_A1659A:
 	 case S9000_ID_A1439A:
 	    if (fb->info.var.bits_per_pixel == 32)

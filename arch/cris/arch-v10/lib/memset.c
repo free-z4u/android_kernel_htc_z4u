@@ -64,7 +64,7 @@ void *memset(void *pdst, int c, unsigned int plen)
 	   move.d r13,%0						\n\
 	   lslq 16,r13							\n\
 	   or.d r13,%0"
-          : "=r" (lc)		/* Inputs.  */
+	  : "=r" (lc)		/* Inputs.  */
 	  : "0" (lc)		/* Outputs.  */
 	  : "r13");		/* Trash.  */
 
@@ -166,92 +166,92 @@ void *memset(void *pdst, int c, unsigned int plen)
     switch (n)
       {
       case 0:
-        break;
+	break;
 
       case 1:
-        *dst = (char) lc;
-        break;
+	*dst = (char) lc;
+	break;
 
       case 2:
-        *(short *) dst = (short) lc;
-        break;
+	*(short *) dst = (short) lc;
+	break;
 
       case 3:
-        *(short *) dst = (short) lc; dst += 2;
-        *dst = (char) lc;
-        break;
+	*(short *) dst = (short) lc; dst += 2;
+	*dst = (char) lc;
+	break;
 
       case 4:
-        *(long *) dst = lc;
-        break;
+	*(long *) dst = lc;
+	break;
 
       case 5:
-        *(long *) dst = lc; dst += 4;
-        *dst = (char) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*dst = (char) lc;
+	break;
 
       case 6:
-        *(long *) dst = lc; dst += 4;
-        *(short *) dst = (short) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(short *) dst = (short) lc;
+	break;
 
       case 7:
-        *(long *) dst = lc; dst += 4;
-        *(short *) dst = (short) lc; dst += 2;
-        *dst = (char) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(short *) dst = (short) lc; dst += 2;
+	*dst = (char) lc;
+	break;
 
       case 8:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc;
+	break;
 
       case 9:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *dst = (char) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*dst = (char) lc;
+	break;
 
       case 10:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(short *) dst = (short) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(short *) dst = (short) lc;
+	break;
 
       case 11:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(short *) dst = (short) lc; dst += 2;
-        *dst = (char) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(short *) dst = (short) lc; dst += 2;
+	*dst = (char) lc;
+	break;
 
       case 12:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc;
+	break;
 
       case 13:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *dst = (char) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*dst = (char) lc;
+	break;
 
       case 14:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(short *) dst = (short) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(short *) dst = (short) lc;
+	break;
 
       case 15:
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(long *) dst = lc; dst += 4;
-        *(short *) dst = (short) lc; dst += 2;
-        *dst = (char) lc;
-        break;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(long *) dst = lc; dst += 4;
+	*(short *) dst = (short) lc; dst += 2;
+	*dst = (char) lc;
+	break;
       }
   }
 

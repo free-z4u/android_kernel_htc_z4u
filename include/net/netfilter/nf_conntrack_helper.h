@@ -27,7 +27,7 @@ struct nf_conntrack_helper {
 	struct nf_conntrack_tuple tuple;
 
 	/* Function to call when data passes; return verdict, or -1 to
-           invalidate. */
+	   invalidate. */
 	int (*help)(struct sk_buff *skb,
 		    unsigned int protoff,
 		    struct nf_conn *ct,

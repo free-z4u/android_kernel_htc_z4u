@@ -120,10 +120,10 @@ static inline void *kmap_atomic_primary(struct page *page, enum km_type type)
 	paddr = page_to_phys(page);
 
 	switch (type) {
-        case 0:		return __kmap_atomic_primary(0, paddr, 2);
-        case 1:		return __kmap_atomic_primary(1, paddr, 3);
-        case 2:		return __kmap_atomic_primary(2, paddr, 4);
-        case 3:		return __kmap_atomic_primary(3, paddr, 5);
+	case 0:		return __kmap_atomic_primary(0, paddr, 2);
+	case 1:		return __kmap_atomic_primary(1, paddr, 3);
+	case 2:		return __kmap_atomic_primary(2, paddr, 4);
+	case 3:		return __kmap_atomic_primary(3, paddr, 5);
 
 	default:
 		BUG();
@@ -146,10 +146,10 @@ do {									\
 static inline void kunmap_atomic_primary(void *kvaddr, enum km_type type)
 {
 	switch (type) {
-        case 0:		__kunmap_atomic_primary(0, 2);	break;
-        case 1:		__kunmap_atomic_primary(1, 3);	break;
-        case 2:		__kunmap_atomic_primary(2, 4);	break;
-        case 3:		__kunmap_atomic_primary(3, 5);	break;
+	case 0:		__kunmap_atomic_primary(0, 2);	break;
+	case 1:		__kunmap_atomic_primary(1, 3);	break;
+	case 2:		__kunmap_atomic_primary(2, 4);	break;
+	case 3:		__kunmap_atomic_primary(3, 5);	break;
 
 	default:
 		BUG();

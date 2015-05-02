@@ -202,19 +202,19 @@ static inline void isa_delay(void)
 
 #define isa_insw(port, buf, nr)     \
        (ISA_SEX ? raw_insw(isa_itw(port), (u16 *)(buf), (nr)) :    \
-                  raw_insw_swapw(isa_itw(port), (u16 *)(buf), (nr)))
+		  raw_insw_swapw(isa_itw(port), (u16 *)(buf), (nr)))
 
 #define isa_outsw(port, buf, nr)    \
        (ISA_SEX ? raw_outsw(isa_itw(port), (u16 *)(buf), (nr)) :  \
-                  raw_outsw_swapw(isa_itw(port), (u16 *)(buf), (nr)))
+		  raw_outsw_swapw(isa_itw(port), (u16 *)(buf), (nr)))
 
 #define isa_insl(port, buf, nr)     \
        (ISA_SEX ? raw_insl(isa_itl(port), (u32 *)(buf), (nr)) :    \
-                  raw_insw_swapw(isa_itw(port), (u16 *)(buf), (nr)<<1))
+		  raw_insw_swapw(isa_itw(port), (u16 *)(buf), (nr)<<1))
 
 #define isa_outsl(port, buf, nr)    \
        (ISA_SEX ? raw_outsl(isa_itl(port), (u32 *)(buf), (nr)) :  \
-                  raw_outsw_swapw(isa_itw(port), (u16 *)(buf), (nr)<<1))
+		  raw_outsw_swapw(isa_itw(port), (u16 *)(buf), (nr)<<1))
 
 
 #define inb     isa_inb

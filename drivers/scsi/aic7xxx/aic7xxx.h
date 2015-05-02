@@ -72,7 +72,7 @@ struct seeprom_descriptor;
 	((scsiid) & OID)
 #define SCSIID_CHANNEL(ahc, scsiid) \
 	((((ahc)->features & AHC_TWIN) != 0) \
-        ? ((((scsiid) & TWIN_CHNLB) != 0) ? 'B' : 'A') \
+	? ((((scsiid) & TWIN_CHNLB) != 0) ? 'B' : 'A') \
        : 'A')
 #define	SCB_IS_SCSIBUS_B(ahc, scb) \
 	(SCSIID_CHANNEL(ahc, (scb)->hscb->scsiid) == 'B')
@@ -759,8 +759,8 @@ struct ahc_syncrate {
  * to parity errors in each phase table.
  */
 struct ahc_phase_table_entry {
-        uint8_t phase;
-        uint8_t mesg_out; /* Message response to parity errors */
+	uint8_t phase;
+	uint8_t mesg_out; /* Message response to parity errors */
 	char *phasemsg;
 };
 

@@ -78,7 +78,7 @@
 #define DRV_AUTHOR	"David S. Miller <davem@redhat.com>"
 
 static char version[] __devinitdata =
-        DRV_NAME ".c:v" DRV_VERSION " " DRV_AUTHOR "\n";
+	DRV_NAME ".c:v" DRV_VERSION " " DRV_AUTHOR "\n";
 
 MODULE_AUTHOR(DRV_AUTHOR);
 MODULE_DESCRIPTION("Sun GEM Gbit ethernet driver");
@@ -743,7 +743,7 @@ static __inline__ void gem_post_rxds(struct gem *gp, int limit)
 }
 
 #define ALIGNED_RX_SKB_ADDR(addr) \
-        ((((unsigned long)(addr) + (64UL - 1UL)) & ~(64UL - 1UL)) - (unsigned long)(addr))
+	((((unsigned long)(addr) + (64UL - 1UL)) & ~(64UL - 1UL)) - (unsigned long)(addr))
 static __inline__ struct sk_buff *gem_alloc_skb(struct net_device *dev, int size,
 						gfp_t gfp_flags)
 {

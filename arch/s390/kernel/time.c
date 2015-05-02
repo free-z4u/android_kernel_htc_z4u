@@ -264,7 +264,7 @@ void __init time_init(void)
 
 	/* request the clock comparator external interrupt */
 	if (register_external_interrupt(0x1004, clock_comparator_interrupt))
-                panic("Couldn't request external interrupt 0x1004");
+		panic("Couldn't request external interrupt 0x1004");
 
 	/* request the timing alert external interrupt */
 	if (register_external_interrupt(0x1406, timing_alert_interrupt))

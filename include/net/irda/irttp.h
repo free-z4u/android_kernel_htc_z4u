@@ -113,7 +113,7 @@ struct tsap_cb {
 
 	__u8 initial_credit;  /* Initial credit to give peer */
 
-        int avail_credit;    /* Available credit to return to peer */
+	int avail_credit;    /* Available credit to return to peer */
 	int remote_credit;   /* Credit held by peer TTP entity */
 	int send_credit;     /* Credit held by local TTP entity */
 

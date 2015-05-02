@@ -565,7 +565,7 @@ struct edge_boot_descriptor {
 
 
 /************************************************************************
-                 T I   U M P   D E F I N I T I O N S
+		 T I   U M P   D E F I N I T I O N S
  ***********************************************************************/
 
 // Chip definitions in I2C

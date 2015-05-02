@@ -4,7 +4,7 @@
 
     This driver supports the IBM PCMCIA Token-Ring Card.
     Written by Steve Kipisz, kipisz@vnet.ibm.com or
-                             bungy@ibm.net
+			     bungy@ibm.net
 
     Written 1995,1996.
 
@@ -236,8 +236,8 @@ static int __devinit ibmtr_config(struct pcmcia_device *link)
 	    goto failed;
 
     /*  Set up the Token-Ring Controller Configuration Register and
-        turn on the card.  Check the "Local Area Network Credit Card
-        Adapters Technical Reference"  SC30-3585 for this info.  */
+	turn on the card.  Check the "Local Area Network Credit Card
+	Adapters Technical Reference"  SC30-3585 for this info.  */
     ibmtr_hw_setup(dev, mmiobase);
 
     SET_NETDEV_DEV(dev, &link->dev);

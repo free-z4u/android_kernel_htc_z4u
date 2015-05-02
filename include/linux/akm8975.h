@@ -86,10 +86,10 @@ Defines a read-only address of the fuse ROM of the AK8975.*/
 #define ECS_IOCTL_APP_GET_MVFLAG       _IOR(AKMIO, 0x1A, short)
 
 struct akm8975_platform_data {
-        short layouts[4][3][3];
-        short irq_trigger;
-        int use_pana_gyro;
-        int intr_pin;
+	short layouts[4][3][3];
+	short irq_trigger;
+	int use_pana_gyro;
+	int intr_pin;
 };
 
 void akm_get_akmd_data(short *getdata);

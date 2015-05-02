@@ -515,14 +515,14 @@ void *safe_dma_memcpy(void *dst, const void *src, size_t size)
 EXPORT_SYMBOL(safe_dma_memcpy);
 
 static void _dma_out(unsigned long addr, unsigned long buf, unsigned short len,
-                     u16 size, u16 dma_size)
+		     u16 size, u16 dma_size)
 {
 	blackfin_dcache_flush_range(buf, buf + len * size);
 	__dma_memcpy(addr, 0, buf, size, len, dma_size);
 }
 
 static void _dma_in(unsigned long addr, unsigned long buf, unsigned short len,
-                    u16 size, u16 dma_size)
+		    u16 size, u16 dma_size)
 {
 	blackfin_dcache_invalidate_range(buf, buf + len * size);
 	__dma_memcpy(buf, size, addr, 0, len, dma_size);

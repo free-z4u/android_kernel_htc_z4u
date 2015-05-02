@@ -150,7 +150,7 @@ extern void *srmmu_nocache_pool;
 /* Accessing the MMU control register. */
 static inline unsigned int srmmu_get_mmureg(void)
 {
-        unsigned int retval;
+	unsigned int retval;
 	__asm__ __volatile__("lda [%%g0] %1, %0\n\t" :
 			     "=r" (retval) :
 			     "i" (ASI_M_MMUREGS));

@@ -41,17 +41,17 @@ static struct platform_device a20r_serial8250_device = {
 };
 
 static struct resource a20r_ds1216_rsrc[] = {
-        {
-                .start = 0x1c081ffc,
-                .end   = 0x1c081fff,
-                .flags = IORESOURCE_MEM
-        }
+	{
+		.start = 0x1c081ffc,
+		.end   = 0x1c081fff,
+		.flags = IORESOURCE_MEM
+	}
 };
 
 static struct platform_device a20r_ds1216_device = {
-        .name           = "rtc-ds1216",
-        .num_resources  = ARRAY_SIZE(a20r_ds1216_rsrc),
-        .resource       = a20r_ds1216_rsrc
+	.name           = "rtc-ds1216",
+	.num_resources  = ARRAY_SIZE(a20r_ds1216_rsrc),
+	.resource       = a20r_ds1216_rsrc
 };
 
 static struct resource snirm_82596_rsrc[] = {

@@ -100,11 +100,11 @@ extern const struct net_device_ops com20020_netdev_ops;
 #define ARCRESET { outb(lp->config | 0x80, _CONFIG); \
 		    udelay(5);                        \
 		    outb(lp->config , _CONFIG);       \
-                  }
+		  }
 #define ARCRESET0 { outb(0x18 | 0x80, _CONFIG);   \
 		    udelay(5);                       \
 		    outb(0x18 , _CONFIG);            \
-                  }
+		  }
 
 #define ASTATUS()	inb(_STATUS)
 #define ADIAGSTATUS()	inb(_DIAGSTAT)

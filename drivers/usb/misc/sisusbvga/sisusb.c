@@ -1358,7 +1358,7 @@ sisusb_testreadwrite(struct sisusb_usb_data *sisusb)
     sisusb_copy_memory(sisusb, srcbuffer, sisusb->vrambase, 7, &dummy);
 
     for(i = 1; i <= 7; i++) {
-        dev_dbg(&sisusb->sisusb_dev->dev, "sisusb: rwtest %d bytes\n", i);
+	dev_dbg(&sisusb->sisusb_dev->dev, "sisusb: rwtest %d bytes\n", i);
 	sisusb_read_memory(sisusb, destbuffer, sisusb->vrambase, i, &dummy);
 	for(j = 0; j < i; j++) {
 	     dev_dbg(&sisusb->sisusb_dev->dev, "rwtest read[%d] = %x\n", j, destbuffer[j]);

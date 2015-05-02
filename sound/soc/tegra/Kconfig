@@ -54,5 +54,5 @@ config SND_SOC_TEGRA_ALC5632
        select SND_SOC_TEGRA_I2S
        select SND_SOC_ALC5632
        help
-         Say Y or M here if you want to add support for SoC audio on the
-         Toshiba AC100 netbook.
+	 Say Y or M here if you want to add support for SoC audio on the
+	 Toshiba AC100 netbook.

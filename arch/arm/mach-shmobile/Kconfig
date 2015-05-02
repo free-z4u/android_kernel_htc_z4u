@@ -101,7 +101,7 @@ config MACH_MARZEN
 comment "SH-Mobile System Configuration"
 
 config CPU_HAS_INTEVT
-        bool
+	bool
 	default y
 
 menu "Memory configuration"

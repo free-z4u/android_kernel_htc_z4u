@@ -273,7 +273,7 @@ int nvram_write_os_partition(struct nvram_os_partition *part, char * buff,
 }
 
 int nvram_write_error_log(char * buff, int length,
-                          unsigned int err_type, unsigned int error_log_cnt)
+			  unsigned int err_type, unsigned int error_log_cnt)
 {
 	int rc = nvram_write_os_partition(&rtas_log_partition, buff, length,
 						err_type, error_log_cnt);
@@ -287,7 +287,7 @@ int nvram_write_error_log(char * buff, int length,
  * Reads nvram for error log for at most 'length'
  */
 int nvram_read_error_log(char * buff, int length,
-                         unsigned int * err_type, unsigned int * error_log_cnt)
+			 unsigned int * err_type, unsigned int * error_log_cnt)
 {
 	int rc;
 	loff_t tmp_index;

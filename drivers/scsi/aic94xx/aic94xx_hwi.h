@@ -225,8 +225,8 @@ struct asd_ha_struct {
 
 #define ASD_BUSADDR_LO(__dma_handle) ((u32)(__dma_handle))
 #define ASD_BUSADDR_HI(__dma_handle) (((sizeof(dma_addr_t))==8)     \
-                                    ? ((u32)((__dma_handle) >> 32)) \
-                                    : ((u32)0))
+				    ? ((u32)((__dma_handle) >> 32)) \
+				    : ((u32)0))
 
 #define dev_to_asd_ha(__dev)  pci_get_drvdata(to_pci_dev(__dev))
 #define SCB_SITE_VALID(__site_no) (((__site_no) & 0xF0FF) != 0x00FF   \

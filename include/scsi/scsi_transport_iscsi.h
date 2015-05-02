@@ -260,7 +260,7 @@ struct iscsi_cls_host {
 };
 
 #define iscsi_job_to_shost(_job) \
-        dev_to_shost(_job->dev)
+	dev_to_shost(_job->dev)
 
 extern void iscsi_host_for_each_session(struct Scsi_Host *shost,
 				void (*fn)(struct iscsi_cls_session *));

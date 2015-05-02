@@ -3577,7 +3577,7 @@ static int megasas_init_fw(struct megasas_instance *instance)
 
 	kfree(ctrl_info);
 
-        /*
+	/*
 	* Setup tasklet for cmd completion
 	*/
 

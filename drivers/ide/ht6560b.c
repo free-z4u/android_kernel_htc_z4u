@@ -202,7 +202,7 @@ static u8 ht_pio2timings(ide_drive_t *drive, const u8 pio)
 	int active_cycles, recovery_cycles;
 	int bus_speed = ide_vlb_clk ? ide_vlb_clk : 50;
 
-        if (pio) {
+	if (pio) {
 		unsigned int cycle_time;
 		struct ide_timing *t = ide_timing_find_mode(XFER_PIO_0 + pio);
 

@@ -204,7 +204,7 @@ static void __init simpad_map_io(void)
 		RS232_ON | ENABLE_5V | RESET_SIMCARD | DECT_POWER_ON);
 	__simpad_write_cs3(); /* Spinlocks not yet initialized */
 
-        sa1100_register_uart_fns(&simpad_port_fns);
+	sa1100_register_uart_fns(&simpad_port_fns);
 	sa1100_register_uart(0, 3);  /* serial interface */
 	sa1100_register_uart(1, 1);  /* DECT             */
 

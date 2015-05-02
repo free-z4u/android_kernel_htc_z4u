@@ -191,11 +191,11 @@
 
 #define GSCTRL_GSWIDTH Fld(11,11)
 #define Gsctrl_Width(Pixel)	/* Display Width [1..2048 pix.]  */ \
-                        (((Pixel) - 1) << FShft(GSCTRL_GSWIDTH))
+			(((Pixel) - 1) << FShft(GSCTRL_GSWIDTH))
 
 #define GSCTRL_GSHEIGHT Fld(11,0)
 #define Gsctrl_Height(Pixel)	/* Display Height [1..2048 pix.]  */ \
-                        (((Pixel) - 1) << FShft(GSCTRL_GSHEIGHT))
+			(((Pixel) - 1) << FShft(GSCTRL_GSHEIGHT))
 
 /* GBBASE fileds */
 #define GBBASE_GLALPHA Fld(8,24)

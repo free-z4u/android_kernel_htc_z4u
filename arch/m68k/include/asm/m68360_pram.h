@@ -18,7 +18,7 @@
 #define WRAP_SLOT	0x4000
 
 /*****************************************************************
-        Global Multichannel parameter RAM
+	Global Multichannel parameter RAM
 *****************************************************************/
 struct global_multi_pram {
     /*
@@ -43,7 +43,7 @@ struct global_multi_pram {
 };
 
 /*****************************************************************
-        Quicc32 HDLC parameter RAM
+	Quicc32 HDLC parameter RAM
 *****************************************************************/
 struct quicc32_pram {
 
@@ -73,7 +73,7 @@ struct quicc32_pram {
 
 
 /*****************************************************************
-        HDLC parameter RAM
+	HDLC parameter RAM
 *****************************************************************/
 
 struct hdlc_pram {
@@ -125,7 +125,7 @@ struct hdlc_pram {
 
 
 /*****************************************************************
-        UART parameter RAM
+	UART parameter RAM
 *****************************************************************/
 
 /*
@@ -185,7 +185,7 @@ struct uart_pram {
 
 
 /*****************************************************************
-        BISYNC parameter RAM
+	BISYNC parameter RAM
 *****************************************************************/
 
 struct bisync_pram {
@@ -225,8 +225,8 @@ struct bisync_pram {
 };
 
 /*****************************************************************
-        IOM2 parameter RAM
-        (overlaid on tx bd[5] of SCC channel[2])
+	IOM2 parameter RAM
+	(overlaid on tx bd[5] of SCC channel[2])
 *****************************************************************/
 struct iom2_pram {
     unsigned short  ci_data;        /* ci data */
@@ -236,8 +236,8 @@ struct iom2_pram {
 };
 
 /*****************************************************************
-        SPI/SMC parameter RAM
-        (overlaid on tx bd[6,7] of SCC channel[2])
+	SPI/SMC parameter RAM
+	(overlaid on tx bd[6,7] of SCC channel[2])
 *****************************************************************/
 
 #define SPI_R       0x8000          /* Ready bit in BD */
@@ -360,12 +360,12 @@ struct ethernet_pram {
     unsigned long   tbuf0_crc;
     unsigned short  tbuf0_bcnt;
     union {
-        unsigned char b[6];
-        struct {
-            unsigned short high;
-            unsigned short middl;
-            unsigned short low;
-        } w;
+	unsigned char b[6];
+	struct {
+	    unsigned short high;
+	    unsigned short middl;
+	    unsigned short low;
+	} w;
     } paddr;
     unsigned short  p_per;          /* persistence */
     unsigned short  rfbd_ptr;       /* rx first bd pointer */

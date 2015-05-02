@@ -1239,7 +1239,7 @@ mptfc_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 			ioc->name);
 		error = -1;
 		goto out_mptfc_probe;
-        }
+	}
 
 	spin_lock_init(&ioc->fc_rescan_work_lock);
 	INIT_WORK(&ioc->fc_rescan_work, mptfc_rescan_devices);

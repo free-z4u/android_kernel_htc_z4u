@@ -74,7 +74,7 @@ typedef struct tagSDot11Counters {
 typedef struct tagSMib2Counter {
     long    ifIndex;
     char    ifDescr[256];               // max size 255 plus zero ending
-                                        // e.g. "interface 1"
+					// e.g. "interface 1"
     long    ifType;
     long    ifMtu;
     unsigned long ifSpeed;
@@ -275,7 +275,7 @@ typedef struct tagSStatCounter {
     unsigned long dwTsrOnceRetry[TYPE_MAXTD];         // this packet only occur one collision
     unsigned long dwTsrMoreThanOnceRetry[TYPE_MAXTD]; // this packet occur more than one collision
     unsigned long dwTsrRetry[TYPE_MAXTD];             // this packet has ever occur collision,
-                                         // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
+					 // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
     unsigned long dwTsrACKData[TYPE_MAXTD];
     unsigned long dwTsrErr[TYPE_MAXTD];
     unsigned long dwAllTsrOK[TYPE_MAXTD];
@@ -347,12 +347,12 @@ void STAvClearAllCounter(PSStatCounter pStatistic);
 void STAvUpdateIsrStatCounter(PSStatCounter pStatistic, unsigned long dwIsr);
 
 void STAvUpdateRDStatCounter(PSStatCounter pStatistic,
-                              unsigned char byRSR, unsigned char byNewRSR, unsigned char byRxRate,
-                              unsigned char *pbyBuffer, unsigned int cbFrameLength);
+			      unsigned char byRSR, unsigned char byNewRSR, unsigned char byRxRate,
+			      unsigned char *pbyBuffer, unsigned int cbFrameLength);
 
 void STAvUpdateRDStatCounterEx(PSStatCounter pStatistic,
-                              unsigned char byRSR, unsigned char byNewRsr, unsigned char byRxRate,
-                              unsigned char *pbyBuffer, unsigned int cbFrameLength);
+			      unsigned char byRSR, unsigned char byNewRsr, unsigned char byRxRate,
+			      unsigned char *pbyBuffer, unsigned int cbFrameLength);
 
 void STAvUpdateTDStatCounter(PSStatCounter pStatistic, unsigned char byTSR0, unsigned char byTSR1,
 		unsigned char *pbyBuffer, unsigned int cbFrameLength, unsigned int uIdx);

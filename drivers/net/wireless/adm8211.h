@@ -417,7 +417,7 @@ struct adm8211_desc {
 
 /* SRAM offsets */
 #define ADM8211_SRAM(x) (priv->pdev->revision < ADM8211_REV_BA ? \
-        ADM8211_SRAM_A_ ## x : ADM8211_SRAM_B_ ## x)
+	ADM8211_SRAM_A_ ## x : ADM8211_SRAM_B_ ## x)
 
 #define ADM8211_SRAM_INDIV_KEY   0x0000
 #define ADM8211_SRAM_A_SHARE_KEY 0x0160

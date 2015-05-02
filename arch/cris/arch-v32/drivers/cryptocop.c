@@ -2905,7 +2905,7 @@ static int cryptocop_ioctl_process(struct inode *inode, struct file *filp, unsig
 
 	wait_event(cryptocop_ioc_process_wq, (jc->processed != 0));
 	DEBUG(printk("cryptocop_ioctl_process: end wait for result\n"));
-        if (!jc->processed){
+	if (!jc->processed){
 		printk(KERN_WARNING "cryptocop_ioctl_process: job not processed at completion\n");
 		err = -EIO;
 		goto error_cleanup;

@@ -215,7 +215,7 @@ asmlinkage void sparc64_get_context(struct pt_regs *regs)
 					    (sizeof(unsigned int) * 32));
 		if (fprs & FPRS_DU)
 			err |= copy_to_user(
-                          ((unsigned long __user *)&(mcp->mc_fpregs.mcfpu_fregs))+16, fpregs+16,
+			  ((unsigned long __user *)&(mcp->mc_fpregs.mcfpu_fregs))+16, fpregs+16,
 			  (sizeof(unsigned int) * 32));
 		err |= __put_user(current_thread_info()->xfsr[0], &(mcp->mc_fpregs.mcfpu_fsr));
 		err |= __put_user(current_thread_info()->gsr[0], &(mcp->mc_fpregs.mcfpu_gsr));

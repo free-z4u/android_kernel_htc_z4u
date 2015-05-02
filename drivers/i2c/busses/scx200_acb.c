@@ -5,8 +5,8 @@
     Also supports the AMD CS5535 and AMD CS5536
 
     Based on i2c-keywest.c which is:
-        Copyright (c) 2001 Benjamin Herrenschmidt <benh@kernel.crashing.org>
-        Copyright (c) 2000 Philip Edelbrock <phil@stimpy.netroedge.com>
+	Copyright (c) 2001 Benjamin Herrenschmidt <benh@kernel.crashing.org>
+	Copyright (c) 2000 Philip Edelbrock <phil@stimpy.netroedge.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as

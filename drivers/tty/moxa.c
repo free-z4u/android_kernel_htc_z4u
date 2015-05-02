@@ -248,8 +248,8 @@ static void moxa_wait_finish(void __iomem *ofsAddr)
 
 static void moxafunc(void __iomem *ofsAddr, u16 cmd, u16 arg)
 {
-        unsigned long flags;
-        spin_lock_irqsave(&moxafunc_lock, flags);
+	unsigned long flags;
+	spin_lock_irqsave(&moxafunc_lock, flags);
 	writew(arg, ofsAddr + FuncArg);
 	writew(cmd, ofsAddr + FuncCode);
 	moxa_wait_finish(ofsAddr);
@@ -258,9 +258,9 @@ static void moxafunc(void __iomem *ofsAddr, u16 cmd, u16 arg)
 
 static int moxafuncret(void __iomem *ofsAddr, u16 cmd, u16 arg)
 {
-        unsigned long flags;
-        u16 ret;
-        spin_lock_irqsave(&moxafunc_lock, flags);
+	unsigned long flags;
+	u16 ret;
+	spin_lock_irqsave(&moxafunc_lock, flags);
 	writew(arg, ofsAddr + FuncArg);
 	writew(cmd, ofsAddr + FuncCode);
 	moxa_wait_finish(ofsAddr);
@@ -354,7 +354,7 @@ static int moxa_ioctl(struct tty_struct *tty,
 				if (!moxa_boards[i].ready) {
 				        spin_unlock_bh(&moxa_lock);
 					goto copy;
-                                }
+				}
 
 				status = MoxaPortLineStatus(p);
 				spin_unlock_bh(&moxa_lock);
@@ -1126,7 +1126,7 @@ module_exit(moxa_exit);
 static void moxa_shutdown(struct tty_port *port)
 {
 	struct moxa_port *ch = container_of(port, struct moxa_port, port);
-        MoxaPortDisable(ch);
+	MoxaPortDisable(ch);
 	MoxaPortFlushData(ch, 2);
 }
 
@@ -1248,7 +1248,7 @@ static int moxa_chars_in_buffer(struct tty_struct *tty)
 		 * Make it possible to wakeup anything waiting for output
 		 * in tty_ioctl.c, etc.
 		 */
-        	set_bit(EMPTYWAIT, &ch->statusflags);
+		set_bit(EMPTYWAIT, &ch->statusflags);
 	return chars;
 }
 
@@ -1350,8 +1350,8 @@ static void moxa_new_dcdstate(struct moxa_port *p, u8 dcd)
 
 	spin_lock_irqsave(&p->port.lock, flags);
 	if (dcd != p->DCDState) {
-        	p->DCDState = dcd;
-        	spin_unlock_irqrestore(&p->port.lock, flags);
+		p->DCDState = dcd;
+		spin_unlock_irqrestore(&p->port.lock, flags);
 		tty = tty_port_tty_get(&p->port);
 		if (tty && C_CLOCAL(tty) && !dcd)
 			tty_hangup(tty);

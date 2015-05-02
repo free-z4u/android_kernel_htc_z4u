@@ -242,7 +242,7 @@ struct cmd_id_map cmds_map[] = {
 	{VFE_CMD_CAPTURE, VFE_START, QDSP_CMDQUEUE,
 			"VFE_CMD_CAPTURE", "VFE_START"},
 	{VFE_CMD_DUMMY_7, VFE_MAX, VFE_MAX},
-        {VFE_CMD_STOP, VFE_IMMEDIATE_STOP, QDSP_CMDQUEUE, "VFE_CMD_STOP", "VFE_IMMEDIATE_STOP"},
+	{VFE_CMD_STOP, VFE_IMMEDIATE_STOP, QDSP_CMDQUEUE, "VFE_CMD_STOP", "VFE_IMMEDIATE_STOP"},
 	{VFE_CMD_GET_HW_VERSION, VFE_MAX, VFE_MAX},
 	{VFE_CMD_GET_FRAME_SKIP_COUNTS, VFE_MAX, VFE_MAX},
 	{VFE_CMD_OUTPUT1_BUFFER_ENQ, VFE_MAX, VFE_MAX},
@@ -537,7 +537,7 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 		              else {
 		                   free_buf = NULL;
 		                   vfe2x_ctrl->camif_error--;
-                          }
+			  }
 				CDBG("free_buf = %x\n",
 						(unsigned int) free_buf);
 				if (free_buf) {
@@ -609,15 +609,15 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 				return;
 			}
 
-                   if (!vfe2x_ctrl->camif_error) {
-                    free_buf = vfe2x_check_free_buffer(
-                        VFE_MSG_OUTPUT_IRQ,
-                        VFE_MSG_OUTPUT_PRIMARY);
-                   }
-                   else {
-                       free_buf = NULL;
-                       vfe2x_ctrl->camif_error--;
-                   }
+		   if (!vfe2x_ctrl->camif_error) {
+		    free_buf = vfe2x_check_free_buffer(
+			VFE_MSG_OUTPUT_IRQ,
+			VFE_MSG_OUTPUT_PRIMARY);
+		   }
+		   else {
+		       free_buf = NULL;
+		       vfe2x_ctrl->camif_error--;
+		   }
 
 			CDBG("free_buf = %x\n",
 					(unsigned int) free_buf);
@@ -799,11 +799,11 @@ static void vfe_7x_ops(void *driver_data, unsigned id, size_t len,
 				struct vfe_error_msg *VFE_ErrorMessageBuffer
 					= data;
 				ptr = data;
-                   if (VFE_ErrorMessageBuffer->output1ybusoverflow ||
-                       VFE_ErrorMessageBuffer->output1cbcrbusoverflow ||
-                       VFE_ErrorMessageBuffer->output2ybusoverflow ||
-                       VFE_ErrorMessageBuffer->output2cbcrbusoverflow)
-                           vfe2x_ctrl->camif_error = 2;
+		   if (VFE_ErrorMessageBuffer->output1ybusoverflow ||
+		       VFE_ErrorMessageBuffer->output1cbcrbusoverflow ||
+		       VFE_ErrorMessageBuffer->output2ybusoverflow ||
+		       VFE_ErrorMessageBuffer->output2cbcrbusoverflow)
+			   vfe2x_ctrl->camif_error = 2;
 
  				CDBG("Error: %x %x\n", ptr[0], ptr[1]);
 				pr_err("CAMIF_Error              = %d\n",
@@ -1550,7 +1550,7 @@ static long msm_vfe_subdev_ioctl(struct v4l2_subdev *sd,
 		if (queue == QDSP_CMDQUEUE) {
 			switch (vfecmd.id) {
 			case VFE_CMD_RESET:
-                Print_csic_irq_cnt = 10;
+		Print_csic_irq_cnt = 10;
 			    Block_IN_VFE_RESET = 1;
 				pr_info("CMD_GENERAL: before %s %s\n", cmds_map[vfecmd.id].isp_id_name,
 					cmds_map[vfecmd.id].vfe_id_name);
@@ -1598,11 +1598,11 @@ static long msm_vfe_subdev_ioctl(struct v4l2_subdev *sd,
 				spin_lock_irqsave(&vfe2x_ctrl->table_lock,
 						flags);
 				if ((op_mode & SNAPSHOT_MASK_MODE) && !vfe2x_ctrl->snapshot_done) {
-                                        vfe2x_ctrl->stop_pending = 1;
-                                        spin_unlock_irqrestore(&vfe2x_ctrl->table_lock,
-                                                flags);
-                                        return 0;
-                                }
+					vfe2x_ctrl->stop_pending = 1;
+					spin_unlock_irqrestore(&vfe2x_ctrl->table_lock,
+						flags);
+					return 0;
+				}
 				if ((!list_empty(&vfe2x_ctrl->table_q)) ||
 						vfe2x_ctrl->tableack_pending) {
 					CDBG("stop pending\n");

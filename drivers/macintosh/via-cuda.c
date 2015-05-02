@@ -463,12 +463,12 @@ cuda_interrupt(int irq, void *arg)
     if (!arg)
 #endif
     {
-        if ((in_8(&via[IFR]) & SR_INT) == 0) {
-            spin_unlock(&cuda_lock);
-            return IRQ_NONE;
-        } else {
-            out_8(&via[IFR], SR_INT);
-        }
+	if ((in_8(&via[IFR]) & SR_INT) == 0) {
+	    spin_unlock(&cuda_lock);
+	    return IRQ_NONE;
+	} else {
+	    out_8(&via[IFR], SR_INT);
+	}
     }
 
     status = (~in_8(&via[B]) & (TIP|TREQ)) | (in_8(&via[ACR]) & SR_OUT);

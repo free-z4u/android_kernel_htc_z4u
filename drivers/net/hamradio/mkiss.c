@@ -73,7 +73,7 @@ struct mkiss {
 #define AXF_OUTWAIT	4		/* is outpacket was flag	*/
 
 	int		mode;
-        int		crcmode;	/* MW: for FlexNet, SMACK etc.  */
+	int		crcmode;	/* MW: for FlexNet, SMACK etc.  */
 	int		crcauto;	/* CRC auto mode */
 
 #define CRC_MODE_NONE		0

@@ -62,7 +62,7 @@ struct reg_window32 {
 /* A V9 Sparc stack frame */
 struct sparc_stackf {
 	unsigned long locals[8];
-        unsigned long ins[6];
+	unsigned long ins[6];
 	struct sparc_stackf *fp;
 	unsigned long callers_pc;
 	char *structptr;
@@ -73,7 +73,7 @@ struct sparc_stackf {
 /* A 32-bit Sparc stack frame */
 struct sparc_stackf32 {
 	unsigned int locals[8];
-        unsigned int ins[6];
+	unsigned int ins[6];
 	unsigned int fp;
 	unsigned int callers_pc;
 	unsigned int structptr;
@@ -117,7 +117,7 @@ struct reg_window32 {
 /* A Sparc stack frame */
 struct sparc_stackf {
 	unsigned long locals[8];
-        unsigned long ins[6];
+	unsigned long ins[6];
 	struct sparc_stackf *fp;
 	unsigned long callers_pc;
 	char *structptr;

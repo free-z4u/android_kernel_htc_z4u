@@ -247,7 +247,7 @@ static struct atari_floppy_struct {
 	udelay(25);				\
 	dma_wd.fdc_acces_seccount = (val);	\
 	MFPDELAY();				\
-        /* local_irq_restore(__flags); */	\
+	/* local_irq_restore(__flags); */	\
     } while(0)
 
 
@@ -362,7 +362,7 @@ static void finish_fdc_done( int dummy );
 static void setup_req_params( int drive );
 static void redo_fd_request( void);
 static int fd_locked_ioctl(struct block_device *bdev, fmode_t mode, unsigned int
-                     cmd, unsigned long param);
+		     cmd, unsigned long param);
 static void fd_probe( int drive );
 static int fd_test_drive_present( int drive );
 static void config_types( void );

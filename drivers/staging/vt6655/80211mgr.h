@@ -333,7 +333,7 @@ typedef struct tagWLAN_IE_RSN_EXT {
     unsigned char abyMulticast[4];
     unsigned short wPKCount;
     struct {
-        unsigned char abyOUI[4];
+	unsigned char abyOUI[4];
     } PKSList[1]; // the rest is variable so need to
     // overlay ieauth structure
 } WLAN_IE_RSN_EXT, *PWLAN_IE_RSN_EXT;
@@ -342,7 +342,7 @@ typedef struct tagWLAN_IE_RSN_EXT {
 typedef struct tagWLAN_IE_RSN_AUTH {
     unsigned short wAuthCount;
     struct {
-        unsigned char abyOUI[4];
+	unsigned char abyOUI[4];
     } AuthKSList[1];
 } WLAN_IE_RSN_AUTH, *PWLAN_IE_RSN_AUTH;
 

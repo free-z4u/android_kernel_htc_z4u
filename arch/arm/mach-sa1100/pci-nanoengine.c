@@ -201,19 +201,19 @@ pci 0000:00:00.0: BAR 1: set to [io  0x0400-0x043f] (PCI address [0x0-0x3f])
 
 # lspci -vv -s 0000:00:00.0
 00:00.0 Class 0200: Device 8086:1209 (rev 09)
-        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr+ Stepping- SERR+ FastB2B- DisINTx-
-        Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR+ <PERR+ INTx-
-        Latency: 0 (2000ns min, 14000ns max), Cache Line Size: 32 bytes
-        Interrupt: pin A routed to IRQ 0
-        Region 0: Memory at 18620000 (32-bit, non-prefetchable) [size=4K]
-        Region 1: I/O ports at 0400 [size=64]
-        Region 2: [virtual] Memory at 18600000 (32-bit, non-prefetchable) [size=128K]
-        [virtual] Expansion ROM at 78000000 [disabled] [size=1M]
-        Capabilities: [dc] Power Management version 2
-                Flags: PMEClk- DSI+ D1+ D2+ AuxCurrent=0mA PME(D0+,D1+,D2+,D3hot+,D3cold-)
-                Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=2 PME-
-        Kernel driver in use: e100
-        Kernel modules: e100
+	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr+ Stepping- SERR+ FastB2B- DisINTx-
+	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR+ <PERR+ INTx-
+	Latency: 0 (2000ns min, 14000ns max), Cache Line Size: 32 bytes
+	Interrupt: pin A routed to IRQ 0
+	Region 0: Memory at 18620000 (32-bit, non-prefetchable) [size=4K]
+	Region 1: I/O ports at 0400 [size=64]
+	Region 2: [virtual] Memory at 18600000 (32-bit, non-prefetchable) [size=128K]
+	[virtual] Expansion ROM at 78000000 [disabled] [size=1M]
+	Capabilities: [dc] Power Management version 2
+		Flags: PMEClk- DSI+ D1+ D2+ AuxCurrent=0mA PME(D0+,D1+,D2+,D3hot+,D3cold-)
+		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=2 PME-
+	Kernel driver in use: e100
+	Kernel modules: e100
  *
  */
 static struct resource pci_prefetchable_memory = {

@@ -1850,10 +1850,10 @@ struct dentry *d_lookup(struct dentry *parent, struct qstr *name)
 	struct dentry *dentry;
 	unsigned seq;
 
-        do {
-                seq = read_seqbegin(&rename_lock);
-                dentry = __d_lookup(parent, name);
-                if (dentry)
+	do {
+		seq = read_seqbegin(&rename_lock);
+		dentry = __d_lookup(parent, name);
+		if (dentry)
 			break;
 	} while (read_seqretry(&rename_lock, seq));
 	return dentry;
@@ -3078,7 +3078,7 @@ void __init vfs_caches_init(unsigned long mempages)
 	unsigned long reserve;
 
 	/* Base hash sizes on available memory, with a reserve equal to
-           150% of current kernel size */
+	   150% of current kernel size */
 
 	reserve = min((mempages - nr_free_pages()) * 3/2, mempages - 1);
 	mempages -= reserve;

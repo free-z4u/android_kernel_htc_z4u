@@ -1199,7 +1199,7 @@ static int
 imsttfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
 {
 	struct imstt_par *par = info->par;
-        u32 flags = cursor->set, fg, bg, xx, yy;
+	u32 flags = cursor->set, fg, bg, xx, yy;
 
 	if (cursor->dest == NULL && cursor->rop == ROP_XOR)
 		return 1;
@@ -1212,43 +1212,43 @@ imsttfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
 	}
 
 	if (flags & FB_CUR_SETSIZE) {
-        }
+	}
 
-        if (flags & (FB_CUR_SETSHAPE | FB_CUR_SETCMAP)) {
-                int fg_idx = cursor->image.fg_color;
-                int width = (cursor->image.width+7)/8;
-                u8 *dat = (u8 *) cursor->image.data;
-                u8 *dst = (u8 *) cursor->dest;
-                u8 *msk = (u8 *) cursor->mask;
+	if (flags & (FB_CUR_SETSHAPE | FB_CUR_SETCMAP)) {
+		int fg_idx = cursor->image.fg_color;
+		int width = (cursor->image.width+7)/8;
+		u8 *dat = (u8 *) cursor->image.data;
+		u8 *dst = (u8 *) cursor->dest;
+		u8 *msk = (u8 *) cursor->mask;
 
-                switch (cursor->rop) {
-                case ROP_XOR:
-                        for (i = 0; i < cursor->image.height; i++) {
-                                for (j = 0; j < width; j++) {
-                                        d_idx = i * MAX_CURS/8  + j;
-                                        data[d_idx] =  byte_rev[dat[s_idx] ^
-                                                                dst[s_idx]];
-                                        mask[d_idx] = byte_rev[msk[s_idx]];
-                                        s_idx++;
-                                }
-                        }
-                        break;
-                case ROP_COPY:
-                default:
-                        for (i = 0; i < cursor->image.height; i++) {
-                                for (j = 0; j < width; j++) {
-                                        d_idx = i * MAX_CURS/8 + j;
-                                        data[d_idx] = byte_rev[dat[s_idx]];
-                                        mask[d_idx] = byte_rev[msk[s_idx]];
-                                        s_idx++;
-                                }
+		switch (cursor->rop) {
+		case ROP_XOR:
+			for (i = 0; i < cursor->image.height; i++) {
+				for (j = 0; j < width; j++) {
+					d_idx = i * MAX_CURS/8  + j;
+					data[d_idx] =  byte_rev[dat[s_idx] ^
+								dst[s_idx]];
+					mask[d_idx] = byte_rev[msk[s_idx]];
+					s_idx++;
+				}
+			}
+			break;
+		case ROP_COPY:
+		default:
+			for (i = 0; i < cursor->image.height; i++) {
+				for (j = 0; j < width; j++) {
+					d_idx = i * MAX_CURS/8 + j;
+					data[d_idx] = byte_rev[dat[s_idx]];
+					mask[d_idx] = byte_rev[msk[s_idx]];
+					s_idx++;
+				}
 			}
 			break;
 		}
 
 		fg = ((info->cmap.red[fg_idx] & 0xf8) << 7) |
-                     ((info->cmap.green[fg_idx] & 0xf8) << 2) |
-                     ((info->cmap.blue[fg_idx] & 0xf8) >> 3) | 1 << 15;
+		     ((info->cmap.green[fg_idx] & 0xf8) << 2) |
+		     ((info->cmap.blue[fg_idx] & 0xf8) >> 3) | 1 << 15;
 
 		imsttfb_load_cursor_image(par, xx, yy, fgc);
 	}
@@ -1450,7 +1450,7 @@ init_imstt(struct fb_info *info)
 
 	info->fbops = &imsttfb_ops;
 	info->flags = FBINFO_DEFAULT |
-                      FBINFO_HWACCEL_COPYAREA |
+		      FBINFO_HWACCEL_COPYAREA |
 	              FBINFO_HWACCEL_FILLRECT |
 	              FBINFO_HWACCEL_YPAN;
 

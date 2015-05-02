@@ -693,11 +693,11 @@ int i_APCI1710_InsnReadSSIValue(struct comedi_device *dev, struct comedi_subdevi
 | Task              :
 					(0) Set the digital output from selected SSI moule         |
 |                     (b_ModuleNbr) ON
-                    (1) Set the digital output from selected SSI moule         |
+		    (1) Set the digital output from selected SSI moule         |
 |                     (b_ModuleNbr) OFF
 					(2)Read the status from selected SSI digital input        |
 |                     (b_InputChannel)
-                    (3)Read the status from all SSI digital inputs from       |
+		    (3)Read the status from all SSI digital inputs from       |
 |                     selected SSI module (b_ModulNbr)                   |
 +----------------------------------------------------------------------------+
 | Input Parameters  : unsigned char_ b_BoardHandle         : Handle of board APCI-1710|

@@ -204,7 +204,7 @@ static inline irqreturn_t timer_interrupt(int irq, void *dev_id)
 	/* Reset watchdog otherwise it resets us! */
 	reset_watchdog();
 
-        /* Update statistics. */
+	/* Update statistics. */
 	update_process_times(user_mode(regs));
 
 	cris_do_profile(regs); /* Save profiling information */
@@ -215,7 +215,7 @@ static inline irqreturn_t timer_interrupt(int irq, void *dev_id)
 
 	/* Call the real timer interrupt handler */
 	xtime_update(1);
-        return IRQ_HANDLED;
+	return IRQ_HANDLED;
 }
 
 /* Timer is IRQF_SHARED so drivers can add stuff to the timer irq chain.

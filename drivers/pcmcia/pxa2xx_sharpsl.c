@@ -213,7 +213,7 @@ int __devinit pcmcia_collie_init(struct device *dev)
        int ret = -ENODEV;
 
        if (machine_is_collie())
-               ret = sa11xx_drv_pcmcia_probe(dev, &sharpsl_pcmcia_ops, 0, 1);
+	       ret = sa11xx_drv_pcmcia_probe(dev, &sharpsl_pcmcia_ops, 0, 1);
 
        return ret;
 }

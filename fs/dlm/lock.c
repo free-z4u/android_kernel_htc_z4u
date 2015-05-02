@@ -52,7 +52,7 @@
    calls on local (L) and remote (R) nodes:
 
    L: send_xxxx()              ->  R: receive_xxxx()
-                                   R: do_xxxx()
+				   R: do_xxxx()
    L: receive_xxxx_reply()     <-  R: send_xxxx_reply()
 */
 #include <linux/types.h>
@@ -101,14 +101,14 @@ static void del_timeout(struct dlm_lkb *lkb);
 
 static const int __dlm_compat_matrix[8][8] = {
       /* UN NL CR CW PR PW EX PD */
-        {1, 1, 1, 1, 1, 1, 1, 0},       /* UN */
-        {1, 1, 1, 1, 1, 1, 1, 0},       /* NL */
-        {1, 1, 1, 1, 1, 1, 0, 0},       /* CR */
-        {1, 1, 1, 1, 0, 0, 0, 0},       /* CW */
-        {1, 1, 1, 0, 1, 0, 0, 0},       /* PR */
-        {1, 1, 1, 0, 0, 0, 0, 0},       /* PW */
-        {1, 1, 0, 0, 0, 0, 0, 0},       /* EX */
-        {0, 0, 0, 0, 0, 0, 0, 0}        /* PD */
+	{1, 1, 1, 1, 1, 1, 1, 0},       /* UN */
+	{1, 1, 1, 1, 1, 1, 1, 0},       /* NL */
+	{1, 1, 1, 1, 1, 1, 0, 0},       /* CR */
+	{1, 1, 1, 1, 0, 0, 0, 0},       /* CW */
+	{1, 1, 1, 0, 1, 0, 0, 0},       /* PR */
+	{1, 1, 1, 0, 0, 0, 0, 0},       /* PW */
+	{1, 1, 0, 0, 0, 0, 0, 0},       /* EX */
+	{0, 0, 0, 0, 0, 0, 0, 0}        /* PD */
 };
 
 /*
@@ -121,15 +121,15 @@ static const int __dlm_compat_matrix[8][8] = {
  */
 
 const int dlm_lvb_operations[8][8] = {
-        /* UN   NL  CR  CW  PR  PW  EX  PD*/
-        {  -1,  1,  1,  1,  1,  1,  1, -1 }, /* UN */
-        {  -1,  1,  1,  1,  1,  1,  1,  0 }, /* NL */
-        {  -1, -1,  1,  1,  1,  1,  1,  0 }, /* CR */
-        {  -1, -1, -1,  1,  1,  1,  1,  0 }, /* CW */
-        {  -1, -1, -1, -1,  1,  1,  1,  0 }, /* PR */
-        {  -1,  0,  0,  0,  0,  0,  1,  0 }, /* PW */
-        {  -1,  0,  0,  0,  0,  0,  0,  0 }, /* EX */
-        {  -1,  0,  0,  0,  0,  0,  0,  0 }  /* PD */
+	/* UN   NL  CR  CW  PR  PW  EX  PD*/
+	{  -1,  1,  1,  1,  1,  1,  1, -1 }, /* UN */
+	{  -1,  1,  1,  1,  1,  1,  1,  0 }, /* NL */
+	{  -1, -1,  1,  1,  1,  1,  1,  0 }, /* CR */
+	{  -1, -1, -1,  1,  1,  1,  1,  0 }, /* CW */
+	{  -1, -1, -1, -1,  1,  1,  1,  0 }, /* PR */
+	{  -1,  0,  0,  0,  0,  0,  1,  0 }, /* PW */
+	{  -1,  0,  0,  0,  0,  0,  0,  0 }, /* EX */
+	{  -1,  0,  0,  0,  0,  0,  0,  0 }  /* PD */
 };
 
 #define modes_compat(gr, rq) \
@@ -148,14 +148,14 @@ int dlm_modes_compat(int mode1, int mode2)
 
 static const int __quecvt_compat_matrix[8][8] = {
       /* UN NL CR CW PR PW EX PD */
-        {0, 0, 0, 0, 0, 0, 0, 0},       /* UN */
-        {0, 0, 1, 1, 1, 1, 1, 0},       /* NL */
-        {0, 0, 0, 1, 1, 1, 1, 0},       /* CR */
-        {0, 0, 0, 0, 1, 1, 1, 0},       /* CW */
-        {0, 0, 0, 1, 0, 1, 1, 0},       /* PR */
-        {0, 0, 0, 0, 0, 0, 1, 0},       /* PW */
-        {0, 0, 0, 0, 0, 0, 0, 0},       /* EX */
-        {0, 0, 0, 0, 0, 0, 0, 0}        /* PD */
+	{0, 0, 0, 0, 0, 0, 0, 0},       /* UN */
+	{0, 0, 1, 1, 1, 1, 1, 0},       /* NL */
+	{0, 0, 0, 1, 1, 1, 1, 0},       /* CR */
+	{0, 0, 0, 0, 1, 1, 1, 0},       /* CW */
+	{0, 0, 0, 1, 0, 1, 1, 0},       /* PR */
+	{0, 0, 0, 0, 0, 0, 1, 0},       /* PW */
+	{0, 0, 0, 0, 0, 0, 0, 0},       /* EX */
+	{0, 0, 0, 0, 0, 0, 0, 0}        /* PD */
 };
 
 void dlm_print_lkb(struct dlm_lkb *lkb)
@@ -1425,7 +1425,7 @@ static void set_lvb_lock_pc(struct dlm_rsb *r, struct dlm_lkb *lkb,
    remove_lock -- used for unlock, removes lkb from granted
    revert_lock -- used for cancel, moves lkb from convert to granted
    grant_lock  -- used for request and convert, adds lkb to granted or
-                  moves lkb from convert or waiting to granted
+		  moves lkb from convert or waiting to granted
 
    Each of these is used for master or local copy lkb's.  There is
    also a _pc() variation used to make the corresponding change on
@@ -1925,7 +1925,7 @@ static int grant_pending_wait(struct dlm_rsb *r, int high, int *cw)
 	list_for_each_entry_safe(lkb, s, &r->res_waitqueue, lkb_statequeue) {
 		if (can_be_granted(r, lkb, 0, NULL))
 			grant_lock_pending(r, lkb);
-                else {
+		else {
 			high = max_t(int, lkb->lkb_rqmode, high);
 			if (lkb->lkb_rqmode == DLM_LOCK_CW)
 				*cw = 1;

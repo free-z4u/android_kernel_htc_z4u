@@ -55,12 +55,12 @@ static int __init init_nls_utf8(void)
 	for (i=0; i<256; i++)
 		identity[i] = i;
 
-        return register_nls(&table);
+	return register_nls(&table);
 }
 
 static void __exit exit_nls_utf8(void)
 {
-        unregister_nls(&table);
+	unregister_nls(&table);
 }
 
 module_init(init_nls_utf8)

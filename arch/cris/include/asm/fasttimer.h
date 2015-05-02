@@ -30,10 +30,10 @@ struct fast_timer{ /* Close to timer_list */
 extern struct fast_timer *fast_timer_list;
 
 void start_one_shot_timer(struct fast_timer *t,
-                          fast_timer_function_type *function,
-                          unsigned long data,
-                          unsigned long delay_us,
-                          const char *name);
+			  fast_timer_function_type *function,
+			  unsigned long data,
+			  unsigned long delay_us,
+			  const char *name);
 
 int del_fast_timer(struct fast_timer * t);
 /* return 1 if deleted */

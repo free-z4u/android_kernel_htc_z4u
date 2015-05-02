@@ -667,7 +667,7 @@ static int __init lart_flash_init (void)
 #endif
 
    result = mtd_device_register(&mtd, lart_partitions,
-                                ARRAY_SIZE(lart_partitions));
+				ARRAY_SIZE(lart_partitions));
 
    return (result);
 }

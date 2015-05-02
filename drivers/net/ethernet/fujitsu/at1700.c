@@ -14,7 +14,7 @@
 	Annapolis MD 21403
 
 	This is a device driver for the Allied Telesis AT1700, and
-        Fujitsu FMV-181/182/181A/182A/183/184/183A/184A, which are
+	Fujitsu FMV-181/182/181A/182A/183/184/183A/184A, which are
 	straight-forward Fujitsu MB86965 implementations.
 
 	Modification for Fujitsu FMV-18X cards is done by Yutaka Tamiya

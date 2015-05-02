@@ -431,7 +431,7 @@ static void tcp_options(const struct sk_buff *skb,
 }
 
 static void tcp_sack(const struct sk_buff *skb, unsigned int dataoff,
-                     const struct tcphdr *tcph, __u32 *sack)
+		     const struct tcphdr *tcph, __u32 *sack)
 {
 	unsigned char buff[(15 * 4) - sizeof(struct tcphdr)];
 	const unsigned char *ptr;

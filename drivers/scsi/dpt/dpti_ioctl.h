@@ -1,6 +1,6 @@
 /***************************************************************************
-                          dpti_ioctl.h  -  description
-                             -------------------
+			  dpti_ioctl.h  -  description
+			     -------------------
     begin                : Thu Sep 7 2000
     copyright            : (C) 2001 by Adaptec
 

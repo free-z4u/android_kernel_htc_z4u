@@ -213,7 +213,7 @@ static void omap_kp_tasklet(unsigned long data)
 	memcpy(keypad_state, new_state, sizeof(keypad_state));
 
 	if (key_down) {
-                int delay = HZ / 20;
+		int delay = HZ / 20;
 		/* some key is pressed - keep irq disabled and use timer
 		 * to poll the keypad */
 		if (spurious)

@@ -43,7 +43,7 @@ static u32 pit_cnt;
  */
 
 static void init_cf_pit_timer(enum clock_event_mode mode,
-                             struct clock_event_device *evt)
+			     struct clock_event_device *evt)
 {
 	switch (mode) {
 	case CLOCK_EVT_MODE_PERIODIC:

@@ -208,18 +208,18 @@ USHORT	IpVersion6(PMINI_ADAPTER Adapter, /**< Pointer to the driver control stru
 		}
 
 		bClassificationSucceed=MatchSrcIpv6Address(pstClassifierRule,pstIpv6Header);
-        if(!bClassificationSucceed)
-            break;
+	if(!bClassificationSucceed)
+	    break;
 
-        bClassificationSucceed=MatchDestIpv6Address(pstClassifierRule,pstIpv6Header);
-        if(!bClassificationSucceed)
-            break;
+	bClassificationSucceed=MatchDestIpv6Address(pstClassifierRule,pstIpv6Header);
+	if(!bClassificationSucceed)
+	    break;
 
 		//Match the protocol type.For IPv6 the next protocol at end of Chain of IPv6 prot headers
 		bClassificationSucceed=MatchProtocol(pstClassifierRule,ucNextProtocolAboveIP);
-        if(!bClassificationSucceed)
-            break;
-        BCM_DEBUG_PRINT( Adapter,DBG_TYPE_TX, IPV6_DBG, DBG_LVL_ALL, "\nIPv6 Protocol Matched");
+	if(!bClassificationSucceed)
+	    break;
+	BCM_DEBUG_PRINT( Adapter,DBG_TYPE_TX, IPV6_DBG, DBG_LVL_ALL, "\nIPv6 Protocol Matched");
 
 		if((ucNextProtocolAboveIP == TCP_HEADER_TYPE) || (ucNextProtocolAboveIP == UDP_HEADER_TYPE))
 		{

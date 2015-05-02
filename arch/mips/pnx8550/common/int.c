@@ -153,7 +153,7 @@ int pnx8550_set_gic_priority(int irq, int priority)
 	int gic_irq = irq-PNX8550_INT_GIC_MIN;
 	int prev_priority = PNX8550_GIC_REQ(gic_irq) & 0xf;
 
-        gic_prio[gic_irq] = priority;
+	gic_prio[gic_irq] = priority;
 	PNX8550_GIC_REQ(gic_irq) |= (0x10000000 | gic_prio[gic_irq]);
 
 	return prev_priority;

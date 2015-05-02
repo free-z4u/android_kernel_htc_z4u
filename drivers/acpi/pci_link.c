@@ -98,7 +98,7 @@ static LIST_HEAD(acpi_link_list);
 static DEFINE_MUTEX(acpi_link_lock);
 
 /* --------------------------------------------------------------------------
-                            PCI Link Device Management
+			    PCI Link Device Management
    -------------------------------------------------------------------------- */
 
 /*
@@ -412,7 +412,7 @@ static int acpi_pci_link_set(struct acpi_pci_link *link, int irq)
 }
 
 /* --------------------------------------------------------------------------
-                            PCI Link IRQ Management
+			    PCI Link IRQ Management
    -------------------------------------------------------------------------- */
 
 /*
@@ -689,7 +689,7 @@ int acpi_pci_link_free_irq(acpi_handle handle)
 }
 
 /* --------------------------------------------------------------------------
-                                 Driver Interface
+				 Driver Interface
    -------------------------------------------------------------------------- */
 
 static int acpi_pci_link_add(struct acpi_device *device)

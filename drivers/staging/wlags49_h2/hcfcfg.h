@@ -381,7 +381,7 @@ typedef unsigned long			hcf_32;
 #define UIL_ERR_IN_USE				0x44
 #define UIL_ERR_WRONG_IFB			0x46
 #define UIL_ERR_MAX					0x7F		/*upper boundary of UIL errors without HCF-pendant
-                                                  ***** ******** ** *** ****** ******* *** *******  */
+						  ***** ******** ** *** ****** ******* *** *******  */
 #define UIL_ERR_BUSY			    HCF_ERR_BUSY
 #define UIL_ERR_DIAG_1			    HCF_ERR_DIAG_1
 #define UIL_FAILURE					0xFF	/* 20010705 nv this relick should be eridicated */

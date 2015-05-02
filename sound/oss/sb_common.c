@@ -781,10 +781,10 @@ int sb_dsp_init(struct address_info *hw_config, struct module *owner)
 					devc->submodel = SUBMDL_ALS100;
 					if (hw_config->name == NULL)
 						hw_config->name = "Sound Blaster 16 (ALS-100)";
-        			}
-        			else
-        			{
-        				sb_setmixer(devc,0x3c,0x1f);    /* Enable all inputs */
+				}
+				else
+				{
+					sb_setmixer(devc,0x3c,0x1f);    /* Enable all inputs */
 					sb_setmixer(devc,0x4c,0x1f);
 					sb_setmixer(devc,0x22,mixer22); /* Restore 0x22 to original value */
 					devc->submodel = SUBMDL_ALS007;

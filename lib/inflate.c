@@ -171,31 +171,31 @@ STATIC int INIT inflate OF((void));
 
 /* Tables for deflate from PKZIP's appnote.txt. */
 static const unsigned border[] = {    /* Order of the bit length code lengths */
-        16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
+	16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};
 static const ush cplens[] = {         /* Copy lengths for literal codes 257..285 */
-        3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
-        35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0};
-        /* note: see note #13 above about the 258 in this list. */
+	3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
+	35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0};
+	/* note: see note #13 above about the 258 in this list. */
 static const ush cplext[] = {         /* Extra bits for literal codes 257..285 */
-        0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2,
-        3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 99, 99}; /* 99==invalid */
+	0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2,
+	3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 99, 99}; /* 99==invalid */
 static const ush cpdist[] = {         /* Copy offsets for distance codes 0..29 */
-        1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
-        257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
-        8193, 12289, 16385, 24577};
+	1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
+	257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
+	8193, 12289, 16385, 24577};
 static const ush cpdext[] = {         /* Extra bits for distance codes */
-        0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,
-        7, 7, 8, 8, 9, 9, 10, 10, 11, 11,
-        12, 12, 13, 13};
+	0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,
+	7, 7, 8, 8, 9, 9, 10, 10, 11, 11,
+	12, 12, 13, 13};
 
 
 
 /* Macros for inflate() bit peeking and grabbing.
    The usage is:
 
-        NEEDBITS(j)
-        x = b & mask_bits[j];
-        DUMPBITS(j)
+	NEEDBITS(j)
+	x = b & mask_bits[j];
+	DUMPBITS(j)
 
    where NEEDBITS makes sure that b has at least j bits in it, and
    DUMPBITS removes the bits from b.  The macros use the variable k
@@ -462,53 +462,53 @@ DEBG("h6b1 ");
       while (k > w + l)
       {
 DEBG1("1 ");
-        h++;
-        w += l;                 /* previous table always l bits */
+	h++;
+	w += l;                 /* previous table always l bits */
 
-        /* compute minimum size table less than or equal to l bits */
-        z = (z = g - w) > (unsigned)l ? l : z;  /* upper limit on table size */
-        if ((f = 1 << (j = k - w)) > a + 1)     /* try a k-w bit table */
-        {                       /* too few codes for k-w bit table */
+	/* compute minimum size table less than or equal to l bits */
+	z = (z = g - w) > (unsigned)l ? l : z;  /* upper limit on table size */
+	if ((f = 1 << (j = k - w)) > a + 1)     /* try a k-w bit table */
+	{                       /* too few codes for k-w bit table */
 DEBG1("2 ");
-          f -= a + 1;           /* deduct codes from patterns left */
-          xp = c + k;
-          if (j < z)
-            while (++j < z)       /* try smaller tables up to z bits */
-            {
-              if ((f <<= 1) <= *++xp)
-                break;            /* enough codes to use up j bits */
-              f -= *xp;           /* else deduct codes from patterns */
-            }
-        }
+	  f -= a + 1;           /* deduct codes from patterns left */
+	  xp = c + k;
+	  if (j < z)
+	    while (++j < z)       /* try smaller tables up to z bits */
+	    {
+	      if ((f <<= 1) <= *++xp)
+		break;            /* enough codes to use up j bits */
+	      f -= *xp;           /* else deduct codes from patterns */
+	    }
+	}
 DEBG1("3 ");
-        z = 1 << j;             /* table entries for j-bit table */
+	z = 1 << j;             /* table entries for j-bit table */
 
-        /* allocate and link in new table */
-        if ((q = (struct huft *)malloc((z + 1)*sizeof(struct huft))) ==
-            (struct huft *)NULL)
-        {
-          if (h)
-            huft_free(u[0]);
-          ret = 3;             /* not enough memory */
+	/* allocate and link in new table */
+	if ((q = (struct huft *)malloc((z + 1)*sizeof(struct huft))) ==
+	    (struct huft *)NULL)
+	{
+	  if (h)
+	    huft_free(u[0]);
+	  ret = 3;             /* not enough memory */
 	  goto out;
-        }
+	}
 DEBG1("4 ");
-        hufts += z + 1;         /* track memory usage */
-        *t = q + 1;             /* link to list for huft_free() */
-        *(t = &(q->v.t)) = (struct huft *)NULL;
-        u[h] = ++q;             /* table starts after link */
+	hufts += z + 1;         /* track memory usage */
+	*t = q + 1;             /* link to list for huft_free() */
+	*(t = &(q->v.t)) = (struct huft *)NULL;
+	u[h] = ++q;             /* table starts after link */
 
 DEBG1("5 ");
-        /* connect to last table, if there is one */
-        if (h)
-        {
-          x[h] = i;             /* save pattern for backing up */
-          r.b = (uch)l;         /* bits to dump before this table */
-          r.e = (uch)(16 + j);  /* bits in this table */
-          r.v.t = q;            /* pointer to this table */
-          j = i >> (w - l);     /* (get around Turbo C bug) */
-          u[h-1][j] = r;        /* connect to last table */
-        }
+	/* connect to last table, if there is one */
+	if (h)
+	{
+	  x[h] = i;             /* save pattern for backing up */
+	  r.b = (uch)l;         /* bits to dump before this table */
+	  r.e = (uch)(16 + j);  /* bits in this table */
+	  r.v.t = q;            /* pointer to this table */
+	  j = i >> (w - l);     /* (get around Turbo C bug) */
+	  u[h-1][j] = r;        /* connect to last table */
+	}
 DEBG1("6 ");
       }
 DEBG("h6c ");
@@ -516,35 +516,35 @@ DEBG("h6c ");
       /* set up table entry in r */
       r.b = (uch)(k - w);
       if (p >= v + n)
-        r.e = 99;               /* out of values--invalid code */
+	r.e = 99;               /* out of values--invalid code */
       else if (*p < s)
       {
-        r.e = (uch)(*p < 256 ? 16 : 15);    /* 256 is end-of-block code */
-        r.v.n = (ush)(*p);             /* simple code is just the value */
+	r.e = (uch)(*p < 256 ? 16 : 15);    /* 256 is end-of-block code */
+	r.v.n = (ush)(*p);             /* simple code is just the value */
 	p++;                           /* one compiler does not like *p++ */
       }
       else
       {
-        r.e = (uch)e[*p - s];   /* non-simple--look up in lists */
-        r.v.n = d[*p++ - s];
+	r.e = (uch)e[*p - s];   /* non-simple--look up in lists */
+	r.v.n = d[*p++ - s];
       }
 DEBG("h6d ");
 
       /* fill code-like entries with r */
       f = 1 << (k - w);
       for (j = i >> w; j < z; j += f)
-        q[j] = r;
+	q[j] = r;
 
       /* backwards increment the k-bit code i */
       for (j = 1 << (k - 1); i & j; j >>= 1)
-        i ^= j;
+	i ^= j;
       i ^= j;
 
       /* backup over finished tables */
       while ((i & ((1 << w) - 1)) != x[h])
       {
-        h--;                    /* don't need to update q */
-        w -= l;
+	h--;                    /* don't need to update q */
+	w -= l;
       }
 DEBG("h6e ");
     }
@@ -616,11 +616,11 @@ STATIC int INIT inflate_codes(
     NEEDBITS((unsigned)bl)
     if ((e = (t = tl + ((unsigned)b & ml))->e) > 16)
       do {
-        if (e == 99)
-          return 1;
-        DUMPBITS(t->b)
-        e -= 16;
-        NEEDBITS(e)
+	if (e == 99)
+	  return 1;
+	DUMPBITS(t->b)
+	e -= 16;
+	NEEDBITS(e)
       } while ((e = (t = t->v.t + ((unsigned)b & mask_bits[e]))->e) > 16);
     DUMPBITS(t->b)
     if (e == 16)                /* then it's a literal */
@@ -629,15 +629,15 @@ STATIC int INIT inflate_codes(
       Tracevv((stderr, "%c", slide[w-1]));
       if (w == WSIZE)
       {
-        flush_output(w);
-        w = 0;
+	flush_output(w);
+	w = 0;
       }
     }
     else                        /* it's an EOB or a length */
     {
       /* exit if end of block */
       if (e == 15)
-        break;
+	break;
 
       /* get length of block to copy */
       NEEDBITS(e)
@@ -647,13 +647,13 @@ STATIC int INIT inflate_codes(
       /* decode distance of block to copy */
       NEEDBITS((unsigned)bd)
       if ((e = (t = td + ((unsigned)b & md))->e) > 16)
-        do {
-          if (e == 99)
-            return 1;
-          DUMPBITS(t->b)
-          e -= 16;
-          NEEDBITS(e)
-        } while ((e = (t = t->v.t + ((unsigned)b & mask_bits[e]))->e) > 16);
+	do {
+	  if (e == 99)
+	    return 1;
+	  DUMPBITS(t->b)
+	  e -= 16;
+	  NEEDBITS(e)
+	} while ((e = (t = t->v.t + ((unsigned)b & mask_bits[e]))->e) > 16);
       DUMPBITS(t->b)
       NEEDBITS(e)
       d = w - t->v.n - ((unsigned)b & mask_bits[e]);
@@ -662,25 +662,25 @@ STATIC int INIT inflate_codes(
 
       /* do the copy */
       do {
-        n -= (e = (e = WSIZE - ((d &= WSIZE-1) > w ? d : w)) > n ? n : e);
+	n -= (e = (e = WSIZE - ((d &= WSIZE-1) > w ? d : w)) > n ? n : e);
 #if !defined(NOMEMCPY) && !defined(DEBUG)
-        if (w - d >= e)         /* (this test assumes unsigned comparison) */
-        {
-          memcpy(slide + w, slide + d, e);
-          w += e;
-          d += e;
-        }
-        else                      /* do it slow to avoid memcpy() overlap */
+	if (w - d >= e)         /* (this test assumes unsigned comparison) */
+	{
+	  memcpy(slide + w, slide + d, e);
+	  w += e;
+	  d += e;
+	}
+	else                      /* do it slow to avoid memcpy() overlap */
 #endif /* !NOMEMCPY */
-          do {
-            slide[w++] = slide[d++];
+	  do {
+	    slide[w++] = slide[d++];
 	    Tracevv((stderr, "%c", slide[w-1]));
-          } while (--e);
-        if (w == WSIZE)
-        {
-          flush_output(w);
-          w = 0;
-        }
+	  } while (--e);
+	if (w == WSIZE)
+	{
+	  flush_output(w);
+	  w = 0;
+	}
       } while (n);
     }
   }
@@ -925,11 +925,11 @@ DEBG("dyn3 ");
       j = 3 + ((unsigned)b & 3);
       DUMPBITS(2)
       if ((unsigned)i + j > n) {
-        ret = 1;
+	ret = 1;
 	goto out;
       }
       while (j--)
-        ll[i++] = l;
+	ll[i++] = l;
     }
     else if (j == 17)           /* 3 to 10 zero length codes */
     {
@@ -937,11 +937,11 @@ DEBG("dyn3 ");
       j = 3 + ((unsigned)b & 7);
       DUMPBITS(3)
       if ((unsigned)i + j > n) {
-        ret = 1;
+	ret = 1;
 	goto out;
       }
       while (j--)
-        ll[i++] = 0;
+	ll[i++] = 0;
       l = 0;
     }
     else                        /* j == 18: 11 to 138 zero length codes */
@@ -950,11 +950,11 @@ DEBG("dyn3 ");
       j = 11 + ((unsigned)b & 0x7f);
       DUMPBITS(7)
       if ((unsigned)i + j > n) {
-        ret = 1;
+	ret = 1;
 	goto out;
       }
       while (j--)
-        ll[i++] = 0;
+	ll[i++] = 0;
       l = 0;
     }
   }
@@ -1169,7 +1169,7 @@ makecrc(void)
     {
       c = c & 1 ? (c >> 1) ^ e : c >> 1;
       if (k & 1)
-        c ^= e;
+	c ^= e;
     }
     crc_32_tab[i] = c;
   }

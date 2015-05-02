@@ -178,7 +178,7 @@
 #define VERSATILE_INTREG_WPROT        0x00    /* MMC protection status (no interrupt generated) */
 #define VERSATILE_INTREG_RI0          0x01    /* Ring indicator UART0 is asserted,              */
 #define VERSATILE_INTREG_CARDIN       0x08    /* MMCI card in detect                            */
-                                                /* write 1 to acknowledge and clear               */
+						/* write 1 to acknowledge and clear               */
 #define VERSATILE_INTREG_RI1          0x02    /* Ring indicator UART1 is asserted,              */
 #define VERSATILE_INTREG_CARDINSERT   0x03    /* Signal insertion of MMC card                   */
 
@@ -206,7 +206,7 @@
 #define VERSATILE_DMAC_BASE            0x10130000	/* DMA controller */
 #define VERSATILE_VIC_BASE             0x10140000	/* Vectored interrupt controller */
 #define VERSATILE_PERIPH_BASE          0x10150000	/* off-chip peripherals alias from */
-                                                /* 0x10000000 - 0x100FFFFF */
+						/* 0x10000000 - 0x100FFFFF */
 #define VERSATILE_AHBM_BASE            0x101D0000	/* AHB monitor */
 #define VERSATILE_SCTL_BASE            0x101E0000	/* System controller */
 #define VERSATILE_WATCHDOG_BASE        0x101E1000	/* Watchdog */

@@ -314,7 +314,7 @@ static void es_reset_8390(struct net_device *dev)
 	if (ei_debug > 1) printk("%s: resetting the ES3210...", dev->name);
 
 	end = jiffies + 2*HZ/100;
-        while ((signed)(end - jiffies) > 0) continue;
+	while ((signed)(end - jiffies) > 0) continue;
 
 	ei_status.txing = 0;
 	outb(0x01, ioaddr + ES_RESET_PORT);

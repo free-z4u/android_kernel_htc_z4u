@@ -42,12 +42,12 @@ Ptr____Call (c)
        |c                     |c                 |c                 |c
        |                      |                  |                  |
       \/                  -------------      -------------      -------------
-                       | Foreground  |_\  | Middlegr'nd |_\  | Background  |_\
-                       |     tree    |g/  |    tree     |g/  |     tree    |g/
-                        -------------      -------------      -------------
-                              |c                 |c                 |c
-                              |                  |                  |
-                             \/                 \/                 \/
+		       | Foreground  |_\  | Middlegr'nd |_\  | Background  |_\
+		       |     tree    |g/  |    tree     |g/  |     tree    |g/
+			-------------      -------------      -------------
+			      |c                 |c                 |c
+			      |                  |                  |
+			     \/                 \/                 \/
 
 *********************************************************************************************/
 
@@ -65,10 +65,10 @@ Ptr____Call (c)
 											   This should only ever be used on the Background thread */
 #define STANDARD_ACTIVE_INCREMENT	1		/* Task tree thread normal operation */
 #define SUSPEND_ACTIVE_INCREMENT	2		/* Cause execution to suspend in the task tree thread
-                                               This should only ever be used on the Background thread */
+					       This should only ever be used on the Background thread */
 
 #define HOSTFLAGS_DISABLE_BG_SLEEP  0       /* Host-controlled flag that determines whether we go to sleep
-                                               at the end of BG */
+					       at the end of BG */
 
 /* Minimal context save area for Hyper Forground */
 struct dsp_hf_save_area {
@@ -133,7 +133,7 @@ struct dsp_task_tree_data {
 	    active_count
 	)
 
-        ___DSP_DUAL_16BIT_ALLOC(
+	___DSP_DUAL_16BIT_ALLOC(
 	/* BitNumber to enable modification of correct bit in ActiveTaskFlags */
 	    active_bit,
 	/* Pointer to OS location for indicating current activity on task level */
@@ -206,7 +206,7 @@ struct dsp_task_tree_context_block {
 	/* Value may be overwriten by stack save algorithm.
 	   Retain the size of the stack data saved here if used */
 	___DSP_DUAL_16BIT_ALLOC(
-             reserved1,
+	     reserved1,
   	     stack_size
 	)
 	u32		saverba;	  /* (HFG) */

@@ -69,9 +69,9 @@ static int snd_us428ctls_mmap(struct snd_hwdep * hw, struct file *filp, struct v
 		return -EBUSY;
 
 	/* if userspace tries to mmap beyond end of our buffer, fail */
-        if (size > PAGE_ALIGN(sizeof(struct us428ctls_sharedmem))) {
+	if (size > PAGE_ALIGN(sizeof(struct us428ctls_sharedmem))) {
 		snd_printd( "%lu > %lu\n", size, (unsigned long)sizeof(struct us428ctls_sharedmem));
-                return -EINVAL;
+		return -EINVAL;
 	}
 
 	if (!us428->us428ctls_sharedmem) {

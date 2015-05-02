@@ -131,94 +131,94 @@ static struct platform_device usb_mass_storage_device = {
 };
 
 static struct resource msm_kgsl_resources[] = {
-        {
-                .name   = "kgsl_reg_memory",
-                .start  = MSM_GPU_REG_PHYS,
-                .end    = MSM_GPU_REG_PHYS + MSM_GPU_REG_SIZE - 1,
-                .flags  = IORESOURCE_MEM,
-        },
-        {
-                .name   = "kgsl_phys_memory",
-                .start  = MSM_GPU_MEM_BASE,
-                .end    = MSM_GPU_MEM_BASE + MSM_GPU_MEM_SIZE - 1,
-                .flags  = IORESOURCE_MEM,
-        },
-        {
-                .start  = INT_GRAPHICS,
-                .end    = INT_GRAPHICS,
-                .flags  = IORESOURCE_IRQ,
-        },
+	{
+		.name   = "kgsl_reg_memory",
+		.start  = MSM_GPU_REG_PHYS,
+		.end    = MSM_GPU_REG_PHYS + MSM_GPU_REG_SIZE - 1,
+		.flags  = IORESOURCE_MEM,
+	},
+	{
+		.name   = "kgsl_phys_memory",
+		.start  = MSM_GPU_MEM_BASE,
+		.end    = MSM_GPU_MEM_BASE + MSM_GPU_MEM_SIZE - 1,
+		.flags  = IORESOURCE_MEM,
+	},
+	{
+		.start  = INT_GRAPHICS,
+		.end    = INT_GRAPHICS,
+		.flags  = IORESOURCE_IRQ,
+	},
 };
 
 static struct platform_device msm_kgsl_device = {
-        .name           = "kgsl",
-        .id             = -1,
-        .resource       = msm_kgsl_resources,
-        .num_resources  = ARRAY_SIZE(msm_kgsl_resources),
+	.name           = "kgsl",
+	.id             = -1,
+	.resource       = msm_kgsl_resources,
+	.num_resources  = ARRAY_SIZE(msm_kgsl_resources),
 };
 
 static struct android_pmem_platform_data mdp_pmem_pdata = {
-        .name           = "pmem",
-        .start          = MSM_PMEM_MDP_BASE,
-        .size           = MSM_PMEM_MDP_SIZE,
-        .no_allocator   = 0,
-        .cached         = 1,
+	.name           = "pmem",
+	.start          = MSM_PMEM_MDP_BASE,
+	.size           = MSM_PMEM_MDP_SIZE,
+	.no_allocator   = 0,
+	.cached         = 1,
 };
 
 static struct android_pmem_platform_data android_pmem_gpu0_pdata = {
-        .name           = "pmem_gpu0",
-        .start          = MSM_PMEM_GPU0_BASE,
-        .size           = MSM_PMEM_GPU0_SIZE,
-        .no_allocator   = 0,
-        .cached         = 0,
+	.name           = "pmem_gpu0",
+	.start          = MSM_PMEM_GPU0_BASE,
+	.size           = MSM_PMEM_GPU0_SIZE,
+	.no_allocator   = 0,
+	.cached         = 0,
 };
 
 static struct android_pmem_platform_data android_pmem_gpu1_pdata = {
-        .name           = "pmem_gpu1",
-        .start          = MSM_PMEM_GPU1_BASE,
-        .size           = MSM_PMEM_GPU1_SIZE,
-        .no_allocator   = 0,
-        .cached         = 0,
+	.name           = "pmem_gpu1",
+	.start          = MSM_PMEM_GPU1_BASE,
+	.size           = MSM_PMEM_GPU1_SIZE,
+	.no_allocator   = 0,
+	.cached         = 0,
 };
 
 static struct android_pmem_platform_data android_pmem_adsp_pdata = {
-        .name           = "pmem_adsp",
-        .start          = MSM_PMEM_ADSP_BASE,
-        .size           = MSM_PMEM_ADSP_SIZE,
-        .no_allocator   = 0,
-        .cached         = 0,
+	.name           = "pmem_adsp",
+	.start          = MSM_PMEM_ADSP_BASE,
+	.size           = MSM_PMEM_ADSP_SIZE,
+	.no_allocator   = 0,
+	.cached         = 0,
 };
 
 static struct platform_device android_pmem_mdp_device = {
-        .name           = "android_pmem",
-        .id             = 0,
-        .dev            = {
-                .platform_data = &mdp_pmem_pdata
-        },
+	.name           = "android_pmem",
+	.id             = 0,
+	.dev            = {
+		.platform_data = &mdp_pmem_pdata
+	},
 };
 
 static struct platform_device android_pmem_adsp_device = {
-        .name           = "android_pmem",
-        .id             = 1,
-        .dev            = {
-                .platform_data = &android_pmem_adsp_pdata,
-        },
+	.name           = "android_pmem",
+	.id             = 1,
+	.dev            = {
+		.platform_data = &android_pmem_adsp_pdata,
+	},
 };
 
 static struct platform_device android_pmem_gpu0_device = {
-        .name           = "android_pmem",
-        .id             = 2,
-        .dev            = {
-                .platform_data = &android_pmem_gpu0_pdata,
-        },
+	.name           = "android_pmem",
+	.id             = 2,
+	.dev            = {
+		.platform_data = &android_pmem_gpu0_pdata,
+	},
 };
 
 static struct platform_device android_pmem_gpu1_device = {
-        .name           = "android_pmem",
-        .id             = 3,
-        .dev            = {
-                .platform_data = &android_pmem_gpu1_pdata,
-        },
+	.name           = "android_pmem",
+	.id             = 3,
+	.dev            = {
+		.platform_data = &android_pmem_gpu1_pdata,
+	},
 };
 
 static char *usb_functions[] = { "usb_mass_storage" };

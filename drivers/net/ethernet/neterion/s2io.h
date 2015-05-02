@@ -740,7 +740,7 @@ struct ring_info {
 	struct rx_curr_get_info rx_curr_get_info;
 
 	/* interface MTU value */
-        unsigned mtu;
+	unsigned mtu;
 
 	/* Buffer Address store. */
 	struct buffAdd **ba;
@@ -1032,16 +1032,16 @@ static inline void SPECIAL_REG_WRITE(u64 val, void __iomem *addr, int order)
 #define RX_TRAFFIC_INTR (0x0001<<9)
 #define MC_INTR         (0x0001<<10)
 #define ENA_ALL_INTRS    (   TX_PIC_INTR     | \
-                            TX_DMA_INTR     | \
-                            TX_MAC_INTR     | \
-                            TX_XGXS_INTR    | \
-                            TX_TRAFFIC_INTR | \
-                            RX_PIC_INTR     | \
-                            RX_DMA_INTR     | \
-                            RX_MAC_INTR     | \
-                            RX_XGXS_INTR    | \
-                            RX_TRAFFIC_INTR | \
-                            MC_INTR )
+			    TX_DMA_INTR     | \
+			    TX_MAC_INTR     | \
+			    TX_XGXS_INTR    | \
+			    TX_TRAFFIC_INTR | \
+			    RX_PIC_INTR     | \
+			    RX_DMA_INTR     | \
+			    RX_MAC_INTR     | \
+			    RX_XGXS_INTR    | \
+			    RX_TRAFFIC_INTR | \
+			    MC_INTR )
 
 /*  Interrupt masks for the general interrupt mask register */
 #define DISABLE_ALL_INTRS   0xFFFFFFFFFFFFFFFFULL

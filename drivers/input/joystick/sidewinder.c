@@ -148,7 +148,7 @@ static int sw_read_packet(struct gameport *gameport, unsigned char *buf, int len
 	pending = 0;
 	sched = 0;
 
-        local_irq_save(flags);					/* Quiet, please */
+	local_irq_save(flags);					/* Quiet, please */
 
 	gameport_trigger(gameport);				/* Trigger */
 	v = gameport_read(gameport);
@@ -244,15 +244,15 @@ static void sw_init_digital(struct gameport *gameport)
 	unsigned long flags;
 	int i, t;
 
-        local_irq_save(flags);
+	local_irq_save(flags);
 
 	i = 0;
-        do {
-                gameport_trigger(gameport);			/* Trigger */
+	do {
+		gameport_trigger(gameport);			/* Trigger */
 		t = gameport_time(gameport, SW_TIMEOUT * 1000);
 		while ((gameport_read(gameport) & 1) && t) t--;	/* Wait for axis to fall back to 0 */
-                udelay(seq[i]);					/* Delay magic time */
-        } while (seq[++i]);
+		udelay(seq[i]);					/* Delay magic time */
+	} while (seq[++i]);
 
 	gameport_trigger(gameport);				/* Last trigger */
 

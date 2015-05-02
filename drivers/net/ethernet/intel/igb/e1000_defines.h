@@ -828,7 +828,7 @@
 
 /* DMA Coalescing register fields */
 #define E1000_PCIEMISC_LX_DECISION      0x00000080 /* Lx power decision based
-                                                      on DMA coal */
+						      on DMA coal */
 
 /* Tx Rate-Scheduler Config fields */
 #define E1000_RTTBCNRC_RS_ENA		0x80000000

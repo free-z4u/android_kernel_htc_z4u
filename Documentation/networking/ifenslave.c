@@ -631,7 +631,7 @@ static int get_drv_info(char *master_ifname)
 
 	abi_ver = strtoul(info.fw_version, &endptr, 0);
 	if (*endptr) {
-                v_print("Master '%s': Error: got invalid string as an ABI "
+		v_print("Master '%s': Error: got invalid string as an ABI "
 			"version from the bonding module\n",
 			master_ifname);
 		return 1;

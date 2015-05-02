@@ -110,7 +110,7 @@ static int l4_open(struct gameport *gameport, int mode)
 {
 	struct l4 *l4 = gameport->port_data;
 
-        if (l4->port != 0 && mode != GAMEPORT_MODE_COOKED)
+	if (l4->port != 0 && mode != GAMEPORT_MODE_COOKED)
 		return -1;
 	outb(L4_SELECT_ANALOG, L4_PORT);
 	return 0;
@@ -138,7 +138,7 @@ static int l4_getcal(int port, int *cal)
 
 	if (l4_wait_ready())
 		goto out;
-        outb(port & 3, L4_PORT);
+	outb(port & 3, L4_PORT);
 
 	for (i = 0; i < 4; i++) {
 		if (l4_wait_ready())
@@ -174,7 +174,7 @@ static int l4_setcal(int port, int *cal)
 
 	if (l4_wait_ready())
 		goto out;
-        outb(port & 3, L4_PORT);
+	outb(port & 3, L4_PORT);
 
 	for (i = 0; i < 4; i++) {
 		if (l4_wait_ready())

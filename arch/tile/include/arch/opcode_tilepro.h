@@ -86,7 +86,7 @@ static __inline unsigned int
 get_BrOff_X1(tilepro_bundle_bits n)
 {
   return (((unsigned int)(n >> 43)) & 0x00007fff) |
-         (((unsigned int)(n >> 20)) & 0x00018000);
+	 (((unsigned int)(n >> 20)) & 0x00018000);
 }
 
 static __inline unsigned int
@@ -99,7 +99,7 @@ static __inline unsigned int
 get_Dest_Imm8_X1(tilepro_bundle_bits n)
 {
   return (((unsigned int)(n >> 31)) & 0x0000003f) |
-         (((unsigned int)(n >> 43)) & 0x000000c0);
+	 (((unsigned int)(n >> 43)) & 0x000000c0);
 }
 
 static __inline unsigned int
@@ -205,27 +205,27 @@ static __inline unsigned int
 get_JOffLong_X1(tilepro_bundle_bits n)
 {
   return (((unsigned int)(n >> 43)) & 0x00007fff) |
-         (((unsigned int)(n >> 20)) & 0x00018000) |
-         (((unsigned int)(n >> 14)) & 0x001e0000) |
-         (((unsigned int)(n >> 16)) & 0x07e00000) |
-         (((unsigned int)(n >> 31)) & 0x18000000);
+	 (((unsigned int)(n >> 20)) & 0x00018000) |
+	 (((unsigned int)(n >> 14)) & 0x001e0000) |
+	 (((unsigned int)(n >> 16)) & 0x07e00000) |
+	 (((unsigned int)(n >> 31)) & 0x18000000);
 }
 
 static __inline unsigned int
 get_JOff_X1(tilepro_bundle_bits n)
 {
   return (((unsigned int)(n >> 43)) & 0x00007fff) |
-         (((unsigned int)(n >> 20)) & 0x00018000) |
-         (((unsigned int)(n >> 14)) & 0x001e0000) |
-         (((unsigned int)(n >> 16)) & 0x07e00000) |
-         (((unsigned int)(n >> 31)) & 0x08000000);
+	 (((unsigned int)(n >> 20)) & 0x00018000) |
+	 (((unsigned int)(n >> 14)) & 0x001e0000) |
+	 (((unsigned int)(n >> 16)) & 0x07e00000) |
+	 (((unsigned int)(n >> 31)) & 0x08000000);
 }
 
 static __inline unsigned int
 get_MF_Imm15_X1(tilepro_bundle_bits n)
 {
   return (((unsigned int)(n >> 37)) & 0x00003fff) |
-         (((unsigned int)(n >> 44)) & 0x00004000);
+	 (((unsigned int)(n >> 44)) & 0x00004000);
 }
 
 static __inline unsigned int
@@ -258,8 +258,8 @@ static __inline unsigned int
 get_MT_Imm15_X1(tilepro_bundle_bits n)
 {
   return (((unsigned int)(n >> 31)) & 0x0000003f) |
-         (((unsigned int)(n >> 37)) & 0x00003fc0) |
-         (((unsigned int)(n >> 44)) & 0x00004000);
+	 (((unsigned int)(n >> 37)) & 0x00003fc0) |
+	 (((unsigned int)(n >> 44)) & 0x00004000);
 }
 
 static __inline unsigned int
@@ -423,7 +423,7 @@ static __inline unsigned int
 get_SrcA_Y2(tilepro_bundle_bits n)
 {
   return (((n >> 26)) & 0x00000001) |
-         (((unsigned int)(n >> 50)) & 0x0000003e);
+	 (((unsigned int)(n >> 50)) & 0x0000003e);
 }
 
 static __inline unsigned int
@@ -540,7 +540,7 @@ create_BrOff_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilepro_bundle_bits)(n & 0x00007fff)) << 43) |
-         (((tilepro_bundle_bits)(n & 0x00018000)) << 20);
+	 (((tilepro_bundle_bits)(n & 0x00018000)) << 20);
 }
 
 static __inline tilepro_bundle_bits
@@ -555,7 +555,7 @@ create_Dest_Imm8_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilepro_bundle_bits)(n & 0x0000003f)) << 31) |
-         (((tilepro_bundle_bits)(n & 0x000000c0)) << 43);
+	 (((tilepro_bundle_bits)(n & 0x000000c0)) << 43);
 }
 
 static __inline tilepro_bundle_bits
@@ -668,10 +668,10 @@ create_JOffLong_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilepro_bundle_bits)(n & 0x00007fff)) << 43) |
-         (((tilepro_bundle_bits)(n & 0x00018000)) << 20) |
-         (((tilepro_bundle_bits)(n & 0x001e0000)) << 14) |
-         (((tilepro_bundle_bits)(n & 0x07e00000)) << 16) |
-         (((tilepro_bundle_bits)(n & 0x18000000)) << 31);
+	 (((tilepro_bundle_bits)(n & 0x00018000)) << 20) |
+	 (((tilepro_bundle_bits)(n & 0x001e0000)) << 14) |
+	 (((tilepro_bundle_bits)(n & 0x07e00000)) << 16) |
+	 (((tilepro_bundle_bits)(n & 0x18000000)) << 31);
 }
 
 static __inline tilepro_bundle_bits
@@ -679,10 +679,10 @@ create_JOff_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilepro_bundle_bits)(n & 0x00007fff)) << 43) |
-         (((tilepro_bundle_bits)(n & 0x00018000)) << 20) |
-         (((tilepro_bundle_bits)(n & 0x001e0000)) << 14) |
-         (((tilepro_bundle_bits)(n & 0x07e00000)) << 16) |
-         (((tilepro_bundle_bits)(n & 0x08000000)) << 31);
+	 (((tilepro_bundle_bits)(n & 0x00018000)) << 20) |
+	 (((tilepro_bundle_bits)(n & 0x001e0000)) << 14) |
+	 (((tilepro_bundle_bits)(n & 0x07e00000)) << 16) |
+	 (((tilepro_bundle_bits)(n & 0x08000000)) << 31);
 }
 
 static __inline tilepro_bundle_bits
@@ -690,7 +690,7 @@ create_MF_Imm15_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilepro_bundle_bits)(n & 0x00003fff)) << 37) |
-         (((tilepro_bundle_bits)(n & 0x00004000)) << 44);
+	 (((tilepro_bundle_bits)(n & 0x00004000)) << 44);
 }
 
 static __inline tilepro_bundle_bits
@@ -726,8 +726,8 @@ create_MT_Imm15_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilepro_bundle_bits)(n & 0x0000003f)) << 31) |
-         (((tilepro_bundle_bits)(n & 0x00003fc0)) << 37) |
-         (((tilepro_bundle_bits)(n & 0x00004000)) << 44);
+	 (((tilepro_bundle_bits)(n & 0x00003fc0)) << 37) |
+	 (((tilepro_bundle_bits)(n & 0x00004000)) << 44);
 }
 
 static __inline tilepro_bundle_bits
@@ -903,7 +903,7 @@ create_SrcA_Y2(int num)
 {
   const unsigned int n = (unsigned int)num;
   return ((n & 0x00000001) << 26) |
-         (((tilepro_bundle_bits)(n & 0x0000003e)) << 50);
+	 (((tilepro_bundle_bits)(n & 0x0000003e)) << 50);
 }
 
 static __inline tilepro_bundle_bits

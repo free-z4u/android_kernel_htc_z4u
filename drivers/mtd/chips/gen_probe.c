@@ -253,7 +253,7 @@ static struct mtd_info *check_cmd_set(struct map_info *map, int primary)
 		return cfi_cmdset_0002(map, primary);
 #endif
 #ifdef CONFIG_MTD_CFI_STAA
-        case P_ID_ST_ADV:
+	case P_ID_ST_ADV:
 		return cfi_cmdset_0020(map, primary);
 #endif
 	default:

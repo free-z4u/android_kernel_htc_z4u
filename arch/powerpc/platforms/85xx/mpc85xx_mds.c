@@ -430,9 +430,9 @@ static void __init mpc85xx_mds_pic_init(void)
 
 static int __init mpc85xx_mds_probe(void)
 {
-        unsigned long root = of_get_flat_dt_root();
+	unsigned long root = of_get_flat_dt_root();
 
-        return of_flat_dt_is_compatible(root, "MPC85xxMDS");
+	return of_flat_dt_is_compatible(root, "MPC85xxMDS");
 }
 
 define_machine(mpc8568_mds) {

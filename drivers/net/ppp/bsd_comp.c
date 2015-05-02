@@ -425,7 +425,7 @@ static void *bsd_alloc (unsigned char *options, int opt_len, int decomp)
  */
     else
       {
-        db->lens = vmalloc((maxmaxcode + 1) * sizeof(db->lens[0]));
+	db->lens = vmalloc((maxmaxcode + 1) * sizeof(db->lens[0]));
 	if (!db->lens)
 	  {
 	    bsd_free (db);

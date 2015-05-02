@@ -508,30 +508,30 @@ static int __devinit snd_opl3sa2_mixer(struct snd_card *card)
 	memset(&id2, 0, sizeof(id2));
 	id1.iface = id2.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
 	/* reassign AUX0 to CD */
-        strcpy(id1.name, "Aux Playback Switch");
-        strcpy(id2.name, "CD Playback Switch");
-        if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
+	strcpy(id1.name, "Aux Playback Switch");
+	strcpy(id2.name, "CD Playback Switch");
+	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
-                return err;
+		return err;
 	}
-        strcpy(id1.name, "Aux Playback Volume");
-        strcpy(id2.name, "CD Playback Volume");
-        if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
+	strcpy(id1.name, "Aux Playback Volume");
+	strcpy(id2.name, "CD Playback Volume");
+	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
-                return err;
+		return err;
 	}
 	/* reassign AUX1 to FM */
-        strcpy(id1.name, "Aux Playback Switch"); id1.index = 1;
-        strcpy(id2.name, "FM Playback Switch");
-        if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
+	strcpy(id1.name, "Aux Playback Switch"); id1.index = 1;
+	strcpy(id2.name, "FM Playback Switch");
+	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
-                return err;
+		return err;
 	}
-        strcpy(id1.name, "Aux Playback Volume");
-        strcpy(id2.name, "FM Playback Volume");
-        if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
+	strcpy(id1.name, "Aux Playback Volume");
+	strcpy(id2.name, "FM Playback Volume");
+	if ((err = snd_ctl_rename_id(card, &id1, &id2)) < 0) {
 		snd_printk(KERN_ERR "Cannot rename opl3sa2 control\n");
-                return err;
+		return err;
 	}
 	/* add OPL3SA2 controls */
 	for (idx = 0; idx < ARRAY_SIZE(snd_opl3sa2_controls); idx++) {

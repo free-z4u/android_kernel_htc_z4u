@@ -4610,8 +4610,8 @@ static int ocfs2_figure_insert_type(struct ocfs2_extent_tree *et,
 	 * 1) Contiguousness (also set contig_index if this is so)
 	 *
 	 * 2) Are we doing an append? We can trivially break this up
-         *     into two types of appends: simple record append, or a
-         *     rotate inside the tail leaf.
+	 *     into two types of appends: simple record append, or a
+	 *     rotate inside the tail leaf.
 	 */
 	ocfs2_figure_contig_type(et, insert, el, insert_rec);
 

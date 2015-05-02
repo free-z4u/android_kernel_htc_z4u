@@ -2116,9 +2116,9 @@ static int iwpriv_set_mac_filters(struct net_device *dev,
 
 #ifdef SOFTAP
 static int iwpriv_set_ap_sta_disassoc(struct net_device *dev,
-        struct iw_request_info *info,
-        union iwreq_data *wrqu,
-        char *ext)
+	struct iw_request_info *info,
+	union iwreq_data *wrqu,
+	char *ext)
 {
 	int res = 0;
 	char sta_mac[6] = {0, 0, 0, 0, 0, 0};

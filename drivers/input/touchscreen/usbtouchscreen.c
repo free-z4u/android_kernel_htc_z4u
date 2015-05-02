@@ -1245,7 +1245,7 @@ static struct usbtouch_device_info usbtouch_dev_info[] = {
  * Generic Part
  */
 static void usbtouch_process_pkt(struct usbtouch_usb *usbtouch,
-                                 unsigned char *pkt, int len)
+				 unsigned char *pkt, int len)
 {
 	struct usbtouch_device_info *type = usbtouch->type;
 
@@ -1269,7 +1269,7 @@ static void usbtouch_process_pkt(struct usbtouch_usb *usbtouch,
 
 #ifdef MULTI_PACKET
 static void usbtouch_process_multi(struct usbtouch_usb *usbtouch,
-                                   unsigned char *pkt, int len)
+				   unsigned char *pkt, int len)
 {
 	unsigned char *buffer;
 	int pkt_len, pos, buf_len, tmp;

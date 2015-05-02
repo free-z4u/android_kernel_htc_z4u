@@ -794,16 +794,16 @@ struct ipw2100_priv {
 #define IPW_MIN_ACCEPTABLE_RX_FRAME_LENGTH	60
 #define IPW_MAX_ACCEPTABLE_RX_FRAME_LENGTH \
 	(IPW_MAX_ACCEPTABLE_TX_FRAME_LENGTH + IPW_HEADER_802_11_SIZE - \
-        sizeof(struct ethhdr))
+	sizeof(struct ethhdr))
 
 #define IPW_802_11_FCS_LENGTH 4
 #define IPW_RX_NIC_BUFFER_LENGTH \
-        (IPW_MAX_802_11_PAYLOAD_LENGTH + IPW_HEADER_802_11_SIZE + \
+	(IPW_MAX_802_11_PAYLOAD_LENGTH + IPW_HEADER_802_11_SIZE + \
 		IPW_802_11_FCS_LENGTH)
 
 #define IPW_802_11_PAYLOAD_OFFSET \
-        (sizeof(struct libipw_hdr_3addr) + \
-         sizeof(struct libipw_snap_hdr))
+	(sizeof(struct libipw_hdr_3addr) + \
+	 sizeof(struct libipw_snap_hdr))
 
 struct ipw2100_rx {
 	union {

@@ -73,10 +73,10 @@ static int hc_show(struct seq_file *m, void *p)
 }
 
 static const struct seq_operations hcall_inst_seq_ops = {
-        .start = hc_start,
-        .next  = hc_next,
-        .stop  = hc_stop,
-        .show  = hc_show
+	.start = hc_start,
+	.next  = hc_next,
+	.stop  = hc_stop,
+	.show  = hc_show
 };
 
 static int hcall_inst_seq_open(struct inode *inode, struct file *file)

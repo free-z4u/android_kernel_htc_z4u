@@ -508,10 +508,10 @@ int drm_sysfs_device_add(struct drm_minor *minor)
 	minor->kdev.type = &drm_sysfs_device_minor;
 	if (minor->type == DRM_MINOR_CONTROL)
 		minor_str = "controlD%d";
-        else if (minor->type == DRM_MINOR_RENDER)
-                minor_str = "renderD%d";
-        else
-                minor_str = "card%d";
+	else if (minor->type == DRM_MINOR_RENDER)
+		minor_str = "renderD%d";
+	else
+		minor_str = "card%d";
 
 	dev_set_name(&minor->kdev, minor_str, minor->index);
 

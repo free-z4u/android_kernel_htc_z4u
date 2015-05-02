@@ -54,12 +54,12 @@ nfnl_acct_new(struct sock *nfnl, struct sk_buff *skb,
 		if (strncmp(nfacct->name, acct_name, NFACCT_NAME_MAX) != 0)
 			continue;
 
-                if (nlh->nlmsg_flags & NLM_F_EXCL)
+		if (nlh->nlmsg_flags & NLM_F_EXCL)
 			return -EEXIST;
 
 		matching = nfacct;
 		break;
-        }
+	}
 
 	if (matching) {
 		if (nlh->nlmsg_flags & NLM_F_REPLACE) {

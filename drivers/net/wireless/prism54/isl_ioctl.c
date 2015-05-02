@@ -1273,7 +1273,7 @@ static int prism54_set_genie(struct net_device *ndev,
 
 	/* Note: endianness is covered by mgt_set_varlen */
 	attach->type = (WLAN_FC_TYPE_MGMT << 2) |
-               (WLAN_FC_STYPE_ASSOC_REQ << 4);
+	       (WLAN_FC_STYPE_ASSOC_REQ << 4);
 	attach->id = -1;
 	attach->size = priv->wpa_ie_len;
 	memcpy(attach->data, extra, priv->wpa_ie_len);

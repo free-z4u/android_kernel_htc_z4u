@@ -442,7 +442,7 @@ media_picked:
 	} else if (tp->chip_id == PNIC2) {
 	        /* for initial startup advertise 10/100 Full and Half */
 	        tp->sym_advertise = 0x01E0;
-                /* enable autonegotiate end interrupt */
+		/* enable autonegotiate end interrupt */
 	        iowrite32(ioread32(ioaddr+CSR5)| 0x00008010, ioaddr + CSR5);
 	        iowrite32(ioread32(ioaddr+CSR7)| 0x00008010, ioaddr + CSR7);
 		pnic2_start_nway(dev);
@@ -507,8 +507,8 @@ media_picked:
 	add_timer(&tp->timer);
 #ifdef CONFIG_TULIP_NAPI
 	init_timer(&tp->oom_timer);
-        tp->oom_timer.data = (unsigned long)dev;
-        tp->oom_timer.function = oom_timer;
+	tp->oom_timer.data = (unsigned long)dev;
+	tp->oom_timer.function = oom_timer;
 #endif
 }
 
@@ -933,26 +933,26 @@ static int private_ioctl (struct net_device *dev, struct ifreq *rq, int cmd)
 			int csr14 = ioread32 (ioaddr + CSR14);
 			switch (regnum) {
 			case 0:
-                                if (((csr14<<5) & 0x1000) ||
-                                        (dev->if_port == 5 && tp->nwayset))
-                                        data->val_out = 0x1000;
-                                else
-                                        data->val_out = (tulip_media_cap[dev->if_port]&MediaIs100 ? 0x2000 : 0)
-                                                | (tulip_media_cap[dev->if_port]&MediaIsFD ? 0x0100 : 0);
+				if (((csr14<<5) & 0x1000) ||
+					(dev->if_port == 5 && tp->nwayset))
+					data->val_out = 0x1000;
+				else
+					data->val_out = (tulip_media_cap[dev->if_port]&MediaIs100 ? 0x2000 : 0)
+						| (tulip_media_cap[dev->if_port]&MediaIsFD ? 0x0100 : 0);
 				break;
 			case 1:
-                                data->val_out =
+				data->val_out =
 					0x1848 +
 					((csr12&0x7000) == 0x5000 ? 0x20 : 0) +
 					((csr12&0x06) == 6 ? 0 : 4);
-                                data->val_out |= 0x6048;
+				data->val_out |= 0x6048;
 				break;
 			case 4:
-                                /* Advertised value, bogus 10baseTx-FD value from CSR6. */
-                                data->val_out =
+				/* Advertised value, bogus 10baseTx-FD value from CSR6. */
+				data->val_out =
 					((ioread32(ioaddr + CSR6) >> 3) & 0x0040) +
 					((csr14 >> 1) & 0x20) + 1;
-                                data->val_out |= ((csr14 >> 9) & 0x03C0);
+				data->val_out |= ((csr14 >> 9) & 0x03C0);
 				break;
 			case 5: data->val_out = tp->lpar; break;
 			default: data->val_out = 0; break;
@@ -984,10 +984,10 @@ static int private_ioctl (struct net_device *dev, struct ifreq *rq, int cmd)
 			if (regnum == 0) {
 			  if ((value & 0x1200) == 0x1200) {
 			    if (tp->chip_id == PNIC2) {
-                                   pnic2_start_nway (dev);
-                            } else {
+				   pnic2_start_nway (dev);
+			    } else {
 				   t21142_start_nway (dev);
-                            }
+			    }
 			  }
 			} else if (regnum == 4)
 				tp->sym_advertise = value;
@@ -1333,7 +1333,7 @@ static int __devinit tulip_init_one (struct pci_dev *pdev,
 	 *	different driver (lmc driver)
 	 */
 
-        if (pdev->subsystem_vendor == PCI_VENDOR_ID_LMC) {
+	if (pdev->subsystem_vendor == PCI_VENDOR_ID_LMC) {
 		pr_err("skipping LMC card\n");
 		return -ENODEV;
 	} else if (pdev->subsystem_vendor == PCI_VENDOR_ID_SBE &&
@@ -1400,7 +1400,7 @@ static int __devinit tulip_init_one (struct pci_dev *pdev,
 	if (tulip_uli_dm_quirk(pdev)) {
 		csr0 &= ~0x01f100ff;
 #if defined(CONFIG_SPARC)
-                csr0 = (csr0 & ~0xff00) | 0xe000;
+		csr0 = (csr0 & ~0xff00) | 0xe000;
 #endif
 	}
 	/*
@@ -1575,14 +1575,14 @@ static int __devinit tulip_init_one (struct pci_dev *pdev,
 			multiport_cnt = 4;
 		}
 #ifdef CONFIG_MIPS_COBALT
-               if ((pdev->bus->number == 0) &&
-                   ((PCI_SLOT(pdev->devfn) == 7) ||
-                    (PCI_SLOT(pdev->devfn) == 12))) {
-                       /* Cobalt MAC address in first EEPROM locations. */
-                       sa_offset = 0;
+	       if ((pdev->bus->number == 0) &&
+		   ((PCI_SLOT(pdev->devfn) == 7) ||
+		    (PCI_SLOT(pdev->devfn) == 12))) {
+		       /* Cobalt MAC address in first EEPROM locations. */
+		       sa_offset = 0;
 		       /* Ensure our media table fixup get's applied */
 		       memcpy(ee_data + 16, ee_data, 8);
-               }
+	       }
 #endif
 #ifdef CONFIG_GSC
 		/* Check to see if we have a broken srom */
@@ -1731,7 +1731,7 @@ static int __devinit tulip_init_one (struct pci_dev *pdev,
 		 eeprom_missing ? " EEPROM not present," : "",
 		 dev->dev_addr, irq);
 
-        if (tp->chip_id == PNIC2)
+	if (tp->chip_id == PNIC2)
 		tp->link_change = pnic2_lnk_change;
 	else if (tp->flags & HAS_NWAY)
 		tp->link_change = t21142_lnk_change;

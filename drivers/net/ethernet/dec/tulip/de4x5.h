@@ -221,7 +221,7 @@
 #define BMR_BAR    0x00000002       /* Bus ARbitration */
 #define BMR_SWR    0x00000001       /* Software Reset */
 
-                                    /* Timings here are for 10BASE-T/AUI only*/
+				    /* Timings here are for 10BASE-T/AUI only*/
 #define TAP_NOPOLL 0x00000000       /* No automatic polling */
 #define TAP_200US  0x00020000       /* TX automatic polling every 200us */
 #define TAP_800US  0x00040000       /* TX automatic polling every 800us */
@@ -944,8 +944,8 @@
   if ((lp->phy[lp->active].id) && (!lp->useSROM || lp->useMII)) {\
     int fdx=0;\
     if (lp->phy[lp->active].id == NATIONAL_TX) {\
-        mii_wr(mii_rd(0x18, lp->phy[lp->active].addr, DE4X5_MII) & ~0x2000,\
-                      0x18, lp->phy[lp->active].addr, DE4X5_MII);\
+	mii_wr(mii_rd(0x18, lp->phy[lp->active].addr, DE4X5_MII) & ~0x2000,\
+		      0x18, lp->phy[lp->active].addr, DE4X5_MII);\
     }\
     omr = inl(DE4X5_OMR) & ~(OMR_TTM | OMR_PCS | OMR_SCR | OMR_FDX);\
     sr = mii_rd(MII_SR, lp->phy[lp->active].addr, DE4X5_MII);\

@@ -1481,9 +1481,9 @@ UNUSUAL_DEV(  0x10d6, 0x2200, 0x0100, 0x0100,
  * Ignore driver CD mode and force into modem mode by default.
  */
 UNUSUAL_DEV(  0x1186, 0x3e04, 0x0000, 0x0000,
-           "D-Link",
-           "USB Mass Storage",
-           USB_SC_DEVICE, USB_PR_DEVICE, option_ms_init, US_FL_IGNORE_DEVICE),
+	   "D-Link",
+	   "USB Mass Storage",
+	   USB_SC_DEVICE, USB_PR_DEVICE, option_ms_init, US_FL_IGNORE_DEVICE),
 
 /* Reported by Kevin Lloyd <linux@sierrawireless.com>
  * Entry is needed for the initializer function override,
@@ -1988,10 +1988,10 @@ UNUSUAL_DEV(  0x4102, 0x1020, 0x0100,  0x0100,
 
 /* Reported by Sergey Pinaev <dfo@antex.ru> */
 UNUSUAL_DEV(  0x4102, 0x1059, 0x0000,  0x0000,
-               "iRiver",
-               "P7K",
-               USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-               US_FL_MAX_SECTORS_64 ),
+	       "iRiver",
+	       "P7K",
+	       USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+	       US_FL_MAX_SECTORS_64 ),
 
 /*
  * David Härdeman <david@2gen.com>

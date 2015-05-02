@@ -159,7 +159,7 @@ static inline int set_gpio_output_pin(unsigned int pin, char command)
 }
 
 static ssize_t tanbac_tb0219_read(struct file *file, char __user *buf, size_t len,
-                                  loff_t *ppos)
+				  loff_t *ppos)
 {
 	unsigned int minor;
 	char value;
@@ -192,7 +192,7 @@ static ssize_t tanbac_tb0219_read(struct file *file, char __user *buf, size_t le
 }
 
 static ssize_t tanbac_tb0219_write(struct file *file, const char __user *data,
-                                   size_t len, loff_t *ppos)
+				   size_t len, loff_t *ppos)
 {
 	unsigned int minor;
 	tb0219_type_t type;

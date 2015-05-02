@@ -41,8 +41,8 @@
 
 static void i810i2c_setscl(void *data, int state)
 {
-        struct i810fb_i2c_chan    *chan = data;
-        struct i810fb_par         *par = chan->par;
+	struct i810fb_i2c_chan    *chan = data;
+	struct i810fb_par         *par = chan->par;
 	u8                        __iomem *mmio = par->mmio_start_virtual;
 
 	if (state)
@@ -54,8 +54,8 @@ static void i810i2c_setscl(void *data, int state)
 
 static void i810i2c_setsda(void *data, int state)
 {
-        struct i810fb_i2c_chan    *chan = data;
-        struct i810fb_par         *par = chan->par;
+	struct i810fb_i2c_chan    *chan = data;
+	struct i810fb_par         *par = chan->par;
 	u8                        __iomem *mmio = par->mmio_start_virtual;
 
 	if (state)
@@ -67,8 +67,8 @@ static void i810i2c_setsda(void *data, int state)
 
 static int i810i2c_getscl(void *data)
 {
-        struct i810fb_i2c_chan    *chan = data;
-        struct i810fb_par         *par = chan->par;
+	struct i810fb_i2c_chan    *chan = data;
+	struct i810fb_par         *par = chan->par;
 	u8                        __iomem *mmio = par->mmio_start_virtual;
 
 	i810_writel(mmio, chan->ddc_base, SCL_DIR_MASK);
@@ -78,8 +78,8 @@ static int i810i2c_getscl(void *data)
 
 static int i810i2c_getsda(void *data)
 {
-        struct i810fb_i2c_chan    *chan = data;
-        struct i810fb_par         *par = chan->par;
+	struct i810fb_i2c_chan    *chan = data;
+	struct i810fb_par         *par = chan->par;
 	u8                        __iomem *mmio = par->mmio_start_virtual;
 
 	i810_writel(mmio, chan->ddc_base, SDA_DIR_MASK);
@@ -89,43 +89,43 @@ static int i810i2c_getsda(void *data)
 
 static int i810_setup_i2c_bus(struct i810fb_i2c_chan *chan, const char *name)
 {
-        int rc;
+	int rc;
 
-        strcpy(chan->adapter.name, name);
-        chan->adapter.owner             = THIS_MODULE;
-        chan->adapter.algo_data         = &chan->algo;
-        chan->adapter.dev.parent        = &chan->par->dev->dev;
+	strcpy(chan->adapter.name, name);
+	chan->adapter.owner             = THIS_MODULE;
+	chan->adapter.algo_data         = &chan->algo;
+	chan->adapter.dev.parent        = &chan->par->dev->dev;
 	chan->algo.setsda               = i810i2c_setsda;
 	chan->algo.setscl               = i810i2c_setscl;
 	chan->algo.getsda               = i810i2c_getsda;
 	chan->algo.getscl               = i810i2c_getscl;
 	chan->algo.udelay               = 10;
-        chan->algo.timeout              = (HZ/2);
-        chan->algo.data                 = chan;
+	chan->algo.timeout              = (HZ/2);
+	chan->algo.data                 = chan;
 
-        i2c_set_adapdata(&chan->adapter, chan);
+	i2c_set_adapdata(&chan->adapter, chan);
 
-        /* Raise SCL and SDA */
-        chan->algo.setsda(chan, 1);
-        chan->algo.setscl(chan, 1);
-        udelay(20);
+	/* Raise SCL and SDA */
+	chan->algo.setsda(chan, 1);
+	chan->algo.setscl(chan, 1);
+	udelay(20);
 
-        rc = i2c_bit_add_bus(&chan->adapter);
+	rc = i2c_bit_add_bus(&chan->adapter);
 
-        if (rc == 0)
-                dev_dbg(&chan->par->dev->dev, "I2C bus %s registered.\n",name);
-        else {
-                dev_warn(&chan->par->dev->dev, "Failed to register I2C bus "
+	if (rc == 0)
+		dev_dbg(&chan->par->dev->dev, "I2C bus %s registered.\n",name);
+	else {
+		dev_warn(&chan->par->dev->dev, "Failed to register I2C bus "
 			 "%s.\n", name);
 		chan->par = NULL;
 	}
 
-        return rc;
+	return rc;
 }
 
 void i810_create_i2c_busses(struct i810fb_par *par)
 {
-        par->chan[0].par        = par;
+	par->chan[0].par        = par;
 	par->chan[1].par        = par;
 	par->chan[2].par        = par;
 
@@ -139,9 +139,9 @@ void i810_create_i2c_busses(struct i810fb_par *par)
 
 void i810_delete_i2c_busses(struct i810fb_par *par)
 {
-        if (par->chan[0].par)
+	if (par->chan[0].par)
 		i2c_del_adapter(&par->chan[0].adapter);
-        par->chan[0].par = NULL;
+	par->chan[0].par = NULL;
 
 	if (par->chan[1].par)
 		i2c_del_adapter(&par->chan[1].adapter);
@@ -155,7 +155,7 @@ void i810_delete_i2c_busses(struct i810fb_par *par)
 int i810_probe_i2c_connector(struct fb_info *info, u8 **out_edid, int conn)
 {
 	struct i810fb_par *par = info->par;
-        u8 *edid = NULL;
+	u8 *edid = NULL;
 
 	DPRINTK("i810-i2c: Probe DDC%i Bus\n", conn+1);
 	if (conn < par->ddc_num) {
@@ -171,5 +171,5 @@ int i810_probe_i2c_connector(struct fb_info *info, u8 **out_edid, int conn)
 
 	*out_edid = edid;
 
-        return (edid) ? 0 : 1;
+	return (edid) ? 0 : 1;
 }

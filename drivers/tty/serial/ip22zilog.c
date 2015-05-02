@@ -1088,7 +1088,7 @@ static void __init ip22zilog_prepare(void)
 		spin_lock_init(&ip22zilog_port_table[channel].port.lock);
 
 	ip22zilog_irq_chain = &ip22zilog_port_table[NUM_CHANNELS - 1];
-        up = &ip22zilog_port_table[0];
+	up = &ip22zilog_port_table[0];
 	for (channel = NUM_CHANNELS - 1 ; channel > 0; channel--)
 		up[channel].next = &up[channel - 1];
 	up[channel].next = NULL;

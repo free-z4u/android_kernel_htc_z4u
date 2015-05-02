@@ -247,9 +247,9 @@ static int sendup_buffer (struct net_device *dev);
 
 static unsigned long dma_mem_alloc(int size)
 {
-        int order = get_order(size);
+	int order = get_order(size);
 
-        return __get_dma_pages(GFP_KERNEL, order);
+	return __get_dma_pages(GFP_KERNEL, order);
 }
 
 /* DMA data buffer, DMA command buffer */
@@ -1129,7 +1129,7 @@ struct net_device * __init ltpc_probe(void)
 
 	/* the card will want to send a result at this point */
 	/* (I think... leaving out this part makes the kernel crash,
-           so I put it back in...) */
+	   so I put it back in...) */
 
 	f=claim_dma_lock();
 	disable_dma(dma);
@@ -1238,7 +1238,7 @@ module_param(dma, int, 0);
 
 static int __init ltpc_module_init(void)
 {
-        if(io == 0)
+	if(io == 0)
 		printk(KERN_NOTICE
 		       "ltpc: Autoprobing is not recommended for modules\n");
 

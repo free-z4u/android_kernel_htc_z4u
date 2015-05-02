@@ -238,7 +238,7 @@ extern void acpi_processor_unregister_performance(struct
 						  unsigned int cpu);
 
 /* note: this locks both the calling module and the processor module
-         if a _PPC object exists, rmmod is disallowed then */
+	 if a _PPC object exists, rmmod is disallowed then */
 int acpi_processor_notify_smm(struct module *calling_module);
 
 /* for communication between multiple parts of the processor kernel module */

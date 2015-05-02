@@ -521,8 +521,8 @@ struct SsidRid {
 
 typedef struct ModulationRid ModulationRid;
 struct ModulationRid {
-        __le16 len;
-        __le16 modulation;
+	__le16 len;
+	__le16 modulation;
 #define MOD_DEFAULT cpu_to_le16(0)
 #define MOD_CCK cpu_to_le16(1)
 #define MOD_MOK cpu_to_le16(2)
@@ -578,7 +578,7 @@ struct ConfigRid {
 #define SCANMODE_AIROSCAN cpu_to_le16(2)
 	__le16 probeDelay; /* in kusec */
 	__le16 probeEnergyTimeout; /* in kusec */
-        __le16 probeResponseTimeout;
+	__le16 probeResponseTimeout;
 	__le16 beaconListenTimeout;
 	__le16 joinNetTimeout;
 	__le16 authTimeout;
@@ -627,7 +627,7 @@ struct ConfigRid {
 #define TXPOWER_DEFAULT 0
 	__le16 rssiThreshold;
 #define RSSI_DEFAULT 0
-        __le16 modulation;
+	__le16 modulation;
 #define PREAMBLE_AUTO cpu_to_le16(0)
 #define PREAMBLE_LONG cpu_to_le16(1)
 #define PREAMBLE_SHORT cpu_to_le16(2)
@@ -1060,13 +1060,13 @@ typedef struct {
 } TxCtlHdr;
 
 typedef struct {
-        u16 ctl;
-        u16 duration;
-        char addr1[6];
-        char addr2[6];
-        char addr3[6];
-        u16 seq;
-        char addr4[6];
+	u16 ctl;
+	u16 duration;
+	char addr1[6];
+	char addr2[6];
+	char addr3[6];
+	u16 seq;
+	char addr4[6];
 } WifiHdr;
 
 
@@ -1165,7 +1165,7 @@ struct airo_info {
 	char keyindex; // Used with auto wep
 	char defindex; // Used with auto wep
 	struct proc_dir_entry *proc_entry;
-        spinlock_t aux_lock;
+	spinlock_t aux_lock;
 #define FLAG_RADIO_OFF	0	/* User disabling of MAC */
 #define FLAG_RADIO_DOWN	1	/* ifup/ifdown disabling of MAC */
 #define FLAG_RADIO_MASK 0x03
@@ -1359,11 +1359,11 @@ static int micsetup(struct airo_info *ai) {
 	if (ai->tfm == NULL)
 	        ai->tfm = crypto_alloc_cipher("aes", 0, CRYPTO_ALG_ASYNC);
 
-        if (IS_ERR(ai->tfm)) {
-                airo_print_err(ai->dev->name, "failed to load transform for AES");
-                ai->tfm = NULL;
-                return ERROR;
-        }
+	if (IS_ERR(ai->tfm)) {
+		airo_print_err(ai->dev->name, "failed to load transform for AES");
+		ai->tfm = NULL;
+		return ERROR;
+	}
 
 	for (i=0; i < NUM_MODULES; i++) {
 		memset(&ai->mod[i].mCtx,0,sizeof(miccntx));
@@ -2147,7 +2147,7 @@ static netdev_tx_t airo_start_xmit(struct sk_buff *skb,
 	}
 	/* check min length*/
 	len = ETH_ZLEN < skb->len ? skb->len : ETH_ZLEN;
-        /* Mark fid as used & save length for later */
+	/* Mark fid as used & save length for later */
 	fids[i] |= (len << 16);
 	priv->xmit.skb = skb;
 	priv->xmit.fid = i;
@@ -2221,7 +2221,7 @@ static netdev_tx_t airo_start_xmit11(struct sk_buff *skb,
 	}
 	/* check min length*/
 	len = ETH_ZLEN < skb->len ? skb->len : ETH_ZLEN;
-        /* Mark fid as used & save length for later */
+	/* Mark fid as used & save length for later */
 	fids[i] |= (len << 16);
 	priv->xmit11.skb = skb;
 	priv->xmit11.fid = i;
@@ -2425,7 +2425,7 @@ void stop_airo_card( struct net_device *dev, int freeres )
 			pci_free_consistent(ai->pci, PCI_SHARED_LEN,
 				ai->shared, ai->shared_dma);
 		}
-        }
+	}
 	crypto_free_cipher(ai->tfm);
 	del_airo_dev(ai);
 	free_netdev( dev );
@@ -3602,7 +3602,7 @@ static int enable_MAC(struct airo_info *ai, int lock)
 }
 
 static void disable_MAC( struct airo_info *ai, int lock ) {
-        Cmd cmd;
+	Cmd cmd;
 	Resp rsp;
 
 	if (lock && down_interruptible(&ai->sem))
@@ -3927,7 +3927,7 @@ static u16 setup_card(struct airo_info *ai, u8 *mac, int lock)
 }
 
 static u16 issuecommand(struct airo_info *ai, Cmd *pCmd, Resp *pRsp) {
-        // Im really paranoid about letting it run forever!
+	// Im really paranoid about letting it run forever!
 	int max_tries = 600000;
 
 	if (IN4500(ai, EVSTAT) & EV_CMD)
@@ -3988,7 +3988,7 @@ static int bap_setup(struct airo_info *ai, u16 rid, u16 offset, int whichbap )
 	while (1) {
 		int status = IN4500(ai, OFFSET0+whichbap);
 		if (status & BAP_BUSY) {
-                        /* This isn't really a timeout, but its kinda
+			/* This isn't really a timeout, but its kinda
 			   close */
 			if (timeout--) {
 				continue;
@@ -4113,7 +4113,7 @@ static int PC4500_accessrid(struct airo_info *ai, u16 rid, u16 accmd)
 static int PC4500_readrid(struct airo_info *ai, u16 rid, void *pBuf, int len, int lock)
 {
 	u16 status;
-        int rc = SUCCESS;
+	int rc = SUCCESS;
 
 	if (lock) {
 		if (down_interruptible(&ai->sem))
@@ -4244,7 +4244,7 @@ static int PC4500_writerid(struct airo_info *ai, u16 rid,
 done:
 	if (lock)
 		up(&ai->sem);
-        return rc;
+	return rc;
 }
 
 /* Allocates a FID to be used for transmitting packets.  We only use
@@ -4682,16 +4682,16 @@ static int proc_status_open(struct inode *inode, struct file *file)
 
 	mode = le16_to_cpu(status_rid.mode);
 
-        i = sprintf(data->rbuffer, "Status: %s%s%s%s%s%s%s%s%s\n",
-                    mode & 1 ? "CFG ": "",
-                    mode & 2 ? "ACT ": "",
-                    mode & 0x10 ? "SYN ": "",
-                    mode & 0x20 ? "LNK ": "",
-                    mode & 0x40 ? "LEAP ": "",
-                    mode & 0x80 ? "PRIV ": "",
-                    mode & 0x100 ? "KEY ": "",
-                    mode & 0x200 ? "WEP ": "",
-                    mode & 0x8000 ? "ERR ": "");
+	i = sprintf(data->rbuffer, "Status: %s%s%s%s%s%s%s%s%s\n",
+		    mode & 1 ? "CFG ": "",
+		    mode & 2 ? "ACT ": "",
+		    mode & 0x10 ? "SYN ": "",
+		    mode & 0x20 ? "LNK ": "",
+		    mode & 0x40 ? "LEAP ": "",
+		    mode & 0x80 ? "PRIV ": "",
+		    mode & 0x100 ? "KEY ": "",
+		    mode & 0x200 ? "WEP ": "",
+		    mode & 0x8000 ? "ERR ": "");
 	sprintf( data->rbuffer+i, "Mode: %x\n"
 		 "Signal Strength: %d\n"
 		 "Signal Quality: %d\n"
@@ -4763,7 +4763,7 @@ static int proc_stats_rid_open( struct inode *inode,
 	readStatsRid(apriv, &stats, rid, 1);
 	len = le16_to_cpu(stats.len);
 
-        j = 0;
+	j = 0;
 	for(i=0; statsLabels[i]!=(char *)-1 && i*4<len; i++) {
 		if (!statsLabels[i]) continue;
 		if (j+strlen(statsLabels[i])+16>4096) {
@@ -5008,12 +5008,12 @@ static void proc_config_on_close(struct inode *inode, struct file *file)
 
 static const char *get_rmode(__le16 mode)
 {
-        switch(mode & RXMODE_MASK) {
-        case RXMODE_RFMON:  return "rfmon";
-        case RXMODE_RFMON_ANYBSS:  return "yna (any) bss rfmon";
-        case RXMODE_LANMON:  return "lanmon";
-        }
-        return "ESS";
+	switch(mode & RXMODE_MASK) {
+	case RXMODE_RFMON:  return "rfmon";
+	case RXMODE_RFMON_ANYBSS:  return "yna (any) bss rfmon";
+	case RXMODE_LANMON:  return "lanmon";
+	}
+	return "ESS";
 }
 
 static int proc_config_open(struct inode *inode, struct file *file)
@@ -5506,8 +5506,8 @@ static int proc_BSSList_open( struct inode *inode, struct file *file ) {
 	}
 	ptr = data->rbuffer;
 	/* There is a race condition here if there are concurrent opens.
-           Since it is a rare condition, we'll just live with it, otherwise
-           we have to add a spin lock... */
+	   Since it is a rare condition, we'll just live with it, otherwise
+	   we have to add a spin lock... */
 	rc = readBSSListRid(ai, doLoseSync, &BSSList_rid);
 	while(rc == 0 && BSSList_rid.index != cpu_to_le16(0xffff)) {
 		ptr += sprintf(ptr, "%pM %*s rssi = %d",
@@ -5671,7 +5671,7 @@ static int airo_pci_resume(struct pci_dev *pdev)
 
 	set_bit(FLAG_COMMIT, &ai->flags);
 	disable_MAC(ai, 0);
-        msleep(200);
+	msleep(200);
 	if (ai->SSID) {
 		writeSsidRid(ai, ai->SSID, 0);
 		kfree(ai->SSID);
@@ -7883,7 +7883,7 @@ static int readrids(struct net_device *dev, aironet_ioctl *comp) {
 static int writerids(struct net_device *dev, aironet_ioctl *comp) {
 	struct airo_info *ai = dev->ml_priv;
 	int  ridcode;
-        int  enabled;
+	int  enabled;
 	static int (* writer)(struct airo_info *, u16 rid, const void *, int, int);
 	unsigned char *iobuf;
 

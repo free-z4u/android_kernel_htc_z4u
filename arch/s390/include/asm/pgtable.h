@@ -388,7 +388,7 @@ extern struct page *vmemmap;
  * Read permission implies execute permission and write permission
  * implies read permission.
  */
-         /*xwr*/
+	 /*xwr*/
 #define __P000	PAGE_NONE
 #define __P001	PAGE_RO
 #define __P010	PAGE_RO

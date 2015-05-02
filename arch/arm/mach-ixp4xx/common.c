@@ -258,7 +258,7 @@ void __init ixp4xx_init_irq(void)
 		*IXP4XX_ICMR2 = 0x00;
 	}
 
-        /* Default to all level triggered */
+	/* Default to all level triggered */
 	for(i = 0; i < NR_IRQS; i++) {
 		irq_set_chip_and_handler(i, &ixp4xx_irq_chip,
 					 handle_level_irq);

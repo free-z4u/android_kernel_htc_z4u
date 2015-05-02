@@ -42,7 +42,7 @@ static void wake_up_event_readers(struct service_processor *sp)
 	struct event_reader *reader;
 
 	list_for_each_entry(reader, &sp->event_buffer->readers, node)
-                wake_up_interruptible(&reader->wait);
+		wake_up_interruptible(&reader->wait);
 }
 
 /**
@@ -123,8 +123,8 @@ int ibmasm_get_next_event(struct service_processor *sp, struct event_reader *rea
 
 void ibmasm_cancel_next_event(struct event_reader *reader)
 {
-        reader->cancelled = 1;
-        wake_up_interruptible(&reader->wait);
+	reader->cancelled = 1;
+	wake_up_interruptible(&reader->wait);
 }
 
 void ibmasm_event_reader_register(struct service_processor *sp, struct event_reader *reader)

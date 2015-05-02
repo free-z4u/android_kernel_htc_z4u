@@ -1299,8 +1299,8 @@ static ssize_t subbuf_splice_actor(struct file *in,
 	if (ret < 0 || ret < total_len)
 		goto out;
 
-        if (read_start + ret == nonpad_end)
-                ret += padding;
+	if (read_start + ret == nonpad_end)
+		ret += padding;
 
 out:
 	splice_shrink_spd(&spd);

@@ -624,9 +624,9 @@
 #define K_SCD_TRSEQ_IGNORED             15
 
 #define K_SCD_TRSEQ_TRIGGER_ALL         (V_SCD_TRSEQ_EVENT1(K_SCD_TRSEQ_IGNORED) | \
-                                         V_SCD_TRSEQ_EVENT2(K_SCD_TRSEQ_IGNORED) | \
-                                         V_SCD_TRSEQ_EVENT3(K_SCD_TRSEQ_IGNORED) | \
-                                         V_SCD_TRSEQ_EVENT4(K_SCD_TRSEQ_IGNORED))
+					 V_SCD_TRSEQ_EVENT2(K_SCD_TRSEQ_IGNORED) | \
+					 V_SCD_TRSEQ_EVENT3(K_SCD_TRSEQ_IGNORED) | \
+					 V_SCD_TRSEQ_EVENT4(K_SCD_TRSEQ_IGNORED))
 
 #define S_SCD_TRSEQ_FUNCTION            16
 #define M_SCD_TRSEQ_FUNCTION            _SB_MAKEMASK(4, S_SCD_TRSEQ_FUNCTION)

@@ -362,10 +362,10 @@ EXPORT_SYMBOL(seq_release);
 int seq_escape(struct seq_file *m, const char *s, const char *esc)
 {
 	char *end = m->buf + m->size;
-        char *p;
+	char *p;
 	char c;
 
-        for (p = m->buf + m->count; (c = *s) != '\0' && p < end; s++) {
+	for (p = m->buf + m->count; (c = *s) != '\0' && p < end; s++) {
 		if (!strchr(esc, c)) {
 			*p++ = c;
 			continue;
@@ -379,9 +379,9 @@ int seq_escape(struct seq_file *m, const char *s, const char *esc)
 		}
 		seq_set_overflow(m);
 		return -1;
-        }
+	}
 	m->count = p - m->buf;
-        return 0;
+	return 0;
 }
 EXPORT_SYMBOL(seq_escape);
 

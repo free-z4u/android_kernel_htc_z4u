@@ -167,7 +167,7 @@
 #define __FP_PACK_S(val,X)			\
 ({  int __exc = _FP_PACK_CANONICAL(S,1,X);	\
     if(!__exc || !__FPU_TRAP_P(__exc))		\
-        _FP_PACK_RAW_1_P(S,val,X);		\
+	_FP_PACK_RAW_1_P(S,val,X);		\
     __exc;					\
 })
 
@@ -300,7 +300,7 @@
     __asm__ ("mulhwu %0,%1,%2"						\
 	     : "=r" ((USItype)(ph))					\
 	     : "%r" (__m0),						\
-               "r" (__m1));						\
+	       "r" (__m1));						\
     (pl) = __m0 * __m1;							\
   } while (0)
 

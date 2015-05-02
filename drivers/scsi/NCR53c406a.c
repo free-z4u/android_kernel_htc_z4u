@@ -748,7 +748,7 @@ static int NCR53c406a_host_reset(Scsi_Cmnd * SCpnt)
 }
 
 static int NCR53c406a_biosparm(struct scsi_device *disk,
-                               struct block_device *dev,
+			       struct block_device *dev,
 			       sector_t capacity, int *info_array)
 {
 	int size;
@@ -788,7 +788,7 @@ static void NCR53c406a_intr(void *dev_id)
 #if USE_PIO
 	unsigned char pio_status;
 	struct scatterlist *sg;
-        int i;
+	int i;
 #endif
 
 	VDEB(printk("NCR53c406a_intr called\n"));
@@ -871,14 +871,14 @@ static void NCR53c406a_intr(void *dev_id)
 			LOAD_DMA_COUNT(scsi_bufflen(current_SC));	/* Max transfer size */
 #if USE_DMA			/* No s/g support for DMA */
 			NCR53c406a_dma_write(scsi_sglist(current_SC),
-                                             scsdi_bufflen(current_SC));
+					     scsdi_bufflen(current_SC));
 
 #endif				/* USE_DMA */
 			outb(TRANSFER_INFO | DMA_OP, CMD_REG);
 #if USE_PIO
-                        scsi_for_each_sg(current_SC, sg, scsi_sg_count(current_SC), i) {
-                                NCR53c406a_pio_write(sg_virt(sg), sg->length);
-                        }
+			scsi_for_each_sg(current_SC, sg, scsi_sg_count(current_SC), i) {
+				NCR53c406a_pio_write(sg_virt(sg), sg->length);
+			}
 			REG0;
 #endif				/* USE_PIO */
 		}
@@ -893,13 +893,13 @@ static void NCR53c406a_intr(void *dev_id)
 			LOAD_DMA_COUNT(scsi_bufflen(current_SC));	/* Max transfer size */
 #if USE_DMA			/* No s/g support for DMA */
 			NCR53c406a_dma_read(scsi_sglist(current_SC),
-                                            scsdi_bufflen(current_SC));
+					    scsdi_bufflen(current_SC));
 #endif				/* USE_DMA */
 			outb(TRANSFER_INFO | DMA_OP, CMD_REG);
 #if USE_PIO
-                        scsi_for_each_sg(current_SC, sg, scsi_sg_count(current_SC), i) {
-                                NCR53c406a_pio_read(sg_virt(sg), sg->length);
-                        }
+			scsi_for_each_sg(current_SC, sg, scsi_sg_count(current_SC), i) {
+				NCR53c406a_pio_read(sg_virt(sg), sg->length);
+			}
 			REG0;
 #endif				/* USE_PIO */
 		}

@@ -512,7 +512,7 @@ void __init smp_setup_cpu_maps(void)
 	vdso_data->processorCount = num_present_cpus();
 #endif /* CONFIG_PPC64 */
 
-        /* Initialize CPU <=> thread mapping/
+	/* Initialize CPU <=> thread mapping/
 	 *
 	 * WARNING: We assume that the number of threads is the same for
 	 * every CPU in the system. If that is not the case, then some code
@@ -645,7 +645,7 @@ int check_legacy_ioport(unsigned long base_port)
 EXPORT_SYMBOL(check_legacy_ioport);
 
 static int ppc_panic_event(struct notifier_block *this,
-                             unsigned long event, void *ptr)
+			     unsigned long event, void *ptr)
 {
 	/*
 	 * If firmware-assisted dump has been registered then trigger

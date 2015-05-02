@@ -379,7 +379,7 @@ static __initconst const u64 westmere_hw_cache_event_ids
 #define NHM_UNCORE_HIT		(1 << 8)
 #define NHM_OTHER_CORE_HIT_SNP	(1 << 9)
 #define NHM_OTHER_CORE_HITM	(1 << 10)
-        			/* reserved */
+				/* reserved */
 #define NHM_REMOTE_CACHE_FWD	(1 << 12)
 #define NHM_REMOTE_DRAM		(1 << 13)
 #define NHM_LOCAL_DRAM		(1 << 14)

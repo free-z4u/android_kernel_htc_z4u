@@ -78,7 +78,7 @@ static DEFINE_SPINLOCK(idr_lock);
  * SIGEV values.  Here we put out an error if this assumption fails.
  */
 #if SIGEV_THREAD_ID != (SIGEV_THREAD_ID & \
-                       ~(SIGEV_SIGNAL | SIGEV_NONE | SIGEV_THREAD))
+		       ~(SIGEV_SIGNAL | SIGEV_NONE | SIGEV_THREAD))
 #error "SIGEV_THREAD_ID must not share bit with other SIGEV values!"
 #endif
 

@@ -81,7 +81,7 @@ config LIS3L02DQ_BUF_KFIFO
        depends on IIO_KFIFO_BUF
        bool "Simple FIFO"
        help
-         Kfifo based FIFO.  Does not provide any events so it is up
+	 Kfifo based FIFO.  Does not provide any events so it is up
 	 to userspace to ensure it reads often enough that data is not
 	 lost.
 
@@ -89,7 +89,7 @@ config LIS3L02DQ_BUF_RING_SW
        depends on IIO_SW_RING
        bool "IIO Software Ring"
        help
-         Original IIO ring buffer implementation.  Provides simple
+	 Original IIO ring buffer implementation.  Provides simple
 	 buffer events, half full etc.
 
 endchoice

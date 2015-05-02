@@ -186,49 +186,49 @@ struct RxFD {
 #define SCC_REG_START(dpriv)	(SCC_START+(dpriv->dev_id)*SCC_OFFSET)
 
 struct dscc4_pci_priv {
-        __le32 *iqcfg;
-        int cfg_cur;
-        spinlock_t lock;
-        struct pci_dev *pdev;
+	__le32 *iqcfg;
+	int cfg_cur;
+	spinlock_t lock;
+	struct pci_dev *pdev;
 
-        struct dscc4_dev_priv *root;
-        dma_addr_t iqcfg_dma;
+	struct dscc4_dev_priv *root;
+	dma_addr_t iqcfg_dma;
 	u32 xtal_hz;
 };
 
 struct dscc4_dev_priv {
-        struct sk_buff *rx_skbuff[RX_RING_SIZE];
-        struct sk_buff *tx_skbuff[TX_RING_SIZE];
+	struct sk_buff *rx_skbuff[RX_RING_SIZE];
+	struct sk_buff *tx_skbuff[TX_RING_SIZE];
 
-        struct RxFD *rx_fd;
-        struct TxFD *tx_fd;
-        __le32 *iqrx;
-        __le32 *iqtx;
+	struct RxFD *rx_fd;
+	struct TxFD *tx_fd;
+	__le32 *iqrx;
+	__le32 *iqtx;
 
 	/* FIXME: check all the volatile are required */
-        volatile u32 tx_current;
-        u32 rx_current;
-        u32 iqtx_current;
-        u32 iqrx_current;
+	volatile u32 tx_current;
+	u32 rx_current;
+	u32 iqtx_current;
+	u32 iqrx_current;
 
-        volatile u32 tx_dirty;
-        volatile u32 ltda;
-        u32 rx_dirty;
-        u32 lrda;
+	volatile u32 tx_dirty;
+	volatile u32 ltda;
+	u32 rx_dirty;
+	u32 lrda;
 
-        dma_addr_t tx_fd_dma;
-        dma_addr_t rx_fd_dma;
-        dma_addr_t iqtx_dma;
-        dma_addr_t iqrx_dma;
+	dma_addr_t tx_fd_dma;
+	dma_addr_t rx_fd_dma;
+	dma_addr_t iqtx_dma;
+	dma_addr_t iqrx_dma;
 
 	u32 scc_regs[SCC_REGISTERS_MAX]; /* Cf errata DS5 p.4 */
 
 	struct timer_list timer;
 
-        struct dscc4_pci_priv *pci_priv;
-        spinlock_t lock;
+	struct dscc4_pci_priv *pci_priv;
+	spinlock_t lock;
 
-        int dev_id;
+	int dev_id;
 	volatile u32 flags;
 	u32 timer_help;
 
@@ -428,7 +428,7 @@ static inline void dscc4_do_tx(struct dscc4_dev_priv *dpriv,
 			       struct net_device *dev)
 {
 	dpriv->ltda = dpriv->tx_fd_dma +
-                      ((dpriv->tx_current-1)%TX_RING_SIZE)*sizeof(struct TxFD);
+		      ((dpriv->tx_current-1)%TX_RING_SIZE)*sizeof(struct TxFD);
 	writel(dpriv->ltda, dpriv->base_addr + CH0LTDA + dpriv->dev_id*4);
 	/* Flush posted writes *NOW* */
 	readl(dpriv->base_addr + CH0LTDA + dpriv->dev_id*4);
@@ -984,8 +984,8 @@ static void dscc4_timer(unsigned long data)
 
 	goto done;
 done:
-        dpriv->timer.expires = jiffies + TX_TIMEOUT;
-        add_timer(&dpriv->timer);
+	dpriv->timer.expires = jiffies + TX_TIMEOUT;
+	add_timer(&dpriv->timer);
 }
 
 static void dscc4_tx_timeout(struct net_device *dev)
@@ -1122,11 +1122,11 @@ static int dscc4_open(struct net_device *dev)
 done:
 	netif_start_queue(dev);
 
-        init_timer(&dpriv->timer);
-        dpriv->timer.expires = jiffies + 10*HZ;
-        dpriv->timer.data = (unsigned long)dev;
+	init_timer(&dpriv->timer);
+	dpriv->timer.expires = jiffies + 10*HZ;
+	dpriv->timer.data = (unsigned long)dev;
 	dpriv->timer.function = dscc4_timer;
-        add_timer(&dpriv->timer);
+	add_timer(&dpriv->timer);
 	netif_carrier_on(dev);
 
 	return 0;
@@ -1315,8 +1315,8 @@ static int dscc4_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 	const size_t size = sizeof(dpriv->settings);
 	int ret = 0;
 
-        if (dev->flags & IFF_UP)
-                return -EBUSY;
+	if (dev->flags & IFF_UP)
+		return -EBUSY;
 
 	if (cmd != SIOCWANDEV)
 		return -EOPNOTSUPP;
@@ -2023,8 +2023,8 @@ static int dscc4_hdlc_attach(struct net_device *dev, unsigned short encoding,
 	    parity != PARITY_CRC32_PR1_CCITT)
 		return -EINVAL;
 
-        dpriv->encoding = encoding;
-        dpriv->parity = parity;
+	dpriv->encoding = encoding;
+	dpriv->parity = parity;
 	return 0;
 }
 

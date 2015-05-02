@@ -34,7 +34,7 @@ static void instruction_dump(unsigned long *pc)
 	int i;
 
 	if((((unsigned long) pc) & 3))
-                return;
+		return;
 
 	for(i = -3; i < 6; i++)
 		printk("%c%08lx%c",i?' ':'<',pc[i],i?' ':'>');
@@ -74,7 +74,7 @@ void die_if_kernel(char *str, struct pt_regs *regs)
 		 */
 		while(rw					&&
 		      count++ < 30				&&
-                      (((unsigned long) rw) >= PAGE_OFFSET)	&&
+		      (((unsigned long) rw) >= PAGE_OFFSET)	&&
 		      !(((unsigned long) rw) & 0x7)) {
 			printk("Caller[%08lx]: %pS\n", rw->ins[7],
 			       (void *) rw->ins[7]);
@@ -174,7 +174,7 @@ void do_memaccess_unaligned(struct pt_regs *regs, unsigned long pc, unsigned lon
 
 static unsigned long init_fsr = 0x0UL;
 static unsigned long init_fregs[32] __attribute__ ((aligned (8))) =
-                { ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL,
+		{ ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL,
 		  ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL,
 		  ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL,
 		  ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL, ~0UL };
@@ -420,8 +420,8 @@ void handle_hw_divzero(struct pt_regs *regs, unsigned long pc, unsigned long npc
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 void do_BUG(const char *file, int line)
 {
-        // bust_spinlocks(1);   XXX Not in our original BUG()
-        printk("kernel BUG at %s:%d!\n", file, line);
+	// bust_spinlocks(1);   XXX Not in our original BUG()
+	printk("kernel BUG at %s:%d!\n", file, line);
 }
 EXPORT_SYMBOL(do_BUG);
 #endif

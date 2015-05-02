@@ -453,12 +453,12 @@ scdrv_init(void)
 						 0 /*ignored */ ,
 						 SAL_IROUTER_INTR_RECV);
 
-                        /* on the console nasid, prepare to receive
-                         * system controller environmental events
-                         */
-                        if(scd->scd_nasid == event_nasid) {
-                                scdrv_event_init(scd);
-                        }
+			/* on the console nasid, prepare to receive
+			 * system controller environmental events
+			 */
+			if(scd->scd_nasid == event_nasid) {
+				scdrv_event_init(scd);
+			}
 	}
 	return 0;
 }

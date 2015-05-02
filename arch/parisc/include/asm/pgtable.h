@@ -37,9 +37,9 @@ struct vm_area_struct;
  * hook is made available.
  */
 #define set_pte(pteptr, pteval)                                 \
-        do{                                                     \
-                *(pteptr) = (pteval);                           \
-        } while(0)
+	do{                                                     \
+		*(pteptr) = (pteval);                           \
+	} while(0)
 #define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
 
 #endif /* !__ASSEMBLY__ */

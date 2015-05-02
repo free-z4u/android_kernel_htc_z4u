@@ -1971,7 +1971,7 @@ static int radeon_atombios_parse_power_table_1_3(struct radeon_device *rdev)
 	struct radeon_i2c_bus_rec i2c_bus;
 	union power_info *power_info;
 	int index = GetIndexIntoMasterTable(DATA, PowerPlayInfo);
-        u16 data_offset;
+	u16 data_offset;
 	u8 frev, crev;
 
 	if (!atom_parse_data_header(mode_info->atom_context, index, NULL,
@@ -2387,7 +2387,7 @@ static int radeon_atombios_parse_power_table_4_5(struct radeon_device *rdev)
 	bool valid;
 	union power_info *power_info;
 	int index = GetIndexIntoMasterTable(DATA, PowerPlayInfo);
-        u16 data_offset;
+	u16 data_offset;
 	u8 frev, crev;
 
 	if (!atom_parse_data_header(mode_info->atom_context, index, NULL,
@@ -2476,7 +2476,7 @@ static int radeon_atombios_parse_power_table_6(struct radeon_device *rdev)
 	bool valid;
 	union power_info *power_info;
 	int index = GetIndexIntoMasterTable(DATA, PowerPlayInfo);
-        u16 data_offset;
+	u16 data_offset;
 	u8 frev, crev;
 
 	if (!atom_parse_data_header(mode_info->atom_context, index, NULL,

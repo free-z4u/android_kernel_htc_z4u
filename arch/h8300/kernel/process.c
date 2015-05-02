@@ -188,7 +188,7 @@ asmlinkage int h8300_clone(struct pt_regs *regs)
 }
 
 int copy_thread(unsigned long clone_flags,
-                unsigned long usp, unsigned long topstk,
+		unsigned long usp, unsigned long topstk,
 		 struct task_struct * p, struct pt_regs * regs)
 {
 	struct pt_regs * childregs;

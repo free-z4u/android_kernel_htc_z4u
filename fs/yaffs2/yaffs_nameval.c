@@ -83,7 +83,7 @@ int nval_del(char *xb, int xb_size, const YCHAR * name)
 		return 0;
 	} else {
 		return -ENODATA;
-        }
+	}
 }
 
 int nval_set(char *xb, int xb_size, const YCHAR * name, const char *buf,
@@ -185,7 +185,7 @@ int nval_list(const char *xb, int xb_size, char *buf, int bsize)
 			ncopied += (name_len + 1);
 		} else {
 			filled = 1;
-                }
+		}
 		pos += size;
 		if (pos < xb_size - sizeof(int))
 			memcpy(&size, xb + pos, sizeof(int));

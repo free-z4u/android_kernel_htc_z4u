@@ -295,7 +295,7 @@ islpci_interrupt(int irq, void *config)
 				islpci_mgmt_rx_fill(ndev);
 
 				/* no need to trigger the device, next
-                                   islpci_mgt_transaction does it */
+				   islpci_mgt_transaction does it */
 			}
 
 			while (isl38xx_in_queue(priv->control_block,
@@ -499,7 +499,7 @@ islpci_reset_if(islpci_private *priv)
 	isl38xx_interface_reset(priv->device_base, priv->device_host_address);
 	islpci_set_state(priv, PRV_STATE_PREINIT);
 
-        for(count = 0; count < 2 && result; count++) {
+	for(count = 0; count < 2 && result; count++) {
 		/* The software reset acknowledge needs about 220 msec here.
 		 * Be conservative and wait for up to one second. */
 
@@ -748,8 +748,8 @@ islpci_free_memory(islpci_private *priv)
 	priv->device_psm_buffer = 0;
 	priv->control_block = NULL;
 
-        /* clean up mgmt rx buffers */
-        for (counter = 0; counter < ISL38XX_CB_MGMT_QSIZE; counter++) {
+	/* clean up mgmt rx buffers */
+	for (counter = 0; counter < ISL38XX_CB_MGMT_QSIZE; counter++) {
 		struct islpci_membuf *buf = &priv->mgmt_rx[counter];
 		if (buf->pci_addr)
 			pci_unmap_single(priv->pdev, buf->pci_addr,
@@ -758,7 +758,7 @@ islpci_free_memory(islpci_private *priv)
 		kfree(buf->mem);
 		buf->size = 0;
 		buf->mem = NULL;
-        }
+	}
 
 	/* clean up data rx buffers */
 	for (counter = 0; counter < ISL38XX_CB_RX_QSIZE; counter++) {
@@ -791,7 +791,7 @@ islpci_set_multicast_list(struct net_device *dev)
 #endif
 
 static void islpci_ethtool_get_drvinfo(struct net_device *dev,
-                                       struct ethtool_drvinfo *info)
+				       struct ethtool_drvinfo *info)
 {
 	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
 	strlcpy(info->version, DRV_VERSION, sizeof(info->version));

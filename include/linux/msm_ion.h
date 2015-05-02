@@ -14,7 +14,7 @@
  */
 
 struct ion_client *msm_ion_client_create(unsigned int heap_mask,
-                                        const char *name);
+					const char *name);
 
 /**
  * msm_ion_secure_heap - secure a heap. Wrapper around ion_secure_heap.
@@ -75,43 +75,43 @@ int msm_ion_unsecure_heap_2_0(int heap_id, enum cp_mem_usage usage);
  * Returns 0 on success
  */
 int msm_ion_do_cache_op(struct ion_client *client, struct ion_handle *handle,
-                        void *vaddr, unsigned long len, unsigned int cmd);
+			void *vaddr, unsigned long len, unsigned int cmd);
 
 #else
 
 static inline struct ion_client *msm_ion_client_create(unsigned int heap_mask,
-                                        const char *name)
+					const char *name)
 {
-        return ERR_PTR(-ENODEV);
+	return ERR_PTR(-ENODEV);
 }
 
 static inline int msm_ion_secure_heap(int heap_id)
 {
-        return -ENODEV;
+	return -ENODEV;
 
 }
 
 static inline int msm_ion_unsecure_heap(int heap_id)
 {
-        return -ENODEV;
+	return -ENODEV;
 }
 
 static inline int msm_ion_secure_heap_2_0(int heap_id, enum cp_mem_usage usage)
 {
-        return -ENODEV;
+	return -ENODEV;
 }
 
 static inline int msm_ion_unsecure_heap_2_0(int heap_id,
-                                        enum cp_mem_usage usage)
+					enum cp_mem_usage usage)
 {
-        return -ENODEV;
+	return -ENODEV;
 }
 
 static inline int msm_ion_do_cache_op(struct ion_client *client,
-                        struct ion_handle *handle, void *vaddr,
-                        unsigned long len, unsigned int cmd)
+			struct ion_handle *handle, void *vaddr,
+			unsigned long len, unsigned int cmd)
 {
-        return -ENODEV;
+	return -ENODEV;
 }
 
 #endif /* CONFIG_ION */

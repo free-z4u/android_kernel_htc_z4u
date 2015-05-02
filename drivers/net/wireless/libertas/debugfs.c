@@ -22,9 +22,9 @@ static void lbs_debug_init(struct lbs_private *priv);
 #endif
 
 static ssize_t write_file_dummy(struct file *file, const char __user *buf,
-                                size_t count, loff_t *ppos)
+				size_t count, loff_t *ppos)
 {
-        return -EINVAL;
+	return -EINVAL;
 }
 
 static const size_t len = PAGE_SIZE;

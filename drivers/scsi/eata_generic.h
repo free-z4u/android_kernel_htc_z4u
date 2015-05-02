@@ -337,8 +337,8 @@ typedef struct hstd {
     __u8   state;		 /* state of HBA	       */
     __u8   primary;		 /* true if primary	       */
     __u8        more_support:1,  /* HBA supports MORE flag     */
-           immediate_support:1,  /* HBA supports IMMEDIATE CMDs*/
-              broken_INQUIRY:1;	 /* This is an EISA HBA with   *
+	   immediate_support:1,  /* HBA supports IMMEDIATE CMDs*/
+	      broken_INQUIRY:1;	 /* This is an EISA HBA with   *
 				  * broken INQUIRY	       */
     __u8   do_latency;		 /* Latency measurement flag   */
     __u32  reads[13];

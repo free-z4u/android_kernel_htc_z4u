@@ -144,7 +144,7 @@ static inline __must_check long __copy_to_user(void __user *to,
 ({								\
 	__typeof__(*(ptr)) __x = (x);				\
 	int __pu_err = -EFAULT;					\
-        __chk_user_ptr(ptr);                                    \
+	__chk_user_ptr(ptr);                                    \
 	switch (sizeof (*(ptr))) {				\
 	case 1:							\
 	case 2:							\

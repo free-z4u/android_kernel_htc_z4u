@@ -82,11 +82,11 @@ static inline unsigned long _swapl(volatile unsigned long v)
      __v; })
 
 #define writeb(b,addr) (void)((*(volatile unsigned char *) \
-                             ((unsigned long)(addr) & 0x00ffffff)) = (b))
+			     ((unsigned long)(addr) & 0x00ffffff)) = (b))
 #define writew(b,addr) (void)((*(volatile unsigned short *) \
-                             ((unsigned long)(addr) & 0x00ffffff)) = (b))
+			     ((unsigned long)(addr) & 0x00ffffff)) = (b))
 #define writel(b,addr) (void)((*(volatile unsigned long *) \
-                             ((unsigned long)(addr) & 0x00ffffff)) = (b))
+			     ((unsigned long)(addr) & 0x00ffffff)) = (b))
 #define readb_relaxed(addr) readb(addr)
 #define readw_relaxed(addr) readw(addr)
 #define readl_relaxed(addr) readl(addr)
@@ -214,7 +214,7 @@ static inline void io_insl_noswap(unsigned int addr, void *buf, int len)
 #define inw(addr)    _swapw(readw(addr))
 #define inl(addr)    _swapl(readl(addr))
 #define outb(x,addr) ((void)((h8300_buswidth(addr) && \
-                      ((addr) & 1))?writew(x,(addr) & ~1):writeb(x,addr)))
+		      ((addr) & 1))?writew(x,(addr) & ~1):writeb(x,addr)))
 #define outw(x,addr) ((void) writew(_swapw(x),addr))
 #define outl(x,addr) ((void) writel(_swapl(x),addr))
 
@@ -292,7 +292,7 @@ static __inline__ void ctrl_outw(unsigned short b, unsigned long addr)
 
 static __inline__ void ctrl_outl(unsigned long b, unsigned long addr)
 {
-        *(volatile unsigned long*)addr = b;
+	*(volatile unsigned long*)addr = b;
 }
 
 static __inline__ void ctrl_bclr(int b, unsigned long addr)

@@ -718,7 +718,7 @@ static int cryptd_create_aead(struct crypto_template *tmpl,
 
 	alg = crypto_get_attr_alg(tb, CRYPTO_ALG_TYPE_AEAD,
 				CRYPTO_ALG_TYPE_MASK);
-        if (IS_ERR(alg))
+	if (IS_ERR(alg))
 		return PTR_ERR(alg);
 
 	inst = cryptd_alloc_instance(alg, 0, sizeof(*ctx));

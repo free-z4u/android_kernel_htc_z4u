@@ -55,7 +55,7 @@
 #define CLAW_RC_WRONG_VERSION       167  /*  wrong CLAW version number */
 #define CLAW_RC_HOST_RCV_TOO_SMALL  180  /*  Host maximum receive is   */
 					 /*  less than Linux on zSeries*/
-                                         /*  transmit size             */
+					 /*  transmit size             */
 
 /*-----------------------------------------------------*
 *      CLAW Constants application name                 *
@@ -151,9 +151,9 @@ enum claw_channel_types {
 /*------------------------------------------------------*/
 
 struct clawh {
-        __u16  length;     /* length of data read by preceding read CCW */
-        __u8   opcode;     /* equivalent read CCW */
-        __u8   flag;       /* flag of FF to indicate read was completed */
+	__u16  length;     /* length of data read by preceding read CCW */
+	__u8   opcode;     /* equivalent read CCW */
+	__u8   flag;       /* flag of FF to indicate read was completed */
 };
 
 /*------------------------------------------------------*/
@@ -171,80 +171,80 @@ struct clawph {
 struct endccw {
 	__u32     real;            /* real address of this block */
        __u8      write1;          /* write 1 is active */
-        __u8      read1;           /* read 1 is active  */
-        __u16     reserved;        /* reserved for future use */
-        struct ccw1    write1_nop1;
-        struct ccw1    write1_nop2;
-        struct ccw1    write2_nop1;
-        struct ccw1    write2_nop2;
-        struct ccw1    read1_nop1;
-        struct ccw1    read1_nop2;
-        struct ccw1    read2_nop1;
-        struct ccw1    read2_nop2;
+	__u8      read1;           /* read 1 is active  */
+	__u16     reserved;        /* reserved for future use */
+	struct ccw1    write1_nop1;
+	struct ccw1    write1_nop2;
+	struct ccw1    write2_nop1;
+	struct ccw1    write2_nop2;
+	struct ccw1    read1_nop1;
+	struct ccw1    read1_nop2;
+	struct ccw1    read2_nop1;
+	struct ccw1    read2_nop2;
 };
 
 /*------------------------------------------------------*/
 /*     CLAW struct ccwbk                                       */
 /*------------------------------------------------------*/
 struct ccwbk {
-        void   *next;        /* pointer to next ccw block */
-        __u32     real;         /* real address of this ccw */
-        void      *p_buffer;    /* virtual address of data */
-        struct clawh     header;       /* claw header */
-        struct ccw1    write;   /* write CCW    */
-        struct ccw1    w_read_FF; /* read FF */
-        struct ccw1    w_TIC_1;        /* TIC */
-        struct ccw1    read;         /* read CCW  */
-        struct ccw1    read_h;        /* read header */
-        struct ccw1    signal;       /* signal SMOD  */
-        struct ccw1    r_TIC_1;        /* TIC1 */
-        struct ccw1    r_read_FF;      /* read FF  */
-        struct ccw1    r_TIC_2;        /* TIC2 */
+	void   *next;        /* pointer to next ccw block */
+	__u32     real;         /* real address of this ccw */
+	void      *p_buffer;    /* virtual address of data */
+	struct clawh     header;       /* claw header */
+	struct ccw1    write;   /* write CCW    */
+	struct ccw1    w_read_FF; /* read FF */
+	struct ccw1    w_TIC_1;        /* TIC */
+	struct ccw1    read;         /* read CCW  */
+	struct ccw1    read_h;        /* read header */
+	struct ccw1    signal;       /* signal SMOD  */
+	struct ccw1    r_TIC_1;        /* TIC1 */
+	struct ccw1    r_read_FF;      /* read FF  */
+	struct ccw1    r_TIC_2;        /* TIC2 */
 };
 
 /*------------------------------------------------------*/
 /*     CLAW control block                               */
 /*------------------------------------------------------*/
 struct clawctl {
-        __u8    command;      /* control command */
-        __u8    version;      /* CLAW protocol version */
-        __u8    linkid;       /* link ID   */
-        __u8    correlator;   /* correlator */
-        __u8    rc;           /* return code */
-        __u8    reserved1;    /* reserved */
-        __u8    reserved2;    /* reserved */
-        __u8    reserved3;    /* reserved */
-        __u8    data[24];     /* command specific fields */
+	__u8    command;      /* control command */
+	__u8    version;      /* CLAW protocol version */
+	__u8    linkid;       /* link ID   */
+	__u8    correlator;   /* correlator */
+	__u8    rc;           /* return code */
+	__u8    reserved1;    /* reserved */
+	__u8    reserved2;    /* reserved */
+	__u8    reserved3;    /* reserved */
+	__u8    data[24];     /* command specific fields */
 };
 
 /*------------------------------------------------------*/
 /*     Data for SYSTEMVALIDATE command                  */
 /*------------------------------------------------------*/
 struct sysval  {
-        char    WS_name[8];        /* Workstation System name  */
-        char    host_name[8];      /* Host system name     */
-        __u16   read_frame_size;   /* read frame size */
-        __u16   write_frame_size;  /* write frame size */
-        __u8    reserved[4];       /* reserved */
+	char    WS_name[8];        /* Workstation System name  */
+	char    host_name[8];      /* Host system name     */
+	__u16   read_frame_size;   /* read frame size */
+	__u16   write_frame_size;  /* write frame size */
+	__u8    reserved[4];       /* reserved */
 };
 
 /*------------------------------------------------------*/
 /*     Data for Connect command                         */
 /*------------------------------------------------------*/
 struct conncmd  {
-        char     WS_name[8];       /* Workstation application name  */
-        char     host_name[8];     /* Host application name      */
-        __u16    reserved1[2];     /* read frame size */
-        __u8     reserved2[4];     /* reserved  */
+	char     WS_name[8];       /* Workstation application name  */
+	char     host_name[8];     /* Host application name      */
+	__u16    reserved1[2];     /* read frame size */
+	__u8     reserved2[4];     /* reserved  */
 };
 
 /*------------------------------------------------------*/
 /*     Data for CLAW error                              */
 /*------------------------------------------------------*/
 struct clawwerror  {
-        char      reserved1[8];   /* reserved */
-        char      reserved2[8];   /* reserved  */
-        char      reserved3[8];   /* reserved  */
+	char      reserved1[8];   /* reserved */
+	char      reserved2[8];   /* reserved  */
+	char      reserved3[8];   /* reserved  */
 };
 
 /*------------------------------------------------------*/
@@ -259,23 +259,23 @@ struct clawbuf  {
 /*------------------------------------------------------*/
 
 struct chbk {
-        unsigned int        devno;
-        int                 irq;
+	unsigned int        devno;
+	int                 irq;
 	char 		    id[CLAW_ID_SIZE];
        __u32               IO_active;
-        __u8                claw_state;
-        struct irb          *irb;
+	__u8                claw_state;
+	struct irb          *irb;
        	struct ccw_device   *cdev;  /* pointer to the channel device */
 	struct net_device   *ndev;
-        wait_queue_head_t   wait;
-        struct tasklet_struct    tasklet;
-        struct timer_list   timer;
-        unsigned long       flag_a;    /* atomic flags */
+	wait_queue_head_t   wait;
+	struct tasklet_struct    tasklet;
+	struct timer_list   timer;
+	unsigned long       flag_a;    /* atomic flags */
 #define CLAW_BH_ACTIVE      0
-        unsigned long       flag_b;    /* atomic flags */
+	unsigned long       flag_b;    /* atomic flags */
 #define CLAW_WRITE_ACTIVE   0
-        __u8                last_dstat;
-        __u8                flag;
+	__u8                last_dstat;
+	__u8                flag;
 	struct sk_buff_head collect_queue;
 	spinlock_t collect_lock;
 #define CLAW_WRITE      0x02      /* - Set if this is a write channel */
@@ -288,19 +288,19 @@ struct chbk {
 *---------------------------------------------------------------*/
 
 struct claw_env {
-        unsigned int            devno[2];       /* device number */
-        char                    host_name[9];   /* Host name */
-        char                    adapter_name [9]; /* adapter name */
-        char                    api_type[9];    /* TCPIP, API or PACKED */
-        void                    *p_priv;        /* privptr */
-        __u16                   read_buffers;   /* read buffer number */
-        __u16                   write_buffers;  /* write buffer number */
-        __u16                   read_size;      /* read buffer size */
-        __u16                   write_size;     /* write buffer size */
-        __u16                   dev_id;         /* device ident */
+	unsigned int            devno[2];       /* device number */
+	char                    host_name[9];   /* Host name */
+	char                    adapter_name [9]; /* adapter name */
+	char                    api_type[9];    /* TCPIP, API or PACKED */
+	void                    *p_priv;        /* privptr */
+	__u16                   read_buffers;   /* read buffer number */
+	__u16                   write_buffers;  /* write buffer number */
+	__u16                   read_size;      /* read buffer size */
+	__u16                   write_size;     /* write buffer size */
+	__u16                   dev_id;         /* device ident */
 	__u8			packing;	/* are we packing? */
-        __u8                    in_use;         /* device active flag */
-        struct net_device       *ndev;    	/* backward ptr to the net dev*/
+	__u8                    in_use;         /* device active flag */
+	struct net_device       *ndev;    	/* backward ptr to the net dev*/
 };
 
 /*--------------------------------------------------------------*
@@ -308,39 +308,39 @@ struct claw_env {
 *---------------------------------------------------------------*/
 
 struct claw_privbk {
-        void *p_buff_ccw;
-        __u32      p_buff_ccw_num;
-        void  *p_buff_read;
-        __u32      p_buff_read_num;
-        __u32      p_buff_pages_perread;
-        void  *p_buff_write;
-        __u32      p_buff_write_num;
-        __u32      p_buff_pages_perwrite;
-        long       active_link_ID;           /* Active logical link ID */
-        struct ccwbk *p_write_free_chain;     /* pointer to free ccw chain */
-        struct ccwbk *p_write_active_first;   /* ptr to the first write ccw */
-        struct ccwbk *p_write_active_last;    /* ptr to the last write ccw */
-        struct ccwbk *p_read_active_first;    /* ptr to the first read ccw */
-        struct ccwbk *p_read_active_last;     /* ptr to the last read ccw */
-        struct endccw *p_end_ccw;              /*ptr to ending ccw */
-        struct ccwbk *p_claw_signal_blk;      /* ptr to signal block */
-        __u32      write_free_count;       /* number of free bufs for write */
+	void *p_buff_ccw;
+	__u32      p_buff_ccw_num;
+	void  *p_buff_read;
+	__u32      p_buff_read_num;
+	__u32      p_buff_pages_perread;
+	void  *p_buff_write;
+	__u32      p_buff_write_num;
+	__u32      p_buff_pages_perwrite;
+	long       active_link_ID;           /* Active logical link ID */
+	struct ccwbk *p_write_free_chain;     /* pointer to free ccw chain */
+	struct ccwbk *p_write_active_first;   /* ptr to the first write ccw */
+	struct ccwbk *p_write_active_last;    /* ptr to the last write ccw */
+	struct ccwbk *p_read_active_first;    /* ptr to the first read ccw */
+	struct ccwbk *p_read_active_last;     /* ptr to the last read ccw */
+	struct endccw *p_end_ccw;              /*ptr to ending ccw */
+	struct ccwbk *p_claw_signal_blk;      /* ptr to signal block */
+	__u32      write_free_count;       /* number of free bufs for write */
 	struct     net_device_stats  stats; /* 	 device status    */
-        struct chbk channel[2];            /* Channel control blocks */
-        __u8       mtc_skipping;
-        int        mtc_offset;
-        int        mtc_logical_link;
-        void       *p_mtc_envelope;
+	struct chbk channel[2];            /* Channel control blocks */
+	__u8       mtc_skipping;
+	int        mtc_offset;
+	int        mtc_logical_link;
+	void       *p_mtc_envelope;
 	struct	   sk_buff	*pk_skb;	/* packing buffer    */
 	int	   pk_cnt;
-        struct clawctl ctl_bk;
-        struct claw_env *p_env;
-        __u8       system_validate_comp;
-        __u8       release_pend;
-        __u8      checksum_received_ip_pkts;
+	struct clawctl ctl_bk;
+	struct claw_env *p_env;
+	__u8       system_validate_comp;
+	__u8       release_pend;
+	__u8      checksum_received_ip_pkts;
 	__u8      buffs_alloc;
-        struct endccw  end_ccw;
-        unsigned long  tbusy;
+	struct endccw  end_ccw;
+	unsigned long  tbusy;
 
 };
 

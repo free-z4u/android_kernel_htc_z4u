@@ -103,7 +103,7 @@ static BLOCKING_NOTIFIER_HEAD(acpi_lid_notifier);
 static struct acpi_device *lid_device;
 
 /* --------------------------------------------------------------------------
-                              FS Interface (/proc)
+			      FS Interface (/proc)
    -------------------------------------------------------------------------- */
 
 static struct proc_dir_entry *acpi_button_dir;
@@ -211,7 +211,7 @@ static int acpi_button_remove_fs(struct acpi_device *device)
 }
 
 /* --------------------------------------------------------------------------
-                                Driver Interface
+				Driver Interface
    -------------------------------------------------------------------------- */
 int acpi_lid_notifier_register(struct notifier_block *nb)
 {

@@ -115,12 +115,12 @@ static DEFINE_RWLOCK(adb_handler_lock);
 #if 0
 static void printADBreply(struct adb_request *req)
 {
-        int i;
+	int i;
 
-        printk("adb reply (%d)", req->reply_len);
-        for(i = 0; i < req->reply_len; i++)
-                printk(" %x", req->reply[i]);
-        printk("\n");
+	printk("adb reply (%d)", req->reply_len);
+	for(i = 0; i < req->reply_len; i++)
+		printk(" %x", req->reply[i]);
+	printk("\n");
 
 }
 #endif
@@ -135,7 +135,7 @@ static int adb_scan_bus(void)
 	for (i = 1; i < 16; i++) {
 		/* see if there is anything at address i */
 		adb_request(&req, NULL, ADBREQ_SYNC | ADBREQ_REPLY, 1,
-                            (i << 4) | 0xf);
+			    (i << 4) | 0xf);
 		if (req.reply_len > 1)
 			/* one or more devices at this address */
 			adb_handler[i].original_address = i;

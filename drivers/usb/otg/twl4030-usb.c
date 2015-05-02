@@ -270,7 +270,7 @@ static enum usb_phy_events twl4030_usb_linkstat(struct twl4030_usb *twl)
 		dev_err(twl->dev, "USB link status err %d\n", status);
 	else if (status & (BIT(7) | BIT(2))) {
 		if (status & (BIT(7)))
-                        twl->vbus_supplied = true;
+			twl->vbus_supplied = true;
 
 		if (status & BIT(2))
 			linkstat = USB_EVENT_ID;

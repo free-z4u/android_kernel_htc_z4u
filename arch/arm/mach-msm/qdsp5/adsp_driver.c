@@ -561,7 +561,7 @@ static long adsp_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		if (copy_from_user(&info, (void *) arg, sizeof(info))){
 			MM_INFO("adsp: ADSP_IOCTL_REGISTER_PMEM copy from user failed\n");
 			return -EFAULT;
-                }
+		}
 		return adsp_ion_add(adev->module, &info);
 	}
 

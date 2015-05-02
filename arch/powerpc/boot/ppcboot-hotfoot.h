@@ -115,8 +115,8 @@ typedef struct bd_info {
 #define HAVE_ENET3ADDR
 #endif
 #if defined(TARGET_HOTFOOT)
-        int             bi_phynum[2];           /* Determines phy mapping */
-        int             bi_phymode[2];          /* Determines phy mode */
+	int             bi_phynum[2];           /* Determines phy mapping */
+	int             bi_phymode[2];          /* Determines phy mode */
 #endif
 #if defined(TARGET_4xx)
 	unsigned int	bi_opbfreq;		/* OB clock in Hz */

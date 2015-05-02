@@ -525,7 +525,7 @@ out:
  */
 
 int gfs2_internal_read(struct gfs2_inode *ip, struct file_ra_state *ra_state,
-                       char *buf, loff_t *pos, unsigned size)
+		       char *buf, loff_t *pos, unsigned size)
 {
 	struct address_space *mapping = ip->i_inode.i_mapping;
 	unsigned long index = *pos / PAGE_CACHE_SIZE;

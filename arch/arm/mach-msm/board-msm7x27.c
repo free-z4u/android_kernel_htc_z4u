@@ -1990,7 +1990,7 @@ MACHINE_START(MSM7X27_SURF, "QCT MSM7x27 SURF")
 	.init_irq	= msm7x2x_init_irq,
 	.init_machine	= msm7x2x_init,
 	.timer		= &msm_timer,
-        .init_early     = msm7x27_init_early,
+	.init_early     = msm7x27_init_early,
 	.handle_irq     = vic_handle_irq,
 MACHINE_END
 
@@ -2001,7 +2001,7 @@ MACHINE_START(MSM7X27_FFA, "QCT MSM7x27 FFA")
 	.init_irq	= msm7x2x_init_irq,
 	.init_machine	= msm7x2x_init,
 	.timer		= &msm_timer,
-        .init_early     = msm7x27_init_early,
+	.init_early     = msm7x27_init_early,
 	.handle_irq     = vic_handle_irq,
 MACHINE_END
 
@@ -2012,7 +2012,7 @@ MACHINE_START(MSM7X25_SURF, "QCT MSM7x25 SURF")
 	.init_irq	= msm7x2x_init_irq,
 	.init_machine	= msm7x2x_init,
 	.timer		= &msm_timer,
-        .init_early     = msm7x27_init_early,
+	.init_early     = msm7x27_init_early,
 	.handle_irq     = vic_handle_irq,
 MACHINE_END
 
@@ -2023,6 +2023,6 @@ MACHINE_START(MSM7X25_FFA, "QCT MSM7x25 FFA")
 	.init_irq	= msm7x2x_init_irq,
 	.init_machine	= msm7x2x_init,
 	.timer		= &msm_timer,
-        .init_early     = msm7x27_init_early,
+	.init_early     = msm7x27_init_early,
 	.handle_irq     = vic_handle_irq,
 MACHINE_END

@@ -1344,7 +1344,7 @@ static netdev_tx_t start_tx(struct sk_buff *skb, struct net_device *dev)
 		if (np->pci_dev->device == 0x891)
 			np->cur_tx_copy->control |= ETIControl | RetryTxLC;
 		next->buffer = pci_map_single(ep->pci_dev, skb->data + BPT,
-                                skb->len - BPT, PCI_DMA_TODEVICE);
+				skb->len - BPT, PCI_DMA_TODEVICE);
 
 		next->status = TXOWN;
 		np->cur_tx_copy->status = TXOWN;

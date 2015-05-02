@@ -40,8 +40,8 @@ typedef struct file_private_info {
 	int    act_area;                /* number of last formated area */
 	int    act_page;                /* act page in given area */
 	int    act_entry;               /* last formated entry (offset */
-                                        /* relative to beginning of last */
-                                        /* formated page) */
+					/* relative to beginning of last */
+					/* formated page) */
 	size_t act_entry_offset;        /* up to this offset we copied */
 					/* in last read the last formated */
 					/* entry to userland */
@@ -140,12 +140,12 @@ static struct debug_view debug_pages_view = {
 };
 
 static struct debug_view debug_flush_view = {
-        "flush",
-        NULL,
-        NULL,
-        NULL,
-        &debug_input_flush_fn,
-        NULL
+	"flush",
+	NULL,
+	NULL,
+	NULL,
+	&debug_input_flush_fn,
+	NULL
 };
 
 struct debug_view debug_sprintf_view = {
@@ -335,29 +335,29 @@ debug_info_create(const char *name, int pages_per_area, int nr_areas,
 {
 	debug_info_t* rc;
 
-        rc = debug_info_alloc(name, pages_per_area, nr_areas, buf_size,
+	rc = debug_info_alloc(name, pages_per_area, nr_areas, buf_size,
 				DEBUG_DEFAULT_LEVEL, ALL_AREAS);
-        if(!rc)
+	if(!rc)
 		goto out;
 
 	rc->mode = mode & ~S_IFMT;
 
 	/* create root directory */
-        rc->debugfs_root_entry = debugfs_create_dir(rc->name,
+	rc->debugfs_root_entry = debugfs_create_dir(rc->name,
 					debug_debugfs_root_entry);
 
 	/* append new element to linked list */
-        if (!debug_area_first) {
-                /* first element in list */
-                debug_area_first = rc;
-                rc->prev = NULL;
-        } else {
-                /* append element to end of list */
-                debug_area_last->next = rc;
-                rc->prev = debug_area_last;
-        }
-        debug_area_last = rc;
-        rc->next = NULL;
+	if (!debug_area_first) {
+		/* first element in list */
+		debug_area_first = rc;
+		rc->prev = NULL;
+	} else {
+		/* append element to end of list */
+		debug_area_last->next = rc;
+		rc->prev = debug_area_last;
+	}
+	debug_area_last = rc;
+	rc->next = NULL;
 
 	debug_info_get(rc);
 out:
@@ -372,9 +372,9 @@ out:
 static debug_info_t*
 debug_info_copy(debug_info_t* in, int mode)
 {
-        int i,j;
-        debug_info_t* rc;
-        unsigned long flags;
+	int i,j;
+	debug_info_t* rc;
+	unsigned long flags;
 
 	/* get a consistent copy of the debug areas */
 	do {
@@ -393,16 +393,16 @@ debug_info_copy(debug_info_t* in, int mode)
 	} while (1);
 
 	if (mode == NO_AREAS)
-                goto out;
+		goto out;
 
-        for(i = 0; i < in->nr_areas; i++){
+	for(i = 0; i < in->nr_areas; i++){
 		for(j = 0; j < in->pages_per_area; j++) {
 			memcpy(rc->areas[i][j], in->areas[i][j],PAGE_SIZE);
 		}
-        }
+	}
 out:
-        spin_unlock_irqrestore(&in->lock, flags);
-        return rc;
+	spin_unlock_irqrestore(&in->lock, flags);
+	return rc;
 }
 
 /*
@@ -460,8 +460,8 @@ debug_format_entry(file_private_info_t *p_info)
 	size_t len = 0;
 	if(p_info->act_entry == DEBUG_PROLOG_ENTRY){
 		/* print prolog */
-        	if (view->prolog_proc)
-                	len += view->prolog_proc(id_snap,view,p_info->temp_buf);
+		if (view->prolog_proc)
+			len += view->prolog_proc(id_snap,view,p_info->temp_buf);
 		goto out;
 	}
 	if (!id_snap->areas) /* this is true, if we have a prolog only view */
@@ -478,7 +478,7 @@ debug_format_entry(file_private_info_t *p_info)
 		len += view->format_proc(id_snap, view, p_info->temp_buf + len,
 						DEBUG_DATA(act_entry));
 out:
-        return len;
+	return len;
 }
 
 /*
@@ -507,10 +507,10 @@ debug_next_entry(file_private_info_t *p_info)
 		p_info->act_page += 1;
 		if((p_info->act_page % id->pages_per_area) == 0) {
 			/* next area */
-        		p_info->act_area++;
+			p_info->act_area++;
 			p_info->act_page=0;
 		}
-        	if(p_info->act_area >= id->nr_areas)
+		if(p_info->act_area >= id->nr_areas)
 			return 1;
 	}
 out:
@@ -702,18 +702,18 @@ debug_info_t *debug_register_mode(const char *name, int pages_per_area,
 	BUG_ON(!initialized);
 	mutex_lock(&debug_mutex);
 
-        /* create new debug_info */
+	/* create new debug_info */
 
 	rc = debug_info_create(name, pages_per_area, nr_areas, buf_size, mode);
 	if(!rc)
 		goto out;
 	debug_register_view(rc, &debug_level_view);
-        debug_register_view(rc, &debug_flush_view);
+	debug_register_view(rc, &debug_flush_view);
 	debug_register_view(rc, &debug_pages_view);
 out:
-        if (!rc){
+	if (!rc){
 		pr_err("Registering debug feature %s failed\n", name);
-        }
+	}
 	mutex_unlock(&debug_mutex);
 	return rc;
 }
@@ -800,15 +800,15 @@ debug_set_level(debug_info_t* id, int new_level)
 	if(!id)
 		return;
 	spin_lock_irqsave(&id->lock,flags);
-        if(new_level == DEBUG_OFF_LEVEL){
-                id->level = DEBUG_OFF_LEVEL;
+	if(new_level == DEBUG_OFF_LEVEL){
+		id->level = DEBUG_OFF_LEVEL;
 		pr_info("%s: switched off\n",id->name);
-        } else if ((new_level > DEBUG_MAX_LEVEL) || (new_level < 0)) {
+	} else if ((new_level > DEBUG_MAX_LEVEL) || (new_level < 0)) {
 		pr_info("%s: level %i is out of range (%i - %i)\n",
-                        id->name, new_level, 0, DEBUG_MAX_LEVEL);
-        } else {
-                id->level = new_level;
-        }
+			id->name, new_level, 0, DEBUG_MAX_LEVEL);
+	} else {
+		id->level = new_level;
+	}
 	spin_unlock_irqrestore(&id->lock,flags);
 }
 
@@ -886,7 +886,7 @@ static int debug_active=1;
  */
 static int
 s390dbf_procactive(ctl_table *table, int write,
-                     void __user *buffer, size_t *lenp, loff_t *ppos)
+		     void __user *buffer, size_t *lenp, loff_t *ppos)
 {
 	if (!write || debug_stoppable || !debug_active)
 		return proc_dointvec(table, write, buffer, lenp, ppos);
@@ -1195,7 +1195,7 @@ debug_get_user_string(const char __user *user_buf, size_t user_len)
 		buffer[user_len - 1] = 0;
 	else
 		buffer[user_len] = 0;
-        return buffer;
+	return buffer;
 }
 
 static inline int
@@ -1240,7 +1240,7 @@ debug_input_pages_fn(debug_info_t * id, struct debug_view *view,
 	int rc,new_pages;
 
 	if (user_len > 0x10000)
-                user_len = 0x10000;
+		user_len = 0x10000;
 	if (*offset != 0){
 		rc = -EPIPE;
 		goto out;
@@ -1299,7 +1299,7 @@ debug_input_level_fn(debug_info_t * id, struct debug_view *view,
 	int rc,new_level;
 
 	if (user_len > 0x10000)
-                user_len = 0x10000;
+		user_len = 0x10000;
 	if (*offset != 0){
 		rc = -EPIPE;
 		goto out;
@@ -1338,29 +1338,29 @@ out:
 
 static void debug_flush(debug_info_t* id, int area)
 {
-        unsigned long flags;
-        int i,j;
+	unsigned long flags;
+	int i,j;
 
-        if(!id || !id->areas)
-                return;
-        spin_lock_irqsave(&id->lock,flags);
-        if(area == DEBUG_FLUSH_ALL){
-                id->active_area = 0;
-                memset(id->active_entries, 0, id->nr_areas * sizeof(int));
-                for (i = 0; i < id->nr_areas; i++) {
+	if(!id || !id->areas)
+		return;
+	spin_lock_irqsave(&id->lock,flags);
+	if(area == DEBUG_FLUSH_ALL){
+		id->active_area = 0;
+		memset(id->active_entries, 0, id->nr_areas * sizeof(int));
+		for (i = 0; i < id->nr_areas; i++) {
 			id->active_pages[i] = 0;
 			for(j = 0; j < id->pages_per_area; j++) {
-                        	memset(id->areas[i][j], 0, PAGE_SIZE);
+				memset(id->areas[i][j], 0, PAGE_SIZE);
 			}
 		}
-        } else if(area >= 0 && area < id->nr_areas) {
-                id->active_entries[area] = 0;
+	} else if(area >= 0 && area < id->nr_areas) {
+		id->active_entries[area] = 0;
 		id->active_pages[area] = 0;
 		for(i = 0; i < id->pages_per_area; i++) {
-                	memset(id->areas[area][i],0,PAGE_SIZE);
+			memset(id->areas[area][i],0,PAGE_SIZE);
 		}
-        }
-        spin_unlock_irqrestore(&id->lock,flags);
+	}
+	spin_unlock_irqrestore(&id->lock,flags);
 }
 
 /*
@@ -1372,35 +1372,35 @@ debug_input_flush_fn(debug_info_t * id, struct debug_view *view,
 			struct file *file, const char __user *user_buf,
 			size_t user_len, loff_t * offset)
 {
-        char input_buf[1];
-        int rc = user_len;
+	char input_buf[1];
+	int rc = user_len;
 
 	if (user_len > 0x10000)
-                user_len = 0x10000;
-        if (*offset != 0){
+		user_len = 0x10000;
+	if (*offset != 0){
 		rc = -EPIPE;
-                goto out;
+		goto out;
 	}
-        if (copy_from_user(input_buf, user_buf, 1)){
-                rc = -EFAULT;
-                goto out;
-        }
-        if(input_buf[0] == '-') {
-                debug_flush(id, DEBUG_FLUSH_ALL);
-                goto out;
-        }
-        if (isdigit(input_buf[0])) {
-                int area = ((int) input_buf[0] - (int) '0');
-                debug_flush(id, area);
-                goto out;
-        }
+	if (copy_from_user(input_buf, user_buf, 1)){
+		rc = -EFAULT;
+		goto out;
+	}
+	if(input_buf[0] == '-') {
+		debug_flush(id, DEBUG_FLUSH_ALL);
+		goto out;
+	}
+	if (isdigit(input_buf[0])) {
+		int area = ((int) input_buf[0] - (int) '0');
+		debug_flush(id, area);
+		goto out;
+	}
 
 	pr_info("Flushing debug data failed because %c is not a valid "
 		 "area\n", input_buf[0]);
 
 out:
-        *offset += user_len;
-        return rc;              /* number of input characters */
+	*offset += user_len;
+	return rc;              /* number of input characters */
 }
 
 /*
@@ -1411,11 +1411,11 @@ static int
 debug_raw_header_fn(debug_info_t * id, struct debug_view *view,
 			int area, debug_entry_t * entry, char *out_buf)
 {
-        int rc;
+	int rc;
 
 	rc = sizeof(debug_entry_t);
 	memcpy(out_buf,entry,sizeof(debug_entry_t));
-        return rc;
+	return rc;
 }
 
 /*
@@ -1444,9 +1444,9 @@ debug_hex_ascii_format_fn(debug_info_t * id, struct debug_view *view,
 	int i, rc = 0;
 
 	for (i = 0; i < id->buf_size; i++) {
-                rc += sprintf(out_buf + rc, "%02x ",
-                              ((unsigned char *) in_buf)[i]);
-        }
+		rc += sprintf(out_buf + rc, "%02x ",
+			      ((unsigned char *) in_buf)[i]);
+	}
 	rc += sprintf(out_buf + rc, "| ");
 	for (i = 0; i < id->buf_size; i++) {
 		unsigned char c = in_buf[i];
@@ -1496,7 +1496,7 @@ debug_dflt_header_fn(debug_info_t * id, struct debug_view *view,
 
 static int
 debug_sprintf_format_fn(debug_info_t * id, struct debug_view *view,
-                        char *out_buf, debug_sprintf_entry_t *curr_event)
+			char *out_buf, debug_sprintf_entry_t *curr_event)
 {
 	int num_longs, num_used_args = 0,i, rc = 0;
 	int index[DEBUG_SPRINTF_MAX_ARGS];

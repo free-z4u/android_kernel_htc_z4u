@@ -154,24 +154,24 @@ static void pullup_on(void)
 
 static void pio_irq_enable(int bEndpointAddress)
 {
-        bEndpointAddress &= 0xf;
-        if (bEndpointAddress < 8)
-                UICR0 &= ~(1 << bEndpointAddress);
-        else {
-                bEndpointAddress -= 8;
-                UICR1 &= ~(1 << bEndpointAddress);
+	bEndpointAddress &= 0xf;
+	if (bEndpointAddress < 8)
+		UICR0 &= ~(1 << bEndpointAddress);
+	else {
+		bEndpointAddress -= 8;
+		UICR1 &= ~(1 << bEndpointAddress);
 	}
 }
 
 static void pio_irq_disable(int bEndpointAddress)
 {
-        bEndpointAddress &= 0xf;
-        if (bEndpointAddress < 8)
-                UICR0 |= 1 << bEndpointAddress;
-        else {
-                bEndpointAddress -= 8;
-                UICR1 |= 1 << bEndpointAddress;
-        }
+	bEndpointAddress &= 0xf;
+	if (bEndpointAddress < 8)
+		UICR0 |= 1 << bEndpointAddress;
+	else {
+		bEndpointAddress -= 8;
+		UICR1 |= 1 << bEndpointAddress;
+	}
 }
 
 /* The UDCCR reg contains mask and interrupt status bits,

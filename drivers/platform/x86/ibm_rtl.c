@@ -154,23 +154,23 @@ static int ibm_rtl_write(u8 value)
 }
 
 static ssize_t rtl_show_version(struct device *dev,
-                                struct device_attribute *attr,
-                                char *buf)
+				struct device_attribute *attr,
+				char *buf)
 {
 	return sprintf(buf, "%d\n", (int)ioread8(&rtl_table->version));
 }
 
 static ssize_t rtl_show_state(struct device *dev,
-                              struct device_attribute *attr,
-                              char *buf)
+			      struct device_attribute *attr,
+			      char *buf)
 {
 	return sprintf(buf, "%d\n", ioread8(&rtl_table->rt_status));
 }
 
 static ssize_t rtl_set_state(struct device *dev,
-                             struct device_attribute *attr,
-                             const char *buf,
-                             size_t count)
+			     struct device_attribute *attr,
+			     const char *buf,
+			     size_t count)
 {
 	ssize_t ret;
 

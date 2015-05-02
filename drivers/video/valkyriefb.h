@@ -156,7 +156,7 @@ static struct valkyrie_regvals valkyrie_reg_init_11 = {
 static struct valkyrie_regvals valkyrie_reg_init_10 = {
     12,
     { 25, 32, 3 },  /* pixel clock = 40.0015MHz,
-                     used to be 20,53,2, pixel clock 41.41MHz for V=59.78Hz */
+		     used to be 20,53,2, pixel clock 41.41MHz for V=59.78Hz */
     { 800, 1600 },
 	800, 600
 };

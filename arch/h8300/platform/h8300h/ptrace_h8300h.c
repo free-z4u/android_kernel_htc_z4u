@@ -76,7 +76,7 @@ enum jump_type {none,    /* normal instruction */
 		reg,     /* register indexed jump */
 		relb,    /* pc relative jump (byte offset) */
 		relw,    /* pc relative jump (word offset) */
-               };
+	       };
 
 /* opcode decode table define
    ptn: opcode pattern
@@ -91,7 +91,7 @@ struct optable {
 } __attribute__((aligned(1),packed));
 
 #define OPTABLE(ptn,msk,len,jmp)   \
-        {                          \
+	{                          \
 		.bitpattern = ptn, \
 		.bitmask    = msk, \
 		.length	    = len, \
@@ -160,7 +160,7 @@ static const struct optables_list {
 	int size;
 } optables[] = {
 #define OPTABLES(no)                                                   \
-        {                                                              \
+	{                                                              \
 		.ptr  = optable_##no,                                  \
 		.size = sizeof(optable_##no) / sizeof(struct optable), \
 	}

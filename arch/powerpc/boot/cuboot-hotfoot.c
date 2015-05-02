@@ -136,7 +136,7 @@ void platform_init(unsigned long r3, unsigned long r4, unsigned long r5,
 {
 	CUBOOT_INIT();
 	platform_ops.fixups = hotfoot_fixups;
-        platform_ops.exit = ibm40x_dbcr_reset;
+	platform_ops.exit = ibm40x_dbcr_reset;
 	fdt_init(_dtb_start);
 	serial_console_init();
 }

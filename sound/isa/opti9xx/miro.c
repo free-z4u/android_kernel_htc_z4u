@@ -702,8 +702,8 @@ static int __devinit snd_set_aci_init_values(struct snd_miro *miro)
 		if (error < 0) {
 			snd_printk(KERN_ERR "aci_setvalue(%d) failed: %d\n",
 				   aci_init_values[idx][0], error);
-                        return error;
-                }
+			return error;
+		}
 	}
 	aci->aci_amp = 0;
 	aci->aci_preamp = 0;
@@ -1236,7 +1236,7 @@ static int __devinit snd_card_miro_aci_detect(struct snd_card *card,
 		return -ENOMEM;
 	}
 
-        /* force ACI into a known state */
+	/* force ACI into a known state */
 	for (i = 0; i < 3; i++)
 		if (snd_aci_cmd(aci, ACI_ERROR_OP, -1, -1) < 0) {
 			snd_printk(KERN_ERR "can't force aci into known state.\n");
@@ -1395,7 +1395,7 @@ static int __devinit snd_miro_probe(struct snd_card *card)
 
 	error = snd_set_aci_init_values(miro);
 	if (error < 0)
-                return error;
+		return error;
 
 	return snd_card_register(card);
 }

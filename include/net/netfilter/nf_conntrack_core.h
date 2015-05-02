@@ -71,8 +71,8 @@ static inline int nf_conntrack_confirm(struct sk_buff *skb)
 
 int
 print_tuple(struct seq_file *s, const struct nf_conntrack_tuple *tuple,
-            const struct nf_conntrack_l3proto *l3proto,
-            const struct nf_conntrack_l4proto *proto);
+	    const struct nf_conntrack_l3proto *l3proto,
+	    const struct nf_conntrack_l4proto *proto);
 
 extern spinlock_t nf_conntrack_lock ;
 

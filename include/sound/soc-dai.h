@@ -88,8 +88,8 @@ struct snd_soc_dapm_widget;
 			       SNDRV_PCM_FMTBIT_S20_3BE |\
 			       SNDRV_PCM_FMTBIT_S24_3LE |\
 			       SNDRV_PCM_FMTBIT_S24_3BE |\
-                               SNDRV_PCM_FMTBIT_S32_LE |\
-                               SNDRV_PCM_FMTBIT_S32_BE)
+			       SNDRV_PCM_FMTBIT_S32_LE |\
+			       SNDRV_PCM_FMTBIT_S32_BE)
 
 struct snd_soc_dai_driver;
 struct snd_soc_dai;

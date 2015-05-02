@@ -227,8 +227,8 @@ int msm_camera_flash(
 		}
     } else {
 
-        pr_err("flash_src->camera_flash == NULL");
-        return -EINVAL;
+	pr_err("flash_src->camera_flash == NULL");
+	return -EINVAL;
 
     }
 

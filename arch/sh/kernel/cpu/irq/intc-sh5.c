@@ -189,9 +189,9 @@ void __init plat_irq_setup(void)
 	 * sti() is not enough, we need to
 	 * lower priority, too.
 	 */
-        __asm__ __volatile__("getcon    " __SR ", %0\n\t"
-                             "and       %0, %1, %0\n\t"
-                             "putcon    %0, " __SR "\n\t"
-                             : "=&r" (__dummy0)
-                             : "r" (__dummy1));
+	__asm__ __volatile__("getcon    " __SR ", %0\n\t"
+			     "and       %0, %1, %0\n\t"
+			     "putcon    %0, " __SR "\n\t"
+			     : "=&r" (__dummy0)
+			     : "r" (__dummy1));
 }

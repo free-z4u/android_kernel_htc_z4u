@@ -176,7 +176,7 @@ static inline unsigned long calculate_vtclock(uint16_t clkspeed, unsigned long p
 }
 
 static inline unsigned long calculate_tclock(uint16_t clkspeed, unsigned long pclock,
-                                             unsigned long vtclock)
+					     unsigned long vtclock)
 {
 	unsigned long tclock = 0;
 

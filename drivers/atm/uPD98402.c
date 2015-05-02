@@ -137,7 +137,7 @@ static int uPD98402_ioctl(struct atm_dev *dev,unsigned int cmd,void __user *arg)
 	switch (cmd) {
 
 		case SONET_GETSTATZ:
-                case SONET_GETSTAT:
+		case SONET_GETSTAT:
 			return fetch_stats(dev,arg, cmd == SONET_GETSTATZ);
 		case SONET_SETFRAMING:
 			return set_framing(dev, (int)(unsigned long)arg);

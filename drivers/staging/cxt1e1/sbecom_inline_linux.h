@@ -49,7 +49,7 @@ OS_kmalloc (size_t size)
     char       *ptr = kmalloc (size, GFP_KERNEL | GFP_DMA);
 
     if (ptr)
-        memset (ptr, 0, size);
+	memset (ptr, 0, size);
     return ptr;
 }
 
@@ -72,8 +72,8 @@ OS_mem_token_alloc (size_t size)
     skb = dev_alloc_skb (size);
     if (!skb)
     {
-        //pr_warning("no mem in OS_mem_token_alloc !\n");
-        return 0;
+	//pr_warning("no mem in OS_mem_token_alloc !\n");
+	return 0;
     }
     return skb;
 }

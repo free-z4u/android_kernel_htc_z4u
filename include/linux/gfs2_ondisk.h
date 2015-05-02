@@ -252,7 +252,7 @@ struct gfs2_dinode {
 	__be32 di_minor;	/* device minor number */
 
 	/* This section varies from gfs1. Padding added to align with
-         * remainder of dinode
+	 * remainder of dinode
 	 */
 	__be64 di_goal_meta;	/* rgrp to alloc from next */
 	__be64 di_goal_data;	/* data block goal */
@@ -442,11 +442,11 @@ struct gfs2_quota_change {
 };
 
 struct gfs2_quota_lvb {
-        __be32 qb_magic;
-        __u32 __pad;
-        __be64 qb_limit;      /* Hard limit of # blocks to alloc */
-        __be64 qb_warn;       /* Warn user when alloc is above this # */
-        __be64 qb_value;       /* Current # blocks allocated */
+	__be32 qb_magic;
+	__u32 __pad;
+	__be64 qb_limit;      /* Hard limit of # blocks to alloc */
+	__be64 qb_warn;       /* Warn user when alloc is above this # */
+	__be64 qb_value;       /* Current # blocks allocated */
 };
 
 #endif /* __GFS2_ONDISK_DOT_H__ */

@@ -1217,7 +1217,7 @@ static u32 __devinit nvidia_get_chipset(struct fb_info *info)
 			id = 0x10DE0000 | (id >> 16);
 		else if ((id & 0xffff0000) == 0xDE100000) /* wrong endian */
 			id = 0x10DE0000 | ((id << 8) & 0x0000ff00) |
-                            ((id >> 8) & 0x000000ff);
+			    ((id >> 8) & 0x000000ff);
 		printk(KERN_INFO PFX "Subsystem ID: %x \n", id);
 	}
 

@@ -68,8 +68,8 @@ struct disklabel {
 
 typedef union __bootblock {
     struct {
-        char			__pad1[64];
-        struct disklabel	__label;
+	char			__pad1[64];
+	struct disklabel	__label;
     } __u1;
     struct {
 	unsigned long		__pad2[63];

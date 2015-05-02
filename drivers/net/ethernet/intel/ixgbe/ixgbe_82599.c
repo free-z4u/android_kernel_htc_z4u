@@ -48,19 +48,19 @@ static s32 ixgbe_setup_mac_link_multispeed_fiber(struct ixgbe_hw *hw,
 						 bool autoneg,
 						 bool autoneg_wait_to_complete);
 static s32 ixgbe_setup_mac_link_smartspeed(struct ixgbe_hw *hw,
-                                           ixgbe_link_speed speed,
-                                           bool autoneg,
-                                           bool autoneg_wait_to_complete);
+					   ixgbe_link_speed speed,
+					   bool autoneg,
+					   bool autoneg_wait_to_complete);
 static s32 ixgbe_start_mac_link_82599(struct ixgbe_hw *hw,
 				      bool autoneg_wait_to_complete);
 static s32 ixgbe_setup_mac_link_82599(struct ixgbe_hw *hw,
-                               ixgbe_link_speed speed,
-                               bool autoneg,
-                               bool autoneg_wait_to_complete);
+			       ixgbe_link_speed speed,
+			       bool autoneg,
+			       bool autoneg_wait_to_complete);
 static s32 ixgbe_setup_copper_link_82599(struct ixgbe_hw *hw,
-                                         ixgbe_link_speed speed,
-                                         bool autoneg,
-                                         bool autoneg_wait_to_complete);
+					 ixgbe_link_speed speed,
+					 bool autoneg,
+					 bool autoneg_wait_to_complete);
 static s32 ixgbe_verify_fw_version_82599(struct ixgbe_hw *hw);
 static bool ixgbe_verify_lesm_fw_enabled_82599(struct ixgbe_hw *hw);
 
@@ -233,8 +233,8 @@ static s32 ixgbe_init_phy_ops_82599(struct ixgbe_hw *hw)
  *  Determines the link capabilities by reading the AUTOC register.
  **/
 static s32 ixgbe_get_link_capabilities_82599(struct ixgbe_hw *hw,
-                                             ixgbe_link_speed *speed,
-                                             bool *negotiation)
+					     ixgbe_link_speed *speed,
+					     bool *negotiation)
 {
 	s32 status = 0;
 	u32 autoc = 0;
@@ -386,7 +386,7 @@ out:
  *  Restarts the link.  Performs autonegotiation if needed.
  **/
 static s32 ixgbe_start_mac_link_82599(struct ixgbe_hw *hw,
-                               bool autoneg_wait_to_complete)
+			       bool autoneg_wait_to_complete)
 {
 	u32 autoc_reg;
 	u32 links_reg;
@@ -495,9 +495,9 @@ static void ixgbe_flap_tx_laser_multispeed_fiber(struct ixgbe_hw *hw)
  *  Set the link speed in the AUTOC register and restarts link.
  **/
 static s32 ixgbe_setup_mac_link_multispeed_fiber(struct ixgbe_hw *hw,
-                                          ixgbe_link_speed speed,
-                                          bool autoneg,
-                                          bool autoneg_wait_to_complete)
+					  ixgbe_link_speed speed,
+					  bool autoneg,
+					  bool autoneg_wait_to_complete)
 {
 	s32 status = 0;
 	ixgbe_link_speed link_speed = IXGBE_LINK_SPEED_UNKNOWN;
@@ -763,8 +763,8 @@ out:
  *  Set the link speed in the AUTOC register and restarts link.
  **/
 static s32 ixgbe_setup_mac_link_82599(struct ixgbe_hw *hw,
-                               ixgbe_link_speed speed, bool autoneg,
-                               bool autoneg_wait_to_complete)
+			       ixgbe_link_speed speed, bool autoneg,
+			       bool autoneg_wait_to_complete)
 {
 	s32 status = 0;
 	u32 autoc = IXGBE_READ_REG(hw, IXGBE_AUTOC);
@@ -877,9 +877,9 @@ out:
  *  Restarts link on PHY and MAC based on settings passed in.
  **/
 static s32 ixgbe_setup_copper_link_82599(struct ixgbe_hw *hw,
-                                         ixgbe_link_speed speed,
-                                         bool autoneg,
-                                         bool autoneg_wait_to_complete)
+					 ixgbe_link_speed speed,
+					 bool autoneg,
+					 bool autoneg_wait_to_complete)
 {
 	s32 status;
 
@@ -1301,9 +1301,9 @@ static u32 ixgbe_atr_compute_sig_hash_82599(union ixgbe_atr_hash_dword input,
  *  @queue: queue index to direct traffic to
  **/
 s32 ixgbe_fdir_add_signature_filter_82599(struct ixgbe_hw *hw,
-                                          union ixgbe_atr_hash_dword input,
-                                          union ixgbe_atr_hash_dword common,
-                                          u8 queue)
+					  union ixgbe_atr_hash_dword input,
+					  union ixgbe_atr_hash_dword common,
+					  u8 queue)
 {
 	u64  fdirhashcmd;
 	u32  fdircmd;

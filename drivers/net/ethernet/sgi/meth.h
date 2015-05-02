@@ -104,8 +104,8 @@ typedef union rx_status_vector {
 
 typedef struct rx_packet {
 	rx_status_vector status;
-        u64 pad[3]; /* For whatever reason, there needs to be 4 double-word offset */
-        u16 pad2;
+	u64 pad[3]; /* For whatever reason, there needs to be 4 double-word offset */
+	u16 pad2;
 	char buf[METH_RX_BUFF_SIZE-sizeof(rx_status_vector)-3*sizeof(u64)-sizeof(u16)];/* data */
 } rx_packet;
 

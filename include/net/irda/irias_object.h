@@ -54,10 +54,10 @@ struct ias_object {
  *  Values used by LM-IAS attributes
  */
 struct ias_value {
-        __u8    type;    /* Value description */
+	__u8    type;    /* Value description */
 	__u8	owner;	/* Managed from user/kernel space */
 	int     charset; /* Only used by string type */
-        int     len;
+	int     len;
 
 	/* Value */
 	union {
@@ -74,7 +74,7 @@ struct ias_attrib {
 	irda_queue_t q; /* Must be first! */
 	int magic;
 
-        char *name;   	         /* Attribute name */
+	char *name;   	         /* Attribute name */
 	struct ias_value *value; /* Attribute value */
 };
 

@@ -1004,7 +1004,7 @@ static void eexp_hw_tx_pio(struct net_device *dev, unsigned short *buf,
  	outw(lp->tx_head, ioaddr + WRITE_PTR);
 
 	outw(0x0000, ioaddr + DATAPORT);
-        outw(Cmd_INT|Cmd_Xmit, ioaddr + DATAPORT);
+	outw(Cmd_INT|Cmd_Xmit, ioaddr + DATAPORT);
 	outw(lp->tx_head+0x08, ioaddr + DATAPORT);
 	outw(lp->tx_head+0x0e, ioaddr + DATAPORT);
 
@@ -1135,7 +1135,7 @@ static int __init eexp_hw_probe(struct net_device *dev, unsigned short ioaddr)
 	for (i = 0; i < 32768; i++)
 		outw(0, dev->base_addr + DATAPORT);
 
-        for (memory_size = 0; memory_size < 64; memory_size++)
+	for (memory_size = 0; memory_size < 64; memory_size++)
 	{
 		outw(memory_size<<10, dev->base_addr + READ_PTR);
 		if (inw(dev->base_addr+DATAPORT))
@@ -1428,7 +1428,7 @@ static void eexp_hw_rxinit(struct net_device *dev)
 
 
 	/* Make first Rx frame descriptor point to first Rx buffer
-           descriptor */
+	   descriptor */
 	outw(lp->rx_first + 6, ioaddr+WRITE_PTR);
 	outw(lp->rx_first + 0x16, ioaddr+DATAPORT);
 
@@ -1534,7 +1534,7 @@ static void eexp_hw_init586(struct net_device *dev)
 		}
 	}
 
-        scb_wrcbl(dev, CONF_LINK);
+	scb_wrcbl(dev, CONF_LINK);
 	scb_command(dev, 0xf000|SCB_CUstart);
 	outb(0,ioaddr+SIGNAL_CA);
 
@@ -1567,7 +1567,7 @@ static void eexp_hw_init586(struct net_device *dev)
 
 	lp->init_time = jiffies;
 #if NET_DEBUG > 6
-        printk("%s: leaving eexp_hw_init586()\n", dev->name);
+	printk("%s: leaving eexp_hw_init586()\n", dev->name);
 #endif
 }
 
@@ -1607,42 +1607,42 @@ static void eexp_setup_filter(struct net_device *dev)
 static void
 eexp_set_multicast(struct net_device *dev)
 {
-        unsigned short ioaddr = dev->base_addr;
-        struct net_local *lp = netdev_priv(dev);
-        int kick = 0, i;
-        if ((dev->flags & IFF_PROMISC) != lp->was_promisc) {
-                outw(CONF_PROMISC & ~31, ioaddr+SM_PTR);
-                i = inw(ioaddr+SHADOW(CONF_PROMISC));
-                outw((dev->flags & IFF_PROMISC)?(i|1):(i & ~1),
-                     ioaddr+SHADOW(CONF_PROMISC));
-                lp->was_promisc = dev->flags & IFF_PROMISC;
-                kick = 1;
-        }
-        if (!(dev->flags & IFF_PROMISC)) {
-                eexp_setup_filter(dev);
-                if (lp->old_mc_count != netdev_mc_count(dev)) {
-                        kick = 1;
-                        lp->old_mc_count = netdev_mc_count(dev);
-                }
-        }
-        if (kick) {
-                unsigned long oj;
-                scb_command(dev, SCB_CUsuspend);
-                outb(0, ioaddr+SIGNAL_CA);
-                outb(0, ioaddr+SIGNAL_CA);
+	unsigned short ioaddr = dev->base_addr;
+	struct net_local *lp = netdev_priv(dev);
+	int kick = 0, i;
+	if ((dev->flags & IFF_PROMISC) != lp->was_promisc) {
+		outw(CONF_PROMISC & ~31, ioaddr+SM_PTR);
+		i = inw(ioaddr+SHADOW(CONF_PROMISC));
+		outw((dev->flags & IFF_PROMISC)?(i|1):(i & ~1),
+		     ioaddr+SHADOW(CONF_PROMISC));
+		lp->was_promisc = dev->flags & IFF_PROMISC;
+		kick = 1;
+	}
+	if (!(dev->flags & IFF_PROMISC)) {
+		eexp_setup_filter(dev);
+		if (lp->old_mc_count != netdev_mc_count(dev)) {
+			kick = 1;
+			lp->old_mc_count = netdev_mc_count(dev);
+		}
+	}
+	if (kick) {
+		unsigned long oj;
+		scb_command(dev, SCB_CUsuspend);
+		outb(0, ioaddr+SIGNAL_CA);
+		outb(0, ioaddr+SIGNAL_CA);
 #if 0
-                printk("%s: waiting for CU to go suspended\n", dev->name);
+		printk("%s: waiting for CU to go suspended\n", dev->name);
 #endif
-                oj = jiffies;
-                while ((SCB_CUstat(scb_status(dev)) == 2) &&
-                       (time_before(jiffies, oj + 2000)));
+		oj = jiffies;
+		while ((SCB_CUstat(scb_status(dev)) == 2) &&
+		       (time_before(jiffies, oj + 2000)));
 		if (SCB_CUstat(scb_status(dev)) == 2)
 			printk("%s: warning, CU didn't stop\n", dev->name);
-                lp->started &= ~(STARTED_CU);
-                scb_wrcbl(dev, CONF_LINK);
-                scb_command(dev, SCB_CUstart);
-                outb(0, ioaddr+SIGNAL_CA);
-        }
+		lp->started &= ~(STARTED_CU);
+		scb_wrcbl(dev, CONF_LINK);
+		scb_command(dev, SCB_CUstart);
+		outb(0, ioaddr+SIGNAL_CA);
+	}
 }
 
 

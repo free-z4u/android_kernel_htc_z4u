@@ -73,7 +73,7 @@
 
 struct exception_table_entry
 {
-        unsigned long insn, fixup;
+	unsigned long insn, fixup;
 };
 
 struct uaccess_ops {
@@ -117,7 +117,7 @@ static inline int __get_user_fn(size_t size, const void __user *ptr, void *x)
 ({								\
 	__typeof__(*(ptr)) __x = (x);				\
 	int __pu_err = -EFAULT;					\
-        __chk_user_ptr(ptr);                                    \
+	__chk_user_ptr(ptr);                                    \
 	switch (sizeof (*(ptr))) {				\
 	case 1:							\
 	case 2:							\
@@ -327,11 +327,11 @@ copy_in_user(void __user *to, const void __user *from, unsigned long n)
 static inline long __must_check
 strncpy_from_user(char *dst, const char __user *src, long count)
 {
-        long res = -EFAULT;
+	long res = -EFAULT;
 	might_fault();
-        if (access_ok(VERIFY_READ, src, 1))
+	if (access_ok(VERIFY_READ, src, 1))
 		res = uaccess.strncpy_from_user(count, src, dst);
-        return res;
+	return res;
 }
 
 static inline unsigned long

@@ -54,7 +54,7 @@ static struct _parisc_agp_info {
 
 static struct gatt_mask parisc_agp_masks[] =
 {
-        {
+	{
 		.mask = SBA_PDIR_VALID_BIT,
 		.type = 0
 	}
@@ -62,7 +62,7 @@ static struct gatt_mask parisc_agp_masks[] =
 
 static struct aper_size_info_fixed parisc_agp_sizes[] =
 {
-        {0, 0, 0},              /* filled in by parisc_agp_fetch_size() */
+	{0, 0, 0},              /* filled in by parisc_agp_fetch_size() */
 };
 
 static int
@@ -240,90 +240,90 @@ static int __init
 agp_ioc_init(void __iomem *ioc_regs)
 {
 	struct _parisc_agp_info *info = &parisc_agp_info;
-        u64 iova_base, *io_pdir, io_tlb_ps;
-        int io_tlb_shift;
+	u64 iova_base, *io_pdir, io_tlb_ps;
+	int io_tlb_shift;
 
-        printk(KERN_INFO DRVPFX "IO PDIR shared with sba_iommu\n");
+	printk(KERN_INFO DRVPFX "IO PDIR shared with sba_iommu\n");
 
-        info->ioc_regs = ioc_regs;
+	info->ioc_regs = ioc_regs;
 
-        io_tlb_ps = readq(info->ioc_regs+IOC_TCNFG);
-        switch (io_tlb_ps) {
-        case 0: io_tlb_shift = 12; break;
-        case 1: io_tlb_shift = 13; break;
-        case 2: io_tlb_shift = 14; break;
-        case 3: io_tlb_shift = 16; break;
-        default:
-                printk(KERN_ERR DRVPFX "Invalid IOTLB page size "
-                       "configuration 0x%llx\n", io_tlb_ps);
-                info->gatt = NULL;
-                info->gatt_entries = 0;
-                return -ENODEV;
-        }
-        info->io_page_size = 1 << io_tlb_shift;
-        info->io_pages_per_kpage = PAGE_SIZE / info->io_page_size;
+	io_tlb_ps = readq(info->ioc_regs+IOC_TCNFG);
+	switch (io_tlb_ps) {
+	case 0: io_tlb_shift = 12; break;
+	case 1: io_tlb_shift = 13; break;
+	case 2: io_tlb_shift = 14; break;
+	case 3: io_tlb_shift = 16; break;
+	default:
+		printk(KERN_ERR DRVPFX "Invalid IOTLB page size "
+		       "configuration 0x%llx\n", io_tlb_ps);
+		info->gatt = NULL;
+		info->gatt_entries = 0;
+		return -ENODEV;
+	}
+	info->io_page_size = 1 << io_tlb_shift;
+	info->io_pages_per_kpage = PAGE_SIZE / info->io_page_size;
 
-        iova_base = readq(info->ioc_regs+IOC_IBASE) & ~0x1;
-        info->gart_base = iova_base + PLUTO_IOVA_SIZE - PLUTO_GART_SIZE;
+	iova_base = readq(info->ioc_regs+IOC_IBASE) & ~0x1;
+	info->gart_base = iova_base + PLUTO_IOVA_SIZE - PLUTO_GART_SIZE;
 
-        info->gart_size = PLUTO_GART_SIZE;
-        info->gatt_entries = info->gart_size / info->io_page_size;
+	info->gart_size = PLUTO_GART_SIZE;
+	info->gatt_entries = info->gart_size / info->io_page_size;
 
-        io_pdir = phys_to_virt(readq(info->ioc_regs+IOC_PDIR_BASE));
-        info->gatt = &io_pdir[(PLUTO_IOVA_SIZE/2) >> PAGE_SHIFT];
+	io_pdir = phys_to_virt(readq(info->ioc_regs+IOC_PDIR_BASE));
+	info->gatt = &io_pdir[(PLUTO_IOVA_SIZE/2) >> PAGE_SHIFT];
 
-        if (info->gatt[0] != SBA_AGPGART_COOKIE) {
-                info->gatt = NULL;
-                info->gatt_entries = 0;
-                printk(KERN_ERR DRVPFX "No reserved IO PDIR entry found; "
-                       "GART disabled\n");
-                return -ENODEV;
-        }
+	if (info->gatt[0] != SBA_AGPGART_COOKIE) {
+		info->gatt = NULL;
+		info->gatt_entries = 0;
+		printk(KERN_ERR DRVPFX "No reserved IO PDIR entry found; "
+		       "GART disabled\n");
+		return -ENODEV;
+	}
 
-        return 0;
+	return 0;
 }
 
 static int
 lba_find_capability(int cap)
 {
 	struct _parisc_agp_info *info = &parisc_agp_info;
-        u16 status;
-        u8 pos, id;
-        int ttl = 48;
+	u16 status;
+	u8 pos, id;
+	int ttl = 48;
 
-        status = readw(info->lba_regs + PCI_STATUS);
-        if (!(status & PCI_STATUS_CAP_LIST))
-                return 0;
-        pos = readb(info->lba_regs + PCI_CAPABILITY_LIST);
-        while (ttl-- && pos >= 0x40) {
-                pos &= ~3;
-                id = readb(info->lba_regs + pos + PCI_CAP_LIST_ID);
-                if (id == 0xff)
-                        break;
-                if (id == cap)
-                        return pos;
-                pos = readb(info->lba_regs + pos + PCI_CAP_LIST_NEXT);
-        }
-        return 0;
+	status = readw(info->lba_regs + PCI_STATUS);
+	if (!(status & PCI_STATUS_CAP_LIST))
+		return 0;
+	pos = readb(info->lba_regs + PCI_CAPABILITY_LIST);
+	while (ttl-- && pos >= 0x40) {
+		pos &= ~3;
+		id = readb(info->lba_regs + pos + PCI_CAP_LIST_ID);
+		if (id == 0xff)
+			break;
+		if (id == cap)
+			return pos;
+		pos = readb(info->lba_regs + pos + PCI_CAP_LIST_NEXT);
+	}
+	return 0;
 }
 
 static int __init
 agp_lba_init(void __iomem *lba_hpa)
 {
 	struct _parisc_agp_info *info = &parisc_agp_info;
-        int cap;
+	int cap;
 
 	info->lba_regs = lba_hpa;
-        info->lba_cap_offset = lba_find_capability(PCI_CAP_ID_AGP);
+	info->lba_cap_offset = lba_find_capability(PCI_CAP_ID_AGP);
 
-        cap = readl(lba_hpa + info->lba_cap_offset) & 0xff;
-        if (cap != PCI_CAP_ID_AGP) {
-                printk(KERN_ERR DRVPFX "Invalid capability ID 0x%02x at 0x%x\n",
-                       cap, info->lba_cap_offset);
-                return -ENODEV;
-        }
+	cap = readl(lba_hpa + info->lba_cap_offset) & 0xff;
+	if (cap != PCI_CAP_ID_AGP) {
+		printk(KERN_ERR DRVPFX "Invalid capability ID 0x%02x at 0x%x\n",
+		       cap, info->lba_cap_offset);
+		return -ENODEV;
+	}
 
-        return 0;
+	return 0;
 }
 
 static int __init

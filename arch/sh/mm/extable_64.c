@@ -52,20 +52,20 @@ search_extable(const struct exception_table_entry *first,
 	if (mid)
 		return mid;
 
-        while (first <= last) {
+	while (first <= last) {
 		long diff;
 
 		mid = (last - first) / 2 + first;
 		diff = mid->insn - value;
-                if (diff == 0)
-                        return mid;
-                else if (diff < 0)
-                        first = mid+1;
-                else
-                        last = mid-1;
-        }
+		if (diff == 0)
+			return mid;
+		else if (diff < 0)
+			first = mid+1;
+		else
+			last = mid-1;
+	}
 
-        return NULL;
+	return NULL;
 }
 
 int fixup_exception(struct pt_regs *regs)

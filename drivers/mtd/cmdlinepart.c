@@ -83,11 +83,11 @@ static int cmdline_parsed = 0;
  * syntax has been verified ok.
  */
 static struct mtd_partition * newpart(char *s,
-                                      char **retptr,
-                                      int *num_parts,
-                                      int this_part,
-                                      unsigned char **extra_mem_ptr,
-                                      int extra_mem_size)
+				      char **retptr,
+				      int *num_parts,
+				      int this_part,
+				      unsigned char **extra_mem_ptr,
+				      int extra_mem_size)
 {
 	struct mtd_partition *parts;
 	unsigned long size;
@@ -117,13 +117,13 @@ static struct mtd_partition * newpart(char *s,
 	/* fetch partition name and flags */
 	mask_flags = 0; /* this is going to be a regular partition */
 	delim = 0;
-        /* check for offset */
-        if (*s == '@')
+	/* check for offset */
+	if (*s == '@')
 	{
-                s++;
-                offset = memparse(s, &s);
-        }
-        /* now look for name */
+		s++;
+		offset = memparse(s, &s);
+	}
+	/* now look for name */
 	if (*s == '(')
 	{
 		delim = ')';
@@ -152,19 +152,19 @@ static struct mtd_partition * newpart(char *s,
 	/* record name length for memory allocation later */
 	extra_mem_size += name_len + 1;
 
-        /* test for options */
-        if (strncmp(s, "ro", 2) == 0)
+	/* test for options */
+	if (strncmp(s, "ro", 2) == 0)
 	{
 		mask_flags |= MTD_WRITEABLE;
 		s += 2;
-        }
+	}
 
-        /* if lk is found do NOT unlock the MTD partition*/
-        if (strncmp(s, "lk", 2) == 0)
+	/* if lk is found do NOT unlock the MTD partition*/
+	if (strncmp(s, "lk", 2) == 0)
 	{
 		mask_flags |= MTD_POWERUP_LOCK;
 		s += 2;
-        }
+	}
 
 	/* test if more partitions are following */
 	if (*s == ',')

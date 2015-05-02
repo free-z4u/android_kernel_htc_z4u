@@ -527,8 +527,8 @@ err1:
 }
 
 static struct nf_ct_helper_expectfn sip_nat = {
-        .name           = "sip",
-        .expectfn       = ip_nat_sip_expected,
+	.name           = "sip",
+	.expectfn       = ip_nat_sip_expected,
 };
 
 static void __exit nf_nat_sip_fini(void)

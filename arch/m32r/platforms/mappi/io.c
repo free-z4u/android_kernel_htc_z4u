@@ -78,7 +78,7 @@ unsigned char _inb(unsigned long port)
 		return _ne_inb(PORT2ADDR_NE(port));
 	else
 #if defined(CONFIG_PCMCIA) && defined(CONFIG_M32R_PCC)
-        if (port >= M32R_PCC_IOSTART0 && port <= M32R_PCC_IOEND0) {
+	if (port >= M32R_PCC_IOSTART0 && port <= M32R_PCC_IOEND0) {
 		unsigned char b;
 		pcc_ioread(0, port, &b, sizeof(b), 1, 0);
 		return b;

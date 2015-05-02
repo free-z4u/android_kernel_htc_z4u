@@ -244,7 +244,7 @@ int nobh_write_end(struct file *, struct address_space *,
 				struct page *, void *);
 int nobh_truncate_page(struct address_space *, loff_t, get_block_t *);
 int nobh_writepage(struct page *page, get_block_t *get_block,
-                        struct writeback_control *wbc);
+			struct writeback_control *wbc);
 
 void buffer_init(void);
 
@@ -262,13 +262,13 @@ static inline void attach_page_buffers(struct page *page,
 
 static inline void get_bh(struct buffer_head *bh)
 {
-        atomic_inc(&bh->b_count);
+	atomic_inc(&bh->b_count);
 }
 
 static inline void put_bh(struct buffer_head *bh)
 {
-        smp_mb__before_atomic_dec();
-        atomic_dec(&bh->b_count);
+	smp_mb__before_atomic_dec();
+	atomic_dec(&bh->b_count);
 }
 
 static inline void brelse(struct buffer_head *bh)

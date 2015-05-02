@@ -174,7 +174,7 @@ snd_emu8000_detect(struct snd_emu8000 *emu)
 		return -ENODEV;
 
 	snd_printdd("EMU8000 [0x%lx]: Synth chip found\n",
-                    emu->port1);
+		    emu->port1);
 	return 0;
 }
 

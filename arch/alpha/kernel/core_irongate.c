@@ -181,11 +181,11 @@ again:
 	IRONGATE_jd = *IronECC;  /* re-read to force write */
 
 	/* Clear ALI NMI */
-        nmi_ctl = inb(0x61);
-        nmi_ctl |= 0x0c;
-        outb(nmi_ctl, 0x61);
-        nmi_ctl &= ~0x0c;
-        outb(nmi_ctl, 0x61);
+	nmi_ctl = inb(0x61);
+	nmi_ctl |= 0x0c;
+	outb(nmi_ctl, 0x61);
+	nmi_ctl &= ~0x0c;
+	outb(nmi_ctl, 0x61);
 
 	IRONGATE_jd = *IronECC;
 	if (IRONGATE_jd & 0x300) goto again;

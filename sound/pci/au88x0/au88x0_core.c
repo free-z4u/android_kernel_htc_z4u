@@ -62,14 +62,14 @@
 			 Now the SRC is working too! Yeah! XMMS works !
  20-02-2003 First steps into the ALSA world.
  28-02-2003 As my birthday present, i discovered how the DMA buffer pages really
-            work :-). It was all wrong.
+	    work :-). It was all wrong.
  12-03-2003 ALSA driver starts working (2 channels).
  16-03-2003 More srcblock_setupchannel discoveries.
  12-04-2003 AU8830 playback support. Recording in the works.
  17-04-2003 vortex_route() and vortex_routes() bug fixes. AU8830 recording
  			works now, but chipn' dale effect is still there.
  16-05-2003 SrcSetupChannel cleanup. Moved the Src setup stuff entirely
-            into au88x0_pcm.c .
+	    into au88x0_pcm.c .
  06-06-2003 Buffer shifter bugfix. Mixer volume fix.
  07-12-2003 A3D routing finally fixed. Believed to be OK.
  25-03-2004 Many thanks to Claudia, for such valuable bug reports.

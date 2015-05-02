@@ -180,10 +180,10 @@ config IP6_NF_TARGET_REJECT_SKERR
 	depends on IP6_NF_TARGET_REJECT
 	default n
 	help
-          This option enables turning a "--reject-with icmp*" into a matching
-          socket error also.
+	  This option enables turning a "--reject-with icmp*" into a matching
+	  socket error also.
 	  The REJECT target normally allows sending an ICMP message. But it
-          leaves the local socket unaware of any ingress rejects.
+	  leaves the local socket unaware of any ingress rejects.
 
 	  If unsure, say N.
 
@@ -213,10 +213,10 @@ config IP6_NF_SECURITY
        depends on SECURITY
        depends on NETFILTER_ADVANCED
        help
-         This option adds a `security' table to iptables, for use
-         with Mandatory Access Control (MAC) policy.
-        
-         If unsure, say N.
+	 This option adds a `security' table to iptables, for use
+	 with Mandatory Access Control (MAC) policy.
+
+	 If unsure, say N.
 
 endif # IP6_NF_IPTABLES
 

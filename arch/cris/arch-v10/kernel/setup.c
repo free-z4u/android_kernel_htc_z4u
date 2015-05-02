@@ -100,5 +100,5 @@ void
 show_etrax_copyright(void)
 {
 	printk(KERN_INFO
-               "Linux/CRIS port on ETRAX 100LX (c) 2001 Axis Communications AB\n");
+	       "Linux/CRIS port on ETRAX 100LX (c) 2001 Axis Communications AB\n");
 }

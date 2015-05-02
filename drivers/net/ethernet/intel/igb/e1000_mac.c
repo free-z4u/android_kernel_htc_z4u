@@ -450,7 +450,7 @@ static u32 igb_hash_mc_addr(struct e1000_hw *hw, u8 *mc_addr)
  *  The caller must have a packed mc_addr_list of multicast addresses.
  **/
 void igb_update_mc_addr_list(struct e1000_hw *hw,
-                             u8 *mc_addr_list, u32 mc_addr_count)
+			     u8 *mc_addr_list, u32 mc_addr_count)
 {
 	u32 hash_value, hash_bit, hash_reg;
 	int i;

@@ -40,7 +40,7 @@
 
 // max transmit or receive buffer size
 #define CB_MAX_BUF_SIZE     2900U       // max buffer size
-                                        // NOTE: must be multiple of 4
+					// NOTE: must be multiple of 4
 
 #define CB_MAX_TX_BUF_SIZE          CB_MAX_BUF_SIZE // max Tx buffer size
 #define CB_MAX_RX_BUF_SIZE_NORMAL   CB_MAX_BUF_SIZE // max Rx buffer size when not use Multi-RD

@@ -561,7 +561,7 @@ static int __init g5_pm72_cpufreq_init(struct device_node *cpus)
 	}
 
 	/* Lookup the cpuid eeprom node */
-        cpuid = of_find_node_by_path("/u3@0,f8000000/i2c@f8001000/cpuid@a0");
+	cpuid = of_find_node_by_path("/u3@0,f8000000/i2c@f8001000/cpuid@a0");
 	if (cpuid != NULL)
 		eeprom = of_get_property(cpuid, "cpuid", NULL);
 	if (eeprom == NULL) {

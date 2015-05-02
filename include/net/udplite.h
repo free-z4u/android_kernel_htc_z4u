@@ -36,9 +36,9 @@ static inline int udplite_checksum_init(struct sk_buff *skb, struct udphdr *uh)
 {
 	u16 cscov;
 
-        /* In UDPv4 a zero checksum means that the transmitter generated no
-         * checksum. UDP-Lite (like IPv6) mandates checksums, hence packets
-         * with a zero checksum field are illegal.                            */
+	/* In UDPv4 a zero checksum means that the transmitter generated no
+	 * checksum. UDP-Lite (like IPv6) mandates checksums, hence packets
+	 * with a zero checksum field are illegal.                            */
 	if (uh->check == 0) {
 		LIMIT_NETDEBUG(KERN_DEBUG "UDPLite: zeroed checksum field\n");
 		return 1;
@@ -57,11 +57,11 @@ static inline int udplite_checksum_init(struct sk_buff *skb, struct udphdr *uh)
 		return 1;
 
 	} else if (cscov < skb->len) {
-        	UDP_SKB_CB(skb)->partial_cov = 1;
+		UDP_SKB_CB(skb)->partial_cov = 1;
 		UDP_SKB_CB(skb)->cscov = cscov;
 		if (skb->ip_summed == CHECKSUM_COMPLETE)
 			skb->ip_summed = CHECKSUM_NONE;
-        }
+	}
 
 	return 0;
 }

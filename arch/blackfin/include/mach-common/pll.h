@@ -33,7 +33,7 @@ bfin_iwr_restore(unsigned long iwr0, unsigned long iwr1, unsigned long iwr2)
 #ifndef bfin_iwr_save
 static inline void
 bfin_iwr_save(unsigned long niwr0, unsigned long niwr1, unsigned long niwr2,
-              unsigned long *iwr0, unsigned long *iwr1, unsigned long *iwr2)
+	      unsigned long *iwr0, unsigned long *iwr1, unsigned long *iwr2)
 {
 #ifdef SIC_IWR
 	*iwr0 = bfin_read_SIC_IWR();

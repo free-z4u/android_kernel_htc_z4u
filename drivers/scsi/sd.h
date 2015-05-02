@@ -86,7 +86,7 @@ static inline struct scsi_disk *scsi_disk(struct gendisk *disk)
 }
 
 #define sd_printk(prefix, sdsk, fmt, a...)				\
-        (sdsk)->disk ?							\
+	(sdsk)->disk ?							\
 	sdev_printk(prefix, (sdsk)->device, "[%s] " fmt,		\
 		    (sdsk)->disk->disk_name, ##a) :			\
 	sdev_printk(prefix, (sdsk)->device, fmt, ##a)

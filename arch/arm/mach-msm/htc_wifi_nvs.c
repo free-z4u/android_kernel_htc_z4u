@@ -47,12 +47,12 @@ unsigned char* wlan_random_mac(unsigned char *set_mac_addr)
 {
     static unsigned char mac_addr[6]={0,0,0,0,0,0};
     if(set_mac_addr != NULL){
-        mac_addr[0]=set_mac_addr[0];
-        mac_addr[1]=set_mac_addr[1];
-        mac_addr[2]=set_mac_addr[2];
-        mac_addr[3]=set_mac_addr[3];
-        mac_addr[4]=set_mac_addr[4];
-        mac_addr[5]=set_mac_addr[5];
+	mac_addr[0]=set_mac_addr[0];
+	mac_addr[1]=set_mac_addr[1];
+	mac_addr[2]=set_mac_addr[2];
+	mac_addr[3]=set_mac_addr[3];
+	mac_addr[4]=set_mac_addr[4];
+	mac_addr[5]=set_mac_addr[5];
     }
     return mac_addr;
 }

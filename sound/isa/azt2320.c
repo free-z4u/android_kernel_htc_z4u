@@ -282,7 +282,7 @@ static int __devinit snd_azt2320_pnp_detect(struct pnp_card_link *card,
 		azt2320_devices++;
 		return 0;
 	}
-        return -ENODEV;
+	return -ENODEV;
 }
 
 static void __devexit snd_azt2320_pnp_remove(struct pnp_card_link * pcard)

@@ -130,7 +130,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
 }
 
 static ssize_t snapshot_read(struct file *filp, char __user *buf,
-                             size_t count, loff_t *offp)
+			     size_t count, loff_t *offp)
 {
 	struct snapshot_data *data;
 	ssize_t res;
@@ -163,7 +163,7 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
 }
 
 static ssize_t snapshot_write(struct file *filp, const char __user *buf,
-                              size_t count, loff_t *offp)
+			      size_t count, loff_t *offp)
 {
 	struct snapshot_data *data;
 	ssize_t res;

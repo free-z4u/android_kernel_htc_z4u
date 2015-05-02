@@ -109,16 +109,16 @@ void MACvReadAllRegs (unsigned long dwIoBase, unsigned char *pbyMacRegs)
 
     // read page0 register
     for (ii = 0; ii < MAC_MAX_CONTEXT_SIZE_PAGE0; ii++) {
-        VNSvInPortB(dwIoBase + ii, pbyMacRegs);
-        pbyMacRegs++;
+	VNSvInPortB(dwIoBase + ii, pbyMacRegs);
+	pbyMacRegs++;
     }
 
     MACvSelectPage1(dwIoBase);
 
     // read page1 register
     for (ii = 0; ii < MAC_MAX_CONTEXT_SIZE_PAGE1; ii++) {
-        VNSvInPortB(dwIoBase + ii, pbyMacRegs);
-        pbyMacRegs++;
+	VNSvInPortB(dwIoBase + ii, pbyMacRegs);
+	pbyMacRegs++;
     }
 
     MACvSelectPage0(dwIoBase);
@@ -190,7 +190,7 @@ bool MACbIsIntDisable (unsigned long dwIoBase)
 
     VNSvInPortD(dwIoBase + MAC_REG_IMR, &dwData);
     if (dwData != 0)
-        return false;
+	return false;
 
     return true;
 }
@@ -565,7 +565,7 @@ bool MACbIsInLoopbackMode (unsigned long dwIoBase)
 
     VNSvInPortB(dwIoBase + MAC_REG_TEST, &byOrgValue);
     if (byOrgValue & (TEST_LBINT | TEST_LBEXT))
-        return true;
+	return true;
     return false;
 }
 
@@ -592,41 +592,41 @@ void MACvSetPacketFilter (unsigned long dwIoBase, unsigned short wFilterType)
     // but if other mode exist (e.g. PROMISCUOUS), multicast-address
     // will be open
     if (wFilterType & PKT_TYPE_DIRECTED) {
-        // set multicast address to accept none
-        MACvSelectPage1(dwIoBase);
-        VNSvOutPortD(dwIoBase + MAC_REG_MAR0, 0L);
-        VNSvOutPortD(dwIoBase + MAC_REG_MAR0 + sizeof(unsigned long), 0L);
-        MACvSelectPage0(dwIoBase);
+	// set multicast address to accept none
+	MACvSelectPage1(dwIoBase);
+	VNSvOutPortD(dwIoBase + MAC_REG_MAR0, 0L);
+	VNSvOutPortD(dwIoBase + MAC_REG_MAR0 + sizeof(unsigned long), 0L);
+	MACvSelectPage0(dwIoBase);
     }
 
     if (wFilterType & (PKT_TYPE_PROMISCUOUS | PKT_TYPE_ALL_MULTICAST)) {
-        // set multicast address to accept all
-        MACvSelectPage1(dwIoBase);
-        VNSvOutPortD(dwIoBase + MAC_REG_MAR0, 0xFFFFFFFFL);
-        VNSvOutPortD(dwIoBase + MAC_REG_MAR0 + sizeof(unsigned long), 0xFFFFFFFFL);
-        MACvSelectPage0(dwIoBase);
+	// set multicast address to accept all
+	MACvSelectPage1(dwIoBase);
+	VNSvOutPortD(dwIoBase + MAC_REG_MAR0, 0xFFFFFFFFL);
+	VNSvOutPortD(dwIoBase + MAC_REG_MAR0 + sizeof(unsigned long), 0xFFFFFFFFL);
+	MACvSelectPage0(dwIoBase);
     }
 
     if (wFilterType & PKT_TYPE_PROMISCUOUS) {
 
-        byNewRCR |= (RCR_RXALLTYPE | RCR_UNICAST | RCR_MULTICAST | RCR_BROADCAST);
+	byNewRCR |= (RCR_RXALLTYPE | RCR_UNICAST | RCR_MULTICAST | RCR_BROADCAST);
 
-        byNewRCR &= ~RCR_BSSID;
+	byNewRCR &= ~RCR_BSSID;
     }
 
     if (wFilterType & (PKT_TYPE_ALL_MULTICAST | PKT_TYPE_MULTICAST))
-        byNewRCR |= RCR_MULTICAST;
+	byNewRCR |= RCR_MULTICAST;
 
     if (wFilterType & PKT_TYPE_BROADCAST)
-        byNewRCR |= RCR_BROADCAST;
+	byNewRCR |= RCR_BROADCAST;
 
     if (wFilterType & PKT_TYPE_ERROR_CRC)
-        byNewRCR |= RCR_ERRCRC;
+	byNewRCR |= RCR_ERRCRC;
 
     VNSvInPortB(dwIoBase + MAC_REG_RCR,  &byOldRCR);
     if (byNewRCR != byOldRCR) {
-        // Modify the Receive Command Register
-        VNSvOutPortB(dwIoBase + MAC_REG_RCR, byNewRCR);
+	// Modify the Receive Command Register
+	VNSvOutPortB(dwIoBase + MAC_REG_RCR, byNewRCR);
     }
 }
 
@@ -649,14 +649,14 @@ void MACvSaveContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
 
     // read page0 register
     for (ii = 0; ii < MAC_MAX_CONTEXT_SIZE_PAGE0; ii++) {
-        VNSvInPortB((dwIoBase + ii), (pbyCxtBuf + ii));
+	VNSvInPortB((dwIoBase + ii), (pbyCxtBuf + ii));
     }
 
     MACvSelectPage1(dwIoBase);
 
     // read page1 register
     for (ii = 0; ii < MAC_MAX_CONTEXT_SIZE_PAGE1; ii++) {
-        VNSvInPortB((dwIoBase + ii), (pbyCxtBuf + MAC_MAX_CONTEXT_SIZE_PAGE0 + ii));
+	VNSvInPortB((dwIoBase + ii), (pbyCxtBuf + MAC_MAX_CONTEXT_SIZE_PAGE0 + ii));
     }
 
     MACvSelectPage0(dwIoBase);
@@ -683,23 +683,23 @@ void MACvRestoreContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
     MACvSelectPage1(dwIoBase);
     // restore page1
     for (ii = 0; ii < MAC_MAX_CONTEXT_SIZE_PAGE1; ii++) {
-        VNSvOutPortB((dwIoBase + ii), *(pbyCxtBuf + MAC_MAX_CONTEXT_SIZE_PAGE0 + ii));
+	VNSvOutPortB((dwIoBase + ii), *(pbyCxtBuf + MAC_MAX_CONTEXT_SIZE_PAGE0 + ii));
     }
     MACvSelectPage0(dwIoBase);
 
     // restore RCR,TCR,IMR...
     for (ii = MAC_REG_RCR; ii < MAC_REG_ISR; ii++) {
-        VNSvOutPortB(dwIoBase + ii, *(pbyCxtBuf + ii));
+	VNSvOutPortB(dwIoBase + ii, *(pbyCxtBuf + ii));
     }
     // restore MAC Config.
     for (ii = MAC_REG_LRT; ii < MAC_REG_PAGE1SEL; ii++) {
-        VNSvOutPortB(dwIoBase + ii, *(pbyCxtBuf + ii));
+	VNSvOutPortB(dwIoBase + ii, *(pbyCxtBuf + ii));
     }
     VNSvOutPortB(dwIoBase + MAC_REG_CFG, *(pbyCxtBuf + MAC_REG_CFG));
 
     // restore PS Config.
     for (ii = MAC_REG_PSCFG; ii < MAC_REG_BBREGCTL; ii++) {
-        VNSvOutPortB(dwIoBase + ii, *(pbyCxtBuf + ii));
+	VNSvOutPortB(dwIoBase + ii, *(pbyCxtBuf + ii));
     }
 
     // restore CURR_RX_DESC_ADDR, CURR_TX_DESC_ADDR
@@ -738,22 +738,22 @@ bool MACbCompareContext (unsigned long dwIoBase, unsigned char *pbyCxtBuf)
     // compare CURR_RX_DESC_ADDR, CURR_TX_DESC_ADDR
     VNSvInPortD(dwIoBase + MAC_REG_TXDMAPTR0, &dwData);
     if (dwData != *(unsigned long *)(pbyCxtBuf + MAC_REG_TXDMAPTR0)) {
-        return false;
+	return false;
     }
 
     VNSvInPortD(dwIoBase + MAC_REG_AC0DMAPTR, &dwData);
     if (dwData != *(unsigned long *)(pbyCxtBuf + MAC_REG_AC0DMAPTR)) {
-        return false;
+	return false;
     }
 
     VNSvInPortD(dwIoBase + MAC_REG_RXDMAPTR0, &dwData);
     if (dwData != *(unsigned long *)(pbyCxtBuf + MAC_REG_RXDMAPTR0)) {
-        return false;
+	return false;
     }
 
     VNSvInPortD(dwIoBase + MAC_REG_RXDMAPTR1, &dwData);
     if (dwData != *(unsigned long *)(pbyCxtBuf + MAC_REG_RXDMAPTR1)) {
-        return false;
+	return false;
     }
 
 
@@ -783,12 +783,12 @@ bool MACbSoftwareReset (unsigned long dwIoBase)
     VNSvOutPortB(dwIoBase+ MAC_REG_HOSTCR, 0x01);
 
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_HOSTCR, &byData);
-        if ( !(byData & HOSTCR_SOFTRST))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_HOSTCR, &byData);
+	if ( !(byData & HOSTCR_SOFTRST))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT)
-        return false;
+	return false;
     return true;
 
 }
@@ -851,38 +851,38 @@ bool MACbSafeRxOff (unsigned long dwIoBase)
     VNSvOutPortD(dwIoBase + MAC_REG_RXDMACTL0, DMACTL_CLRRUN);
     VNSvOutPortD(dwIoBase + MAC_REG_RXDMACTL1, DMACTL_CLRRUN);
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_RXDMACTL0, &dwData);
-        if (!(dwData & DMACTL_RUN))
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_RXDMACTL0, &dwData);
+	if (!(dwData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x10);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x10)\n");
-        return(false);
+	DBG_PORT80(0x10);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x10)\n");
+	return(false);
     }
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_RXDMACTL1, &dwData);
-        if ( !(dwData & DMACTL_RUN))
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_RXDMACTL1, &dwData);
+	if ( !(dwData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x11);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x11)\n");
-        return(false);
+	DBG_PORT80(0x11);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x11)\n");
+	return(false);
     }
 
     // try to safe shutdown RX
     MACvRegBitsOff(dwIoBase, MAC_REG_HOSTCR, HOSTCR_RXON);
     // W_MAX_TIMEOUT is the timeout period
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_HOSTCR, &byData);
-        if ( !(byData & HOSTCR_RXONST))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_HOSTCR, &byData);
+	if ( !(byData & HOSTCR_RXONST))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x12);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x12)\n");
-        return(false);
+	DBG_PORT80(0x12);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x12)\n");
+	return(false);
     }
     return true;
 }
@@ -914,24 +914,24 @@ bool MACbSafeTxOff (unsigned long dwIoBase)
 
 
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_TXDMACTL0, &dwData);
-        if ( !(dwData & DMACTL_RUN))
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_TXDMACTL0, &dwData);
+	if ( !(dwData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x20);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x20)\n");
-        return(false);
+	DBG_PORT80(0x20);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x20)\n");
+	return(false);
     }
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_AC0DMACTL, &dwData);
-        if ( !(dwData & DMACTL_RUN))
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_AC0DMACTL, &dwData);
+	if ( !(dwData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x21);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x21)\n");
-        return(false);
+	DBG_PORT80(0x21);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x21)\n");
+	return(false);
     }
 
     // try to safe shutdown TX
@@ -939,14 +939,14 @@ bool MACbSafeTxOff (unsigned long dwIoBase)
 
     // W_MAX_TIMEOUT is the timeout period
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_HOSTCR, &byData);
-        if ( !(byData & HOSTCR_TXONST))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_HOSTCR, &byData);
+	if ( !(byData & HOSTCR_TXONST))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x24);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x24)\n");
-        return(false);
+	DBG_PORT80(0x24);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x24)\n");
+	return(false);
     }
     return true;
 }
@@ -969,16 +969,16 @@ bool MACbSafeStop (unsigned long dwIoBase)
     MACvRegBitsOff(dwIoBase, MAC_REG_TCR, TCR_AUTOBCNTX);
 
     if (MACbSafeRxOff(dwIoBase) == false) {
-        DBG_PORT80(0xA1);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" MACbSafeRxOff == false)\n");
-        MACbSafeSoftwareReset(dwIoBase);
-        return false;
+	DBG_PORT80(0xA1);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" MACbSafeRxOff == false)\n");
+	MACbSafeSoftwareReset(dwIoBase);
+	return false;
     }
     if (MACbSafeTxOff(dwIoBase) == false) {
-        DBG_PORT80(0xA2);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" MACbSafeTxOff == false)\n");
-        MACbSafeSoftwareReset(dwIoBase);
-        return false;
+	DBG_PORT80(0xA2);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" MACbSafeTxOff == false)\n");
+	MACbSafeSoftwareReset(dwIoBase);
+	return false;
     }
 
     MACvRegBitsOff(dwIoBase, MAC_REG_HOSTCR, HOSTCR_MACEN);
@@ -1006,8 +1006,8 @@ bool MACbShutdown (unsigned long dwIoBase)
     MACvSetLoopbackMode(dwIoBase, MAC_LB_INTERNAL);
     // stop the adapter
     if (!MACbSafeStop(dwIoBase)) {
-        MACvSetLoopbackMode(dwIoBase, MAC_LB_NONE);
-        return false;
+	MACvSetLoopbackMode(dwIoBase, MAC_LB_NONE);
+	return false;
     }
     MACvSetLoopbackMode(dwIoBase, MAC_LB_NONE);
     return true;
@@ -1087,19 +1087,19 @@ unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL0, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL0+2, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL0+2, DMACTL_RUN);
     }
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL0, &byData);
-        if ( !(byData & DMACTL_RUN))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL0, &byData);
+	if ( !(byData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x13);
+	DBG_PORT80(0x13);
     }
     VNSvOutPortD(dwIoBase + MAC_REG_RXDMAPTR0, dwCurrDescAddr);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL0, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL0, DMACTL_RUN);
     }
 }
 
@@ -1125,19 +1125,19 @@ unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL1, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL1+2, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL1+2, DMACTL_RUN);
     }
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL1, &byData);
-        if ( !(byData & DMACTL_RUN))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_RXDMACTL1, &byData);
+	if ( !(byData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x14);
+	DBG_PORT80(0x14);
     }
     VNSvOutPortD(dwIoBase + MAC_REG_RXDMAPTR1, dwCurrDescAddr);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL1, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_RXDMACTL1, DMACTL_RUN);
     }
 }
 
@@ -1163,19 +1163,19 @@ unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_TXDMACTL0, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0+2, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0+2, DMACTL_RUN);
     }
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_TXDMACTL0, &byData);
-        if ( !(byData & DMACTL_RUN))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_TXDMACTL0, &byData);
+	if ( !(byData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x25);
+	DBG_PORT80(0x25);
     }
     VNSvOutPortD(dwIoBase + MAC_REG_TXDMAPTR0, dwCurrDescAddr);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0, DMACTL_RUN);
     }
 }
 
@@ -1202,20 +1202,20 @@ unsigned char byOrgDMACtl;
 
     VNSvInPortB(dwIoBase + MAC_REG_AC0DMACTL, &byOrgDMACtl);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_AC0DMACTL+2, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_AC0DMACTL+2, DMACTL_RUN);
     }
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_AC0DMACTL, &byData);
-        if (!(byData & DMACTL_RUN))
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_AC0DMACTL, &byData);
+	if (!(byData & DMACTL_RUN))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x26);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x26)\n");
+	DBG_PORT80(0x26);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x26)\n");
     }
     VNSvOutPortD(dwIoBase + MAC_REG_AC0DMAPTR, dwCurrDescAddr);
     if (byOrgDMACtl & DMACTL_RUN) {
-        VNSvOutPortB(dwIoBase + MAC_REG_AC0DMACTL, DMACTL_RUN);
+	VNSvOutPortB(dwIoBase + MAC_REG_AC0DMACTL, DMACTL_RUN);
     }
 }
 
@@ -1224,9 +1224,9 @@ unsigned char byOrgDMACtl;
 void MACvSetCurrTXDescAddr (int iTxType, unsigned long dwIoBase, unsigned long dwCurrDescAddr)
 {
     if(iTxType == TYPE_AC0DMA){
-        MACvSetCurrAC0DescAddrEx(dwIoBase, dwCurrDescAddr);
+	MACvSetCurrAC0DescAddrEx(dwIoBase, dwCurrDescAddr);
     }else if(iTxType == TYPE_TXDMA0){
-        MACvSetCurrTx0DescAddrEx(dwIoBase, dwCurrDescAddr);
+	MACvSetCurrTx0DescAddrEx(dwIoBase, dwCurrDescAddr);
     }
 }
 
@@ -1253,14 +1253,14 @@ unsigned int uu,ii;
     VNSvOutPortD(dwIoBase + MAC_REG_TMDATA0, uDelay);
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, (TMCTL_TMD | TMCTL_TE));
     for(ii=0;ii<66;ii++) {  // assume max PCI clock is 66Mhz
-        for (uu = 0; uu < uDelay; uu++) {
-            VNSvInPortB(dwIoBase + MAC_REG_TMCTL0, &byValue);
-            if ((byValue == 0) ||
-                (byValue & TMCTL_TSUSP)) {
-                VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, 0);
-                return;
-            }
-        }
+	for (uu = 0; uu < uDelay; uu++) {
+	    VNSvInPortB(dwIoBase + MAC_REG_TMCTL0, &byValue);
+	    if ((byValue == 0) ||
+		(byValue & TMCTL_TSUSP)) {
+		VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, 0);
+		return;
+	    }
+	}
     }
     VNSvOutPortB(dwIoBase + MAC_REG_TMCTL0, 0);
 
@@ -1312,7 +1312,7 @@ void MACvOneShotTimer1MicroSec (unsigned long dwIoBase, unsigned int uDelayTime)
 void MACvSetMISCFifo (unsigned long dwIoBase, unsigned short wOffset, unsigned long dwData)
 {
     if (wOffset > 273)
-        return;
+	return;
     VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset);
     VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, dwData);
     VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
@@ -1325,24 +1325,24 @@ unsigned char byData;
 unsigned int ww = 0;
 
     if (idx == TYPE_TXDMA0) {
-        VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0+2, DMACTL_RUN);
-        for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-            VNSvInPortB(dwIoBase + MAC_REG_TXDMACTL0, &byData);
-            if ( !(byData & DMACTL_RUN))
-                break;
-        }
+	VNSvOutPortB(dwIoBase + MAC_REG_TXDMACTL0+2, DMACTL_RUN);
+	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
+	    VNSvInPortB(dwIoBase + MAC_REG_TXDMACTL0, &byData);
+	    if ( !(byData & DMACTL_RUN))
+		break;
+	}
     } else if (idx == TYPE_AC0DMA) {
-        VNSvOutPortB(dwIoBase + MAC_REG_AC0DMACTL+2, DMACTL_RUN);
-        for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-            VNSvInPortB(dwIoBase + MAC_REG_AC0DMACTL, &byData);
-            if ( !(byData & DMACTL_RUN))
-                break;
-        }
+	VNSvOutPortB(dwIoBase + MAC_REG_AC0DMACTL+2, DMACTL_RUN);
+	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
+	    VNSvInPortB(dwIoBase + MAC_REG_AC0DMACTL, &byData);
+	    if ( !(byData & DMACTL_RUN))
+		break;
+	}
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x29);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x29)\n");
-        return false;
+	DBG_PORT80(0x29);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x29)\n");
+	return false;
     }
     return true;
 }
@@ -1354,18 +1354,18 @@ void MACvClearBusSusInd (unsigned long dwIoBase)
     // check if BcnSusInd enabled
     VNSvInPortD(dwIoBase + MAC_REG_ENCFG , &dwOrgValue);
     if( !(dwOrgValue & EnCFG_BcnSusInd))
-        return;
+	return;
     //Set BcnSusClr
     dwOrgValue = dwOrgValue | EnCFG_BcnSusClr;
     VNSvOutPortD(dwIoBase + MAC_REG_ENCFG, dwOrgValue);
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_ENCFG , &dwOrgValue);
-        if( !(dwOrgValue & EnCFG_BcnSusInd))
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_ENCFG , &dwOrgValue);
+	if( !(dwOrgValue & EnCFG_BcnSusInd))
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x33);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x33)\n");
+	DBG_PORT80(0x33);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x33)\n");
     }
 }
 
@@ -1381,13 +1381,13 @@ void MACvEnableBusSusEn (unsigned long dwIoBase)
     byOrgValue = byOrgValue | CFG_BCNSUSEN;
     VNSvOutPortB(dwIoBase + MAC_REG_ENCFG, byOrgValue);
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortD(dwIoBase + MAC_REG_ENCFG , &dwOrgValue);
-        if(dwOrgValue & EnCFG_BcnSusInd)
-            break;
+	VNSvInPortD(dwIoBase + MAC_REG_ENCFG , &dwOrgValue);
+	if(dwOrgValue & EnCFG_BcnSusInd)
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x34);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x34)\n");
+	DBG_PORT80(0x34);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x34)\n");
     }
 }
 
@@ -1404,13 +1404,13 @@ bool MACbFlushSYNCFifo (unsigned long dwIoBase)
 
     // Check if SyncFlushOK
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_MACCR , &byOrgValue);
-        if(byOrgValue & MACCR_SYNCFLUSHOK)
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_MACCR , &byOrgValue);
+	if(byOrgValue & MACCR_SYNCFLUSHOK)
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x35);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x33)\n");
+	DBG_PORT80(0x35);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x33)\n");
     }
     return true;
 }
@@ -1421,21 +1421,21 @@ bool MACbPSWakeup (unsigned long dwIoBase)
     unsigned int ww;
     // Read PSCTL
     if (MACbIsRegBitsOff(dwIoBase, MAC_REG_PSCTL, PSCTL_PS)) {
-        return true;
+	return true;
     }
     // Disable PS
     MACvRegBitsOff(dwIoBase, MAC_REG_PSCTL, PSCTL_PSEN);
 
     // Check if SyncFlushOK
     for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-        VNSvInPortB(dwIoBase + MAC_REG_PSCTL , &byOrgValue);
-        if(byOrgValue & PSCTL_WAKEDONE)
-            break;
+	VNSvInPortB(dwIoBase + MAC_REG_PSCTL , &byOrgValue);
+	if(byOrgValue & PSCTL_WAKEDONE)
+	    break;
     }
     if (ww == W_MAX_TIMEOUT) {
-        DBG_PORT80(0x36);
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x33)\n");
-        return false;
+	DBG_PORT80(0x36);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO" DBG_PORT80(0x33)\n");
+	return false;
     }
     return true;
 }
@@ -1463,7 +1463,7 @@ unsigned long dwData;
 int     ii;
 
     if (byLocalID <= 1)
-        return;
+	return;
 
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"MACvSetKeyEntry\n");
@@ -1498,11 +1498,11 @@ int     ii;
 
     wOffset += (uKeyIdx * 4);
     for (ii=0;ii<4;ii++) {
-        // alway push 128 bits
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"3.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
-        VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
+	// alway push 128 bits
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"3.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
+	VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
     }
 }
 
@@ -1558,7 +1558,7 @@ unsigned long dwData;
 int     ii;
 
     if (byLocalID <= 1)
-        return;
+	return;
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"MACvSetDefaultKeyEntry\n");
     wOffset = MISCFIFO_KEYETRY0;
@@ -1569,14 +1569,14 @@ int     ii;
     wOffset += (uKeyIdx * 4);
     // alway push 128 bits
     for (ii=0; ii<3; ii++) {
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
-        VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
+	VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
     }
     dwData = *pdwKey;
     if (uKeyLen == WLAN_WEP104_KEYLEN) {
-        dwData |= 0x80000000;
+	dwData |= 0x80000000;
     }
     VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+3);
     VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, dwData);
@@ -1608,7 +1608,7 @@ unsigned long dwData;
 
 
     if (byLocalID <= 1)
-        return;
+	return;
 
     wOffset = MISCFIFO_KEYETRY0;
     wOffset += (10 * MISCFIFO_KEYENTRYSIZE);
@@ -1674,7 +1674,7 @@ unsigned long dwData;
 int     ii;
 
     if (byLocalID <= 1)
-        return;
+	return;
 
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"MACvSetDefaultTKIPKeyEntry\n");
@@ -1698,10 +1698,10 @@ int     ii;
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"1. wOffset: %d, Data: %lX, idx:%d\n", wOffset, *pdwKey, uKeyIdx);
     // alway push 128 bits
     for (ii=0; ii<4; ii++) {
-        DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"2.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
-        VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
-        VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
+	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"2.(%d) wOffset: %d, Data: %lX\n", ii, wOffset+ii, *pdwKey);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFNDEX, wOffset+ii);
+	VNSvOutPortD(dwIoBase + MAC_REG_MISCFFDATA, *pdwKey++);
+	VNSvOutPortW(dwIoBase + MAC_REG_MISCFFCTL, MISCFFCTL_WRITE);
     }
 
 }
@@ -1729,7 +1729,7 @@ unsigned short wOffset;
 unsigned long dwData;
 
     if (byLocalID <= 1)
-        return;
+	return;
 
 
     DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO"MACvSetKeyEntry\n");

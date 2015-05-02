@@ -74,7 +74,7 @@ static unsigned int calc_code_bit(unsigned int i, unsigned int *p_cache)
 	/* Use the cache if it is there */
 	if (p_cache)
 		p = *p_cache;
-        b += p;
+	b += p;
 
 	/*
 	 * For every power of two below our bit number, bump our bit.

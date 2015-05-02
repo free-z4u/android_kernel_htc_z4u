@@ -495,7 +495,7 @@ ds1302_init(void)
 	/* Initialise trickle charger */
 	ds1302_writereg(RTC_TRICKLECHARGER,
 			RTC_TCR_PATTERN |(CONFIG_ETRAX_DS1302_TRICKLE_CHARGE & 0x0F));
-        /* Start clock by resetting CLOCK_HALT */
+	/* Start clock by resetting CLOCK_HALT */
 	ds1302_writereg(RTC_SECONDS, (ds1302_readreg(RTC_SECONDS) & 0x7F));
 	return 0;
 }
@@ -508,7 +508,7 @@ static int __init ds1302_register(void)
 		       ds1302_name, RTC_MAJOR_NR);
 		return -1;
 	}
-        return 0;
+	return 0;
 
 }
 

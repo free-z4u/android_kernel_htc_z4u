@@ -120,8 +120,8 @@ void set_break_vector(int n, irqvectptr addr);
 #define BUILD_IRQ(nr,mask) \
 void IRQ_NAME(nr); \
 __asm__ ( \
-          ".text\n\t" \
-          "IRQ" #nr "_interrupt:\n\t" \
+	  ".text\n\t" \
+	  "IRQ" #nr "_interrupt:\n\t" \
 	  SAVE_ALL \
 	  BLOCK_IRQ(mask,nr) /* this must be done to prevent irq loops when we ei later */ \
 	  "moveq "#nr",$r10\n\t" \
@@ -149,8 +149,8 @@ __asm__ ( \
 #define BUILD_TIMER_IRQ(nr,mask) \
 void IRQ_NAME(nr); \
 __asm__ ( \
-          ".text\n\t" \
-          "IRQ" #nr "_interrupt:\n\t" \
+	  ".text\n\t" \
+	  "IRQ" #nr "_interrupt:\n\t" \
 	  SAVE_ALL \
 	  "moveq "#nr",$r10\n\t" \
 	  "move.d $sp,$r11\n\t" \

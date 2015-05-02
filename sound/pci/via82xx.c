@@ -325,7 +325,7 @@ struct viadev {
 	unsigned int reg_offset;
 	unsigned long port;
 	int direction;	/* playback = 0, capture = 1 */
-        struct snd_pcm_substream *substream;
+	struct snd_pcm_substream *substream;
 	int running;
 	unsigned int tbl_entries; /* # descriptors */
 	struct snd_dma_buffer table;
@@ -2349,9 +2349,9 @@ static int __devinit snd_via82xx_create(struct snd_card *card,
 {
 	struct via82xx *chip;
 	int err;
-        static struct snd_device_ops ops = {
+	static struct snd_device_ops ops = {
 		.dev_free =	snd_via82xx_dev_free,
-        };
+	};
 
 	if ((err = pci_enable_device(pci)) < 0)
 		return err;

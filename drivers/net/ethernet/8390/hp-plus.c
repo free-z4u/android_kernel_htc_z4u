@@ -376,7 +376,7 @@ hpp_io_block_input(struct net_device *dev, int count, struct sk_buff *skb, int r
 	outw(ring_offset, ioaddr + HPP_IN_ADDR);
 	insw(ioaddr + HP_DATAPORT, buf, count>>1);
 	if (count & 0x01)
-        buf[count-1] = inw(ioaddr + HP_DATAPORT);
+	buf[count-1] = inw(ioaddr + HP_DATAPORT);
 }
 
 /* The corresponding shared memory versions of the above 2 functions. */

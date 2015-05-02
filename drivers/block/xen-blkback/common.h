@@ -106,7 +106,7 @@ struct blkif_x86_64_request_rw {
 struct blkif_x86_64_request_discard {
 	uint8_t        flag;         /* BLKIF_DISCARD_SECURE or zero         */
 	blkif_vdev_t   _pad1;        /* was "handle" for read/write requests */
-        uint32_t       _pad2;        /* offsetof(blkif_..,u.discard.id)==8   */
+	uint32_t       _pad2;        /* offsetof(blkif_..,u.discard.id)==8   */
 	uint64_t       id;
 	blkif_sector_t sector_number;/* start sector idx on disk (r/w only)  */
 	uint64_t       nr_sectors;

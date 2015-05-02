@@ -194,7 +194,7 @@ struct drm_display_info {
 	char name[DRM_DISPLAY_INFO_LEN];
 
 	/* Physical size */
-        unsigned int width_mm;
+	unsigned int width_mm;
 	unsigned int height_mm;
 
 	/* Clock limits FIXME: storage format */

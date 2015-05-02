@@ -65,7 +65,7 @@ extern u32 libipw_debug_level;
 #define LIBIPW_DEBUG(level, fmt, args...) \
 do { if (libipw_debug_level & (level)) \
   printk(KERN_DEBUG "libipw: %c %s " fmt, \
-         in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
+	 in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
 #else
 #define LIBIPW_DEBUG(level, fmt, args...) do {} while (0)
 #endif				/* CONFIG_LIBIPW_DEBUG */
@@ -200,8 +200,8 @@ struct libipw_snap_hdr {
 #define LIBIPW_CCK_BASIC_RATES_MASK	(LIBIPW_CCK_RATE_1MB_MASK | \
 	LIBIPW_CCK_RATE_2MB_MASK)
 #define LIBIPW_CCK_DEFAULT_RATES_MASK	(LIBIPW_CCK_BASIC_RATES_MASK | \
-        LIBIPW_CCK_RATE_5MB_MASK | \
-        LIBIPW_CCK_RATE_11MB_MASK)
+	LIBIPW_CCK_RATE_5MB_MASK | \
+	LIBIPW_CCK_RATE_11MB_MASK)
 
 #define LIBIPW_OFDM_RATES_MASK		0x00000FF0
 #define LIBIPW_OFDM_BASIC_RATES_MASK	(LIBIPW_OFDM_RATE_6MB_MASK | \
@@ -214,7 +214,7 @@ struct libipw_snap_hdr {
 	LIBIPW_OFDM_RATE_48MB_MASK | \
 	LIBIPW_OFDM_RATE_54MB_MASK)
 #define LIBIPW_DEFAULT_RATES_MASK (LIBIPW_OFDM_DEFAULT_RATES_MASK | \
-                                LIBIPW_CCK_DEFAULT_RATES_MASK)
+				LIBIPW_CCK_DEFAULT_RATES_MASK)
 
 #define LIBIPW_NUM_OFDM_RATES	    8
 #define LIBIPW_NUM_CCK_RATES	            4

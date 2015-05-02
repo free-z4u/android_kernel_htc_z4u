@@ -1,11 +1,11 @@
 /*
-        aten.c  (c) 1997-8  Grant R. Guenther <grant@torque.net>
-                            Under the terms of the GNU General Public License.
+	aten.c  (c) 1997-8  Grant R. Guenther <grant@torque.net>
+			    Under the terms of the GNU General Public License.
 
 	aten.c is a low-level protocol driver for the ATEN EH-100
 	parallel port adapter.  The EH-100 supports 4-bit and 8-bit
-        modes only.  There is also an EH-132 which supports EPP mode
-        transfers.  The EH-132 is not yet supported.
+	modes only.  There is also an EH-132 which supports EPP mode
+	transfers.  The EH-132 is not yet supported.
 
 */
 
@@ -48,16 +48,16 @@ static int aten_read_regr( PIA *pi, int cont, int regr )
 
 {	int  a, b, r;
 
-        r = regr + cont_map[cont] + 0x40;
+	r = regr + cont_map[cont] + 0x40;
 
 	switch (pi->mode) {
 
-        case 0: w0(r); w2(0xe); w2(6);
+	case 0: w0(r); w2(0xe); w2(6);
 		w2(7); w2(6); w2(0);
 		a = r1(); w0(0x10); b = r1(); w2(0xc);
 		return j44(a,b);
 
-        case 1: r |= 0x10;
+	case 1: r |= 0x10;
 		w0(r); w2(0xe); w2(6); w0(0xff);
 		w2(0x27); w2(0x26); w2(0x20);
 		a = r0();
@@ -110,23 +110,23 @@ static void aten_write_block( PIA *pi, char * buf, int count )
 static void aten_connect ( PIA *pi  )
 
 {       pi->saved_r0 = r0();
-        pi->saved_r2 = r2();
+	pi->saved_r2 = r2();
 	w2(0xc);
 }
 
 static void aten_disconnect ( PIA *pi )
 
 {       w0(pi->saved_r0);
-        w2(pi->saved_r2);
+	w2(pi->saved_r2);
 }
 
 static void aten_log_adapter( PIA *pi, char * scratch, int verbose )
 
 {       char    *mode_string[2] = {"4-bit","8-bit"};
 
-        printk("%s: aten %s, ATEN EH-100 at 0x%x, ",
-                pi->device,ATEN_VERSION,pi->port);
-        printk("mode %d (%s), delay %d\n",pi->mode,
+	printk("%s: aten %s, ATEN EH-100 at 0x%x, ",
+		pi->device,ATEN_VERSION,pi->port);
+	printk("mode %d (%s), delay %d\n",pi->mode,
 		mode_string[pi->mode],pi->delay);
 
 }

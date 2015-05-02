@@ -464,7 +464,7 @@ static int mpc52xx_gpt_do_start(struct mpc52xx_gpt_priv *gpt, u64 period,
  * An interrupt will be generated every time the timer fires
  */
 int mpc52xx_gpt_start_timer(struct mpc52xx_gpt_priv *gpt, u64 period,
-                            int continuous)
+			    int continuous)
 {
 	return mpc52xx_gpt_do_start(gpt, period, continuous, 0);
 }

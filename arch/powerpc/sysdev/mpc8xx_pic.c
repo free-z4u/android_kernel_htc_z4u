@@ -82,7 +82,7 @@ unsigned int mpc8xx_get_irq(void)
 	if (irq == PIC_VEC_SPURRIOUS)
 		irq = NO_IRQ;
 
-        return irq_linear_revmap(mpc8xx_pic_host, irq);
+	return irq_linear_revmap(mpc8xx_pic_host, irq);
 
 }
 

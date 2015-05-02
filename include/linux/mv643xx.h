@@ -664,7 +664,7 @@
 /*          CUNIT  Registers               */
 /*******************************************/
 
-         /* Address Decoding Register Map */
+	 /* Address Decoding Register Map */
 
 #define MV64340_CUNIT_BASE_ADDR_REG0                                0xf200
 #define MV64340_CUNIT_BASE_ADDR_REG1                                0xf208
@@ -681,31 +681,31 @@
 #define MV64340_MPSC1_ACCESS_PROTECTION_REG                         0xf258
 #define MV64340_CUNIT_INTERNAL_SPACE_BASE_ADDR_REG                  0xf25C
 
-        /*  Error Report Registers  */
+	/*  Error Report Registers  */
 
 #define MV64340_CUNIT_INTERRUPT_CAUSE_REG                           0xf310
 #define MV64340_CUNIT_INTERRUPT_MASK_REG                            0xf314
 #define MV64340_CUNIT_ERROR_ADDR                                    0xf318
 
-        /*  Cunit Control Registers */
+	/*  Cunit Control Registers */
 
 #define MV64340_CUNIT_ARBITER_CONTROL_REG                           0xf300
 #define MV64340_CUNIT_CONFIG_REG                                    0xb40c
 #define MV64340_CUNIT_CRROSBAR_TIMEOUT_REG                          0xf304
 
-        /*  Cunit Debug Registers   */
+	/*  Cunit Debug Registers   */
 
 #define MV64340_CUNIT_DEBUG_LOW                                     0xf340
 #define MV64340_CUNIT_DEBUG_HIGH                                    0xf344
 #define MV64340_CUNIT_MMASK                                         0xf380
 
-        /*  MPSCs Clocks Routing Registers  */
+	/*  MPSCs Clocks Routing Registers  */
 
 #define MV64340_MPSC_ROUTING_REG                                    0xb400
 #define MV64340_MPSC_RX_CLOCK_ROUTING_REG                           0xb404
 #define MV64340_MPSC_TX_CLOCK_ROUTING_REG                           0xb408
 
-        /*  MPSCs Interrupts Registers    */
+	/*  MPSCs Interrupts Registers    */
 
 #define MV64340_MPSC_CAUSE_REG(port)                               (0xb804 + (port<<3))
 #define MV64340_MPSC_MASK_REG(port)                                (0xb884 + (port<<3))
@@ -724,7 +724,7 @@
 #define MV64340_MPSC_CHANNEL_REG9(port)                            (0x802c + (port<<12))
 #define MV64340_MPSC_CHANNEL_REG10(port)                           (0x8030 + (port<<12))
 
-        /*  MPSC0 Registers      */
+	/*  MPSC0 Registers      */
 
 
 /***************************************/
@@ -809,7 +809,7 @@
 #define MV64340_DMA_SIZE_REG7                                       0xa3C
 
  /* IDMA Address Decoding High Address Remap and Access
-                  Protection Registers                    */
+		  Protection Registers                    */
 
 #define MV64340_DMA_HIGH_ADDR_REMAP_REG0                            0xa60
 #define MV64340_DMA_HIGH_ADDR_REMAP_REG1                            0xa64

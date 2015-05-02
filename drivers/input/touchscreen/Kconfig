@@ -60,12 +60,12 @@ config TOUCHSCREEN_ATMEL_MAXTOUCH
        depends on I2C
        default n
        help
-         Say Y here if you have an Atmel Maxtouch based touchscreen.
+	 Say Y here if you have an Atmel Maxtouch based touchscreen.
 
-         If unsure, say N.
+	 If unsure, say N.
 
-         To compile this driver as a module, choose M here: the
-         module will be called maXTouch.
+	 To compile this driver as a module, choose M here: the
+	 module will be called maXTouch.
 
 config TOUCHSCREEN_AD7879
 	tristate "Analog Devices AD7879-1/AD7889-1 touchscreen interface"
@@ -404,7 +404,7 @@ config TOUCHSCREEN_HP600
 	depends on SH_HP6XX && SH_ADC
 	help
 	  Say Y here if you have a HP Jornada 620/660/680/690 and want to
-          support the built-in touchscreen.
+	  support the built-in touchscreen.
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called hp680_ts_input.
@@ -531,7 +531,7 @@ config TOUCHSCREEN_ATMEL_TSADCC
 	depends on ARCH_AT91SAM9RL || ARCH_AT91SAM9G45
 	help
 	  Say Y here if you have a 4-wire touchscreen connected to the
-          ADC Controller on your Atmel SoC (such as the AT91SAM9RL).
+	  ADC Controller on your Atmel SoC (such as the AT91SAM9RL).
 
 	  If unsure, say N.
 
@@ -810,10 +810,10 @@ config TOUCHSCREEN_TSC_SERIO
 	  module will be called tsc40.
 
 config TOUCHSCREEN_TSC2005
-        tristate "TSC2005 based touchscreens"
-        depends on SPI_MASTER && GENERIC_HARDIRQS
-        help
-          Say Y here if you have a TSC2005 based touchscreen.
+	tristate "TSC2005 based touchscreens"
+	depends on SPI_MASTER && GENERIC_HARDIRQS
+	help
+	  Say Y here if you have a TSC2005 based touchscreen.
 
 	  If unsure, say N.
 
@@ -924,14 +924,14 @@ config TOUCHSCREEN_CYTTSP_I2C_QC
        depends on I2C
        default n
        help
-         Say Y here if you have a Cypress TTSP based touchscreen.
-         TMA300 is a multi-touch screen which can report upto 10
-         touches at a time.
+	 Say Y here if you have a Cypress TTSP based touchscreen.
+	 TMA300 is a multi-touch screen which can report upto 10
+	 touches at a time.
 
-         If unsure, say N.
+	 If unsure, say N.
 
-         To compile this driver as a module, choose M here: the
-         module will be called cyttsp-i2c.
+	 To compile this driver as a module, choose M here: the
+	 module will be called cyttsp-i2c.
 
 config TOUCHSCREEN_HIMAX
 	tristate "Himax 8526A based touchscreen"
@@ -942,14 +942,14 @@ config TOUCHSCREEN_FT5X06
        tristate "FocalTech touchscreens"
        depends on I2C
        help
-         Say Y here if you have a ft5X06 touchscreen.
+	 Say Y here if you have a ft5X06 touchscreen.
 	 Ft5x06 controllers are multi touch controllers which can
 	 report 5 touches at a time.
 
-         If unsure, say N.
+	 If unsure, say N.
 
-         To compile this driver as a module, choose M here: the
-         module will be called ft5x06_ts.
+	 To compile this driver as a module, choose M here: the
+	 module will be called ft5x06_ts.
 
 config TOUCHSCREEN_SYNAPTICS_3K
 	tristate "Synaptics 3k serious i2c touchscreen"

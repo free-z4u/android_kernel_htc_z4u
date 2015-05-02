@@ -61,12 +61,12 @@ extern void nf_conntrack_timeout_fini(struct net *net);
 #else
 static inline int nf_conntrack_timeout_init(struct net *net)
 {
-        return 0;
+	return 0;
 }
 
 static inline void nf_conntrack_timeout_fini(struct net *net)
 {
-        return;
+	return;
 }
 #endif /* CONFIG_NF_CONNTRACK_TIMEOUT */
 

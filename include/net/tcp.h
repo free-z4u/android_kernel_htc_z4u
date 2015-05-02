@@ -107,7 +107,7 @@ extern void tcp_time_wait(struct sock *sk, int state, int timeo);
 #define TCP_TIMEWAIT_LEN (60*HZ) /* how long to wait to destroy TIME-WAIT
 				  * state, about 60 seconds	*/
 #define TCP_FIN_TIMEOUT	TCP_TIMEWAIT_LEN
-                                 /* BSD style FIN_WAIT2 deadlock breaker.
+				 /* BSD style FIN_WAIT2 deadlock breaker.
 				  * It used to be 3min, new value is 60sec,
 				  * to combine FIN-WAIT-2 timeout with
 				  * TIME-WAIT timer.
@@ -264,7 +264,7 @@ extern int tcp_memory_pressure;
 
 static inline int before(__u32 seq1, __u32 seq2)
 {
-        return (__s32)(seq1-seq2) < 0;
+	return (__s32)(seq1-seq2) < 0;
 }
 #define after(seq2, seq1) 	before(seq1, seq2)
 

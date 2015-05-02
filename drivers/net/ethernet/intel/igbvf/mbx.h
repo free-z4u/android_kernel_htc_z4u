@@ -47,11 +47,11 @@
  * Message ACK's are the value or'd with 0xF0000000
  */
 #define E1000_VT_MSGTYPE_ACK      0x80000000  /* Messages below or'd with
-                                               * this are the ACK */
+					       * this are the ACK */
 #define E1000_VT_MSGTYPE_NACK     0x40000000  /* Messages below or'd with
-                                               * this are the NACK */
+					       * this are the NACK */
 #define E1000_VT_MSGTYPE_CTS      0x20000000  /* Indicates that VF is still
-                                                 clear to send requests */
+						 clear to send requests */
 
 /* We have a total wait time of 1s for vf mailbox posted messages */
 #define E1000_VF_MBX_INIT_TIMEOUT 2000 /* retry count for mailbox timeout */

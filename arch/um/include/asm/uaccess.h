@@ -142,28 +142,28 @@ extern int strnlen_user(const void __user *str, int len);
 
 #define get_user(x, ptr) \
 ({ \
-        const __typeof__((*(ptr))) __user *private_ptr = (ptr); \
-        (access_ok(VERIFY_READ, private_ptr, sizeof(*private_ptr)) ? \
+	const __typeof__((*(ptr))) __user *private_ptr = (ptr); \
+	(access_ok(VERIFY_READ, private_ptr, sizeof(*private_ptr)) ? \
 	 __get_user(x, private_ptr) : ((x) = (__typeof__(*ptr))0, -EFAULT)); \
 })
 
 #define __put_user(x, ptr) \
 ({ \
-        __typeof__(*(ptr)) __user *__private_ptr = ptr; \
-        __typeof__(*(__private_ptr)) __private_val; \
-        int __private_ret = -EFAULT; \
-        __private_val = (__typeof__(*(__private_ptr))) (x); \
-        if (__copy_to_user((__private_ptr), &__private_val, \
+	__typeof__(*(ptr)) __user *__private_ptr = ptr; \
+	__typeof__(*(__private_ptr)) __private_val; \
+	int __private_ret = -EFAULT; \
+	__private_val = (__typeof__(*(__private_ptr))) (x); \
+	if (__copy_to_user((__private_ptr), &__private_val, \
 			   sizeof(*(__private_ptr))) == 0) { \
 		__private_ret = 0; \
 	} \
-        __private_ret; \
+	__private_ret; \
 })
 
 #define put_user(x, ptr) \
 ({ \
-        __typeof__(*(ptr)) __user *private_ptr = (ptr); \
-        (access_ok(VERIFY_WRITE, private_ptr, sizeof(*private_ptr)) ? \
+	__typeof__(*(ptr)) __user *private_ptr = (ptr); \
+	(access_ok(VERIFY_WRITE, private_ptr, sizeof(*private_ptr)) ? \
 	 __put_user(x, private_ptr) : -EFAULT); \
 })
 
@@ -171,7 +171,7 @@ extern int strnlen_user(const void __user *str, int len);
 
 struct exception_table_entry
 {
-        unsigned long insn;
+	unsigned long insn;
 	unsigned long fixup;
 };
 

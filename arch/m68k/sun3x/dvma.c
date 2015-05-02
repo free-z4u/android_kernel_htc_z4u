@@ -65,12 +65,12 @@ static volatile unsigned long *iommu_pte = (unsigned long *)SUN3X_IOMMU;
 void dvma_print (unsigned long dvma_addr)
 {
 
-        unsigned long index;
+	unsigned long index;
 
-        index = dvma_addr >> DVMA_PAGE_SHIFT;
+	index = dvma_addr >> DVMA_PAGE_SHIFT;
 
-        printk("idx %lx dvma_addr %08lx paddr %08lx\n", index, dvma_addr,
-               dvma_entry_paddr(index));
+	printk("idx %lx dvma_addr %08lx paddr %08lx\n", index, dvma_addr,
+	       dvma_entry_paddr(index));
 
 
 }

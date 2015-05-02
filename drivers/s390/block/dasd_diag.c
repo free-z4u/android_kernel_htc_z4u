@@ -196,7 +196,7 @@ dasd_start_diag(struct dasd_ccw_req * cqr)
 		cqr->status = DASD_CQR_SUCCESS;
 		/* Indicate to calling function that only a dasd_schedule_bh()
 		   and no timer is needed */
-                rc = -EACCES;
+		rc = -EACCES;
 		break;
 	case 8: /* Asynchronous I/O was started */
 		cqr->status = DASD_CQR_IN_IO;

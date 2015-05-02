@@ -155,7 +155,7 @@ typedef enum {
 
 struct epic_chip_info {
 	const char *name;
-        int drv_flags;                          /* Driver use, intended as capability flags. */
+	int drv_flags;                          /* Driver use, intended as capability flags. */
 };
 
 

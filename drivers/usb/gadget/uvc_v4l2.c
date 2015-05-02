@@ -268,7 +268,7 @@ uvc_v4l2_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 	}
 
 	/* Events */
-        case VIDIOC_DQEVENT:
+	case VIDIOC_DQEVENT:
 	{
 		struct v4l2_event *event = arg;
 

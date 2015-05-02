@@ -1600,7 +1600,7 @@ void __init msm7627a_camera_init(void)
 	} else
 #endif
 		pr_debug("i2c_register_board_info\n");
-        if (machine_is_qrd_skud_prime()||
+	if (machine_is_qrd_skud_prime()||
 			machine_is_msm8625q_skud()||
 			machine_is_msm8625q_evbd()) {
 		i2c_register_board_info(MSM_GSBI0_QUP_I2C_BUS_ID,

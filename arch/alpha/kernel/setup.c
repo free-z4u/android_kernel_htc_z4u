@@ -49,8 +49,8 @@ extern struct atomic_notifier_head panic_notifier_list;
 static int alpha_panic_event(struct notifier_block *, unsigned long, void *);
 static struct notifier_block alpha_panic_block = {
 	alpha_panic_event,
-        NULL,
-        INT_MAX /* try to do it first */
+	NULL,
+	INT_MAX /* try to do it first */
 };
 
 #include <asm/uaccess.h>
@@ -222,13 +222,13 @@ reserve_std_resources(void)
 {
 	static struct resource standard_io_resources[] = {
 		{ .name = "rtc", .start = -1, .end = -1 },
-        	{ .name = "dma1", .start = 0x00, .end = 0x1f },
-        	{ .name = "pic1", .start = 0x20, .end = 0x3f },
-        	{ .name = "timer", .start = 0x40, .end = 0x5f },
-        	{ .name = "keyboard", .start = 0x60, .end = 0x6f },
-        	{ .name = "dma page reg", .start = 0x80, .end = 0x8f },
-        	{ .name = "pic2", .start = 0xa0, .end = 0xbf },
-        	{ .name = "dma2", .start = 0xc0, .end = 0xdf },
+		{ .name = "dma1", .start = 0x00, .end = 0x1f },
+		{ .name = "pic1", .start = 0x20, .end = 0x3f },
+		{ .name = "timer", .start = 0x40, .end = 0x5f },
+		{ .name = "keyboard", .start = 0x60, .end = 0x6f },
+		{ .name = "dma page reg", .start = 0x80, .end = 0x8f },
+		{ .name = "pic2", .start = 0xa0, .end = 0xbf },
+		{ .name = "dma2", .start = 0xc0, .end = 0xdf },
 	};
 
 	struct resource *io = &ioport_resource;
@@ -259,21 +259,21 @@ reserve_std_resources(void)
 static unsigned long __init
 get_mem_size_limit(char *s)
 {
-        unsigned long end = 0;
-        char *from = s;
+	unsigned long end = 0;
+	char *from = s;
 
-        end = simple_strtoul(from, &from, 0);
-        if ( *from == 'K' || *from == 'k' ) {
-                end = end << 10;
-                from++;
-        } else if ( *from == 'M' || *from == 'm' ) {
-                end = end << 20;
-                from++;
-        } else if ( *from == 'G' || *from == 'g' ) {
-                end = end << 30;
-                from++;
-        }
-        return end >> PAGE_SHIFT; /* Return the PFN of the limit. */
+	end = simple_strtoul(from, &from, 0);
+	if ( *from == 'K' || *from == 'k' ) {
+		end = end << 10;
+		from++;
+	} else if ( *from == 'M' || *from == 'm' ) {
+		end = end << 20;
+		from++;
+	} else if ( *from == 'G' || *from == 'g' ) {
+		end = end << 30;
+		from++;
+	}
+	return end >> PAGE_SHIFT; /* Return the PFN of the limit. */
 }
 
 #ifdef CONFIG_BLK_DEV_INITRD
@@ -510,7 +510,7 @@ setup_arch(char **cmdline_p)
 	hwrpb = (struct hwrpb_struct*) __va(INIT_HWRPB->phys_addr);
 	boot_cpuid = hard_smp_processor_id();
 
-        /*
+	/*
 	 * Pre-process the system type to make sure it will be valid.
 	 *
 	 * This may restore real CABRIO and EB66+ family names, ie
@@ -520,7 +520,7 @@ setup_arch(char **cmdline_p)
 	 * and AS1200 (DIGITAL Server 5000 series) have the type as
 	 * the negative of the real one.
 	 */
-        if ((long)hwrpb->sys_type < 0) {
+	if ((long)hwrpb->sys_type < 0) {
 		hwrpb->sys_type = -((long)hwrpb->sys_type);
 		hwrpb_update_checksum(hwrpb);
 	}
@@ -1493,7 +1493,7 @@ alpha_panic_event(struct notifier_block *this, unsigned long event, void *ptr)
 	if (alpha_using_srm && srmcons_output)
 		__halt();
 #endif
-        return NOTIFY_DONE;
+	return NOTIFY_DONE;
 }
 
 static __init int add_pcspkr(void)

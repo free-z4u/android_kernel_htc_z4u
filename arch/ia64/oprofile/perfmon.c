@@ -18,7 +18,7 @@ static int allow_ints;
 
 static int
 perfmon_handler(struct task_struct *task, void *buf, pfm_ovfl_arg_t *arg,
-                struct pt_regs *regs, unsigned long stamp)
+		struct pt_regs *regs, unsigned long stamp)
 {
 	int event = arg->pmd_eventid;
 

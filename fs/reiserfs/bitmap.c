@@ -1298,8 +1298,8 @@ int reiserfs_allocate_blocknrs(reiserfs_blocknr_hint_t * hint, b_blocknr_t * new
 }
 
 void reiserfs_cache_bitmap_metadata(struct super_block *sb,
-                                    struct buffer_head *bh,
-                                    struct reiserfs_bitmap_info *info)
+				    struct buffer_head *bh,
+				    struct reiserfs_bitmap_info *info)
 {
 	unsigned long *cur = (unsigned long *)(bh->b_data + bh->b_size);
 
@@ -1320,7 +1320,7 @@ void reiserfs_cache_bitmap_metadata(struct super_block *sb,
 }
 
 struct buffer_head *reiserfs_read_bitmap_block(struct super_block *sb,
-                                               unsigned int bitmap)
+					       unsigned int bitmap)
 {
 	b_blocknr_t block = (sb->s_blocksize << 3) * bitmap;
 	struct reiserfs_bitmap_info *info = SB_AP_BITMAP(sb) + bitmap;

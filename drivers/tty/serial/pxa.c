@@ -760,22 +760,22 @@ static struct uart_driver serial_pxa_reg = {
 #ifdef CONFIG_PM
 static int serial_pxa_suspend(struct device *dev)
 {
-        struct uart_pxa_port *sport = dev_get_drvdata(dev);
+	struct uart_pxa_port *sport = dev_get_drvdata(dev);
 
-        if (sport)
-                uart_suspend_port(&serial_pxa_reg, &sport->port);
+	if (sport)
+		uart_suspend_port(&serial_pxa_reg, &sport->port);
 
-        return 0;
+	return 0;
 }
 
 static int serial_pxa_resume(struct device *dev)
 {
-        struct uart_pxa_port *sport = dev_get_drvdata(dev);
+	struct uart_pxa_port *sport = dev_get_drvdata(dev);
 
-        if (sport)
-                uart_resume_port(&serial_pxa_reg, &sport->port);
+	if (sport)
+		uart_resume_port(&serial_pxa_reg, &sport->port);
 
-        return 0;
+	return 0;
 }
 
 static const struct dev_pm_ops serial_pxa_pm_ops = {
@@ -881,8 +881,8 @@ static int serial_pxa_remove(struct platform_device *dev)
 }
 
 static struct platform_driver serial_pxa_driver = {
-        .probe          = serial_pxa_probe,
-        .remove         = serial_pxa_remove,
+	.probe          = serial_pxa_probe,
+	.remove         = serial_pxa_remove,
 
 	.driver		= {
 	        .name	= "pxa2xx-uart",

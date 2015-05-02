@@ -35,7 +35,7 @@
 #include <net/iw_handler.h>
 
 /******************************************************************************
-        Global variable definition section
+	Global variable definition section
 ******************************************************************************/
 int pc_debug = VERBOSE;
 module_param(pc_debug, int, 0);

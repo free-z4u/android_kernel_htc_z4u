@@ -55,26 +55,26 @@ sgl_frnd(sgl_floating_point *srcptr,
 	register boolean inexact = FALSE;
 
 	src = *srcptr;
-        /*
-         * check source operand for NaN or infinity
-         */
-        if ((src_exponent = Sgl_exponent(src)) == SGL_INFINITY_EXPONENT) {
-                /*
-                 * is signaling NaN?
-                 */
-                if (Sgl_isone_signaling(src)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Sgl_set_quiet(src);
-                }
-                /*
-                 * return quiet NaN or infinity
-                 */
-                *dstptr = src;
-                return(NOEXCEPTION);
-        }
+	/*
+	 * check source operand for NaN or infinity
+	 */
+	if ((src_exponent = Sgl_exponent(src)) == SGL_INFINITY_EXPONENT) {
+		/*
+		 * is signaling NaN?
+		 */
+		if (Sgl_isone_signaling(src)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Sgl_set_quiet(src);
+		}
+		/*
+		 * return quiet NaN or infinity
+		 */
+		*dstptr = src;
+		return(NOEXCEPTION);
+	}
 	/*
 	 * Need to round?
 	 */
@@ -160,26 +160,26 @@ dbl_frnd(
 	register boolean inexact = FALSE;
 
 	Dbl_copyfromptr(srcptr,srcp1,srcp2);
-        /*
-         * check source operand for NaN or infinity
-         */
-        if ((src_exponent = Dbl_exponent(srcp1)) == DBL_INFINITY_EXPONENT) {
-                /*
-                 * is signaling NaN?
-                 */
-                if (Dbl_isone_signaling(srcp1)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Dbl_set_quiet(srcp1);
-                }
-                /*
-                 * return quiet NaN or infinity
-                 */
-                Dbl_copytoptr(srcp1,srcp2,dstptr);
-                return(NOEXCEPTION);
-        }
+	/*
+	 * check source operand for NaN or infinity
+	 */
+	if ((src_exponent = Dbl_exponent(srcp1)) == DBL_INFINITY_EXPONENT) {
+		/*
+		 * is signaling NaN?
+		 */
+		if (Dbl_isone_signaling(srcp1)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Dbl_set_quiet(srcp1);
+		}
+		/*
+		 * return quiet NaN or infinity
+		 */
+		Dbl_copytoptr(srcp1,srcp2,dstptr);
+		return(NOEXCEPTION);
+	}
 	/*
 	 * Need to round?
 	 */

@@ -120,12 +120,12 @@
  * ethernet specific structure
  */
 typedef union {
-        unsigned char b[6];
-        struct {
-            unsigned short high;
-            unsigned short middl;
-            unsigned short low;
-        } w;
+	unsigned char b[6];
+	struct {
+	    unsigned short high;
+	    unsigned short middl;
+	    unsigned short low;
+	} w;
 } ETHER_ADDR;
 
 typedef struct {
@@ -164,13 +164,13 @@ void        ether_interrupt(int scc_num);
  * User callable routines prototypes (ethernet specific)
  */
 void ethernet_init(int                       scc_number,
-                   alloc_routine             *alloc_buffer,
-                   free_routine              *free_buffer,
-                   store_rx_buffer_routine   *store_rx_buffer,
-                   handle_tx_error_routine   *handle_tx_error,
-                   handle_rx_error_routine   *handle_rx_error,
-                   handle_lost_error_routine *handle_lost_error,
-                   ETHER_SPECIFIC            *ether_spec);
+		   alloc_routine             *alloc_buffer,
+		   free_routine              *free_buffer,
+		   store_rx_buffer_routine   *store_rx_buffer,
+		   handle_tx_error_routine   *handle_tx_error,
+		   handle_rx_error_routine   *handle_rx_error,
+		   handle_lost_error_routine *handle_lost_error,
+		   ETHER_SPECIFIC            *ether_spec);
 int  ethernet_tx(int scc_number, void *buf, int length);
 
 #endif

@@ -436,7 +436,7 @@ static void dhdsdio_release_malloc(dhd_bus_t *bus, osl_t *osh);
 static void dhdsdio_disconnect(void *ptr);
 static bool dhdsdio_chipmatch(uint16 chipid);
 static bool dhdsdio_probe_attach(dhd_bus_t *bus, osl_t *osh, void *sdh,
-                                 void * regsva, uint16  devid);
+				 void * regsva, uint16  devid);
 static bool dhdsdio_probe_malloc(dhd_bus_t *bus, osl_t *osh, void *sdh);
 static bool dhdsdio_probe_init(dhd_bus_t *bus, osl_t *osh, void *sdh);
 static void dhdsdio_release_dongle(dhd_bus_t *bus, osl_t *osh, int reset_flag);
@@ -1965,7 +1965,7 @@ err:
 
 static int
 dhdsdio_doiovar(dhd_bus_t *bus, const bcm_iovar_t *vi, uint32 actionid, const char *name,
-                void *params, int plen, void *arg, int len, int val_size)
+		void *params, int plen, void *arg, int len, int val_size)
 {
 	int bcmerror = 0;
 	int32 int_val = 0;
@@ -2547,7 +2547,7 @@ fail:
 
 int
 dhd_bus_iovar_op(dhd_pub_t *dhdp, const char *name,
-                 void *params, int plen, void *arg, int len, bool set)
+		 void *params, int plen, void *arg, int len, bool set)
 {
 	dhd_bus_t *bus = dhdp->bus;
 	const bcm_iovar_t *vi = NULL;
@@ -4926,7 +4926,7 @@ fail:
 
 static bool
 dhdsdio_probe_attach(struct dhd_bus *bus, osl_t *osh, void *sdh, void *regsva,
-                    uint16 devid)
+		    uint16 devid)
 {
 	uint8 clkctl = 0;
 	int err = 0;
@@ -5201,7 +5201,7 @@ dhdsdio_probe_init(dhd_bus_t *bus, osl_t *osh, void *sdh)
 
 bool
 dhd_bus_download_firmware(struct dhd_bus *bus, osl_t *osh,
-                          char *fw_path, char *nv_path)
+			  char *fw_path, char *nv_path)
 {
 	bool ret;
 	bus->fw_path = fw_path;

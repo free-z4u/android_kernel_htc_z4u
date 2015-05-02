@@ -80,7 +80,7 @@ extern size_t gen_pool_size(struct gen_pool *);
 
 unsigned long __must_check
 gen_pool_alloc_aligned(struct gen_pool *pool, size_t size,
-                       unsigned alignment_order);
+		       unsigned alignment_order);
 
 /**
  * gen_pool_alloc() - allocate special memory from the pool
@@ -93,7 +93,7 @@ gen_pool_alloc_aligned(struct gen_pool *pool, size_t size,
 static inline unsigned long __must_check
 gen_pool_alloc(struct gen_pool *pool, size_t size)
 {
-        return gen_pool_alloc_aligned(pool, size, 0);
+	return gen_pool_alloc_aligned(pool, size, 0);
 }
 
 #endif /* __GENALLOC_H__ */

@@ -323,21 +323,21 @@ static int __init ni5010_probe1(struct net_device *dev, int ioaddr)
  * i.e. data for offs. 0x801 is written to 0x1 with a 2K onboard buffer
  */
 	if (!bufsize_rcv) {
-        	outb(1, IE_MMODE);      /* Put Rcv buffer on system bus */
-        	outw(0, IE_GP);		/* Point GP at start of packet */
-        	outb(0, IE_RBUF);	/* set buffer byte 0 to 0 */
-        	for (i = 1; i < 0xff; i++) {
-                	outw(i << 8, IE_GP); /* Point GP at packet size to be tested */
-                	outb(i, IE_RBUF);
-                	outw(0x0, IE_GP); /* Point GP at start of packet */
-                	data = inb(IE_RBUF);
-                	if (data == i) break;
-        	}
+		outb(1, IE_MMODE);      /* Put Rcv buffer on system bus */
+		outw(0, IE_GP);		/* Point GP at start of packet */
+		outb(0, IE_RBUF);	/* set buffer byte 0 to 0 */
+		for (i = 1; i < 0xff; i++) {
+			outw(i << 8, IE_GP); /* Point GP at packet size to be tested */
+			outb(i, IE_RBUF);
+			outw(0x0, IE_GP); /* Point GP at start of packet */
+			data = inb(IE_RBUF);
+			if (data == i) break;
+		}
 		bufsize_rcv = i << 8;
-        	outw(0, IE_GP);		/* Point GP at start of packet */
-        	outb(0, IE_RBUF);	/* set buffer byte 0 to 0 again */
+		outw(0, IE_GP);		/* Point GP at start of packet */
+		outb(0, IE_RBUF);	/* set buffer byte 0 to 0 again */
 	}
-        printk("-> bufsize rcv/xmt=%d/%d\n", bufsize_rcv, NI5010_BUFSIZE);
+	printk("-> bufsize rcv/xmt=%d/%d\n", bufsize_rcv, NI5010_BUFSIZE);
 
 	dev->netdev_ops		= &ni5010_netdev_ops;
 	dev->watchdog_timeo	= HZ/20;
@@ -381,16 +381,16 @@ static int ni5010_open(struct net_device *dev)
 		return -EAGAIN;
 	}
 	PRINTK3((KERN_DEBUG "%s: passed open() #1\n", dev->name));
-        /*
-         * Always allocate the DMA channel after the IRQ,
-         * and clean up on failure.
-         */
+	/*
+	 * Always allocate the DMA channel after the IRQ,
+	 * and clean up on failure.
+	 */
 #ifdef JUMPERED_DMA
-        if (request_dma(dev->dma, cardname)) {
+	if (request_dma(dev->dma, cardname)) {
 		printk(KERN_WARNING "%s: Cannot get dma %#2x\n", dev->name, dev->dma);
-                free_irq(dev->irq, NULL);
-                return -EAGAIN;
-        }
+		free_irq(dev->irq, NULL);
+		return -EAGAIN;
+	}
 #endif	/* JUMPERED_DMA */
 
 	PRINTK3((KERN_DEBUG "%s: passed open() #2\n", dev->name));
@@ -455,7 +455,7 @@ static int ni5010_send_packet(struct sk_buff *skb, struct net_device *dev)
 	PRINTK2((KERN_DEBUG "%s: entering ni5010_send_packet\n", dev->name));
 
 	/*
-         * Block sending
+	 * Block sending
 	 */
 
 	netif_stop_queue(dev);
@@ -484,16 +484,16 @@ static irqreturn_t ni5010_interrupt(int irq, void *dev_id)
 	status = inb(IE_ISTAT);
 	PRINTK3((KERN_DEBUG "%s: IE_ISTAT = %#02x\n", dev->name, status));
 
-        if ((status & IS_R_INT) == 0) ni5010_rx(dev);
+	if ((status & IS_R_INT) == 0) ni5010_rx(dev);
 
-        if ((status & IS_X_INT) == 0) {
-                xmit_was_error = process_xmt_interrupt(dev);
-        }
+	if ((status & IS_X_INT) == 0) {
+		xmit_was_error = process_xmt_interrupt(dev);
+	}
 
-        if ((status & IS_DMA_INT) == 0) {
-                PRINTK((KERN_DEBUG "%s: DMA complete (?)\n", dev->name));
-                outb(0, IE_DMA_RST); /* Reset DMA int */
-        }
+	if ((status & IS_DMA_INT) == 0) {
+		PRINTK((KERN_DEBUG "%s: DMA complete (?)\n", dev->name));
+		outb(0, IE_DMA_RST); /* Reset DMA int */
+	}
 
 	if (!xmit_was_error)
 		reset_receiver(dev);
@@ -536,11 +536,11 @@ static void ni5010_rx(struct net_device *dev)
 		if (rcv_stat & RS_ALIGN) dev->stats.rx_frame_errors++;
 		if (rcv_stat & RS_CRC_ERR) dev->stats.rx_crc_errors++;
 		if (rcv_stat & RS_OFLW) dev->stats.rx_fifo_errors++;
-        	outb(0xff, EDLC_RCLR); /* Clear the interrupt */
+		outb(0xff, EDLC_RCLR); /* Clear the interrupt */
 		return;
 	}
 
-        outb(0xff, EDLC_RCLR);  /* Clear the interrupt */
+	outb(0xff, EDLC_RCLR);  /* Clear the interrupt */
 
 	i_pkt_size = inw(IE_RCNT);
 	if (i_pkt_size > ETH_FRAME_LEN || i_pkt_size < 10 ) {
@@ -562,7 +562,7 @@ static void ni5010_rx(struct net_device *dev)
 	skb_reserve(skb, 2);
 
 	/* Read packet into buffer */
-        outb(MM_MUX, IE_MMODE); /* Rcv buffer to system bus */
+	outb(MM_MUX, IE_MMODE); /* Rcv buffer to system bus */
 	outw(0, IE_GP);	/* Seek to beginning of packet */
 	insb(IE_RBUF, skb_put(skb, i_pkt_size), i_pkt_size);
 
@@ -639,7 +639,7 @@ static int ni5010_close(struct net_device *dev)
    num_addrs == -1      Promiscuous mode, receive all packets
    num_addrs == 0       Normal mode, clear multicast list
    num_addrs > 0        Multicast mode, receive normal and MC packets, and do
-                        best-effort filtering.
+			best-effort filtering.
 */
 static void ni5010_set_multicast_list(struct net_device *dev)
 {
@@ -666,11 +666,11 @@ static void hardware_send_packet(struct net_device *dev, char *buf, int length, 
 
 	PRINTK2((KERN_DEBUG "%s: entering hardware_send_packet\n", dev->name));
 
-        if (length > ETH_FRAME_LEN) {
-                PRINTK((KERN_WARNING "%s: packet too large, not possible\n",
-                        dev->name));
-                return;
-        }
+	if (length > ETH_FRAME_LEN) {
+		PRINTK((KERN_WARNING "%s: packet too large, not possible\n",
+			dev->name));
+		return;
+	}
 
 	if (NI5010_DEBUG) ni5010_show_registers(dev);
 
@@ -755,7 +755,7 @@ static int __init ni5010_init_module(void)
 	dev_ni5010 = ni5010_probe(-1);
 	if (IS_ERR(dev_ni5010))
 		return PTR_ERR(dev_ni5010);
-        return 0;
+	return 0;
 }
 
 static void __exit ni5010_cleanup_module(void)

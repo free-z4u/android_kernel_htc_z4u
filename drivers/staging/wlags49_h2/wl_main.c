@@ -432,7 +432,7 @@ int wl_insert( struct net_device *dev )
 
 	/* Initialize states */
 	//lp->lockcount = 0; //PE1DNN
-        lp->is_handling_int = WL_NOT_HANDLING_INT;
+	lp->is_handling_int = WL_NOT_HANDLING_INT;
 	lp->firmware_present = WL_FRIMWARE_NOT_PRESENT;
 
 	lp->dev = dev;
@@ -800,11 +800,11 @@ int wl_insert( struct net_device *dev )
 
 	/* Register the ISR handler information here, so that it's not done
 	   repeatedly in the ISR */
-        tasklet_init(&lp->task, wl_isr_handler, (unsigned long)lp);
+	tasklet_init(&lp->task, wl_isr_handler, (unsigned long)lp);
 
-        /* Connect to the adapter */
-        DBG_TRACE( DbgInfo, "Calling hcf_connect()...\n" );
-        hcf_status = hcf_connect( &lp->hcfCtx, dev->base_addr );
+	/* Connect to the adapter */
+	DBG_TRACE( DbgInfo, "Calling hcf_connect()...\n" );
+	hcf_status = hcf_connect( &lp->hcfCtx, dev->base_addr );
 	//HCF_ERR_INCOMP_FW is acceptable, because download must still take place
 	//HCF_ERR_INCOMP_PRI is not acceptable
 	if ( hcf_status != HCF_SUCCESS && hcf_status != HCF_ERR_INCOMP_FW ) {
@@ -889,12 +889,12 @@ int wl_insert( struct net_device *dev )
 #ifdef USE_RTS
 	if ( lp->useRTS == 1 ) {
 		DBG_TRACE( DbgInfo, "ENTERING RTS MODE...\n" );
-                wl_act_int_off( lp );
-                lp->is_handling_int = WL_NOT_HANDLING_INT; // Not handling interrupts anymore
+		wl_act_int_off( lp );
+		lp->is_handling_int = WL_NOT_HANDLING_INT; // Not handling interrupts anymore
 
 		wl_disable( lp );
 
-        	hcf_connect( &lp->hcfCtx, HCF_DISCONNECT);
+		hcf_connect( &lp->hcfCtx, HCF_DISCONNECT);
 	}
 #endif  /* USE_RTS */
 
@@ -966,10 +966,10 @@ int wl_reset(struct net_device *dev)
 	DBG_PARAM( DbgInfo, "dev->base_addr", "(%#03lx)", dev->base_addr );
 
 	/*
-         * The caller should already have a lock and
-         * disable the interrupts, we do not lock here,
-         * nor do we enable/disable interrupts!
-         */
+	 * The caller should already have a lock and
+	 * disable the interrupts, we do not lock here,
+	 * nor do we enable/disable interrupts!
+	 */
 
 	DBG_TRACE( DbgInfo, "Device Base Address: %#03lx\n", dev->base_addr );
 	if ( dev->base_addr ) {
@@ -980,7 +980,7 @@ int wl_reset(struct net_device *dev)
 		lp->txBytes = 0;
 
 		/* Connect to the adapter. */
-        	hcf_status = hcf_connect( &lp->hcfCtx, dev->base_addr );
+		hcf_status = hcf_connect( &lp->hcfCtx, dev->base_addr );
 		if ( hcf_status != HCF_SUCCESS && hcf_status != HCF_ERR_INCOMP_FW ) {
 			DBG_ERROR( DbgInfo, "hcf_connect() failed, status: 0x%x\n", hcf_status );
 			goto out;
@@ -1150,11 +1150,11 @@ int 			rc;
 	}
 
 	/*
-         * Downloaded, no need to repeat this next time, assume the
-         * contents stays in the card until it is powered off. Note we
-         * do not switch firmware on the fly, the firmware is fixed in
-         * the driver for now.
-         */
+	 * Downloaded, no need to repeat this next time, assume the
+	 * contents stays in the card until it is powered off. Note we
+	 * do not switch firmware on the fly, the firmware is fixed in
+	 * the driver for now.
+	 */
 	lp->firmware_present = WL_FRIMWARE_PRESENT;
 
 	DBG_TRACE( DbgInfo, "ComponentID:%04x variant:%04x major:%04x minor:%04x\n",
@@ -2057,7 +2057,7 @@ static int __init wl_module_init( void )
 	DBG_ENTER( DbgInfo );
 	printk(KERN_INFO "%s\n", VERSION_INFO);
     	printk(KERN_INFO "*** Modified for kernel 2.6 by Henk de Groot <pe1dnn@amsat.org>\n");
-        printk(KERN_INFO "*** Based on 7.18 version by Andrey Borzenkov <arvidjaar@mail.ru> $Revision: 39 $\n");
+	printk(KERN_INFO "*** Based on 7.18 version by Andrey Borzenkov <arvidjaar@mail.ru> $Revision: 39 $\n");
 
 
 // ;?#if (HCF_TYPE) & HCF_TYPE_AP
@@ -2192,7 +2192,7 @@ void wl_isr_handler( unsigned long p )
 	bool_t                  stop = TRUE;
 	int                     count;
 	int                     result;
-        struct wl_private       *lp = (struct wl_private *)p;
+	struct wl_private       *lp = (struct wl_private *)p;
 	/*------------------------------------------------------------------------*/
 
 	if ( lp == NULL ) {
@@ -2319,13 +2319,13 @@ void wl_remove( struct net_device *dev )
 
 	/* stop handling interrupts */
 	wl_act_int_off( lp );
-        lp->is_handling_int = WL_NOT_HANDLING_INT;
+	lp->is_handling_int = WL_NOT_HANDLING_INT;
 
 	/*
-         * Disable the ports: just change state: since the
-         * card is gone it is useless to talk to it and at
-         * disconnect all state information is lost anyway.
-         */
+	 * Disable the ports: just change state: since the
+	 * card is gone it is useless to talk to it and at
+	 * disconnect all state information is lost anyway.
+	 */
 	/* Reset portState */
 	lp->portState = WVLAN_PORT_STATE_DISABLED;
 
@@ -2402,7 +2402,7 @@ void wl_suspend( struct net_device *dev )
 	/* Disable */
 	wl_disable( lp );
 
-        /* Disconnect from the adapter */
+	/* Disconnect from the adapter */
 	hcf_connect( &lp->hcfCtx, HCF_DISCONNECT );
 
 	/* Reset portState to be sure (should have been done by wl_disable */
@@ -2445,7 +2445,7 @@ void wl_resume(struct net_device *dev)
 
 	wl_lock( lp, &flags );
 
-        /* Connect to the adapter */
+	/* Connect to the adapter */
 	hcf_connect( &lp->hcfCtx, dev->base_addr );
 
 	/* Reset portState */
@@ -3597,7 +3597,7 @@ int scull_read_procmem(char *buf, char **start, off_t offset, int len, int *eof,
 
 	lp = ((struct net_device *)data)->priv;
 	if (lp == NULL) {
-        len += sprintf(buf+len,"No wl_private in scull_read_procmem\n" );
+	len += sprintf(buf+len,"No wl_private in scull_read_procmem\n" );
 	} else if ( lp->wlags49_type == 0 ){
    	    ifbp = &lp->hcfCtx;
    	    len += sprintf(buf+len,"Magic:               0x%04X\n", ifbp->IFB_Magic );
@@ -3726,34 +3726,34 @@ int scull_read_procmem(char *buf, char **start, off_t offset, int len, int *eof,
 #endif // USE_WDS
 #endif // HCF_AP
 	} else if ( lp->wlags49_type == 2 ){
-        len += sprintf(buf+len,"tallies to be added\n" );
+	len += sprintf(buf+len,"tallies to be added\n" );
 //Hermes Tallies (IFB substructure) {
    	    p = &lp->hcfCtx.IFB_NIC_Tallies;
-        len += sprintf(buf+len,"TxUnicastFrames:          %08lX\n", p->TxUnicastFrames );
-        len += sprintf(buf+len,"TxMulticastFrames:        %08lX\n", p->TxMulticastFrames );
-        len += sprintf(buf+len,"TxFragments:              %08lX\n", p->TxFragments );
-        len += sprintf(buf+len,"TxUnicastOctets:          %08lX\n", p->TxUnicastOctets );
-        len += sprintf(buf+len,"TxMulticastOctets:        %08lX\n", p->TxMulticastOctets );
-        len += sprintf(buf+len,"TxDeferredTransmissions:  %08lX\n", p->TxDeferredTransmissions );
-        len += sprintf(buf+len,"TxSingleRetryFrames:      %08lX\n", p->TxSingleRetryFrames );
-        len += sprintf(buf+len,"TxMultipleRetryFrames:    %08lX\n", p->TxMultipleRetryFrames );
-        len += sprintf(buf+len,"TxRetryLimitExceeded:     %08lX\n", p->TxRetryLimitExceeded );
-        len += sprintf(buf+len,"TxDiscards:               %08lX\n", p->TxDiscards );
-        len += sprintf(buf+len,"RxUnicastFrames:          %08lX\n", p->RxUnicastFrames );
-        len += sprintf(buf+len,"RxMulticastFrames:        %08lX\n", p->RxMulticastFrames );
-        len += sprintf(buf+len,"RxFragments:              %08lX\n", p->RxFragments );
-        len += sprintf(buf+len,"RxUnicastOctets:          %08lX\n", p->RxUnicastOctets );
-        len += sprintf(buf+len,"RxMulticastOctets:        %08lX\n", p->RxMulticastOctets );
-        len += sprintf(buf+len,"RxFCSErrors:              %08lX\n", p->RxFCSErrors );
-        len += sprintf(buf+len,"RxDiscardsNoBuffer:       %08lX\n", p->RxDiscardsNoBuffer );
-        len += sprintf(buf+len,"TxDiscardsWrongSA:        %08lX\n", p->TxDiscardsWrongSA );
-        len += sprintf(buf+len,"RxWEPUndecryptable:       %08lX\n", p->RxWEPUndecryptable );
-        len += sprintf(buf+len,"RxMsgInMsgFragments:      %08lX\n", p->RxMsgInMsgFragments );
-        len += sprintf(buf+len,"RxMsgInBadMsgFragments:   %08lX\n", p->RxMsgInBadMsgFragments );
-        len += sprintf(buf+len,"RxDiscardsWEPICVError:    %08lX\n", p->RxDiscardsWEPICVError );
-        len += sprintf(buf+len,"RxDiscardsWEPExcluded:    %08lX\n", p->RxDiscardsWEPExcluded );
+	len += sprintf(buf+len,"TxUnicastFrames:          %08lX\n", p->TxUnicastFrames );
+	len += sprintf(buf+len,"TxMulticastFrames:        %08lX\n", p->TxMulticastFrames );
+	len += sprintf(buf+len,"TxFragments:              %08lX\n", p->TxFragments );
+	len += sprintf(buf+len,"TxUnicastOctets:          %08lX\n", p->TxUnicastOctets );
+	len += sprintf(buf+len,"TxMulticastOctets:        %08lX\n", p->TxMulticastOctets );
+	len += sprintf(buf+len,"TxDeferredTransmissions:  %08lX\n", p->TxDeferredTransmissions );
+	len += sprintf(buf+len,"TxSingleRetryFrames:      %08lX\n", p->TxSingleRetryFrames );
+	len += sprintf(buf+len,"TxMultipleRetryFrames:    %08lX\n", p->TxMultipleRetryFrames );
+	len += sprintf(buf+len,"TxRetryLimitExceeded:     %08lX\n", p->TxRetryLimitExceeded );
+	len += sprintf(buf+len,"TxDiscards:               %08lX\n", p->TxDiscards );
+	len += sprintf(buf+len,"RxUnicastFrames:          %08lX\n", p->RxUnicastFrames );
+	len += sprintf(buf+len,"RxMulticastFrames:        %08lX\n", p->RxMulticastFrames );
+	len += sprintf(buf+len,"RxFragments:              %08lX\n", p->RxFragments );
+	len += sprintf(buf+len,"RxUnicastOctets:          %08lX\n", p->RxUnicastOctets );
+	len += sprintf(buf+len,"RxMulticastOctets:        %08lX\n", p->RxMulticastOctets );
+	len += sprintf(buf+len,"RxFCSErrors:              %08lX\n", p->RxFCSErrors );
+	len += sprintf(buf+len,"RxDiscardsNoBuffer:       %08lX\n", p->RxDiscardsNoBuffer );
+	len += sprintf(buf+len,"TxDiscardsWrongSA:        %08lX\n", p->TxDiscardsWrongSA );
+	len += sprintf(buf+len,"RxWEPUndecryptable:       %08lX\n", p->RxWEPUndecryptable );
+	len += sprintf(buf+len,"RxMsgInMsgFragments:      %08lX\n", p->RxMsgInMsgFragments );
+	len += sprintf(buf+len,"RxMsgInBadMsgFragments:   %08lX\n", p->RxMsgInBadMsgFragments );
+	len += sprintf(buf+len,"RxDiscardsWEPICVError:    %08lX\n", p->RxDiscardsWEPICVError );
+	len += sprintf(buf+len,"RxDiscardsWEPExcluded:    %08lX\n", p->RxDiscardsWEPExcluded );
 #if (HCF_EXT) & HCF_EXT_TALLIES_FW
-        //to be added ;?
+	//to be added ;?
 #endif // HCF_EXT_TALLIES_FW
 	} else if ( lp->wlags49_type & 0x8000 ) {	//;?kludgy but it is unclear to me were else to place this
 #if DBG
@@ -3761,14 +3761,14 @@ int scull_read_procmem(char *buf, char **start, off_t offset, int len, int *eof,
 #endif // DBG
 		lp->wlags49_type = 0;				//default to IFB again ;?
 	} else {
-        len += sprintf(buf+len,"unknown value for wlags49_type: 0x%08lX\n", lp->wlags49_type );
-        len += sprintf(buf+len,"0x0000 - IFB\n" );
-        len += sprintf(buf+len,"0x0001 - wl_private\n" );
-        len += sprintf(buf+len,"0x0002 - Tallies\n" );
-        len += sprintf(buf+len,"0x8xxx - Change debufflag\n" );
-        len += sprintf(buf+len,"ERROR    0001\nWARNING  0002\nNOTICE   0004\nTRACE    0008\n" );
-        len += sprintf(buf+len,"VERBOSE  0010\nPARAM    0020\nBREAK    0040\nRX       0100\n" );
-        len += sprintf(buf+len,"TX       0200\nDS       0400\n" );
+	len += sprintf(buf+len,"unknown value for wlags49_type: 0x%08lX\n", lp->wlags49_type );
+	len += sprintf(buf+len,"0x0000 - IFB\n" );
+	len += sprintf(buf+len,"0x0001 - wl_private\n" );
+	len += sprintf(buf+len,"0x0002 - Tallies\n" );
+	len += sprintf(buf+len,"0x8xxx - Change debufflag\n" );
+	len += sprintf(buf+len,"ERROR    0001\nWARNING  0002\nNOTICE   0004\nTRACE    0008\n" );
+	len += sprintf(buf+len,"VERBOSE  0010\nPARAM    0020\nBREAK    0040\nRX       0100\n" );
+	len += sprintf(buf+len,"TX       0200\nDS       0400\n" );
 	}
     return len;
 } // scull_read_procmem

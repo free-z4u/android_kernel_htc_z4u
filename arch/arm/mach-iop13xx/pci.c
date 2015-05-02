@@ -1100,33 +1100,33 @@ u16 iop13xx_dev_id(void)
 
 static int __init iop13xx_init_atu_setup(char *str)
 {
-        init_atu = IOP13XX_INIT_ATU_NONE;
-        if (str) {
-                while (*str != '\0') {
-                        switch (*str) {
-                        case 'x':
-                        case 'X':
-                                init_atu |= IOP13XX_INIT_ATU_ATUX;
-                                init_atu &= ~IOP13XX_INIT_ATU_NONE;
-                                break;
-                        case 'e':
-                        case 'E':
-                                init_atu |= IOP13XX_INIT_ATU_ATUE;
-                                init_atu &= ~IOP13XX_INIT_ATU_NONE;
-                                break;
-                        case ',':
-                        case '=':
-                                break;
-                        default:
-                                PRINTK("\"iop13xx_init_atu\" malformed at "
-                                            "character: \'%c\'", *str);
-                                *(str + 1) = '\0';
-                                init_atu = IOP13XX_INIT_ATU_DEFAULT;
-                        }
-                        str++;
-                }
-        }
-        return 1;
+	init_atu = IOP13XX_INIT_ATU_NONE;
+	if (str) {
+		while (*str != '\0') {
+			switch (*str) {
+			case 'x':
+			case 'X':
+				init_atu |= IOP13XX_INIT_ATU_ATUX;
+				init_atu &= ~IOP13XX_INIT_ATU_NONE;
+				break;
+			case 'e':
+			case 'E':
+				init_atu |= IOP13XX_INIT_ATU_ATUE;
+				init_atu &= ~IOP13XX_INIT_ATU_NONE;
+				break;
+			case ',':
+			case '=':
+				break;
+			default:
+				PRINTK("\"iop13xx_init_atu\" malformed at "
+					    "character: \'%c\'", *str);
+				*(str + 1) = '\0';
+				init_atu = IOP13XX_INIT_ATU_DEFAULT;
+			}
+			str++;
+		}
+	}
+	return 1;
 }
 
 __setup("iop13xx_init_atu", iop13xx_init_atu_setup);

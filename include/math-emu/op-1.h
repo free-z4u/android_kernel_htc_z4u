@@ -254,15 +254,15 @@
   do {							\
     while (q != _FP_WORK_ROUND)				\
       {							\
-        T##_f = S##_f + q;				\
-        if (T##_f <= X##_f)				\
-          {						\
-            S##_f = T##_f + q;				\
-            X##_f -= T##_f;				\
-            R##_f += q;					\
-          }						\
-        _FP_FRAC_SLL_1(X, 1);				\
-        q >>= 1;					\
+	T##_f = S##_f + q;				\
+	if (T##_f <= X##_f)				\
+	  {						\
+	    S##_f = T##_f + q;				\
+	    X##_f -= T##_f;				\
+	    R##_f += q;					\
+	  }						\
+	_FP_FRAC_SLL_1(X, 1);				\
+	q >>= 1;					\
       }							\
     if (X##_f)						\
       {							\

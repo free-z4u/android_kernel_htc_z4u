@@ -125,11 +125,11 @@ XS(boot_Perf__Trace__Context)
     PERL_UNUSED_VAR(items); /* -W */
     XS_VERSION_BOOTCHECK ;
 
-        newXSproto("Perf::Trace::Context::common_pc", XS_Perf__Trace__Context_common_pc, file, "$");
-        newXSproto("Perf::Trace::Context::common_flags", XS_Perf__Trace__Context_common_flags, file, "$");
-        newXSproto("Perf::Trace::Context::common_lock_depth", XS_Perf__Trace__Context_common_lock_depth, file, "$");
+	newXSproto("Perf::Trace::Context::common_pc", XS_Perf__Trace__Context_common_pc, file, "$");
+	newXSproto("Perf::Trace::Context::common_flags", XS_Perf__Trace__Context_common_flags, file, "$");
+	newXSproto("Perf::Trace::Context::common_lock_depth", XS_Perf__Trace__Context_common_lock_depth, file, "$");
     if (PL_unitcheckav)
-         call_list(PL_scopestack_ix, PL_unitcheckav);
+	 call_list(PL_scopestack_ix, PL_unitcheckav);
     XSRETURN_YES;
 }
 

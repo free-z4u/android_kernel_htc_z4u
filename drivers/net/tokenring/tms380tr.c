@@ -193,45 +193,45 @@ static void 	tms380tr_write_tpl_status(TPL *tpl, unsigned int Status);
 #if 0 /* TMS380TR_DEBUG > 0 */
 static int madgemc_sifprobe(struct net_device *dev)
 {
-        unsigned char old, chk1, chk2;
+	unsigned char old, chk1, chk2;
 
 	old = SIFREADB(SIFADR);  /* Get the old SIFADR value */
 
-        chk1 = 0;       /* Begin with check value 0 */
-        do {
+	chk1 = 0;       /* Begin with check value 0 */
+	do {
 		madgemc_setregpage(dev, 0);
-                /* Write new SIFADR value */
+		/* Write new SIFADR value */
 		SIFWRITEB(chk1, SIFADR);
 		chk2 = SIFREADB(SIFADR);
 		if (chk2 != chk1)
 			return -1;
 
 		madgemc_setregpage(dev, 1);
-                /* Read, invert and write */
+		/* Read, invert and write */
 		chk2 = SIFREADB(SIFADD);
 		if (chk2 != chk1)
 			return -1;
 
 		madgemc_setregpage(dev, 0);
-                chk2 ^= 0x0FE;
+		chk2 ^= 0x0FE;
 		SIFWRITEB(chk2, SIFADR);
 
-                /* Read, invert and compare */
+		/* Read, invert and compare */
 		madgemc_setregpage(dev, 1);
 		chk2 = SIFREADB(SIFADD);
 		madgemc_setregpage(dev, 0);
-                chk2 ^= 0x0FE;
+		chk2 ^= 0x0FE;
 
-                if(chk1 != chk2)
-                        return -1;    /* No adapter */
-                chk1 -= 2;
-        } while(chk1 != 0);     /* Repeat 128 times (all byte values) */
+		if(chk1 != chk2)
+			return -1;    /* No adapter */
+		chk1 -= 2;
+	} while(chk1 != 0);     /* Repeat 128 times (all byte values) */
 
 	madgemc_setregpage(dev, 0); /* sanity */
-        /* Restore the SIFADR value */
+	/* Restore the SIFADR value */
 	SIFWRITEB(old, SIFADR);
 
-        return 0;
+	return 0;
 }
 #endif
 
@@ -497,15 +497,15 @@ static void tms380tr_init_opb(struct net_device *dev)
 	tp->ocpl.FullDuplex 	 = 0;
 	tp->ocpl.FullDuplex 	|= OPEN_FULL_DUPLEX_OFF;
 
-        /*
+	/*
 	 * Set node address
 	 *
 	 * We go ahead and put it in the OPB even though on
 	 * most of the generic adapters this isn't required.
 	 * Its simpler this way.  -- ASF
 	 */
-        for (i=0;i<6;i++)
-                tp->ocpl.NodeAddr[i] = ((unsigned char *)dev->dev_addr)[i];
+	for (i=0;i<6;i++)
+		tp->ocpl.NodeAddr[i] = ((unsigned char *)dev->dev_addr)[i];
 
 	tp->ocpl.GroupAddr	 = 0;
 	tp->ocpl.FunctAddr	 = 0;
@@ -1886,7 +1886,7 @@ static void tms380tr_read_ram(struct net_device *dev, unsigned char *Data,
 	/* Page number of adapter memory */
 	SIFWRITEW(0x0001, SIFADX);
 	/* Address offset in adapter RAM */
-        SIFWRITEW(Address, SIFADR);
+	SIFWRITEW(Address, SIFADR);
 
 	/* Copy len byte from adapter memory to system data area. */
 	i = 0;

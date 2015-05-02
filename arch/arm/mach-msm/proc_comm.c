@@ -146,7 +146,7 @@ static int msm_proc_htc_cmd_handler(unsigned cmd, unsigned *data1, unsigned *dat
 			*data1 = readl_relaxed(base + BACKUP_CPU_RATE);
 		}
 		break;
-        case PCOM_BACKUP_CPU_AXI_RATE:
+	case PCOM_BACKUP_CPU_AXI_RATE:
 		writel_relaxed(data1 ? *data1 : 0, base + BACKUP_CPU_RATE);
 		writel_relaxed(data2 ? *data2 : 0, base + BACKUP_AXI_RATE);
 		break;
@@ -239,12 +239,12 @@ int msm_proc_comm(unsigned cmd, unsigned *data1, unsigned *data2)
 #endif
 
 
-        if(cmd == PCOM_FINAL_EFS_SYNC)
-        {
-                printk(KERN_INFO "[HTC][EFS] update efs  magic number:%x\n", (data1 ? *data1 : 0));
-                writel_relaxed(data1 ? *data1 : 0, base + APP_EFS_MAGIC);
-                return 0;
-        }
+	if(cmd == PCOM_FINAL_EFS_SYNC)
+	{
+		printk(KERN_INFO "[HTC][EFS] update efs  magic number:%x\n", (data1 ? *data1 : 0));
+		writel_relaxed(data1 ? *data1 : 0, base + APP_EFS_MAGIC);
+		return 0;
+	}
 
 
 
@@ -263,15 +263,15 @@ again:
 #if (defined(CONFIG_MACH_PRIMODS) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY))
        if ((cmd == PCOM_CLKCTL_RPC_DISABLE) && (*data1 == 0x1F)) {
 
-               ret = 0;
-               goto end;
+	       ret = 0;
+	       goto end;
        }
 #endif
 
 #ifdef CONFIG_HTC_ACPU_DEBUG
-        writel_relaxed(cmd, base + BACKUP_APP_COMMAND);
-        writel_relaxed(data1 ? *data1 : 0, base + BACKUP_APP_DATA1);
-        writel_relaxed(data2 ? *data2 : 0, base + BACKUP_APP_DATA2);
+	writel_relaxed(cmd, base + BACKUP_APP_COMMAND);
+	writel_relaxed(data1 ? *data1 : 0, base + BACKUP_APP_DATA1);
+	writel_relaxed(data2 ? *data2 : 0, base + BACKUP_APP_DATA2);
 #endif
 	writel_relaxed(cmd, base + APP_COMMAND);
 	writel_relaxed(data1 ? *data1 : 0, base + APP_DATA1);

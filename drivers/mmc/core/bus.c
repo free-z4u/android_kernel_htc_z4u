@@ -346,7 +346,7 @@ void mmc_remove_card(struct mmc_card *card)
 #endif
 
        if (mmc_card_sd(card))
-               mmc_card_set_removed(card);
+	       mmc_card_set_removed(card);
 
 	if (mmc_card_present(card)) {
 		if (mmc_host_is_spi(card->host)) {

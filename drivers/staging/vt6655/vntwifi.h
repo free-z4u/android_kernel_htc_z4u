@@ -112,22 +112,22 @@ typedef enum tagWMAC_POWER_MODE {
 } WMAC_POWER_MODE, *PWMAC_POWER_MODE;
 
 #define VNTWIFIbIsShortSlotTime(wCapInfo)               \
-        WLAN_GET_CAP_INFO_SHORTSLOTTIME(wCapInfo)       \
+	WLAN_GET_CAP_INFO_SHORTSLOTTIME(wCapInfo)       \
 
 #define VNTWIFIbIsProtectMode(byERP)                    \
-        ((byERP & WLAN_EID_ERP_USE_PROTECTION) != 0)    \
+	((byERP & WLAN_EID_ERP_USE_PROTECTION) != 0)    \
 
 #define VNTWIFIbIsBarkerMode(byERP)                     \
-        ((byERP & WLAN_EID_ERP_BARKER_MODE) != 0)       \
+	((byERP & WLAN_EID_ERP_BARKER_MODE) != 0)       \
 
 #define VNTWIFIbIsShortPreamble(wCapInfo)               \
-        WLAN_GET_CAP_INFO_SHORTPREAMBLE(wCapInfo)       \
+	WLAN_GET_CAP_INFO_SHORTPREAMBLE(wCapInfo)       \
 
 #define VNTWIFIbIsEncryption(wCapInfo)                  \
-        WLAN_GET_CAP_INFO_PRIVACY(wCapInfo)             \
+	WLAN_GET_CAP_INFO_PRIVACY(wCapInfo)             \
 
 #define VNTWIFIbIsESS(wCapInfo)                         \
-        WLAN_GET_CAP_INFO_ESS(wCapInfo)                 \
+	WLAN_GET_CAP_INFO_ESS(wCapInfo)                 \
 
 
 /*---------------------  Export Classes  ----------------------------*/

@@ -136,7 +136,7 @@ unwind_table_sort(struct unwind_table_entry *start,
 struct unwind_table *
 unwind_table_add(const char *name, unsigned long base_addr,
 		 unsigned long gp,
-                 void *start, void *end)
+		 void *start, void *end)
 {
 	struct unwind_table *table;
 	unsigned long flags;

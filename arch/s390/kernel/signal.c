@@ -278,10 +278,10 @@ static int setup_frame(int sig, struct k_sigaction *ka,
 	/* Set up to return from userspace.  If provided, use a stub
 	   already in userspace.  */
 	if (ka->sa.sa_flags & SA_RESTORER) {
-                regs->gprs[14] = (unsigned long)
+		regs->gprs[14] = (unsigned long)
 			ka->sa.sa_restorer | PSW_ADDR_AMODE;
 	} else {
-                regs->gprs[14] = (unsigned long)
+		regs->gprs[14] = (unsigned long)
 			frame->retcode | PSW_ADDR_AMODE;
 		if (__put_user(S390_SYSCALL_OPCODE | __NR_sigreturn,
 	                       (u16 __user *)(frame->retcode)))
@@ -351,10 +351,10 @@ static int setup_rt_frame(int sig, struct k_sigaction *ka, siginfo_t *info,
 	/* Set up to return from userspace.  If provided, use a stub
 	   already in userspace.  */
 	if (ka->sa.sa_flags & SA_RESTORER) {
-                regs->gprs[14] = (unsigned long)
+		regs->gprs[14] = (unsigned long)
 			ka->sa.sa_restorer | PSW_ADDR_AMODE;
 	} else {
-                regs->gprs[14] = (unsigned long)
+		regs->gprs[14] = (unsigned long)
 			frame->retcode | PSW_ADDR_AMODE;
 		if (__put_user(S390_SYSCALL_OPCODE | __NR_rt_sigreturn,
 			       (u16 __user *)(frame->retcode)))

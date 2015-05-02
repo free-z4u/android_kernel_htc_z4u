@@ -105,11 +105,11 @@ static void asd_clear_nexus_timedout(unsigned long data)
 	DECLARE_TCS(tcs); \
 		\
 	ASD_DPRINTK("%s: PRE\n", __func__); \
-        res = 1;                \
+	res = 1;                \
 	ascb = asd_ascb_alloc_list(asd_ha, &res, GFP_KERNEL); \
 	if (!ascb)              \
 		return -ENOMEM; \
-                                \
+				\
 	ascb->completion = &completion; \
 	ascb->uldd_task = &tcs; \
 	scb = ascb->scb;        \

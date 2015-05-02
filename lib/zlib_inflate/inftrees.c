@@ -44,19 +44,19 @@ int zlib_inflate_table(codetype type, unsigned short *lens, unsigned codes,
     unsigned short count[MAXBITS+1];    /* number of codes of each length */
     unsigned short offs[MAXBITS+1];     /* offsets in table for each length */
     static const unsigned short lbase[31] = { /* Length codes 257..285 base */
-        3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
-        35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0};
+	3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
+	35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0};
     static const unsigned short lext[31] = { /* Length codes 257..285 extra */
-        16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18,
-        19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 201, 196};
+	16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18,
+	19, 19, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 16, 201, 196};
     static const unsigned short dbase[32] = { /* Distance codes 0..29 base */
-        1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
-        257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
-        8193, 12289, 16385, 24577, 0, 0};
+	1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
+	257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
+	8193, 12289, 16385, 24577, 0, 0};
     static const unsigned short dext[32] = { /* Distance codes 0..29 extra */
-        16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22,
-        23, 23, 24, 24, 25, 25, 26, 26, 27, 27,
-        28, 28, 29, 29, 64, 64};
+	16, 16, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22,
+	23, 23, 24, 24, 25, 25, 26, 26, 27, 27,
+	28, 28, 29, 29, 64, 64};
 
     /*
        Process a set of code lengths to create a canonical Huffman code.  The
@@ -91,46 +91,46 @@ int zlib_inflate_table(codetype type, unsigned short *lens, unsigned codes,
 
     /* accumulate lengths for codes (assumes lens[] all in 0..MAXBITS) */
     for (len = 0; len <= MAXBITS; len++)
-        count[len] = 0;
+	count[len] = 0;
     for (sym = 0; sym < codes; sym++)
-        count[lens[sym]]++;
+	count[lens[sym]]++;
 
     /* bound code lengths, force root to be within code lengths */
     root = *bits;
     for (max = MAXBITS; max >= 1; max--)
-        if (count[max] != 0) break;
+	if (count[max] != 0) break;
     if (root > max) root = max;
     if (max == 0) {                     /* no symbols to code at all */
-        this.op = (unsigned char)64;    /* invalid code marker */
-        this.bits = (unsigned char)1;
-        this.val = (unsigned short)0;
-        *(*table)++ = this;             /* make a table to force an error */
-        *(*table)++ = this;
-        *bits = 1;
-        return 0;     /* no symbols, but wait for decoding to report error */
+	this.op = (unsigned char)64;    /* invalid code marker */
+	this.bits = (unsigned char)1;
+	this.val = (unsigned short)0;
+	*(*table)++ = this;             /* make a table to force an error */
+	*(*table)++ = this;
+	*bits = 1;
+	return 0;     /* no symbols, but wait for decoding to report error */
     }
     for (min = 1; min <= MAXBITS; min++)
-        if (count[min] != 0) break;
+	if (count[min] != 0) break;
     if (root < min) root = min;
 
     /* check for an over-subscribed or incomplete set of lengths */
     left = 1;
     for (len = 1; len <= MAXBITS; len++) {
-        left <<= 1;
-        left -= count[len];
-        if (left < 0) return -1;        /* over-subscribed */
+	left <<= 1;
+	left -= count[len];
+	if (left < 0) return -1;        /* over-subscribed */
     }
     if (left > 0 && (type == CODES || max != 1))
-        return -1;                      /* incomplete set */
+	return -1;                      /* incomplete set */
 
     /* generate offsets into symbol table for each length for sorting */
     offs[1] = 0;
     for (len = 1; len < MAXBITS; len++)
-        offs[len + 1] = offs[len] + count[len];
+	offs[len + 1] = offs[len] + count[len];
 
     /* sort symbols by length, by symbol order within each length */
     for (sym = 0; sym < codes; sym++)
-        if (lens[sym] != 0) work[offs[lens[sym]]++] = (unsigned short)sym;
+	if (lens[sym] != 0) work[offs[lens[sym]]++] = (unsigned short)sym;
 
     /*
        Create and fill in decoding tables.  In this loop, the table being
@@ -167,20 +167,20 @@ int zlib_inflate_table(codetype type, unsigned short *lens, unsigned codes,
     /* set up for code type */
     switch (type) {
     case CODES:
-        base = extra = work;    /* dummy value--not used */
-        end = 19;
-        break;
+	base = extra = work;    /* dummy value--not used */
+	end = 19;
+	break;
     case LENS:
-        base = lbase;
-        base -= 257;
-        extra = lext;
-        extra -= 257;
-        end = 256;
-        break;
+	base = lbase;
+	base -= 257;
+	extra = lext;
+	extra -= 257;
+	end = 256;
+	break;
     default:            /* DISTS */
-        base = dbase;
-        extra = dext;
-        end = -1;
+	base = dbase;
+	extra = dext;
+	end = -1;
     }
 
     /* initialize state for loop */
@@ -196,82 +196,82 @@ int zlib_inflate_table(codetype type, unsigned short *lens, unsigned codes,
 
     /* check available table space */
     if (type == LENS && used >= ENOUGH - MAXD)
-        return 1;
+	return 1;
 
     /* process all codes and make table entries */
     for (;;) {
-        /* create table entry */
-        this.bits = (unsigned char)(len - drop);
-        if ((int)(work[sym]) < end) {
-            this.op = (unsigned char)0;
-            this.val = work[sym];
-        }
-        else if ((int)(work[sym]) > end) {
-            this.op = (unsigned char)(extra[work[sym]]);
-            this.val = base[work[sym]];
-        }
-        else {
-            this.op = (unsigned char)(32 + 64);         /* end of block */
-            this.val = 0;
-        }
+	/* create table entry */
+	this.bits = (unsigned char)(len - drop);
+	if ((int)(work[sym]) < end) {
+	    this.op = (unsigned char)0;
+	    this.val = work[sym];
+	}
+	else if ((int)(work[sym]) > end) {
+	    this.op = (unsigned char)(extra[work[sym]]);
+	    this.val = base[work[sym]];
+	}
+	else {
+	    this.op = (unsigned char)(32 + 64);         /* end of block */
+	    this.val = 0;
+	}
 
-        /* replicate for those indices with low len bits equal to huff */
-        incr = 1U << (len - drop);
-        fill = 1U << curr;
-        min = fill;                 /* save offset to next table */
-        do {
-            fill -= incr;
-            next[(huff >> drop) + fill] = this;
-        } while (fill != 0);
+	/* replicate for those indices with low len bits equal to huff */
+	incr = 1U << (len - drop);
+	fill = 1U << curr;
+	min = fill;                 /* save offset to next table */
+	do {
+	    fill -= incr;
+	    next[(huff >> drop) + fill] = this;
+	} while (fill != 0);
 
-        /* backwards increment the len-bit code huff */
-        incr = 1U << (len - 1);
-        while (huff & incr)
-            incr >>= 1;
-        if (incr != 0) {
-            huff &= incr - 1;
-            huff += incr;
-        }
-        else
-            huff = 0;
+	/* backwards increment the len-bit code huff */
+	incr = 1U << (len - 1);
+	while (huff & incr)
+	    incr >>= 1;
+	if (incr != 0) {
+	    huff &= incr - 1;
+	    huff += incr;
+	}
+	else
+	    huff = 0;
 
-        /* go to next symbol, update count, len */
-        sym++;
-        if (--(count[len]) == 0) {
-            if (len == max) break;
-            len = lens[work[sym]];
-        }
+	/* go to next symbol, update count, len */
+	sym++;
+	if (--(count[len]) == 0) {
+	    if (len == max) break;
+	    len = lens[work[sym]];
+	}
 
-        /* create new sub-table if needed */
-        if (len > root && (huff & mask) != low) {
-            /* if first time, transition to sub-tables */
-            if (drop == 0)
-                drop = root;
+	/* create new sub-table if needed */
+	if (len > root && (huff & mask) != low) {
+	    /* if first time, transition to sub-tables */
+	    if (drop == 0)
+		drop = root;
 
-            /* increment past last table */
-            next += min;            /* here min is 1 << curr */
+	    /* increment past last table */
+	    next += min;            /* here min is 1 << curr */
 
-            /* determine length of next table */
-            curr = len - drop;
-            left = (int)(1 << curr);
-            while (curr + drop < max) {
-                left -= count[curr + drop];
-                if (left <= 0) break;
-                curr++;
-                left <<= 1;
-            }
+	    /* determine length of next table */
+	    curr = len - drop;
+	    left = (int)(1 << curr);
+	    while (curr + drop < max) {
+		left -= count[curr + drop];
+		if (left <= 0) break;
+		curr++;
+		left <<= 1;
+	    }
 
-            /* check for enough space */
-            used += 1U << curr;
-            if (type == LENS && used >= ENOUGH - MAXD)
-                return 1;
+	    /* check for enough space */
+	    used += 1U << curr;
+	    if (type == LENS && used >= ENOUGH - MAXD)
+		return 1;
 
-            /* point entry in root table to sub-table */
-            low = huff & mask;
-            (*table)[low].op = (unsigned char)curr;
-            (*table)[low].bits = (unsigned char)root;
-            (*table)[low].val = (unsigned short)(next - *table);
-        }
+	    /* point entry in root table to sub-table */
+	    low = huff & mask;
+	    (*table)[low].op = (unsigned char)curr;
+	    (*table)[low].bits = (unsigned char)root;
+	    (*table)[low].val = (unsigned short)(next - *table);
+	}
     }
 
     /*
@@ -285,27 +285,27 @@ int zlib_inflate_table(codetype type, unsigned short *lens, unsigned codes,
     this.bits = (unsigned char)(len - drop);
     this.val = (unsigned short)0;
     while (huff != 0) {
-        /* when done with sub-table, drop back to root table */
-        if (drop != 0 && (huff & mask) != low) {
-            drop = 0;
-            len = root;
-            next = *table;
-            this.bits = (unsigned char)len;
-        }
+	/* when done with sub-table, drop back to root table */
+	if (drop != 0 && (huff & mask) != low) {
+	    drop = 0;
+	    len = root;
+	    next = *table;
+	    this.bits = (unsigned char)len;
+	}
 
-        /* put invalid code marker in table */
-        next[huff >> drop] = this;
+	/* put invalid code marker in table */
+	next[huff >> drop] = this;
 
-        /* backwards increment the len-bit code huff */
-        incr = 1U << (len - 1);
-        while (huff & incr)
-            incr >>= 1;
-        if (incr != 0) {
-            huff &= incr - 1;
-            huff += incr;
-        }
-        else
-            huff = 0;
+	/* backwards increment the len-bit code huff */
+	incr = 1U << (len - 1);
+	while (huff & incr)
+	    incr >>= 1;
+	if (incr != 0) {
+	    huff &= incr - 1;
+	    huff += incr;
+	}
+	else
+	    huff = 0;
     }
 
     /* set return parameters */

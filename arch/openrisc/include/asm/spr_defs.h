@@ -189,12 +189,12 @@
 #define SPR_DCFGR_WPCI     0x00000008  /* Watchpoint counters implemented */
 
 #define MATCHPOINTS_TO_NDP(n) (1 == n ? SPR_DCFGR_NDP1 : \
-                               2 == n ? SPR_DCFGR_NDP2 : \
-                               3 == n ? SPR_DCFGR_NDP3 : \
-                               4 == n ? SPR_DCFGR_NDP4 : \
-                               5 == n ? SPR_DCFGR_NDP5 : \
-                               6 == n ? SPR_DCFGR_NDP6 : \
-                               7 == n ? SPR_DCFGR_NDP7 : SPR_DCFGR_NDP8)
+			       2 == n ? SPR_DCFGR_NDP2 : \
+			       3 == n ? SPR_DCFGR_NDP3 : \
+			       4 == n ? SPR_DCFGR_NDP4 : \
+			       5 == n ? SPR_DCFGR_NDP5 : \
+			       6 == n ? SPR_DCFGR_NDP6 : \
+			       7 == n ? SPR_DCFGR_NDP7 : SPR_DCFGR_NDP8)
 #define MAX_MATCHPOINTS  8
 #define MAX_WATCHPOINTS  (MAX_MATCHPOINTS + 2)
 

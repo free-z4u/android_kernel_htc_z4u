@@ -313,7 +313,7 @@ static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_
 			case UWB_DRP_CONFLICT_ACT2:
 			case UWB_DRP_CONFLICT_ACT3:
 				uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_EXPANDING_CONFLICT);
-                                /* send_drp_avail_ie = true; */
+				/* send_drp_avail_ie = true; */
 			}
 		}
 	} else { /* also base part of the reservation is conflicting */
@@ -329,7 +329,7 @@ static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_
 			uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_MODIFIED);
 		} else { /* it is a target rsv */
 			uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_CONFLICT);
-                        /* send_drp_avail_ie = true; */
+			/* send_drp_avail_ie = true; */
 		}
 	}
 }

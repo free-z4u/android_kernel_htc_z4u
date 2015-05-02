@@ -73,7 +73,7 @@ miata_init_irq(void)
 	init_i8259a_irqs();
 
 	/* Not interested in the bogus interrupts (3,10), Fan Fault (0),
-           NMI (1), or EIDE (9).
+	   NMI (1), or EIDE (9).
 
 	   We also disable the risers (4,5), since we don't know how to
 	   route the interrupts behind the bridge.  */
@@ -152,7 +152,7 @@ miata_init_irq(void)
 static int __init
 miata_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
 {
-        static char irq_tab[18][5] __initdata = {
+	static char irq_tab[18][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */
 		{16+ 8, 16+ 8, 16+ 8, 16+ 8, 16+ 8},  /* IdSel 14,  DC21142 */
 		{   -1,    -1,    -1,    -1,    -1},  /* IdSel 15,  EIDE    */
@@ -174,11 +174,11 @@ miata_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
 		{16+28, 16+28, 16+29, 16+30, 16+31},  /* IdSel 30,  slot 3  */
 		/* This bridge is on the main bus of the later orig MIATA */
 		{   -1,    -1,    -1,    -1,    -1},  /* IdSel 31,  PCI-PCI */
-        };
+	};
 	const long min_idsel = 3, max_idsel = 20, irqs_per_slot = 5;
 
 	/* the USB function of the 82c693 has it's interrupt connected to
-           the 2nd 8259 controller. So we have to check for it first. */
+	   the 2nd 8259 controller. So we have to check for it first. */
 
 	if((slot == 7) && (PCI_FUNC(dev->devfn) == 3)) {
 		u8 irq=0;

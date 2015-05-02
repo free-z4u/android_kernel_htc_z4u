@@ -813,8 +813,8 @@ struct ahd_tmode_tstate {
  * to parity errors in each phase table.
  */
 struct ahd_phase_table_entry {
-        uint8_t phase;
-        uint8_t mesg_out; /* Message response to parity errors */
+	uint8_t phase;
+	uint8_t mesg_out; /* Message response to parity errors */
 	const char *phasemsg;
 };
 

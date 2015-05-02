@@ -108,7 +108,7 @@ static int atyfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
 		 * In doublescan mode, the cursor location
 		 * and heigh also needs to be doubled.
 		 */
-                if (par->crtc.gen_cntl & CRTC_DBL_SCAN_EN) {
+		if (par->crtc.gen_cntl & CRTC_DBL_SCAN_EN) {
 			y<<=1;
 			h<<=1;
 		}

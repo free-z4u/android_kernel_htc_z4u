@@ -106,9 +106,9 @@ typedef u16 u16_le;
 # define FIFO_IRQ_MASK              BIT(14)
 # define SCSI_IRQ_MASK              BIT(15)
 # define IRQ_CONTROL_ALL_IRQ_MASK   (PCI_IRQ_MASK   | \
-                                     TIMER_IRQ_MASK | \
-                                     FIFO_IRQ_MASK  | \
-                                     SCSI_IRQ_MASK  )
+				     TIMER_IRQ_MASK | \
+				     FIFO_IRQ_MASK  | \
+				     SCSI_IRQ_MASK  )
 # define IRQSTATUS_ANY_IRQ          (IRQSTATUS_RESELECT_OCCUER	| \
 				     IRQSTATUS_PHASE_CHANGE_IRQ	| \
 				     IRQSTATUS_SCSIRESET_IRQ	| \
@@ -176,11 +176,11 @@ typedef u16 u16_le;
 # define BM_COUNTER_CLR        BIT(4)
 # define SAVED_ACK_CLR         BIT(5)
 # define CLRCOUNTER_ALLMASK    (ACK_COUNTER_CLR       | \
-                                SREQ_COUNTER_CLR      | \
-                                FIFO_HOST_POINTER_CLR | \
-                                FIFO_REST_COUNT_CLR   | \
-                                BM_COUNTER_CLR        | \
-                                SAVED_ACK_CLR         )
+				SREQ_COUNTER_CLR      | \
+				FIFO_HOST_POINTER_CLR | \
+				FIFO_REST_COUNT_CLR   | \
+				BM_COUNTER_CLR        | \
+				SAVED_ACK_CLR         )
 
 #define SCSI_BUS_MONITOR	0x12	/* BASE+12, B, R */
 # define BUSMON_MSG BIT(0)

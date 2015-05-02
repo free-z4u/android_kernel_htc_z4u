@@ -9,10 +9,10 @@
    multiplexing unit is located at IO 0x208 with a bit map of
      0-5 Page Selection in 32k increments
      6-7 Device selection:
-        00 SSD off
-        01 SSD 0 (Socket)
-        10 SSD 1 (Flash chip)
-        11 undefined
+	00 SSD off
+	01 SSD 0 (Socket)
+	10 SSD 1 (Flash chip)
+	11 undefined
 
    On each SSD, the first 128k is reserved for use by the bios
    (actually it IS the bios..) This only matters if you are booting off the

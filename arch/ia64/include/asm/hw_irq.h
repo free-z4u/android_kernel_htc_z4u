@@ -90,11 +90,11 @@ extern int ia64_last_device_vector;
 
 /* Delivery modes for inter-cpu interrupts */
 enum {
-        IA64_IPI_DM_INT =       0x0,    /* pend an external interrupt */
-        IA64_IPI_DM_PMI =       0x2,    /* pend a PMI */
-        IA64_IPI_DM_NMI =       0x4,    /* pend an NMI (vector 2) */
-        IA64_IPI_DM_INIT =      0x5,    /* pend an INIT interrupt */
-        IA64_IPI_DM_EXTINT =    0x7,    /* pend an 8259-compatible interrupt. */
+	IA64_IPI_DM_INT =       0x0,    /* pend an external interrupt */
+	IA64_IPI_DM_PMI =       0x2,    /* pend a PMI */
+	IA64_IPI_DM_NMI =       0x4,    /* pend an NMI (vector 2) */
+	IA64_IPI_DM_INIT =      0x5,    /* pend an INIT interrupt */
+	IA64_IPI_DM_EXTINT =    0x7,    /* pend an 8259-compatible interrupt. */
 };
 
 extern __u8 isa_irq_to_vector_map[16];

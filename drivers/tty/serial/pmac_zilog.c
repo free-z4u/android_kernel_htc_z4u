@@ -556,7 +556,7 @@ static void pmz_set_mctrl(struct uart_port *port, unsigned int mctrl)
 	struct uart_pmac_port *uap = to_pmz(port);
 	unsigned char set_bits, clear_bits;
 
-        /* Do nothing for irda for now... */
+	/* Do nothing for irda for now... */
 	if (ZS_IS_IRDA(uap))
 		return;
 	/* We get called during boot with a port not up yet */

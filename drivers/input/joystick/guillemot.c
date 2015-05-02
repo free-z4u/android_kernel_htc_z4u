@@ -52,8 +52,8 @@ static short guillemot_btn_pad[] =
 	{ BTN_A, BTN_B, BTN_C, BTN_X, BTN_Y, BTN_Z, BTN_TL, BTN_TR, BTN_MODE, BTN_SELECT, -1 };
 
 static struct {
-        int x;
-        int y;
+	int x;
+	int y;
 } guillemot_hat_to_axis[16] = {{ 0,-1}, { 1,-1}, { 1, 0}, { 1, 1}, { 0, 1}, {-1, 1}, {-1, 0}, {-1,-1}};
 
 struct guillemot_type {

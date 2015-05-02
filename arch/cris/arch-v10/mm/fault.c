@@ -29,7 +29,7 @@ extern const struct exception_table_entry
 	*search_exception_tables(unsigned long addr);
 
 asmlinkage void do_page_fault(unsigned long address, struct pt_regs *regs,
-                              int protection, int writeaccess);
+			      int protection, int writeaccess);
 
 /* fast TLB-fill fault handler
  * this is called from entry.S with interrupts disabled
@@ -73,10 +73,10 @@ handle_mmu_bus_fault(struct pt_regs *regs)
 	/* leave it to the MM system fault handler */
 	if (miss)
 		do_page_fault(address, regs, 0, writeac);
-        else
+	else
 		do_page_fault(address, regs, 1, we);
 
-        /* Reload TLB with new entry to avoid an extra miss exception.
+	/* Reload TLB with new entry to avoid an extra miss exception.
 	 * do_page_fault may have flushed the TLB so we have to restore
 	 * the MMU registers.
 	 */

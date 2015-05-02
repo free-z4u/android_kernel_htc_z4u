@@ -101,7 +101,7 @@ static void inline unmask_gpio_irq(struct irq_data *d)
 
 static void
 h720x_gpio_handler(unsigned int mask, unsigned int irq,
-                 struct irq_desc *desc)
+		 struct irq_desc *desc)
 {
 	IRQDBG("%s irq: %d\n", __func__, irq);
 	while (mask) {

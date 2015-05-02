@@ -77,9 +77,9 @@ sgl_fmpy(
 					 * and zero
 					 */
 					if (Is_invalidtrap_enabled())
-                                		return(INVALIDEXCEPTION);
-                                	Set_invalidflag();
-                                	Sgl_makequietnan(result);
+						return(INVALIDEXCEPTION);
+					Set_invalidflag();
+					Sgl_makequietnan(result);
 					*dstptr = result;
 					return(NOEXCEPTION);
 				}
@@ -92,35 +92,35 @@ sgl_fmpy(
 			}
 		}
 		else {
-                	/*
-                 	 * is NaN; signaling or quiet?
-                 	 */
-                	if (Sgl_isone_signaling(opnd1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Sgl_set_quiet(opnd1);
-                	}
+			/*
+		 	 * is NaN; signaling or quiet?
+		 	 */
+			if (Sgl_isone_signaling(opnd1)) {
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Sgl_set_quiet(opnd1);
+			}
 			/*
 			 * is second operand a signaling NaN?
 			 */
 			else if (Sgl_is_signalingnan(opnd2)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Sgl_set_quiet(opnd2);
-                		*dstptr = opnd2;
-                		return(NOEXCEPTION);
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Sgl_set_quiet(opnd2);
+				*dstptr = opnd2;
+				return(NOEXCEPTION);
 			}
-                	/*
-                 	 * return quiet NaN
-                 	 */
-                	*dstptr = opnd1;
-                	return(NOEXCEPTION);
+			/*
+		 	 * return quiet NaN
+		 	 */
+			*dstptr = opnd1;
+			return(NOEXCEPTION);
 		}
 	}
 	/*
@@ -131,9 +131,9 @@ sgl_fmpy(
 			if (Sgl_iszero_exponentmantissa(opnd1)) {
 				/* invalid since operands are zero & infinity */
 				if (Is_invalidtrap_enabled())
-                                	return(INVALIDEXCEPTION);
-                                Set_invalidflag();
-                                Sgl_makequietnan(opnd2);
+					return(INVALIDEXCEPTION);
+				Set_invalidflag();
+				Sgl_makequietnan(opnd2);
 				*dstptr = opnd2;
 				return(NOEXCEPTION);
 			}
@@ -144,22 +144,22 @@ sgl_fmpy(
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
-                /*
-                 * is NaN; signaling or quiet?
-                 */
-                if (Sgl_isone_signaling(opnd2)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+		/*
+		 * is NaN; signaling or quiet?
+		 */
+		if (Sgl_isone_signaling(opnd2)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
 
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Sgl_set_quiet(opnd2);
-                }
-                /*
-                 * return quiet NaN
-                 */
-                *dstptr = opnd2;
-                return(NOEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Sgl_set_quiet(opnd2);
+		}
+		/*
+		 * return quiet NaN
+		 */
+		*dstptr = opnd2;
+		return(NOEXCEPTION);
 	}
 	/*
 	 * Generate exponent
@@ -180,8 +180,8 @@ sgl_fmpy(
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
-                /* is denormalized, adjust exponent */
-                Sgl_clear_signexponent(opnd1);
+		/* is denormalized, adjust exponent */
+		Sgl_clear_signexponent(opnd1);
 		Sgl_leftshiftby1(opnd1);
 		Sgl_normalize(opnd1,dest_exponent);
 	}
@@ -196,9 +196,9 @@ sgl_fmpy(
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
-                /* is denormalized; want to normalize */
-                Sgl_clear_signexponent(opnd2);
-                Sgl_leftshiftby1(opnd2);
+		/* is denormalized; want to normalize */
+		Sgl_clear_signexponent(opnd2);
+		Sgl_leftshiftby1(opnd2);
 		Sgl_normalize(opnd2,dest_exponent);
 	}
 
@@ -266,15 +266,15 @@ sgl_fmpy(
 	}
 	Sgl_set_mantissa(result,opnd3);
 
-        /*
-         * Test for overflow
-         */
+	/*
+	 * Test for overflow
+	 */
 	if (dest_exponent >= SGL_INFINITY_EXPONENT) {
-                /* trap if OVERFLOWTRAP enabled */
-                if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
+		/* trap if OVERFLOWTRAP enabled */
+		if (Is_overflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
 			Sgl_setwrapped_exponent(result,dest_exponent,ovfl);
 			*dstptr = result;
 			if (inexact)
@@ -282,21 +282,21 @@ sgl_fmpy(
 				return(OVERFLOWEXCEPTION | INEXACTEXCEPTION);
 			    else Set_inexactflag();
 			return(OVERFLOWEXCEPTION);
-                }
+		}
 		inexact = TRUE;
 		Set_overflowflag();
-                /* set result to infinity or largest number */
+		/* set result to infinity or largest number */
 		Sgl_setoverflow(result);
 	}
-        /*
-         * Test for underflow
-         */
+	/*
+	 * Test for underflow
+	 */
 	else if (dest_exponent <= 0) {
-                /* trap if UNDERFLOWTRAP enabled */
-                if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
+		/* trap if UNDERFLOWTRAP enabled */
+		if (Is_underflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
 			Sgl_setwrapped_exponent(result,dest_exponent,unfl);
 			*dstptr = result;
 			if (inexact)
@@ -304,7 +304,7 @@ sgl_fmpy(
 				return(UNDERFLOWEXCEPTION | INEXACTEXCEPTION);
 			    else Set_inexactflag();
 			return(UNDERFLOWEXCEPTION);
-                }
+		}
 
 		/* Determine if should set underflow flag */
 		is_tiny = TRUE;
@@ -314,7 +314,7 @@ sgl_fmpy(
 				if (Sgl_iszero_sign(result)) {
 					Sgl_increment(opnd3);
 					if (Sgl_isone_hiddenoverflow(opnd3))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Sgl_decrement(opnd3);
 				}
 				break;
@@ -322,7 +322,7 @@ sgl_fmpy(
 				if (Sgl_isone_sign(result)) {
 					Sgl_increment(opnd3);
 					if (Sgl_isone_hiddenoverflow(opnd3))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Sgl_decrement(opnd3);
 				}
 				break;
@@ -331,16 +331,16 @@ sgl_fmpy(
 				    Sgl_isone_lowmantissa(opnd3))) {
 				      	Sgl_increment(opnd3);
 					if (Sgl_isone_hiddenoverflow(opnd3))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Sgl_decrement(opnd3);
 				}
 				break;
 			}
 		}
 
-                /*
-                 * denormalize result or set to signed zero
-                 */
+		/*
+		 * denormalize result or set to signed zero
+		 */
 		stickybit = inexact;
 		Sgl_denormalize(opnd3,dest_exponent,guardbit,stickybit,inexact);
 
@@ -364,7 +364,7 @@ sgl_fmpy(
 				}
 				break;
 			}
-                if (is_tiny) Set_underflowflag();
+		if (is_tiny) Set_underflowflag();
 		}
 		Sgl_set_exponentmantissa(result,opnd3);
 	}

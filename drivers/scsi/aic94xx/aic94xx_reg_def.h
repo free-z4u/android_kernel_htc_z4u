@@ -854,7 +854,7 @@
 		((u32) (Mode) * LmSEQ_MODE_PAGE_SIZE))
 
 #define  LmSEQ_PHY_REG(Mode, LinkNum, Reg) \
-                 (LmSEQ_PHY_BASE(Mode, LinkNum) + (u32) (Reg))
+		 (LmSEQ_PHY_BASE(Mode, LinkNum) + (u32) (Reg))
 
 #define LmMODEPTR(LinkNum)		LmSEQ_PHY_REG(0, LinkNum, MODEPTR)
 

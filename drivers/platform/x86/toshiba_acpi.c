@@ -860,8 +860,8 @@ static void remove_toshiba_proc_entries(struct toshiba_acpi_dev *dev)
 }
 
 static const struct backlight_ops toshiba_backlight_data = {
-        .get_brightness = get_lcd,
-        .update_status  = set_lcd_status,
+	.get_brightness = get_lcd,
+	.update_status  = set_lcd_status,
 };
 
 static bool toshiba_acpi_i8042_filter(unsigned char data, unsigned char str,

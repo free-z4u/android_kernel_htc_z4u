@@ -52,7 +52,7 @@ const char * oakscsi_info (struct Scsi_Host *spnt)
 #define DATA	((128 + 8) << 2)
 
 static inline int NCR5380_pwrite(struct Scsi_Host *instance, unsigned char *addr,
-              int len)
+	      int len)
 {
   void __iomem *base = priv(instance)->base;
 
@@ -67,7 +67,7 @@ printk("writing %p len %d\n",addr, len);
 }
 
 static inline int NCR5380_pread(struct Scsi_Host *instance, unsigned char *addr,
-              int len)
+	      int len)
 {
   void __iomem *base = priv(instance)->base;
 printk("reading %p len %d\n", addr, len);
@@ -83,8 +83,8 @@ printk("reading %p len %d\n", addr, len);
       timeout--;
       if(status & 0x200 || !timeout)
       {
-        printk("status = %08X\n", status);
-        return 1;
+	printk("status = %08X\n", status);
+	return 1;
       }
     }
 
@@ -100,7 +100,7 @@ printk("reading %p len %d\n", addr, len);
       *addr ++ = b;
       len -= 1;
       if(len)
-        *addr ++ = b>>8;
+	*addr ++ = b>>8;
       len -= 1;
     }
   }

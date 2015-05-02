@@ -923,8 +923,8 @@ float32 float64_to_float32(float64 a)
     shift64RightJamming( aSig, 22, &aSig );
     zSig = aSig;
     if ( aExp || zSig ) {
-        zSig |= 0x40000000;
-        aExp -= 0x381;
+	zSig |= 0x40000000;
+	aExp -= 0x381;
     }
     return roundAndPackFloat32(aSign, aExp, zSig);
 }

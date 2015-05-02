@@ -674,7 +674,7 @@ int msm_mctl_reserve_free_buf(
 }
 
 int msm_mctl_return_free_buf(struct msm_cam_media_controller *pmctl,
-                int image_node, struct msm_free_buf *free_buf)
+		int image_node, struct msm_free_buf *free_buf)
 {
     int idx = 0;
     struct msm_frame_buffer *buf = NULL;
@@ -684,36 +684,36 @@ int msm_mctl_return_free_buf(struct msm_cam_media_controller *pmctl,
     int rc = -EINVAL;
 
     if (!free_buf)
-        return rc;
+	return rc;
 
     idx = msm_mctl_img_mode_to_inst_index(pmctl, image_node, 0);
     if (idx < 0) {
-        pr_err("%s Invalid instance, buffer not released\n", __func__);
-        return idx;
+	pr_err("%s Invalid instance, buffer not released\n", __func__);
+	return idx;
     }
     pcam_inst = pmctl->pcam_ptr->dev_inst[idx];
     if (!pcam_inst) {
-        pr_err("%s Invalid instance, cannot send buf to user",
-            __func__);
-        return rc;
+	pr_err("%s Invalid instance, cannot send buf to user",
+	    __func__);
+	return rc;
     }
 
     spin_lock_irqsave(&pcam_inst->vq_irqlock, flags);
 
     if (!list_empty(&pcam_inst->free_vq)) {
-        list_for_each_entry(buf, &pcam_inst->free_vq, list) {
-            buf_phyaddr =
-                (uint32_t) videobuf2_to_pmem_contig(&buf->vidbuf, 0);
-            if (free_buf->ch_paddr[0] == buf_phyaddr) {
-                D("%s buf = 0x%x ", __func__, free_buf->ch_paddr[0]);
-                buf->state = MSM_BUFFER_STATE_QUEUED;
-                rc = 0;
-                break;
-            }
-        }
+	list_for_each_entry(buf, &pcam_inst->free_vq, list) {
+	    buf_phyaddr =
+		(uint32_t) videobuf2_to_pmem_contig(&buf->vidbuf, 0);
+	    if (free_buf->ch_paddr[0] == buf_phyaddr) {
+		D("%s buf = 0x%x ", __func__, free_buf->ch_paddr[0]);
+		buf->state = MSM_BUFFER_STATE_QUEUED;
+		rc = 0;
+		break;
+	    }
+	}
     }
     if (rc != 0)
-        pr_err("%s invalid buffer address ", __func__);
+	pr_err("%s invalid buffer address ", __func__);
 
     spin_unlock_irqrestore(&pcam_inst->vq_irqlock, flags);
     return rc;

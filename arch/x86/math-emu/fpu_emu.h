@@ -159,7 +159,7 @@ extern u_char const data_sizes_16[32];
 #define getsign(a) (signbyte(a) & 0x80)
 #define setsign(a,b) { if (b) signbyte(a) |= 0x80; else signbyte(a) &= 0x7f; }
 #define copysign(a,b) { if (getsign(a)) signbyte(b) |= 0x80; \
-                        else signbyte(b) &= 0x7f; }
+			else signbyte(b) &= 0x7f; }
 #define changesign(a) { signbyte(a) ^= 0x80; }
 #define setpositive(a) { signbyte(a) &= 0x7f; }
 #define setnegative(a) { signbyte(a) |= 0x80; }

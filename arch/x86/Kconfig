@@ -438,7 +438,7 @@ config X86_MDFLD
 	select MFD_INTEL_MSIC
 	---help---
 	  Medfield is Intel's Low Power Intel Architecture (LPIA) based Moblin
-	  Internet Device(MID) platform. 
+	  Internet Device(MID) platform.
 	  Unlike standard x86 PCs, Medfield does not have many legacy devices
 	  nor standard legacy replacement devices/features. e.g. Medfield does
 	  not contain i8259, i8254, HPET, legacy BIOS, most of the io ports.
@@ -673,11 +673,11 @@ config APB_TIMER
        select DW_APB_TIMER
        depends on X86_INTEL_MID && SFI
        help
-         APB timer is the replacement for 8254, HPET on X86 MID platforms.
-         The APBT provides a stable time base on SMP
-         systems, unlike the TSC, but it is more expensive to access,
-         as it is off-chip. APB timers are always running regardless of CPU
-         C states, they are used as per CPU clockevent device when possible.
+	 APB timer is the replacement for 8254, HPET on X86 MID platforms.
+	 The APBT provides a stable time base on SMP
+	 systems, unlike the TSC, but it is more expensive to access,
+	 as it is off-chip. APB timers are always running regardless of CPU
+	 C states, they are used as per CPU clockevent device when possible.
 
 # Mark as expert because too many people got it wrong.
 # The code disables itself when not needed.
@@ -1503,7 +1503,7 @@ config EFI_STUB
        bool "EFI stub support"
        depends on EFI
        ---help---
-          This kernel feature allows a bzImage to be loaded directly
+	  This kernel feature allows a bzImage to be loaded directly
 	  by EFI firmware without the use of a bootloader.
 
 config SECCOMP

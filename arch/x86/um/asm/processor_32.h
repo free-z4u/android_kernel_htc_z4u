@@ -40,9 +40,9 @@ static inline void arch_flush_thread(struct arch_thread *thread)
 }
 
 static inline void arch_copy_thread(struct arch_thread *from,
-                                    struct arch_thread *to)
+				    struct arch_thread *to)
 {
-        memcpy(&to->tls_array, &from->tls_array, sizeof(from->tls_array));
+	memcpy(&to->tls_array, &from->tls_array, sizeof(from->tls_array));
 }
 
 /*

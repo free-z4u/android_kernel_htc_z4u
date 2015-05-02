@@ -185,7 +185,7 @@ static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a)
 {
 	if (dmanr <= 3)  {
 	    dma_outb( a & 0xff, ((dmanr&3)<<1) + IO_DMA1_BASE );
-            dma_outb( (a>>8) & 0xff, ((dmanr&3)<<1) + IO_DMA1_BASE );
+	    dma_outb( (a>>8) & 0xff, ((dmanr&3)<<1) + IO_DMA1_BASE );
 	}  else  {
 	    dma_outb( (a>>1) & 0xff, ((dmanr&3)<<2) + IO_DMA2_BASE );
 	    dma_outb( (a>>9) & 0xff, ((dmanr&3)<<2) + IO_DMA2_BASE );
@@ -203,14 +203,14 @@ static __inline__ void set_dma_addr(unsigned int dmanr, unsigned int a)
  */
 static __inline__ void set_dma_count(unsigned int dmanr, unsigned int count)
 {
-        count--;
+	count--;
 	if (dmanr <= 3)  {
 	    dma_outb( count & 0xff, ((dmanr&3)<<1) + 1 + IO_DMA1_BASE );
 	    dma_outb( (count>>8) & 0xff, ((dmanr&3)<<1) + 1 + IO_DMA1_BASE );
-        } else {
+	} else {
 	    dma_outb( (count>>1) & 0xff, ((dmanr&3)<<2) + 2 + IO_DMA2_BASE );
 	    dma_outb( (count>>9) & 0xff, ((dmanr&3)<<2) + 2 + IO_DMA2_BASE );
-        }
+	}
 }
 
 

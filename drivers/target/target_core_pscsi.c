@@ -892,7 +892,7 @@ static ssize_t pscsi_show_configfs_dev_params(struct se_hba *hba,
 					      char *b)
 {
 	struct pscsi_hba_virt *phv = hba->hba_ptr;
-        struct pscsi_dev_virt *pdv = se_dev->se_dev_su_ptr;
+	struct pscsi_dev_virt *pdv = se_dev->se_dev_su_ptr;
 	struct scsi_device *sd = pdv->pdv_sd;
 	unsigned char host_id[16];
 	ssize_t bl;

@@ -48,9 +48,9 @@ static int offalarm_snooze_size = OFFALARM_SNOOZE_SIZE;
 static int offalarm[OFFALARM_SIZE];
 static int offalarm_snooze[OFFALARM_SNOOZE_SIZE];
 module_param_array_named(offalarm, offalarm, uint, &offalarm_size,
-        S_IRUGO | S_IWUSR);
+	S_IRUGO | S_IWUSR);
 module_param_array_named(offalarm_snooze, offalarm_snooze, uint, &offalarm_snooze_size,
-        S_IRUGO | S_IWUSR);
+	S_IRUGO | S_IWUSR);
 #endif
 
 #define pr_alarm(debug_level_mask, args...) \
@@ -471,49 +471,49 @@ static int alarm_resume(struct platform_device *pdev)
 #ifdef CONFIG_HTC_OFFMODE_ALARM
 static int find_offmode_alarm(void)
 {
-        struct timespec rtc_now;
-        int i;
-        int nearest_alarm = 0;
-        int nearest_alarm_snooze = 0;
+	struct timespec rtc_now;
+	int i;
+	int nearest_alarm = 0;
+	int nearest_alarm_snooze = 0;
 
-        getnstimeofday(&rtc_now);
-        for (i = 0; i < offalarm_size; i++) {
-                if (offalarm[i] > rtc_now.tv_sec) {
-                        if (nearest_alarm == 0)
-                                nearest_alarm = offalarm[i];
-                        else if (offalarm[i] < nearest_alarm)
-                                nearest_alarm = offalarm[i];
-                }
-        }
-        for (i = 0; i < offalarm_snooze_size; i++) {
-                if (offalarm_snooze[i] > rtc_now.tv_sec) {
-                        if (nearest_alarm_snooze == 0)
-                                nearest_alarm_snooze = offalarm_snooze[i];
-                        else if (offalarm_snooze[i] < nearest_alarm_snooze)
-                                nearest_alarm_snooze = offalarm_snooze[i];
-                }
-        }
-        pr_alarm(FLOW, "alarm(%u), snooze(%u)", nearest_alarm, nearest_alarm_snooze);
-        if((nearest_alarm == 0 || nearest_alarm_snooze <= nearest_alarm) && nearest_alarm_snooze != 0)
-                return nearest_alarm_snooze;
-        else
-                return nearest_alarm;
+	getnstimeofday(&rtc_now);
+	for (i = 0; i < offalarm_size; i++) {
+		if (offalarm[i] > rtc_now.tv_sec) {
+			if (nearest_alarm == 0)
+				nearest_alarm = offalarm[i];
+			else if (offalarm[i] < nearest_alarm)
+				nearest_alarm = offalarm[i];
+		}
+	}
+	for (i = 0; i < offalarm_snooze_size; i++) {
+		if (offalarm_snooze[i] > rtc_now.tv_sec) {
+			if (nearest_alarm_snooze == 0)
+				nearest_alarm_snooze = offalarm_snooze[i];
+			else if (offalarm_snooze[i] < nearest_alarm_snooze)
+				nearest_alarm_snooze = offalarm_snooze[i];
+		}
+	}
+	pr_alarm(FLOW, "alarm(%u), snooze(%u)", nearest_alarm, nearest_alarm_snooze);
+	if((nearest_alarm == 0 || nearest_alarm_snooze <= nearest_alarm) && nearest_alarm_snooze != 0)
+		return nearest_alarm_snooze;
+	else
+		return nearest_alarm;
 }
 static void alarm_shutdown(struct platform_device *pdev)
 {
-        int offmode_alarm;
-        struct rtc_wkalrm rtc_alarm;
+	int offmode_alarm;
+	struct rtc_wkalrm rtc_alarm;
 
-        if (!htc_is_offalarm_enabled())
-                return;
+	if (!htc_is_offalarm_enabled())
+		return;
 
-        offmode_alarm = find_offmode_alarm();
-        if (offmode_alarm > 0) {
-                pr_alarm(FLOW, "set offmode alarm(%u)", offmode_alarm);
-                rtc_time_to_tm(offmode_alarm, &rtc_alarm.time);
-                rtc_alarm.enabled = 1;
-                rtc_set_alarm(alarm_rtc_dev, &rtc_alarm);
-        }
+	offmode_alarm = find_offmode_alarm();
+	if (offmode_alarm > 0) {
+		pr_alarm(FLOW, "set offmode alarm(%u)", offmode_alarm);
+		rtc_time_to_tm(offmode_alarm, &rtc_alarm.time);
+		rtc_alarm.enabled = 1;
+		rtc_set_alarm(alarm_rtc_dev, &rtc_alarm);
+	}
 }
 #endif
 
@@ -577,7 +577,7 @@ static struct platform_driver alarm_driver = {
 	.suspend = alarm_suspend,
 	.resume = alarm_resume,
 #ifdef CONFIG_HTC_OFFMODE_ALARM
-        .shutdown = alarm_shutdown,
+	.shutdown = alarm_shutdown,
 #endif
 	.driver = {
 		.name = "alarm"

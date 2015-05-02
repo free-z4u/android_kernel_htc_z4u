@@ -348,7 +348,7 @@ static void au1xmmc_data_complete(struct au1xmmc_host *host, u32 status)
 	data->error = 0;
 	dma_unmap_sg(mmc_dev(host->mmc), data->sg, data->sg_len, host->dma.dir);
 
-        /* Process any errors */
+	/* Process any errors */
 	crc = (status & (SD_STATUS_WC | SD_STATUS_RC));
 	if (host->flags & HOST_F_XMIT)
 		crc |= ((status & 0x07) == 0x02) ? 0 : 1;
@@ -563,7 +563,7 @@ static void au1xmmc_cmd_complete(struct au1xmmc_host *host, u32 status)
 		}
 	}
 
-        /* Figure out errors */
+	/* Figure out errors */
 	if (status & (SD_STATUS_SC | SD_STATUS_WC | SD_STATUS_RC))
 		cmd->error = -EILSEQ;
 
@@ -724,7 +724,7 @@ static void au1xmmc_reset_controller(struct au1xmmc_host *host)
 {
 	/* Apply the clock */
 	au_writel(SD_ENABLE_CE, HOST_ENABLE(host));
-        au_sync_delay(1);
+	au_sync_delay(1);
 
 	au_writel(SD_ENABLE_R | SD_ENABLE_CE, HOST_ENABLE(host));
 	au_sync_delay(5);
@@ -737,7 +737,7 @@ static void au1xmmc_reset_controller(struct au1xmmc_host *host)
 	au_sync();
 
 	au_writel(SD_CONFIG2_EN, HOST_CONFIG2(host));
-        au_sync();
+	au_sync();
 
 	au_writel(SD_CONFIG2_EN | SD_CONFIG2_FF, HOST_CONFIG2(host));
 	au_sync_delay(1);

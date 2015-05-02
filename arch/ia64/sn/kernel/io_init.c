@@ -357,10 +357,10 @@ sn_bus_fixup(struct pci_bus *bus)
 			return;
 		}
 		sn_common_bus_fixup(bus, prom_bussoft_ptr);
-        }
-        list_for_each_entry(pci_dev, &bus->devices, bus_list) {
-                sn_io_slot_fixup(pci_dev);
-        }
+	}
+	list_for_each_entry(pci_dev, &bus->devices, bus_list) {
+		sn_io_slot_fixup(pci_dev);
+	}
 
 }
 

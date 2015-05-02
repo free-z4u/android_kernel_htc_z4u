@@ -66,12 +66,12 @@ void rds_tcp_xmit_complete(struct rds_connection *conn)
 static int rds_tcp_sendmsg(struct socket *sock, void *data, unsigned int len)
 {
 	struct kvec vec = {
-                .iov_base = data,
-                .iov_len = len,
+		.iov_base = data,
+		.iov_len = len,
 	};
-        struct msghdr msg = {
-                .msg_flags = MSG_DONTWAIT | MSG_NOSIGNAL,
-        };
+	struct msghdr msg = {
+		.msg_flags = MSG_DONTWAIT | MSG_NOSIGNAL,
+	};
 
 	return kernel_sendmsg(sock, &msg, &vec, 1, vec.iov_len);
 }
@@ -190,7 +190,7 @@ void rds_tcp_write_space(struct sock *sk)
 	tc->t_last_seen_una = rds_tcp_snd_una(tc);
 	rds_send_drop_acked(conn, rds_tcp_snd_una(tc), rds_tcp_is_acked);
 
-        if ((atomic_read(&sk->sk_wmem_alloc) << 1) <= sk->sk_sndbuf)
+	if ((atomic_read(&sk->sk_wmem_alloc) << 1) <= sk->sk_sndbuf)
 		queue_delayed_work(rds_wq, &conn->c_send_w, 0);
 
 out:

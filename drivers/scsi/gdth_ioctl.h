@@ -50,75 +50,75 @@ typedef struct {
     u32     CommandIndex;                   /* command number */
     u16      OpCode;                         /* the command (READ,..) */
     union {
-        struct {
-            u16      DeviceNo;               /* number of cache drive */
-            u32     BlockNo;                /* block number */
-            u32     BlockCnt;               /* block count */
-            u32     DestAddr;               /* dest. addr. (if s/g: -1) */
-            u32     sg_canz;                /* s/g element count */
-            gdth_sg_str sg_lst[GDTH_MAXSG];     /* s/g list */
-        } __attribute__((packed)) cache;                         /* cache service cmd. str. */
-        struct {
-            u16      DeviceNo;               /* number of cache drive */
-            u64     BlockNo;                /* block number */
-            u32     BlockCnt;               /* block count */
-            u64     DestAddr;               /* dest. addr. (if s/g: -1) */
-            u32     sg_canz;                /* s/g element count */
-            gdth_sg64_str sg_lst[GDTH_MAXSG];   /* s/g list */
-        } __attribute__((packed)) cache64;                       /* cache service cmd. str. */
-        struct {
-            u16      param_size;             /* size of p_param buffer */
-            u32     subfunc;                /* IOCTL function */
-            u32     channel;                /* device */
-            u64     p_param;                /* buffer */
-        } __attribute__((packed)) ioctl;                         /* IOCTL command structure */
-        struct {
-            u16      reserved;
-            union {
-                struct {
-                    u32  msg_handle;        /* message handle */
-                    u64  msg_addr;          /* message buffer address */
-                } __attribute__((packed)) msg;
-                u8       data[12];          /* buffer for rtc data, ... */
-            } su;
-        } __attribute__((packed)) screen;                        /* screen service cmd. str. */
-        struct {
-            u16      reserved;
-            u32     direction;              /* data direction */
-            u32     mdisc_time;             /* disc. time (0: no timeout)*/
-            u32     mcon_time;              /* connect time(0: no to.) */
-            u32     sdata;                  /* dest. addr. (if s/g: -1) */
-            u32     sdlen;                  /* data length (bytes) */
-            u32     clen;                   /* SCSI cmd. length(6,10,12) */
-            u8      cmd[12];                /* SCSI command */
-            u8      target;                 /* target ID */
-            u8      lun;                    /* LUN */
-            u8      bus;                    /* SCSI bus number */
-            u8      priority;               /* only 0 used */
-            u32     sense_len;              /* sense data length */
-            u32     sense_data;             /* sense data addr. */
-            u32     link_p;                 /* linked cmds (not supp.) */
-            u32     sg_ranz;                /* s/g element count */
-            gdth_sg_str sg_lst[GDTH_MAXSG];     /* s/g list */
-        } __attribute__((packed)) raw;                           /* raw service cmd. struct. */
-        struct {
-            u16      reserved;
-            u32     direction;              /* data direction */
-            u32     mdisc_time;             /* disc. time (0: no timeout)*/
-            u32     mcon_time;              /* connect time(0: no to.) */
-            u64     sdata;                  /* dest. addr. (if s/g: -1) */
-            u32     sdlen;                  /* data length (bytes) */
-            u32     clen;                   /* SCSI cmd. length(6,..,16) */
-            u8      cmd[16];                /* SCSI command */
-            u8      target;                 /* target ID */
-            u8      lun;                    /* LUN */
-            u8      bus;                    /* SCSI bus number */
-            u8      priority;               /* only 0 used */
-            u32     sense_len;              /* sense data length */
-            u64     sense_data;             /* sense data addr. */
-            u32     sg_ranz;                /* s/g element count */
-            gdth_sg64_str sg_lst[GDTH_MAXSG];   /* s/g list */
-        } __attribute__((packed)) raw64;                         /* raw service cmd. struct. */
+	struct {
+	    u16      DeviceNo;               /* number of cache drive */
+	    u32     BlockNo;                /* block number */
+	    u32     BlockCnt;               /* block count */
+	    u32     DestAddr;               /* dest. addr. (if s/g: -1) */
+	    u32     sg_canz;                /* s/g element count */
+	    gdth_sg_str sg_lst[GDTH_MAXSG];     /* s/g list */
+	} __attribute__((packed)) cache;                         /* cache service cmd. str. */
+	struct {
+	    u16      DeviceNo;               /* number of cache drive */
+	    u64     BlockNo;                /* block number */
+	    u32     BlockCnt;               /* block count */
+	    u64     DestAddr;               /* dest. addr. (if s/g: -1) */
+	    u32     sg_canz;                /* s/g element count */
+	    gdth_sg64_str sg_lst[GDTH_MAXSG];   /* s/g list */
+	} __attribute__((packed)) cache64;                       /* cache service cmd. str. */
+	struct {
+	    u16      param_size;             /* size of p_param buffer */
+	    u32     subfunc;                /* IOCTL function */
+	    u32     channel;                /* device */
+	    u64     p_param;                /* buffer */
+	} __attribute__((packed)) ioctl;                         /* IOCTL command structure */
+	struct {
+	    u16      reserved;
+	    union {
+		struct {
+		    u32  msg_handle;        /* message handle */
+		    u64  msg_addr;          /* message buffer address */
+		} __attribute__((packed)) msg;
+		u8       data[12];          /* buffer for rtc data, ... */
+	    } su;
+	} __attribute__((packed)) screen;                        /* screen service cmd. str. */
+	struct {
+	    u16      reserved;
+	    u32     direction;              /* data direction */
+	    u32     mdisc_time;             /* disc. time (0: no timeout)*/
+	    u32     mcon_time;              /* connect time(0: no to.) */
+	    u32     sdata;                  /* dest. addr. (if s/g: -1) */
+	    u32     sdlen;                  /* data length (bytes) */
+	    u32     clen;                   /* SCSI cmd. length(6,10,12) */
+	    u8      cmd[12];                /* SCSI command */
+	    u8      target;                 /* target ID */
+	    u8      lun;                    /* LUN */
+	    u8      bus;                    /* SCSI bus number */
+	    u8      priority;               /* only 0 used */
+	    u32     sense_len;              /* sense data length */
+	    u32     sense_data;             /* sense data addr. */
+	    u32     link_p;                 /* linked cmds (not supp.) */
+	    u32     sg_ranz;                /* s/g element count */
+	    gdth_sg_str sg_lst[GDTH_MAXSG];     /* s/g list */
+	} __attribute__((packed)) raw;                           /* raw service cmd. struct. */
+	struct {
+	    u16      reserved;
+	    u32     direction;              /* data direction */
+	    u32     mdisc_time;             /* disc. time (0: no timeout)*/
+	    u32     mcon_time;              /* connect time(0: no to.) */
+	    u64     sdata;                  /* dest. addr. (if s/g: -1) */
+	    u32     sdlen;                  /* data length (bytes) */
+	    u32     clen;                   /* SCSI cmd. length(6,..,16) */
+	    u8      cmd[16];                /* SCSI command */
+	    u8      target;                 /* target ID */
+	    u8      lun;                    /* LUN */
+	    u8      bus;                    /* SCSI bus number */
+	    u8      priority;               /* only 0 used */
+	    u32     sense_len;              /* sense data length */
+	    u64     sense_data;             /* sense data addr. */
+	    u32     sg_ranz;                /* s/g element count */
+	    gdth_sg64_str sg_lst[GDTH_MAXSG];   /* s/g list */
+	} __attribute__((packed)) raw64;                         /* raw service cmd. struct. */
     } u;
     /* additional variables */
     u8      Service;                        /* controller service */
@@ -136,31 +136,31 @@ typedef struct {
 typedef struct {
     u16                  size;               /* size of structure */
     union {
-        char                stream[16];
-        struct {
-            u16          ionode;
-            u16          service;
-            u32         index;
-        } __attribute__((packed)) driver;
-        struct {
-            u16          ionode;
-            u16          service;
-            u16          status;
-            u32         info;
-            u8          scsi_coord[3];
-        } __attribute__((packed)) async;
-        struct {
-            u16          ionode;
-            u16          service;
-            u16          status;
-            u32         info;
-            u16          hostdrive;
-            u8          scsi_coord[3];
-            u8          sense_key;
-        } __attribute__((packed)) sync;
-        struct {
-            u32         l1, l2, l3, l4;
-        } __attribute__((packed)) test;
+	char                stream[16];
+	struct {
+	    u16          ionode;
+	    u16          service;
+	    u32         index;
+	} __attribute__((packed)) driver;
+	struct {
+	    u16          ionode;
+	    u16          service;
+	    u16          status;
+	    u32         info;
+	    u8          scsi_coord[3];
+	} __attribute__((packed)) async;
+	struct {
+	    u16          ionode;
+	    u16          service;
+	    u16          status;
+	    u32         info;
+	    u16          hostdrive;
+	    u8          scsi_coord[3];
+	    u8          sense_key;
+	} __attribute__((packed)) sync;
+	struct {
+	    u32         l1, l2, l3, l4;
+	} __attribute__((packed)) test;
     } eu;
     u32                 severity;
     u8                  event_string[256];
@@ -187,35 +187,35 @@ typedef struct {
     u16                  service;            /* controller service */
     u16                  timeout;            /* timeout */
     union {
-        struct {
-            u8          command[512];       /* controller command */
-            u8          data[1];            /* add. data */
-        } general;
-        struct {
-            u8          lock;               /* lock/unlock */
-            u8          drive_cnt;          /* drive count */
-            u16          drives[MAX_HDRIVES];/* drives */
-        } lockdrv;
-        struct {
-            u8          lock;               /* lock/unlock */
-            u8          channel;            /* channel */
-        } lockchn;
-        struct {
-            int             erase;              /* erase event ? */
-            int             handle;
-            u8          evt[EVENT_SIZE];    /* event structure */
-        } event;
-        struct {
-            u8          bus;                /* SCSI bus */
-            u8          target;             /* target ID */
-            u8          lun;                /* LUN */
-            u8          cmd_len;            /* command length */
-            u8          cmd[12];            /* SCSI command */
-        } scsi;
-        struct {
-            u16          hdr_no;             /* host drive number */
-            u8          flag;               /* old meth./add/remove */
-        } rescan;
+	struct {
+	    u8          command[512];       /* controller command */
+	    u8          data[1];            /* add. data */
+	} general;
+	struct {
+	    u8          lock;               /* lock/unlock */
+	    u8          drive_cnt;          /* drive count */
+	    u16          drives[MAX_HDRIVES];/* drives */
+	} lockdrv;
+	struct {
+	    u8          lock;               /* lock/unlock */
+	    u8          channel;            /* channel */
+	} lockchn;
+	struct {
+	    int             erase;              /* erase event ? */
+	    int             handle;
+	    u8          evt[EVENT_SIZE];    /* event structure */
+	} event;
+	struct {
+	    u8          bus;                /* SCSI bus */
+	    u8          target;             /* target ID */
+	    u8          lun;                /* LUN */
+	    u8          cmd_len;            /* command length */
+	    u8          cmd[12];            /* SCSI command */
+	} scsi;
+	struct {
+	    u16          hdr_no;             /* host drive number */
+	    u8          flag;               /* old meth./add/remove */
+	} rescan;
     } iu;
 } gdth_iowr_str;
 
@@ -224,40 +224,40 @@ typedef struct {
     u32                 size;               /* buffer size */
     u32                 status;             /* IOCTL error code */
     union {
-        struct {
-            u8          data[1];            /* data */
-        } general;
-        struct {
-            u16          version;            /* driver version */
-        } drvers;
-        struct {
-            u8          type;               /* controller type */
-            u16          info;               /* slot etc. */
-            u16          oem_id;             /* OEM ID */
-            u16          bios_ver;           /* not used */
-            u16          access;             /* not used */
-            u16          ext_type;           /* extended type */
-            u16          device_id;          /* device ID */
-            u16          sub_device_id;      /* sub device ID */
-        } ctrtype;
-        struct {
-            u8          version;            /* OS version */
-            u8          subversion;         /* OS subversion */
-            u16          revision;           /* revision */
-        } osvers;
-        struct {
-            u16          count;              /* controller count */
-        } ctrcnt;
-        struct {
-            int             handle;
-            u8          evt[EVENT_SIZE];    /* event structure */
-        } event;
-        struct {
-            u8          bus;                /* SCSI bus, 0xff: invalid */
-            u8          target;             /* target ID */
-            u8          lun;                /* LUN */
-            u8          cluster_type;       /* cluster properties */
-        } hdr_list[MAX_HDRIVES];                /* index is host drive number */
+	struct {
+	    u8          data[1];            /* data */
+	} general;
+	struct {
+	    u16          version;            /* driver version */
+	} drvers;
+	struct {
+	    u8          type;               /* controller type */
+	    u16          info;               /* slot etc. */
+	    u16          oem_id;             /* OEM ID */
+	    u16          bios_ver;           /* not used */
+	    u16          access;             /* not used */
+	    u16          ext_type;           /* extended type */
+	    u16          device_id;          /* device ID */
+	    u16          sub_device_id;      /* sub device ID */
+	} ctrtype;
+	struct {
+	    u8          version;            /* OS version */
+	    u8          subversion;         /* OS subversion */
+	    u16          revision;           /* revision */
+	} osvers;
+	struct {
+	    u16          count;              /* controller count */
+	} ctrcnt;
+	struct {
+	    int             handle;
+	    u8          evt[EVENT_SIZE];    /* event structure */
+	} event;
+	struct {
+	    u8          bus;                /* SCSI bus, 0xff: invalid */
+	    u8          target;             /* target ID */
+	    u8          lun;                /* LUN */
+	    u8          cluster_type;       /* cluster properties */
+	} hdr_list[MAX_HDRIVES];                /* index is host drive number */
     } iu;
 } gdth_iord_str;
 #endif
@@ -322,10 +322,10 @@ typedef struct {
     u8 flag;                                /* add/remove */
     u16 hdr_no;                              /* drive no. */
     struct {
-        u8 bus;                             /* SCSI bus */
-        u8 target;                          /* target ID */
-        u8 lun;                             /* LUN */
-        u8 cluster_type;                    /* cluster properties */
+	u8 bus;                             /* SCSI bus */
+	u8 target;                          /* target ID */
+	u8 lun;                             /* LUN */
+	u8 cluster_type;                    /* cluster properties */
     } hdr_list[MAX_HDRIVES];                    /* index is host drive number */
 } gdth_ioctl_rescan;
 

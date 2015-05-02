@@ -277,12 +277,12 @@ struct streamer_private {
 	__u16 arb;
 	__u16 asb;
 
-        struct streamer_private *next;
-        struct pci_dev *pci_dev;
+	struct streamer_private *next;
+	struct pci_dev *pci_dev;
 	__u8 __iomem *streamer_mmio;
-        char *streamer_card_name;
+	char *streamer_card_name;
 
-        spinlock_t streamer_lock;
+	spinlock_t streamer_lock;
 
 	volatile int srb_queued;	/* True if an SRB is still posted */
 	wait_queue_head_t srb_wait;

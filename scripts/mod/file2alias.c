@@ -96,15 +96,15 @@ extern struct devtable *__start___devtable[], *__stop___devtable[];
 
 #define ADD(str, sep, cond, field)                              \
 do {                                                            \
-        strcat(str, sep);                                       \
-        if (cond)                                               \
-                sprintf(str + strlen(str),                      \
-                        sizeof(field) == 1 ? "%02X" :           \
-                        sizeof(field) == 2 ? "%04X" :           \
-                        sizeof(field) == 4 ? "%08X" : "",       \
-                        field);                                 \
-        else                                                    \
-                sprintf(str + strlen(str), "*");                \
+	strcat(str, sep);                                       \
+	if (cond)                                               \
+		sprintf(str + strlen(str),                      \
+			sizeof(field) == 1 ? "%02X" :           \
+			sizeof(field) == 2 ? "%04X" :           \
+			sizeof(field) == 4 ? "%08X" : "",       \
+			field);                                 \
+	else                                                    \
+		sprintf(str + strlen(str), "*");                \
 } while(0)
 
 /* Always end in a wildcard, for future extension */
@@ -615,18 +615,18 @@ static int do_of_entry (const char *filename, struct of_device_id *of, char *ali
     int len;
     char *tmp;
     len = sprintf (alias, "of:N%sT%s",
-                    of->name[0] ? of->name : "*",
-                    of->type[0] ? of->type : "*");
+		    of->name[0] ? of->name : "*",
+		    of->type[0] ? of->type : "*");
 
     if (of->compatible[0])
-        sprintf (&alias[len], "%sC%s",
-                     of->type[0] ? "*" : "",
-                     of->compatible);
+	sprintf (&alias[len], "%sC%s",
+		     of->type[0] ? "*" : "",
+		     of->compatible);
 
     /* Replace all whitespace with underscores */
     for (tmp = alias; tmp && *tmp; tmp++)
-        if (isspace (*tmp))
-            *tmp = '_';
+	if (isspace (*tmp))
+	    *tmp = '_';
 
     add_wildcard(alias);
     return 1;

@@ -200,7 +200,7 @@ typedef struct _ATOM_COMMON_TABLE_HEADER
   USHORT usStructureSize;
   UCHAR  ucTableFormatRevision;   /*Change it when the Parser is not backward compatible */
   UCHAR  ucTableContentRevision;  /*Change it only when the table needs to change but the firmware */
-                                  /*Image can't be updated, while Driver needs to carry the new table! */
+				  /*Image can't be updated, while Driver needs to carry the new table! */
 }ATOM_COMMON_TABLE_HEADER;
 
 /****************************************************************************/
@@ -210,7 +210,7 @@ typedef struct _ATOM_ROM_HEADER
 {
   ATOM_COMMON_TABLE_HEADER		sHeader;
   UCHAR	 uaFirmWareSignature[4];    /*Signature to distinguish between Atombios and non-atombios,
-                                      atombios should init it as "ATOM", don't change the position */
+				      atombios should init it as "ATOM", don't change the position */
   USHORT usBiosRuntimeSegmentAddress;
   USHORT usProtectedModeInfoOffset;
   USHORT usConfigFilenameOffset;
@@ -646,8 +646,8 @@ typedef struct _DAC_ENCODER_CONTROL_PARAMETERS
   USHORT usPixelClock;                // in 10KHz; for bios convenient
   UCHAR  ucDacStandard;               // See definition of ATOM_DACx_xxx, For DEC3.0, bit 7 used as internal flag to indicate DAC2 (==1) or DAC1 (==0)
   UCHAR  ucAction;                    // 0: turn off encoder
-                                      // 1: setup and turn on encoder
-                                      // 7: ATOM_ENCODER_INIT Initialize DAC
+				      // 1: setup and turn on encoder
+				      // 7: ATOM_ENCODER_INIT Initialize DAC
 }DAC_ENCODER_CONTROL_PARAMETERS;
 
 #define DAC_ENCODER_CONTROL_PS_ALLOCATION  DAC_ENCODER_CONTROL_PARAMETERS
@@ -661,21 +661,21 @@ typedef struct _DIG_ENCODER_CONTROL_PARAMETERS
 {
   USHORT usPixelClock;		// in 10KHz; for bios convenient
   UCHAR  ucConfig;
-                            // [2] Link Select:
-                            // =0: PHY linkA if bfLane<3
-                            // =1: PHY linkB if bfLanes<3
-                            // =0: PHY linkA+B if bfLanes=3
-                            // [3] Transmitter Sel
-                            // =0: UNIPHY or PCIEPHY
-                            // =1: LVTMA
+			    // [2] Link Select:
+			    // =0: PHY linkA if bfLane<3
+			    // =1: PHY linkB if bfLanes<3
+			    // =0: PHY linkA+B if bfLanes=3
+			    // [3] Transmitter Sel
+			    // =0: UNIPHY or PCIEPHY
+			    // =1: LVTMA
   UCHAR ucAction;           // =0: turn off encoder
-                            // =1: turn on encoder
+			    // =1: turn on encoder
   UCHAR ucEncoderMode;
-                            // =0: DP   encoder
-                            // =1: LVDS encoder
-                            // =2: DVI  encoder
-                            // =3: HDMI encoder
-                            // =4: SDVO encoder
+			    // =0: DP   encoder
+			    // =1: LVDS encoder
+			    // =2: DVI  encoder
+			    // =3: HDMI encoder
+			    // =4: SDVO encoder
   UCHAR ucLaneNum;          // how many lanes to enable
   UCHAR ucReserved[2];
 }DIG_ENCODER_CONTROL_PARAMETERS;
@@ -740,11 +740,11 @@ typedef struct _DIG_ENCODER_CONTROL_PARAMETERS_V2
   ATOM_DIG_ENCODER_CONFIG_V2 acConfig;
   UCHAR ucAction;
   UCHAR ucEncoderMode;
-                            // =0: DP   encoder
-                            // =1: LVDS encoder
-                            // =2: DVI  encoder
-                            // =3: HDMI encoder
-                            // =4: SDVO encoder
+			    // =0: DP   encoder
+			    // =1: LVDS encoder
+			    // =2: DVI  encoder
+			    // =3: HDMI encoder
+			    // =4: SDVO encoder
   UCHAR ucLaneNum;          // how many lanes to enable
   UCHAR ucStatus;           // = DP_LINK_TRAINING_COMPLETE or DP_LINK_TRAINING_INCOMPLETE, only used by VBIOS with command ATOM_ENCODER_CMD_QUERY_DP_LINK_TRAINING_STATUS
   UCHAR ucReserved;
@@ -816,12 +816,12 @@ typedef struct _DIG_ENCODER_CONTROL_PARAMETERS_V3
   UCHAR ucAction;
   union {
     UCHAR ucEncoderMode;
-                            // =0: DP   encoder
-                            // =1: LVDS encoder
-                            // =2: DVI  encoder
-                            // =3: HDMI encoder
-                            // =4: SDVO encoder
-                            // =5: DP audio
+			    // =0: DP   encoder
+			    // =1: LVDS encoder
+			    // =2: DVI  encoder
+			    // =3: HDMI encoder
+			    // =4: SDVO encoder
+			    // =5: DP audio
     UCHAR ucPanelMode;      // only valid when ucAction == ATOM_ENCODER_CMD_SETUP_PANEL_MODE
 	                    // =0:     external DP
 	                    // =1:     internal DP2
@@ -875,12 +875,12 @@ typedef struct _DIG_ENCODER_CONTROL_PARAMETERS_V4
   UCHAR ucAction;
   union {
     UCHAR ucEncoderMode;
-                            // =0: DP   encoder
-                            // =1: LVDS encoder
-                            // =2: DVI  encoder
-                            // =3: HDMI encoder
-                            // =4: SDVO encoder
-                            // =5: DP audio
+			    // =0: DP   encoder
+			    // =1: LVDS encoder
+			    // =2: DVI  encoder
+			    // =3: HDMI encoder
+			    // =4: SDVO encoder
+			    // =5: DP audio
     UCHAR ucPanelMode;      // only valid when ucAction == ATOM_ENCODER_CMD_SETUP_PANEL_MODE
 	                    // =0:     external DP
 	                    // =1:     internal DP2
@@ -926,17 +926,17 @@ typedef struct _DIG_TRANSMITTER_CONTROL_PARAMETERS
   UCHAR ucConfig;
 													// [0]=0: 4 lane Link,
 													//    =1: 8 lane Link ( Dual Links TMDS )
-                          // [1]=0: InCoherent mode
+			  // [1]=0: InCoherent mode
 													//    =1: Coherent Mode
 													// [2] Link Select:
   												// =0: PHY linkA   if bfLane<3
 													// =1: PHY linkB   if bfLanes<3
 		  										// =0: PHY linkA+B if bfLanes=3
-                          // [5:4]PCIE lane Sel
-                          // =0: lane 0~3 or 0~7
-                          // =1: lane 4~7
-                          // =2: lane 8~11 or 8~15
-                          // =3: lane 12~15
+			  // [5:4]PCIE lane Sel
+			  // =0: lane 0~3 or 0~7
+			  // =1: lane 4~7
+			  // =2: lane 8~11 or 8~15
+			  // =3: lane 12~15
 	UCHAR ucAction;				  // =0: turn off encoder
 	                        // =1: turn on encoder
   UCHAR ucReserved[4];
@@ -993,13 +993,13 @@ typedef struct _ATOM_DIG_TRANSMITTER_CONFIG_V2
 {
 #if ATOM_BIG_ENDIAN
   UCHAR ucTransmitterSel:2;         //bit7:6: =0 Dig Transmitter 1 ( Uniphy AB )
-                                    //        =1 Dig Transmitter 2 ( Uniphy CD )
-                                    //        =2 Dig Transmitter 3 ( Uniphy EF )
+				    //        =1 Dig Transmitter 2 ( Uniphy CD )
+				    //        =2 Dig Transmitter 3 ( Uniphy EF )
   UCHAR ucReserved:1;
   UCHAR fDPConnector:1;             //bit4=0: DP connector  =1: None DP connector
   UCHAR ucEncoderSel:1;             //bit3=0: Data/Clk path source from DIGA( DIG inst0 ). =1: Data/clk path source from DIGB ( DIG inst1 )
   UCHAR ucLinkSel:1;                //bit2=0: Uniphy LINKA or C or E when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is A or C or E
-                                    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
+				    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
 
   UCHAR fCoherentMode:1;            //bit1=1: Coherent Mode ( for DVI/HDMI mode )
   UCHAR fDualLinkConnector:1;       //bit0=1: Dual Link DVI connector
@@ -1007,13 +1007,13 @@ typedef struct _ATOM_DIG_TRANSMITTER_CONFIG_V2
   UCHAR fDualLinkConnector:1;       //bit0=1: Dual Link DVI connector
   UCHAR fCoherentMode:1;            //bit1=1: Coherent Mode ( for DVI/HDMI mode )
   UCHAR ucLinkSel:1;                //bit2=0: Uniphy LINKA or C or E when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is A or C or E
-                                    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
+				    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
   UCHAR ucEncoderSel:1;             //bit3=0: Data/Clk path source from DIGA( DIG inst0 ). =1: Data/clk path source from DIGB ( DIG inst1 )
   UCHAR fDPConnector:1;             //bit4=0: DP connector  =1: None DP connector
   UCHAR ucReserved:1;
   UCHAR ucTransmitterSel:2;         //bit7:6: =0 Dig Transmitter 1 ( Uniphy AB )
-                                    //        =1 Dig Transmitter 2 ( Uniphy CD )
-                                    //        =2 Dig Transmitter 3 ( Uniphy EF )
+				    //        =1 Dig Transmitter 2 ( Uniphy CD )
+				    //        =2 Dig Transmitter 3 ( Uniphy EF )
 #endif
 }ATOM_DIG_TRANSMITTER_CONFIG_V2;
 
@@ -1060,24 +1060,24 @@ typedef struct _ATOM_DIG_TRANSMITTER_CONFIG_V3
 {
 #if ATOM_BIG_ENDIAN
   UCHAR ucTransmitterSel:2;         //bit7:6: =0 Dig Transmitter 1 ( Uniphy AB )
-                                    //        =1 Dig Transmitter 2 ( Uniphy CD )
-                                    //        =2 Dig Transmitter 3 ( Uniphy EF )
+				    //        =1 Dig Transmitter 2 ( Uniphy CD )
+				    //        =2 Dig Transmitter 3 ( Uniphy EF )
   UCHAR ucRefClkSource:2;           //bit5:4: PPLL1 =0, PPLL2=1, EXT_CLK=2
   UCHAR ucEncoderSel:1;             //bit3=0: Data/Clk path source from DIGA/C/E. =1: Data/clk path source from DIGB/D/F
   UCHAR ucLinkSel:1;                //bit2=0: Uniphy LINKA or C or E when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is A or C or E
-                                    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
+				    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
   UCHAR fCoherentMode:1;            //bit1=1: Coherent Mode ( for DVI/HDMI mode )
   UCHAR fDualLinkConnector:1;       //bit0=1: Dual Link DVI connector
 #else
   UCHAR fDualLinkConnector:1;       //bit0=1: Dual Link DVI connector
   UCHAR fCoherentMode:1;            //bit1=1: Coherent Mode ( for DVI/HDMI mode )
   UCHAR ucLinkSel:1;                //bit2=0: Uniphy LINKA or C or E when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is A or C or E
-                                    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
+				    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
   UCHAR ucEncoderSel:1;             //bit3=0: Data/Clk path source from DIGA/C/E. =1: Data/clk path source from DIGB/D/F
   UCHAR ucRefClkSource:2;           //bit5:4: PPLL1 =0, PPLL2=1, EXT_CLK=2
   UCHAR ucTransmitterSel:2;         //bit7:6: =0 Dig Transmitter 1 ( Uniphy AB )
-                                    //        =1 Dig Transmitter 2 ( Uniphy CD )
-                                    //        =2 Dig Transmitter 3 ( Uniphy EF )
+				    //        =1 Dig Transmitter 2 ( Uniphy CD )
+				    //        =2 Dig Transmitter 3 ( Uniphy EF )
 #endif
 }ATOM_DIG_TRANSMITTER_CONFIG_V3;
 
@@ -1156,24 +1156,24 @@ typedef struct _ATOM_DIG_TRANSMITTER_CONFIG_V4
 {
 #if ATOM_BIG_ENDIAN
   UCHAR ucTransmitterSel:2;         //bit7:6: =0 Dig Transmitter 1 ( Uniphy AB )
-                                    //        =1 Dig Transmitter 2 ( Uniphy CD )
-                                    //        =2 Dig Transmitter 3 ( Uniphy EF )
+				    //        =1 Dig Transmitter 2 ( Uniphy CD )
+				    //        =2 Dig Transmitter 3 ( Uniphy EF )
   UCHAR ucRefClkSource:2;           //bit5:4: PPLL1 =0, PPLL2=1, DCPLL=2, EXT_CLK=3   <= New
   UCHAR ucEncoderSel:1;             //bit3=0: Data/Clk path source from DIGA/C/E. =1: Data/clk path source from DIGB/D/F
   UCHAR ucLinkSel:1;                //bit2=0: Uniphy LINKA or C or E when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is A or C or E
-                                    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
+				    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
   UCHAR fCoherentMode:1;            //bit1=1: Coherent Mode ( for DVI/HDMI mode )
   UCHAR fDualLinkConnector:1;       //bit0=1: Dual Link DVI connector
 #else
   UCHAR fDualLinkConnector:1;       //bit0=1: Dual Link DVI connector
   UCHAR fCoherentMode:1;            //bit1=1: Coherent Mode ( for DVI/HDMI mode )
   UCHAR ucLinkSel:1;                //bit2=0: Uniphy LINKA or C or E when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is A or C or E
-                                    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
+				    //    =1: Uniphy LINKB or D or F when fDualLinkConnector=0. when fDualLinkConnector=1, it means master link of dual link is B or D or F
   UCHAR ucEncoderSel:1;             //bit3=0: Data/Clk path source from DIGA/C/E. =1: Data/clk path source from DIGB/D/F
   UCHAR ucRefClkSource:2;           //bit5:4: PPLL1 =0, PPLL2=1, DCPLL=2, EXT_CLK=3   <= New
   UCHAR ucTransmitterSel:2;         //bit7:6: =0 Dig Transmitter 1 ( Uniphy AB )
-                                    //        =1 Dig Transmitter 2 ( Uniphy CD )
-                                    //        =2 Dig Transmitter 3 ( Uniphy EF )
+				    //        =1 Dig Transmitter 2 ( Uniphy CD )
+				    //        =2 Dig Transmitter 3 ( Uniphy EF )
 #endif
 }ATOM_DIG_TRANSMITTER_CONFIG_V4;
 
@@ -1378,9 +1378,9 @@ typedef struct _EXTERNAL_ENCODER_CONTROL_PS_ALLOCATION_V3
 typedef struct _DISPLAY_DEVICE_OUTPUT_CONTROL_PARAMETERS
 {
   UCHAR  ucAction;                    // Possible input:ATOM_ENABLE||ATOMDISABLE
-                                      // When the display is LCD, in addition to above:
-                                      // ATOM_LCD_BLOFF|| ATOM_LCD_BLON ||ATOM_LCD_BL_BRIGHTNESS_CONTROL||ATOM_LCD_SELFTEST_START||
-                                      // ATOM_LCD_SELFTEST_STOP
+				      // When the display is LCD, in addition to above:
+				      // ATOM_LCD_BLOFF|| ATOM_LCD_BLON ||ATOM_LCD_BL_BRIGHTNESS_CONTROL||ATOM_LCD_SELFTEST_START||
+				      // ATOM_LCD_SELFTEST_STOP
 
   UCHAR  aucPadding[3];               // padding to DWORD aligned
 }DISPLAY_DEVICE_OUTPUT_CONTROL_PARAMETERS;
@@ -1512,7 +1512,7 @@ typedef struct _SELECT_CRTC_SOURCE_PARAMETERS_V2
 typedef struct _PIXEL_CLOCK_PARAMETERS
 {
   USHORT usPixelClock;                // in 10kHz unit; for bios convenient = (RefClk*FB_Div)/(Ref_Div*Post_Div)
-                                      // 0 means disable PPLL
+				      // 0 means disable PPLL
   USHORT usRefDiv;                    // Reference divider
   USHORT usFbDiv;                     // feedback divider
   UCHAR  ucPostDiv;                   // post divider
@@ -1532,7 +1532,7 @@ typedef struct _PIXEL_CLOCK_PARAMETERS
 typedef struct _PIXEL_CLOCK_PARAMETERS_V2
 {
   USHORT usPixelClock;                // in 10kHz unit; for bios convenient = (RefClk*FB_Div)/(Ref_Div*Post_Div)
-                                      // 0 means disable PPLL
+				      // 0 means disable PPLL
   USHORT usRefDiv;                    // Reference divider
   USHORT usFbDiv;                     // feedback divider
   UCHAR  ucPostDiv;                   // post divider
@@ -1579,7 +1579,7 @@ typedef struct _PIXEL_CLOCK_PARAMETERS_V2
 typedef struct _PIXEL_CLOCK_PARAMETERS_V3
 {
   USHORT usPixelClock;                // in 10kHz unit; for bios convenient = (RefClk*FB_Div)/(Ref_Div*Post_Div)
-                                      // 0 means disable PPLL. For VGA PPLL,make sure this value is not 0.
+				      // 0 means disable PPLL. For VGA PPLL,make sure this value is not 0.
   USHORT usRefDiv;                    // Reference divider
   USHORT usFbDiv;                     // feedback divider
   UCHAR  ucPostDiv;                   // post divider
@@ -1592,8 +1592,8 @@ typedef struct _PIXEL_CLOCK_PARAMETERS_V3
 	UCHAR  ucDVOConfig;									// when use DVO, need to know SDR/DDR, 12bit or 24bit
 	};
   UCHAR  ucMiscInfo;                  // bit[0]=Force program, bit[1]= set pclk for VGA, b[2]= CRTC sel
-                                      // bit[3]=0:use PPLL for dispclk source, =1: use engine clock for dispclock source
-                                      // bit[4]=0:use XTALIN as the source of reference divider,=1 use the pre-defined clock as the source of reference divider
+				      // bit[3]=0:use PPLL for dispclk source, =1: use engine clock for dispclock source
+				      // bit[4]=0:use XTALIN as the source of reference divider,=1 use the pre-defined clock as the source of reference divider
 }PIXEL_CLOCK_PARAMETERS_V3;
 
 #define PIXEL_CLOCK_PARAMETERS_LAST			PIXEL_CLOCK_PARAMETERS_V2
@@ -1602,28 +1602,28 @@ typedef struct _PIXEL_CLOCK_PARAMETERS_V3
 typedef struct _PIXEL_CLOCK_PARAMETERS_V5
 {
   UCHAR  ucCRTC;             // ATOM_CRTC1~6, indicate the CRTC controller to
-                             // drive the pixel clock. not used for DCPLL case.
+			     // drive the pixel clock. not used for DCPLL case.
   union{
   UCHAR  ucReserved;
   UCHAR  ucFracFbDiv;        // [gphan] temporary to prevent build problem.  remove it after driver code is changed.
   };
   USHORT usPixelClock;       // target the pixel clock to drive the CRTC timing
-                             // 0 means disable PPLL/DCPLL.
+			     // 0 means disable PPLL/DCPLL.
   USHORT usFbDiv;            // feedback divider integer part.
   UCHAR  ucPostDiv;          // post divider.
   UCHAR  ucRefDiv;           // Reference divider
   UCHAR  ucPpll;             // ATOM_PPLL1/ATOM_PPLL2/ATOM_DCPLL
   UCHAR  ucTransmitterID;    // ASIC encoder id defined in objectId.h,
-                             // indicate which graphic encoder will be used.
+			     // indicate which graphic encoder will be used.
   UCHAR  ucEncoderMode;      // Encoder mode:
   UCHAR  ucMiscInfo;         // bit[0]= Force program PPLL
-                             // bit[1]= when VGA timing is used.
-                             // bit[3:2]= HDMI panel bit depth: =0: 24bpp =1:30bpp, =2:32bpp
-                             // bit[4]= RefClock source for PPLL.
-                             // =0: XTLAIN( default mode )
+			     // bit[1]= when VGA timing is used.
+			     // bit[3:2]= HDMI panel bit depth: =0: 24bpp =1:30bpp, =2:32bpp
+			     // bit[4]= RefClock source for PPLL.
+			     // =0: XTLAIN( default mode )
 	                           // =1: other external clock source, which is pre-defined
-                             //     by VBIOS depend on the feature required.
-                             // bit[7:5]: reserved.
+			     //     by VBIOS depend on the feature required.
+			     // bit[7:5]: reserved.
   ULONG  ulFbDivDecFrac;     // 20 bit feedback divider decimal fraction part, range from 1~999999 ( 0.000001 to 0.999999 )
 
 }PIXEL_CLOCK_PARAMETERS_V5;
@@ -1640,14 +1640,14 @@ typedef struct _CRTC_PIXEL_CLOCK_FREQ
 {
 #if ATOM_BIG_ENDIAN
   ULONG  ucCRTC:8;            // ATOM_CRTC1~6, indicate the CRTC controller to
-                              // drive the pixel clock. not used for DCPLL case.
+			      // drive the pixel clock. not used for DCPLL case.
   ULONG  ulPixelClock:24;     // target the pixel clock to drive the CRTC timing.
-                              // 0 means disable PPLL/DCPLL. Expanded to 24 bits comparing to previous version.
+			      // 0 means disable PPLL/DCPLL. Expanded to 24 bits comparing to previous version.
 #else
   ULONG  ulPixelClock:24;     // target the pixel clock to drive the CRTC timing.
-                              // 0 means disable PPLL/DCPLL. Expanded to 24 bits comparing to previous version.
+			      // 0 means disable PPLL/DCPLL. Expanded to 24 bits comparing to previous version.
   ULONG  ucCRTC:8;            // ATOM_CRTC1~6, indicate the CRTC controller to
-                              // drive the pixel clock. not used for DCPLL case.
+			      // drive the pixel clock. not used for DCPLL case.
 #endif
 }CRTC_PIXEL_CLOCK_FREQ;
 
@@ -1662,16 +1662,16 @@ typedef struct _PIXEL_CLOCK_PARAMETERS_V6
   UCHAR  ucRefDiv;           // Reference divider
   UCHAR  ucPpll;             // ATOM_PPLL1/ATOM_PPLL2/ATOM_DCPLL
   UCHAR  ucTransmitterID;    // ASIC encoder id defined in objectId.h,
-                             // indicate which graphic encoder will be used.
+			     // indicate which graphic encoder will be used.
   UCHAR  ucEncoderMode;      // Encoder mode:
   UCHAR  ucMiscInfo;         // bit[0]= Force program PPLL
-                             // bit[1]= when VGA timing is used.
-                             // bit[3:2]= HDMI panel bit depth: =0: 24bpp =1:30bpp, =2:32bpp
-                             // bit[4]= RefClock source for PPLL.
-                             // =0: XTLAIN( default mode )
+			     // bit[1]= when VGA timing is used.
+			     // bit[3:2]= HDMI panel bit depth: =0: 24bpp =1:30bpp, =2:32bpp
+			     // bit[4]= RefClock source for PPLL.
+			     // =0: XTLAIN( default mode )
 	                           // =1: other external clock source, which is pre-defined
-                             //     by VBIOS depend on the feature required.
-                             // bit[7:5]: reserved.
+			     //     by VBIOS depend on the feature required.
+			     // bit[7:5]: reserved.
   ULONG  ulFbDivDecFrac;     // 20 bit feedback divider decimal fraction part, range from 1~999999 ( 0.000001 to 0.999999 )
 
 }PIXEL_CLOCK_PARAMETERS_V6;
@@ -1800,7 +1800,7 @@ typedef struct _READ_EDID_FROM_HW_I2C_DATA_PARAMETERS
   USHORT    usPrescale;         //Ratio between Engine clock and I2C clock
   USHORT    usVRAMAddress;      //Address in Frame Buffer where to pace raw EDID
   USHORT    usStatus;           //When use output: lower byte EDID checksum, high byte hardware status
-                                //WHen use input:  lower byte as 'byte to read':currently limited to 128byte or 1byte
+				//WHen use input:  lower byte as 'byte to read':currently limited to 128byte or 1byte
   UCHAR     ucSlaveAddr;        //Read from which slave
   UCHAR     ucLineNumber;       //Read from which HW assisted line
 }READ_EDID_FROM_HW_I2C_DATA_PARAMETERS;
@@ -1817,12 +1817,12 @@ typedef struct _WRITE_ONE_BYTE_HW_I2C_DATA_PARAMETERS
 {
   USHORT    usPrescale;         //Ratio between Engine clock and I2C clock
   USHORT    usByteOffset;       //Write to which byte
-                                //Upper portion of usByteOffset is Format of data
-                                //1bytePS+offsetPS
-                                //2bytesPS+offsetPS
-                                //blockID+offsetPS
-                                //blockID+offsetID
-                                //blockID+counterID+offsetID
+				//Upper portion of usByteOffset is Format of data
+				//1bytePS+offsetPS
+				//2bytesPS+offsetPS
+				//blockID+offsetPS
+				//blockID+offsetID
+				//blockID+counterID+offsetID
   UCHAR     ucData;             //PS data1
   UCHAR     ucStatus;           //Status byte 1=success, 2=failure, Also is used as PS data2
   UCHAR     ucSlaveAddr;        //Write to which slave
@@ -1903,9 +1903,9 @@ typedef struct _ENABLE_SPREAD_SPECTRUM_ON_PPLL_V2
 {
   USHORT  usSpreadSpectrumPercentage;
   UCHAR   ucSpreadSpectrumType;	        // Bit[0]: 0-Down Spread,1-Center Spread.
-                                        // Bit[1]: 1-Ext. 0-Int.
-                                        // Bit[3:2]: =0 P1PLL =1 P2PLL =2 DCPLL
-                                        // Bits[7:4] reserved
+					// Bit[1]: 1-Ext. 0-Int.
+					// Bit[3:2]: =0 P1PLL =1 P2PLL =2 DCPLL
+					// Bits[7:4] reserved
   UCHAR   ucEnable;	                    // ATOM_ENABLE or ATOM_DISABLE
   USHORT  usSpreadSpectrumAmount;      	// Includes SS_AMOUNT_FBDIV[7:0] and SS_AMOUNT_NFRAC_SLIP[11:8]
   USHORT  usSpreadSpectrumStep;	        // SS_STEP_SIZE_DSFRAC
@@ -1928,9 +1928,9 @@ typedef struct _ENABLE_SPREAD_SPECTRUM_ON_PPLL_V2
 {
   USHORT  usSpreadSpectrumAmountFrac;   // SS_AMOUNT_DSFRAC New in DCE5.0
   UCHAR   ucSpreadSpectrumType;	        // Bit[0]: 0-Down Spread,1-Center Spread.
-                                        // Bit[1]: 1-Ext. 0-Int.
-                                        // Bit[3:2]: =0 P1PLL =1 P2PLL =2 DCPLL
-                                        // Bits[7:4] reserved
+					// Bit[1]: 1-Ext. 0-Int.
+					// Bit[3:2]: =0 P1PLL =1 P2PLL =2 DCPLL
+					// Bits[7:4] reserved
   UCHAR   ucEnable;	                    // ATOM_ENABLE or ATOM_DISABLE
   USHORT  usSpreadSpectrumAmount;      	// Includes SS_AMOUNT_FBDIV[7:0] and SS_AMOUNT_NFRAC_SLIP[11:8]
   USHORT  usSpreadSpectrumStep;	        // SS_STEP_SIZE_DSFRAC
@@ -1983,11 +1983,11 @@ typedef struct _LVDS_ENCODER_CONTROL_PARAMETERS
 {
   USHORT usPixelClock;  // in 10KHz; for bios convenient
   UCHAR  ucMisc;        // bit0=0: Enable single link
-                        //     =1: Enable dual link
-                        // Bit1=0: 666RGB
-                        //     =1: 888RGB
+			//     =1: Enable dual link
+			// Bit1=0: 666RGB
+			//     =1: 888RGB
   UCHAR  ucAction;      // 0: turn off encoder
-                        // 1: setup and turn on encoder
+			// 1: setup and turn on encoder
 }LVDS_ENCODER_CONTROL_PARAMETERS;
 
 #define LVDS_ENCODER_CONTROL_PS_ALLOCATION  LVDS_ENCODER_CONTROL_PARAMETERS
@@ -2005,29 +2005,29 @@ typedef struct _LVDS_ENCODER_CONTROL_PARAMETERS_V2
   USHORT usPixelClock;  // in 10KHz; for bios convenient
   UCHAR  ucMisc;        // see PANEL_ENCODER_MISC_xx defintions below
   UCHAR  ucAction;      // 0: turn off encoder
-                        // 1: setup and turn on encoder
+			// 1: setup and turn on encoder
   UCHAR  ucTruncate;    // bit0=0: Disable truncate
-                        //     =1: Enable truncate
-                        // bit4=0: 666RGB
-                        //     =1: 888RGB
+			//     =1: Enable truncate
+			// bit4=0: 666RGB
+			//     =1: 888RGB
   UCHAR  ucSpatial;     // bit0=0: Disable spatial dithering
-                        //     =1: Enable spatial dithering
-                        // bit4=0: 666RGB
-                        //     =1: 888RGB
+			//     =1: Enable spatial dithering
+			// bit4=0: 666RGB
+			//     =1: 888RGB
   UCHAR  ucTemporal;    // bit0=0: Disable temporal dithering
-                        //     =1: Enable temporal dithering
-                        // bit4=0: 666RGB
-                        //     =1: 888RGB
-                        // bit5=0: Gray level 2
-                        //     =1: Gray level 4
+			//     =1: Enable temporal dithering
+			// bit4=0: 666RGB
+			//     =1: 888RGB
+			// bit5=0: Gray level 2
+			//     =1: Gray level 4
   UCHAR  ucFRC;         // bit4=0: 25FRC_SEL pattern E
-                        //     =1: 25FRC_SEL pattern F
-                        // bit6:5=0: 50FRC_SEL pattern A
-                        //       =1: 50FRC_SEL pattern B
-                        //       =2: 50FRC_SEL pattern C
-                        //       =3: 50FRC_SEL pattern D
-                        // bit7=0: 75FRC_SEL pattern E
-                        //     =1: 75FRC_SEL pattern F
+			//     =1: 25FRC_SEL pattern F
+			// bit6:5=0: 50FRC_SEL pattern A
+			//       =1: 50FRC_SEL pattern B
+			//       =2: 50FRC_SEL pattern C
+			//       =3: 50FRC_SEL pattern D
+			// bit7=0: 75FRC_SEL pattern E
+			//     =1: 75FRC_SEL pattern F
 }LVDS_ENCODER_CONTROL_PARAMETERS_V2;
 
 #define LVDS_ENCODER_CONTROL_PS_ALLOCATION_V2  LVDS_ENCODER_CONTROL_PARAMETERS_V2
@@ -2260,7 +2260,7 @@ typedef struct _TV_ENCODER_CONTROL_PARAMETERS
   USHORT usPixelClock;                // in 10KHz; for bios convenient
   UCHAR  ucTvStandard;                // See definition "ATOM_TV_NTSC ..."
   UCHAR  ucAction;                    // 0: turn off encoder
-                                      // 1: setup and turn on encoder
+				      // 1: setup and turn on encoder
 }TV_ENCODER_CONTROL_PARAMETERS;
 
 typedef struct _TV_ENCODER_CONTROL_PS_ALLOCATION
@@ -2690,7 +2690,7 @@ typedef struct _ATOM_INTEGRATED_SYSTEM_INFO
   USHORT	                        usFSBClock;			            //In MHz unit
   USHORT                          usCapabilityFlag;		        //Bit0=1 indicates the fake HDMI support,Bit1=0/1 for Dynamic clocking dis/enable
 																                              //Bit[3:2]== 0:No PCIE card, 1:AC card, 2:SDVO card
-                                                              //Bit[4]==1: P/2 mode, ==0: P/1 mode
+							      //Bit[4]==1: P/2 mode, ==0: P/1 mode
   USHORT	                        usPCIENBCfgReg7;				    //bit[7:0]=MUX_Sel, bit[9:8]=MUX_SEL_LEVEL2, bit[10]=Lane_Reversal
   USHORT	                        usK8MemoryClock;            //in MHz unit
   USHORT	                        usK8SyncStartDelay;         //in 0.01 us unit
@@ -2707,14 +2707,14 @@ typedef struct _ATOM_INTEGRATED_SYSTEM_INFO
 
 /* Explanation on entries in ATOM_INTEGRATED_SYSTEM_INFO
 ulBootUpMemoryClock:    For Intel IGP,it's the UMA system memory clock
-                        For AMD IGP,it's 0 if no SidePort memory installed or it's the boot-up SidePort memory clock
+			For AMD IGP,it's 0 if no SidePort memory installed or it's the boot-up SidePort memory clock
 ulMaxSystemMemoryClock: For Intel IGP,it's the Max freq from memory SPD if memory runs in ASYNC mode or otherwise (SYNC mode) it's 0
-                        For AMD IGP,for now this can be 0
+			For AMD IGP,for now this can be 0
 ulMinSystemMemoryClock: For Intel IGP,it's 133MHz if memory runs in ASYNC mode or otherwise (SYNC mode) it's 0
-                        For AMD IGP,for now this can be 0
+			For AMD IGP,for now this can be 0
 
 usFSBClock:             For Intel IGP,it's FSB Freq
-                        For AMD IGP,it's HT Link Speed
+			For AMD IGP,it's HT Link Speed
 
 usK8MemoryClock:        For AMD IGP only. For RevF CPU, set it to 200
 usK8SyncStartDelay:     For AMD IGP only. Memory access latency in K8, required for watermark calculation
@@ -2826,11 +2826,11 @@ ulDDISlot1Config: Describes the PCIE lane configuration on this DDI PCIE slot (A
 
 			[15:8] - Lane configuration attribute;
       [23:16]- Connector type, possible value:
-               CONNECTOR_OBJECT_ID_SINGLE_LINK_DVI_D
-               CONNECTOR_OBJECT_ID_DUAL_LINK_DVI_D
-               CONNECTOR_OBJECT_ID_HDMI_TYPE_A
-               CONNECTOR_OBJECT_ID_DISPLAYPORT
-               CONNECTOR_OBJECT_ID_eDP
+	       CONNECTOR_OBJECT_ID_SINGLE_LINK_DVI_D
+	       CONNECTOR_OBJECT_ID_DUAL_LINK_DVI_D
+	       CONNECTOR_OBJECT_ID_HDMI_TYPE_A
+	       CONNECTOR_OBJECT_ID_DISPLAYPORT
+	       CONNECTOR_OBJECT_ID_eDP
 			[31:24]- Reserved
 
 ulDDISlot2Config: Same as Slot1.
@@ -2849,31 +2849,31 @@ usNumberOfCyclesInPeriod:Indicate how many cycles when PWM duty is 100%.
 
 usMaxNBVoltage:Max. voltage control value in either PWM or GPIO mode.
 usMinNBVoltage:Min. voltage control value in either PWM or GPIO mode.
-                    GPIO mode: both usMaxNBVoltage & usMinNBVoltage have a valid value ulSystemConfig.SYSTEM_CONFIG_USE_PWM_ON_VOLTAGE=0
-                    PWM mode: both usMaxNBVoltage & usMinNBVoltage have a valid value ulSystemConfig.SYSTEM_CONFIG_USE_PWM_ON_VOLTAGE=1
-                    GPU SW don't control mode: usMaxNBVoltage & usMinNBVoltage=0 and no care about ulSystemConfig.SYSTEM_CONFIG_USE_PWM_ON_VOLTAGE
+		    GPIO mode: both usMaxNBVoltage & usMinNBVoltage have a valid value ulSystemConfig.SYSTEM_CONFIG_USE_PWM_ON_VOLTAGE=0
+		    PWM mode: both usMaxNBVoltage & usMinNBVoltage have a valid value ulSystemConfig.SYSTEM_CONFIG_USE_PWM_ON_VOLTAGE=1
+		    GPU SW don't control mode: usMaxNBVoltage & usMinNBVoltage=0 and no care about ulSystemConfig.SYSTEM_CONFIG_USE_PWM_ON_VOLTAGE
 
 usBootUpNBVoltage:Boot-up voltage regulator dependent PWM value.
 
 ulHTLinkFreq:       Bootup HT link Frequency in 10Khz.
 usMinHTLinkWidth:   Bootup minimum HT link width. If CDLW disabled, this is equal to usMaxHTLinkWidth.
-                    If CDLW enabled, both upstream and downstream width should be the same during bootup.
+		    If CDLW enabled, both upstream and downstream width should be the same during bootup.
 usMaxHTLinkWidth:   Bootup maximum HT link width. If CDLW disabled, this is equal to usMinHTLinkWidth.
-                    If CDLW enabled, both upstream and downstream width should be the same during bootup.
+		    If CDLW enabled, both upstream and downstream width should be the same during bootup.
 
 usUMASyncStartDelay: Memory access latency, required for watermark calculation
 usUMADataReturnTime: Memory access latency, required for watermark calculation
 usLinkStatusZeroTime:Memory access latency required for watermark calculation, set this to 0x0 for K8 CPU, set a proper value in 0.01 the unit of us
 for Griffin or Greyhound. SBIOS needs to convert to actual time by:
-                     if T0Ttime [5:4]=00b, then usLinkStatusZeroTime=T0Ttime [3:0]*0.1us (0.0 to 1.5us)
-                     if T0Ttime [5:4]=01b, then usLinkStatusZeroTime=T0Ttime [3:0]*0.5us (0.0 to 7.5us)
-                     if T0Ttime [5:4]=10b, then usLinkStatusZeroTime=T0Ttime [3:0]*2.0us (0.0 to 30us)
-                     if T0Ttime [5:4]=11b, and T0Ttime [3:0]=0x0 to 0xa, then usLinkStatusZeroTime=T0Ttime [3:0]*20us (0.0 to 200us)
+		     if T0Ttime [5:4]=00b, then usLinkStatusZeroTime=T0Ttime [3:0]*0.1us (0.0 to 1.5us)
+		     if T0Ttime [5:4]=01b, then usLinkStatusZeroTime=T0Ttime [3:0]*0.5us (0.0 to 7.5us)
+		     if T0Ttime [5:4]=10b, then usLinkStatusZeroTime=T0Ttime [3:0]*2.0us (0.0 to 30us)
+		     if T0Ttime [5:4]=11b, and T0Ttime [3:0]=0x0 to 0xa, then usLinkStatusZeroTime=T0Ttime [3:0]*20us (0.0 to 200us)
 
 ulHighVoltageHTLinkFreq:     HT link frequency for power state with low voltage. If boot up runs in HT1, this must be 0.
-                             This must be less than or equal to ulHTLinkFreq(bootup frequency).
+			     This must be less than or equal to ulHTLinkFreq(bootup frequency).
 ulLowVoltageHTLinkFreq:      HT link frequency for power state with low voltage or voltage scaling 1.0v~1.1v. If boot up runs in HT1, this must be 0.
-                             This must be less than or equal to ulHighVoltageHTLinkFreq.
+			     This must be less than or equal to ulHighVoltageHTLinkFreq.
 
 usMaxUpStreamHTLinkWidth:    Asymmetric link width support in the future, to replace usMaxHTLinkWidth. Not used for now.
 usMaxDownStreamHTLinkWidth:  same as above.
@@ -3354,9 +3354,9 @@ typedef struct _ATOM_LVDS_INFO
   UCHAR               ucPowerSequenceDigOntoDEin10Ms;
   UCHAR               ucPowerSequenceDEtoBLOnin10Ms;
   UCHAR               ucLVDS_Misc;               // Bit0:{=0:single, =1:dual},Bit1 {=0:666RGB, =1:888RGB},Bit2:3:{Grey level}
-                                                 // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
-                                                 // Bit5:{=0:Spatial Dithering disabled;1 Spatial Dithering enabled}
-                                                 // Bit6:{=0:Temporal Dithering disabled;1 Temporal Dithering enabled}
+						 // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
+						 // Bit5:{=0:Spatial Dithering disabled;1 Spatial Dithering enabled}
+						 // Bit6:{=0:Temporal Dithering disabled;1 Temporal Dithering enabled}
   UCHAR               ucPanelDefaultRefreshRate;
   UCHAR               ucPanelIdentification;
   UCHAR               ucSS_Id;
@@ -3374,9 +3374,9 @@ typedef struct _ATOM_LVDS_INFO_V12
   UCHAR               ucPowerSequenceDigOntoDEin10Ms;
   UCHAR               ucPowerSequenceDEtoBLOnin10Ms;
   UCHAR               ucLVDS_Misc;               // Bit0:{=0:single, =1:dual},Bit1 {=0:666RGB, =1:888RGB},Bit2:3:{Grey level}
-                                                 // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
-                                                 // Bit5:{=0:Spatial Dithering disabled;1 Spatial Dithering enabled}
-                                                 // Bit6:{=0:Temporal Dithering disabled;1 Temporal Dithering enabled}
+						 // Bit4:{=0:LDI format for RGB888, =1 FPDI format for RGB888}
+						 // Bit5:{=0:Spatial Dithering disabled;1 Spatial Dithering enabled}
+						 // Bit6:{=0:Temporal Dithering disabled;1 Temporal Dithering enabled}
   UCHAR               ucPanelDefaultRefreshRate;
   UCHAR               ucPanelIdentification;
   UCHAR               ucSS_Id;
@@ -3404,14 +3404,14 @@ typedef struct _ATOM_LVDS_INFO_V12
 
 //Color Bit Depth definition in EDID V1.4 @BYTE 14h
 //Bit 6  5  4
-                              //      0  0  0  -  Color bit depth is undefined
-                              //      0  0  1  -  6 Bits per Primary Color
-                              //      0  1  0  -  8 Bits per Primary Color
-                              //      0  1  1  - 10 Bits per Primary Color
-                              //      1  0  0  - 12 Bits per Primary Color
-                              //      1  0  1  - 14 Bits per Primary Color
-                              //      1  1  0  - 16 Bits per Primary Color
-                              //      1  1  1  - Reserved
+			      //      0  0  0  -  Color bit depth is undefined
+			      //      0  0  1  -  6 Bits per Primary Color
+			      //      0  1  0  -  8 Bits per Primary Color
+			      //      0  1  1  - 10 Bits per Primary Color
+			      //      1  0  0  - 12 Bits per Primary Color
+			      //      1  0  1  - 14 Bits per Primary Color
+			      //      1  1  0  - 16 Bits per Primary Color
+			      //      1  1  1  - Reserved
 
 #define PANEL_COLOR_BIT_DEPTH_MASK    0x70
 
@@ -3435,21 +3435,21 @@ typedef struct _ATOM_LCD_INFO_V13
   USHORT              usSupportedRefreshRate;     //Refer to panel info table in ATOMBIOS extension Spec.
   ULONG               ulReserved0;
   UCHAR               ucLCD_Misc;                // Reorganized in V13
-                                                 // Bit0: {=0:single, =1:dual},
-                                                 // Bit1: {=0:LDI format for RGB888, =1 FPDI format for RGB888}  // was {=0:666RGB, =1:888RGB},
-                                                 // Bit3:2: {Grey level}
-                                                 // Bit6:4 Color Bit Depth definition (see below definition in EDID V1.4 @BYTE 14h)
-                                                 // Bit7   Reserved.  was for ATOM_PANEL_MISC_API_ENABLED, still need it?
+						 // Bit0: {=0:single, =1:dual},
+						 // Bit1: {=0:LDI format for RGB888, =1 FPDI format for RGB888}  // was {=0:666RGB, =1:888RGB},
+						 // Bit3:2: {Grey level}
+						 // Bit6:4 Color Bit Depth definition (see below definition in EDID V1.4 @BYTE 14h)
+						 // Bit7   Reserved.  was for ATOM_PANEL_MISC_API_ENABLED, still need it?
   UCHAR               ucPanelDefaultRefreshRate;
   UCHAR               ucPanelIdentification;
   UCHAR               ucSS_Id;
   USHORT              usLCDVenderID;
   USHORT              usLCDProductID;
   UCHAR               ucLCDPanel_SpecialHandlingCap;  // Reorganized in V13
-                                                 // Bit0: Once DAL sees this CAP is set, it will read EDID from LCD on its own
-                                                 // Bit1: See LCDPANEL_CAP_DRR_SUPPORTED
-                                                 // Bit2: a quick reference whether an embadded panel (LCD1 ) is LVDS (0) or eDP (1)
-                                                 // Bit7-3: Reserved
+						 // Bit0: Once DAL sees this CAP is set, it will read EDID from LCD on its own
+						 // Bit1: See LCDPANEL_CAP_DRR_SUPPORTED
+						 // Bit2: a quick reference whether an embadded panel (LCD1 ) is LVDS (0) or eDP (1)
+						 // Bit7-3: Reserved
   UCHAR               ucPanelInfoSize;					 //  start from ATOM_DTD_FORMAT to end of panel info, include ExtInfoTable
   USHORT              usBacklightPWM;            //  Backlight PWM in Hz. New in _V13
 
@@ -3487,14 +3487,14 @@ typedef struct _ATOM_LCD_INFO_V13
 
 //Color Bit Depth definition in EDID V1.4 @BYTE 14h
 //Bit 6  5  4
-                              //      0  0  0  -  Color bit depth is undefined
-                              //      0  0  1  -  6 Bits per Primary Color
-                              //      0  1  0  -  8 Bits per Primary Color
-                              //      0  1  1  - 10 Bits per Primary Color
-                              //      1  0  0  - 12 Bits per Primary Color
-                              //      1  0  1  - 14 Bits per Primary Color
-                              //      1  1  0  - 16 Bits per Primary Color
-                              //      1  1  1  - Reserved
+			      //      0  0  0  -  Color bit depth is undefined
+			      //      0  0  1  -  6 Bits per Primary Color
+			      //      0  1  0  -  8 Bits per Primary Color
+			      //      0  1  1  - 10 Bits per Primary Color
+			      //      1  0  0  - 12 Bits per Primary Color
+			      //      1  0  1  - 14 Bits per Primary Color
+			      //      1  1  0  - 16 Bits per Primary Color
+			      //      1  1  1  - Reserved
 
 //Definitions for ucLCDPanel_SpecialHandlingCap:
 
@@ -4663,60 +4663,60 @@ ulBootUpUMAClock:                 System memory boot up clock frequency in 10Khz
 sDISPCLK_Voltage:                 Report Display clock voltage requirement.
 
 ulBootUpReqDisplayVector:         VBIOS boot up display IDs, following are supported devices in Liano/Ontaio projects:
-                                  ATOM_DEVICE_CRT1_SUPPORT                  0x0001
-                                  ATOM_DEVICE_CRT2_SUPPORT                  0x0010
-                                  ATOM_DEVICE_DFP1_SUPPORT                  0x0008
-                                  ATOM_DEVICE_DFP6_SUPPORT                  0x0040
-                                  ATOM_DEVICE_DFP2_SUPPORT                  0x0080
-                                  ATOM_DEVICE_DFP3_SUPPORT                  0x0200
-                                  ATOM_DEVICE_DFP4_SUPPORT                  0x0400
-                                  ATOM_DEVICE_DFP5_SUPPORT                  0x0800
-                                  ATOM_DEVICE_LCD1_SUPPORT                  0x0002
+				  ATOM_DEVICE_CRT1_SUPPORT                  0x0001
+				  ATOM_DEVICE_CRT2_SUPPORT                  0x0010
+				  ATOM_DEVICE_DFP1_SUPPORT                  0x0008
+				  ATOM_DEVICE_DFP6_SUPPORT                  0x0040
+				  ATOM_DEVICE_DFP2_SUPPORT                  0x0080
+				  ATOM_DEVICE_DFP3_SUPPORT                  0x0200
+				  ATOM_DEVICE_DFP4_SUPPORT                  0x0400
+				  ATOM_DEVICE_DFP5_SUPPORT                  0x0800
+				  ATOM_DEVICE_LCD1_SUPPORT                  0x0002
 ulOtherDisplayMisc:      	        Other display related flags, not defined yet.
 ulGPUCapInfo:                     bit[0]=0: TMDS/HDMI Coherent Mode use cascade PLL mode.
-                                        =1: TMDS/HDMI Coherent Mode use signel PLL mode.
-                                  bit[3]=0: Enable HW AUX mode detection logic
-                                        =1: Disable HW AUX mode dettion logic
+					=1: TMDS/HDMI Coherent Mode use signel PLL mode.
+				  bit[3]=0: Enable HW AUX mode detection logic
+					=1: Disable HW AUX mode dettion logic
 ulSB_MMIO_Base_Addr:              Physical Base address to SB MMIO space. Driver needs to initialize it for SMU usage.
 
 usRequestedPWMFreqInHz:           When it's set to 0x0 by SBIOS: the LCD BackLight is not controlled by GPU(SW).
-                                  Any attempt to change BL using VBIOS function or enable VariBri from PP table is not effective since ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==0;
+				  Any attempt to change BL using VBIOS function or enable VariBri from PP table is not effective since ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==0;
 
-                                  When it's set to a non-zero frequency, the BackLight is controlled by GPU (SW) in one of two ways below:
-                                  1. SW uses the GPU BL PWM output to control the BL, in chis case, this non-zero frequency determines what freq GPU should use;
-                                  VBIOS will set up proper PWM frequency and ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1,as the result,
-                                  Changing BL using VBIOS function is functional in both driver and non-driver present environment;
-                                  and enabling VariBri under the driver environment from PP table is optional.
+				  When it's set to a non-zero frequency, the BackLight is controlled by GPU (SW) in one of two ways below:
+				  1. SW uses the GPU BL PWM output to control the BL, in chis case, this non-zero frequency determines what freq GPU should use;
+				  VBIOS will set up proper PWM frequency and ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1,as the result,
+				  Changing BL using VBIOS function is functional in both driver and non-driver present environment;
+				  and enabling VariBri under the driver environment from PP table is optional.
 
-                                  2. SW uses other means to control BL (like DPCD),this non-zero frequency serves as a flag only indicating
-                                  that BL control from GPU is expected.
-                                  VBIOS will NOT set up PWM frequency but make ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1
-                                  Changing BL using VBIOS function could be functional in both driver and non-driver present environment,but
-                                  it's per platform
-                                  and enabling VariBri under the driver environment from PP table is optional.
+				  2. SW uses other means to control BL (like DPCD),this non-zero frequency serves as a flag only indicating
+				  that BL control from GPU is expected.
+				  VBIOS will NOT set up PWM frequency but make ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1
+				  Changing BL using VBIOS function could be functional in both driver and non-driver present environment,but
+				  it's per platform
+				  and enabling VariBri under the driver environment from PP table is optional.
 
 ucHtcTmpLmt:                      Refer to D18F3x64 bit[22:16], HtcTmpLmt.
-                                  Threshold on value to enter HTC_active state.
+				  Threshold on value to enter HTC_active state.
 ucHtcHystLmt:                     Refer to D18F3x64 bit[27:24], HtcHystLmt.
-                                  To calculate threshold off value to exit HTC_active state, which is Threshold on vlaue minus ucHtcHystLmt.
+				  To calculate threshold off value to exit HTC_active state, which is Threshold on vlaue minus ucHtcHystLmt.
 ulMinEngineClock:                 Minimum SCLK allowed in 10kHz unit. This is calculated based on WRCK Fuse settings.
 ulSystemConfig:                   Bit[0]=0: PCIE Power Gating Disabled
-                                        =1: PCIE Power Gating Enabled
-                                  Bit[1]=0: DDR-DLL shut-down feature disabled.
-                                         1: DDR-DLL shut-down feature enabled.
-                                  Bit[2]=0: DDR-PLL Power down feature disabled.
-                                         1: DDR-PLL Power down feature enabled.
+					=1: PCIE Power Gating Enabled
+				  Bit[1]=0: DDR-DLL shut-down feature disabled.
+					 1: DDR-DLL shut-down feature enabled.
+				  Bit[2]=0: DDR-PLL Power down feature disabled.
+					 1: DDR-PLL Power down feature enabled.
 ulCPUCapInfo:                     TBD
 usNBP0Voltage:                    VID for voltage on NB P0 State
 usNBP1Voltage:                    VID for voltage on NB P1 State
 usBootUpNBVoltage:                Voltage Index of GNB voltage configured by SBIOS, which is suffcient to support VBIOS DISPCLK requirement.
 usExtDispConnInfoOffset:          Offset to sExtDispConnInfo inside the structure
 usPanelRefreshRateRange:          Bit vector for LCD supported refresh rate range. If DRR is requestd by the platform, at least two bits need to be set
-                                  to indicate a range.
-                                  SUPPORTED_LCD_REFRESHRATE_30Hz          0x0004
-                                  SUPPORTED_LCD_REFRESHRATE_40Hz          0x0008
-                                  SUPPORTED_LCD_REFRESHRATE_50Hz          0x0010
-                                  SUPPORTED_LCD_REFRESHRATE_60Hz          0x0020
+				  to indicate a range.
+				  SUPPORTED_LCD_REFRESHRATE_30Hz          0x0004
+				  SUPPORTED_LCD_REFRESHRATE_40Hz          0x0008
+				  SUPPORTED_LCD_REFRESHRATE_50Hz          0x0010
+				  SUPPORTED_LCD_REFRESHRATE_60Hz          0x0020
 ucMemoryType:                     [3:0]=1:DDR1;=2:DDR2;=3:DDR3.[7:4] is reserved.
 ucUMAChannelNumber:      	        System memory channel numbers.
 ulCSR_M3_ARB_CNTL_DEFAULT[10]:    Arrays with values for CSR M3 arbiter for default
@@ -4738,10 +4738,10 @@ usDVISSPercentage:                DVI Spread Spectrum Percentage in unit 0.01%; 
 usDVISSpreadRateIn10Hz:           DVI Spread Spectrum frequency in unit of 10Hz,  =0, use VBIOS default setting.
 usMaxLVDSPclkFreqInSingleLink:    Max pixel clock LVDS panel single link, if=0 means VBIOS use default threhold, right now it is 85Mhz
 ucLVDSMisc:                       [bit0] LVDS 888bit panel mode =0: LVDS 888 panel in LDI mode, =1: LVDS 888 panel in FPDI mode
-                                  [bit1] LVDS panel lower and upper link mapping =0: lower link and upper link not swap, =1: lower link and upper link are swapped
-                                  [bit2] LVDS 888bit per color mode  =0: 666 bit per color =1:888 bit per color
-                                  [bit3] LVDS parameter override enable  =0: ucLvdsMisc parameter are not used =1: ucLvdsMisc parameter should be used
-                                  [bit4] Polarity of signal sent to digital BLON output pin. =0: not inverted(active high) =1: inverted ( active low )
+				  [bit1] LVDS panel lower and upper link mapping =0: lower link and upper link not swap, =1: lower link and upper link are swapped
+				  [bit2] LVDS 888bit per color mode  =0: 666 bit per color =1:888 bit per color
+				  [bit3] LVDS parameter override enable  =0: ucLvdsMisc parameter are not used =1: ucLvdsMisc parameter should be used
+				  [bit4] Polarity of signal sent to digital BLON output pin. =0: not inverted(active high) =1: inverted ( active low )
 **********************************************************************************************************************/
 
 // this Table is used for Liano/Ontario APU
@@ -4853,58 +4853,58 @@ ulBootUpUMAClock:                 System memory boot up clock frequency in 10Khz
 sDISPCLK_Voltage:                 Report Display clock voltage requirement.
 
 ulBootUpReqDisplayVector:         VBIOS boot up display IDs, following are supported devices in Trinity projects:
-                                  ATOM_DEVICE_CRT1_SUPPORT                  0x0001
-                                  ATOM_DEVICE_DFP1_SUPPORT                  0x0008
-                                  ATOM_DEVICE_DFP6_SUPPORT                  0x0040
-                                  ATOM_DEVICE_DFP2_SUPPORT                  0x0080
-                                  ATOM_DEVICE_DFP3_SUPPORT                  0x0200
-                                  ATOM_DEVICE_DFP4_SUPPORT                  0x0400
-                                  ATOM_DEVICE_DFP5_SUPPORT                  0x0800
-                                  ATOM_DEVICE_LCD1_SUPPORT                  0x0002
+				  ATOM_DEVICE_CRT1_SUPPORT                  0x0001
+				  ATOM_DEVICE_DFP1_SUPPORT                  0x0008
+				  ATOM_DEVICE_DFP6_SUPPORT                  0x0040
+				  ATOM_DEVICE_DFP2_SUPPORT                  0x0080
+				  ATOM_DEVICE_DFP3_SUPPORT                  0x0200
+				  ATOM_DEVICE_DFP4_SUPPORT                  0x0400
+				  ATOM_DEVICE_DFP5_SUPPORT                  0x0800
+				  ATOM_DEVICE_LCD1_SUPPORT                  0x0002
 ulOtherDisplayMisc:      	        bit[0]=0: INT15 callback function Get LCD EDID ( ax=4e08, bl=1b ) is not supported by SBIOS.
-                                        =1: INT15 callback function Get LCD EDID ( ax=4e08, bl=1b ) is supported by SBIOS.
-                                  bit[1]=0: INT15 callback function Get boot display( ax=4e08, bl=01h) is not supported by SBIOS
-                                        =1: INT15 callback function Get boot display( ax=4e08, bl=01h) is supported by SBIOS
-                                  bit[2]=0: INT15 callback function Get panel Expansion ( ax=4e08, bl=02h) is not supported by SBIOS
-                                        =1: INT15 callback function Get panel Expansion ( ax=4e08, bl=02h) is supported by SBIOS
-                                  bit[3]=0: VBIOS fast boot is disable
-                                        =1: VBIOS fast boot is enable. ( VBIOS skip display device detection in every set mode if LCD panel is connect and LID is open)
+					=1: INT15 callback function Get LCD EDID ( ax=4e08, bl=1b ) is supported by SBIOS.
+				  bit[1]=0: INT15 callback function Get boot display( ax=4e08, bl=01h) is not supported by SBIOS
+					=1: INT15 callback function Get boot display( ax=4e08, bl=01h) is supported by SBIOS
+				  bit[2]=0: INT15 callback function Get panel Expansion ( ax=4e08, bl=02h) is not supported by SBIOS
+					=1: INT15 callback function Get panel Expansion ( ax=4e08, bl=02h) is supported by SBIOS
+				  bit[3]=0: VBIOS fast boot is disable
+					=1: VBIOS fast boot is enable. ( VBIOS skip display device detection in every set mode if LCD panel is connect and LID is open)
 ulGPUCapInfo:                     bit[0]=0: TMDS/HDMI Coherent Mode use cascade PLL mode.
-                                        =1: TMDS/HDMI Coherent Mode use signel PLL mode.
-                                  bit[1]=0: DP mode use cascade PLL mode ( New for Trinity )
-                                        =1: DP mode use single PLL mode
-                                  bit[3]=0: Enable AUX HW mode detection logic
-                                        =1: Disable AUX HW mode detection logic
+					=1: TMDS/HDMI Coherent Mode use signel PLL mode.
+				  bit[1]=0: DP mode use cascade PLL mode ( New for Trinity )
+					=1: DP mode use single PLL mode
+				  bit[3]=0: Enable AUX HW mode detection logic
+					=1: Disable AUX HW mode detection logic
 
 ulSB_MMIO_Base_Addr:              Physical Base address to SB MMIO space. Driver needs to initialize it for SMU usage.
 
 usRequestedPWMFreqInHz:           When it's set to 0x0 by SBIOS: the LCD BackLight is not controlled by GPU(SW).
-                                  Any attempt to change BL using VBIOS function or enable VariBri from PP table is not effective since ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==0;
+				  Any attempt to change BL using VBIOS function or enable VariBri from PP table is not effective since ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==0;
 
-                                  When it's set to a non-zero frequency, the BackLight is controlled by GPU (SW) in one of two ways below:
-                                  1. SW uses the GPU BL PWM output to control the BL, in chis case, this non-zero frequency determines what freq GPU should use;
-                                  VBIOS will set up proper PWM frequency and ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1,as the result,
-                                  Changing BL using VBIOS function is functional in both driver and non-driver present environment;
-                                  and enabling VariBri under the driver environment from PP table is optional.
+				  When it's set to a non-zero frequency, the BackLight is controlled by GPU (SW) in one of two ways below:
+				  1. SW uses the GPU BL PWM output to control the BL, in chis case, this non-zero frequency determines what freq GPU should use;
+				  VBIOS will set up proper PWM frequency and ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1,as the result,
+				  Changing BL using VBIOS function is functional in both driver and non-driver present environment;
+				  and enabling VariBri under the driver environment from PP table is optional.
 
-                                  2. SW uses other means to control BL (like DPCD),this non-zero frequency serves as a flag only indicating
-                                  that BL control from GPU is expected.
-                                  VBIOS will NOT set up PWM frequency but make ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1
-                                  Changing BL using VBIOS function could be functional in both driver and non-driver present environment,but
-                                  it's per platform
-                                  and enabling VariBri under the driver environment from PP table is optional.
+				  2. SW uses other means to control BL (like DPCD),this non-zero frequency serves as a flag only indicating
+				  that BL control from GPU is expected.
+				  VBIOS will NOT set up PWM frequency but make ATOM_BIOS_INFO_BL_CONTROLLED_BY_GPU==1
+				  Changing BL using VBIOS function could be functional in both driver and non-driver present environment,but
+				  it's per platform
+				  and enabling VariBri under the driver environment from PP table is optional.
 
 ucHtcTmpLmt:                      Refer to D18F3x64 bit[22:16], HtcTmpLmt.
-                                  Threshold on value to enter HTC_active state.
+				  Threshold on value to enter HTC_active state.
 ucHtcHystLmt:                     Refer to D18F3x64 bit[27:24], HtcHystLmt.
-                                  To calculate threshold off value to exit HTC_active state, which is Threshold on vlaue minus ucHtcHystLmt.
+				  To calculate threshold off value to exit HTC_active state, which is Threshold on vlaue minus ucHtcHystLmt.
 ulMinEngineClock:                 Minimum SCLK allowed in 10kHz unit. This is calculated based on WRCK Fuse settings.
 ulSystemConfig:                   Bit[0]=0: PCIE Power Gating Disabled
-                                        =1: PCIE Power Gating Enabled
-                                  Bit[1]=0: DDR-DLL shut-down feature disabled.
-                                         1: DDR-DLL shut-down feature enabled.
-                                  Bit[2]=0: DDR-PLL Power down feature disabled.
-                                         1: DDR-PLL Power down feature enabled.
+					=1: PCIE Power Gating Enabled
+				  Bit[1]=0: DDR-DLL shut-down feature disabled.
+					 1: DDR-DLL shut-down feature enabled.
+				  Bit[2]=0: DDR-PLL Power down feature disabled.
+					 1: DDR-PLL Power down feature enabled.
 ulCPUCapInfo:                     TBD
 usNBP0Voltage:                    VID for voltage on NB P0 State
 usNBP1Voltage:                    VID for voltage on NB P1 State
@@ -4913,11 +4913,11 @@ usNBP3Voltage:                    VID for voltage on NB P3 State
 usBootUpNBVoltage:                Voltage Index of GNB voltage configured by SBIOS, which is suffcient to support VBIOS DISPCLK requirement.
 usExtDispConnInfoOffset:          Offset to sExtDispConnInfo inside the structure
 usPanelRefreshRateRange:          Bit vector for LCD supported refresh rate range. If DRR is requestd by the platform, at least two bits need to be set
-                                  to indicate a range.
-                                  SUPPORTED_LCD_REFRESHRATE_30Hz          0x0004
-                                  SUPPORTED_LCD_REFRESHRATE_40Hz          0x0008
-                                  SUPPORTED_LCD_REFRESHRATE_50Hz          0x0010
-                                  SUPPORTED_LCD_REFRESHRATE_60Hz          0x0020
+				  to indicate a range.
+				  SUPPORTED_LCD_REFRESHRATE_30Hz          0x0004
+				  SUPPORTED_LCD_REFRESHRATE_40Hz          0x0008
+				  SUPPORTED_LCD_REFRESHRATE_50Hz          0x0010
+				  SUPPORTED_LCD_REFRESHRATE_60Hz          0x0020
 ucMemoryType:                     [3:0]=1:DDR1;=2:DDR2;=3:DDR3.[7:4] is reserved.
 ucUMAChannelNumber:      	        System memory channel numbers.
 ulCSR_M3_ARB_CNTL_DEFAULT[10]:    Arrays with values for CSR M3 arbiter for default
@@ -4939,36 +4939,36 @@ usDVISSPercentage:                DVI Spread Spectrum Percentage in unit 0.01%; 
 usDVISSpreadRateIn10Hz:           DVI Spread Spectrum frequency in unit of 10Hz,  =0, use VBIOS default setting.
 usMaxLVDSPclkFreqInSingleLink:    Max pixel clock LVDS panel single link, if=0 means VBIOS use default threhold, right now it is 85Mhz
 ucLVDSMisc:                       [bit0] LVDS 888bit panel mode =0: LVDS 888 panel in LDI mode, =1: LVDS 888 panel in FPDI mode
-                                  [bit1] LVDS panel lower and upper link mapping =0: lower link and upper link not swap, =1: lower link and upper link are swapped
-                                  [bit2] LVDS 888bit per color mode  =0: 666 bit per color =1:888 bit per color
-                                  [bit3] LVDS parameter override enable  =0: ucLvdsMisc parameter are not used =1: ucLvdsMisc parameter should be used
-                                  [bit4] Polarity of signal sent to digital BLON output pin. =0: not inverted(active high) =1: inverted ( active low )
+				  [bit1] LVDS panel lower and upper link mapping =0: lower link and upper link not swap, =1: lower link and upper link are swapped
+				  [bit2] LVDS 888bit per color mode  =0: 666 bit per color =1:888 bit per color
+				  [bit3] LVDS parameter override enable  =0: ucLvdsMisc parameter are not used =1: ucLvdsMisc parameter should be used
+				  [bit4] Polarity of signal sent to digital BLON output pin. =0: not inverted(active high) =1: inverted ( active low )
 ucLVDSPwrOnSeqDIGONtoDE_in4Ms:    LVDS power up sequence time in unit of 4ms, time delay from DIGON signal active to data enable signal active( DE ).
-                                  =0 mean use VBIOS default which is 8 ( 32ms ). The LVDS power up sequence is as following: DIGON->DE->VARY_BL->BLON.
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 mean use VBIOS default which is 8 ( 32ms ). The LVDS power up sequence is as following: DIGON->DE->VARY_BL->BLON.
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 ucLVDSPwrOnDEtoVARY_BL_in4Ms:     LVDS power up sequence time in unit of 4ms., time delay from DE( data enable ) active to Vary Brightness enable signal active( VARY_BL ).
-                                  =0 mean use VBIOS default which is 90 ( 360ms ). The LVDS power up sequence is as following: DIGON->DE->VARY_BL->BLON.
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 mean use VBIOS default which is 90 ( 360ms ). The LVDS power up sequence is as following: DIGON->DE->VARY_BL->BLON.
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 
 ucLVDSPwrOffVARY_BLtoDE_in4Ms:    LVDS power down sequence time in unit of 4ms, time delay from data enable ( DE ) signal off to LCDVCC (DIGON) off.
-                                  =0 mean use VBIOS default delay which is 8 ( 32ms ). The LVDS power down sequence is as following: BLON->VARY_BL->DE->DIGON
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 mean use VBIOS default delay which is 8 ( 32ms ). The LVDS power down sequence is as following: BLON->VARY_BL->DE->DIGON
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 
 ucLVDSPwrOffDEtoDIGON_in4Ms:      LVDS power down sequence time in unit of 4ms, time delay from vary brightness enable signal( VARY_BL) off to data enable ( DE ) signal off.
-                                  =0 mean use VBIOS default which is 90 ( 360ms ). The LVDS power down sequence is as following: BLON->VARY_BL->DE->DIGON
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 mean use VBIOS default which is 90 ( 360ms ). The LVDS power down sequence is as following: BLON->VARY_BL->DE->DIGON
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 
 ucLVDSOffToOnDelay_in4Ms:         LVDS power down sequence time in unit of 4ms. Time delay from DIGON signal off to DIGON signal active.
-                                  =0 means to use VBIOS default delay which is 125 ( 500ms ).
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 means to use VBIOS default delay which is 125 ( 500ms ).
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 
 ucLVDSPwrOnVARY_BLtoBLON_in4Ms:   LVDS power up sequence time in unit of 4ms. Time delay from VARY_BL signal on to DLON signal active.
-                                  =0 means to use VBIOS default delay which is 0 ( 0ms ).
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 means to use VBIOS default delay which is 0 ( 0ms ).
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 
 ucLVDSPwrOffBLONtoVARY_BL_in4Ms:  LVDS power down sequence time in unit of 4ms. Time delay from BLON signal off to VARY_BL signal off.
-                                  =0 means to use VBIOS default delay which is 0 ( 0ms ).
-                                  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
+				  =0 means to use VBIOS default delay which is 0 ( 0ms ).
+				  This parameter is used by VBIOS only. VBIOS will patch LVDS_InfoTable.
 
 ulNbpStateMemclkFreq[4]:          system memory clock frequncey in unit of 10Khz in different NB pstate.
 
@@ -5038,7 +5038,7 @@ typedef struct _ATOM_ASIC_SS_ASSIGNMENT
 typedef struct _ATOM_ASIC_SS_ASSIGNMENT_V2
 {
 	ULONG								ulTargetClockRange;						//For mem/engine/uvd, Clock Out frequence (VCO ), in unit of 10Khz
-                                                    //For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
+						    //For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
   USHORT              usSpreadSpectrumPercentage;		//in unit of 0.01%
 	USHORT							usSpreadRateIn10Hz;						//in unit of 10Hz, modulation freq
   UCHAR               ucClockIndication;					  //Indicate which clock source needs SS
@@ -5069,7 +5069,7 @@ typedef struct _ATOM_ASIC_INTERNAL_SS_INFO_V2
 typedef struct _ATOM_ASIC_SS_ASSIGNMENT_V3
 {
 	ULONG								ulTargetClockRange;						//For mem/engine/uvd, Clock Out frequence (VCO ), in unit of 10Khz
-                                                    //For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
+						    //For TMDS/HDMI/LVDS, it is pixel clock , for DP, it is link clock ( 27000 or 16200 )
   USHORT              usSpreadSpectrumPercentage;		//in unit of 0.01%
 	USHORT							usSpreadRateIn10Hz;						//in unit of 10Hz, modulation freq
   UCHAR               ucClockIndication;					  //Indicate which clock source needs SS
@@ -5136,7 +5136,7 @@ typedef struct _ATOM_ASIC_INTERNAL_SS_INFO_V3
 #define ATOM_S0_DFP_MASK                ATOM_S0_DFP1 | ATOM_S0_DFP2 | ATOM_S0_DFP3 | ATOM_S0_DFP4 | ATOM_S0_DFP5 | ATOM_S0_DFP6
 
 #define ATOM_S0_FAD_REGISTER_BUG        0x02000000L // If set, indicates we are running a PCIE asic with
-                                                    // the FAD/HDP reg access bug.  Bit is read by DAL, this is obsolete from RV5xx
+						    // the FAD/HDP reg access bug.  Bit is read by DAL, this is obsolete from RV5xx
 
 #define ATOM_S0_THERMAL_STATE_MASK      0x1C000000L
 #define ATOM_S0_THERMAL_STATE_SHIFT     26
@@ -5341,7 +5341,7 @@ typedef struct _ATOM_ASIC_INTERNAL_SS_INFO_V3
 #define ATOM_S5_DOS_FORCE_CRT2b2        ATOM_S5_DOS_REQ_CRT2b0
 #define ATOM_S5_DOS_FORCE_CVb3          ATOM_S5_DOS_REQ_CVb1
 #define ATOM_S5_DOS_FORCE_DEVICEw1      (ATOM_S5_DOS_FORCE_CRT1b2+ATOM_S5_DOS_FORCE_TV1b2+ATOM_S5_DOS_FORCE_CRT2b2+\
-                                        (ATOM_S5_DOS_FORCE_CVb3<<8))
+					(ATOM_S5_DOS_FORCE_CVb3<<8))
 
 // BIOS_6_SCRATCH Definition
 #define ATOM_S6_DEVICE_CHANGE           0x00000001L
@@ -6126,7 +6126,7 @@ typedef struct _ATOM_VRAM_MODULE_V4
   ULONG	  ulChannelMapCfg;	                // board dependent parameter: Channel combination
   USHORT  usModuleSize;                     // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
   USHORT  usPrivateReserved;                // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                            // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+					    // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
   USHORT  usReserved;
   UCHAR   ucExtMemoryID;    		            // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
   UCHAR   ucMemoryType;                     // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4; 0x5:DDR5 [3:0] - Must be 0x0 for now;
@@ -6139,7 +6139,7 @@ typedef struct _ATOM_VRAM_MODULE_V4
   UCHAR   ucNPL_RT;                         // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
   UCHAR		ucPreamble;                       // [7:4] Write Preamble, [3:0] Read Preamble
   UCHAR   ucMemorySize;                     // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                            // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
+					    // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
   UCHAR   ucReserved[3];
 
 //compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
@@ -6168,7 +6168,7 @@ typedef struct _ATOM_VRAM_MODULE_V5
   ULONG	  ulChannelMapCfg;	                // board dependent parameter: Channel combination
   USHORT  usModuleSize;                     // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
   USHORT  usPrivateReserved;                // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                            // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+					    // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
   USHORT  usReserved;
   UCHAR   ucExtMemoryID;    		            // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
   UCHAR   ucMemoryType;                     // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4; 0x5:DDR5 [3:0] - Must be 0x0 for now;
@@ -6181,7 +6181,7 @@ typedef struct _ATOM_VRAM_MODULE_V5
   UCHAR   ucNPL_RT;                         // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
   UCHAR		ucPreamble;                       // [7:4] Write Preamble, [3:0] Read Preamble
   UCHAR   ucMemorySize;                     // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                            // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
+					    // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
   UCHAR   ucReserved[3];
 
 //compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
@@ -6199,7 +6199,7 @@ typedef struct _ATOM_VRAM_MODULE_V6
   ULONG	  ulChannelMapCfg;	                // board dependent parameter: Channel combination
   USHORT  usModuleSize;                     // size of ATOM_VRAM_MODULE_V4, make it easy for VBIOS to look for next entry of VRAM_MODULE
   USHORT  usPrivateReserved;                // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                            // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
+					    // MC_ARB_RAMCFG (includes NOOFBANK,NOOFRANKS,NOOFROWS,NOOFCOLS)
   USHORT  usReserved;
   UCHAR   ucExtMemoryID;    		            // An external indicator (by hardcode, callback or pin) to tell what is the current memory module
   UCHAR   ucMemoryType;                     // [7:4]=0x1:DDR1;=0x2:DDR2;=0x3:DDR3;=0x4:DDR4; 0x5:DDR5 [3:0] - Must be 0x0 for now;
@@ -6212,7 +6212,7 @@ typedef struct _ATOM_VRAM_MODULE_V6
   UCHAR   ucNPL_RT;                         // board dependent parameter:NPL round trip delay, used for calculate memory timing parameters
   UCHAR		ucPreamble;                       // [7:4] Write Preamble, [3:0] Read Preamble
   UCHAR   ucMemorySize;                     // BIOS internal reserved space to optimize code size, updated by the compiler, shouldn't be modified manually!!
-                                            // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
+					    // Total memory size in unit of 16MB for CONFIG_MEMSIZE - bit[23:0] zeros
   UCHAR   ucReserved[3];
 
 //compare with V3, we flat the struct by merging ATOM_MEMORY_FORMAT (as is) into V4 as the same level
@@ -7071,7 +7071,7 @@ typedef struct _ATOM_XTMDS_INFO
   UCHAR                      ucXtransimitterID;
   UCHAR                      ucSupportedLink;    // Bit field, bit0=1, single link supported;bit1=1,dual link supported
   UCHAR                      ucSequnceAlterID;   // Even with the same external TMDS asic, it's possible that the program seqence alters
-                                                 // due to design. This ID is used to alert driver that the sequence is not "standard"!
+						 // due to design. This ID is used to alert driver that the sequence is not "standard"!
   UCHAR                      ucMasterAddress;    // Address to control Master xTMDS Chip
   UCHAR                      ucSlaveAddress;     // Address to control Slave xTMDS Chip
 }ATOM_XTMDS_INFO;
@@ -7134,7 +7134,7 @@ typedef struct _DFP_DPMS_STATUS_CHANGE_PARAMETERS
 #define ATOM_PM_MISCINFO2_FORCEDLOWPWR_MODE              0x00000010L
 #define ATOM_PM_MISCINFO2_VDDCI_DYNAMIC_VOLTAGE_EN       0x00000020L
 #define ATOM_PM_MISCINFO2_VIDEO_PLAYBACK_CAPABLE         0x00000040L  //If this bit is set in multi-pp mode, then driver will pack up one with the minior power consumption.
-                                                                      //If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback
+								      //If it's not set in any pp mode, driver will use its default logic to pick a pp mode in video playback
 #define ATOM_PM_MISCINFO2_NOT_VALID_ON_DC                0x00000080L
 #define ATOM_PM_MISCINFO2_STUTTER_MODE_EN                0x00000100L
 #define ATOM_PM_MISCINFO2_UVD_SUPPORT_MODE               0x00000200L

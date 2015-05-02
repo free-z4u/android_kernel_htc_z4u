@@ -97,41 +97,41 @@ void STAvUpdateIsrStatCounter (PSStatCounter pStatistic, BYTE byIsr0, BYTE byIsr
     /**********************/
     // not any IMR bit invoke irq
     if (byIsr0 == 0) {
-        pStatistic->ISRStat.dwIsrUnknown++;
-        return;
+	pStatistic->ISRStat.dwIsrUnknown++;
+	return;
     }
 
 
     if (byIsr0 & ISR_ACTX)              // ISR, bit0
-        pStatistic->ISRStat.dwIsrTx0OK++;           // TXDMA0 successful
+	pStatistic->ISRStat.dwIsrTx0OK++;           // TXDMA0 successful
 
     if (byIsr0 & ISR_BNTX)              // ISR, bit2
-        pStatistic->ISRStat.dwIsrBeaconTxOK++;      // BeaconTx successful
+	pStatistic->ISRStat.dwIsrBeaconTxOK++;      // BeaconTx successful
 
     if (byIsr0 & ISR_RXDMA0)            // ISR, bit3
-        pStatistic->ISRStat.dwIsrRx0OK++;           // Rx0 successful
+	pStatistic->ISRStat.dwIsrRx0OK++;           // Rx0 successful
 
     if (byIsr0 & ISR_TBTT)              // ISR, bit4
-        pStatistic->ISRStat.dwIsrTBTTInt++;         // TBTT successful
+	pStatistic->ISRStat.dwIsrTBTTInt++;         // TBTT successful
 
     if (byIsr0 & ISR_SOFTTIMER)         // ISR, bit6
-        pStatistic->ISRStat.dwIsrSTIMERInt++;
+	pStatistic->ISRStat.dwIsrSTIMERInt++;
 
     if (byIsr0 & ISR_WATCHDOG)          // ISR, bit7
-        pStatistic->ISRStat.dwIsrWatchDog++;
+	pStatistic->ISRStat.dwIsrWatchDog++;
 
 
     if (byIsr1 & ISR_FETALERR)              // ISR, bit8
-        pStatistic->ISRStat.dwIsrUnrecoverableError++;
+	pStatistic->ISRStat.dwIsrUnrecoverableError++;
 
     if (byIsr1 & ISR_SOFTINT)               // ISR, bit9
-        pStatistic->ISRStat.dwIsrSoftInterrupt++;       // software interrupt
+	pStatistic->ISRStat.dwIsrSoftInterrupt++;       // software interrupt
 
     if (byIsr1 & ISR_MIBNEARFULL)           // ISR, bit10
-        pStatistic->ISRStat.dwIsrMIBNearfull++;
+	pStatistic->ISRStat.dwIsrMIBNearfull++;
 
     if (byIsr1 & ISR_RXNOBUF)               // ISR, bit11
-        pStatistic->ISRStat.dwIsrRxNoBuf++;             // Rx No Buff
+	pStatistic->ISRStat.dwIsrRxNoBuf++;             // Rx No Buff
 
 }
 
@@ -168,128 +168,128 @@ void STAvUpdateRDStatCounter(PSStatCounter pStatistic,
 
 		if (cbFrameLength >= ETH_ALEN) {
 			/* update counters in case of successful transmission */
-            if (byRSR & RSR_ADDRBROAD) {
-                pStatistic->ullRxBroadcastFrames++;
+	    if (byRSR & RSR_ADDRBROAD) {
+		pStatistic->ullRxBroadcastFrames++;
 		pStatistic->ullRxBroadcastBytes +=
 		  (unsigned long long) cbFrameLength;
-            }
-            else if (byRSR & RSR_ADDRMULTI) {
-                pStatistic->ullRxMulticastFrames++;
+	    }
+	    else if (byRSR & RSR_ADDRMULTI) {
+		pStatistic->ullRxMulticastFrames++;
 		pStatistic->ullRxMulticastBytes +=
 		  (unsigned long long) cbFrameLength;
-            }
-            else {
-                pStatistic->ullRxDirectedFrames++;
+	    }
+	    else {
+		pStatistic->ullRxDirectedFrames++;
 		pStatistic->ullRxDirectedBytes +=
 		  (unsigned long long) cbFrameLength;
-            }
-        }
+	    }
+	}
     }
 
     if(byRxRate==22) {
-        pStatistic->CustomStat.ullRsr11M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr11MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr11M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr11MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "11M: ALL[%d], OK[%d]:[%02x]\n",
 		(signed int) pStatistic->CustomStat.ullRsr11M,
 		(signed int) pStatistic->CustomStat.ullRsr11MCRCOk, byRSR);
     }
     else if(byRxRate==11) {
-        pStatistic->CustomStat.ullRsr5M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr5MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr5M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr5MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO " 5M: ALL[%d], OK[%d]:[%02x]\n",
 		(signed int) pStatistic->CustomStat.ullRsr5M,
 		(signed int) pStatistic->CustomStat.ullRsr5MCRCOk, byRSR);
     }
     else if(byRxRate==4) {
-        pStatistic->CustomStat.ullRsr2M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr2MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr2M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr2MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO " 2M: ALL[%d], OK[%d]:[%02x]\n",
 		(signed int) pStatistic->CustomStat.ullRsr2M,
 		(signed int) pStatistic->CustomStat.ullRsr2MCRCOk, byRSR);
     }
     else if(byRxRate==2){
-        pStatistic->CustomStat.ullRsr1M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr1MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr1M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr1MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO " 1M: ALL[%d], OK[%d]:[%02x]\n",
 		(signed int) pStatistic->CustomStat.ullRsr1M,
 		(signed int) pStatistic->CustomStat.ullRsr1MCRCOk, byRSR);
     }
     else if(byRxRate==12){
-        pStatistic->CustomStat.ullRsr6M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr6MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr6M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr6MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO " 6M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr6M,
 		(signed int) pStatistic->CustomStat.ullRsr6MCRCOk);
     }
     else if(byRxRate==18){
-        pStatistic->CustomStat.ullRsr9M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr9MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr9M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr9MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO " 9M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr9M,
 		(signed int) pStatistic->CustomStat.ullRsr9MCRCOk);
     }
     else if(byRxRate==24){
-        pStatistic->CustomStat.ullRsr12M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr12MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr12M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr12MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "12M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr12M,
 		(signed int) pStatistic->CustomStat.ullRsr12MCRCOk);
     }
     else if(byRxRate==36){
-        pStatistic->CustomStat.ullRsr18M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr18MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr18M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr18MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "18M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr18M,
 		(signed int) pStatistic->CustomStat.ullRsr18MCRCOk);
     }
     else if(byRxRate==48){
-        pStatistic->CustomStat.ullRsr24M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr24MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr24M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr24MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "24M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr24M,
 		(signed int) pStatistic->CustomStat.ullRsr24MCRCOk);
     }
     else if(byRxRate==72){
-        pStatistic->CustomStat.ullRsr36M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr36MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr36M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr36MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "36M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr36M,
 		(signed int) pStatistic->CustomStat.ullRsr36MCRCOk);
     }
     else if(byRxRate==96){
-        pStatistic->CustomStat.ullRsr48M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr48MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr48M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr48MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "48M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr48M,
 		(signed int) pStatistic->CustomStat.ullRsr48MCRCOk);
     }
     else if(byRxRate==108){
-        pStatistic->CustomStat.ullRsr54M++;
-        if(byRSR & RSR_CRCOK) {
-            pStatistic->CustomStat.ullRsr54MCRCOk++;
-        }
+	pStatistic->CustomStat.ullRsr54M++;
+	if(byRSR & RSR_CRCOK) {
+	    pStatistic->CustomStat.ullRsr54MCRCOk++;
+	}
 	DBG_PRT(MSG_LEVEL_DEBUG, KERN_INFO "54M: ALL[%d], OK[%d]\n",
 		(signed int) pStatistic->CustomStat.ullRsr54M,
 		(signed int) pStatistic->CustomStat.ullRsr54MCRCOk);
@@ -302,27 +302,27 @@ void STAvUpdateRDStatCounter(PSStatCounter pStatistic,
     }
 
     if (byRSR & RSR_BSSIDOK)
-        pStatistic->dwRsrBSSIDOk++;
+	pStatistic->dwRsrBSSIDOk++;
 
     if (byRSR & RSR_BCNSSIDOK)
-        pStatistic->dwRsrBCNSSIDOk++;
+	pStatistic->dwRsrBCNSSIDOk++;
     if (byRSR & RSR_IVLDLEN)  //invalid len (> 2312 byte)
-        pStatistic->dwRsrLENErr++;
+	pStatistic->dwRsrLENErr++;
     if (byRSR & RSR_IVLDTYP)  //invalid packet type
-        pStatistic->dwRsrTYPErr++;
+	pStatistic->dwRsrTYPErr++;
     if ((byRSR & (RSR_IVLDTYP | RSR_IVLDLEN)) || !(byRSR & RSR_CRCOK))
-        pStatistic->dwRsrErr++;
+	pStatistic->dwRsrErr++;
 
     if (byNewRSR & NEWRSR_DECRYPTOK)
-        pStatistic->dwNewRsrDECRYPTOK++;
+	pStatistic->dwNewRsrDECRYPTOK++;
     if (byNewRSR & NEWRSR_CFPIND)
-        pStatistic->dwNewRsrCFP++;
+	pStatistic->dwNewRsrCFP++;
     if (byNewRSR & NEWRSR_HWUTSF)
-        pStatistic->dwNewRsrUTSF++;
+	pStatistic->dwNewRsrUTSF++;
     if (byNewRSR & NEWRSR_BCNHITAID)
-        pStatistic->dwNewRsrHITAID++;
+	pStatistic->dwNewRsrHITAID++;
     if (byNewRSR & NEWRSR_BCNHITAID0)
-        pStatistic->dwNewRsrHITAID0++;
+	pStatistic->dwNewRsrHITAID0++;
 
     // increase rx packet count
     pStatistic->dwRsrRxPacket++;
@@ -330,44 +330,44 @@ void STAvUpdateRDStatCounter(PSStatCounter pStatistic,
 
 
     if (IS_TYPE_DATA(pbyBuffer)) {
-        pStatistic->dwRsrRxData++;
+	pStatistic->dwRsrRxData++;
     } else if (IS_TYPE_MGMT(pbyBuffer)){
-        pStatistic->dwRsrRxManage++;
+	pStatistic->dwRsrRxManage++;
     } else if (IS_TYPE_CONTROL(pbyBuffer)){
-        pStatistic->dwRsrRxControl++;
+	pStatistic->dwRsrRxControl++;
     }
 
     if (byRSR & RSR_ADDRBROAD)
-        pStatistic->dwRsrBroadcast++;
+	pStatistic->dwRsrBroadcast++;
     else if (byRSR & RSR_ADDRMULTI)
-        pStatistic->dwRsrMulticast++;
+	pStatistic->dwRsrMulticast++;
     else
-        pStatistic->dwRsrDirected++;
+	pStatistic->dwRsrDirected++;
 
     if (WLAN_GET_FC_MOREFRAG(pHeader->wFrameCtl))
-        pStatistic->dwRsrRxFragment++;
+	pStatistic->dwRsrRxFragment++;
 
     if (cbFrameLength < ETH_ZLEN + 4) {
-        pStatistic->dwRsrRunt++;
+	pStatistic->dwRsrRunt++;
     } else if (cbFrameLength == ETH_ZLEN + 4) {
-        pStatistic->dwRsrRxFrmLen64++;
+	pStatistic->dwRsrRxFrmLen64++;
     }
     else if ((65 <= cbFrameLength) && (cbFrameLength <= 127)) {
-        pStatistic->dwRsrRxFrmLen65_127++;
+	pStatistic->dwRsrRxFrmLen65_127++;
     }
     else if ((128 <= cbFrameLength) && (cbFrameLength <= 255)) {
-        pStatistic->dwRsrRxFrmLen128_255++;
+	pStatistic->dwRsrRxFrmLen128_255++;
     }
     else if ((256 <= cbFrameLength) && (cbFrameLength <= 511)) {
-        pStatistic->dwRsrRxFrmLen256_511++;
+	pStatistic->dwRsrRxFrmLen256_511++;
     }
     else if ((512 <= cbFrameLength) && (cbFrameLength <= 1023)) {
-        pStatistic->dwRsrRxFrmLen512_1023++;
+	pStatistic->dwRsrRxFrmLen512_1023++;
     } else if ((1024 <= cbFrameLength) &&
 	       (cbFrameLength <= ETH_FRAME_LEN + 4)) {
-        pStatistic->dwRsrRxFrmLen1024_1518++;
+	pStatistic->dwRsrRxFrmLen1024_1518++;
     } else if (cbFrameLength > ETH_FRAME_LEN + 4) {
-        pStatistic->dwRsrLong++;
+	pStatistic->dwRsrLong++;
     }
 }
 
@@ -400,14 +400,14 @@ STAvUpdateRDStatCounterEx (
     )
 {
     STAvUpdateRDStatCounter(
-                    pStatistic,
-                    byRSR,
-                    byNewRSR,
-                    byRxSts,
-                    byRxRate,
-                    pbyBuffer,
-                    cbFrameLength
-                    );
+		    pStatistic,
+		    byRSR,
+		    byNewRSR,
+		    byRxSts,
+		    byRxRate,
+		    pbyBuffer,
+		    cbFrameLength
+		    );
 
     // rx length
     pStatistic->dwCntRxFrmLength = cbFrameLength;
@@ -447,61 +447,61 @@ STAvUpdateTDStatCounter (
 
     byRetyCnt = (byTSR & 0xF0) >> 4;
     if (byRetyCnt != 0) {
-        pStatistic->dwTsrRetry++;
-        pStatistic->dwTsrTotalRetry += byRetyCnt;
-        pStatistic->dwTxFail[byRate]+= byRetyCnt;
-        pStatistic->dwTxFail[MAX_RATE] += byRetyCnt;
+	pStatistic->dwTsrRetry++;
+	pStatistic->dwTsrTotalRetry += byRetyCnt;
+	pStatistic->dwTxFail[byRate]+= byRetyCnt;
+	pStatistic->dwTxFail[MAX_RATE] += byRetyCnt;
 
-        if ( byRetyCnt == 0x1)
-            pStatistic->dwTsrOnceRetry++;
-        else
-            pStatistic->dwTsrMoreThanOnceRetry++;
+	if ( byRetyCnt == 0x1)
+	    pStatistic->dwTsrOnceRetry++;
+	else
+	    pStatistic->dwTsrMoreThanOnceRetry++;
 
-        if (byRetyCnt <= 8)
-            pStatistic->dwTxRetryCount[byRetyCnt-1]++;
+	if (byRetyCnt <= 8)
+	    pStatistic->dwTxRetryCount[byRetyCnt-1]++;
 
     }
     if ( !(byTSR & (TSR_TMO | TSR_RETRYTMO))) {
 
    if (byRetyCnt < 2)
-        pStatistic->TxNoRetryOkCount ++;
+	pStatistic->TxNoRetryOkCount ++;
    else
-        pStatistic->TxRetryOkCount ++;
+	pStatistic->TxRetryOkCount ++;
 
-        pStatistic->ullTsrOK++;
-        pStatistic->CustomStat.ullTsrAllOK++;
-        // update counters in case that successful transmit
-        pStatistic->dwTxOk[byRate]++;
-        pStatistic->dwTxOk[MAX_RATE]++;
+	pStatistic->ullTsrOK++;
+	pStatistic->CustomStat.ullTsrAllOK++;
+	// update counters in case that successful transmit
+	pStatistic->dwTxOk[byRate]++;
+	pStatistic->dwTxOk[MAX_RATE]++;
 
-        if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_BROAD )  {
-            pStatistic->ullTxBroadcastFrames++;
-            pStatistic->ullTxBroadcastBytes += pStatistic->abyTxPktInfo[byPktNum].wLength;
-        } else if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_MULTI ) {
-            pStatistic->ullTxMulticastFrames++;
-            pStatistic->ullTxMulticastBytes += pStatistic->abyTxPktInfo[byPktNum].wLength;
-        } else if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_UNI ) {
-            pStatistic->ullTxDirectedFrames++;
-            pStatistic->ullTxDirectedBytes += pStatistic->abyTxPktInfo[byPktNum].wLength;
-        }
+	if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_BROAD )  {
+	    pStatistic->ullTxBroadcastFrames++;
+	    pStatistic->ullTxBroadcastBytes += pStatistic->abyTxPktInfo[byPktNum].wLength;
+	} else if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_MULTI ) {
+	    pStatistic->ullTxMulticastFrames++;
+	    pStatistic->ullTxMulticastBytes += pStatistic->abyTxPktInfo[byPktNum].wLength;
+	} else if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_UNI ) {
+	    pStatistic->ullTxDirectedFrames++;
+	    pStatistic->ullTxDirectedBytes += pStatistic->abyTxPktInfo[byPktNum].wLength;
+	}
     }
     else {
 
-        pStatistic->TxFailCount ++;
+	pStatistic->TxFailCount ++;
 
-        pStatistic->dwTsrErr++;
-        if (byTSR & TSR_RETRYTMO)
-            pStatistic->dwTsrRetryTimeout++;
-        if (byTSR & TSR_TMO)
-            pStatistic->dwTsrTransmitTimeout++;
+	pStatistic->dwTsrErr++;
+	if (byTSR & TSR_RETRYTMO)
+	    pStatistic->dwTsrRetryTimeout++;
+	if (byTSR & TSR_TMO)
+	    pStatistic->dwTsrTransmitTimeout++;
     }
 
     if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_BROAD )  {
-        pStatistic->dwTsrBroadcast++;
+	pStatistic->dwTsrBroadcast++;
     } else if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_MULTI ) {
-        pStatistic->dwTsrMulticast++;
+	pStatistic->dwTsrMulticast++;
     } else if ( pStatistic->abyTxPktInfo[byPktNum].byBroadMultiUni == TX_PKT_UNI ) {
-        pStatistic->dwTsrDirected++;
+	pStatistic->dwTsrDirected++;
     }
 }
 
@@ -587,7 +587,7 @@ void STAvUpdateUSBCounter(PSUSBCounter pUsbCounter, int ntStatus)
 {
 
 //    if ( ntStatus == USBD_STATUS_CRC ) {
-        pUsbCounter->dwCrc++;
+	pUsbCounter->dwCrc++;
 //    }
 
 }

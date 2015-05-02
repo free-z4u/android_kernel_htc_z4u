@@ -391,7 +391,7 @@ config DYNAMIC_FTRACE
 	depends on HAVE_DYNAMIC_FTRACE
 	default y
 	help
-          This option will modify all the calls to ftrace dynamically
+	  This option will modify all the calls to ftrace dynamically
 	  (will patch them out of the binary image and replace them
 	  with a No-Op instruction) as they are called. A table is
 	  created to dynamically enable them again.

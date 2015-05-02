@@ -139,7 +139,7 @@ static char *port_status(int portno)
 }
 
 static int gpio_proc_read(char *buf, char **start, off_t offset,
-                          int len, int *unused_i, void *unused_v)
+			  int len, int *unused_i, void *unused_v)
 {
 	int c,outlen;
 	static const char port_name[]="123456789ABCDEFGH";

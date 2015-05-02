@@ -51,15 +51,15 @@ genCrcTable (u_int32_t *CRCTable)
 
     for (ii = 0; ii < CRC_TABLE_ENTRIES; ii++)
     {
-        crc = ii;
-        for (jj = 8; jj > 0; jj--)
-        {
-            if (crc & 1)
-                crc = (crc >> 1) ^ CRC32_POLYNOMIAL;
-            else
-                crc >>= 1;
-        }
-        CRCTable[ii] = crc;
+	crc = ii;
+	for (jj = 8; jj > 0; jj--)
+	{
+	    if (crc & 1)
+		crc = (crc >> 1) ^ CRC32_POLYNOMIAL;
+	    else
+		crc >>= 1;
+	}
+	CRCTable[ii] = crc;
     }
 
     crcTableInit++;
@@ -86,9 +86,9 @@ genCrcTable (u_int32_t *CRCTable)
 
 void
 sbeCrc (u_int8_t *buffer,          /* data buffer to crc */
-        u_int32_t count,           /* length of block in bytes */
-        u_int32_t initialCrc,      /* starting CRC */
-        u_int32_t *result)
+	u_int32_t count,           /* length of block in bytes */
+	u_int32_t initialCrc,      /* starting CRC */
+	u_int32_t *result)
 {
     u_int32_t     *tbl = 0;
     u_int32_t      temp1, temp2, crc;
@@ -101,17 +101,17 @@ sbeCrc (u_int8_t *buffer,          /* data buffer to crc */
     if (!crcTableInit)
     {
 #ifdef STATIC_CRC_TABLE
-        tbl = &CRCTable;
-        genCrcTable (tbl);
+	tbl = &CRCTable;
+	genCrcTable (tbl);
 #else
-        tbl = (u_int32_t *) OS_kmalloc (CRC_TABLE_ENTRIES * sizeof (u_int32_t));
-        if (tbl == 0)
-        {
-            *result = 0;            /* dummy up return value due to malloc
-                                     * failure */
-            return;
-        }
-        genCrcTable (tbl);
+	tbl = (u_int32_t *) OS_kmalloc (CRC_TABLE_ENTRIES * sizeof (u_int32_t));
+	if (tbl == 0)
+	{
+	    *result = 0;            /* dummy up return value due to malloc
+				     * failure */
+	    return;
+	}
+	genCrcTable (tbl);
 #endif
     }
     /* inverting bits makes ZMODEM & PKZIP compatible */
@@ -119,9 +119,9 @@ sbeCrc (u_int8_t *buffer,          /* data buffer to crc */
 
     while (count-- != 0)
     {
-        temp1 = (crc >> 8) & 0x00FFFFFFL;
-        temp2 = tbl[((int) crc ^ *buffer++) & 0xff];
-        crc = temp1 ^ temp2;
+	temp1 = (crc >> 8) & 0x00FFFFFFL;
+	temp2 = tbl[((int) crc ^ *buffer++) & 0xff];
+	crc = temp1 ^ temp2;
     }
 
     crc ^= 0xFFFFFFFFL;

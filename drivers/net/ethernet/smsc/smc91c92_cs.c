@@ -1842,7 +1842,7 @@ static int smc_link_ok(struct net_device *dev)
     if (smc->cfg & CFG_MII_SELECT) {
 	return mii_link_ok(&smc->mii_if);
     } else {
-        SMC_SELECT_BANK(0);
+	SMC_SELECT_BANK(0);
 	return inw(ioaddr + EPH) & EPH_LINK_OK;
     }
 }

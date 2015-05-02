@@ -97,7 +97,7 @@ extern uint sdioh_query_iofnum(sdioh_info_t *si);
 
 /* handle iovars */
 extern int sdioh_iovar_op(sdioh_info_t *si, const char *name,
-                          void *params, int plen, void *arg, int len, bool set);
+			  void *params, int plen, void *arg, int len, bool set);
 
 /* Issue abort to the specified function and clear controller as needed */
 extern int sdioh_abort(sdioh_info_t *si, uint fnc);

@@ -427,15 +427,15 @@ static void core_tmr_drain_cmd_list(
 }
 
 int core_tmr_lun_reset(
-        struct se_device *dev,
-        struct se_tmr_req *tmr,
-        struct list_head *preempt_and_abort_list,
-        struct se_cmd *prout_cmd)
+	struct se_device *dev,
+	struct se_tmr_req *tmr,
+	struct list_head *preempt_and_abort_list,
+	struct se_cmd *prout_cmd)
 {
 	struct se_node_acl *tmr_nacl = NULL;
 	struct se_portal_group *tmr_tpg = NULL;
 	int tas;
-        /*
+	/*
 	 * TASK_ABORTED status bit, this is configurable via ConfigFS
 	 * struct se_device attributes.  spc4r17 section 7.4.6 Control mode page
 	 *

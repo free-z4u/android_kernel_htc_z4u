@@ -24,7 +24,7 @@ config EASYCAP_DEBUG
 	  This option enables debug printouts
 
 	  To enable debug, pass the debug level to the debug module
-          parameter:
+	  parameter:
 
-          modprobe easycap debug=[0..9]
+	  modprobe easycap debug=[0..9]
 

@@ -580,14 +580,14 @@ static int __devinit hgafb_probe(struct platform_device *pdev)
 	info->fbops = &hgafb_ops;
 	info->screen_base = hga_vram;
 
-        if (register_framebuffer(info) < 0) {
+	if (register_framebuffer(info) < 0) {
 		framebuffer_release(info);
 		iounmap(hga_vram);
 		return -EINVAL;
 	}
 
-        printk(KERN_INFO "fb%d: %s frame buffer device\n",
-               info->node, info->fix.id);
+	printk(KERN_INFO "fb%d: %s frame buffer device\n",
+	       info->node, info->fix.id);
 	platform_set_drvdata(pdev, info);
 	return 0;
 }

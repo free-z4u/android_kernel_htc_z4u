@@ -31,7 +31,7 @@ extern void cpu_probe(void);
 
 /* traps_32.c */
 extern void handle_hw_divzero(struct pt_regs *regs, unsigned long pc,
-                              unsigned long npc, unsigned long psr);
+			      unsigned long npc, unsigned long psr);
 /* muldiv.c */
 extern int do_user_muldiv (struct pt_regs *, unsigned long);
 
@@ -58,9 +58,9 @@ extern spinlock_t sun4d_imsk_lock;
 
 extern void sun4d_init_IRQ(void);
 extern int sun4d_request_irq(unsigned int irq,
-                             irq_handler_t handler,
-                             unsigned long irqflags,
-                             const char *devname, void *dev_id);
+			     irq_handler_t handler,
+			     unsigned long irqflags,
+			     const char *devname, void *dev_id);
 extern int show_sun4d_interrupts(struct seq_file *, void *);
 extern void sun4d_distribute_irqs(void);
 extern void sun4d_free_irq(unsigned int irq, void *dev_id);

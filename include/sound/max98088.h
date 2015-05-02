@@ -33,15 +33,15 @@ struct max98088_pdata {
 
        /* Receiver output can be configured as power amplifier or LINE out */
        /* Set receiver_mode to:
-        * 0 = amplifier output, or
-        * 1 = LINE level output
-        */
+	* 0 = amplifier output, or
+	* 1 = LINE level output
+	*/
        unsigned int receiver_mode:1;
 
        /* Analog/digital microphone configuration:
-        * 0 = analog microphone input (normal setting)
-        * 1 = digital microphone input
-        */
+	* 0 = analog microphone input (normal setting)
+	* 1 = digital microphone input
+	*/
        unsigned int digmic_left_mode:1;
        unsigned int digmic_right_mode:1;
 

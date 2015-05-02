@@ -42,7 +42,7 @@ struct scsi_pointer {
 	struct scatterlist *buffer;	/* which buffer */
 	int buffers_residual;	/* how many buffers left */
 
-        dma_addr_t dma_handle;
+	dma_addr_t dma_handle;
 
 	volatile int Status;
 	volatile int Message;

@@ -222,12 +222,12 @@ static int sn_set_affinity_irq(struct irq_data *data,
 #ifdef CONFIG_SMP
 void sn_set_err_irq_affinity(unsigned int irq)
 {
-        /*
-         * On systems which support CPU disabling (SHub2), all error interrupts
-         * are targeted at the boot CPU.
-         */
-        if (is_shub2() && sn_prom_feature_available(PRF_CPU_DISABLE_SUPPORT))
-                set_irq_affinity_info(irq, cpu_physical_id(0), 0);
+	/*
+	 * On systems which support CPU disabling (SHub2), all error interrupts
+	 * are targeted at the boot CPU.
+	 */
+	if (is_shub2() && sn_prom_feature_available(PRF_CPU_DISABLE_SUPPORT))
+		set_irq_affinity_info(irq, cpu_physical_id(0), 0);
 }
 #else
 void sn_set_err_irq_affinity(unsigned int irq) { }

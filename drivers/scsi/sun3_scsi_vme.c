@@ -223,14 +223,14 @@ static int __init sun3scsi_detect(struct scsi_host_template * tpnt)
 
 	default_instance = instance;
 
-        instance->io_port = (unsigned long) ioaddr;
+	instance->io_port = (unsigned long) ioaddr;
 	instance->irq = irq;
 
 	NCR5380_init(instance, 0);
 
 	instance->n_io_port = 32;
 
-        ((struct NCR5380_hostdata *)instance->hostdata)->ctrl = 0;
+	((struct NCR5380_hostdata *)instance->hostdata)->ctrl = 0;
 
 	if (request_irq(instance->irq, scsi_sun3_intr,
 			0, "Sun3SCSI-5380VME", instance)) {

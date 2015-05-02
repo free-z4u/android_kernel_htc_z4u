@@ -134,7 +134,7 @@ typedef z_stream *z_streamp;
    a single step).
 */
 
-                        /* constants */
+			/* constants */
 
 #define Z_NO_FLUSH      0
 #define Z_PARTIAL_FLUSH 1 /* will be removed, use Z_SYNC_FLUSH instead */
@@ -177,7 +177,7 @@ typedef z_stream *z_streamp;
 #define Z_DEFLATED   8
 /* The deflate compression method (the only one supported in this version) */
 
-                        /* basic functions */
+			/* basic functions */
 
 extern int zlib_deflate_workspacesize (int windowBits, int memLevel);
 /*
@@ -444,7 +444,7 @@ extern int zlib_inflateEnd (z_streamp strm);
    static string (which must not be deallocated).
 */
 
-                        /* Advanced functions */
+			/* Advanced functions */
 
 /*
     The following functions are needed only in some special applications.
@@ -452,11 +452,11 @@ extern int zlib_inflateEnd (z_streamp strm);
 
 /*
 extern int deflateInit2 (z_streamp strm,
-                                     int  level,
-                                     int  method,
-                                     int  windowBits,
-                                     int  memLevel,
-                                     int  strategy);
+				     int  level,
+				     int  method,
+				     int  windowBits,
+				     int  memLevel,
+				     int  strategy);
 
      This is another version of deflateInit with more compression options. The
    fields next_in, zalloc, zfree and opaque must be initialized before by
@@ -696,8 +696,8 @@ extern int zlib_inflateIncomp (z_stream *strm);
 	zlib_inflateInit2((strm), DEF_WBITS)
 
 extern int zlib_deflateInit2(z_streamp strm, int  level, int  method,
-                                      int windowBits, int memLevel,
-                                      int strategy);
+				      int windowBits, int memLevel,
+				      int strategy);
 extern int zlib_inflateInit2(z_streamp strm, int  windowBits);
 
 #if !defined(_Z_UTIL_H) && !defined(NO_DUMMY_DECL)

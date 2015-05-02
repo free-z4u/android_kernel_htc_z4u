@@ -811,7 +811,7 @@ static int snd_ac97_spdif_default_put(struct snd_kcontrol *kcontrol, struct snd_
 		change |= snd_ac97_update_bits_nolock(ac97, AC97_SPDIF, 0x3fff, val);
 		if (extst & AC97_EA_SPDIF) {
 			snd_ac97_update_bits_nolock(ac97, AC97_EXTENDED_STATUS, AC97_EA_SPDIF, AC97_EA_SPDIF); /* turn on again */
-                }
+		}
 	}
 	mutex_unlock(&ac97->reg_mutex);
 

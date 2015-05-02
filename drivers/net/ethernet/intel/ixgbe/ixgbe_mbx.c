@@ -223,7 +223,7 @@ out:
  *  received an ack to that message within delay * timeout period
  **/
 static s32 ixgbe_write_posted_mbx(struct ixgbe_hw *hw, u32 *msg, u16 size,
-                           u16 mbx_id)
+			   u16 mbx_id)
 {
 	struct ixgbe_mbx_info *mbx = &hw->mbx;
 	s32 ret_val = IXGBE_ERR_MBX;
@@ -366,7 +366,7 @@ static s32 ixgbe_obtain_mbx_lock_pf(struct ixgbe_hw *hw, u16 vf_number)
  *  returns SUCCESS if it successfully copied message into the buffer
  **/
 static s32 ixgbe_write_mbx_pf(struct ixgbe_hw *hw, u32 *msg, u16 size,
-                              u16 vf_number)
+			      u16 vf_number)
 {
 	s32 ret_val;
 	u16 i;
@@ -407,7 +407,7 @@ out_no_write:
  *  a message due to a VF request so no polling for message is needed.
  **/
 static s32 ixgbe_read_mbx_pf(struct ixgbe_hw *hw, u32 *msg, u16 size,
-                             u16 vf_number)
+			     u16 vf_number)
 {
 	s32 ret_val;
 	u16 i;

@@ -969,7 +969,7 @@ extern int i2o_parm_table_get(struct i2o_device *, int, int, int, void *, int,
 	osm_printk(KERN_DEBUG, format , ## arg)
 #else
 #define osm_debug(format, arg...) \
-        do { } while (0)
+	do { } while (0)
 #endif
 
 #define osm_err(format, arg...)		\

@@ -80,7 +80,7 @@ static irqreturn_t maceps2_interrupt(int irq, void *dev_id)
 	if (port->status & PS2_STATUS_RX_FULL) {
 		byte = port->rx;
 		serio_interrupt(dev, byte & 0xff, 0);
-        }
+	}
 
 	return IRQ_HANDLED;
 }
@@ -98,7 +98,7 @@ static int maceps2_open(struct serio *dev)
 	data->port->control = PS2_CONTROL_TX_CLOCK_DISABLE | PS2_CONTROL_RESET;
 	udelay(100);
 
-        /* Enable interrupts */
+	/* Enable interrupts */
 	data->port->control = PS2_CONTROL_RX_CLOCK_ENABLE |
 			      PS2_CONTROL_TX_ENABLE |
 			      PS2_CONTROL_RX_INT_ENABLE;

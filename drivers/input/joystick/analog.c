@@ -143,16 +143,16 @@ struct analog_port {
 #define TIME_NAME	(cpu_has_tsc?"TSC":"PIT")
 static unsigned int get_time_pit(void)
 {
-        unsigned long flags;
-        unsigned int count;
+	unsigned long flags;
+	unsigned int count;
 
-        raw_spin_lock_irqsave(&i8253_lock, flags);
-        outb_p(0x00, 0x43);
-        count = inb_p(0x40);
-        count |= inb_p(0x40) << 8;
-        raw_spin_unlock_irqrestore(&i8253_lock, flags);
+	raw_spin_lock_irqsave(&i8253_lock, flags);
+	outb_p(0x00, 0x43);
+	count = inb_p(0x40);
+	count |= inb_p(0x40) << 8;
+	raw_spin_unlock_irqrestore(&i8253_lock, flags);
 
-        return count;
+	return count;
 }
 #elif defined(__x86_64__)
 #define GET_TIME(x)	rdtscl(x)
@@ -397,7 +397,7 @@ static void analog_calibrate_timer(struct analog_port *port)
 		if (t < tx) tx = t;
 	}
 
-        port->loop = tx / 50;
+	port->loop = tx / 50;
 }
 
 /*

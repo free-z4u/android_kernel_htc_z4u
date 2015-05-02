@@ -106,12 +106,12 @@ static int drm_minor_get_id(struct drm_device *dev, int type)
 	int base = 0, limit = 63;
 
 	if (type == DRM_MINOR_CONTROL) {
-                base += 64;
-                limit = base + 127;
-        } else if (type == DRM_MINOR_RENDER) {
-                base += 128;
-                limit = base + 255;
-        }
+		base += 64;
+		limit = base + 127;
+	} else if (type == DRM_MINOR_RENDER) {
+		base += 128;
+		limit = base + 255;
+	}
 
 again:
 	if (idr_pre_get(&drm_minors_idr, GFP_KERNEL) == 0) {

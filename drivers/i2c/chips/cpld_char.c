@@ -58,7 +58,7 @@ static void gpio_read_fn(struct work_struct *work)
 	int i;
 	for(i=0; i<=READ_WIRTE_LOOP; i++){
 		cpld_gpio_read(i);
-        PK_DEBUG(0x2, "[gpio_read_fn] DONE %d\n", i);
+	PK_DEBUG(0x2, "[gpio_read_fn] DONE %d\n", i);
     }
 }
 
@@ -68,7 +68,7 @@ static void gpio_write_fn(struct work_struct *work)
 	static int  value = 1;
 	for(i=0; i<=READ_WIRTE_LOOP; i++){
 		cpld_gpio_write(i, value);
-        PK_DEBUG(0x2, "[gpio_wirte_fn] DONE %d\n", i);
+	PK_DEBUG(0x2, "[gpio_wirte_fn] DONE %d\n", i);
     }
 	value = ~value;
 }
@@ -151,7 +151,7 @@ extern int CPLD_I2C_Read_Byte(uint16_t slaveAddr, uint8_t *pdata);
 
 
 static ssize_t cpld_read(struct file *fp, char __user *buf,
-                         size_t size, loff_t *off)
+			 size_t size, loff_t *off)
 {
 	int i, status;
 	int ret;
@@ -162,8 +162,8 @@ static ssize_t cpld_read(struct file *fp, char __user *buf,
 	if(ret >= 0)
 		printk(KERN_INFO "[CPLD]%s: CPLD INT_STATUS=0x%X...\n", __func__, reg_int_st);
 
-        ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &rdata);
-        if(ret >= 0)
+	ret = CPLD_I2C_Read_Byte(CPLD_REG_7, &rdata);
+	if(ret >= 0)
 		printk(KERN_INFO "[CPLD]%s: CPLD GPI_LEVEL=0x%X...\n", __func__, rdata);
 
 	for( i=1 ; i < CPLD_EXT_GPIO_MAX ; ++i )
@@ -187,7 +187,7 @@ out__cpld_read:
 
 #define USER_BUF_SIZE 32
 static ssize_t cpld_write(struct file *fp, const char __user *args,
-                          size_t size, loff_t *off)
+			  size_t size, loff_t *off)
 {
 	int gpio_num = -1, direct = -1, gpio_level = -1;
 	int status = 0;
@@ -273,19 +273,19 @@ static ssize_t cpld_write(struct file *fp, const char __user *args,
 		status = cpld_gpio_read( gpio_num );
 #if 0
 
-        	if( status == 0 )
-            		ret = copy_to_user(args, " 0\n", 3);
-        	else if( status == 1 )
-            		ret = copy_to_user(args, " 1\n", 3);
-        	else
-            		ret = copy_to_user(args, "-1\n", 3);
+		if( status == 0 )
+	    		ret = copy_to_user(args, " 0\n", 3);
+		else if( status == 1 )
+	    		ret = copy_to_user(args, " 1\n", 3);
+		else
+	    		ret = copy_to_user(args, "-1\n", 3);
 
-        	if (ret != 0)
-        	{
-            		PK_DEBUG(0x1, "[CPLD] E/ %s(): read: copy_to_user error.\n",
-                   		__FUNCTION__);
-            		goto fail_cpld_write;
-        	}
+		if (ret != 0)
+		{
+	    		PK_DEBUG(0x1, "[CPLD] E/ %s(): read: copy_to_user error.\n",
+		   		__FUNCTION__);
+	    		goto fail_cpld_write;
+		}
 #endif
 		if( status == -1 )
 		{

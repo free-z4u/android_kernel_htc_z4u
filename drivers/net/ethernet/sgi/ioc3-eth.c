@@ -231,16 +231,16 @@ static int nic_wait(struct ioc3 *ioc3)
 {
 	u32 mcr;
 
-        do {
-                mcr = ioc3_r_mcr();
-        } while (!(mcr & 2));
+	do {
+		mcr = ioc3_r_mcr();
+	} while (!(mcr & 2));
 
-        return mcr & 1;
+	return mcr & 1;
 }
 
 static int nic_reset(struct ioc3 *ioc3)
 {
-        int presence;
+	int presence;
 
 	ioc3_w_mcr(mcr_pack(500, 65));
 	presence = nic_wait(ioc3);
@@ -248,7 +248,7 @@ static int nic_reset(struct ioc3 *ioc3)
 	ioc3_w_mcr(mcr_pack(0, 500));
 	nic_wait(ioc3);
 
-        return presence;
+	return presence;
 }
 
 static inline int nic_read_bit(struct ioc3 *ioc3)
@@ -1564,9 +1564,9 @@ static void ioc3_get_drvinfo (struct net_device *dev,
 {
 	struct ioc3_private *ip = netdev_priv(dev);
 
-        strcpy (info->driver, IOC3_NAME);
-        strcpy (info->version, IOC3_VERSION);
-        strcpy (info->bus_info, pci_name(ip->pdev));
+	strcpy (info->driver, IOC3_NAME);
+	strcpy (info->version, IOC3_VERSION);
+	strcpy (info->bus_info, pci_name(ip->pdev));
 }
 
 static int ioc3_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)

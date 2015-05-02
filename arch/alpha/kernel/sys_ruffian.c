@@ -120,7 +120,7 @@ ruffian_kill_arch (int mode)
 static int __init
 ruffian_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
 {
-        static char irq_tab[11][5] __initdata = {
+	static char irq_tab[11][5] __initdata = {
 	      /*INT  INTA INTB INTC INTD */
 		{-1,  -1,  -1,  -1,  -1},  /* IdSel 13,  21052	     */
 		{-1,  -1,  -1,  -1,  -1},  /* IdSel 14,  SIO	     */
@@ -134,7 +134,7 @@ ruffian_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
 		{39,  39,  38,  37,  36},  /* IdSel 11,  slot 3	     */
 		{35,  35,  34,  33,  32},  /* IdSel 12,  slot 4	     */
 		{20,  20,  20,  20,  20},  /* IdSel 13,  53c875	     */
-        };
+	};
 	const long min_idsel = 13, max_idsel = 23, irqs_per_slot = 5;
 	return COMMON_TABLE_LOOKUP;
 }

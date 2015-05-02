@@ -1323,8 +1323,8 @@ static inline int IO_APIC_irq_trigger(int irq)
 		}
 	}
 	/*
-         * nonexistent IRQs are edge default
-         */
+	 * nonexistent IRQs are edge default
+	 */
 	return 0;
 }
 #else
@@ -3047,8 +3047,8 @@ void __init setup_IO_APIC(void)
 
 	apic_printk(APIC_VERBOSE, "ENABLING IO-APIC IRQs\n");
 	/*
-         * Set up IO-APIC IRQ routing.
-         */
+	 * Set up IO-APIC IRQ routing.
+	 */
 	x86_init.mpparse.setup_ioapic_ids();
 
 	sync_Arb_IDs();

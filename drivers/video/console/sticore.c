@@ -53,8 +53,8 @@ static struct sti_struct *sti_roms[MAX_STI_ROMS] __read_mostly;
  * but have to translate them, anyway. */
 
 static const u8 col_trans[8] = {
-        0, 6, 4, 5,
-        2, 7, 3, 1
+	0, 6, 4, 5,
+	2, 7, 3, 1
 };
 
 #define c_fg(sti, c) col_trans[((c>> 8) & 7)]

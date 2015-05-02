@@ -1191,12 +1191,12 @@ static inline void set_io_start_time_ns(struct request *req)
 
 static inline uint64_t rq_start_time_ns(struct request *req)
 {
-        return req->start_time_ns;
+	return req->start_time_ns;
 }
 
 static inline uint64_t rq_io_start_time_ns(struct request *req)
 {
-        return req->io_start_time_ns;
+	return req->io_start_time_ns;
 }
 #else
 static inline void set_start_time_ns(struct request *req) {}

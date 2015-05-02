@@ -871,7 +871,7 @@ static void ipg_nic_txfree(struct net_device *dev)
 		 * buffer.
 		 */
 		if (!(txfd->tfc & cpu_to_le64(IPG_TFC_TFDDONE)))
-                        break;
+			break;
 
 		/* Free the transmit buffer. */
 		if (skb) {

@@ -368,7 +368,7 @@ static void __devexit cpqarray_remove_one_pci (struct pci_dev *pdev)
 		printk(KERN_ERR "cpqarray: controller %d appears to have"
 			"already been removed \n", i);
 		return;
-        }
+	}
 	pci_set_drvdata(pdev, NULL);
 
 	cpqarray_remove_one(i);
@@ -383,7 +383,7 @@ static void __devexit cpqarray_remove_one_eisa (int i)
 		printk(KERN_ERR "cpqarray: controller %d appears to have"
 			"already been removed \n", i);
 		return;
-        }
+	}
 	cpqarray_remove_one(i);
 }
 
@@ -713,11 +713,11 @@ DBGINFO(
  */
 static void __iomem *remap_pci_mem(ulong base, ulong size)
 {
-        ulong page_base        = ((ulong) base) & PAGE_MASK;
-        ulong page_offs        = ((ulong) base) - page_base;
-        void __iomem *page_remapped    = ioremap(page_base, page_offs+size);
+	ulong page_base        = ((ulong) base) & PAGE_MASK;
+	ulong page_offs        = ((ulong) base) - page_base;
+	void __iomem *page_remapped    = ioremap(page_base, page_offs+size);
 
-        return (page_remapped ? (page_remapped + page_offs) : NULL);
+	return (page_remapped ? (page_remapped + page_offs) : NULL);
 }
 
 #ifndef MODULE
@@ -1029,8 +1029,8 @@ static inline void complete_command(cmdlist_t *cmd, int timeout)
 		ddir = PCI_DMA_FROMDEVICE;
 	else
 		ddir = PCI_DMA_TODEVICE;
-        for(i=0; i<cmd->req.hdr.sg_cnt; i++)
-                pci_unmap_page(hba[cmd->ctlr]->pci_dev, cmd->req.sg[i].addr,
+	for(i=0; i<cmd->req.hdr.sg_cnt; i++)
+		pci_unmap_page(hba[cmd->ctlr]->pci_dev, cmd->req.sg[i].addr,
 				cmd->req.sg[i].size, ddir);
 
 	DBGPX(printk("Done with %p\n", rq););
@@ -1080,14 +1080,14 @@ static irqreturn_t do_ida_intr(int irq, void *dev_id)
 			if (c->busaddr == a) {
 				removeQ(&h->cmpQ, c);
 				/*  Check for invalid command.
-                                 *  Controller returns command error,
-                                 *  But rcode = 0.
-                                 */
+				 *  Controller returns command error,
+				 *  But rcode = 0.
+				 */
 
 				if((a1 & 0x03) && (c->req.hdr.rcode == 0))
-                                {
-                                	c->req.hdr.rcode = RCODE_INVREQ;
-                                }
+				{
+					c->req.hdr.rcode = RCODE_INVREQ;
+				}
 				if (c->type == CMD_RWREQ) {
 					complete_command(c, 0);
 					cmd_free(h, c, 1);
@@ -1275,10 +1275,10 @@ static int ida_ctlr_ioctl(ctlr_info_t *h, int dsk, ida_ioctl_t *io)
 		p = kmalloc(io->sg[0].size, GFP_KERNEL);
 		if (!p)
 		{
-                        error = -ENOMEM;
-                        cmd_free(h, c, 0);
-                        return(error);
-                }
+			error = -ENOMEM;
+			cmd_free(h, c, 0);
+			return(error);
+		}
 
 		c->req.sg[0].size = io->sg[0].size;
 		c->req.sg[0].addr = pci_map_single(h->pci_dev, p,
@@ -1295,7 +1295,7 @@ static int ida_ctlr_ioctl(ctlr_info_t *h, int dsk, ida_ioctl_t *io)
 			error = PTR_ERR(p);
 			cmd_free(h, c, 0);
 			return error;
-                }
+		}
 		c->req.sg[0].size = io->sg[0].size;
 		c->req.sg[0].addr = pci_map_single(h->pci_dev, p,
 			c->req.sg[0].size, PCI_DMA_BIDIRECTIONAL);
@@ -1326,8 +1326,8 @@ static int ida_ctlr_ioctl(ctlr_info_t *h, int dsk, ida_ioctl_t *io)
 	switch(io->cmd) {
 	case PASSTHRU_A:
 		pci_unmap_single(h->pci_dev, c->req.hdr.blk,
-                                sizeof(ida_ioctl_t),
-                                PCI_DMA_BIDIRECTIONAL);
+				sizeof(ida_ioctl_t),
+				PCI_DMA_BIDIRECTIONAL);
 	case IDA_READ:
 	case DIAG_PASS_THRU:
 	case SENSE_CONTROLLER_PERFORMANCE:
@@ -1694,8 +1694,8 @@ static void getgeometry(int ctlr)
 		 * on the controller.
 		 */
 		printk(KERN_ERR "cpqarray: error sending ID controller\n");
-                goto err_4;
-        }
+		goto err_4;
+	}
 
 	info_p->log_drives = id_ctlr_buf->nr_drvs;
 	for(i=0;i<4;i++)
@@ -1740,7 +1740,7 @@ static void getgeometry(int ctlr)
 				" failed to report status of logical drive %d\n"
 			 "Access to this controller has been disabled\n",
 				ctlr, log_unit);
-                	goto err_4;
+			goto err_4;
 		}
 		/*
 		   Make sure the logical drive is configured
@@ -1769,8 +1769,8 @@ static void getgeometry(int ctlr)
 				 sizeof(config_t), 0, 0, log_unit);
 				if (ret_code == IO_ERROR) {
 					info_p->log_drv_map = 0;
-                			printk(KERN_ERR "cpqarray: error sending sense config\n");
-                			goto err_4;
+					printk(KERN_ERR "cpqarray: error sending sense config\n");
+					goto err_4;
 				}
 
 				info_p->phys_drives =

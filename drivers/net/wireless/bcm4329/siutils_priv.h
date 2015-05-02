@@ -187,7 +187,7 @@ extern uint sb_pcie_readreg(void *sih, uint addrtype, uint offset);
 
 /* AMBA Interconnect exported externs */
 extern si_t *ai_attach(uint pcidev, osl_t *osh, void *regs, uint bustype,
-                       void *sdh, char **vars, uint *varsz);
+		       void *sdh, char **vars, uint *varsz);
 extern si_t *ai_kattach(osl_t *osh);
 extern void ai_scan(si_t *sih, void *regs, uint devid);
 

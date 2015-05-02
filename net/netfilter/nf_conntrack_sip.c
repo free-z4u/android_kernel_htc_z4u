@@ -184,8 +184,8 @@ static int media_len(const struct nf_conn *ct, const char *dptr,
 }
 
 static int parse_addr(const struct nf_conn *ct, const char *cp,
-                      const char **endp, union nf_inet_addr *addr,
-                      const char *limit)
+		      const char **endp, union nf_inet_addr *addr,
+		      const char *limit)
 {
 	const char *end;
 	int ret = 0;

@@ -138,18 +138,18 @@ struct thread_struct {
 #define PARISC_UAC_MASK		(PARISC_UAC_NOPRINT|PARISC_UAC_SIGBUS)
 
 #define SET_UNALIGN_CTL(task,value)                                       \
-        ({                                                                \
-        (task)->thread.flags = (((task)->thread.flags & ~PARISC_UAC_MASK) \
-                                | (((value) << PARISC_UAC_SHIFT) &        \
-                                   PARISC_UAC_MASK));                     \
-        0;                                                                \
-        })
+	({                                                                \
+	(task)->thread.flags = (((task)->thread.flags & ~PARISC_UAC_MASK) \
+				| (((value) << PARISC_UAC_SHIFT) &        \
+				   PARISC_UAC_MASK));                     \
+	0;                                                                \
+	})
 
 #define GET_UNALIGN_CTL(task,addr)                                        \
-        ({                                                                \
-        put_user(((task)->thread.flags & PARISC_UAC_MASK)                 \
-                 >> PARISC_UAC_SHIFT, (int __user *) (addr));             \
-        })
+	({                                                                \
+	put_user(((task)->thread.flags & PARISC_UAC_MASK)                 \
+		 >> PARISC_UAC_SHIFT, (int __user *) (addr));             \
+	})
 
 #define INIT_THREAD { \
 	.regs = {	.gr	= { 0, }, \

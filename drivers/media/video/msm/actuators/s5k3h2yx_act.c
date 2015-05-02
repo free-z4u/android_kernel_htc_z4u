@@ -354,29 +354,29 @@ static int s5k3h2yx_i2c_add_driver_table(
 		return (int) rc;
 	}
 
-        rc = msm_camera_i2c_write(&(s5k3h2yx_act_t.i2c_client),
-                REG_VCM_MODE, 0x15,
-                MSM_CAMERA_I2C_BYTE_DATA);
-        if (rc < 0) {
-                pr_err("%s i2c write failed\n", __func__);
-                return (int) rc;
-        }
+	rc = msm_camera_i2c_write(&(s5k3h2yx_act_t.i2c_client),
+		REG_VCM_MODE, 0x15,
+		MSM_CAMERA_I2C_BYTE_DATA);
+	if (rc < 0) {
+		pr_err("%s i2c write failed\n", __func__);
+		return (int) rc;
+	}
 
-        rc = msm_camera_i2c_write(&(s5k3h2yx_act_t.i2c_client),
-                REG_VCM_MOVE_TIME, 0xA4,
-                MSM_CAMERA_I2C_BYTE_DATA);
-        if (rc < 0) {
-                pr_err("%s i2c write failed\n", __func__);
-                return (int) rc;
-        }
+	rc = msm_camera_i2c_write(&(s5k3h2yx_act_t.i2c_client),
+		REG_VCM_MOVE_TIME, 0xA4,
+		MSM_CAMERA_I2C_BYTE_DATA);
+	if (rc < 0) {
+		pr_err("%s i2c write failed\n", __func__);
+		return (int) rc;
+	}
 
-        rc = msm_camera_i2c_write(&(s5k3h2yx_act_t.i2c_client),
-                REG_VCM_THRES_LSB, 0xC8,
-                MSM_CAMERA_I2C_BYTE_DATA);
-        if (rc < 0) {
-                pr_err("%s i2c write failed\n", __func__);
-                return (int) rc;
-        }
+	rc = msm_camera_i2c_write(&(s5k3h2yx_act_t.i2c_client),
+		REG_VCM_THRES_LSB, 0xC8,
+		MSM_CAMERA_I2C_BYTE_DATA);
+	if (rc < 0) {
+		pr_err("%s i2c write failed\n", __func__);
+		return (int) rc;
+	}
 
 	return (int) rc;
 }

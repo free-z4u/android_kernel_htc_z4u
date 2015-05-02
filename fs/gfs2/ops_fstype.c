@@ -1086,7 +1086,7 @@ static int fill_super(struct super_block *sb, struct gfs2_args *args, int silent
 	sdp->sd_args = *args;
 
 	if (sdp->sd_args.ar_spectator) {
-                sb->s_flags |= MS_RDONLY;
+		sb->s_flags |= MS_RDONLY;
 		set_bit(SDF_RORECOVERY, &sdp->sd_flags);
 	}
 	if (sdp->sd_args.ar_posix_acl)
@@ -1110,7 +1110,7 @@ static int fill_super(struct super_block *sb, struct gfs2_args *args, int silent
 	sdp->sd_sb.sb_bsize = sb_min_blocksize(sb, GFS2_BASIC_BLOCK);
 	sdp->sd_sb.sb_bsize_shift = sb->s_blocksize_bits;
 	sdp->sd_fsb2bb_shift = sdp->sd_sb.sb_bsize_shift -
-                               GFS2_BASIC_BLOCK_SHIFT;
+			       GFS2_BASIC_BLOCK_SHIFT;
 	sdp->sd_fsb2bb = 1 << sdp->sd_fsb2bb_shift;
 
 	sdp->sd_tune.gt_logd_secs = sdp->sd_args.ar_commit;

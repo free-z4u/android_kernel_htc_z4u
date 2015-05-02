@@ -100,16 +100,16 @@
 #define PCI_DEVICE_ID_VORTEX_GDT6x21RD  0x115   /* GDT6121RD/GDT6521RD */
 /* GDT_MPR, RD series, wide/ultra2 SCSI */
 #define PCI_DEVICE_ID_VORTEX_GDT6x18RD  0x118   /* GDT6118RD/GDT6518RD/
-                                                   GDT6618RD */
+						   GDT6618RD */
 #define PCI_DEVICE_ID_VORTEX_GDT6x28RD  0x119   /* GDT6128RD/GDT6528RD/
-                                                   GDT6628RD */
+						   GDT6628RD */
 #define PCI_DEVICE_ID_VORTEX_GDT6x38RD  0x11A   /* GDT6538RD/GDT6638RD */
 #define PCI_DEVICE_ID_VORTEX_GDT6x58RD  0x11B   /* GDT6558RD/GDT6658RD */
 /* GDT_MPR, RN series (64-bit PCI), wide/ultra2 SCSI */
 #define PCI_DEVICE_ID_VORTEX_GDT7x18RN  0x168   /* GDT7118RN/GDT7518RN/
-                                                   GDT7618RN */
+						   GDT7618RN */
 #define PCI_DEVICE_ID_VORTEX_GDT7x28RN  0x169   /* GDT7128RN/GDT7528RN/
-                                                   GDT7628RN */
+						   GDT7628RN */
 #define PCI_DEVICE_ID_VORTEX_GDT7x38RN  0x16A   /* GDT7538RN/GDT7638RN */
 #define PCI_DEVICE_ID_VORTEX_GDT7x58RN  0x16B   /* GDT7558RN/GDT7658RN */
 #endif
@@ -160,7 +160,7 @@
 #define MAXBUS          6
 #define MAX_EVENTS      100                     /* event buffer count */
 #define MAX_RES_ARGS    40                      /* device reservation,
-                                                   must be a multiple of 4 */
+						   must be a multiple of 4 */
 #define MAXCYLS         1024
 #define HEADS           64
 #define SECS            32                      /* mapping 64*32 */
@@ -440,16 +440,16 @@ typedef struct {
     u32     count;                          /* (R) number of init. el. */
     u32     mon_time;                       /* time stamp */
     struct {
-        u8  tid;                            /* target ID */
-        u8  lun;                            /* LUN */
-        u8  res[2];
-        u32 blk_size;                       /* block size in bytes */
-        u32 rd_count;                       /* bytes read */
-        u32 wr_count;                       /* bytes written */
-        u32 rd_blk_count;                   /* blocks read */
-        u32 wr_blk_count;                   /* blocks written */
-        u32 retries;                        /* retries */
-        u32 reassigns;                      /* reassigns */
+	u8  tid;                            /* target ID */
+	u8  lun;                            /* LUN */
+	u8  res[2];
+	u32 blk_size;                       /* block size in bytes */
+	u32 rd_count;                       /* bytes read */
+	u32 wr_count;                       /* bytes written */
+	u32 rd_blk_count;                   /* blocks read */
+	u32 wr_blk_count;                   /* blocks written */
+	u32 retries;                        /* retries */
+	u32 reassigns;                      /* reassigns */
     } __attribute__((packed)) list[1];
 } __attribute__((packed)) gdth_dskstat_str;
 
@@ -467,10 +467,10 @@ typedef struct {
 typedef struct {
     gdth_iochan_header  hdr;
     struct {
-        u32         address;                /* channel address */
-        u8          type;                   /* type (SCSI, FCAL) */
-        u8          local_no;               /* local number */
-        u16          features;               /* channel features */
+	u32         address;                /* channel address */
+	u8          type;                   /* type (SCSI, FCAL) */
+	u8          local_no;               /* local number */
+	u16          features;               /* channel features */
     } __attribute__((packed)) list[MAXBUS];
 } __attribute__((packed)) gdth_iochan_str;
 
@@ -478,9 +478,9 @@ typedef struct {
 typedef struct {
     gdth_iochan_header  hdr;
     struct {
-        u8      proc_id;                    /* processor id */
-        u8      proc_defect;                /* defect ? */
-        u8      reserved[2];
+	u8      proc_id;                    /* processor id */
+	u8      proc_defect;                /* defect ? */
+	u8      reserved[2];
     } __attribute__((packed)) list[MAXBUS];
 } __attribute__((packed)) gdth_raw_iochan_str;
 
@@ -699,8 +699,8 @@ typedef struct {
     u16              Service;                /* service(for async.events) */
     u32             Info[2];                /* additional info */
     struct {
-        u16          offset;                 /* command offs. in the DPRAM*/
-        u16          serv_id;                /* service */
+	u16          offset;                 /* command offs. in the DPRAM*/
+	u16          serv_id;                /* service */
     } __attribute__((packed)) comm_queue[MAXOFFSETS];            /* command queue */
     u32             bios_reserved[2];
     u8              gdt_dpr_cmd[1];         /* commands */
@@ -729,47 +729,47 @@ typedef struct {
 /* DPRAM ISA controllers */
 typedef struct {
     union {
-        struct {
-            u8      bios_used[0x3c00-32];   /* 15KB - 32Bytes BIOS */
-            u32     magic;                  /* controller (EISA) ID */
-            u16      need_deinit;            /* switch betw. BIOS/driver */
-            u8      switch_support;         /* see need_deinit */
-            u8      padding[9];
-            u8      os_used[16];            /* OS code per service */
-        } __attribute__((packed)) dp_sram;
-        u8          bios_area[0x4000];      /* 16KB reserved for BIOS */
+	struct {
+	    u8      bios_used[0x3c00-32];   /* 15KB - 32Bytes BIOS */
+	    u32     magic;                  /* controller (EISA) ID */
+	    u16      need_deinit;            /* switch betw. BIOS/driver */
+	    u8      switch_support;         /* see need_deinit */
+	    u8      padding[9];
+	    u8      os_used[16];            /* OS code per service */
+	} __attribute__((packed)) dp_sram;
+	u8          bios_area[0x4000];      /* 16KB reserved for BIOS */
     } bu;
     union {
-        gdt_dpr_if      ic;                     /* interface area */
-        u8          if_area[0x3000];        /* 12KB for interface */
+	gdt_dpr_if      ic;                     /* interface area */
+	u8          if_area[0x3000];        /* 12KB for interface */
     } u;
     struct {
-        u8          memlock;                /* write protection DPRAM */
-        u8          event;                  /* release event */
-        u8          irqen;                  /* board interrupts enable */
-        u8          irqdel;                 /* acknowledge board int. */
-        u8 volatile Sema1;                  /* status semaphore */
-        u8          rq;                     /* IRQ/DRQ configuration */
+	u8          memlock;                /* write protection DPRAM */
+	u8          event;                  /* release event */
+	u8          irqen;                  /* board interrupts enable */
+	u8          irqdel;                 /* acknowledge board int. */
+	u8 volatile Sema1;                  /* status semaphore */
+	u8          rq;                     /* IRQ/DRQ configuration */
     } __attribute__((packed)) io;
 } __attribute__((packed)) gdt2_dpram_str;
 
 /* DPRAM PCI controllers */
 typedef struct {
     union {
-        gdt_dpr_if      ic;                     /* interface area */
-        u8          if_area[0xff0-sizeof(gdt_pci_sram)];
+	gdt_dpr_if      ic;                     /* interface area */
+	u8          if_area[0xff0-sizeof(gdt_pci_sram)];
     } u;
     gdt_pci_sram        gdt6sr;                 /* SRAM structure */
     struct {
-        u8          unused0[1];
-        u8 volatile Sema1;                  /* command semaphore */
-        u8          unused1[3];
-        u8          irqen;                  /* board interrupts enable */
-        u8          unused2[2];
-        u8          event;                  /* release event */
-        u8          unused3[3];
-        u8          irqdel;                 /* acknowledge board int. */
-        u8          unused4[3];
+	u8          unused0[1];
+	u8 volatile Sema1;                  /* command semaphore */
+	u8          unused1[3];
+	u8          irqen;                  /* board interrupts enable */
+	u8          unused2[2];
+	u8          event;                  /* release event */
+	u8          unused3[3];
+	u8          irqdel;                 /* acknowledge board int. */
+	u8          unused4[3];
     } __attribute__((packed)) io;
 } __attribute__((packed)) gdt6_dpram_str;
 
@@ -796,8 +796,8 @@ typedef struct {
 /* DPRAM new PCI controllers */
 typedef struct {
     union {
-        gdt_dpr_if      ic;                     /* interface area */
-        u8          if_area[0x4000-sizeof(gdt_pci_sram)];
+	gdt_dpr_if      ic;                     /* interface area */
+	u8          if_area[0x4000-sizeof(gdt_pci_sram)];
     } u;
     gdt_pci_sram        gdt6sr;                 /* SRAM structure */
 } __attribute__((packed)) gdt6c_dpram_str;
@@ -827,8 +827,8 @@ typedef struct {
 typedef struct {
     gdt6m_i960_regs     i960r;                  /* 4KB i960 registers */
     union {
-        gdt_dpr_if      ic;                     /* interface area */
-        u8          if_area[0x3000-sizeof(gdt_pci_sram)];
+	gdt_dpr_if      ic;                     /* interface area */
+	u8          if_area[0x3000-sizeof(gdt_pci_sram)];
     } u;
     gdt_pci_sram        gdt6sr;                 /* SRAM structure */
 } __attribute__((packed)) gdt6m_dpram_str;
@@ -880,49 +880,49 @@ typedef struct {
     u32             info2;                  /* additional info */
     Scsi_Cmnd           *req_first;             /* top of request queue */
     struct {
-        u8          present;                /* Flag: host drive present? */
-        u8          is_logdrv;              /* Flag: log. drive (master)? */
-        u8          is_arraydrv;            /* Flag: array drive? */
-        u8          is_master;              /* Flag: array drive master? */
-        u8          is_parity;              /* Flag: parity drive? */
-        u8          is_hotfix;              /* Flag: hotfix drive? */
-        u8          master_no;              /* number of master drive */
-        u8          lock;                   /* drive locked? (hot plug) */
-        u8          heads;                  /* mapping */
-        u8          secs;
-        u16          devtype;                /* further information */
-        u64         size;                   /* capacity */
-        u8          ldr_no;                 /* log. drive no. */
-        u8          rw_attribs;             /* r/w attributes */
-        u8          cluster_type;           /* cluster properties */
-        u8          media_changed;          /* Flag:MOUNT/UNMOUNT occurred */
-        u32         start_sec;              /* start sector */
+	u8          present;                /* Flag: host drive present? */
+	u8          is_logdrv;              /* Flag: log. drive (master)? */
+	u8          is_arraydrv;            /* Flag: array drive? */
+	u8          is_master;              /* Flag: array drive master? */
+	u8          is_parity;              /* Flag: parity drive? */
+	u8          is_hotfix;              /* Flag: hotfix drive? */
+	u8          master_no;              /* number of master drive */
+	u8          lock;                   /* drive locked? (hot plug) */
+	u8          heads;                  /* mapping */
+	u8          secs;
+	u16          devtype;                /* further information */
+	u64         size;                   /* capacity */
+	u8          ldr_no;                 /* log. drive no. */
+	u8          rw_attribs;             /* r/w attributes */
+	u8          cluster_type;           /* cluster properties */
+	u8          media_changed;          /* Flag:MOUNT/UNMOUNT occurred */
+	u32         start_sec;              /* start sector */
     } hdr[MAX_LDRIVES];                         /* host drives */
     struct {
-        u8          lock;                   /* channel locked? (hot plug) */
-        u8          pdev_cnt;               /* physical device count */
-        u8          local_no;               /* local channel number */
-        u8          io_cnt[MAXID];          /* current IO count */
-        u32         address;                /* channel address */
-        u32         id_list[MAXID];         /* IDs of the phys. devices */
+	u8          lock;                   /* channel locked? (hot plug) */
+	u8          pdev_cnt;               /* physical device count */
+	u8          local_no;               /* local channel number */
+	u8          io_cnt[MAXID];          /* current IO count */
+	u32         address;                /* channel address */
+	u32         id_list[MAXID];         /* IDs of the phys. devices */
     } raw[MAXBUS];                              /* SCSI channels */
     struct {
-        Scsi_Cmnd       *cmnd;                  /* pending request */
-        u16          service;                /* service */
+	Scsi_Cmnd       *cmnd;                  /* pending request */
+	u16          service;                /* service */
     } cmd_tab[GDTH_MAXCMDS];                    /* table of pend. requests */
     struct gdth_cmndinfo {                      /* per-command private info */
-        int index;
-        int internal_command;                   /* don't call scsi_done */
-        gdth_cmd_str *internal_cmd_str;         /* crier for internal messages*/
-        dma_addr_t sense_paddr;                 /* sense dma-addr */
-        u8 priority;
+	int index;
+	int internal_command;                   /* don't call scsi_done */
+	gdth_cmd_str *internal_cmd_str;         /* crier for internal messages*/
+	dma_addr_t sense_paddr;                 /* sense dma-addr */
+	u8 priority;
 	int timeout_count;			/* # of timeout calls */
-        volatile int wait_for_completion;
-        u16 status;
-        u32 info;
-        enum dma_data_direction dma_dir;
-        int phase;                              /* ???? */
-        int OpCode;
+	volatile int wait_for_completion;
+	u16 status;
+	u32 info;
+	enum dma_data_direction dma_dir;
+	int phase;                              /* ???? */
+	int OpCode;
     } cmndinfo[GDTH_MAXCMDS];                   /* index==0 is free */
     u8              bus_cnt;                /* SCSI bus count */
     u8              tid_cnt;                /* Target ID count */
@@ -995,16 +995,16 @@ typedef struct {
 /* MODE_SENSE data format */
 typedef struct {
     struct {
-        u8  data_length;
-        u8  med_type;
-        u8  dev_par;
-        u8  bd_length;
+	u8  data_length;
+	u8  med_type;
+	u8  dev_par;
+	u8  bd_length;
     } __attribute__((packed)) hd;
     struct {
-        u8  dens_code;
-        u8  block_count[3];
-        u8  reserved;
-        u8  block_length[3];
+	u8  dens_code;
+	u8  block_count[3];
+	u8  reserved;
+	u8  block_length[3];
     } __attribute__((packed)) bd;
 } __attribute__((packed)) gdth_modep_data;
 

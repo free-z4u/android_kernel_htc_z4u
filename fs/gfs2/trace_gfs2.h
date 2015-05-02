@@ -137,8 +137,8 @@ TRACE_EVENT(gfs2_glock_put,
 
 	TP_printk("%u,%u glock %d:%lld state %s => %s flags:%s",
 		  MAJOR(__entry->dev), MINOR(__entry->dev),
-                  __entry->gltype, (unsigned long long)__entry->glnum,
-                  glock_trace_name(__entry->cur_state),
+		  __entry->gltype, (unsigned long long)__entry->glnum,
+		  glock_trace_name(__entry->cur_state),
 		  glock_trace_name(DLM_LOCK_IV),
 		  show_glock_flags(__entry->flags))
 
@@ -172,8 +172,8 @@ TRACE_EVENT(gfs2_demote_rq,
 	TP_printk("%u,%u glock %d:%lld demote %s to %s flags:%s",
 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->gltype,
 		  (unsigned long long)__entry->glnum,
-                  glock_trace_name(__entry->cur_state),
-                  glock_trace_name(__entry->dmt_state),
+		  glock_trace_name(__entry->cur_state),
+		  glock_trace_name(__entry->dmt_state),
 		  show_glock_flags(__entry->flags))
 
 );

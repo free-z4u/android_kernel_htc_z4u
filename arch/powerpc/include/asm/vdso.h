@@ -28,8 +28,8 @@ extern unsigned long vdso32_rt_sigtramp;
 #ifdef VDS64_HAS_DESCRIPTORS
 #define V_FUNCTION_BEGIN(name)		\
 	.globl name;			\
-        .section ".opd","a";		\
-        .align 3;			\
+	.section ".opd","a";		\
+	.align 3;			\
 	name:				\
 	.quad .name,.TOC.@tocbase,0;	\
 	.previous;			\

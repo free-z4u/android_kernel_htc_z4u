@@ -92,7 +92,7 @@ static int __init init_dbox2_flash(void)
 	if (mymtd) {
 		mymtd->owner = THIS_MODULE;
 
-                /* Create MTD devices for each partition. */
+		/* Create MTD devices for each partition. */
 		mtd_device_register(mymtd, partition_info, NUM_PARTITIONS);
 
 		return 0;

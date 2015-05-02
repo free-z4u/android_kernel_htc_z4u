@@ -304,7 +304,7 @@ int dlm_recoverd_start(struct dlm_ls *ls)
 	if (IS_ERR(p))
 		error = PTR_ERR(p);
 	else
-                ls->ls_recoverd_task = p;
+		ls->ls_recoverd_task = p;
 	return error;
 }
 

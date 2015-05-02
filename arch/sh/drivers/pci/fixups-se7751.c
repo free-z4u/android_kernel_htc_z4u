@@ -8,16 +8,16 @@
 
 int __init pcibios_map_platform_irq(const struct pci_dev *, u8 slot, u8 pin)
 {
-        switch (slot) {
-        case 0: return 13;
-        case 1: return 13;	/* AMD Ethernet controller */
-        case 2: return -1;
-        case 3: return -1;
-        case 4: return -1;
-        default:
-                printk("PCI: Bad IRQ mapping request for slot %d\n", slot);
-                return -1;
-        }
+	switch (slot) {
+	case 0: return 13;
+	case 1: return 13;	/* AMD Ethernet controller */
+	case 2: return -1;
+	case 3: return -1;
+	case 4: return -1;
+	default:
+		printk("PCI: Bad IRQ mapping request for slot %d\n", slot);
+		return -1;
+	}
 }
 
 #define PCIMCR_MRSET_OFF	0xBFFFFFFF

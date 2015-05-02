@@ -70,7 +70,7 @@ void __init MMU_init_hw(void)
 	 * kernel access as indicated in the PTE.
 	 */
 
-        mtspr(SPRN_ZPR, 0x10000000);
+	mtspr(SPRN_ZPR, 0x10000000);
 
 	flush_instruction_cache();
 
@@ -79,15 +79,15 @@ void __init MMU_init_hw(void)
 	 * handlers (which are run in real-mode).
 	 */
 
-        mtspr(SPRN_DCWR, 0x00000000);	/* All caching is write-back */
+	mtspr(SPRN_DCWR, 0x00000000);	/* All caching is write-back */
 
-        /*
+	/*
 	 * Cache instruction and data space where the exception
 	 * vectors and the kernel live in real-mode.
 	 */
 
-        mtspr(SPRN_DCCR, 0xFFFF0000);	/* 2GByte of data space at 0x0. */
-        mtspr(SPRN_ICCR, 0xFFFF0000);	/* 2GByte of instr. space at 0x0. */
+	mtspr(SPRN_DCCR, 0xFFFF0000);	/* 2GByte of data space at 0x0. */
+	mtspr(SPRN_ICCR, 0xFFFF0000);	/* 2GByte of instr. space at 0x0. */
 }
 
 #define LARGE_PAGE_SIZE_16M	(1<<24)

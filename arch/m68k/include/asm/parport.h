@@ -18,7 +18,7 @@
 static int __devinit parport_pc_find_isa_ports (int autoirq, int autodma);
 static int __devinit parport_pc_find_nonpci_ports (int autoirq, int autodma)
 {
-        if (! (MACH_IS_Q40))
+	if (! (MACH_IS_Q40))
 	  return 0; /* count=0 */
 	return parport_pc_find_isa_ports (PARPORT_IRQ_NONE, PARPORT_DMA_NONE);
 }

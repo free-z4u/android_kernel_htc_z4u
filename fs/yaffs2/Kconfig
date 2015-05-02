@@ -107,7 +107,7 @@ config YAFFS_ALWAYS_CHECK_CHUNK_ERASED
 	depends on YAFFS_FS
 	default n
 	help
-          Normally YAFFS only checks chunks before writing until an erased
+	  Normally YAFFS only checks chunks before writing until an erased
 	  chunk is found. This helps to detect any partially written
 	  chunks that might have happened due to power loss.
 

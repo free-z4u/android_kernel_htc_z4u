@@ -218,9 +218,9 @@ static struct sync_port ports[]=
 		.regi_dmaout           = OUT_DMA_INST,
 		.regi_dmain            = IN_DMA_INST,
 #if defined(CONFIG_ETRAX_SYNCHRONOUS_SERIAL0_DMA)
-                .use_dma               = 1,
+		.use_dma               = 1,
 #else
-                .use_dma               = 0,
+		.use_dma               = 0,
 #endif
 	}
 #ifdef CONFIG_ETRAXFS
@@ -231,9 +231,9 @@ static struct sync_port ports[]=
 		.regi_dmaout           = regi_dma6,
 		.regi_dmain            = regi_dma7,
 #if defined(CONFIG_ETRAX_SYNCHRONOUS_SERIAL1_DMA)
-                .use_dma               = 1,
+		.use_dma               = 1,
 #else
-                .use_dma               = 0,
+		.use_dma               = 0,
 #endif
 	}
 #endif
@@ -538,7 +538,7 @@ static int sync_serial_open(struct inode *inode, struct file *file)
 #endif
 			}
 #endif
-                        /* Enable DMAs */
+			/* Enable DMAs */
 			REG_WR(dma, port->regi_dmain, rw_cfg, cfg);
 			REG_WR(dma, port->regi_dmaout, rw_cfg, cfg);
 			/* Enable DMA IRQs */
@@ -603,7 +603,7 @@ static int sync_serial_release(struct inode *inode, struct file *file)
 	if (port->busy)
 		port->busy--;
 	if (!port->busy)
-          /* XXX */ ;
+	  /* XXX */ ;
 	return 0;
 }
 
@@ -670,7 +670,7 @@ static int sync_serial_ioctl(struct file *file,
 		DEBUG(printk("Invalid minor %d\n", dev));
 		return -1;
 	}
-        port = &ports[dev];
+	port = &ports[dev];
 	spin_lock_irq(&port->lock);
 
 	tr_cfg = REG_RD(sser, port->regi_sser, rw_tr_cfg);
@@ -964,7 +964,7 @@ static int sync_serial_ioctl(struct file *file,
 }
 
 static long sync_serial_ioctl(struct file *file,
-                             unsigned int cmd, unsigned long arg)
+			     unsigned int cmd, unsigned long arg)
 {
        long ret;
 
@@ -1449,10 +1449,10 @@ static irqreturn_t rx_interrupt(int irq, void *dev_id)
 					if (port->writep >= port->flip + port->in_buffer_size)
 						port->writep = port->flip;
 				}
-                                if (port->writep == port->readp)
-                                {
+				if (port->writep == port->readp)
+				{
 				  port->full = 1;
-                                }
+				}
 
 				port->next_rx_desc->eol = 1;
 				port->prev_rx_desc->eol = 0;

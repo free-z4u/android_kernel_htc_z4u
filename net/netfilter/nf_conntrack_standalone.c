@@ -37,8 +37,8 @@ MODULE_LICENSE("GPL");
 #ifdef CONFIG_NF_CONNTRACK_PROCFS
 int
 print_tuple(struct seq_file *s, const struct nf_conntrack_tuple *tuple,
-            const struct nf_conntrack_l3proto *l3proto,
-            const struct nf_conntrack_l4proto *l4proto)
+	    const struct nf_conntrack_l3proto *l3proto,
+	    const struct nf_conntrack_l4proto *l4proto)
 {
 	return l3proto->print_tuple(s, tuple) || l4proto->print_tuple(s, tuple);
 }

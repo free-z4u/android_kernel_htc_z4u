@@ -106,17 +106,17 @@ static int __init sh5pci_init(void)
 	u32 lsr0;
 	u32 uval;
 
-        if (request_irq(IRQ_ERR, pcish5_err_irq,
-                        0, "PCI Error",NULL) < 0) {
-                printk(KERN_ERR "PCISH5: Cannot hook PCI_PERR interrupt\n");
-                return -EINVAL;
-        }
+	if (request_irq(IRQ_ERR, pcish5_err_irq,
+			0, "PCI Error",NULL) < 0) {
+		printk(KERN_ERR "PCISH5: Cannot hook PCI_PERR interrupt\n");
+		return -EINVAL;
+	}
 
-        if (request_irq(IRQ_SERR, pcish5_serr_irq,
-                        0, "PCI SERR interrupt", NULL) < 0) {
-                printk(KERN_ERR "PCISH5: Cannot hook PCI_SERR interrupt\n");
-                return -EINVAL;
-        }
+	if (request_irq(IRQ_SERR, pcish5_serr_irq,
+			0, "PCI SERR interrupt", NULL) < 0) {
+		printk(KERN_ERR "PCISH5: Cannot hook PCI_SERR interrupt\n");
+		return -EINVAL;
+	}
 
 	pcicr_virt = (unsigned long)ioremap_nocache(SH5PCI_ICR_BASE, 1024);
 	if (!pcicr_virt) {
@@ -129,85 +129,85 @@ static int __init sh5pci_init(void)
 	}
 
 	/* Clear snoop registers */
-        SH5PCI_WRITE(CSCR0, 0);
-        SH5PCI_WRITE(CSCR1, 0);
+	SH5PCI_WRITE(CSCR0, 0);
+	SH5PCI_WRITE(CSCR1, 0);
 
-        /* Switch off interrupts */
-        SH5PCI_WRITE(INTM,  0);
-        SH5PCI_WRITE(AINTM, 0);
-        SH5PCI_WRITE(PINTM, 0);
+	/* Switch off interrupts */
+	SH5PCI_WRITE(INTM,  0);
+	SH5PCI_WRITE(AINTM, 0);
+	SH5PCI_WRITE(PINTM, 0);
 
-        /* Set bus active, take it out of reset */
-        uval = SH5PCI_READ(CR);
+	/* Set bus active, take it out of reset */
+	uval = SH5PCI_READ(CR);
 
 	/* Set command Register */
-        SH5PCI_WRITE(CR, uval | CR_LOCK_MASK | CR_CFINT| CR_FTO | CR_PFE |
+	SH5PCI_WRITE(CR, uval | CR_LOCK_MASK | CR_CFINT| CR_FTO | CR_PFE |
 		     CR_PFCS | CR_BMAM);
 
 	uval=SH5PCI_READ(CR);
 
-        /* Allow it to be a master */
+	/* Allow it to be a master */
 	/* NB - WE DISABLE I/O ACCESS to stop overlap */
-        /* set WAIT bit to enable stepping, an attempt to improve stability */
+	/* set WAIT bit to enable stepping, an attempt to improve stability */
 	SH5PCI_WRITE_SHORT(CSR_CMD,
 			    PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER |
 			    PCI_COMMAND_WAIT);
 
-        /*
-        ** Set translation mapping memory in order to convert the address
-        ** used for the main bus, to the PCI internal address.
-        */
-        SH5PCI_WRITE(MBR,0x40000000);
+	/*
+	** Set translation mapping memory in order to convert the address
+	** used for the main bus, to the PCI internal address.
+	*/
+	SH5PCI_WRITE(MBR,0x40000000);
 
-        /* Always set the max size 512M */
-        SH5PCI_WRITE(MBMR, PCISH5_MEM_SIZCONV(512*1024*1024));
+	/* Always set the max size 512M */
+	SH5PCI_WRITE(MBMR, PCISH5_MEM_SIZCONV(512*1024*1024));
 
-        /*
-        ** I/O addresses are mapped at internal PCI specific address
-        ** as is described into the configuration bridge table.
-        ** These are changed to 0, to allow cards that have legacy
-        ** io such as vga to function correctly. We set the SH5 IOBAR to
-        ** 256K, which is a bit big as we can only have 64K of address space
-        */
+	/*
+	** I/O addresses are mapped at internal PCI specific address
+	** as is described into the configuration bridge table.
+	** These are changed to 0, to allow cards that have legacy
+	** io such as vga to function correctly. We set the SH5 IOBAR to
+	** 256K, which is a bit big as we can only have 64K of address space
+	*/
 
-        SH5PCI_WRITE(IOBR,0x0);
+	SH5PCI_WRITE(IOBR,0x0);
 
-        /* Set up a 256K window. Totally pointless waste  of address space */
-        SH5PCI_WRITE(IOBMR,0);
+	/* Set up a 256K window. Totally pointless waste  of address space */
+	SH5PCI_WRITE(IOBMR,0);
 
 	/* The SH5 has a HUGE 256K I/O region, which breaks the PCI spec.
 	 * Ideally, we would want to map the I/O region somewhere, but it
 	 * is so big this is not that easy!
-         */
+	 */
 	SH5PCI_WRITE(CSR_IBAR0,~0);
 	/* Set memory size value */
-        memSize = memory_end - memory_start;
+	memSize = memory_end - memory_start;
 
 	/* Now we set up the mbars so the PCI bus can see the memory of
 	 * the machine */
 	if (memSize < (1024 * 1024)) {
-                printk(KERN_ERR "PCISH5: Ridiculous memory size of 0x%lx?\n",
+		printk(KERN_ERR "PCISH5: Ridiculous memory size of 0x%lx?\n",
 		       memSize);
-                return -EINVAL;
-        }
+		return -EINVAL;
+	}
 
-        /* Set LSR 0 */
-        lsr0 = (memSize > (512 * 1024 * 1024)) ? 0x1ff00001 :
+	/* Set LSR 0 */
+	lsr0 = (memSize > (512 * 1024 * 1024)) ? 0x1ff00001 :
 		((r2p2(memSize) - 0x100000) | 0x1);
-        SH5PCI_WRITE(LSR0, lsr0);
+	SH5PCI_WRITE(LSR0, lsr0);
 
-        /* Set MBAR 0 */
-        SH5PCI_WRITE(CSR_MBAR0, memory_start);
-        SH5PCI_WRITE(LAR0, memory_start);
+	/* Set MBAR 0 */
+	SH5PCI_WRITE(CSR_MBAR0, memory_start);
+	SH5PCI_WRITE(LAR0, memory_start);
 
-        SH5PCI_WRITE(CSR_MBAR1,0);
-        SH5PCI_WRITE(LAR1,0);
-        SH5PCI_WRITE(LSR1,0);
+	SH5PCI_WRITE(CSR_MBAR1,0);
+	SH5PCI_WRITE(LAR1,0);
+	SH5PCI_WRITE(LSR1,0);
 
-        /* Enable the PCI interrupts on the device */
-        SH5PCI_WRITE(INTM,  ~0);
-        SH5PCI_WRITE(AINTM, ~0);
-        SH5PCI_WRITE(PINTM, ~0);
+	/* Enable the PCI interrupts on the device */
+	SH5PCI_WRITE(INTM,  ~0);
+	SH5PCI_WRITE(AINTM, ~0);
+	SH5PCI_WRITE(PINTM, ~0);
 
 	sh5_pci_resources[0].start = PCI_IO_AREA;
 	sh5_pci_resources[0].end = PCI_IO_AREA + 0x10000;

@@ -273,7 +273,7 @@ static struct platform_device gps_ctl_dev={
 
 static int __init gps_ctl_init(void)
 {
-        int ret;
+	int ret;
 	ret = platform_device_register(&gps_ctl_dev);
 	if(ret < 0){
 		GPSE("platform_device register error!\n");

@@ -81,10 +81,10 @@ static void send_usb_connect_notify(struct work_struct *w)
 	USBH_INFO("send connect type %d\n", motg->connect_type);
 	mutex_lock(&notify_sem);
 #ifdef CONFIG_CABLE_DETECT_ACCESSORY
-        if (cable_get_accessory_type() == DOCK_STATE_DMB) {
-                motg->connect_type = CONNECT_TYPE_CLEAR;
-                USBH_INFO("current accessory is DMB, send  %d\n", motg->connect_type);
-        }
+	if (cable_get_accessory_type() == DOCK_STATE_DMB) {
+		motg->connect_type = CONNECT_TYPE_CLEAR;
+		USBH_INFO("current accessory is DMB, send  %d\n", motg->connect_type);
+	}
 #endif
 	list_for_each_entry(notifier, &g_lh_usb_notifier_list, notifier_link) {
 		if (notifier->func != NULL) {

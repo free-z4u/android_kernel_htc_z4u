@@ -133,7 +133,7 @@ static void compute_prefix_tbl(struct ts_bm *bm, int flags)
 	bm->good_shift[0] = 1;
 	for (i = 1; i < bm->patlen; i++)
 		bm->good_shift[i] = bm->patlen;
-        for (i = bm->patlen-1, g = 1; i > 0; g++, i--) {
+	for (i = bm->patlen-1, g = 1; i > 0; g++, i--) {
 		for (j = i-1; j >= 1-g ; j--)
 			if (subpattern(bm->pattern, i, j, g)) {
 				bm->good_shift[g] = bm->patlen-j-g;

@@ -184,7 +184,7 @@ static int vxp_load_xilinx_binary(struct vx_core *_chip, const struct firmware *
 		c = vx_inb(chip, RXL);
 		if (c != (int)data)
 			snd_printk(KERN_ERR "vxpocket: load xilinx mismatch at %d: 0x%x != 0x%x\n", i, c, (int)data);
-        }
+	}
 
 	/* reset HF1 */
 	vx_outb(chip, ICR, 0);
@@ -483,7 +483,7 @@ void vx_set_mic_boost(struct vx_core *chip, int boost)
 			/* minimum value: 20 dB */
 			pchip->regCDSP |=  P24_CDSP_MIC20_SEL_MASK;
 			pchip->regCDSP &= ~P24_CDSP_MIC38_SEL_MASK;
-                }
+		}
 		vx_outb(chip, CDSP, pchip->regCDSP);
 	}
 	spin_unlock_irqrestore(&chip->lock, flags);

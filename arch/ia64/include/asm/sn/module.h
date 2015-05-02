@@ -58,14 +58,14 @@
 #define RACK_NUM_DVDR           1
 
 #define RACK_CREATE_RACKID(_c, _g, _n)  ((_c) * RACK_CLASS_DVDR +       \
-        (_g) * RACK_GROUP_DVDR + (_n) * RACK_NUM_DVDR)
+	(_g) * RACK_GROUP_DVDR + (_n) * RACK_NUM_DVDR)
 
 #define RACK_GET_CLASS(_r)              ((_r) / RACK_CLASS_DVDR)
 #define RACK_GET_GROUP(_r)              (((_r) - RACK_GET_CLASS(_r) *   \
-            RACK_CLASS_DVDR) / RACK_GROUP_DVDR)
+	    RACK_CLASS_DVDR) / RACK_GROUP_DVDR)
 #define RACK_GET_NUM(_r)                (((_r) - RACK_GET_CLASS(_r) *   \
-            RACK_CLASS_DVDR - RACK_GET_GROUP(_r) *      \
-            RACK_GROUP_DVDR) / RACK_NUM_DVDR)
+	    RACK_CLASS_DVDR - RACK_GET_GROUP(_r) *      \
+	    RACK_GROUP_DVDR) / RACK_NUM_DVDR)
 
 /*
  * Macros for encoding and decoding rack IDs
@@ -80,19 +80,19 @@
 #define RACK_CLASS_MASK(_r)     0x20
 #define RACK_CLASS_SHFT(_r)     5
 #define RACK_ADD_CLASS(_r, _c)  \
-        ((_r) |= (_c) << RACK_CLASS_SHFT(_r) & RACK_CLASS_MASK(_r))
+	((_r) |= (_c) << RACK_CLASS_SHFT(_r) & RACK_CLASS_MASK(_r))
 
 #define RACK_GROUP_SHFT(_r)     RACK_NUM_BITS(_r)
 #define RACK_GROUP_MASK(_r)     \
-        ( (((unsigned)1<<RACK_GROUP_BITS(_r)) - 1) << RACK_GROUP_SHFT(_r) )
+	( (((unsigned)1<<RACK_GROUP_BITS(_r)) - 1) << RACK_GROUP_SHFT(_r) )
 #define RACK_ADD_GROUP(_r, _g)  \
-        ((_r) |= (_g) << RACK_GROUP_SHFT(_r) & RACK_GROUP_MASK(_r))
+	((_r) |= (_g) << RACK_GROUP_SHFT(_r) & RACK_GROUP_MASK(_r))
 
 #define RACK_NUM_SHFT(_r)       0
 #define RACK_NUM_MASK(_r)       \
-        ( (((unsigned)1<<RACK_NUM_BITS(_r)) - 1) << RACK_NUM_SHFT(_r) )
+	( (((unsigned)1<<RACK_NUM_BITS(_r)) - 1) << RACK_NUM_SHFT(_r) )
 #define RACK_ADD_NUM(_r, _n)    \
-        ((_r) |= ((_n) - 1) << RACK_NUM_SHFT(_r) & RACK_NUM_MASK(_r))
+	((_r) |= ((_n) - 1) << RACK_NUM_SHFT(_r) & RACK_NUM_MASK(_r))
 
 
 /*

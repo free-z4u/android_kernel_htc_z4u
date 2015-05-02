@@ -38,24 +38,24 @@ typedef int status_t;
 
     struct pmcc4_timeslot_param
     {
-        u_int8_t    card;       /* the card number */
-        u_int8_t    port;       /* the port number */
-        u_int8_t    _reserved1;
-        u_int8_t    _reserved2;
+	u_int8_t    card;       /* the card number */
+	u_int8_t    port;       /* the port number */
+	u_int8_t    _reserved1;
+	u_int8_t    _reserved2;
 
-        /*
-         * each byte in bitmask below represents one timeslot (bitmask[0] is
-         * for timeslot 0 and so on), each bit in the byte selects timeslot
-         * bits for this channel (0xff - whole timeslot, 0x7f - 56kbps mode)
-         */
-        u_int8_t    bitmask[32];
+	/*
+	 * each byte in bitmask below represents one timeslot (bitmask[0] is
+	 * for timeslot 0 and so on), each bit in the byte selects timeslot
+	 * bits for this channel (0xff - whole timeslot, 0x7f - 56kbps mode)
+	 */
+	u_int8_t    bitmask[32];
     };
 
     struct c4_musycc_param
     {
-        u_int8_t    RWportnum;
-                    u_int16_t offset;
-        u_int32_t   value;
+	u_int8_t    RWportnum;
+		    u_int16_t offset;
+	u_int32_t   value;
     };
 
 /*Alarm values */
@@ -98,7 +98,7 @@ u_int32_t   sbeCrc (u_int8_t *, u_int32_t, u_int32_t, u_int32_t *);
 
 void        VMETRO_TRACE (void *);       /* put data into 8 LEDs */
 void        VMETRO_TRIGGER (ci_t *, int);       /* Note: int = 0(default)
-                                                 * thru 15 */
+						 * thru 15 */
 
 #if defined (SBE_ISR_TASKLET)
 void        musycc_intr_bh_tasklet (ci_t *);

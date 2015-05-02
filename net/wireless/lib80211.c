@@ -98,21 +98,21 @@ void lib80211_crypt_info_free(struct lib80211_crypt_info *info)
 {
 	int i;
 
-        lib80211_crypt_quiescing(info);
-        del_timer_sync(&info->crypt_deinit_timer);
-        lib80211_crypt_deinit_entries(info, 1);
+	lib80211_crypt_quiescing(info);
+	del_timer_sync(&info->crypt_deinit_timer);
+	lib80211_crypt_deinit_entries(info, 1);
 
-        for (i = 0; i < NUM_WEP_KEYS; i++) {
-                struct lib80211_crypt_data *crypt = info->crypt[i];
-                if (crypt) {
-                        if (crypt->ops) {
-                                crypt->ops->deinit(crypt->priv);
-                                module_put(crypt->ops->owner);
-                        }
-                        kfree(crypt);
-                        info->crypt[i] = NULL;
-                }
-        }
+	for (i = 0; i < NUM_WEP_KEYS; i++) {
+		struct lib80211_crypt_data *crypt = info->crypt[i];
+		if (crypt) {
+			if (crypt->ops) {
+				crypt->ops->deinit(crypt->priv);
+				module_put(crypt->ops->owner);
+			}
+			kfree(crypt);
+			info->crypt[i] = NULL;
+		}
+	}
 }
 EXPORT_SYMBOL(lib80211_crypt_info_free);
 

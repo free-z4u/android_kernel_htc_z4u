@@ -115,14 +115,14 @@ ia64_do_page_fault (unsigned long address, unsigned long isr, struct pt_regs *re
 	if (!vma && !prev_vma )
 		goto bad_area;
 
-        /*
-         * find_vma_prev() returns vma such that address < vma->vm_end or NULL
-         *
-         * May find no vma, but could be that the last vm area is the
-         * register backing store that needs to expand upwards, in
-         * this case vma will be null, but prev_vma will ne non-null
-         */
-        if (( !vma && prev_vma ) || (address < vma->vm_start) )
+	/*
+	 * find_vma_prev() returns vma such that address < vma->vm_end or NULL
+	 *
+	 * May find no vma, but could be that the last vm area is the
+	 * register backing store that needs to expand upwards, in
+	 * this case vma will be null, but prev_vma will ne non-null
+	 */
+	if (( !vma && prev_vma ) || (address < vma->vm_start) )
 		goto check_expansion;
 
   good_area:

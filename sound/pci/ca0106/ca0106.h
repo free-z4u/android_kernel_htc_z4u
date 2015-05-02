@@ -657,13 +657,13 @@ struct snd_ca0106_channel {
 struct snd_ca0106_pcm {
 	struct snd_ca0106 *emu;
 	struct snd_pcm_substream *substream;
-        int channel_id;
+	int channel_id;
 	unsigned short running;
 };
 
 struct snd_ca0106_details {
-        u32 serial;
-        char * name;
+	u32 serial;
+	char * name;
 	int ac97;	/* ac97 = 0 -> Select MIC, Line in, TAD in, AUX in.
 			   ac97 = 1 -> Default to AC97 in. */
 	int gpio_type;	/* gpio_type = 1 -> shared mic-in/line-in

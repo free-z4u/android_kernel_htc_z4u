@@ -231,7 +231,7 @@ lmc_hssi_set_clock (lmc_softc_t * const sc, int ie)
       LMC_CSR_WRITE (sc, csr_gp, sc->lmc_gpio);
       sc->ictl.clock_source = LMC_CTL_CLOCK_SOURCE_EXT;
       if(old != ie)
-        printk (LMC_PRINTF_FMT ": clock external\n", LMC_PRINTF_ARGS);
+	printk (LMC_PRINTF_FMT ": clock external\n", LMC_PRINTF_ARGS);
     }
   else
     {
@@ -239,7 +239,7 @@ lmc_hssi_set_clock (lmc_softc_t * const sc, int ie)
       LMC_CSR_WRITE (sc, csr_gp, sc->lmc_gpio);
       sc->ictl.clock_source = LMC_CTL_CLOCK_SOURCE_INT;
       if(old != ie)
-        printk (LMC_PRINTF_FMT ": clock internal\n", LMC_PRINTF_ARGS);
+	printk (LMC_PRINTF_FMT ": clock internal\n", LMC_PRINTF_ARGS);
     }
 }
 
@@ -442,62 +442,62 @@ lmc_ds3_get_link_status (lmc_softc_t * const sc)
     lmc_led_on(sc, LMC_DS3_LED2);
 
     if ((link_status & LMC_FRAMER_REG0_DLOS) ||
-        (link_status & LMC_FRAMER_REG0_OOFS)){
-        ret = 0;
-        if(sc->last_led_err[3] != 1){
+	(link_status & LMC_FRAMER_REG0_OOFS)){
+	ret = 0;
+	if(sc->last_led_err[3] != 1){
 	    u16 r1;
-            lmc_mii_writereg (sc, 0, 17, 01); /* Turn on Xbit error as our cisco does */
-            r1 = lmc_mii_readreg (sc, 0, 18);
-            r1 &= 0xfe;
-            lmc_mii_writereg(sc, 0, 18, r1);
-            printk(KERN_WARNING "%s: Red Alarm - Loss of Signal or Loss of Framing\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED3);	/* turn on red LED */
-        sc->last_led_err[3] = 1;
+	    lmc_mii_writereg (sc, 0, 17, 01); /* Turn on Xbit error as our cisco does */
+	    r1 = lmc_mii_readreg (sc, 0, 18);
+	    r1 &= 0xfe;
+	    lmc_mii_writereg(sc, 0, 18, r1);
+	    printk(KERN_WARNING "%s: Red Alarm - Loss of Signal or Loss of Framing\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED3);	/* turn on red LED */
+	sc->last_led_err[3] = 1;
     }
     else {
-        lmc_led_off(sc, LMC_DS3_LED3);	/* turn on red LED */
-        if(sc->last_led_err[3] == 1){
+	lmc_led_off(sc, LMC_DS3_LED3);	/* turn on red LED */
+	if(sc->last_led_err[3] == 1){
 	    u16 r1;
-            lmc_mii_writereg (sc, 0, 17, 01); /* Turn off Xbit error */
-            r1 = lmc_mii_readreg (sc, 0, 18);
-            r1 |= 0x01;
-            lmc_mii_writereg(sc, 0, 18, r1);
-        }
-        sc->last_led_err[3] = 0;
+	    lmc_mii_writereg (sc, 0, 17, 01); /* Turn off Xbit error */
+	    r1 = lmc_mii_readreg (sc, 0, 18);
+	    r1 |= 0x01;
+	    lmc_mii_writereg(sc, 0, 18, r1);
+	}
+	sc->last_led_err[3] = 0;
     }
 
     lmc_mii_writereg(sc, 0, 17, 0x10);
     link_status_11 = lmc_mii_readreg(sc, 0, 18);
     if((link_status & LMC_FRAMER_REG0_AIS) ||
        (link_status_11 & LMC_FRAMER_REG10_XBIT)) {
-        ret = 0;
-        if(sc->last_led_err[0] != 1){
-            printk(KERN_WARNING "%s: AIS Alarm or XBit Error\n", sc->name);
-            printk(KERN_WARNING "%s: Remote end has loss of signal or framing\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED0);
-        sc->last_led_err[0] = 1;
+	ret = 0;
+	if(sc->last_led_err[0] != 1){
+	    printk(KERN_WARNING "%s: AIS Alarm or XBit Error\n", sc->name);
+	    printk(KERN_WARNING "%s: Remote end has loss of signal or framing\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED0);
+	sc->last_led_err[0] = 1;
     }
     else {
-        lmc_led_off(sc, LMC_DS3_LED0);
-        sc->last_led_err[0] = 0;
+	lmc_led_off(sc, LMC_DS3_LED0);
+	sc->last_led_err[0] = 0;
     }
 
     lmc_mii_writereg (sc, 0, 17, 9);
     link_status = lmc_mii_readreg (sc, 0, 18);
 
     if(link_status & LMC_FRAMER_REG9_RBLUE){
-        ret = 0;
-        if(sc->last_led_err[1] != 1){
-            printk(KERN_WARNING "%s: Blue Alarm - Receiving all 1's\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED1);
-        sc->last_led_err[1] = 1;
+	ret = 0;
+	if(sc->last_led_err[1] != 1){
+	    printk(KERN_WARNING "%s: Blue Alarm - Receiving all 1's\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED1);
+	sc->last_led_err[1] = 1;
     }
     else {
-        lmc_led_off(sc, LMC_DS3_LED1);
-        sc->last_led_err[1] = 0;
+	lmc_led_off(sc, LMC_DS3_LED1);
+	sc->last_led_err[1] = 0;
     }
 
     return ret;
@@ -619,7 +619,7 @@ lmc_ssi_set_clock (lmc_softc_t * const sc, int ie)
       LMC_CSR_WRITE (sc, csr_gp, sc->lmc_gpio);
       sc->ictl.clock_source = LMC_CTL_CLOCK_SOURCE_EXT;
       if(ie != old)
-        printk (LMC_PRINTF_FMT ": clock external\n", LMC_PRINTF_ARGS);
+	printk (LMC_PRINTF_FMT ": clock external\n", LMC_PRINTF_ARGS);
     }
   else
     {
@@ -627,7 +627,7 @@ lmc_ssi_set_clock (lmc_softc_t * const sc, int ie)
       LMC_CSR_WRITE (sc, csr_gp, sc->lmc_gpio);
       sc->ictl.clock_source = LMC_CTL_CLOCK_SOURCE_INT;
       if(ie != old)
-        printk (LMC_PRINTF_FMT ": clock internal\n", LMC_PRINTF_ARGS);
+	printk (LMC_PRINTF_FMT ": clock internal\n", LMC_PRINTF_ARGS);
     }
 }
 
@@ -724,7 +724,7 @@ lmc_ssi_get_link_status (lmc_softc_t * const sc)
   }
   else {
       if(sc->last_led_err[3] == 1)
-          printk(KERN_WARNING "%s: Clock Returned\n", sc->name);
+	  printk(KERN_WARNING "%s: Clock Returned\n", sc->name);
       sc->last_led_err[3] = 0;
       lmc_led_off (sc, LMC_MII16_LED3);		/* turn OFF red LED */
   }
@@ -743,13 +743,13 @@ lmc_ssi_get_link_status (lmc_softc_t * const sc)
 
   if(hw_hdsk == 0){
       if(sc->last_led_err[1] != 1)
-          printk(KERN_WARNING "%s: DSR not asserted\n", sc->name);
+	  printk(KERN_WARNING "%s: DSR not asserted\n", sc->name);
       sc->last_led_err[1] = 1;
       lmc_led_off(sc, LMC_MII16_LED1);
   }
   else {
       if(sc->last_led_err[1] != 0)
-          printk(KERN_WARNING "%s: DSR now asserted\n", sc->name);
+	  printk(KERN_WARNING "%s: DSR now asserted\n", sc->name);
       sc->last_led_err[1] = 0;
       lmc_led_on(sc, LMC_MII16_LED1);
   }
@@ -1035,19 +1035,19 @@ lmc_t1_get_link_status (lmc_softc_t * const sc)
 
 
     if (link_status & T1F_RAIS) {			/* turn on blue LED */
-        ret = 0;
-        if(sc->last_led_err[1] != 1){
-            printk(KERN_WARNING "%s: Receive AIS/Blue Alarm. Far end in RED alarm\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED1);
-        sc->last_led_err[1] = 1;
+	ret = 0;
+	if(sc->last_led_err[1] != 1){
+	    printk(KERN_WARNING "%s: Receive AIS/Blue Alarm. Far end in RED alarm\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED1);
+	sc->last_led_err[1] = 1;
     }
     else {
-        if(sc->last_led_err[1] != 0){
-            printk(KERN_WARNING "%s: End AIS/Blue Alarm\n", sc->name);
-        }
-        lmc_led_off (sc, LMC_DS3_LED1);
-        sc->last_led_err[1] = 0;
+	if(sc->last_led_err[1] != 0){
+	    printk(KERN_WARNING "%s: End AIS/Blue Alarm\n", sc->name);
+	}
+	lmc_led_off (sc, LMC_DS3_LED1);
+	sc->last_led_err[1] = 0;
     }
 
     /*
@@ -1061,19 +1061,19 @@ lmc_t1_get_link_status (lmc_softc_t * const sc)
      */
 
     if (link_status & T1F_RMYEL) {
-        ret = 0;
-        if(sc->last_led_err[0] != 1){
-            printk(KERN_WARNING "%s: Receive Yellow AIS Alarm\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED0);
-        sc->last_led_err[0] = 1;
+	ret = 0;
+	if(sc->last_led_err[0] != 1){
+	    printk(KERN_WARNING "%s: Receive Yellow AIS Alarm\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED0);
+	sc->last_led_err[0] = 1;
     }
     else {
-        if(sc->last_led_err[0] != 0){
-            printk(KERN_WARNING "%s: End of Yellow AIS Alarm\n", sc->name);
-        }
-        lmc_led_off(sc, LMC_DS3_LED0);
-        sc->last_led_err[0] = 0;
+	if(sc->last_led_err[0] != 0){
+	    printk(KERN_WARNING "%s: End of Yellow AIS Alarm\n", sc->name);
+	}
+	lmc_led_off(sc, LMC_DS3_LED0);
+	sc->last_led_err[0] = 0;
     }
 
     /*
@@ -1081,39 +1081,39 @@ lmc_t1_get_link_status (lmc_softc_t * const sc)
      * Use the green bit to identify which one lit the led
      */
     if(link_status & T1F_RLOF){
-        ret = 0;
-        if(sc->last_led_err[3] != 1){
-            printk(KERN_WARNING "%s: Local Red Alarm: Loss of Framing\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED3);
-        sc->last_led_err[3] = 1;
+	ret = 0;
+	if(sc->last_led_err[3] != 1){
+	    printk(KERN_WARNING "%s: Local Red Alarm: Loss of Framing\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED3);
+	sc->last_led_err[3] = 1;
 
     }
     else {
-        if(sc->last_led_err[3] != 0){
-            printk(KERN_WARNING "%s: End Red Alarm (LOF)\n", sc->name);
-        }
-        if( ! (link_status & T1F_RLOS))
-            lmc_led_off(sc, LMC_DS3_LED3);
-        sc->last_led_err[3] = 0;
+	if(sc->last_led_err[3] != 0){
+	    printk(KERN_WARNING "%s: End Red Alarm (LOF)\n", sc->name);
+	}
+	if( ! (link_status & T1F_RLOS))
+	    lmc_led_off(sc, LMC_DS3_LED3);
+	sc->last_led_err[3] = 0;
     }
 
     if(link_status & T1F_RLOS){
-        ret = 0;
-        if(sc->last_led_err[2] != 1){
-            printk(KERN_WARNING "%s: Local Red Alarm: Loss of Signal\n", sc->name);
-        }
-        lmc_led_on(sc, LMC_DS3_LED3);
-        sc->last_led_err[2] = 1;
+	ret = 0;
+	if(sc->last_led_err[2] != 1){
+	    printk(KERN_WARNING "%s: Local Red Alarm: Loss of Signal\n", sc->name);
+	}
+	lmc_led_on(sc, LMC_DS3_LED3);
+	sc->last_led_err[2] = 1;
 
     }
     else {
-        if(sc->last_led_err[2] != 0){
-            printk(KERN_WARNING "%s: End Red Alarm (LOS)\n", sc->name);
-        }
-        if( ! (link_status & T1F_RLOF))
-            lmc_led_off(sc, LMC_DS3_LED3);
-        sc->last_led_err[2] = 0;
+	if(sc->last_led_err[2] != 0){
+	    printk(KERN_WARNING "%s: End Red Alarm (LOS)\n", sc->name);
+	}
+	if( ! (link_status & T1F_RLOF))
+	    lmc_led_off(sc, LMC_DS3_LED3);
+	sc->last_led_err[2] = 0;
     }
 
     sc->lmc_xinfo.t1_alarm1_status = link_status;
@@ -1186,7 +1186,7 @@ lmc_t1_set_clock (lmc_softc_t * const sc, int ie)
       LMC_CSR_WRITE (sc, csr_gp, sc->lmc_gpio);
       sc->ictl.clock_source = LMC_CTL_CLOCK_SOURCE_EXT;
       if(old != ie)
-        printk (LMC_PRINTF_FMT ": clock external\n", LMC_PRINTF_ARGS);
+	printk (LMC_PRINTF_FMT ": clock external\n", LMC_PRINTF_ARGS);
     }
   else
     {
@@ -1194,7 +1194,7 @@ lmc_t1_set_clock (lmc_softc_t * const sc, int ie)
       LMC_CSR_WRITE (sc, csr_gp, sc->lmc_gpio);
       sc->ictl.clock_source = LMC_CTL_CLOCK_SOURCE_INT;
       if(old != ie)
-        printk (LMC_PRINTF_FMT ": clock internal\n", LMC_PRINTF_ARGS);
+	printk (LMC_PRINTF_FMT ": clock internal\n", LMC_PRINTF_ARGS);
     }
 }
 

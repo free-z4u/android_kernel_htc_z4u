@@ -70,17 +70,17 @@ config IWLWIFI_DEBUG
 	  any problems you may encounter.
 
 config IWLWIFI_DEBUGFS
-        bool "iwlwifi debugfs support"
-        depends on IWLWIFI && MAC80211_DEBUGFS
-        ---help---
+	bool "iwlwifi debugfs support"
+	depends on IWLWIFI && MAC80211_DEBUGFS
+	---help---
 	  Enable creation of debugfs files for the iwlwifi drivers. This
 	  is a low-impact option that allows getting insight into the
 	  driver's state at runtime.
 
 config IWLWIFI_DEBUG_EXPERIMENTAL_UCODE
-        bool "Experimental uCode support"
-        depends on IWLWIFI && IWLWIFI_DEBUG
-        ---help---
+	bool "Experimental uCode support"
+	depends on IWLWIFI && IWLWIFI_DEBUG
+	---help---
 	  Enable use of experimental ucode for testing and debugging.
 
 config IWLWIFI_DEVICE_TRACING
@@ -116,17 +116,17 @@ config IWLWIFI_P2P
        bool "iwlwifi experimental P2P support"
        depends on IWLWIFI
        help
-         This option enables experimental P2P support for some devices
-         based on microcode support. Since P2P support is still under
-         development, this option may even enable it for some devices
-         now that turn out to not support it in the future due to
-         microcode restrictions.
+	 This option enables experimental P2P support for some devices
+	 based on microcode support. Since P2P support is still under
+	 development, this option may even enable it for some devices
+	 now that turn out to not support it in the future due to
+	 microcode restrictions.
 
-         To determine if your microcode supports the experimental P2P
-         offered by this option, check if the driver advertises AP
-         support when it is loaded.
+	 To determine if your microcode supports the experimental P2P
+	 offered by this option, check if the driver advertises AP
+	 support when it is loaded.
 
-         Say Y only if you want to experiment with P2P.
+	 Say Y only if you want to experiment with P2P.
 
 config IWLWIFI_EXPERIMENTAL_MFP
 	bool "support MFP (802.11w) even if uCode doesn't advertise"

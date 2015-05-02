@@ -766,11 +766,11 @@ ia64_sn_power_down(void)
 static inline u64
 ia64_sn_fru_capture(void)
 {
-        struct ia64_sal_retval isrv;
-        SAL_CALL(isrv, SN_SAL_SYSCTL_FRU_CAPTURE, 0, 0, 0, 0, 0, 0, 0);
-        if (isrv.status)
-                return 0;
-        return isrv.v0;
+	struct ia64_sal_retval isrv;
+	SAL_CALL(isrv, SN_SAL_SYSCTL_FRU_CAPTURE, 0, 0, 0, 0, 0, 0, 0);
+	if (isrv.status)
+		return 0;
+	return isrv.v0;
 }
 
 /*
@@ -902,10 +902,10 @@ ia64_sn_irtr_intr_disable(nasid_t nasid, int subch, u64 intr)
 static inline int
 ia64_sn_sysctl_event_init(nasid_t nasid)
 {
-        struct ia64_sal_retval rv;
-        SAL_CALL_REENTRANT(rv, SN_SAL_SYSCTL_EVENT, (u64) nasid,
+	struct ia64_sal_retval rv;
+	SAL_CALL_REENTRANT(rv, SN_SAL_SYSCTL_EVENT, (u64) nasid,
 			   0, 0, 0, 0, 0, 0);
-        return (int) rv.v0;
+	return (int) rv.v0;
 }
 
 /*
@@ -1100,7 +1100,7 @@ ia64_sn_get_sn_info(int fc, u8 *shubtype, u16 *nasid_bitmask, u8 *nasid_shift,
  */
 static inline int
 ia64_sn_hwperf_op(nasid_t nasid, u64 opcode, u64 a0, u64 a1, u64 a2,
-                  u64 a3, u64 a4, int *v0)
+		  u64 a3, u64 a4, int *v0)
 {
 	struct ia64_sal_retval rv;
 	SAL_CALL_NOLOCK(rv, SN_SAL_HWPERF_OP, (u64)nasid,

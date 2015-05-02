@@ -3654,11 +3654,11 @@ static void __devexit dfx_pci_unregister(struct pci_dev *pdev)
 
 #ifdef CONFIG_EISA
 static struct eisa_device_id dfx_eisa_table[] = {
-        { "DEC3001", DEFEA_PROD_ID_1 },
-        { "DEC3002", DEFEA_PROD_ID_2 },
-        { "DEC3003", DEFEA_PROD_ID_3 },
-        { "DEC3004", DEFEA_PROD_ID_4 },
-        { }
+	{ "DEC3001", DEFEA_PROD_ID_1 },
+	{ "DEC3002", DEFEA_PROD_ID_2 },
+	{ "DEC3003", DEFEA_PROD_ID_3 },
+	{ "DEC3004", DEFEA_PROD_ID_4 },
+	{ }
 };
 MODULE_DEVICE_TABLE(eisa, dfx_eisa_table);
 

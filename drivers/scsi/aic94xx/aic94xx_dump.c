@@ -97,7 +97,7 @@ static const struct lseq_cio_regs {
 	{"LmPRMSTAT0",    0x80, 32, MODE_COMMON },
 	{"LmPRMSTAT1",    0x84, 32, MODE_COMMON },
 	{"LmGPRMINT",     0x88,  8, MODE_COMMON },
-        {"LmMnCURRSCB",   0x8A, 16, MD(0) },
+	{"LmMnCURRSCB",   0x8A, 16, MD(0) },
 	{"LmPRMICODE",    0x8C, 32, MODE_COMMON },
 	{"LmMnRCVCNT",    0x90, 16, MD(0) },
 	{"LmMnBUFSTAT",   0x92, 16, MD(0) },
@@ -119,7 +119,7 @@ static const struct lseq_cio_regs {
 	{"LmMnXMTSTAT",   0xC4,  8, MD(1) },
 	{"LmHWTSTATEN",   0xC5,  8, MODE_COMMON },
 	{"LmMnRRDYRC",    0xC6,  8, MD(0) },
-        {"LmMnRRDYTC",    0xC6,  8, MD(1) },
+	{"LmMnRRDYTC",    0xC6,  8, MD(1) },
 	{"LmHWTSTAT",     0xC7,  8, MODE_COMMON },
 	{"LmMnDATABUFADR",0xC8, 16, MD(0)|MD(1) },
 	{"LmDWSSTATUS",   0xCB,  8, MODE_COMMON },
@@ -244,16 +244,16 @@ static struct lseq_cio_regs LSEQmOOBREGS[] = {
 
 /* can also be used for MD when the register is mode aware already */
 #define PRINT_MIS_byte(_ha, _n) asd_printk(STR_8BIT, #_n,CSEQ_##_n-CMAPPEDSCR,\
-                                           asd_read_reg_byte(_ha, CSEQ_##_n))
+					   asd_read_reg_byte(_ha, CSEQ_##_n))
 #define PRINT_MIS_word(_ha, _n) asd_printk(STR_16BIT,#_n,CSEQ_##_n-CMAPPEDSCR,\
-                                           asd_read_reg_word(_ha, CSEQ_##_n))
+					   asd_read_reg_word(_ha, CSEQ_##_n))
 #define PRINT_MIS_dword(_ha, _n)                      \
-        asd_printk(STR_32BIT,#_n,CSEQ_##_n-CMAPPEDSCR,\
-                   asd_read_reg_dword(_ha, CSEQ_##_n))
+	asd_printk(STR_32BIT,#_n,CSEQ_##_n-CMAPPEDSCR,\
+		   asd_read_reg_dword(_ha, CSEQ_##_n))
 #define PRINT_MIS_qword(_ha, _n)                                       \
-        asd_printk(STR_64BIT, #_n,CSEQ_##_n-CMAPPEDSCR,                \
-                   (unsigned long long)(((u64)asd_read_reg_dword(_ha, CSEQ_##_n))     \
-                 | (((u64)asd_read_reg_dword(_ha, (CSEQ_##_n)+4))<<32)))
+	asd_printk(STR_64BIT, #_n,CSEQ_##_n-CMAPPEDSCR,                \
+		   (unsigned long long)(((u64)asd_read_reg_dword(_ha, CSEQ_##_n))     \
+		 | (((u64)asd_read_reg_dword(_ha, (CSEQ_##_n)+4))<<32)))
 
 #define CMDP_REG(_n, _m) (_m*(CSEQ_PAGE_SIZE*2)+CSEQ_##_n)
 #define PRINT_CMDP_word(_ha, _n) \
@@ -439,11 +439,11 @@ static void asd_dump_cseq_state(struct asd_ha_struct *asd_ha)
 }
 
 #define PRINT_LREG_8bit(_h, _lseq, _n) \
-        asd_printk(STR_8BIT, #_n, _n, asd_read_reg_byte(_h, Lm##_n(_lseq)))
+	asd_printk(STR_8BIT, #_n, _n, asd_read_reg_byte(_h, Lm##_n(_lseq)))
 #define PRINT_LREG_16bit(_h, _lseq, _n) \
-        asd_printk(STR_16BIT, #_n, _n, asd_read_reg_word(_h, Lm##_n(_lseq)))
+	asd_printk(STR_16BIT, #_n, _n, asd_read_reg_word(_h, Lm##_n(_lseq)))
 #define PRINT_LREG_32bit(_h, _lseq, _n) \
-        asd_printk(STR_32BIT, #_n, _n, asd_read_reg_dword(_h, Lm##_n(_lseq)))
+	asd_printk(STR_32BIT, #_n, _n, asd_read_reg_dword(_h, Lm##_n(_lseq)))
 
 #define PRINT_LMIP_byte(_h, _lseq, _n)                              \
 	asd_printk(STR_8BIT, #_n, LmSEQ_##_n(_lseq)-LmSCRATCH(_lseq), \

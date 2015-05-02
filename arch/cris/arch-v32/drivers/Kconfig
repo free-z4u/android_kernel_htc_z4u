@@ -372,30 +372,30 @@ config ETRAX_SYNCHRONOUS_SERIAL
 	  Enables the ETRAX FS synchronous serial driver.
 
 config ETRAX_SYNCHRONOUS_SERIAL_PORT0
-         bool "Synchronous serial port 0 enabled"
-         depends on ETRAX_SYNCHRONOUS_SERIAL
-         help
-           Enabled synchronous serial port 0.
+	 bool "Synchronous serial port 0 enabled"
+	 depends on ETRAX_SYNCHRONOUS_SERIAL
+	 help
+	   Enabled synchronous serial port 0.
 
 config ETRAX_SYNCHRONOUS_SERIAL0_DMA
-         bool "Enable DMA on synchronous serial port 0."
-         depends on ETRAX_SYNCHRONOUS_SERIAL_PORT0
-         help
-           A synchronous serial port can run in manual or DMA mode.
-           Selecting this option will make it run in DMA mode.
+	 bool "Enable DMA on synchronous serial port 0."
+	 depends on ETRAX_SYNCHRONOUS_SERIAL_PORT0
+	 help
+	   A synchronous serial port can run in manual or DMA mode.
+	   Selecting this option will make it run in DMA mode.
 
 config ETRAX_SYNCHRONOUS_SERIAL_PORT1
-         bool "Synchronous serial port 1 enabled"
-         depends on ETRAX_SYNCHRONOUS_SERIAL && ETRAXFS
-         help
-           Enabled synchronous serial port 1.
+	 bool "Synchronous serial port 1 enabled"
+	 depends on ETRAX_SYNCHRONOUS_SERIAL && ETRAXFS
+	 help
+	   Enabled synchronous serial port 1.
 
 config ETRAX_SYNCHRONOUS_SERIAL1_DMA
-         bool "Enable DMA on synchronous serial port 1."
-         depends on ETRAX_SYNCHRONOUS_SERIAL_PORT1
-         help
-           A synchronous serial port can run in manual or DMA mode.
-           Selecting this option will make it run in DMA mode.
+	 bool "Enable DMA on synchronous serial port 1."
+	 depends on ETRAX_SYNCHRONOUS_SERIAL_PORT1
+	 help
+	   A synchronous serial port can run in manual or DMA mode.
+	   Selecting this option will make it run in DMA mode.
 
 config ETRAX_AXISFLASHMAP
 	bool "Axis flash-map support"
@@ -616,10 +616,10 @@ config ETRAX_PV_CHANGEABLE_BITS
 	  Bit set = changeable.
 
 config ETRAX_CARDBUS
-        bool "Cardbus support"
-        depends on ETRAX_ARCH_V32
-        select HOTPLUG
-        help
+	bool "Cardbus support"
+	depends on ETRAX_ARCH_V32
+	select HOTPLUG
+	help
 	 Enabled the ETRAX Cardbus driver.
 
 config PCI

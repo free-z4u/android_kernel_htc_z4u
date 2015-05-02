@@ -537,7 +537,7 @@ static void rmt_dup_actions(struct s_smc *smc)
 	else {
 		if (smc->s.rmt_dup_mac_behavior) {
 			SMT_ERR_LOG(smc,SMT_E0138, SMT_E0138_MSG) ;
-                        rmt_reinsert_actions(smc) ;
+			rmt_reinsert_actions(smc) ;
 		}
 		else {
 			SMT_ERR_LOG(smc,SMT_E0135, SMT_E0135_MSG) ;

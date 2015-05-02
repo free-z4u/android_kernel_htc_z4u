@@ -514,9 +514,9 @@ static void vio_dma_iommu_free_coherent(struct device *dev, size_t size,
 }
 
 static dma_addr_t vio_dma_iommu_map_page(struct device *dev, struct page *page,
-                                         unsigned long offset, size_t size,
-                                         enum dma_data_direction direction,
-                                         struct dma_attrs *attrs)
+					 unsigned long offset, size_t size,
+					 enum dma_data_direction direction,
+					 struct dma_attrs *attrs)
 {
 	struct vio_dev *viodev = to_vio_dev(dev);
 	dma_addr_t ret = DMA_ERROR_CODE;
@@ -548,8 +548,8 @@ static void vio_dma_iommu_unmap_page(struct device *dev, dma_addr_t dma_handle,
 }
 
 static int vio_dma_iommu_map_sg(struct device *dev, struct scatterlist *sglist,
-                                int nelems, enum dma_data_direction direction,
-                                struct dma_attrs *attrs)
+				int nelems, enum dma_data_direction direction,
+				struct dma_attrs *attrs)
 {
 	struct vio_dev *viodev = to_vio_dev(dev);
 	struct scatterlist *sgl;
@@ -600,12 +600,12 @@ static void vio_dma_iommu_unmap_sg(struct device *dev,
 
 static int vio_dma_iommu_dma_supported(struct device *dev, u64 mask)
 {
-        return dma_iommu_ops.dma_supported(dev, mask);
+	return dma_iommu_ops.dma_supported(dev, mask);
 }
 
 static u64 vio_dma_get_required_mask(struct device *dev)
 {
-        return dma_iommu_ops.get_required_mask(dev);
+	return dma_iommu_ops.get_required_mask(dev);
 }
 
 struct dma_map_ops vio_dma_mapping_ops = {
@@ -924,8 +924,8 @@ static void vio_cmo_bus_init(void)
 
 #define viodev_cmo_rd_attr(name)                                        \
 static ssize_t viodev_cmo_##name##_show(struct device *dev,             \
-                                        struct device_attribute *attr,  \
-                                         char *buf)                     \
+					struct device_attribute *attr,  \
+					 char *buf)                     \
 {                                                                       \
 	return sprintf(buf, "%lu\n", to_vio_dev(dev)->cmo.name);        \
 }
@@ -998,7 +998,7 @@ viobus_cmo_##name##_pool_show_##var(struct bus_type *bt, char *buf)     \
 }
 
 static ssize_t viobus_cmo_high_reset(struct bus_type *bt, const char *buf,
-                                     size_t count)
+				     size_t count)
 {
 	unsigned long flags;
 
@@ -1253,10 +1253,10 @@ struct vio_dev *vio_register_device_node(struct device_node *of_node)
 	viodev->dev.parent = &vio_bus_device.dev;
 	viodev->dev.bus = &vio_bus_type;
 	viodev->dev.release = vio_dev_release;
-        /* needed to ensure proper operation of coherent allocations
-         * later, in case driver doesn't set it explicitly */
-        dma_set_mask(&viodev->dev, DMA_BIT_MASK(64));
-        dma_set_coherent_mask(&viodev->dev, DMA_BIT_MASK(64));
+	/* needed to ensure proper operation of coherent allocations
+	 * later, in case driver doesn't set it explicitly */
+	dma_set_mask(&viodev->dev, DMA_BIT_MASK(64));
+	dma_set_coherent_mask(&viodev->dev, DMA_BIT_MASK(64));
 
 	/* register with generic device framework */
 	if (device_register(&viodev->dev)) {

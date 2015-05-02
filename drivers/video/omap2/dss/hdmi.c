@@ -194,11 +194,11 @@ static const struct hdmi_config *hdmi_get_timings(void)
        int len;
 
        if (hdmi.ip_data.cfg.cm.mode == HDMI_DVI) {
-               arr = vesa_timings;
-               len = ARRAY_SIZE(vesa_timings);
+	       arr = vesa_timings;
+	       len = ARRAY_SIZE(vesa_timings);
        } else {
-               arr = cea_timings;
-               len = ARRAY_SIZE(cea_timings);
+	       arr = cea_timings;
+	       len = ARRAY_SIZE(cea_timings);
        }
 
        return hdmi_find_timing(arr, len);

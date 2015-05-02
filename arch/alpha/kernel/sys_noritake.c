@@ -260,24 +260,24 @@ noritake_apecs_machine_check(unsigned long vector, unsigned long la_ptr)
 #define MCHK_NO_DEVSEL 0x205U
 #define MCHK_NO_TABT 0x204U
 
-        struct el_common *mchk_header;
-        unsigned int code;
+	struct el_common *mchk_header;
+	unsigned int code;
 
-        mchk_header = (struct el_common *)la_ptr;
+	mchk_header = (struct el_common *)la_ptr;
 
-        /* Clear the error before any reporting.  */
-        mb();
-        mb(); /* magic */
-        draina();
-        apecs_pci_clr_err();
-        wrmces(0x7);
-        mb();
+	/* Clear the error before any reporting.  */
+	mb();
+	mb(); /* magic */
+	draina();
+	apecs_pci_clr_err();
+	wrmces(0x7);
+	mb();
 
-        code = mchk_header->code;
-        process_mcheck_info(vector, la_ptr, "NORITAKE APECS",
-                            (mcheck_expected(0)
-                             && (code == MCHK_NO_DEVSEL
-                                 || code == MCHK_NO_TABT)));
+	code = mchk_header->code;
+	process_mcheck_info(vector, la_ptr, "NORITAKE APECS",
+			    (mcheck_expected(0)
+			     && (code == MCHK_NO_DEVSEL
+				 || code == MCHK_NO_TABT)));
 }
 #endif
 

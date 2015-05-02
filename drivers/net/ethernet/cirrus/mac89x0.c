@@ -12,19 +12,19 @@
   Changelog:
 
   Mike Cruse        : mcruse@cti-ltd.com
-                    : Changes for Linux 2.0 compatibility.
-                    : Added dev_id parameter in net_interrupt(),
-                    : request_irq() and free_irq(). Just NULL for now.
+		    : Changes for Linux 2.0 compatibility.
+		    : Added dev_id parameter in net_interrupt(),
+		    : request_irq() and free_irq(). Just NULL for now.
 
   Mike Cruse        : Added MOD_INC_USE_COUNT and MOD_DEC_USE_COUNT macros
-                    : in net_open() and net_close() so kerneld would know
-                    : that the module is in use and wouldn't eject the
-                    : driver prematurely.
+		    : in net_open() and net_close() so kerneld would know
+		    : that the module is in use and wouldn't eject the
+		    : driver prematurely.
 
   Mike Cruse        : Rewrote init_module() and cleanup_module using 8390.c
-                    : as an example. Disabled autoprobing in init_module(),
-                    : not a good thing to do to other devices while Linux
-                    : is running from all accounts.
+		    : as an example. Disabled autoprobing in init_module(),
+		    : not a good thing to do to other devices while Linux
+		    : is running from all accounts.
 
   Alan Cox          : Removed 1.2 support, added 2.1 extra counters.
 
@@ -114,7 +114,7 @@ struct net_local {
 	int send_cmd;		/* the propercommand used to send a packet. */
 	int rx_mode;
 	int curr_rx_cfg;
-        int send_underrun;      /* keep track of how many underruns in a row we get */
+	int send_underrun;      /* keep track of how many underruns in a row we get */
 	struct sk_buff *skb;
 };
 
@@ -212,7 +212,7 @@ struct net_device * __init mac89x0_probe(int unit)
 		goto out;
 
 	/* The pseudo-ISA bits always live at offset 0x300 (gee,
-           wonder why...) */
+	   wonder why...) */
 	ioaddr = (unsigned long)
 		nubus_slot_addr(slot) | (((slot&0xf) << 20) + DEFAULTIOBASE);
 	{
@@ -272,14 +272,14 @@ struct net_device * __init mac89x0_probe(int unit)
 	if ((readreg(dev, PP_SelfST) & (EEPROM_PRESENT | EEPROM_OK)) == 0) {
 		printk("\nmac89x0: No EEPROM, giving up now.\n");
 		goto out1;
-        } else {
-                for (i = 0; i < ETH_ALEN; i += 2) {
+	} else {
+		for (i = 0; i < ETH_ALEN; i += 2) {
 			/* Big-endian (why??!) */
 			unsigned short s = readreg(dev, PP_IA + i);
-                        dev->dev_addr[i] = s >> 8;
-                        dev->dev_addr[i+1] = s & 0xff;
-                }
-        }
+			dev->dev_addr[i] = s >> 8;
+			dev->dev_addr[i+1] = s & 0xff;
+		}
+	}
 
 	dev->irq = SLOT2IRQ(slot);
 
@@ -428,12 +428,12 @@ static irqreturn_t net_interrupt(int irq, void *dev_id)
 	lp = netdev_priv(dev);
 
 	/* we MUST read all the events out of the ISQ, otherwise we'll never
-           get interrupted again.  As a consequence, we can't have any limit
-           on the number of times we loop in the interrupt handler.  The
-           hardware guarantees that eventually we'll run out of events.  Of
-           course, if you're on a slow machine, and packets are arriving
-           faster than you can read them off, you're screwed.  Hasta la
-           vista, baby!  */
+	   get interrupted again.  As a consequence, we can't have any limit
+	   on the number of times we loop in the interrupt handler.  The
+	   hardware guarantees that eventually we'll run out of events.  Of
+	   course, if you're on a slow machine, and packets are arriving
+	   faster than you can read them off, you're screwed.  Hasta la
+	   vista, baby!  */
 	while ((status = swab16(nubus_readw(dev->base_addr + ISQ_PORT)))) {
 		if (net_debug > 4)printk("%s: event=%04x\n", dev->name, status);
 		switch(status & ISQ_EVENT_MASK) {
@@ -458,18 +458,18 @@ static irqreturn_t net_interrupt(int irq, void *dev_id)
 		case ISQ_BUFFER_EVENT:
 			if (status & READY_FOR_TX) {
 				/* we tried to transmit a packet earlier,
-                                   but inexplicably ran out of buffers.
-                                   That shouldn't happen since we only ever
-                                   load one packet.  Shrug.  Do the right
-                                   thing anyway. */
+				   but inexplicably ran out of buffers.
+				   That shouldn't happen since we only ever
+				   load one packet.  Shrug.  Do the right
+				   thing anyway. */
 				netif_wake_queue(dev);
 			}
 			if (status & TX_UNDERRUN) {
 				if (net_debug > 0) printk("%s: transmit underrun\n", dev->name);
-                                lp->send_underrun++;
-                                if (lp->send_underrun == 3) lp->send_cmd = TX_AFTER_381;
-                                else if (lp->send_underrun == 6) lp->send_cmd = TX_AFTER_ALL;
-                        }
+				lp->send_underrun++;
+				if (lp->send_underrun == 3) lp->send_cmd = TX_AFTER_381;
+				else if (lp->send_underrun == 6) lp->send_cmd = TX_AFTER_ALL;
+			}
 			break;
 		case ISQ_RX_MISS_EVENT:
 			dev->stats.rx_missed_errors += (status >> 6);
@@ -519,11 +519,11 @@ net_rx(struct net_device *dev)
 				length);
 
 	if (net_debug > 3)printk("%s: received %d byte packet of type %x\n",
-                                 dev->name, length,
-                                 (skb->data[ETH_ALEN+ETH_ALEN] << 8)
+				 dev->name, length,
+				 (skb->data[ETH_ALEN+ETH_ALEN] << 8)
 				 | skb->data[ETH_ALEN+ETH_ALEN+1]);
 
-        skb->protocol=eth_type_trans(skb,dev);
+	skb->protocol=eth_type_trans(skb,dev);
 	netif_rx(skb);
 	dev->stats.rx_packets++;
 	dev->stats.rx_bytes += length;
@@ -619,9 +619,9 @@ int __init
 init_module(void)
 {
 	net_debug = debug;
-        dev_cs89x0 = mac89x0_probe(-1);
+	dev_cs89x0 = mac89x0_probe(-1);
 	if (IS_ERR(dev_cs89x0)) {
-                printk(KERN_WARNING "mac89x0.c: No card found\n");
+		printk(KERN_WARNING "mac89x0.c: No card found\n");
 		return PTR_ERR(dev_cs89x0);
 	}
 	return 0;

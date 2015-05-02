@@ -230,9 +230,9 @@ static irqreturn_t arcfb_interrupt(int vec, void *dev_instance)
 	ks108_writeb_mainctl(par, KS_CLRINT);
 
 	spin_lock(&par->lock);
-        if (waitqueue_active(&arcfb_waitq)) {
-                wake_up(&arcfb_waitq);
-        }
+	if (waitqueue_active(&arcfb_waitq)) {
+		wake_up(&arcfb_waitq);
+	}
 	spin_unlock(&par->lock);
 
 	return IRQ_HANDLED;

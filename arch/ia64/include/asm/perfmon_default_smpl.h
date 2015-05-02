@@ -59,17 +59,17 @@ typedef struct {
  * last_reset_value member indicates the initial value of the overflowed PMD.
  */
 typedef struct {
-        int             pid;                    /* thread id (for NPTL, this is gettid()) */
-        unsigned char   reserved1[3];           /* reserved for future use */
-        unsigned char   ovfl_pmd;               /* index of overflowed PMD */
+	int             pid;                    /* thread id (for NPTL, this is gettid()) */
+	unsigned char   reserved1[3];           /* reserved for future use */
+	unsigned char   ovfl_pmd;               /* index of overflowed PMD */
 
-        unsigned long   last_reset_val;         /* initial value of overflowed PMD */
-        unsigned long   ip;                     /* where did the overflow interrupt happened  */
-        unsigned long   tstamp;                 /* ar.itc when entering perfmon intr. handler */
+	unsigned long   last_reset_val;         /* initial value of overflowed PMD */
+	unsigned long   ip;                     /* where did the overflow interrupt happened  */
+	unsigned long   tstamp;                 /* ar.itc when entering perfmon intr. handler */
 
-        unsigned short  cpu;                    /* cpu on which the overflow occurred */
-        unsigned short  set;                    /* event set active when overflow occurred   */
-        int    		tgid;              	/* thread group id (for NPTL, this is getpid()) */
+	unsigned short  cpu;                    /* cpu on which the overflow occurred */
+	unsigned short  set;                    /* event set active when overflow occurred   */
+	int    		tgid;              	/* thread group id (for NPTL, this is getpid()) */
 } pfm_default_smpl_entry_t;
 
 #define PFM_DEFAULT_MAX_PMDS		64 /* how many pmds supported by data structures (sizeof(unsigned long) */

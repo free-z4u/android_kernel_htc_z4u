@@ -145,10 +145,10 @@ struct thread_struct {
  *       set_thread_state in signal.c depends on it.
  */
 #define USER_PS_VALUE ((1 << PS_WOE_BIT) |				\
-                       (1 << PS_CALLINC_SHIFT) |			\
-                       (USER_RING << PS_RING_SHIFT) |			\
-                       (1 << PS_UM_BIT) |				\
-                       (1 << PS_EXCM_BIT))
+		       (1 << PS_CALLINC_SHIFT) |			\
+		       (USER_RING << PS_RING_SHIFT) |			\
+		       (1 << PS_UM_BIT) |				\
+		       (1 << PS_EXCM_BIT))
 
 /* Clearing a0 terminates the backtrace. */
 #define start_thread(regs, new_pc, new_sp) \

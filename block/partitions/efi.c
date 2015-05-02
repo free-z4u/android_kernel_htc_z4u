@@ -152,10 +152,10 @@ static u64 last_lba(struct block_device *bdev)
 static inline int
 pmbr_part_valid(struct partition *part)
 {
-        if (part->sys_ind == EFI_PMBR_OSTYPE_EFI_GPT &&
-            le32_to_cpu(part->start_sect) == 1UL)
-                return 1;
-        return 0;
+	if (part->sys_ind == EFI_PMBR_OSTYPE_EFI_GPT &&
+	    le32_to_cpu(part->start_sect) == 1UL)
+		return 1;
+	return 0;
 }
 
 /**
@@ -172,10 +172,10 @@ is_pmbr_valid(legacy_mbr *mbr)
 {
 	int i;
 	if (!mbr || le16_to_cpu(mbr->signature) != MSDOS_MBR_SIGNATURE)
-                return 0;
+		return 0;
 	for (i = 0; i < 4; i++)
 		if (pmbr_part_valid(&mbr->partition_record[i]))
-                        return 1;
+			return 1;
 	return 0;
 }
 
@@ -197,7 +197,7 @@ static size_t read_lba(struct parsed_partitions *state,
 	sector_t n = lba * (bdev_logical_block_size(bdev) / 512);
 
 	if (!buffer || lba > last_lba(bdev))
-                return 0;
+		return 0;
 
 	while (count) {
 		int copied = 512;
@@ -235,7 +235,7 @@ static gpt_entry *alloc_read_gpt_entries(struct parsed_partitions *state,
 		return NULL;
 
 	count = le32_to_cpu(gpt->num_partition_entries) *
-                le32_to_cpu(gpt->sizeof_partition_entry);
+		le32_to_cpu(gpt->sizeof_partition_entry);
 	if (!count)
 		return NULL;
 	pte = kzalloc(count, GFP_KERNEL);
@@ -243,10 +243,10 @@ static gpt_entry *alloc_read_gpt_entries(struct parsed_partitions *state,
 		return NULL;
 
 	if (read_lba(state, le64_to_cpu(gpt->partition_entry_lba),
-                     (u8 *) pte,
+		     (u8 *) pte,
 		     count) < count) {
 		kfree(pte);
-                pte=NULL;
+		pte=NULL;
 		return NULL;
 	}
 	return pte;
@@ -273,7 +273,7 @@ static gpt_header *alloc_read_gpt_header(struct parsed_partitions *state,
 
 	if (read_lba(state, lba, (u8 *) gpt, ssz) < ssz) {
 		kfree(gpt);
-                gpt=NULL;
+		gpt=NULL;
 		return NULL;
 	}
 
@@ -425,7 +425,7 @@ compare_gpts(gpt_header *pgpt, gpt_header *agpt, u64 lastlba)
 		       "GPT:Primary header LBA != Alt. header alternate_lba\n");
 		printk(KERN_WARNING "GPT:%lld != %lld\n",
 		       (unsigned long long)le64_to_cpu(pgpt->my_lba),
-                       (unsigned long long)le64_to_cpu(agpt->alternate_lba));
+		       (unsigned long long)le64_to_cpu(agpt->alternate_lba));
 		error_found++;
 	}
 	if (le64_to_cpu(pgpt->alternate_lba) != le64_to_cpu(agpt->my_lba)) {
@@ -433,23 +433,23 @@ compare_gpts(gpt_header *pgpt, gpt_header *agpt, u64 lastlba)
 		       "GPT:Primary header alternate_lba != Alt. header my_lba\n");
 		printk(KERN_WARNING "GPT:%lld != %lld\n",
 		       (unsigned long long)le64_to_cpu(pgpt->alternate_lba),
-                       (unsigned long long)le64_to_cpu(agpt->my_lba));
+		       (unsigned long long)le64_to_cpu(agpt->my_lba));
 		error_found++;
 	}
 	if (le64_to_cpu(pgpt->first_usable_lba) !=
-            le64_to_cpu(agpt->first_usable_lba)) {
+	    le64_to_cpu(agpt->first_usable_lba)) {
 		printk(KERN_WARNING "GPT:first_usable_lbas don't match.\n");
 		printk(KERN_WARNING "GPT:%lld != %lld\n",
 		       (unsigned long long)le64_to_cpu(pgpt->first_usable_lba),
-                       (unsigned long long)le64_to_cpu(agpt->first_usable_lba));
+		       (unsigned long long)le64_to_cpu(agpt->first_usable_lba));
 		error_found++;
 	}
 	if (le64_to_cpu(pgpt->last_usable_lba) !=
-            le64_to_cpu(agpt->last_usable_lba)) {
+	    le64_to_cpu(agpt->last_usable_lba)) {
 		printk(KERN_WARNING "GPT:last_usable_lbas don't match.\n");
 		printk(KERN_WARNING "GPT:%lld != %lld\n",
 		       (unsigned long long)le64_to_cpu(pgpt->last_usable_lba),
-                       (unsigned long long)le64_to_cpu(agpt->last_usable_lba));
+		       (unsigned long long)le64_to_cpu(agpt->last_usable_lba));
 		error_found++;
 	}
 	if (efi_guidcmp(pgpt->disk_guid, agpt->disk_guid)) {
@@ -457,7 +457,7 @@ compare_gpts(gpt_header *pgpt, gpt_header *agpt, u64 lastlba)
 		error_found++;
 	}
 	if (le32_to_cpu(pgpt->num_partition_entries) !=
-            le32_to_cpu(agpt->num_partition_entries)) {
+	    le32_to_cpu(agpt->num_partition_entries)) {
 		printk(KERN_WARNING "GPT:num_partition_entries don't match: "
 		       "0x%x != 0x%x\n",
 		       le32_to_cpu(pgpt->num_partition_entries),
@@ -465,20 +465,20 @@ compare_gpts(gpt_header *pgpt, gpt_header *agpt, u64 lastlba)
 		error_found++;
 	}
 	if (le32_to_cpu(pgpt->sizeof_partition_entry) !=
-            le32_to_cpu(agpt->sizeof_partition_entry)) {
+	    le32_to_cpu(agpt->sizeof_partition_entry)) {
 		printk(KERN_WARNING
 		       "GPT:sizeof_partition_entry values don't match: "
 		       "0x%x != 0x%x\n",
-                       le32_to_cpu(pgpt->sizeof_partition_entry),
+		       le32_to_cpu(pgpt->sizeof_partition_entry),
 		       le32_to_cpu(agpt->sizeof_partition_entry));
 		error_found++;
 	}
 	if (le32_to_cpu(pgpt->partition_entry_array_crc32) !=
-            le32_to_cpu(agpt->partition_entry_array_crc32)) {
+	    le32_to_cpu(agpt->partition_entry_array_crc32)) {
 		printk(KERN_WARNING
 		       "GPT:partition_entry_array_crc32 values don't match: "
 		       "0x%x != 0x%x\n",
-                       le32_to_cpu(pgpt->partition_entry_array_crc32),
+		       le32_to_cpu(pgpt->partition_entry_array_crc32),
 		       le32_to_cpu(agpt->partition_entry_array_crc32));
 		error_found++;
 	}
@@ -534,65 +534,65 @@ static int find_valid_gpt(struct parsed_partitions *state, gpt_header **gpt,
 		return 0;
 
 	lastlba = last_lba(state->bdev);
-        if (!force_gpt) {
-                /* This will be added to the EFI Spec. per Intel after v1.02. */
-                legacymbr = kzalloc(sizeof (*legacymbr), GFP_KERNEL);
-                if (legacymbr) {
-                        read_lba(state, 0, (u8 *) legacymbr,
+	if (!force_gpt) {
+		/* This will be added to the EFI Spec. per Intel after v1.02. */
+		legacymbr = kzalloc(sizeof (*legacymbr), GFP_KERNEL);
+		if (legacymbr) {
+			read_lba(state, 0, (u8 *) legacymbr,
 				 sizeof (*legacymbr));
-                        good_pmbr = is_pmbr_valid(legacymbr);
-                        kfree(legacymbr);
-                }
-                if (!good_pmbr)
-                        goto fail;
-        }
+			good_pmbr = is_pmbr_valid(legacymbr);
+			kfree(legacymbr);
+		}
+		if (!good_pmbr)
+			goto fail;
+	}
 
 	good_pgpt = is_gpt_valid(state, GPT_PRIMARY_PARTITION_TABLE_LBA,
 				 &pgpt, &pptes);
-        if (good_pgpt)
+	if (good_pgpt)
 		good_agpt = is_gpt_valid(state,
 					 le64_to_cpu(pgpt->alternate_lba),
 					 &agpt, &aptes);
-        if (!good_agpt && force_gpt)
-                good_agpt = is_gpt_valid(state, lastlba, &agpt, &aptes);
+	if (!good_agpt && force_gpt)
+		good_agpt = is_gpt_valid(state, lastlba, &agpt, &aptes);
 
-        /* The obviously unsuccessful case */
-        if (!good_pgpt && !good_agpt)
-                goto fail;
+	/* The obviously unsuccessful case */
+	if (!good_pgpt && !good_agpt)
+		goto fail;
 
-        compare_gpts(pgpt, agpt, lastlba);
+	compare_gpts(pgpt, agpt, lastlba);
 
-        /* The good cases */
-        if (good_pgpt) {
-                *gpt  = pgpt;
-                *ptes = pptes;
-                kfree(agpt);
-                kfree(aptes);
-                if (!good_agpt) {
-                        printk(KERN_WARNING
+	/* The good cases */
+	if (good_pgpt) {
+		*gpt  = pgpt;
+		*ptes = pptes;
+		kfree(agpt);
+		kfree(aptes);
+		if (!good_agpt) {
+			printk(KERN_WARNING
 			       "Alternate GPT is invalid, "
-                               "using primary GPT.\n");
-                }
-                return 1;
-        }
-        else if (good_agpt) {
-                *gpt  = agpt;
-                *ptes = aptes;
-                kfree(pgpt);
-                kfree(pptes);
-                printk(KERN_WARNING
-                       "Primary GPT is invalid, using alternate GPT.\n");
-                return 1;
-        }
+			       "using primary GPT.\n");
+		}
+		return 1;
+	}
+	else if (good_agpt) {
+		*gpt  = agpt;
+		*ptes = aptes;
+		kfree(pgpt);
+		kfree(pptes);
+		printk(KERN_WARNING
+		       "Primary GPT is invalid, using alternate GPT.\n");
+		return 1;
+	}
 
  fail:
-        kfree(pgpt);
-        kfree(agpt);
-        kfree(pptes);
-        kfree(aptes);
-        *gpt = NULL;
-        *ptes = NULL;
-        return 0;
+	kfree(pgpt);
+	kfree(agpt);
+	kfree(pptes);
+	kfree(aptes);
+	*gpt = NULL;
+	*ptes = NULL;
+	return 0;
 }
 
 /**

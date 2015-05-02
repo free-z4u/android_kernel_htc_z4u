@@ -32,11 +32,11 @@ config SCSI_OSD_DPRINT_SENSE
     default 1
     depends on SCSI_OSD_INITIATOR
     help
-        When a CHECK_CONDITION status is returned from a target, and a
-        sense-buffer is retrieved, turning this on will dump a full
-        sense-decoding message. Setting to 2 will also print recoverable
-        errors that might be regularly returned for some filesystem
-        operations.
+	When a CHECK_CONDITION status is returned from a target, and a
+	sense-buffer is retrieved, turning this on will dump a full
+	sense-decoding message. Setting to 2 will also print recoverable
+	errors that might be regularly returned for some filesystem
+	operations.
 
 config SCSI_OSD_DEBUG
 	bool "Compile All OSD modules with lots of DEBUG prints"

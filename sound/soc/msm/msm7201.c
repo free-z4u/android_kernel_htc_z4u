@@ -349,7 +349,7 @@ static int msm_soc_dai_init(
 	struct snd_soc_pcm_runtime *rtd)
 {
 	int ret = 0;
-        struct snd_soc_codec *codec = rtd->codec;
+	struct snd_soc_codec *codec = rtd->codec;
 
 	mutex_init(&the_locks.lock);
 	mutex_init(&the_locks.write_lock);

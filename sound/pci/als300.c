@@ -805,7 +805,7 @@ static int snd_als300_resume(struct pci_dev *pci)
 #endif
 
 static int __devinit snd_als300_probe(struct pci_dev *pci,
-                             const struct pci_device_id *pci_id)
+			     const struct pci_device_id *pci_id)
 {
 	static int dev;
 	struct snd_card *card;

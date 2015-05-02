@@ -19,7 +19,7 @@ typedef void __iomem *virt_addr_t;
     do { int _i = 4*microsec; while (--_i > 0) { __SLOW_DOWN_IO; }} while (0)
 */
 #define osp_MicroDelay(microsec) {unsigned long useconds = (microsec); \
-                                  udelay((useconds));}
+				  udelay((useconds));}
 /*
  * The following tables represent the timing diagrams found in
  * the Data Sheet for the Xicor X25020 EEProm.  The #defines below

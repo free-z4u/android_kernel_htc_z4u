@@ -56,16 +56,16 @@
 
 
 #define VNSvOutPortB(dwIOAddress, byData) {                     \
-        outb(byData, dwIOAddress);                              \
+	outb(byData, dwIOAddress);                              \
 }
 
 
 #define VNSvOutPortW(dwIOAddress, wData) {                      \
-        outw(wData, dwIOAddress);                               \
+	outw(wData, dwIOAddress);                               \
 }
 
 #define VNSvOutPortD(dwIOAddress, dwData) {                     \
-        outl(dwData, dwIOAddress);                              \
+	outl(dwData, dwIOAddress);                              \
 }
 
 #else
@@ -127,27 +127,27 @@
 }
 
 #define PCBvOutPortB(dwIOAddress, byData) {     \
-        outb(byData, dwIOAddress);              \
+	outb(byData, dwIOAddress);              \
 }
 
 #define PCBvOutPortW(dwIOAddress, wData) {      \
-        outw(wData, dwIOAddress);               \
+	outw(wData, dwIOAddress);               \
 }
 
 #define PCBvOutPortD(dwIOAddress, dwData) {     \
-        outl(dwData, dwIOAddress);              \
+	outl(dwData, dwIOAddress);              \
 }
 
 
 #define PCAvDelayByIO(uDelayUnit) {             \
     BYTE    byData;                             \
     unsigned long   ii;                                 \
-                                                \
+						\
     if (uDelayUnit <= 50) {                     \
-        udelay(uDelayUnit);                     \
+	udelay(uDelayUnit);                     \
     }                                           \
     else {                                      \
-        for (ii = 0; ii < (uDelayUnit); ii++)   \
+	for (ii = 0; ii < (uDelayUnit); ii++)   \
 		     byData = inb(0x61);				\
     }                                           \
 }

@@ -33,7 +33,7 @@ fmadds(void *frD, void *frA, void *frB, void *frC)
 
 	if ((A_c == FP_CLS_INF && C_c == FP_CLS_ZERO) ||
 	    (A_c == FP_CLS_ZERO && C_c == FP_CLS_INF))
-                FP_SET_EXCEPTION(EFLAG_VXIMZ);
+		FP_SET_EXCEPTION(EFLAG_VXIMZ);
 
 	FP_MUL_D(T, A, C);
 

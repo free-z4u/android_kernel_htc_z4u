@@ -247,11 +247,11 @@ i2c_inbyte(void)
 	i2c_clk(I2C_CLOCK_HIGH);
 	i2c_delay(CLOCK_HIGH_TIME);
 
-        /*
+	/*
 	 * we leave the clock low, getbyte is usually followed
 	 * by sendack/nack, they assume the clock to be low
 	 */
-        i2c_clk(I2C_CLOCK_LOW);
+	i2c_clk(I2C_CLOCK_LOW);
 	return aBitByte;
 }
 
@@ -651,9 +651,9 @@ i2c_init(void)
 			  IO_STATE(R_PORT_PB_DIR, dir0, input)  |
 			  IO_STATE(R_PORT_PB_DIR, dir1, output));
 #else
-        if ((res = cris_io_interface_allocate_pins(if_i2c,
+	if ((res = cris_io_interface_allocate_pins(if_i2c,
 						   'b',
-                                                   CONFIG_ETRAX_I2C_DATA_PORT,
+						   CONFIG_ETRAX_I2C_DATA_PORT,
 						   CONFIG_ETRAX_I2C_DATA_PORT))) {
 		printk(KERN_WARNING "i2c_init: Failed to get IO pin for I2C data port\n");
 		return res;

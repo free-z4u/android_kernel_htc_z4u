@@ -554,10 +554,10 @@ struct extended_attribute
     u8 nul;				terminating '\0', not counted
     u8 value[valuelen];			value, arbitrary
       if this.indirect, valuelen is 8 and the value is
-        u32 length;			real length of value, bytes
-        secno secno;			sector address where it starts
+	u32 length;			real length of value, bytes
+	secno secno;			sector address where it starts
       if this.anode, the above sector number is the root of an anode tree
-        which points to the value.
+	which points to the value.
   */
 };
 

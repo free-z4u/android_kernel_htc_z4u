@@ -112,7 +112,7 @@
 #define USB_DT_IRDA                0x21
 #define USB_IRDA_STIR421X_HEADER   0x03
 #define IU_SIGMATEL_MAX_RX_URBS    (IU_MAX_ACTIVE_RX_URBS + \
-                                    USB_IRDA_STIR421X_HEADER)
+				    USB_IRDA_STIR421X_HEADER)
 
 struct irda_class_desc {
 	__u8  bLength;

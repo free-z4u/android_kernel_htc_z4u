@@ -403,23 +403,23 @@ static struct snd_pcm_ops snd_cs5535audio_capture_ops = {
 };
 
 static struct cs5535audio_dma_ops snd_cs5535audio_playback_dma_ops = {
-        .type = CS5535AUDIO_DMA_PLAYBACK,
-        .enable_dma = cs5535audio_playback_enable_dma,
-        .disable_dma = cs5535audio_playback_disable_dma,
-        .setup_prd = cs5535audio_playback_setup_prd,
-        .read_prd = cs5535audio_playback_read_prd,
-        .pause_dma = cs5535audio_playback_pause_dma,
-        .read_dma_pntr = cs5535audio_playback_read_dma_pntr,
+	.type = CS5535AUDIO_DMA_PLAYBACK,
+	.enable_dma = cs5535audio_playback_enable_dma,
+	.disable_dma = cs5535audio_playback_disable_dma,
+	.setup_prd = cs5535audio_playback_setup_prd,
+	.read_prd = cs5535audio_playback_read_prd,
+	.pause_dma = cs5535audio_playback_pause_dma,
+	.read_dma_pntr = cs5535audio_playback_read_dma_pntr,
 };
 
 static struct cs5535audio_dma_ops snd_cs5535audio_capture_dma_ops = {
-        .type = CS5535AUDIO_DMA_CAPTURE,
-        .enable_dma = cs5535audio_capture_enable_dma,
-        .disable_dma = cs5535audio_capture_disable_dma,
-        .setup_prd = cs5535audio_capture_setup_prd,
-        .read_prd = cs5535audio_capture_read_prd,
-        .pause_dma = cs5535audio_capture_pause_dma,
-        .read_dma_pntr = cs5535audio_capture_read_dma_pntr,
+	.type = CS5535AUDIO_DMA_CAPTURE,
+	.enable_dma = cs5535audio_capture_enable_dma,
+	.disable_dma = cs5535audio_capture_disable_dma,
+	.setup_prd = cs5535audio_capture_setup_prd,
+	.read_prd = cs5535audio_capture_read_prd,
+	.pause_dma = cs5535audio_capture_pause_dma,
+	.read_dma_pntr = cs5535audio_capture_read_dma_pntr,
 };
 
 int __devinit snd_cs5535audio_pcm(struct cs5535audio *cs5535au)

@@ -522,7 +522,7 @@ ecryptfs_set_dentry_lower_mnt(struct dentry *dentry, struct vfsmount *lower_mnt)
 }
 
 #define ecryptfs_printk(type, fmt, arg...) \
-        __ecryptfs_printk(type "%s: " fmt, __func__, ## arg);
+	__ecryptfs_printk(type "%s: " fmt, __func__, ## arg);
 __printf(1, 2)
 void __ecryptfs_printk(const char *fmt, ...);
 

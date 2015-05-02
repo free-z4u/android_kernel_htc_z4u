@@ -1546,20 +1546,20 @@ static void after_state_ch(struct drbd_conf *mdev, union drbd_state os,
 			drbd_khelper(mdev, "local-io-error");
 	}
 
-        /* second half of local IO error, failure to attach,
-         * or administrative detach,
-         * after local_cnt references have reached zero again */
-        if (os.disk != D_DISKLESS && ns.disk == D_DISKLESS) {
-                /* We must still be diskless,
-                 * re-attach has to be serialized with this! */
-                if (mdev->state.disk != D_DISKLESS)
-                        dev_err(DEV,
-                                "ASSERT FAILED: disk is %s while going diskless\n",
-                                drbd_disk_str(mdev->state.disk));
+	/* second half of local IO error, failure to attach,
+	 * or administrative detach,
+	 * after local_cnt references have reached zero again */
+	if (os.disk != D_DISKLESS && ns.disk == D_DISKLESS) {
+		/* We must still be diskless,
+		 * re-attach has to be serialized with this! */
+		if (mdev->state.disk != D_DISKLESS)
+			dev_err(DEV,
+				"ASSERT FAILED: disk is %s while going diskless\n",
+				drbd_disk_str(mdev->state.disk));
 
-                mdev->rs_total = 0;
-                mdev->rs_failed = 0;
-                atomic_set(&mdev->rs_pending_cnt, 0);
+		mdev->rs_total = 0;
+		mdev->rs_failed = 0;
+		atomic_set(&mdev->rs_pending_cnt, 0);
 
 		if (drbd_send_state(mdev))
 			dev_warn(DEV, "Notified peer that I'm now diskless.\n");

@@ -798,7 +798,7 @@ struct m3_dma {
 	int index[3];
 	struct m3_list *index_list[3];
 
-        int in_lists;
+	int in_lists;
 
 	struct list_head list;
 
@@ -2533,7 +2533,7 @@ static int m3_resume(struct pci_dev *pci)
 	snd_m3_assp_write(chip, MEMTYPE_INTERNAL_DATA,
 			  KDATA_DMA_ACTIVE, 0);
 
-        /* restore ac97 registers */
+	/* restore ac97 registers */
 	snd_ac97_resume(chip->ac97);
 
 	snd_m3_assp_continue(chip);

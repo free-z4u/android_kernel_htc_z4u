@@ -675,9 +675,9 @@ static inline void
 ahd_freeze_scb(struct scb *scb)
 {
 	if ((scb->io_ctx->result & (CAM_DEV_QFRZN << 16)) == 0) {
-                scb->io_ctx->result |= CAM_DEV_QFRZN << 16;
-                scb->platform_data->dev->qfrozen++;
-        }
+		scb->io_ctx->result |= CAM_DEV_QFRZN << 16;
+		scb->platform_data->dev->qfrozen++;
+	}
 }
 
 void	ahd_platform_set_tags(struct ahd_softc *ahd, struct scsi_device *sdev,

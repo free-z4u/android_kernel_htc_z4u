@@ -160,10 +160,10 @@ sim_print(const char* str)
   for ( ; *str != '\0'; str++)
   {
     __insn_mtspr(SPR_SIM_CONTROL, SIM_CONTROL_PUTC |
-                 (*str << _SIM_CONTROL_OPERATOR_BITS));
+		 (*str << _SIM_CONTROL_OPERATOR_BITS));
   }
   __insn_mtspr(SPR_SIM_CONTROL, SIM_CONTROL_PUTC |
-               (SIM_PUTC_FLUSH_BINARY << _SIM_CONTROL_OPERATOR_BITS));
+	       (SIM_PUTC_FLUSH_BINARY << _SIM_CONTROL_OPERATOR_BITS));
 }
 
 
@@ -178,10 +178,10 @@ sim_print_string(const char* str)
   for ( ; *str != '\0'; str++)
   {
     __insn_mtspr(SPR_SIM_CONTROL, SIM_CONTROL_PUTC |
-                 (*str << _SIM_CONTROL_OPERATOR_BITS));
+		 (*str << _SIM_CONTROL_OPERATOR_BITS));
   }
   __insn_mtspr(SPR_SIM_CONTROL, SIM_CONTROL_PUTC |
-               (SIM_PUTC_FLUSH_STRING << _SIM_CONTROL_OPERATOR_BITS));
+	       (SIM_PUTC_FLUSH_STRING << _SIM_CONTROL_OPERATOR_BITS));
 }
 
 
@@ -204,7 +204,7 @@ sim_command(const char* str)
   {
     c = *str++;
     __insn_mtspr(SPR_SIM_CONTROL, SIM_CONTROL_COMMAND |
-                 (c << _SIM_CONTROL_OPERATOR_BITS));
+		 (c << _SIM_CONTROL_OPERATOR_BITS));
   }
   while (c);
 }
@@ -224,7 +224,7 @@ static __inline long _sim_syscall0(int val)
 {
   long result;
   __asm__ __volatile__ ("mtspr SIM_CONTROL, r0"
-                        : "=R00" (result) : "R00" (val));
+			: "=R00" (result) : "R00" (val));
   return result;
 }
 
@@ -232,7 +232,7 @@ static __inline long _sim_syscall1(int val, long arg1)
 {
   long result;
   __asm__ __volatile__ ("{ and zero, r1, r1; mtspr SIM_CONTROL, r0 }"
-                        : "=R00" (result) : "R00" (val), "R01" (arg1));
+			: "=R00" (result) : "R00" (val), "R01" (arg1));
   return result;
 }
 
@@ -240,8 +240,8 @@ static __inline long _sim_syscall2(int val, long arg1, long arg2)
 {
   long result;
   __asm__ __volatile__ ("{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
-                        : "=R00" (result)
-                        : "R00" (val), "R01" (arg1), "R02" (arg2));
+			: "=R00" (result)
+			: "R00" (val), "R01" (arg1), "R02" (arg2));
   return result;
 }
 
@@ -254,34 +254,34 @@ static __inline long _sim_syscall3(int val, long arg1, long arg2, long arg3)
 {
   long result;
   __asm__ __volatile__ ("{ and zero, r3, r3 };"
-                        "{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
-                        : "=R00" (result)
-                        : "R00" (val), "R01" (arg1), "R02" (arg2),
-                          "R03" (arg3));
+			"{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
+			: "=R00" (result)
+			: "R00" (val), "R01" (arg1), "R02" (arg2),
+			  "R03" (arg3));
   return result;
 }
 
 static __inline long _sim_syscall4(int val, long arg1, long arg2, long arg3,
-                                  long arg4)
+				  long arg4)
 {
   long result;
   __asm__ __volatile__ ("{ and zero, r3, r4 };"
-                        "{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
-                        : "=R00" (result)
-                        : "R00" (val), "R01" (arg1), "R02" (arg2),
-                          "R03" (arg3), "R04" (arg4));
+			"{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
+			: "=R00" (result)
+			: "R00" (val), "R01" (arg1), "R02" (arg2),
+			  "R03" (arg3), "R04" (arg4));
   return result;
 }
 
 static __inline long _sim_syscall5(int val, long arg1, long arg2, long arg3,
-                                  long arg4, long arg5)
+				  long arg4, long arg5)
 {
   long result;
   __asm__ __volatile__ ("{ and zero, r3, r4; and zero, r5, r5 };"
-                        "{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
-                        : "=R00" (result)
-                        : "R00" (val), "R01" (arg1), "R02" (arg2),
-                          "R03" (arg3), "R04" (arg4), "R05" (arg5));
+			"{ and zero, r1, r2; mtspr SIM_CONTROL, r0 }"
+			: "=R00" (result)
+			: "R00" (val), "R01" (arg1), "R02" (arg2),
+			  "R03" (arg3), "R04" (arg4), "R05" (arg5));
   return result;
 }
 
@@ -309,25 +309,25 @@ static __inline long _sim_syscall5(int val, long arg1, long arg2, long arg3,
 
 static __inline int
 sim_add_watchpoint(unsigned int process_id,
-                   unsigned long address,
-                   unsigned long size,
-                   unsigned int access_mask,
-                   unsigned long user_data)
+		   unsigned long address,
+		   unsigned long size,
+		   unsigned int access_mask,
+		   unsigned long user_data)
 {
   return _sim_syscall(SIM_SYSCALL_ADD_WATCHPOINT, 5, process_id,
-                     address, size, access_mask, user_data);
+		     address, size, access_mask, user_data);
 }
 
 
 static __inline int
 sim_remove_watchpoint(unsigned int process_id,
-                      unsigned long address,
-                      unsigned long size,
-                      unsigned int access_mask,
-                      unsigned long user_data)
+		      unsigned long address,
+		      unsigned long size,
+		      unsigned int access_mask,
+		      unsigned long user_data)
 {
   return _sim_syscall(SIM_SYSCALL_REMOVE_WATCHPOINT, 5, process_id,
-                     address, size, access_mask, user_data);
+		     address, size, access_mask, user_data);
 }
 
 
@@ -361,10 +361,10 @@ sim_query_watchpoint(unsigned int process_id)
   long val = SIM_CONTROL_SYSCALL |
     (SIM_SYSCALL_QUERY_WATCHPOINT << _SIM_CONTROL_OPERATOR_BITS);
   __asm__ __volatile__ ("{ and zero, r1, r1; mtspr SIM_CONTROL, r0 }"
-                        : "=R00" (status.syscall_status),
-                          "=R01" (status.address),
-                          "=R02" (status.user_data)
-                        : "R00" (val), "R01" (process_id));
+			: "=R00" (status.syscall_status),
+			  "=R01" (status.address),
+			  "=R02" (status.user_data)
+			: "R00" (val), "R01" (process_id));
   return status;
 }
 
@@ -377,7 +377,7 @@ sim_validate_lines_evicted(unsigned long long pa, unsigned long length)
   _sim_syscall(SIM_SYSCALL_VALIDATE_LINES_EVICTED, 2, pa, length);
 #else
   _sim_syscall(SIM_SYSCALL_VALIDATE_LINES_EVICTED, 4,
-               0 /* dummy */, (long)(pa), (long)(pa >> 32), length);
+	       0 /* dummy */, (long)(pa), (long)(pa >> 32), length);
 #endif
 }
 
@@ -426,9 +426,9 @@ sim_query_cpu_speed(void)
  */
 static __inline int
 sim_set_shaping(unsigned shim,
-                unsigned type,
-                unsigned units,
-                unsigned rate)
+		unsigned type,
+		unsigned units,
+		unsigned rate)
 {
   if ((rate & ~((1 << SIM_CONTROL_SHAPING_RATE_BITS) - 1)) != 0)
     return 1;
@@ -444,8 +444,8 @@ static __inline void
 sim_enable_mpipe_links(unsigned mpipe, unsigned long link_mask)
 {
   __insn_mtspr(SPR_SIM_CONTROL,
-               (SIM_CONTROL_ENABLE_MPIPE_LINK_MAGIC_BYTE |
-                (mpipe << 8) | (1 << 16) | ((uint_reg_t)link_mask << 32)));
+	       (SIM_CONTROL_ENABLE_MPIPE_LINK_MAGIC_BYTE |
+		(mpipe << 8) | (1 << 16) | ((uint_reg_t)link_mask << 32)));
 }
 
 /** Disable a set of mPIPE links.  Pass a -1 link_mask to disable all links. */
@@ -453,8 +453,8 @@ static __inline void
 sim_disable_mpipe_links(unsigned mpipe, unsigned long link_mask)
 {
   __insn_mtspr(SPR_SIM_CONTROL,
-               (SIM_CONTROL_ENABLE_MPIPE_LINK_MAGIC_BYTE |
-                (mpipe << 8) | (0 << 16) | ((uint_reg_t)link_mask << 32)));
+	       (SIM_CONTROL_ENABLE_MPIPE_LINK_MAGIC_BYTE |
+		(mpipe << 8) | (0 << 16) | ((uint_reg_t)link_mask << 32)));
 }
 
 #endif /* __tilegx__ */

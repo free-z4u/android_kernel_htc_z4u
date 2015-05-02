@@ -35,11 +35,11 @@ static inline void acpi_debugfs_init(void) { return; }
 #endif
 
 /* --------------------------------------------------------------------------
-                                  Power Resource
+				  Power Resource
    -------------------------------------------------------------------------- */
 int acpi_power_init(void);
 int acpi_device_sleep_wake(struct acpi_device *dev,
-                           int enable, int sleep_state, int dev_state);
+			   int enable, int sleep_state, int dev_state);
 int acpi_power_get_inferred_state(struct acpi_device *device, int *state);
 int acpi_power_on_resources(struct acpi_device *device, int state);
 int acpi_power_transition(struct acpi_device *device, int state);
@@ -49,7 +49,7 @@ int acpi_wakeup_device_init(void);
 void acpi_early_processor_set_pdc(void);
 
 /* --------------------------------------------------------------------------
-                                  Embedded Controller
+				  Embedded Controller
    -------------------------------------------------------------------------- */
 struct acpi_ec {
 	acpi_handle handle;
@@ -75,7 +75,7 @@ void acpi_ec_unblock_transactions(void);
 void acpi_ec_unblock_transactions_early(void);
 
 /*--------------------------------------------------------------------------
-                                  Suspend/Resume
+				  Suspend/Resume
   -------------------------------------------------------------------------- */
 extern int acpi_sleep_init(void);
 

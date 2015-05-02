@@ -1,18 +1,18 @@
 /*
-        epat.c  (c) 1997-8  Grant R. Guenther <grant@torque.net>
-                            Under the terms of the GNU General Public License.
+	epat.c  (c) 1997-8  Grant R. Guenther <grant@torque.net>
+			    Under the terms of the GNU General Public License.
 
 	This is the low level protocol driver for the EPAT parallel
-        to IDE adapter from Shuttle Technologies.  This adapter is
-        used in many popular parallel port disk products such as the
-        SyQuest EZ drives, the Avatar Shark and the Imation SuperDisk.
+	to IDE adapter from Shuttle Technologies.  This adapter is
+	used in many popular parallel port disk products such as the
+	SyQuest EZ drives, the Avatar Shark and the Imation SuperDisk.
 
 */
 
 /* Changes:
 
-        1.01    GRG 1998.05.06 init_proto, release_proto
-        1.02    Joshua b. Jore CPP(renamed), epat_connect, epat_disconnect
+	1.01    GRG 1998.05.06 init_proto, release_proto
+	1.02    Joshua b. Jore CPP(renamed), epat_connect, epat_disconnect
 
 */
 
@@ -208,12 +208,12 @@ static void epat_write_block( PIA *pi, char * buf, int count )
 /* FIXME:  the CPP stuff should be fixed to handle multiple EPATs on a chain */
 
 #define CPP(x) 	w2(4);w0(0x22);w0(0xaa);w0(0x55);w0(0);w0(0xff);\
-                w0(0x87);w0(0x78);w0(x);w2(4);w2(5);w2(4);w0(0xff);
+		w0(0x87);w0(0x78);w0(x);w2(4);w2(5);w2(4);w0(0xff);
 
 static void epat_connect ( PIA *pi )
 
 {       pi->saved_r0 = r0();
-        pi->saved_r2 = r2();
+	pi->saved_r2 = r2();
 
  	/* Initialize the chip */
 	CPP(0);
@@ -228,14 +228,14 @@ static void epat_connect ( PIA *pi )
 		/* CPP(0x30); */
 	}
 
-        /* Connect to the chip */
+	/* Connect to the chip */
 	CPP(0xe0);
-        w0(0);w2(1);w2(4); /* Idle into SPP */
-        if (pi->mode >= 3) {
-          w0(0);w2(1);w2(4);w2(0xc);
-          /* Request EPP */
-          w0(0x40);w2(6);w2(7);w2(4);w2(0xc);w2(4);
-        }
+	w0(0);w2(1);w2(4); /* Idle into SPP */
+	if (pi->mode >= 3) {
+	  w0(0);w2(1);w2(4);w2(0xc);
+	  /* Request EPP */
+	  w0(0x40);w2(6);w2(7);w2(4);w2(0xc);w2(4);
+	}
 
 	if (!epatc8) {
 		WR(8,0x10); WR(0xc,0x14); WR(0xa,0x38); WR(0x12,0x10);
@@ -253,50 +253,50 @@ static int epat_test_proto( PIA *pi, char * scratch, int verbose )
 {       int     k, j, f, cc;
 	int	e[2] = {0,0};
 
-        epat_connect(pi);
+	epat_connect(pi);
 	cc = RR(0xd);
 	epat_disconnect(pi);
 
 	epat_connect(pi);
 	for (j=0;j<2;j++) {
   	    WRi(6,0xa0+j*0x10);
-            for (k=0;k<256;k++) {
-                WRi(2,k^0xaa);
-                WRi(3,k^0x55);
-                if (RRi(2) != (k^0xaa)) e[j]++;
-                }
+	    for (k=0;k<256;k++) {
+		WRi(2,k^0xaa);
+		WRi(3,k^0x55);
+		if (RRi(2) != (k^0xaa)) e[j]++;
+		}
 	    }
-        epat_disconnect(pi);
+	epat_disconnect(pi);
 
-        f = 0;
-        epat_connect(pi);
-        WR(0x13,1); WR(0x13,0); WR(0xa,0x11);
-        epat_read_block(pi,scratch,512);
+	f = 0;
+	epat_connect(pi);
+	WR(0x13,1); WR(0x13,0); WR(0xa,0x11);
+	epat_read_block(pi,scratch,512);
 
-        for (k=0;k<256;k++) {
-            if ((scratch[2*k] & 0xff) != k) f++;
-            if ((scratch[2*k+1] & 0xff) != (0xff-k)) f++;
-        }
-        epat_disconnect(pi);
+	for (k=0;k<256;k++) {
+	    if ((scratch[2*k] & 0xff) != k) f++;
+	    if ((scratch[2*k+1] & 0xff) != (0xff-k)) f++;
+	}
+	epat_disconnect(pi);
 
-        if (verbose)  {
-            printk("%s: epat: port 0x%x, mode %d, ccr %x, test=(%d,%d,%d)\n",
+	if (verbose)  {
+	    printk("%s: epat: port 0x%x, mode %d, ccr %x, test=(%d,%d,%d)\n",
 		   pi->device,pi->port,pi->mode,cc,e[0],e[1],f);
 	}
 
-        return (e[0] && e[1]) || f;
+	return (e[0] && e[1]) || f;
 }
 
 static void epat_log_adapter( PIA *pi, char * scratch, int verbose )
 
 {	int	ver;
-        char    *mode_string[6] =
+	char    *mode_string[6] =
 		   {"4-bit","5/3","8-bit","EPP-8","EPP-16","EPP-32"};
 
 	epat_connect(pi);
 	WR(0xa,0x38);		/* read the version code */
-        ver = RR(0xb);
-        epat_disconnect(pi);
+	ver = RR(0xb);
+	epat_disconnect(pi);
 
 	printk("%s: epat %s, Shuttle EPAT chip %x at 0x%x, ",
 		pi->device,EPAT_VERSION,ver,pi->port);

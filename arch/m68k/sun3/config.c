@@ -71,7 +71,7 @@ void __init sun3_init(void)
 	GET_CONTROL_BYTE(AC_SENABLE,enable_register);
 
 	/* This code looks suspicious, because it doesn't subtract
-           memory belonging to the kernel from the available space */
+	   memory belonging to the kernel from the available space */
 
 
 	memset(sun3_reserved_pmeg, 0, sizeof(sun3_reserved_pmeg));
@@ -138,9 +138,9 @@ void __init config_sun3(void)
 
 	/* Subtract kernel memory from available memory */
 
-        mach_sched_init      =  sun3_sched_init;
-        mach_init_IRQ        =  sun3_init_IRQ;
-        mach_reset           =  sun3_reboot;
+	mach_sched_init      =  sun3_sched_init;
+	mach_init_IRQ        =  sun3_init_IRQ;
+	mach_reset           =  sun3_reboot;
 	mach_gettimeoffset   =  sun3_gettimeoffset;
 	mach_get_model	     =  sun3_get_model;
 	mach_hwclk           =  sun3_hwclk;
@@ -152,7 +152,7 @@ void __init config_sun3(void)
 	memory_end   = *(romvec->pv_sun3mem) + PAGE_OFFSET - 2*PAGE_SIZE;
 
 	m68k_num_memory=1;
-        m68k_memory[0].size=*(romvec->pv_sun3mem);
+	m68k_memory[0].size=*(romvec->pv_sun3mem);
 
 	sun3_bootmem_alloc(memory_start, memory_end);
 }
@@ -160,12 +160,12 @@ void __init config_sun3(void)
 static void __init sun3_sched_init(irq_handler_t timer_routine)
 {
 	sun3_disable_interrupts();
-        intersil_clock->cmd_reg=(INTERSIL_RUN|INTERSIL_INT_DISABLE|INTERSIL_24H_MODE);
-        intersil_clock->int_reg=INTERSIL_HZ_100_MASK;
+	intersil_clock->cmd_reg=(INTERSIL_RUN|INTERSIL_INT_DISABLE|INTERSIL_24H_MODE);
+	intersil_clock->int_reg=INTERSIL_HZ_100_MASK;
 	intersil_clear();
-        sun3_enable_irq(5);
-        intersil_clock->cmd_reg=(INTERSIL_RUN|INTERSIL_INT_ENABLE|INTERSIL_24H_MODE);
-        sun3_enable_interrupts();
-        intersil_clear();
+	sun3_enable_irq(5);
+	intersil_clock->cmd_reg=(INTERSIL_RUN|INTERSIL_INT_ENABLE|INTERSIL_24H_MODE);
+	sun3_enable_interrupts();
+	intersil_clear();
 }
 

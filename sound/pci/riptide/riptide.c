@@ -28,64 +28,64 @@
   MODULE NAME:        cnxt_rt.h
   AUTHOR:             K. Lazarev  (Transcribed by KNL)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Created                           02/1/2000     KNL
+	    -----------------------------     --------     -----
+	    Created                           02/1/2000     KNL
 
   MODULE NAME:     int_mdl.c
   AUTHOR:          Konstantin Lazarev    (Transcribed by KNL)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Created                           10/01/99      KNL
+	    -----------------------------     --------     -----
+	    Created                           10/01/99      KNL
 
   MODULE NAME:        riptide.h
   AUTHOR:             O. Druzhinin  (Transcribed by OLD)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Created                           10/16/97      OLD
+	    -----------------------------     --------     -----
+	    Created                           10/16/97      OLD
 
   MODULE NAME:        Rp_Cmdif.cpp
   AUTHOR:             O. Druzhinin  (Transcribed by OLD)
-                      K. Lazarev    (Transcribed by KNL)
+		      K. Lazarev    (Transcribed by KNL)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Adopted from NT4 driver            6/22/99      OLD
-            Ported to Linux                    9/01/99      KNL
+	    -----------------------------     --------     -----
+	    Adopted from NT4 driver            6/22/99      OLD
+	    Ported to Linux                    9/01/99      KNL
 
   MODULE NAME:        rt_hw.c
   AUTHOR:             O. Druzhinin  (Transcribed by OLD)
-                      C. Lazarev    (Transcribed by CNL)
+		      C. Lazarev    (Transcribed by CNL)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Created                           11/18/97      OLD
-            Hardware functions for RipTide    11/24/97      CNL
-            (ES1) are coded
-            Hardware functions for RipTide    12/24/97      CNL
-            (A0) are coded
-            Hardware functions for RipTide    03/20/98      CNL
-            (A1) are coded
-            Boot loader is included           05/07/98      CNL
-            Redesigned for WDM                07/27/98      CNL
-            Redesigned for Linux              09/01/99      CNL
+	    -----------------------------     --------     -----
+	    Created                           11/18/97      OLD
+	    Hardware functions for RipTide    11/24/97      CNL
+	    (ES1) are coded
+	    Hardware functions for RipTide    12/24/97      CNL
+	    (A0) are coded
+	    Hardware functions for RipTide    03/20/98      CNL
+	    (A1) are coded
+	    Boot loader is included           05/07/98      CNL
+	    Redesigned for WDM                07/27/98      CNL
+	    Redesigned for Linux              09/01/99      CNL
 
   MODULE NAME:        rt_hw.h
   AUTHOR:             C. Lazarev    (Transcribed by CNL)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Created                           11/18/97      CNL
+	    -----------------------------     --------     -----
+	    Created                           11/18/97      CNL
 
   MODULE NAME:     rt_mdl.c
   AUTHOR:          Konstantin Lazarev    (Transcribed by KNL)
   HISTORY:         Major Revision               Date        By
-            -----------------------------     --------     -----
-            Created                           10/01/99      KNL
+	    -----------------------------     --------     -----
+	    Created                           10/01/99      KNL
 
   MODULE NAME:        mixer.h
   AUTHOR:             K. Kenney
   HISTORY:         Major Revision                   Date          By
-            -----------------------------          --------     -----
-            Created from MS W95 Sample             11/28/95      KRS
-            RipTide                                10/15/97      KRS
-            Adopted for Windows NT driver          01/20/98      CNL
+	    -----------------------------          --------     -----
+	    Created from MS W95 Sample             11/28/95      KRS
+	    RipTide                                10/15/97      KRS
+	    Adopted for Windows NT driver          01/20/98      CNL
 */
 
 #include <linux/delay.h>

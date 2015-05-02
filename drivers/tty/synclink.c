@@ -3541,7 +3541,7 @@ static inline void line_info(struct seq_file *m, struct mgsl_struct *info)
 	u16 Tccr = usc_InReg( info, TCCR );
 	u16 Ccar = inw( info->io_base + CCAR );
 	seq_printf(m, "tcsr=%04X tdmr=%04X ticr=%04X rcsr=%04X rdmr=%04X\n"
-                        "ricr=%04X icr =%04X dccr=%04X tmr=%04X tccr=%04X ccar=%04X\n",
+			"ricr=%04X icr =%04X dccr=%04X tmr=%04X tccr=%04X ccar=%04X\n",
 	 		Tcsr,Tdmr,Ticr,Rscr,Rdmr,Ricr,Icr,Dccr,Tmr,Tccr,Ccar );
 	}
 	spin_unlock_irqrestore(&info->irq_spinlock,flags);
@@ -8071,13 +8071,13 @@ static int __devinit synclink_init_one (struct pci_dev *dev,
 		return -EIO;
 	}
 
-        /* Copy user configuration info to device instance data */
+	/* Copy user configuration info to device instance data */
 
 	info->io_base = pci_resource_start(dev, 2);
 	info->irq_level = dev->irq;
 	info->phys_memory_base = pci_resource_start(dev, 3);
 
-        /* Because veremap only works on page boundaries we must map
+	/* Because veremap only works on page boundaries we must map
 	 * a larger area than is actually implemented for the LCR
 	 * memory range. We map a full page starting at the page boundary.
 	 */

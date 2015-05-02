@@ -514,12 +514,12 @@ MODULE_DEVICE_TABLE(pci, snd_cs4281_ids);
 static inline void snd_cs4281_pokeBA0(struct cs4281 *chip, unsigned long offset,
 				      unsigned int val)
 {
-        writel(val, chip->ba0 + offset);
+	writel(val, chip->ba0 + offset);
 }
 
 static inline unsigned int snd_cs4281_peekBA0(struct cs4281 *chip, unsigned long offset)
 {
-        return readl(chip->ba0 + offset);
+	return readl(chip->ba0 + offset);
 }
 
 static void snd_cs4281_ac97_write(struct snd_ac97 *ac97,
@@ -546,7 +546,7 @@ static void snd_cs4281_ac97_write(struct snd_ac97 *ac97,
 	 *  set VFRM - valid frame enabled
 	 *  set ESYN - ASYNC generation enabled
 	 *  set RSTN - ARST# inactive, AC97 codec not reset
-         */
+	 */
 	snd_cs4281_pokeBA0(chip, BA0_ACCAD, reg);
 	snd_cs4281_pokeBA0(chip, BA0_ACCDA, val);
 	snd_cs4281_pokeBA0(chip, BA0_ACCTL, BA0_ACCTL_DCV | BA0_ACCTL_VFRM |
@@ -1432,7 +1432,7 @@ static int snd_cs4281_chip_init(struct cs4281 *chip)
 
 	/* Set the 'Configuration Write Protect' register
 	 * to 4281h.  Allows vendor-defined configuration
-         * space between 0e4h and 0ffh to be written. */
+	 * space between 0e4h and 0ffh to be written. */
 	snd_cs4281_pokeBA0(chip, BA0_CWPR, 0x4281);
 
 	if ((tmp = snd_cs4281_peekBA0(chip, BA0_SERC1)) != (BA0_SERC1_SO1EN | BA0_SERC1_AC97)) {
@@ -1451,14 +1451,14 @@ static int snd_cs4281_chip_init(struct cs4281 *chip)
 
 	/* Serial Port Power Management */
  	/* Blast the clock control register to zero so that the
-         * PLL starts out in a known state, and blast the master serial
-         * port control register to zero so that the serial ports also
-         * start out in a known state. */
+	 * PLL starts out in a known state, and blast the master serial
+	 * port control register to zero so that the serial ports also
+	 * start out in a known state. */
 	snd_cs4281_pokeBA0(chip, BA0_CLKCR1, 0);
 	snd_cs4281_pokeBA0(chip, BA0_SERMC, 0);
 
-        /* Make ESYN go to zero to turn off
-         * the Sync pulse on the AC97 link. */
+	/* Make ESYN go to zero to turn off
+	 * the Sync pulse on the AC97 link. */
 	snd_cs4281_pokeBA0(chip, BA0_ACCTL, 0);
 	udelay(50);
 
@@ -1562,8 +1562,8 @@ static int snd_cs4281_chip_init(struct cs4281 *chip)
 		 *  Read the input slot valid register and see if input slots 3
 		 *  4 are valid yet.
 		 */
-                if ((snd_cs4281_peekBA0(chip, BA0_ACISV) & (BA0_ACISV_SLV(3) | BA0_ACISV_SLV(4))) == (BA0_ACISV_SLV(3) | BA0_ACISV_SLV(4)))
-                        goto __ok2;
+		if ((snd_cs4281_peekBA0(chip, BA0_ACISV) & (BA0_ACISV_SLV(3) | BA0_ACISV_SLV(4))) == (BA0_ACISV_SLV(3) | BA0_ACISV_SLV(4)))
+			goto __ok2;
 		schedule_timeout_uninterruptible(1);
 	} while (time_after_eq(end_time, jiffies));
 
@@ -1910,8 +1910,8 @@ static int __devinit snd_cs4281_probe(struct pci_dev *pci,
 	struct snd_opl3 *opl3;
 	int err;
 
-        if (dev >= SNDRV_CARDS)
-                return -ENODEV;
+	if (dev >= SNDRV_CARDS)
+		return -ENODEV;
 	if (!enable[dev]) {
 		dev++;
 		return -ENOENT;

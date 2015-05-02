@@ -135,7 +135,7 @@ uec_set_settings(struct net_device *netdev, struct ethtool_cmd *ecmd)
 
 static void
 uec_get_pauseparam(struct net_device *netdev,
-                     struct ethtool_pauseparam *pause)
+		     struct ethtool_pauseparam *pause)
 {
 	struct ucc_geth_private *ugeth = netdev_priv(netdev);
 
@@ -149,7 +149,7 @@ uec_get_pauseparam(struct net_device *netdev,
 
 static int
 uec_set_pauseparam(struct net_device *netdev,
-                     struct ethtool_pauseparam *pause)
+		     struct ethtool_pauseparam *pause)
 {
 	struct ucc_geth_private *ugeth = netdev_priv(netdev);
 	int ret = 0;
@@ -201,7 +201,7 @@ uec_get_regs_len(struct net_device *netdev)
 
 static void
 uec_get_regs(struct net_device *netdev,
-               struct ethtool_regs *regs, void *p)
+	       struct ethtool_regs *regs, void *p)
 {
 	int i;
 	struct ucc_geth_private *ugeth = netdev_priv(netdev);
@@ -214,7 +214,7 @@ uec_get_regs(struct net_device *netdev,
 
 static void
 uec_get_ringparam(struct net_device *netdev,
-                    struct ethtool_ringparam *ring)
+		    struct ethtool_ringparam *ring)
 {
 	struct ucc_geth_private *ugeth = netdev_priv(netdev);
 	struct ucc_geth_info *ug_info = ugeth->ug_info;
@@ -233,7 +233,7 @@ uec_get_ringparam(struct net_device *netdev,
 
 static int
 uec_set_ringparam(struct net_device *netdev,
-                    struct ethtool_ringparam *ring)
+		    struct ethtool_ringparam *ring)
 {
 	struct ucc_geth_private *ugeth = netdev_priv(netdev);
 	struct ucc_geth_info *ug_info = ugeth->ug_info;
@@ -348,7 +348,7 @@ static int uec_nway_reset(struct net_device *netdev)
 /* Report driver information */
 static void
 uec_get_drvinfo(struct net_device *netdev,
-                       struct ethtool_drvinfo *drvinfo)
+		       struct ethtool_drvinfo *drvinfo)
 {
 	strncpy(drvinfo->driver, DRV_NAME, 32);
 	strncpy(drvinfo->version, DRV_VERSION, 32);

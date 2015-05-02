@@ -60,27 +60,27 @@
    #define IPS_HA(x)                   ((ips_ha_t *) x->hostdata)
    #define IPS_COMMAND_ID(ha, scb)     (int) (scb - ha->scbs)
    #define IPS_IS_TROMBONE(ha)         (((ha->pcidev->device == IPS_DEVICEID_COPPERHEAD) && \
-                                         (ha->pcidev->revision >= IPS_REVID_TROMBONE32) && \
-                                         (ha->pcidev->revision <= IPS_REVID_TROMBONE64)) ? 1 : 0)
+					 (ha->pcidev->revision >= IPS_REVID_TROMBONE32) && \
+					 (ha->pcidev->revision <= IPS_REVID_TROMBONE64)) ? 1 : 0)
    #define IPS_IS_CLARINET(ha)         (((ha->pcidev->device == IPS_DEVICEID_COPPERHEAD) && \
-                                         (ha->pcidev->revision >= IPS_REVID_CLARINETP1) && \
-                                         (ha->pcidev->revision <= IPS_REVID_CLARINETP3)) ? 1 : 0)
+					 (ha->pcidev->revision >= IPS_REVID_CLARINETP1) && \
+					 (ha->pcidev->revision <= IPS_REVID_CLARINETP3)) ? 1 : 0)
    #define IPS_IS_MORPHEUS(ha)         (ha->pcidev->device == IPS_DEVICEID_MORPHEUS)
    #define IPS_IS_MARCO(ha)            (ha->pcidev->device == IPS_DEVICEID_MARCO)
    #define IPS_USE_I2O_DELIVER(ha)     ((IPS_IS_MORPHEUS(ha) || \
-                                         (IPS_IS_TROMBONE(ha) && \
-                                          (ips_force_i2o))) ? 1 : 0)
+					 (IPS_IS_TROMBONE(ha) && \
+					  (ips_force_i2o))) ? 1 : 0)
    #define IPS_USE_MEMIO(ha)           ((IPS_IS_MORPHEUS(ha) || \
-                                         ((IPS_IS_TROMBONE(ha) || IPS_IS_CLARINET(ha)) && \
-                                          (ips_force_memio))) ? 1 : 0)
+					 ((IPS_IS_TROMBONE(ha) || IPS_IS_CLARINET(ha)) && \
+					  (ips_force_memio))) ? 1 : 0)
 
     #define IPS_HAS_ENH_SGLIST(ha)    (IPS_IS_MORPHEUS(ha) || IPS_IS_MARCO(ha))
     #define IPS_USE_ENH_SGLIST(ha)    ((ha)->flags & IPS_HA_ENH_SG)
     #define IPS_SGLIST_SIZE(ha)       (IPS_USE_ENH_SGLIST(ha) ? \
-                                         sizeof(IPS_ENH_SG_LIST) : sizeof(IPS_STD_SG_LIST))
+					 sizeof(IPS_ENH_SG_LIST) : sizeof(IPS_STD_SG_LIST))
 
   #define IPS_PRINTK(level, pcidev, format, arg...)                 \
-            dev_printk(level , &((pcidev)->dev) , format , ## arg)
+	    dev_printk(level , &((pcidev)->dev) , format , ## arg)
 
    #define MDELAY(n)			\
 	do {				\
@@ -786,7 +786,7 @@ typedef struct {
 /* Data returned from a GetVersion Command                                  */
 /*--------------------------------------------------------------------------*/
 
-                                             /* SubSystem Parameter[4]      */
+					     /* SubSystem Parameter[4]      */
 #define  IPS_GET_VERSION_SUPPORT 0x00018000  /* Mask for Versioning Support */
 
 typedef struct

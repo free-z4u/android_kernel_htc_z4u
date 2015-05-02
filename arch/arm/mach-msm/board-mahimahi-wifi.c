@@ -89,13 +89,13 @@ static struct wifi_platform_data mahimahi_wifi_control = {
 };
 
 static struct platform_device mahimahi_wifi_device = {
-        .name           = "bcm4329_wlan",
-        .id             = 1,
-        .num_resources  = ARRAY_SIZE(mahimahi_wifi_resources),
-        .resource       = mahimahi_wifi_resources,
-        .dev            = {
-                .platform_data = &mahimahi_wifi_control,
-        },
+	.name           = "bcm4329_wlan",
+	.id             = 1,
+	.num_resources  = ARRAY_SIZE(mahimahi_wifi_resources),
+	.resource       = mahimahi_wifi_resources,
+	.dev            = {
+		.platform_data = &mahimahi_wifi_control,
+	},
 };
 
 extern unsigned char *get_wifi_nvs_ram(void);
@@ -140,7 +140,7 @@ static int __init mahimahi_wifi_init(void)
 	mahimahi_wifi_update_nvs("btc_params70=0x32\r\n", 1);
 	mahimahi_init_wifi_mem();
 	ret = platform_device_register(&mahimahi_wifi_device);
-        return ret;
+	return ret;
 }
 
 late_initcall(mahimahi_wifi_init);

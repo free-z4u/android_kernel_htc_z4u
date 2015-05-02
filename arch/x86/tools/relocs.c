@@ -102,8 +102,8 @@ static int is_reloc(enum symtype type, const char *sym_name)
 
 static void regex_init(int use_real_mode)
 {
-        char errbuf[128];
-        int err;
+	char errbuf[128];
+	int err;
 	int i;
 
 	if (use_real_mode)
@@ -122,7 +122,7 @@ static void regex_init(int use_real_mode)
 			regerror(err, &sym_regex_c[i], errbuf, sizeof errbuf);
 			die("%s", errbuf);
 		}
-        }
+	}
 }
 
 static void die(char *fmt, ...)

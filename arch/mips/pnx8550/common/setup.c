@@ -97,9 +97,9 @@ void __init plat_mem_setup(void)
 
 	board_setup();  /* board specific setup */
 
-        _machine_restart = pnx8550_machine_restart;
-        _machine_halt = pnx8550_machine_halt;
-        pm_power_off = pnx8550_machine_halt;
+	_machine_restart = pnx8550_machine_restart;
+	_machine_halt = pnx8550_machine_halt;
+	pm_power_off = pnx8550_machine_halt;
 
 	/* Clear the Global 2 Register, PCI Inta Output Enable Registers
 	   Bit 1:Enable DAC Powerdown

@@ -96,14 +96,14 @@ int kernel_thread(int (*fn)(void *), void * arg, unsigned long flags)
 
 	memset(&regs, 0, sizeof(regs));
 
-        /* Don't use r10 since that is set to 0 in copy_thread */
+	/* Don't use r10 since that is set to 0 in copy_thread */
 	regs.r11 = (unsigned long)fn;
 	regs.r12 = (unsigned long)arg;
 	regs.irp = (unsigned long)kernel_thread_helper;
 	regs.dccr = 1 << I_DCCR_BITNR;
 
 	/* Ok, create the new process.. */
-        return do_fork(flags | CLONE_VM | CLONE_UNTRACED, 0, &regs, 0, NULL, NULL);
+	return do_fork(flags | CLONE_VM | CLONE_UNTRACED, 0, &regs, 0, NULL, NULL);
 }
 
 /* setup the child's kernel stack with a pt_regs and switch_stack on it.
@@ -131,9 +131,9 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
 
 	*childregs = *regs;  /* struct copy of pt_regs */
 
-        p->set_child_tid = p->clear_child_tid = NULL;
+	p->set_child_tid = p->clear_child_tid = NULL;
 
-        childregs->r10 = 0;  /* child returns 0 after a fork/clone */
+	childregs->r10 = 0;  /* child returns 0 after a fork/clone */
 
 	/* put the switch stack right below the pt_regs */
 
@@ -199,7 +199,7 @@ asmlinkage int sys_clone(unsigned long newusp, unsigned long flags,
 asmlinkage int sys_vfork(long r10, long r11, long r12, long r13, long mof, long srp,
 			 struct pt_regs *regs)
 {
-        return do_fork(CLONE_VFORK | CLONE_VM | SIGCHLD, rdusp(), regs, 0, NULL, NULL);
+	return do_fork(CLONE_VFORK | CLONE_VM | SIGCHLD, rdusp(), regs, 0, NULL, NULL);
 }
 
 /*
@@ -230,27 +230,27 @@ unsigned long get_wchan(struct task_struct *p)
 #if 0
 	/* YURGH. TODO. */
 
-        unsigned long ebp, esp, eip;
-        unsigned long stack_page;
-        int count = 0;
-        if (!p || p == current || p->state == TASK_RUNNING)
-                return 0;
-        stack_page = (unsigned long)p;
-        esp = p->thread.esp;
-        if (!stack_page || esp < stack_page || esp > 8188+stack_page)
-                return 0;
-        /* include/asm-i386/system.h:switch_to() pushes ebp last. */
-        ebp = *(unsigned long *) esp;
-        do {
-                if (ebp < stack_page || ebp > 8184+stack_page)
-                        return 0;
-                eip = *(unsigned long *) (ebp+4);
+	unsigned long ebp, esp, eip;
+	unsigned long stack_page;
+	int count = 0;
+	if (!p || p == current || p->state == TASK_RUNNING)
+		return 0;
+	stack_page = (unsigned long)p;
+	esp = p->thread.esp;
+	if (!stack_page || esp < stack_page || esp > 8188+stack_page)
+		return 0;
+	/* include/asm-i386/system.h:switch_to() pushes ebp last. */
+	ebp = *(unsigned long *) esp;
+	do {
+		if (ebp < stack_page || ebp > 8184+stack_page)
+			return 0;
+		eip = *(unsigned long *) (ebp+4);
 		if (!in_sched_functions(eip))
 			return eip;
-                ebp = *(unsigned long *) ebp;
-        } while (count++ < 16);
+		ebp = *(unsigned long *) ebp;
+	} while (count++ < 16);
 #endif
-        return 0;
+	return 0;
 }
 #undef last_sched
 #undef first_sched

@@ -224,7 +224,7 @@ start_port(struct dbg_port* p)
 		  IO_STATE(R_SERIAL0_BAUD, tr_baud, c115k2Hz) |
 		  IO_STATE(R_SERIAL0_BAUD, rec_baud, c115k2Hz);
 		  break;
-        }
+	}
 
 	if (p->parity == 'E') {
 		rec_ctrl =
@@ -282,7 +282,7 @@ console_write_direct(struct console *co, const char *buf, unsigned int len)
 	int i;
 	unsigned long flags;
 
-        if (!port)
+	if (!port)
 		return;
 
 	local_irq_save(flags);
@@ -324,7 +324,7 @@ console_write(struct console *co, const char *buf, unsigned int len)
 	return;
 #endif
 
-        console_write_direct(co, buf, len);
+	console_write_direct(co, buf, len);
 }
 
 /* legacy function */
@@ -390,8 +390,8 @@ console_setup(struct console *co, char *options)
 	if (options) {
 		port = &ports[co->index];
 		port->baudrate = 115200;
-                port->parity = 'N';
-                port->bits = 8;
+		port->parity = 'N';
+		port->bits = 8;
 		port->baudrate = simple_strtoul(options, NULL, 10);
 		s = options;
 		while(*s >= '0' && *s <= '9')
@@ -420,7 +420,7 @@ static void dummy_close(struct tty_struct *tty, struct file * filp)
 }
 
 static int dummy_write(struct tty_struct * tty,
-                       const unsigned char *buf, int count)
+		       const unsigned char *buf, int count)
 {
 	return count;
 }
@@ -469,7 +469,7 @@ etrax_console_device(struct console* co, int *index)
 	else
 		*index = 0;
 #ifdef CONFIG_ETRAX_SERIAL
-        return port ? serial_driver : &dummy_driver;
+	return port ? serial_driver : &dummy_driver;
 #else
 	return &dummy_driver;
 #endif
@@ -551,7 +551,7 @@ init_etrax_debug(void)
 		register_console(&sercons1);
 		register_console(&sercons2);
 		register_console(&sercons3);
-                init_dummy_console();
+		init_dummy_console();
 		return 0;
 	}
 

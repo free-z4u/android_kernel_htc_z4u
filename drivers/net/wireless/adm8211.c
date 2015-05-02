@@ -237,7 +237,7 @@ static int adm8211_read_eeprom(struct ieee80211_hw *dev)
 	}
 
 	printk(KERN_DEBUG "%s (adm8211): RFtype=%d BBPtype=%d Specific BBP=%d "
-               "Transceiver=%d\n", pci_name(priv->pdev), priv->rf_type,
+	       "Transceiver=%d\n", pci_name(priv->pdev), priv->rf_type,
 	       priv->bbp_type, priv->specific_bbptype, priv->transceiver_type);
 
 	return 0;

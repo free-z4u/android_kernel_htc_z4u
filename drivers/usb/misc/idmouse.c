@@ -6,7 +6,7 @@
   the License, or (at your option) any later version.
 
   Copyright (C) 2004-5 by Florian 'Floe' Echtler  <echtler@fs.tum.de>
-                      and Andreas  'ad'  Deresch <aderesch@fs.tum.de>
+		      and Andreas  'ad'  Deresch <aderesch@fs.tum.de>
 
   Derived from the USB Skeleton driver 1.1,
   Copyright (C) 2003 Greg Kroah-Hartman (greg@kroah.com)

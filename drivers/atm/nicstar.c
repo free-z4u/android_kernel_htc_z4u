@@ -371,14 +371,14 @@ static int __devinit ns_init_card(int i, struct pci_dev *pcidev)
 		ns_init_card_error(card, error);
 		return error;
 	}
-        if ((pci_set_dma_mask(pcidev, DMA_BIT_MASK(32)) != 0) ||
+	if ((pci_set_dma_mask(pcidev, DMA_BIT_MASK(32)) != 0) ||
 	    (pci_set_consistent_dma_mask(pcidev, DMA_BIT_MASK(32)) != 0)) {
-                printk(KERN_WARNING
+		printk(KERN_WARNING
 		       "nicstar%d: No suitable DMA available.\n", i);
 		error = 2;
 		ns_init_card_error(card, error);
 		return error;
-        }
+	}
 
 	if ((card = kmalloc(sizeof(ns_dev), GFP_KERNEL)) == NULL) {
 		printk
@@ -876,7 +876,7 @@ static scq_info *get_scq(ns_dev *card, int size, u32 scd)
 	scq = kmalloc(sizeof(scq_info), GFP_KERNEL);
 	if (!scq)
 		return NULL;
-        scq->org = pci_alloc_consistent(card->pcidev, 2 * size, &scq->dma);
+	scq->org = pci_alloc_consistent(card->pcidev, 2 * size, &scq->dma);
 	if (!scq->org) {
 		kfree(scq);
 		return NULL;
@@ -2006,7 +2006,7 @@ static void dequeue_rx(ns_dev * card, ns_rsqe * rsqe)
 		return;
 	}
 	idr_remove(&card->idr, id);
-        pci_dma_sync_single_for_cpu(card->pcidev,
+	pci_dma_sync_single_for_cpu(card->pcidev,
 				    NS_PRV_DMA(skb),
 				    (NS_PRV_BUFTYPE(skb) == BUF_SM
 				     ? NS_SMSKBSIZE : NS_LGSKBSIZE),

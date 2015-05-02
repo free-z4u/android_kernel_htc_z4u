@@ -215,12 +215,12 @@ static inline int restore_fpu_state(struct sigcontext *sc)
 		    goto out;
 	    } else if (CPU_IS_040) {
 		if (!(sc->sc_fpstate[1] == 0x00 ||
-                      sc->sc_fpstate[1] == 0x28 ||
-                      sc->sc_fpstate[1] == 0x60))
+		      sc->sc_fpstate[1] == 0x28 ||
+		      sc->sc_fpstate[1] == 0x60))
 		    goto out;
 	    } else if (CPU_IS_060) {
 		if (!(sc->sc_fpstate[3] == 0x00 ||
-                      sc->sc_fpstate[3] == 0x60 ||
+		      sc->sc_fpstate[3] == 0x60 ||
 		      sc->sc_fpstate[3] == 0xe0))
 		    goto out;
 	    } else if (CPU_IS_COLDFIRE) {
@@ -884,7 +884,7 @@ static int setup_frame (int sig, struct k_sigaction *ka,
 		printk("Performing stackadjust=%04x\n", regs->stkadj);
 #endif
 		/* This must be copied with decreasing addresses to
-                   handle overlaps.  */
+		   handle overlaps.  */
 		tregs->vector = 0;
 		tregs->format = 0;
 		tregs->pc = regs->pc;
@@ -980,7 +980,7 @@ static int setup_rt_frame (int sig, struct k_sigaction *ka, siginfo_t *info,
 		printk("Performing stackadjust=%04x\n", regs->stkadj);
 #endif
 		/* This must be copied with decreasing addresses to
-                   handle overlaps.  */
+		   handle overlaps.  */
 		tregs->vector = 0;
 		tregs->format = 0;
 		tregs->pc = regs->pc;

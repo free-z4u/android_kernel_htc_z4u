@@ -28,8 +28,8 @@ config ACER_WMI
 	select INPUT_SPARSEKMAP
 	# Acer WMI depends on ACPI_VIDEO when ACPI is enabled
 	# but for select to work, need to select ACPI_VIDEO's dependencies, ick
-        select VIDEO_OUTPUT_CONTROL if ACPI
-        select ACPI_VIDEO if ACPI
+	select VIDEO_OUTPUT_CONTROL if ACPI
+	select ACPI_VIDEO if ACPI
 	---help---
 	  This is a driver for newer Acer (and Wistron) laptops. It adds
 	  wireless radio and bluetooth control, and on some laptops,
@@ -151,17 +151,17 @@ config FUJITSU_TABLET
        depends on ACPI
        depends on INPUT
        ---help---
-         This is a driver for tablets built by Fujitsu:
+	 This is a driver for tablets built by Fujitsu:
 
-           * Lifebook P1510/P1610/P1620/Txxxx
-           * Stylistic ST5xxx
-           * Possibly other Fujitsu tablet models
+	   * Lifebook P1510/P1610/P1620/Txxxx
+	   * Stylistic ST5xxx
+	   * Possibly other Fujitsu tablet models
 
-         It adds support for the panel buttons, docking station detection,
-         tablet/notebook mode detection for convertible and
-         orientation detection for docked slates.
+	 It adds support for the panel buttons, docking station detection,
+	 tablet/notebook mode detection for convertible and
+	 orientation detection for docked slates.
 
-         If you have a Fujitsu convertible or slate, say Y or M here.
+	 If you have a Fujitsu convertible or slate, say Y or M here.
 
 config AMILO_RFKILL
 	tristate "Fujitsu-Siemens Amilo rfkill support"
@@ -668,8 +668,8 @@ config INTEL_MFLD_THERMAL
        tristate "Thermal driver for Intel Medfield platform"
        depends on MFD_INTEL_MSIC && THERMAL
        help
-         Say Y here to enable thermal driver support for the  Intel Medfield
-         platform.
+	 Say Y here to enable thermal driver support for the  Intel Medfield
+	 platform.
 
 config INTEL_IPS
 	tristate "Intel Intelligent Power Sharing"
@@ -736,7 +736,7 @@ config MXM_WMI
        tristate "WMI support for MXM Laptop Graphics"
        depends on ACPI_WMI
        ---help---
-          MXM is a standard for laptop graphics cards, the WMI interface
+	  MXM is a standard for laptop graphics cards, the WMI interface
 	  is required for switchable nvidia graphics machines
 
 config INTEL_OAKTRAIL

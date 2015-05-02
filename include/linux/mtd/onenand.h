@@ -219,8 +219,8 @@ struct onenand_chip {
  * @id:		manufacturer ID code of device.
 */
 struct onenand_manufacturers {
-        int id;
-        char *name;
+	int id;
+	char *name;
 };
 
 int onenand_bbt_read_oob(struct mtd_info *mtd, loff_t from,

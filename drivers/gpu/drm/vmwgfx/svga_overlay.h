@@ -54,12 +54,12 @@ typedef enum {
 #define SVGA_ESCAPE_VMWARE_VIDEO             0x00020000
 
 #define SVGA_ESCAPE_VMWARE_VIDEO_SET_REGS    0x00020001
-        /* FIFO escape layout:
-         * Type, Stream Id, (Register Id, Value) pairs */
+	/* FIFO escape layout:
+	 * Type, Stream Id, (Register Id, Value) pairs */
 
 #define SVGA_ESCAPE_VMWARE_VIDEO_FLUSH       0x00020002
-        /* FIFO escape layout:
-         * Type, Stream Id */
+	/* FIFO escape layout:
+	 * Type, Stream Id */
 
 typedef
 struct SVGAEscapeVideoSetRegs {
@@ -135,18 +135,18 @@ struct {
 
 static inline bool
 VMwareVideoGetAttributes(const SVGAOverlayFormat format,    /* IN */
-                         uint32 *width,                     /* IN / OUT */
-                         uint32 *height,                    /* IN / OUT */
-                         uint32 *size,                      /* OUT */
-                         uint32 *pitches,                   /* OUT (optional) */
-                         uint32 *offsets)                   /* OUT (optional) */
+			 uint32 *width,                     /* IN / OUT */
+			 uint32 *height,                    /* IN / OUT */
+			 uint32 *size,                      /* OUT */
+			 uint32 *pitches,                   /* OUT (optional) */
+			 uint32 *offsets)                   /* OUT (optional) */
 {
     int tmp;
 
     *width = (*width + 1) & ~1;
 
     if (offsets) {
-        offsets[0] = 0;
+	offsets[0] = 0;
     }
 
     switch (format) {
@@ -155,26 +155,26 @@ VMwareVideoGetAttributes(const SVGAOverlayFormat format,    /* IN */
        *size = (*width + 3) & ~3;
 
        if (pitches) {
-          pitches[0] = *size;
+	  pitches[0] = *size;
        }
 
        *size *= *height;
 
        if (offsets) {
-          offsets[1] = *size;
+	  offsets[1] = *size;
        }
 
        tmp = ((*width >> 1) + 3) & ~3;
 
        if (pitches) {
-          pitches[1] = pitches[2] = tmp;
+	  pitches[1] = pitches[2] = tmp;
        }
 
        tmp *= (*height >> 1);
        *size += tmp;
 
        if (offsets) {
-          offsets[2] = *size;
+	  offsets[2] = *size;
        }
 
        *size += tmp;
@@ -185,7 +185,7 @@ VMwareVideoGetAttributes(const SVGAOverlayFormat format,    /* IN */
        *size = *width * 2;
 
        if (pitches) {
-          pitches[0] = *size;
+	  pitches[0] = *size;
        }
 
        *size *= *height;

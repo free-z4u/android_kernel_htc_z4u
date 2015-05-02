@@ -144,13 +144,13 @@ config CISS_SCSI_TAPE
 	depends on SCSI=y || SCSI=BLK_CPQ_CISS_DA
 	help
 	  When enabled (Y), this option allows SCSI tape drives and SCSI medium
-	  changers (tape robots) to be accessed via a Compaq 5xxx array 
+	  changers (tape robots) to be accessed via a Compaq 5xxx array
 	  controller.  (See <file:Documentation/blockdev/cciss.txt> for more details.)
 
-	  "SCSI support" and "SCSI tape support" must also be enabled for this 
+	  "SCSI support" and "SCSI tape support" must also be enabled for this
 	  option to work.
 
-	  When this option is disabled (N), the SCSI portion of the driver 
+	  When this option is disabled (N), the SCSI portion of the driver
 	  is not compiled.
 
 config BLK_DEV_DAC960
@@ -186,10 +186,10 @@ config BLK_DEV_UBD
 	bool "Virtual block device"
 	depends on UML
 	---help---
-          The User-Mode Linux port includes a driver called UBD which will let
-          you access arbitrary files on the host computer as block devices.
-          Unless you know that you do not need such virtual block devices say
-          Y here.
+	  The User-Mode Linux port includes a driver called UBD which will let
+	  you access arbitrary files on the host computer as block devices.
+	  Unless you know that you do not need such virtual block devices say
+	  Y here.
 
 config BLK_DEV_UBD_SYNC
 	bool "Always do synchronous disk IO for UBD"
@@ -200,16 +200,16 @@ config BLK_DEV_UBD_SYNC
 	  Linux 'Virtual Machine' uses a journalling filesystem and the host
 	  computer crashes.
 
-          Synchronous operation (i.e. always writing data to the host's disk
-          immediately) is configurable on a per-UBD basis by using a special
-          kernel command line option.  Alternatively, you can say Y here to
-          turn on synchronous operation by default for all block devices.
+	  Synchronous operation (i.e. always writing data to the host's disk
+	  immediately) is configurable on a per-UBD basis by using a special
+	  kernel command line option.  Alternatively, you can say Y here to
+	  turn on synchronous operation by default for all block devices.
 
-          If you're running a journalling file system (like reiserfs, for
-          example) in your virtual machine, you will want to say Y here.  If
-          you care for the safety of the data in your virtual machine, Y is a
-          wise choice too.  In all other cases (for example, if you're just
-          playing around with User-Mode Linux) you can choose N.
+	  If you're running a journalling file system (like reiserfs, for
+	  example) in your virtual machine, you will want to say Y here.  If
+	  you care for the safety of the data in your virtual machine, Y is a
+	  wise choice too.  In all other cases (for example, if you're just
+	  playing around with User-Mode Linux) you can choose N.
 
 config BLK_DEV_COW_COMMON
 	bool
@@ -279,7 +279,7 @@ config BLK_DEV_CRYPTOLOOP
 	select CRYPTO_CBC
 	depends on BLK_DEV_LOOP
 	---help---
-	  Say Y here if you want to be able to use the ciphers that are 
+	  Say Y here if you want to be able to use the ciphers that are
 	  provided by the CryptoAPI as loop transformation. This might be
 	  used as hard disk encryption.
 
@@ -348,7 +348,7 @@ config BLK_DEV_SX8
 	tristate "Promise SATA SX8 support"
 	depends on PCI
 	---help---
-	  Saying Y or M here will enable support for the 
+	  Saying Y or M here will enable support for the
 	  Promise SATA SX8 controllers.
 
 	  Use devices /dev/sx8/$N and /dev/sx8/$Np$M.
@@ -524,7 +524,7 @@ config VIRTIO_BLK
 	depends on EXPERIMENTAL && VIRTIO
 	---help---
 	  This is the virtual block driver for virtio.  It can be used with
-          lguest or QEMU based VMMs (like KVM or Xen).  Say Y or M.
+	  lguest or QEMU based VMMs (like KVM or Xen).  Say Y or M.
 
 config BLK_DEV_HD
 	bool "Very old hard disk (MFM/RLL/IDE) driver"

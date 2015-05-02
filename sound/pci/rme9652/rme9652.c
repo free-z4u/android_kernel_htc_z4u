@@ -88,7 +88,7 @@ MODULE_SUPPORTED_DEVICE("{{RME,Hammerfall},"
 #define RME9652_lock_0	   (1<<3)	/* ADAT 1-PLL: 1=locked, 0=unlocked */
 #define RME9652_fs48	   (1<<4)	/* sample rate is 0=44.1/88.2,1=48/96 Khz */
 #define RME9652_wsel_rd	   (1<<5)	/* if Word-Clock is used and valid then 1 */
-                                        /* bits 6-15 encode h/w buffer pointer position */
+					/* bits 6-15 encode h/w buffer pointer position */
 #define RME9652_sync_2	   (1<<16)	/* if ADAT-IN 3 in sync to system clock */
 #define RME9652_sync_1	   (1<<17)	/* if ADAT-IN 2 in sync to system clock */
 #define RME9652_sync_0	   (1<<18)	/* if ADAT-IN 1 in sync to system clock */
@@ -144,7 +144,7 @@ MODULE_SUPPORTED_DEVICE("{{RME,Hammerfall},"
 
 
 #define RME9652_start_bit	   (1<<0)	/* start record/play */
-                                                /* bits 1-3 encode buffersize/latency */
+						/* bits 1-3 encode buffersize/latency */
 #define RME9652_Master		   (1<<4)	/* Clock Mode Master=1,Slave/Auto=0 */
 #define RME9652_IE		   (1<<5)	/* Interrupt Enable */
 #define RME9652_freq		   (1<<6)       /* samplerate 0=44.1/88.2, 1=48/96 kHz */
@@ -214,7 +214,7 @@ struct snd_rme9652 {
 
 	char *card_name;		/* hammerfall or hammerfall light names */
 
-        size_t hw_offsetmask;     	/* &-with status register to get real hw_offset */
+	size_t hw_offsetmask;     	/* &-with status register to get real hw_offset */
 	size_t prev_hw_offset;		/* previous hw offset */
 	size_t max_jitter;		/* maximum jitter in frames for
 					   hw pointer */
@@ -236,13 +236,13 @@ struct snd_rme9652 {
 	struct snd_pcm_substream *playback_substream;
 	int running;
 
-        int passthru;                   /* non-zero if doing pass-thru */
-        int hw_rev;                     /* h/w rev * 10 (i.e. 1.5 has hw_rev = 15) */
+	int passthru;                   /* non-zero if doing pass-thru */
+	int hw_rev;                     /* h/w rev * 10 (i.e. 1.5 has hw_rev = 15) */
 
 	int last_spdif_sample_rate;	/* so that we can catch externally ... */
 	int last_adat_sample_rate;	/* ... induced rate changes            */
 
-        char *channel_map;
+	char *channel_map;
 
 	struct snd_card *card;
 	struct snd_pcm *pcm;
@@ -384,7 +384,7 @@ static snd_pcm_uframes_t rme9652_hw_pointer(struct snd_rme9652 *rme9652)
 	offset = status & RME9652_buf_pos;
 
 	/* The hardware may give a backward movement for up to 80 frames
-           Martin Kirst <martin.kirst@freenet.de> knows the details.
+	   Martin Kirst <martin.kirst@freenet.de> knows the details.
 	*/
 
 	delta = rme9652->prev_hw_offset - offset;
@@ -2290,7 +2290,7 @@ static int snd_rme9652_playback_open(struct snd_pcm_substream *substream)
 
 	snd_pcm_set_sync(substream);
 
-        runtime->hw = snd_rme9652_playback_subinfo;
+	runtime->hw = snd_rme9652_playback_subinfo;
 	runtime->dma_area = rme9652->playback_buffer;
 	runtime->dma_bytes = RME9652_DMA_AREA_BYTES;
 

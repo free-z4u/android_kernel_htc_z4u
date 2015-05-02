@@ -2025,7 +2025,7 @@ typhoon_tx_timeout(struct net_device *dev)
 	if(typhoon_start_runtime(tp) < 0) {
 		netdev_err(dev, "could not start runtime in tx timeout\n");
 		goto truly_dead;
-        }
+	}
 
 	netif_wake_queue(dev);
 	return;

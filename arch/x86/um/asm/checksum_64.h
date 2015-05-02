@@ -29,14 +29,14 @@ __wsum csum_partial_copy_nocheck(const void *src, void *dst,
 
 static __inline__
 __wsum csum_partial_copy_from_user(const void __user *src,
-                                         void *dst, int len, __wsum sum,
-                                         int *err_ptr)
+					 void *dst, int len, __wsum sum,
+					 int *err_ptr)
 {
-        if (copy_from_user(dst, src, len)) {
-                *err_ptr = -EFAULT;
-                return (__force __wsum)-1;
-        }
-        return csum_partial(dst, len, sum);
+	if (copy_from_user(dst, src, len)) {
+		*err_ptr = -EFAULT;
+		return (__force __wsum)-1;
+	}
+	return csum_partial(dst, len, sum);
 }
 
 /**
@@ -132,11 +132,11 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
 
 static inline unsigned add32_with_carry(unsigned a, unsigned b)
 {
-        asm("addl %2,%0\n\t"
-            "adcl $0,%0"
-            : "=r" (a)
-            : "0" (a), "r" (b));
-        return a;
+	asm("addl %2,%0\n\t"
+	    "adcl $0,%0"
+	    : "=r" (a)
+	    : "0" (a), "r" (b));
+	return a;
 }
 
 extern __sum16 ip_compute_csum(const void *buff, int len);

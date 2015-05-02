@@ -84,8 +84,8 @@ sgl_fadd(
 		     * invalid since operands are opposite signed infinity's
 		     */
 		    if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                    Set_invalidflag();
-                    Sgl_makequietnan(result);
+		    Set_invalidflag();
+		    Sgl_makequietnan(result);
 		    *dstptr = result;
 		    return(NOEXCEPTION);
 		    }
@@ -98,24 +98,24 @@ sgl_fadd(
 	    }
 	else
 	    {
-            /*
-             * is NaN; signaling or quiet?
-             */
-            if (Sgl_isone_signaling(left))
+	    /*
+	     * is NaN; signaling or quiet?
+	     */
+	    if (Sgl_isone_signaling(left))
 		{
-               	/* trap if INVALIDTRAP enabled */
+	       	/* trap if INVALIDTRAP enabled */
 		if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-        	/* make NaN quiet */
-        	Set_invalidflag();
-        	Sgl_set_quiet(left);
-        	}
+		/* make NaN quiet */
+		Set_invalidflag();
+		Sgl_set_quiet(left);
+		}
 	    /*
 	     * is second operand a signaling NaN?
 	     */
 	    else if (Sgl_is_signalingnan(right))
 		{
-        	/* trap if INVALIDTRAP enabled */
-               	if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+		/* trap if INVALIDTRAP enabled */
+	       	if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
 		/* make NaN quiet */
 		Set_invalidflag();
 		Sgl_set_quiet(right);
@@ -140,12 +140,12 @@ sgl_fadd(
 	    *dstptr = right;
 	    return(NOEXCEPTION);
 	    }
-        /*
-         * is NaN; signaling or quiet?
-         */
-        if (Sgl_isone_signaling(right))
+	/*
+	 * is NaN; signaling or quiet?
+	 */
+	if (Sgl_isone_signaling(right))
 	    {
-            /* trap if INVALIDTRAP enabled */
+	    /* trap if INVALIDTRAP enabled */
 	    if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
 	    /* make NaN quiet */
 	    Set_invalidflag();
@@ -176,7 +176,7 @@ sgl_fadd(
     /* Invariant:  left is not smaller than right. */
 
     if((right_exponent = Sgl_exponent(right)) == 0)
-        {
+	{
 	/* Denormalized operands.  First look for zeroes */
 	if(Sgl_iszero_mantissa(right))
 	    {
@@ -254,7 +254,7 @@ sgl_fadd(
 		Sgl_leftshiftby1(result);
 		Sgl_normalize(result,result_exponent);
 		Sgl_set_sign(result,/*using*/sign_save);
-                Sgl_setwrapped_exponent(result,result_exponent,unfl);
+		Sgl_setwrapped_exponent(result,result_exponent,unfl);
 		*dstptr = result;
 		return(UNDERFLOWEXCEPTION);
 		}
@@ -308,9 +308,9 @@ sgl_fadd(
 	     * shift is needed, then all bits to the right of the guard
 	     * bit are zeros, and the guard bit may or may not be zero. */
 	    sign_save = Sgl_signextendedsign(result);
-            Sgl_leftshiftby1_withextent(result,extent,result);
+	    Sgl_leftshiftby1_withextent(result,extent,result);
 
-            /* Need to check for a zero result.  The sign and exponent
+	    /* Need to check for a zero result.  The sign and exponent
 	     * fields have already been zeroed.  The more efficient test
 	     * of the full object can be used.
 	     */
@@ -416,7 +416,7 @@ sgl_fadd(
 	    if(Is_underflowtrap_enabled())
 		{
 		Sgl_set_sign(result,sign_save);
-                Sgl_setwrapped_exponent(result,result_exponent,unfl);
+		Sgl_setwrapped_exponent(result,result_exponent,unfl);
 		*dstptr = result;
 		/* inexact = FALSE; */
 		return(UNDERFLOWEXCEPTION);
@@ -490,9 +490,9 @@ sgl_fadd(
 	if(Sgl_isone_hiddenoverflow(result)) result_exponent++;
 	}
     if(result_exponent == SGL_INFINITY_EXPONENT)
-        {
-        /* Overflow */
-        if(Is_overflowtrap_enabled())
+	{
+	/* Overflow */
+	if(Is_overflowtrap_enabled())
 	    {
 	    Sgl_setwrapped_exponent(result,result_exponent,ovfl);
 	    *dstptr = result;
@@ -502,7 +502,7 @@ sgl_fadd(
 		else Set_inexactflag();
 	    return(OVERFLOWEXCEPTION);
 	    }
-        else
+	else
 	    {
 	    Set_overflowflag();
 	    inexact = TRUE;

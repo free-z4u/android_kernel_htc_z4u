@@ -719,9 +719,9 @@ sb1000_print_status_buffer(const char* name, unsigned char st[],
 		printk(KERN_DEBUG "%s: length: %d protocol: %d from: %d.%d.%d.%d:%d "
 			"to %d.%d.%d.%d:%d\n", name, buffer[28] << 8 | buffer[29],
 			buffer[35], buffer[38], buffer[39], buffer[40], buffer[41],
-            buffer[46] << 8 | buffer[47],
+	    buffer[46] << 8 | buffer[47],
 			buffer[42], buffer[43], buffer[44], buffer[45],
-            buffer[48] << 8 | buffer[49]);
+	    buffer[48] << 8 | buffer[49]);
 	} else {
 		for (i = 0, k = 0; i < (size + 7) / 8; i++) {
 			printk(KERN_DEBUG "%s: %s", name, i ? "       " : "buffer:");

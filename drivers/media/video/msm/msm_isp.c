@@ -405,7 +405,7 @@ static int msm_isp_notify_vfe(struct v4l2_subdev *sd,
 
 		isp_event->isp_data.isp_msg.msg_id = isp_msg->msg_id;
 		isp_event->isp_data.isp_msg.frame_id = isp_msg->sof_count;
-        getnstimeofday(&(isp_event->isp_data.isp_msg.timestamp));
+	getnstimeofday(&(isp_event->isp_data.isp_msg.timestamp));
 		if(atomic_read(&pmctl->dropframe_enabled) &&
 			atomic_read(&pmctl->snap_dropframe_num) == 0 &&
 			isp_msg->msg_id == MSG_ID_SOF_ACK)
@@ -455,13 +455,13 @@ static int msm_isp_notify_vfe(struct v4l2_subdev *sd,
 		}
 
 		if (!rc) {
-            if (msm_isp_should_drop_frame(pmctl, msgid)) {
-                msgid = msm_isp_vfe_msg_to_img_mode(pmctl, msgid);
+	    if (msm_isp_should_drop_frame(pmctl, msgid)) {
+		msgid = msm_isp_vfe_msg_to_img_mode(pmctl, msgid);
 
-                msm_mctl_return_free_buf(pmctl, msgid, &(isp_output->buf));
-                kfree(isp_event);
-                return rc;
-            } else {
+		msm_mctl_return_free_buf(pmctl, msgid, &(isp_output->buf));
+		kfree(isp_event);
+		return rc;
+	    } else {
 			isp_event->isp_data.isp_msg.msg_id =
 				isp_output->output_id;
 			isp_event->isp_data.isp_msg.frame_id =
@@ -473,7 +473,7 @@ static int msm_isp_notify_vfe(struct v4l2_subdev *sd,
 			msm_mctl_buf_done(pmctl, image_mode ,
 				&buf, isp_output->frameCounter);
 
-            }
+	    }
 		}
 		}
 		break;

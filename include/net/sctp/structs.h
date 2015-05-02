@@ -235,7 +235,7 @@ extern struct sctp_globals {
 
 	/* Flag to indicate whether computing and verifying checksum
 	 * is disabled. */
-        bool checksum_disable;
+	bool checksum_disable;
 
 	/* Threshold for rwnd update SACKS.  Receive buffer shifted this many
 	 * bits is an indicator of when to send and window update SACK.
@@ -851,9 +851,9 @@ struct sctp_packet *sctp_packet_init(struct sctp_packet *,
 				     __u16 sport, __u16 dport);
 struct sctp_packet *sctp_packet_config(struct sctp_packet *, __u32 vtag, int);
 sctp_xmit_t sctp_packet_transmit_chunk(struct sctp_packet *,
-                                       struct sctp_chunk *, int);
+				       struct sctp_chunk *, int);
 sctp_xmit_t sctp_packet_append_chunk(struct sctp_packet *,
-                                     struct sctp_chunk *);
+				     struct sctp_chunk *);
 int sctp_packet_transmit(struct sctp_packet *);
 void sctp_packet_free(struct sctp_packet *);
 

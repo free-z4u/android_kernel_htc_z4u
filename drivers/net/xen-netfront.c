@@ -1339,11 +1339,11 @@ static struct net_device * __devinit xennet_create_dev(struct xenbus_device *dev
 	netdev->hw_features	= NETIF_F_IP_CSUM | NETIF_F_SG | NETIF_F_TSO;
 
 	/*
-         * Assume that all hw features are available for now. This set
-         * will be adjusted by the call to netdev_update_features() in
-         * xennet_connect() which is the earliest point where we can
-         * negotiate with the backend regarding supported features.
-         */
+	 * Assume that all hw features are available for now. This set
+	 * will be adjusted by the call to netdev_update_features() in
+	 * xennet_connect() which is the earliest point where we can
+	 * negotiate with the backend regarding supported features.
+	 */
 	netdev->features |= netdev->hw_features;
 
 	SET_ETHTOOL_OPS(netdev, &xennet_ethtool_ops);

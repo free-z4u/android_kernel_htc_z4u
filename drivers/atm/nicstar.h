@@ -104,7 +104,7 @@
 
 #define NS_HBUFSIZE 65568	/* Size of max. AAL5 PDU */
 #define NS_MAX_IOVECS (2 + (65568 - NS_SMBUFSIZE) / \
-                       (NS_LGBUFSIZE - (NS_LGBUFSIZE % 48)))
+		       (NS_LGBUFSIZE - (NS_LGBUFSIZE % 48)))
 #define NS_IOVBUFSIZE (NS_MAX_IOVECS * (sizeof(struct iovec)))
 
 #define NS_SMBUFSIZE_USABLE (NS_SMBUFSIZE - NS_SMBUFSIZE % 48)
@@ -131,9 +131,9 @@ typedef struct ns_rsqe {
 } ns_rsqe;
 
 #define ns_rsqe_vpi(ns_rsqep) \
-        ((le32_to_cpu((ns_rsqep)->word_1) & 0x00FF0000) >> 16)
+	((le32_to_cpu((ns_rsqep)->word_1) & 0x00FF0000) >> 16)
 #define ns_rsqe_vci(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_1) & 0x0000FFFF)
+	(le32_to_cpu((ns_rsqep)->word_1) & 0x0000FFFF)
 
 #define NS_RSQE_VALID      0x80000000
 #define NS_RSQE_NZGFC      0x00004000
@@ -147,24 +147,24 @@ typedef struct ns_rsqe {
 #define NS_RSQE_BUFSIZE_LG 0x00001000
 
 #define ns_rsqe_valid(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_VALID)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_VALID)
 #define ns_rsqe_nzgfc(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_NZGFC)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_NZGFC)
 #define ns_rsqe_eopdu(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_EOPDU)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_EOPDU)
 #define ns_rsqe_bufsize(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_BUFSIZE)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_BUFSIZE)
 #define ns_rsqe_congestion(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_CONGESTION)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_CONGESTION)
 #define ns_rsqe_clp(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_CLP)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_CLP)
 #define ns_rsqe_crcerr(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_CRCERR)
+	(le32_to_cpu((ns_rsqep)->word_4) & NS_RSQE_CRCERR)
 
 #define ns_rsqe_cellcount(ns_rsqep) \
-        (le32_to_cpu((ns_rsqep)->word_4) & 0x000001FF)
+	(le32_to_cpu((ns_rsqep)->word_4) & 0x000001FF)
 #define ns_rsqe_init(ns_rsqep) \
-        ((ns_rsqep)->word_4 = cpu_to_le32(0x00000000))
+	((ns_rsqep)->word_4 = cpu_to_le32(0x00000000))
 
 #define NS_RSQ_NUM_ENTRIES (NS_RSQSIZE / 16)
 #define NS_RSQ_ALIGNMENT NS_RSQSIZE
@@ -190,11 +190,11 @@ typedef struct ns_rcqe {
 #define NS_RCQE_SIZE 64		/* bytes */
 
 #define ns_rcqe_islast(ns_rcqep) \
-        (le32_to_cpu((ns_rcqep)->word_2) != 0x00000000)
+	(le32_to_cpu((ns_rcqep)->word_2) != 0x00000000)
 #define ns_rcqe_cellheader(ns_rcqep) \
-        (le32_to_cpu((ns_rcqep)->word_1))
+	(le32_to_cpu((ns_rcqep)->word_1))
 #define ns_rcqe_nextbufhandle(ns_rcqep) \
-        (le32_to_cpu((ns_rcqep)->word_2))
+	(le32_to_cpu((ns_rcqep)->word_2))
 
 /*
  * SCQ - Segmentation Channel Queue
@@ -241,12 +241,12 @@ typedef struct ns_scqe {
 #define NS_TSR_SCDISVBR 0xFFFF	/* Use as scdi for VBR SCD */
 
 #define ns_tsr_mkword_1(flags) \
-        (cpu_to_le32(NS_SCQE_TYPE_TSR | (flags)))
+	(cpu_to_le32(NS_SCQE_TYPE_TSR | (flags)))
 #define ns_tsr_mkword_2(scdi, scqi) \
-        (cpu_to_le32((scdi) << 16 | 0x00008000 | (scqi)))
+	(cpu_to_le32((scdi) << 16 | 0x00008000 | (scqi)))
 
 #define ns_scqe_is_tsr(ns_scqep) \
-        (le32_to_cpu((ns_scqep)->word_1) & NS_SCQE_TYPE_TSR)
+	(le32_to_cpu((ns_scqep)->word_1) & NS_SCQE_TYPE_TSR)
 
 #define VBR_SCQ_NUM_ENTRIES 512
 #define VBR_SCQSIZE 8192
@@ -274,12 +274,12 @@ typedef struct ns_tsi {
 #define NS_TSI_TIMESTAMP_MASK 0x00FFFFFF
 
 #define ns_tsi_isempty(ns_tsip) \
-        (le32_to_cpu((ns_tsip)->word_2) & NS_TSI_EMPTY)
+	(le32_to_cpu((ns_tsip)->word_2) & NS_TSI_EMPTY)
 #define ns_tsi_gettimestamp(ns_tsip) \
-        (le32_to_cpu((ns_tsip)->word_2) & NS_TSI_TIMESTAMP_MASK)
+	(le32_to_cpu((ns_tsip)->word_2) & NS_TSI_TIMESTAMP_MASK)
 
 #define ns_tsi_init(ns_tsip) \
-        ((ns_tsip)->word_2 = cpu_to_le32(NS_TSI_EMPTY))
+	((ns_tsip)->word_2 = cpu_to_le32(NS_TSI_EMPTY))
 
 #define NS_TSQSIZE 8192
 #define NS_TSQ_NUM_ENTRIES 1024
@@ -288,11 +288,11 @@ typedef struct ns_tsi {
 #define NS_TSI_SCDISVBR NS_TSR_SCDISVBR
 
 #define ns_tsi_tmrof(ns_tsip) \
-        (le32_to_cpu((ns_tsip)->word_1) == 0x00000000)
+	(le32_to_cpu((ns_tsip)->word_1) == 0x00000000)
 #define ns_tsi_getscdindex(ns_tsip) \
-        ((le32_to_cpu((ns_tsip)->word_1) & 0xFFFF0000) >> 16)
+	((le32_to_cpu((ns_tsip)->word_1) & 0xFFFF0000) >> 16)
 #define ns_tsi_getscqpos(ns_tsip) \
-        (le32_to_cpu((ns_tsip)->word_1) & 0x00007FFF)
+	(le32_to_cpu((ns_tsip)->word_1) & 0x00007FFF)
 
 /* NICStAR structures located in local SRAM */
 
@@ -644,15 +644,15 @@ struct ns_skb_prv {
 };
 
 #define NS_PRV_BUFTYPE(skb)   \
-        (((struct ns_skb_prv *)(ATM_SKB(skb)+1))->buf_type)
+	(((struct ns_skb_prv *)(ATM_SKB(skb)+1))->buf_type)
 #define NS_PRV_DMA(skb) \
-        (((struct ns_skb_prv *)(ATM_SKB(skb)+1))->dma)
+	(((struct ns_skb_prv *)(ATM_SKB(skb)+1))->dma)
 #define NS_PRV_IOVCNT(skb) \
-        (((struct ns_skb_prv *)(ATM_SKB(skb)+1))->iovcnt)
+	(((struct ns_skb_prv *)(ATM_SKB(skb)+1))->iovcnt)
 
 typedef struct tsq_info {
 	void *org;
-        dma_addr_t dma;
+	dma_addr_t dma;
 	ns_tsi *base;
 	ns_tsi *next;
 	ns_tsi *last;
@@ -678,7 +678,7 @@ typedef struct scq_info {
 
 typedef struct rsq_info {
 	void *org;
-        dma_addr_t dma;
+	dma_addr_t dma;
 	ns_rsqe *base;
 	ns_rsqe *next;
 	ns_rsqe *last;
@@ -690,7 +690,7 @@ typedef struct skb_pool {
 } skb_pool;
 
 /* NOTE: for small and large buffer pools, the count is not used, as the
-         actual value used for buffer management is the one read from the
+	 actual value used for buffer management is the one read from the
 	 card. */
 
 typedef struct vc_map {
@@ -739,7 +739,7 @@ typedef struct ns_dev {
 	struct sk_buff *lg_handle;
 	u32 lg_addr;
 	struct sk_buff *rcbuf;	/* Current raw cell buffer */
-        struct ns_rcqe *rawcell;
+	struct ns_rcqe *rawcell;
 	u32 rawch;		/* Raw cell queue head */
 	unsigned intcnt;	/* Interrupt counter */
 	spinlock_t int_lock;	/* Interrupt lock */

@@ -78,13 +78,13 @@ static int sdstd_card_enablefuncs(sdioh_info_t *sd);
 static void sdstd_cmd_getrsp(sdioh_info_t *sd, uint32 *rsp_buffer, int count);
 static int sdstd_cmd_issue(sdioh_info_t *sd, bool use_dma, uint32 cmd, uint32 arg);
 static int sdstd_card_regread(sdioh_info_t *sd, int func, uint32 regaddr,
-                              int regsize, uint32 *data);
+			      int regsize, uint32 *data);
 static int sdstd_card_regwrite(sdioh_info_t *sd, int func, uint32 regaddr,
-                               int regsize, uint32 data);
+			       int regsize, uint32 data);
 static int sdstd_driver_init(sdioh_info_t *sd);
 static bool sdstd_reset(sdioh_info_t *sd, bool host_reset, bool client_reset);
 static int sdstd_card_buf(sdioh_info_t *sd, int rw, int func, bool fifo,
-                          uint32 addr, int nbytes, uint32 *data);
+			  uint32 addr, int nbytes, uint32 *data);
 static int sdstd_abort(sdioh_info_t *sd, uint func);
 static int sdstd_check_errs(sdioh_info_t *sdioh_info, uint32 cmd, uint32 arg);
 static int set_client_block_size(sdioh_info_t *sd, int func, int blocksize);
@@ -93,8 +93,8 @@ static void sd_unmap_dma(sdioh_info_t * sd);
 static void sd_clear_adma_dscr_buf(sdioh_info_t *sd);
 static void sd_fill_dma_data_buf(sdioh_info_t *sd, uint8 data);
 static void sd_create_adma_descriptor(sdioh_info_t *sd,
-                                      uint32 index, uint32 addr_phys,
-                                      uint16 length, uint16 flags);
+				      uint32 index, uint32 addr_phys,
+				      uint16 length, uint16 flags);
 static void sd_dump_adma_dscr(sdioh_info_t *sd);
 static void sdstd_dumpregs(sdioh_info_t *sd);
 
@@ -379,7 +379,7 @@ const bcm_iovar_t sdioh_iovars[] = {
 
 int
 sdioh_iovar_op(sdioh_info_t *si, const char *name,
-               void *params, int plen, void *arg, int len, bool set)
+	       void *params, int plen, void *arg, int len, bool set)
 {
 	const bcm_iovar_t *vi = NULL;
 	int bcmerror = 0;
@@ -806,7 +806,7 @@ sdioh_request_byte(sdioh_info_t *sd, uint rw, uint func, uint regaddr, uint8 *by
 
 extern SDIOH_API_RC
 sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint addr,
-                   uint32 *word, uint nbytes)
+		   uint32 *word, uint nbytes)
 {
 	int status;
 	bool swap = FALSE;
@@ -829,7 +829,7 @@ sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint add
 
 extern SDIOH_API_RC
 sdioh_request_buffer(sdioh_info_t *sd, uint pio_dma, uint fix_inc, uint rw, uint func,
-                     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
+		     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
 {
 	int len;
 	int buflen = (int)buflen_u;
@@ -2988,7 +2988,7 @@ static void sd_fill_dma_data_buf(sdioh_info_t *sd, uint8 data)
 
 
 static void sd_create_adma_descriptor(sdioh_info_t *sd, uint32 index,
-                                      uint32 addr_phys, uint16 length, uint16 flags)
+				      uint32 addr_phys, uint16 length, uint16 flags)
 {
 	adma2_dscr_32b_t *adma2_dscr_table;
 	adma1_dscr_t *adma1_dscr_table;

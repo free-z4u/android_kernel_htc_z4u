@@ -550,8 +550,8 @@ static void __init
 dino_fixup_bus(struct pci_bus *bus)
 {
 	struct list_head *ln;
-        struct pci_dev *dev;
-        struct dino_device *dino_dev = DINO_DEV(parisc_walk_tree(bus->bridge));
+	struct pci_dev *dev;
+	struct dino_device *dino_dev = DINO_DEV(parisc_walk_tree(bus->bridge));
 
 	DBG(KERN_WARNING "%s(0x%p) bus %d platform_data 0x%p\n",
 	    __func__, bus, bus->secondary,

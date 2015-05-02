@@ -223,7 +223,7 @@ struct mode_registers {
 };
 
 struct heap_data {
-        unsigned long physical;
+	unsigned long physical;
 	__u8 __iomem *virtual;
 	u32 offset;
 	u32 size;

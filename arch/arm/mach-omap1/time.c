@@ -102,7 +102,7 @@ static inline void omap_mpu_timer_start(int nr, unsigned long load_val,
 	writel(MPU_TIMER_CLOCK_ENABLE, &timer->cntl);
 	udelay(1);
 	writel(load_val, &timer->load_tim);
-        udelay(1);
+	udelay(1);
 	writel(timerflags, &timer->cntl);
 }
 

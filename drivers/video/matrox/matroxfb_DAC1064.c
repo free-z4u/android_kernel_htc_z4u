@@ -837,11 +837,11 @@ static void g450_preinit(struct matrox_fb_info *minfo)
 static int MGAG100_preinit(struct matrox_fb_info *minfo)
 {
 	static const int vxres_g100[] = {  512,        640, 768,  800,  832,  960,
-                                          1024, 1152, 1280,      1600, 1664, 1920,
-                                          2048, 0};
+					  1024, 1152, 1280,      1600, 1664, 1920,
+					  2048, 0};
 	struct matrox_hw_state *hw = &minfo->hw;
 
-        u_int32_t reg50;
+	u_int32_t reg50;
 #if 0
 	u_int32_t q;
 #endif

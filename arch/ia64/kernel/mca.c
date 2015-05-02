@@ -494,23 +494,23 @@ ia64_mca_log_sal_error_record(int sal_info_type)
  */
 int
 search_mca_table (const struct mca_table_entry *first,
-                const struct mca_table_entry *last,
-                unsigned long ip)
+		const struct mca_table_entry *last,
+		unsigned long ip)
 {
-        const struct mca_table_entry *curr;
-        u64 curr_start, curr_end;
+	const struct mca_table_entry *curr;
+	u64 curr_start, curr_end;
 
-        curr = first;
-        while (curr <= last) {
-                curr_start = (u64) &curr->start_addr + curr->start_addr;
-                curr_end = (u64) &curr->end_addr + curr->end_addr;
+	curr = first;
+	while (curr <= last) {
+		curr_start = (u64) &curr->start_addr + curr->start_addr;
+		curr_end = (u64) &curr->end_addr + curr->end_addr;
 
-                if ((ip >= curr_start) && (ip <= curr_end)) {
-                        return 1;
-                }
-                curr++;
-        }
-        return 0;
+		if ((ip >= curr_start) && (ip <= curr_end)) {
+			return 1;
+		}
+		curr++;
+	}
+	return 0;
 }
 
 /* Given an address, look for it in the mca tables. */

@@ -40,15 +40,15 @@ asmlinkage __wsum csum_partial(const void *buff, int len, __wsum sum);
  * better 64-bit) boundary
  */
 extern __wsum csum_partial_copy_nocheck(const void *src, void *dst,
-                                              int len, __wsum sum);
+					      int len, __wsum sum);
 
 /*
  * This is a new version of the above that records errors it finds in *errp,
  * but continues and zeros thre rest of the buffer.
  */
 extern __wsum csum_partial_copy_from_user(const void __user *src, void *dst,
-                                                int len, __wsum sum,
-                                                int *err_ptr);
+						int len, __wsum sum,
+						int *err_ptr);
 
 /*
  *	Fold a partial checksum

@@ -403,7 +403,7 @@ static ssize_t event_file_read(struct file *file, char __user *buf, size_t count
 		goto out;
 	}
 
-        if (copy_to_user(buf, reader->data, reader->data_size)) {
+	if (copy_to_user(buf, reader->data, reader->data_size)) {
 		ret = -EFAULT;
 		goto out;
 	}

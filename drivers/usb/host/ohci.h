@@ -672,14 +672,14 @@ static inline u16 ohci_frame_no(const struct ohci_hcd *ohci)
 }
 
 static inline __hc16 *ohci_hwPSWp(const struct ohci_hcd *ohci,
-                                 const struct td *td, int index)
+				 const struct td *td, int index)
 {
 	return (__hc16 *)(big_endian_desc(ohci) ?
 			&td->hwPSW[index ^ 1] : &td->hwPSW[index]);
 }
 
 static inline u16 ohci_hwPSW(const struct ohci_hcd *ohci,
-                               const struct td *td, int index)
+			       const struct td *td, int index)
 {
 	return hc16_to_cpup(ohci, ohci_hwPSWp(ohci, td, index));
 }

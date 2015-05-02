@@ -41,7 +41,7 @@
 
 struct vga16fb_par {
 	/* structure holding original VGA register settings when the
-           screen is blanked */
+	   screen is blanked */
 	struct {
 		unsigned char	SeqCtrlIndex;	  /* Sequencer Index reg.   */
 		unsigned char	CrtCtrlIndex;	  /* CRT-Contr. Index reg.  */
@@ -473,7 +473,7 @@ static int vga16fb_check_var(struct fb_var_screeninfo *var,
 	par->crtc[VGA_CRTC_V_SYNC_END] = (pos & 0x0F) & ~0x10; /* disabled IRQ */
 	pos += upper - 1; /* blank_end + 1 <= ytotal + 2 */
 	par->crtc[VGA_CRTC_V_BLANK_END] = pos & 0xFF; /* 0x7F for original VGA,
-                     but some SVGA chips requires all 8 bits to set */
+		     but some SVGA chips requires all 8 bits to set */
 	if (vxres >= 512)
 		FAIL("vxres too long");
 	par->crtc[VGA_CRTC_OFFSET] = vxres >> 1;
@@ -827,55 +827,55 @@ static int vga16fb_blank(int blank, struct fb_info *info)
 static void vga_8planes_fillrect(struct fb_info *info, const struct fb_fillrect *rect)
 {
 	u32 dx = rect->dx, width = rect->width;
-        char oldindex = getindex();
-        char oldmode = setmode(0x40);
-        char oldmask = selectmask();
-        int line_ofs, height;
-        char oldop, oldsr;
-        char __iomem *where;
+	char oldindex = getindex();
+	char oldmode = setmode(0x40);
+	char oldmask = selectmask();
+	int line_ofs, height;
+	char oldop, oldsr;
+	char __iomem *where;
 
-        dx /= 4;
-        where = info->screen_base + dx + rect->dy * info->fix.line_length;
+	dx /= 4;
+	where = info->screen_base + dx + rect->dy * info->fix.line_length;
 
-        if (rect->rop == ROP_COPY) {
-                oldop = setop(0);
-                oldsr = setsr(0);
+	if (rect->rop == ROP_COPY) {
+		oldop = setop(0);
+		oldsr = setsr(0);
 
-                width /= 4;
-                line_ofs = info->fix.line_length - width;
-                setmask(0xff);
+		width /= 4;
+		line_ofs = info->fix.line_length - width;
+		setmask(0xff);
 
-                height = rect->height;
+		height = rect->height;
 
-                while (height--) {
-                        int x;
+		while (height--) {
+			int x;
 
-                        /* we can do memset... */
-                        for (x = width; x > 0; --x) {
-                                writeb(rect->color, where);
-                                where++;
-                        }
-                        where += line_ofs;
-                }
-        } else {
-                char oldcolor = setcolor(0xf);
-                int y;
+			/* we can do memset... */
+			for (x = width; x > 0; --x) {
+				writeb(rect->color, where);
+				where++;
+			}
+			where += line_ofs;
+		}
+	} else {
+		char oldcolor = setcolor(0xf);
+		int y;
 
-                oldop = setop(0x18);
-                oldsr = setsr(0xf);
-                setmask(0x0F);
-                for (y = 0; y < rect->height; y++) {
-                        rmw(where);
-                        rmw(where+1);
-                        where += info->fix.line_length;
-                }
-                setcolor(oldcolor);
-        }
-        setmask(oldmask);
-        setsr(oldsr);
-        setop(oldop);
-        setmode(oldmode);
-        setindex(oldindex);
+		oldop = setop(0x18);
+		oldsr = setsr(0xf);
+		setmask(0x0F);
+		for (y = 0; y < rect->height; y++) {
+			rmw(where);
+			rmw(where+1);
+			where += info->fix.line_length;
+		}
+		setcolor(oldcolor);
+	}
+	setmask(oldmask);
+	setsr(oldsr);
+	setop(oldop);
+	setmode(oldmode);
+	setindex(oldindex);
 }
 
 static void vga16fb_fillrect(struct fb_info *info, const struct fb_fillrect *rect)
@@ -955,57 +955,57 @@ static void vga16fb_fillrect(struct fb_info *info, const struct fb_fillrect *rec
 
 static void vga_8planes_copyarea(struct fb_info *info, const struct fb_copyarea *area)
 {
-        char oldindex = getindex();
-        char oldmode = setmode(0x41);
-        char oldop = setop(0);
-        char oldsr = setsr(0xf);
-        int height, line_ofs, x;
+	char oldindex = getindex();
+	char oldmode = setmode(0x41);
+	char oldop = setop(0);
+	char oldsr = setsr(0xf);
+	int height, line_ofs, x;
 	u32 sx, dx, width;
 	char __iomem *dest;
 	char __iomem *src;
 
-        height = area->height;
+	height = area->height;
 
-        sx = area->sx / 4;
-        dx = area->dx / 4;
-        width = area->width / 4;
+	sx = area->sx / 4;
+	dx = area->dx / 4;
+	width = area->width / 4;
 
-        if (area->dy < area->sy || (area->dy == area->sy && dx < sx)) {
-                line_ofs = info->fix.line_length - width;
-                dest = info->screen_base + dx + area->dy * info->fix.line_length;
-                src = info->screen_base + sx + area->sy * info->fix.line_length;
-                while (height--) {
-                        for (x = 0; x < width; x++) {
-                                readb(src);
-                                writeb(0, dest);
-                                src++;
-                                dest++;
-                        }
-                        src += line_ofs;
-                        dest += line_ofs;
-                }
-        } else {
-                line_ofs = info->fix.line_length - width;
-                dest = info->screen_base + dx + width +
+	if (area->dy < area->sy || (area->dy == area->sy && dx < sx)) {
+		line_ofs = info->fix.line_length - width;
+		dest = info->screen_base + dx + area->dy * info->fix.line_length;
+		src = info->screen_base + sx + area->sy * info->fix.line_length;
+		while (height--) {
+			for (x = 0; x < width; x++) {
+				readb(src);
+				writeb(0, dest);
+				src++;
+				dest++;
+			}
+			src += line_ofs;
+			dest += line_ofs;
+		}
+	} else {
+		line_ofs = info->fix.line_length - width;
+		dest = info->screen_base + dx + width +
 			(area->dy + height - 1) * info->fix.line_length;
-                src = info->screen_base + sx + width +
+		src = info->screen_base + sx + width +
 			(area->sy + height - 1) * info->fix.line_length;
-                while (height--) {
-                        for (x = 0; x < width; x++) {
-                                --src;
-                                --dest;
-                                readb(src);
-                                writeb(0, dest);
-                        }
-                        src -= line_ofs;
-                        dest -= line_ofs;
-                }
-        }
+		while (height--) {
+			for (x = 0; x < width; x++) {
+				--src;
+				--dest;
+				readb(src);
+				writeb(0, dest);
+			}
+			src -= line_ofs;
+			dest -= line_ofs;
+		}
+	}
 
-        setsr(oldsr);
-        setop(oldop);
-        setmode(oldmode);
-        setindex(oldindex);
+	setsr(oldsr);
+	setop(oldop);
+	setmode(oldmode);
+	setindex(oldindex);
 }
 
 static void vga16fb_copyarea(struct fb_info *info, const struct fb_copyarea *area)
@@ -1117,33 +1117,33 @@ static const u16 transl_h[] = TRANS_MASK_LOW;
 
 static void vga_8planes_imageblit(struct fb_info *info, const struct fb_image *image)
 {
-        char oldindex = getindex();
-        char oldmode = setmode(0x40);
-        char oldop = setop(0);
-        char oldsr = setsr(0);
-        char oldmask = selectmask();
-        const char *cdat = image->data;
+	char oldindex = getindex();
+	char oldmode = setmode(0x40);
+	char oldop = setop(0);
+	char oldsr = setsr(0);
+	char oldmask = selectmask();
+	const char *cdat = image->data;
 	u32 dx = image->dx;
-        char __iomem *where;
-        int y;
+	char __iomem *where;
+	int y;
 
-        dx /= 4;
-        where = info->screen_base + dx + image->dy * info->fix.line_length;
+	dx /= 4;
+	where = info->screen_base + dx + image->dy * info->fix.line_length;
 
-        setmask(0xff);
-        writeb(image->bg_color, where);
-        readb(where);
-        selectmask();
-        setmask(image->fg_color ^ image->bg_color);
-        setmode(0x42);
-        setop(0x18);
-        for (y = 0; y < image->height; y++, where += info->fix.line_length)
-                writew(transl_h[cdat[y]&0xF] | transl_l[cdat[y] >> 4], where);
-        setmask(oldmask);
-        setsr(oldsr);
-        setop(oldop);
-        setmode(oldmode);
-        setindex(oldindex);
+	setmask(0xff);
+	writeb(image->bg_color, where);
+	readb(where);
+	selectmask();
+	setmask(image->fg_color ^ image->bg_color);
+	setmode(0x42);
+	setop(0x18);
+	for (y = 0; y < image->height; y++, where += info->fix.line_length)
+		writew(transl_h[cdat[y]&0xF] | transl_l[cdat[y] >> 4], where);
+	setmask(oldmask);
+	setsr(oldsr);
+	setop(oldop);
+	setmode(oldmode);
+	setindex(oldindex);
 }
 
 static void vga_imageblit_expand(struct fb_info *info, const struct fb_image *image)

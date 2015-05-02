@@ -55,7 +55,7 @@ struct user{
   struct pt_regs regs;		/* Where the registers are actually stored */
 /* ptrace does not yet supply these.  Someday.... */
   int u_fpvalid;		/* True if math co-processor being used. */
-                                /* for this mess. Not yet used. */
+				/* for this mess. Not yet used. */
 /* The rest of this junk is to help gdb figure out what goes where */
   unsigned long int u_tsize;	/* Text segment size (pages). */
   unsigned long int u_dsize;	/* Data segment size (pages). */

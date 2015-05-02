@@ -764,14 +764,14 @@ static void complete_scsi_command(CommandList_struct *c, int timeout,
 			case CMD_TARGET_STATUS:
 				/* Pass it up to the upper layers... */
 				if( ei->ScsiStatus)
-                		{
+				{
 #if 0
-                    			printk(KERN_WARNING "cciss: cmd %p "
+		    			printk(KERN_WARNING "cciss: cmd %p "
 						"has SCSI Status = %x\n",
 						c, ei->ScsiStatus);
 #endif
 					cmd->result |= (ei->ScsiStatus << 1);
-                		}
+				}
 				else {  /* scsi status is zero??? How??? */
 
 	/* Ordinarily, this case should never happen, but there is a bug
@@ -806,12 +806,12 @@ static void complete_scsi_command(CommandList_struct *c, int timeout,
 			case CMD_PROTOCOL_ERR:
 				dev_warn(&h->pdev->dev,
 					"%p has protocol error\n", c);
-                        break;
+			break;
 			case CMD_HARDWARE_ERR:
 				cmd->result = DID_ERROR << 16;
 				dev_warn(&h->pdev->dev,
 					"%p had hardware error\n", c);
-                        break;
+			break;
 			case CMD_CONNECTION_LOST:
 				cmd->result = DID_ERROR << 16;
 				dev_warn(&h->pdev->dev,
@@ -1168,9 +1168,9 @@ cciss_update_non_disk_devices(ctlr_info_t *h, int hostno)
 	   Also, if you yank out a tape drive, then put in a disk
 	   in it's place, (say, a configured volume from another
 	   array controller for instance)  _don't_ poke this driver
-           (so it thinks it's still a tape, but _do_ poke the scsi
-           mid layer, so it does an inquiry... the scsi mid layer
-           will see the physical disk.  This would be bad.  Need to
+	   (so it thinks it's still a tape, but _do_ poke the scsi
+	   mid layer, so it does an inquiry... the scsi mid layer
+	   will see the physical disk.  This would be bad.  Need to
 	   think about how to prevent that.  One idea would be to
 	   snoop all scsi responses and if an inquiry repsonse comes
 	   back that reports a disk, chuck it an return selection
@@ -1446,7 +1446,7 @@ cciss_scsi_queue_command_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmn
 	}
 
 	/* Ok, we have a reasonable scsi nexus, so send the cmd down, and
-           see what the device thinks of it. */
+	   see what the device thinks of it. */
 
 	spin_lock_irqsave(&h->lock, flags);
 	c = scsi_cmd_alloc(h);

@@ -108,8 +108,8 @@ static const u16 crc_table[] = {
    Update crc with next data byte
 
    Implementation note
-        The data byte is treated as two nibbles.  The crc is generated
-        in reverse, i.e., bits are fed into the register from the top.
+	The data byte is treated as two nibbles.  The crc is generated
+	in reverse, i.e., bits are fed into the register from the top.
 */
 static void bcsp_crc_update(u16 *crc, u8 d)
 {

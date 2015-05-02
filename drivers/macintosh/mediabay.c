@@ -215,8 +215,8 @@ keylargo_mb_power(struct media_bay_info* bay, int on_off)
 {
 	if (on_off) {
 		/* Power up device, assert it's reset line */
-            	MB_BIC(bay, KEYLARGO_MBCR, KL_MBCR_MB0_DEV_RESET);
-            	MB_BIC(bay, KEYLARGO_MBCR, KL_MBCR_MB0_DEV_POWER);
+	    	MB_BIC(bay, KEYLARGO_MBCR, KL_MBCR_MB0_DEV_RESET);
+	    	MB_BIC(bay, KEYLARGO_MBCR, KL_MBCR_MB0_DEV_POWER);
 	} else {
 		/* Disable all devices */
 		MB_BIC(bay, KEYLARGO_MBCR, KL_MBCR_MB0_DEV_MASK);
@@ -571,9 +571,9 @@ static int __devinit media_bay_attach(struct macio_dev *mdev, const struct of_de
 	if (macio_request_resources(mdev, "media-bay"))
 		return -EBUSY;
 	/* Media bay registers are located at the beginning of the
-         * mac-io chip, for now, we trick and align down the first
+	 * mac-io chip, for now, we trick and align down the first
 	 * resource passed in
-         */
+	 */
 	base = macio_resource_start(mdev, 0) & 0xffff0000u;
 	regbase = (u32 __iomem *)ioremap(base, 0x100);
 	if (regbase == NULL) {

@@ -15,7 +15,7 @@
   <name>: name of the device that will be listed in /proc/mtd
   <start>: start of the memory region, decimal or hex (0xabcdef)
   <end/offset>: end of the memory region. It's possible to use +0x1234
-                to specify the offset instead of the absolute address
+		to specify the offset instead of the absolute address
 
   NOTE:
   With slram it's only possible to map a contiguous memory region. Therefore

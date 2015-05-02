@@ -90,7 +90,7 @@ static __inline unsigned int
 get_BrOff_X1(tilegx_bundle_bits n)
 {
   return (((unsigned int)(n >> 31)) & 0x0000003f) |
-         (((unsigned int)(n >> 37)) & 0x0001ffc0);
+	 (((unsigned int)(n >> 37)) & 0x0001ffc0);
 }
 
 static __inline unsigned int
@@ -103,7 +103,7 @@ static __inline unsigned int
 get_Dest_Imm8_X1(tilegx_bundle_bits n)
 {
   return (((unsigned int)(n >> 31)) & 0x0000003f) |
-         (((unsigned int)(n >> 43)) & 0x000000c0);
+	 (((unsigned int)(n >> 43)) & 0x000000c0);
 }
 
 static __inline unsigned int
@@ -206,7 +206,7 @@ static __inline unsigned int
 get_MT_Imm14_X1(tilegx_bundle_bits n)
 {
   return (((unsigned int)(n >> 31)) & 0x0000003f) |
-         (((unsigned int)(n >> 37)) & 0x00003fc0);
+	 (((unsigned int)(n >> 37)) & 0x00003fc0);
 }
 
 static __inline unsigned int
@@ -245,7 +245,7 @@ static __inline unsigned int
 get_Opcode_Y2(tilegx_bundle_bits n)
 {
   return (((n >> 26)) & 0x00000001) |
-         (((unsigned int)(n >> 56)) & 0x00000002);
+	 (((unsigned int)(n >> 56)) & 0x00000002);
 }
 
 static __inline unsigned int
@@ -453,7 +453,7 @@ create_BrOff_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilegx_bundle_bits)(n & 0x0000003f)) << 31) |
-         (((tilegx_bundle_bits)(n & 0x0001ffc0)) << 37);
+	 (((tilegx_bundle_bits)(n & 0x0001ffc0)) << 37);
 }
 
 static __inline tilegx_bundle_bits
@@ -468,7 +468,7 @@ create_Dest_Imm8_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilegx_bundle_bits)(n & 0x0000003f)) << 31) |
-         (((tilegx_bundle_bits)(n & 0x000000c0)) << 43);
+	 (((tilegx_bundle_bits)(n & 0x000000c0)) << 43);
 }
 
 static __inline tilegx_bundle_bits
@@ -581,7 +581,7 @@ create_MT_Imm14_X1(int num)
 {
   const unsigned int n = (unsigned int)num;
   return (((tilegx_bundle_bits)(n & 0x0000003f)) << 31) |
-         (((tilegx_bundle_bits)(n & 0x00003fc0)) << 37);
+	 (((tilegx_bundle_bits)(n & 0x00003fc0)) << 37);
 }
 
 static __inline tilegx_bundle_bits
@@ -624,7 +624,7 @@ create_Opcode_Y2(int num)
 {
   const unsigned int n = (unsigned int)num;
   return ((n & 0x00000001) << 26) |
-         (((tilegx_bundle_bits)(n & 0x00000002)) << 56);
+	 (((tilegx_bundle_bits)(n & 0x00000002)) << 56);
 }
 
 static __inline tilegx_bundle_bits

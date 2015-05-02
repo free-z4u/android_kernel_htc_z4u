@@ -235,8 +235,8 @@ static int __init pci_versatile_setup_resources(struct pci_sys_data *sys)
 int __init pci_versatile_setup(int nr, struct pci_sys_data *sys)
 {
 	int ret = 0;
-        int i;
-        int myslot = -1;
+	int i;
+	int myslot = -1;
 	unsigned long val;
 	void __iomem *local_pci_cfg_base;
 

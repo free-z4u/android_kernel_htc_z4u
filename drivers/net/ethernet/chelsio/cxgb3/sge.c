@@ -2860,8 +2860,8 @@ static void sge_timer_tx(unsigned long data)
 	unsigned long next_period;
 
 	if (__netif_tx_trylock(qs->tx_q)) {
-                tbd[TXQ_ETH] = reclaim_completed_tx(adap, &qs->txq[TXQ_ETH],
-                                                     TX_RECLAIM_TIMER_CHUNK);
+		tbd[TXQ_ETH] = reclaim_completed_tx(adap, &qs->txq[TXQ_ETH],
+						     TX_RECLAIM_TIMER_CHUNK);
 		__netif_tx_unlock(qs->tx_q);
 	}
 
@@ -2872,8 +2872,8 @@ static void sge_timer_tx(unsigned long data)
 	}
 
 	next_period = TX_RECLAIM_PERIOD >>
-                      (max(tbd[TXQ_ETH], tbd[TXQ_OFLD]) /
-                      TX_RECLAIM_TIMER_CHUNK);
+		      (max(tbd[TXQ_ETH], tbd[TXQ_OFLD]) /
+		      TX_RECLAIM_TIMER_CHUNK);
 	mod_timer(&qs->tx_reclaim_timer, jiffies + next_period);
 }
 

@@ -52,7 +52,7 @@ struct GAYLE {
 #define GAYLE_ADDRESS	(0xda8000)	/* gayle main registers base address */
 
 #define GAYLE_RESET	(0xa40000)	/* write 0x00 to start reset,
-                                           read 1 byte to stop reset */
+					   read 1 byte to stop reset */
 
 #define gayle (*(volatile struct GAYLE *)(zTwoBase+GAYLE_ADDRESS))
 #define gayle_reset (*(volatile u_char *)(zTwoBase+GAYLE_RESET))

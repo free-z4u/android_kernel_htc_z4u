@@ -2074,7 +2074,7 @@ do {								\
 	_align_nr = RADEON_RING_ALIGN - ((dev_priv->ring.tail + n) & (RADEON_RING_ALIGN-1));	\
 	_align_nr += n;							\
 	if (dev_priv->ring.space <= (_align_nr * sizeof(u32))) {	\
-                COMMIT_RING();						\
+		COMMIT_RING();						\
 		radeon_wait_ring( dev_priv, _align_nr * sizeof(u32));	\
 	}								\
 	_nr = n; dev_priv->ring.space -= (n) * sizeof(u32);		\

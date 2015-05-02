@@ -156,7 +156,7 @@ static int jread(struct buffer_head **bhp, journal_t *journal,
 
 	if (!buffer_uptodate(bh)) {
 		/* If this is a brand new buffer, start readahead.
-                   Otherwise, we assume we are already reading it.  */
+		   Otherwise, we assume we are already reading it.  */
 		if (!buffer_req(bh))
 			do_readahead(journal, offset);
 		wait_on_buffer(bh);

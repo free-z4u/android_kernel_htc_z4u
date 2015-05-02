@@ -400,7 +400,7 @@ int yaffs_checkpt_close(struct yaffs_dev *dev)
 		return 1;
 	} else {
 		return 0;
-        }
+	}
 }
 
 int yaffs2_checkpt_invalidate_stream(struct yaffs_dev *dev)

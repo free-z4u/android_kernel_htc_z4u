@@ -380,8 +380,8 @@ minstrel_aggr_check(struct ieee80211_sta *pubsta, struct sk_buff *skb)
 
 static void
 minstrel_ht_tx_status(void *priv, struct ieee80211_supported_band *sband,
-                      struct ieee80211_sta *sta, void *priv_sta,
-                      struct sk_buff *skb)
+		      struct ieee80211_sta *sta, void *priv_sta,
+		      struct sk_buff *skb)
 {
 	struct minstrel_ht_sta_priv *msp = priv_sta;
 	struct minstrel_ht_sta *mi = &msp->ht;
@@ -460,7 +460,7 @@ minstrel_ht_tx_status(void *priv, struct ieee80211_supported_band *sband,
 
 static void
 minstrel_calc_retransmit(struct minstrel_priv *mp, struct minstrel_ht_sta *mi,
-                         int index)
+			 int index)
 {
 	struct minstrel_rate_stats *mr;
 	const struct mcs_group *group;
@@ -513,8 +513,8 @@ minstrel_calc_retransmit(struct minstrel_priv *mp, struct minstrel_ht_sta *mi,
 
 static void
 minstrel_ht_set_rate(struct minstrel_priv *mp, struct minstrel_ht_sta *mi,
-                     struct ieee80211_tx_rate *rate, int index,
-                     bool sample, bool rtscts)
+		     struct ieee80211_tx_rate *rate, int index,
+		     bool sample, bool rtscts)
 {
 	const struct mcs_group *group = &minstrel_mcs_groups[index / MCS_GROUP_RATES];
 	struct minstrel_rate_stats *mr;
@@ -599,7 +599,7 @@ minstrel_get_sample_rate(struct minstrel_priv *mp, struct minstrel_ht_sta *mi)
 
 static void
 minstrel_ht_get_rate(void *priv, struct ieee80211_sta *sta, void *priv_sta,
-                     struct ieee80211_tx_rate_control *txrc)
+		     struct ieee80211_tx_rate_control *txrc)
 {
 	struct ieee80211_tx_info *info = IEEE80211_SKB_CB(txrc->skb);
 	struct ieee80211_tx_rate *ar = info->status.rates;
@@ -686,7 +686,7 @@ minstrel_ht_get_rate(void *priv, struct ieee80211_sta *sta, void *priv_sta,
 
 static void
 minstrel_ht_update_caps(void *priv, struct ieee80211_supported_band *sband,
-                        struct ieee80211_sta *sta, void *priv_sta,
+			struct ieee80211_sta *sta, void *priv_sta,
 			enum nl80211_channel_type oper_chan_type)
 {
 	struct minstrel_priv *mp = priv;
@@ -786,7 +786,7 @@ use_legacy:
 
 static void
 minstrel_ht_rate_init(void *priv, struct ieee80211_supported_band *sband,
-                      struct ieee80211_sta *sta, void *priv_sta)
+		      struct ieee80211_sta *sta, void *priv_sta)
 {
 	struct minstrel_priv *mp = priv;
 
@@ -795,8 +795,8 @@ minstrel_ht_rate_init(void *priv, struct ieee80211_supported_band *sband,
 
 static void
 minstrel_ht_rate_update(void *priv, struct ieee80211_supported_band *sband,
-                        struct ieee80211_sta *sta, void *priv_sta,
-                        u32 changed, enum nl80211_channel_type oper_chan_type)
+			struct ieee80211_sta *sta, void *priv_sta,
+			u32 changed, enum nl80211_channel_type oper_chan_type)
 {
 	minstrel_ht_update_caps(priv, sband, sta, priv_sta, oper_chan_type);
 }

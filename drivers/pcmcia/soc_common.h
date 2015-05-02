@@ -74,12 +74,12 @@ struct skt_dev_info {
 
 struct pcmcia_state {
   unsigned detect: 1,
-            ready: 1,
-             bvd1: 1,
-             bvd2: 1,
-           wrprot: 1,
-            vs_3v: 1,
-            vs_Xv: 1;
+	    ready: 1,
+	     bvd1: 1,
+	     bvd2: 1,
+	   wrprot: 1,
+	    vs_3v: 1,
+	    vs_Xv: 1;
 };
 
 struct pcmcia_low_level {

@@ -114,9 +114,9 @@ struct ceph_osd_event {
 struct ceph_osd_event_work {
 	struct work_struct work;
 	struct ceph_osd_event *event;
-        u64 ver;
-        u64 notify_id;
-        u8 opcode;
+	u64 ver;
+	u64 notify_id;
+	u8 opcode;
 };
 
 struct ceph_osd_client {

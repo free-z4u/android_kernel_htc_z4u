@@ -564,7 +564,7 @@ void journal_commit_transaction(journal_t *journal)
 			wbuf[bufs++] = bh;
 
 			/* Record it so that we can wait for IO
-                           completion later */
+			   completion later */
 			BUFFER_TRACE(bh, "ph3: file as descriptor");
 			journal_file_buffer(descriptor, commit_transaction,
 					BJ_LogCtl);
@@ -589,13 +589,13 @@ void journal_commit_transaction(journal_t *journal)
 		commit_transaction->t_outstanding_credits--;
 
 		/* Bump b_count to prevent truncate from stumbling over
-                   the shadowed buffer!  @@@ This can go if we ever get
-                   rid of the BJ_IO/BJ_Shadow pairing of buffers. */
+		   the shadowed buffer!  @@@ This can go if we ever get
+		   rid of the BJ_IO/BJ_Shadow pairing of buffers. */
 		get_bh(jh2bh(jh));
 
 		/* Make a temporary IO buffer with which to write it out
-                   (this will requeue both the metadata buffer and the
-                   temporary IO buffer). new_bh goes on BJ_IO*/
+		   (this will requeue both the metadata buffer and the
+		   temporary IO buffer). new_bh goes on BJ_IO*/
 
 		set_buffer_jwrite(jh2bh(jh));
 		/*
@@ -611,7 +611,7 @@ void journal_commit_transaction(journal_t *journal)
 		wbuf[bufs++] = jh2bh(new_jh);
 
 		/* Record the new block's tag in the current descriptor
-                   buffer */
+		   buffer */
 
 		tag_flag = 0;
 		if (flags & 1)
@@ -642,8 +642,8 @@ void journal_commit_transaction(journal_t *journal)
 			jbd_debug(4, "JBD: Submit %d IOs\n", bufs);
 
 			/* Write an end-of-descriptor marker before
-                           submitting the IOs.  "tag" still points to
-                           the last tag we set up. */
+			   submitting the IOs.  "tag" still points to
+			   the last tag we set up. */
 
 			tag->t_flags |= cpu_to_be32(JFS_FLAG_LAST_TAG);
 
@@ -659,7 +659,7 @@ start_journal_io:
 			cond_resched();
 
 			/* Force a new descriptor to be generated next
-                           time round the loop. */
+			   time round the loop. */
 			descriptor = NULL;
 			bufs = 0;
 		}
@@ -668,10 +668,10 @@ start_journal_io:
 	blk_finish_plug(&plug);
 
 	/* Lo and behold: we have just managed to send a transaction to
-           the log.  Before we can commit it, wait for the IO so far to
-           complete.  Control buffers being written are on the
-           transaction's t_log_list queue, and metadata buffers are on
-           the t_iobuf_list queue.
+	   the log.  Before we can commit it, wait for the IO so far to
+	   complete.  Control buffers being written are on the
+	   transaction's t_log_list queue, and metadata buffers are on
+	   the t_iobuf_list queue.
 
 	   Wait for the buffers in reverse order.  That way we are
 	   less likely to be woken up until all IOs have completed, and
@@ -716,16 +716,16 @@ wait_for_iobuf:
 		free_buffer_head(bh);
 
 		/* We also have to unlock and free the corresponding
-                   shadowed buffer */
+		   shadowed buffer */
 		jh = commit_transaction->t_shadow_list->b_tprev;
 		bh = jh2bh(jh);
 		clear_buffer_jwrite(bh);
 		J_ASSERT_BH(bh, buffer_jbddirty(bh));
 
 		/* The metadata is now released for reuse, but we need
-                   to remember it against this transaction so that when
-                   we finally commit, we can do any checkpointing
-                   required. */
+		   to remember it against this transaction so that when
+		   we finally commit, we can do any checkpointing
+		   required. */
 		JBUFFER_TRACE(jh, "file as BJ_Forget");
 		journal_file_buffer(jh, commit_transaction, BJ_Forget);
 		/*
@@ -787,9 +787,9 @@ wait_for_iobuf:
 		journal_abort(journal, err);
 
 	/* End of a transaction!  Finally, we can do checkpoint
-           processing: any buffers committed as a result of this
-           transaction can be removed from any checkpoint list it was on
-           before. */
+	   processing: any buffers committed as a result of this
+	   transaction can be removed from any checkpoint list it was on
+	   before. */
 
 	jbd_debug(3, "JBD: commit phase 7\n");
 

@@ -453,7 +453,7 @@ static void __devexit chipsfb_remove(struct pci_dev *dp)
 #ifdef CONFIG_PM
 static int chipsfb_pci_suspend(struct pci_dev *pdev, pm_message_t state)
 {
-        struct fb_info *p = pci_get_drvdata(pdev);
+	struct fb_info *p = pci_get_drvdata(pdev);
 
 	if (state.event == pdev->dev.power.power_state.event)
 		return 0;
@@ -471,7 +471,7 @@ static int chipsfb_pci_suspend(struct pci_dev *pdev, pm_message_t state)
 
 static int chipsfb_pci_resume(struct pci_dev *pdev)
 {
-        struct fb_info *p = pci_get_drvdata(pdev);
+	struct fb_info *p = pci_get_drvdata(pdev);
 
 	console_lock();
 	fb_set_suspend(p, 0);

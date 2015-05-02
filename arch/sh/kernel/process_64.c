@@ -51,12 +51,12 @@ void show_regs(struct pt_regs *regs)
 
 	ah = (regs->sr) >> 32;
 	al = (regs->sr) & 0xffffffff;
-        asm volatile ("getcon   " __TEA ", %0" : "=r" (bh));
-        asm volatile ("getcon   " __TEA ", %0" : "=r" (bl));
+	asm volatile ("getcon   " __TEA ", %0" : "=r" (bh));
+	asm volatile ("getcon   " __TEA ", %0" : "=r" (bl));
 	bh = (bh) >> 32;
 	bl = (bl) & 0xffffffff;
-        asm volatile ("getcon   " __KCR0 ", %0" : "=r" (ch));
-        asm volatile ("getcon   " __KCR0 ", %0" : "=r" (cl));
+	asm volatile ("getcon   " __KCR0 ", %0" : "=r" (ch));
+	asm volatile ("getcon   " __KCR0 ", %0" : "=r" (cl));
 	ch = (ch) >> 32;
 	cl = (cl) & 0xffffffff;
 	printk("SR  : %08Lx%08Lx TEA : %08Lx%08Lx KCR0: %08Lx%08Lx\n",
@@ -358,11 +358,11 @@ void flush_thread(void)
 #endif
 
 	/* if we are a kernel thread, about to change to user thread,
-         * update kreg
-         */
+	 * update kreg
+	 */
 	if(current->thread.kregs==&fake_swapper_regs) {
-          current->thread.kregs =
-             ((struct pt_regs *)(THREAD_SIZE + (unsigned long) current) - 1);
+	  current->thread.kregs =
+	     ((struct pt_regs *)(THREAD_SIZE + (unsigned long) current) - 1);
 	  current->thread.uregs = current->thread.kregs;
 	}
 }

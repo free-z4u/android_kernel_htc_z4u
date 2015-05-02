@@ -97,12 +97,12 @@ static inline void scsi_deactivate_tcq(struct scsi_device *sdev, int depth)
  **/
 static inline int scsi_populate_tag_msg(struct scsi_cmnd *cmd, char *msg)
 {
-        struct request *req = cmd->request;
+	struct request *req = cmd->request;
 
-        if (blk_rq_tagged(req)) {
+	if (blk_rq_tagged(req)) {
 		*msg++ = MSG_SIMPLE_TAG;
-        	*msg++ = req->tag;
-        	return 2;
+		*msg++ = req->tag;
+		return 2;
 	}
 
 	return 0;
@@ -119,10 +119,10 @@ static inline int scsi_populate_tag_msg(struct scsi_cmnd *cmd, char *msg)
 static inline struct scsi_cmnd *scsi_find_tag(struct scsi_device *sdev, int tag)
 {
 
-        struct request *req;
+	struct request *req;
 
-        if (tag != SCSI_NO_TAG) {
-        	req = blk_queue_find_tag(sdev->request_queue, tag);
+	if (tag != SCSI_NO_TAG) {
+		req = blk_queue_find_tag(sdev->request_queue, tag);
 	        return req ? (struct scsi_cmnd *)req->special : NULL;
 	}
 

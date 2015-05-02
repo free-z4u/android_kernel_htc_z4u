@@ -583,7 +583,7 @@ int snd_ak4114_check_rate_and_errors(struct ak4114 *ak4114, unsigned int flags)
 	if (rcs1 & AK4114_QCRC)
 		ak4114->qcrc_errors++;
 	c0 = (ak4114->rcs0 & (AK4114_QINT | AK4114_CINT | AK4114_PEM | AK4114_AUDION | AK4114_AUTO | AK4114_UNLCK)) ^
-                     (rcs0 & (AK4114_QINT | AK4114_CINT | AK4114_PEM | AK4114_AUDION | AK4114_AUTO | AK4114_UNLCK));
+		     (rcs0 & (AK4114_QINT | AK4114_CINT | AK4114_PEM | AK4114_AUDION | AK4114_AUTO | AK4114_UNLCK));
 	c1 = (ak4114->rcs1 & 0xf0) ^ (rcs1 & 0xf0);
 	ak4114->rcs0 = rcs0 & ~(AK4114_QINT | AK4114_CINT);
 	ak4114->rcs1 = rcs1;

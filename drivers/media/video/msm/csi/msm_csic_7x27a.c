@@ -198,17 +198,17 @@ static irqreturn_t msm_csic_irq(int irq_num, void *data)
 	}
 	else if(irq != irq_last || ptl != ptl_last) {
 		pr_info("msm_csic_irq: %x\n", (unsigned int)csic_dev->base);
-        pr_info("%s MIPI_INTERRUPT_STATUS = 0x%x 0x%x\n", __func__, irq, ptl);
-        Print_csic_irq_cnt--;
-        same_cnt = 0;
+	pr_info("%s MIPI_INTERRUPT_STATUS = 0x%x 0x%x\n", __func__, irq, ptl);
+	Print_csic_irq_cnt--;
+	same_cnt = 0;
     }
     else {
-        if(++same_cnt >= 50) {
+	if(++same_cnt >= 50) {
 			pr_info("msm_csic_irq: %x\n", (unsigned int)csic_dev->base);
-            pr_info("%s MIPI_INTERRUPT_STATUS = 0x%x 0x%x repeat_cnt = %d\n", __func__, irq, ptl, same_cnt);
-            Print_csic_irq_cnt--;
-            same_cnt = 0;
-        }
+	    pr_info("%s MIPI_INTERRUPT_STATUS = 0x%x 0x%x repeat_cnt = %d\n", __func__, irq, ptl, same_cnt);
+	    Print_csic_irq_cnt--;
+	    same_cnt = 0;
+	}
     }
     irq_last = irq;
     ptl_last = ptl;

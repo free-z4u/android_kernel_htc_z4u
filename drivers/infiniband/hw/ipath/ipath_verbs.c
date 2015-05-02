@@ -1965,7 +1965,7 @@ static int disable_timer(struct ipath_devdata *dd)
 {
 	/* Disable GPIO bit 2 interrupt */
 	if (dd->ipath_flags & IPATH_GPIO_INTR) {
-                /* Disable GPIO bit 2 interrupt */
+		/* Disable GPIO bit 2 interrupt */
 		dd->ipath_gpio_mask &= ~((u64) (1 << IPATH_GPIO_PORT0_BIT));
 		ipath_write_kreg(dd, dd->ipath_kregs->kr_gpio_mask,
 				 dd->ipath_gpio_mask);

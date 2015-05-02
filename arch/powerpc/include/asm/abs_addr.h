@@ -19,11 +19,11 @@
 #include <asm/prom.h>
 
 struct mschunks_map {
-        unsigned long num_chunks;
-        unsigned long chunk_size;
-        unsigned long chunk_shift;
-        unsigned long chunk_mask;
-        u32 *mapping;
+	unsigned long num_chunks;
+	unsigned long chunk_size;
+	unsigned long chunk_shift;
+	unsigned long chunk_mask;
+	u32 *mapping;
 };
 
 extern struct mschunks_map mschunks_map;

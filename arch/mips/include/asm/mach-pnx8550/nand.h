@@ -40,10 +40,10 @@
 #define PNX8550_XIO_SEL0_ENAB        0x00000001
 
 #define PNX8550_SEL0_DEFAULT ((PNX8550_XIO_SEL0_EN_16BIT)  | \
-                              (PNX8550_XIO_SEL0_REN_HIGH*0)| \
+			      (PNX8550_XIO_SEL0_REN_HIGH*0)| \
 	                      (PNX8550_XIO_SEL0_REN_LOW*2) | \
 	                      (PNX8550_XIO_SEL0_WEN_HIGH*0)| \
-                              (PNX8550_XIO_SEL0_WEN_LOW*2) | \
+			      (PNX8550_XIO_SEL0_WEN_LOW*2) | \
 	                      (PNX8550_XIO_SEL0_WAIT*4)    | \
 			      (PNX8550_XIO_SEL0_OFFSET*0)  | \
 			      (PNX8550_XIO_SEL0_TYPE_NAND) | \

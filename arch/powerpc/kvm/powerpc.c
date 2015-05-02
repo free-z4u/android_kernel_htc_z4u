@@ -276,7 +276,7 @@ int kvm_dev_ioctl_check_extension(long ext)
 }
 
 long kvm_arch_dev_ioctl(struct file *filp,
-                        unsigned int ioctl, unsigned long arg)
+			unsigned int ioctl, unsigned long arg)
 {
 	return -EINVAL;
 }
@@ -292,18 +292,18 @@ int kvm_arch_create_memslot(struct kvm_memory_slot *slot, unsigned long npages)
 }
 
 int kvm_arch_prepare_memory_region(struct kvm *kvm,
-                                   struct kvm_memory_slot *memslot,
-                                   struct kvm_memory_slot old,
-                                   struct kvm_userspace_memory_region *mem,
-                                   int user_alloc)
+				   struct kvm_memory_slot *memslot,
+				   struct kvm_memory_slot old,
+				   struct kvm_userspace_memory_region *mem,
+				   int user_alloc)
 {
 	return kvmppc_core_prepare_memory_region(kvm, mem);
 }
 
 void kvm_arch_commit_memory_region(struct kvm *kvm,
-               struct kvm_userspace_memory_region *mem,
-               struct kvm_memory_slot old,
-               int user_alloc)
+	       struct kvm_userspace_memory_region *mem,
+	       struct kvm_memory_slot old,
+	       int user_alloc)
 {
 	kvmppc_core_commit_memory_region(kvm, mem);
 }
@@ -403,19 +403,19 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
 }
 
 int kvm_arch_vcpu_ioctl_set_guest_debug(struct kvm_vcpu *vcpu,
-                                        struct kvm_guest_debug *dbg)
+					struct kvm_guest_debug *dbg)
 {
 	return -EINVAL;
 }
 
 static void kvmppc_complete_dcr_load(struct kvm_vcpu *vcpu,
-                                     struct kvm_run *run)
+				     struct kvm_run *run)
 {
 	kvmppc_set_gpr(vcpu, vcpu->arch.io_gpr, run->dcr.data);
 }
 
 static void kvmppc_complete_mmio_load(struct kvm_vcpu *vcpu,
-                                      struct kvm_run *run)
+				      struct kvm_run *run)
 {
 	u64 uninitialized_var(gpr);
 
@@ -480,7 +480,7 @@ static void kvmppc_complete_mmio_load(struct kvm_vcpu *vcpu,
 }
 
 int kvmppc_handle_load(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                       unsigned int rt, unsigned int bytes, int is_bigendian)
+		       unsigned int rt, unsigned int bytes, int is_bigendian)
 {
 	if (bytes > sizeof(run->mmio.data)) {
 		printk(KERN_ERR "%s: bad MMIO length: %d\n", __func__,
@@ -502,7 +502,7 @@ int kvmppc_handle_load(struct kvm_run *run, struct kvm_vcpu *vcpu,
 
 /* Same as above, but sign extends */
 int kvmppc_handle_loads(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                        unsigned int rt, unsigned int bytes, int is_bigendian)
+			unsigned int rt, unsigned int bytes, int is_bigendian)
 {
 	int r;
 
@@ -513,7 +513,7 @@ int kvmppc_handle_loads(struct kvm_run *run, struct kvm_vcpu *vcpu,
 }
 
 int kvmppc_handle_store(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                        u64 val, unsigned int bytes, int is_bigendian)
+			u64 val, unsigned int bytes, int is_bigendian)
 {
 	void *data = run->mmio.data;
 
@@ -658,19 +658,19 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
 }
 
 int kvm_arch_vcpu_ioctl_get_mpstate(struct kvm_vcpu *vcpu,
-                                    struct kvm_mp_state *mp_state)
+				    struct kvm_mp_state *mp_state)
 {
 	return -EINVAL;
 }
 
 int kvm_arch_vcpu_ioctl_set_mpstate(struct kvm_vcpu *vcpu,
-                                    struct kvm_mp_state *mp_state)
+				    struct kvm_mp_state *mp_state)
 {
 	return -EINVAL;
 }
 
 long kvm_arch_vcpu_ioctl(struct file *filp,
-                         unsigned int ioctl, unsigned long arg)
+			 unsigned int ioctl, unsigned long arg)
 {
 	struct kvm_vcpu *vcpu = filp->private_data;
 	void __user *argp = (void __user *)arg;
@@ -760,7 +760,7 @@ static int kvm_vm_ioctl_get_pvinfo(struct kvm_ppc_pvinfo *pvinfo)
 }
 
 long kvm_arch_vm_ioctl(struct file *filp,
-                       unsigned int ioctl, unsigned long arg)
+		       unsigned int ioctl, unsigned long arg)
 {
 	void __user *argp = (void __user *)arg;
 	long r;

@@ -26,10 +26,10 @@ struct bcm_bt_lpm_platform_data {
 	unsigned int gpio_host_wake;  /* BCM -> CPU wakeup gpio */
 
 	/* Callback to request the uart driver to clock off.
-         * Called with uart spinlock held. */
+	 * Called with uart spinlock held. */
 	void (*request_clock_off_locked)(struct uart_port *uport);
 	/* Callback to request the uart driver to clock on.
-         * Called with uart spinlock held. */
+	 * Called with uart spinlock held. */
 	void (*request_clock_on_locked)(struct uart_port *uport);
 };
 

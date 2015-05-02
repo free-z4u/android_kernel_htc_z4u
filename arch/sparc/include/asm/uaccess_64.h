@@ -71,7 +71,7 @@ static inline int access_ok(int type, const void __user * addr, unsigned long si
  */
 
 struct exception_table_entry {
-        unsigned int insn, fixup;
+	unsigned int insn, fixup;
 };
 
 extern void __ret_efault(void);

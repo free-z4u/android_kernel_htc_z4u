@@ -784,7 +784,7 @@ static void icmp_redirect(struct sk_buff *skb)
 	}
 
 	/* Ping wants to see redirects.
-         * Let's pretend they are errors of sorts... */
+	 * Let's pretend they are errors of sorts... */
 	if (iph->protocol == IPPROTO_ICMP &&
 	    iph->ihl >= 5 &&
 	    pskb_may_pull(skb, (iph->ihl<<2)+8)) {

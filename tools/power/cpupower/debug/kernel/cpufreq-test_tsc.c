@@ -84,7 +84,7 @@ static int __init cpufreq_test_tsc(void)
 
 	printk(KERN_DEBUG "start--> \n");
 	then = read_pmtmr();
-        rdtscll(then_tsc);
+	rdtscll(then_tsc);
 	for (i=0;i<20;i++) {
 		mdelay(100);
 		now = read_pmtmr();

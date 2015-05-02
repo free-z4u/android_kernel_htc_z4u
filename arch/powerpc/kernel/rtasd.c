@@ -52,8 +52,8 @@ static int full_rtas_msgs = 0;
 
 /* Stop logging to nvram after first fatal error */
 static int logging_enabled; /* Until we initialize everything,
-                             * make sure we don't try logging
-                             * anything */
+			     * make sure we don't try logging
+			     * anything */
 static int error_log_cnt;
 
 /*
@@ -414,7 +414,7 @@ static void rtas_event_scan(struct work_struct *w)
 
 	/* raw_ OK because just using CPU as starting point. */
 	cpu = cpumask_next(raw_smp_processor_id(), cpu_online_mask);
-        if (cpu >= nr_cpu_ids) {
+	if (cpu >= nr_cpu_ids) {
 		cpu = cpumask_first(cpu_online_mask);
 
 		if (first_pass) {

@@ -38,11 +38,11 @@ typedef struct bd_info {
     unsigned char  bi_esa[3][6];  /* Ethernet station addresses */
     unsigned int   bi_ramdisk_begin, bi_ramdisk_end;
     struct {                      /* Information about [main] video screen */
-        short x_res;              /*   Horizontal resolution in pixels */
-        short y_res;              /*   Vertical resolution in pixels */
-        short bpp;                /*   Bits/pixel */
-        short mode;               /*   Type of pixels (packed, indexed) */
-        unsigned long fb;         /*   Pointer to frame buffer (pixel) memory */
+	short x_res;              /*   Horizontal resolution in pixels */
+	short y_res;              /*   Vertical resolution in pixels */
+	short bpp;                /*   Bits/pixel */
+	short mode;               /*   Type of pixels (packed, indexed) */
+	unsigned long fb;         /*   Pointer to frame buffer (pixel) memory */
     } bi_video;
     void         (*bi_cputc)(char);   /* Write a character to the RedBoot console */
     char         (*bi_cgetc)(void);   /* Read a character from the RedBoot console */

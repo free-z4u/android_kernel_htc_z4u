@@ -57,7 +57,7 @@ config MACH_HARMONY
        depends on ARCH_TEGRA_2x_SOC
        select MACH_HAS_SND_SOC_TEGRA_WM8903 if SND_SOC
        help
-         Support for nVidia Harmony development platform
+	 Support for nVidia Harmony development platform
 
 config MACH_KAEN
        bool "Kaen board"
@@ -65,20 +65,20 @@ config MACH_KAEN
        select MACH_SEABOARD
        select MACH_HAS_SND_SOC_TEGRA_WM8903 if SND_SOC
        help
-         Support for the Kaen version of Seaboard
+	 Support for the Kaen version of Seaboard
 
 config MACH_PAZ00
        bool "Paz00 board"
        depends on ARCH_TEGRA_2x_SOC
        help
-         Support for the Toshiba AC100/Dynabook AZ netbook
+	 Support for the Toshiba AC100/Dynabook AZ netbook
 
 config MACH_SEABOARD
        bool "Seaboard board"
        depends on ARCH_TEGRA_2x_SOC
        select MACH_HAS_SND_SOC_TEGRA_WM8903 if SND_SOC
        help
-         Support for nVidia Seaboard development platform. It will
+	 Support for nVidia Seaboard development platform. It will
 	 also be included for some of the derivative boards that
 	 have large similarities with the seaboard design.
 
@@ -94,43 +94,43 @@ config MACH_TRIMSLICE
        depends on ARCH_TEGRA_2x_SOC
        select TEGRA_PCI
        help
-         Support for CompuLab TrimSlice platform
+	 Support for CompuLab TrimSlice platform
 
 config MACH_WARIO
        bool "Wario board"
        depends on ARCH_TEGRA_2x_SOC
        select MACH_SEABOARD
        help
-         Support for the Wario version of Seaboard
+	 Support for the Wario version of Seaboard
 
 config MACH_VENTANA
        bool "Ventana board"
        depends on ARCH_TEGRA_2x_SOC
        select MACH_TEGRA_DT
        help
-         Support for the nVidia Ventana development platform
+	 Support for the nVidia Ventana development platform
 
 choice
-        prompt "Low-level debug console UART"
-        default TEGRA_DEBUG_UART_NONE
+	prompt "Low-level debug console UART"
+	default TEGRA_DEBUG_UART_NONE
 
 config TEGRA_DEBUG_UART_NONE
-        bool "None"
+	bool "None"
 
 config TEGRA_DEBUG_UARTA
-        bool "UART-A"
+	bool "UART-A"
 
 config TEGRA_DEBUG_UARTB
-        bool "UART-B"
+	bool "UART-B"
 
 config TEGRA_DEBUG_UARTC
-        bool "UART-C"
+	bool "UART-C"
 
 config TEGRA_DEBUG_UARTD
-        bool "UART-D"
+	bool "UART-D"
 
 config TEGRA_DEBUG_UARTE
-        bool "UART-E"
+	bool "UART-E"
 
 endchoice
 

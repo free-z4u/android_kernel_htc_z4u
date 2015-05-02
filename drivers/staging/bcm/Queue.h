@@ -10,11 +10,11 @@
 do						\
 {                                               \
     if (!_Head) {                           \
-        	_Head = _Packet;                \
-        } 					\
+		_Head = _Packet;                \
+	} 					\
 	else {                                  \
-        	(_Tail)->next = _Packet; 	\
-        }                                       \
+		(_Tail)->next = _Packet; 	\
+	}                                       \
    	(_Packet)->next = NULL;  		\
     _Tail = _Packet;                        \
 }while(0)
@@ -22,10 +22,10 @@ do						\
 do						\
 {   if(Head)			\
 	{                                            \
-        if (!Head->next) {                      \
-        	Tail = NULL;                    \
-        }                                       \
-        Head = Head->next;                      \
+	if (!Head->next) {                      \
+		Tail = NULL;                    \
+	}                                       \
+	Head = Head->next;                      \
 	}		\
 }while(0)
 #endif	//__QUEUE_H__

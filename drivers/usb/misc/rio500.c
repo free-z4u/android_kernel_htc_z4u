@@ -62,13 +62,13 @@
 #define OBUF_SIZE 0x10000
 
 struct rio_usb_data {
-        struct usb_device *rio_dev;     /* init: probe_rio */
-        unsigned int ifnum;             /* Interface number of the USB device */
-        int isopen;                     /* nz if open */
-        int present;                    /* Device is present on the bus */
-        char *obuf, *ibuf;              /* transfer buffers */
-        char bulk_in_ep, bulk_out_ep;   /* Endpoint assignments */
-        wait_queue_head_t wait_q;       /* for timeouts */
+	struct usb_device *rio_dev;     /* init: probe_rio */
+	unsigned int ifnum;             /* Interface number of the USB device */
+	int isopen;                     /* nz if open */
+	int present;                    /* Device is present on the bus */
+	char *obuf, *ibuf;              /* transfer buffers */
+	char bulk_in_ep, bulk_out_ep;   /* Endpoint assignments */
+	wait_queue_head_t wait_q;       /* for timeouts */
 	struct mutex lock;          /* general race avoidance */
 };
 
@@ -121,8 +121,8 @@ static long ioctl_rio(struct file *file, unsigned int cmd, unsigned long arg)
 	int retval=0;
 
 	mutex_lock(&(rio->lock));
-        /* Sanity check to make sure rio is connected, powered, etc */
-        if (rio->present == 0 || rio->rio_dev == NULL) {
+	/* Sanity check to make sure rio is connected, powered, etc */
+	if (rio->present == 0 || rio->rio_dev == NULL) {
 		retval = -ENODEV;
 		goto err_out;
 	}
@@ -280,8 +280,8 @@ write_rio(struct file *file, const char __user *buffer,
 	intr = mutex_lock_interruptible(&(rio->lock));
 	if (intr)
 		return -EINTR;
-        /* Sanity check to make sure rio is connected, powered, etc */
-        if (rio->present == 0 || rio->rio_dev == NULL) {
+	/* Sanity check to make sure rio is connected, powered, etc */
+	if (rio->present == 0 || rio->rio_dev == NULL) {
 		mutex_unlock(&(rio->lock));
 		return -ENODEV;
 	}
@@ -367,7 +367,7 @@ read_rio(struct file *file, char __user *buffer, size_t count, loff_t * ppos)
 	if (intr)
 		return -EINTR;
 	/* Sanity check to make sure rio is connected, powered, etc */
-        if (rio->present == 0 || rio->rio_dev == NULL) {
+	if (rio->present == 0 || rio->rio_dev == NULL) {
 		mutex_unlock(&(rio->lock));
 		return -ENODEV;
 	}

@@ -459,7 +459,7 @@ unregister_debug_trap(struct task_struct *child, unsigned long addr,
 		      unsigned long *code)
 {
 	struct debug_trap *p = &child->thread.debug_trap;
-        int i;
+	int i;
 
 	/* Search debug trap entry. */
 	for (i = 0; i < p->nr_trap; i++) {
@@ -508,21 +508,21 @@ invalidate_cache(void)
 
 	/* Invalidate cache */
 	__asm__ __volatile__ (
-                "ldi    r0, #-1					\n\t"
-                "ldi    r1, #0					\n\t"
-                "stb    r1, @r0		; cache off		\n\t"
-                ";						\n\t"
-                "ldi    r0, #-2					\n\t"
-                "ldi    r1, #1					\n\t"
-                "stb    r1, @r0		; cache invalidate	\n\t"
-                ".fillinsn					\n"
-                "0:						\n\t"
-                "ldb    r1, @r0		; invalidate check	\n\t"
-                "bnez   r1, 0b					\n\t"
-                ";						\n\t"
-                "ldi    r0, #-1					\n\t"
-                "ldi    r1, #1					\n\t"
-                "stb    r1, @r0		; cache on		\n\t"
+		"ldi    r0, #-1					\n\t"
+		"ldi    r1, #0					\n\t"
+		"stb    r1, @r0		; cache off		\n\t"
+		";						\n\t"
+		"ldi    r0, #-2					\n\t"
+		"ldi    r1, #1					\n\t"
+		"stb    r1, @r0		; cache invalidate	\n\t"
+		".fillinsn					\n"
+		"0:						\n\t"
+		"ldb    r1, @r0		; invalidate check	\n\t"
+		"bnez   r1, 0b					\n\t"
+		";						\n\t"
+		"ldi    r0, #-1					\n\t"
+		"ldi    r1, #1					\n\t"
+		"stb    r1, @r0		; cache on		\n\t"
 		: : : "r0", "r1", "memory"
 	);
 	/* FIXME: copying-back d-cache and invalidating i-cache are needed.

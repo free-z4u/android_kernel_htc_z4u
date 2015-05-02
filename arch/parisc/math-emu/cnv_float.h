@@ -81,7 +81,7 @@
 #define Dbl_roundnearest_from_dint(dint_opndB,dbl_opndA,dbl_opndB) 	\
     if (Dintp2(dint_opndB) & 1<<(DBL_EXP_LENGTH - 2))			\
        if ((Dintp2(dint_opndB) << 34 - DBL_EXP_LENGTH) || Dlowp2(dbl_opndB))  \
-          if ((++Dallp2(dbl_opndB))==0) Dallp1(dbl_opndA)++
+	  if ((++Dallp2(dbl_opndB))==0) Dallp1(dbl_opndA)++
 
 #define Sgl_isone_roundbit(sgl_value,exponent)			\
     ((Sall(sgl_value) << (SGL_EXP_LENGTH + 1 + exponent)) >> 31)
@@ -252,7 +252,7 @@
 	    if (exponent == 52) Dintp2(destB) = Dallp2(dbl_valueB);	\
 	    else Variable_shift_double(Dallp1(dbl_valueA),Dallp2(dbl_valueB), \
 	    52-exponent,Dintp2(destB));					\
-        }								\
+	}								\
     	else {								\
     	    Variable_shift_double(Dallp1(dbl_valueA),Dallp2(dbl_valueB), \
 	    84-exponent,Dintp1(destA));					\
@@ -338,7 +338,7 @@
 #define Dbl_roundnearest_from_duint(duint_opndB,dbl_opndA,dbl_opndB) 	\
     if (Duintp2(duint_opndB) & 1<<(DBL_EXP_LENGTH - 1))			\
        if ((Duintp2(duint_opndB) << 33 - DBL_EXP_LENGTH) || Dlowp2(dbl_opndB)) \
-          if ((++Dallp2(dbl_opndB))==0) Dallp1(dbl_opndA)++
+	  if ((++Dallp2(dbl_opndB))==0) Dallp1(dbl_opndA)++
 
 #define Suint_from_sgl_mantissa(src,exponent,result)	\
     Sall(result) = (unsigned)(Sall(src) << SGL_EXP_LENGTH)>>(31 - exponent)

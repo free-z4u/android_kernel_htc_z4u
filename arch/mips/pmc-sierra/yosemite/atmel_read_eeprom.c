@@ -109,13 +109,13 @@ static int recv_bit(void)
 }
 
 static unsigned char recv_byte(void) {
-        int i;
-        unsigned char byte=0;
+	int i;
+	unsigned char byte=0;
 
-        for (i=7;i>=0;i--)
-                byte |= (recv_bit() << i);
+	for (i=7;i>=0;i--)
+		byte |= (recv_bit() << i);
 
-        return byte;
+	return byte;
 }
 
 static int recv_ack(void)

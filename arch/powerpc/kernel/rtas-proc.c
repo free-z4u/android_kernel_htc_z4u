@@ -130,7 +130,7 @@ struct individual_sensor {
 };
 
 struct rtas_sensors {
-        struct individual_sensor sensor[MAX_SENSORS];
+	struct individual_sensor sensor[MAX_SENSORS];
 	unsigned int quant;
 };
 
@@ -765,7 +765,7 @@ static ssize_t ppc_rtas_tone_volume_write(struct file *file,
 	if (volume > 100)
 		volume = 100;
 
-        rtas_tone_volume = volume; /* save it for later */
+	rtas_tone_volume = volume; /* save it for later */
 	error = rtas_call(rtas_token("set-indicator"), 3, 1, NULL,
 			TONE_VOLUME, 0, volume);
 	if (error)

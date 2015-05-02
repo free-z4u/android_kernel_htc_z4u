@@ -367,27 +367,27 @@ int32_t msm_actuator_config(
 		break;
 
     case CFG_SET_VCM_CALIBRATION:
-        if (a_ctrl->actuator_ext_ctrl.is_cal_supported) {
-            if (a_ctrl->func_tbl.actuator_do_cal) {
-                rc = a_ctrl->func_tbl.actuator_do_cal (a_ctrl, &cdata.cfg.get_vcm_cal_info);
-                if (rc < 0) {
-                    LERROR("%s calibration failed %d\n", __func__, rc);
-                } else {
-                    if (copy_to_user((void *)argp,
-                        &cdata,
-                        sizeof(struct msm_actuator_cfg_data)))
-                        rc = -EFAULT;
-                }
-            }
-            else {
-                LERROR("%s a_ctrl->func_tbl.acturator_do_cal is NULL\n", __func__);
-                rc = -EFAULT;
-            }
-        }
-        else {
-            LINFO("%s cal is not supported\n", __func__);
-        }
-        break;
+	if (a_ctrl->actuator_ext_ctrl.is_cal_supported) {
+	    if (a_ctrl->func_tbl.actuator_do_cal) {
+		rc = a_ctrl->func_tbl.actuator_do_cal (a_ctrl, &cdata.cfg.get_vcm_cal_info);
+		if (rc < 0) {
+		    LERROR("%s calibration failed %d\n", __func__, rc);
+		} else {
+		    if (copy_to_user((void *)argp,
+			&cdata,
+			sizeof(struct msm_actuator_cfg_data)))
+			rc = -EFAULT;
+		}
+	    }
+	    else {
+		LERROR("%s a_ctrl->func_tbl.acturator_do_cal is NULL\n", __func__);
+		rc = -EFAULT;
+	    }
+	}
+	else {
+	    LINFO("%s cal is not supported\n", __func__);
+	}
+	break;
 
 	default:
 		break;

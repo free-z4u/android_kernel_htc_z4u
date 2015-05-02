@@ -1370,12 +1370,12 @@ static void usb_headset_detect(int type)
 #ifdef CONFIG_SUPPORT_USB_SPEAKER
 	case USB_AUDIO_OUT_DGTL:
 		hi->usb_headset.type = USB_AUDIO_OUT;
-                hi->usb_headset.status = STATUS_CONNECTED_ENABLED;
-                state_h2w |= BIT_USB_AUDIO_OUT;
-                state_usb = GOOGLE_USB_AUDIO_DGTL;
-                HS_LOG_TIME("Insert USB_AUDIO_OUT DGTL (state %d, %d)",
-                            state_h2w, state_usb);
-                break;
+		hi->usb_headset.status = STATUS_CONNECTED_ENABLED;
+		state_h2w |= BIT_USB_AUDIO_OUT;
+		state_usb = GOOGLE_USB_AUDIO_DGTL;
+		HS_LOG_TIME("Insert USB_AUDIO_OUT DGTL (state %d, %d)",
+			    state_h2w, state_usb);
+		break;
 #endif
 	default:
 		HS_LOG("Unknown headset type");

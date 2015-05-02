@@ -140,16 +140,16 @@
 typedef struct
   { ulong ll_id; /* ID supplied by LL when executing    */
 		 /* a command and returned by HL for    */
-                 /* INVOKE_RES and INVOKE_ERR           */
+		 /* INVOKE_RES and INVOKE_ERR           */
     int hl_id;   /* ID supplied by HL when called       */
-                 /* for executing a cmd and delivered   */
-                 /* for results and errors              */
-                 /* must be supplied by LL when aborting*/
+		 /* for executing a cmd and delivered   */
+		 /* for results and errors              */
+		 /* must be supplied by LL when aborting*/
     int proc;    /* invoke procedure used by CMD_INVOKE */
-                 /* returned by callback and broadcast  */
+		 /* returned by callback and broadcast  */
     int timeout; /* timeout for INVOKE CMD in ms        */
-                 /* -1  in stat callback when timed out */
-                 /* error value when error callback     */
+		 /* -1  in stat callback when timed out */
+		 /* error value when error callback     */
     int datalen; /* length of cmd or stat data          */
     u_char *data;/* pointer to data delivered or send   */
   } isdn_cmd_stat;

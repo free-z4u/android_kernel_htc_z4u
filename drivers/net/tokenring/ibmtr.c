@@ -388,7 +388,7 @@ static int __devinit ibmtr_probe1(struct net_device *dev, int PIOaddr)
 	unsigned char *tchanid, ctemp;
 #ifndef PCMCIA
 	unsigned char t_irq=0;
-        unsigned long timeout;
+	unsigned long timeout;
 	static int version_printed;
 #endif
 
@@ -481,8 +481,8 @@ static int __devinit ibmtr_probe1(struct net_device *dev, int PIOaddr)
 	   waste the memory, just use the existing structure */
 #ifndef PCMCIA
 	ti->mmio = t_mmio;
-        for (i = 0; i < IBMTR_MAX_ADAPTERS; i++) {
-                if (turbo_io[i] != PIOaddr)
+	for (i = 0; i < IBMTR_MAX_ADAPTERS; i++) {
+		if (turbo_io[i] != PIOaddr)
 			continue;
 #if IBMTR_DEBUG_MESSAGES
 		printk("ibmtr::tr_probe1, setting PIOaddr %x to Turbo\n",
@@ -490,7 +490,7 @@ static int __devinit ibmtr_probe1(struct net_device *dev, int PIOaddr)
 #endif
 		ti->turbo = 1;
 		t_irq = turbo_irq[i];
-        }
+	}
 #endif /* !PCMCIA */
 	ti->readlog_pending = 0;
 	init_waitqueue_head(&ti->wait_for_reset);
@@ -832,7 +832,7 @@ static int __devinit trdev_init(struct net_device *dev)
 	struct tok_info *ti = netdev_priv(dev);
 
 	SET_PAGE(ti->srb_page);
-        ti->open_failure = NO    ;
+	ti->open_failure = NO    ;
 	dev->netdev_ops = &trdev_netdev_ops;
 
 	return 0;
@@ -1031,7 +1031,7 @@ static netdev_tx_t tok_send_packet(struct sk_buff *skb,
 	unsigned long flags;
 	ti = netdev_priv(dev);
 
-        netif_stop_queue(dev);
+	netif_stop_queue(dev);
 
 	/* lock against other CPUs */
 	spin_lock_irqsave(&(ti->lock), flags);
@@ -1093,54 +1093,54 @@ static void __iomem *map_address(struct tok_info *ti, unsigned index, __u8 *page
 
 static void dir_open_adapter (struct net_device *dev)
 {
-        struct tok_info *ti = netdev_priv(dev);
-        unsigned char ret_code;
-        __u16 err;
+	struct tok_info *ti = netdev_priv(dev);
+	unsigned char ret_code;
+	__u16 err;
 
-        ti->srb = map_address(ti,
+	ti->srb = map_address(ti,
 		ntohs(readw(ti->init_srb + SRB_ADDRESS_OFST)),
 		&ti->srb_page);
-        ti->ssb = map_address(ti,
+	ti->ssb = map_address(ti,
 		ntohs(readw(ti->init_srb + SSB_ADDRESS_OFST)),
 		&ti->ssb_page);
-        ti->arb = map_address(ti,
+	ti->arb = map_address(ti,
 		ntohs(readw(ti->init_srb + ARB_ADDRESS_OFST)),
 		&ti->arb_page);
-        ti->asb = map_address(ti,
+	ti->asb = map_address(ti,
 		ntohs(readw(ti->init_srb + ASB_ADDRESS_OFST)),
 		&ti->asb_page);
-        ti->current_skb = NULL;
-        ret_code = readb(ti->init_srb + RETCODE_OFST);
-        err = ntohs(readw(ti->init_srb + OPEN_ERROR_CODE_OFST));
-        if (!ret_code) {
+	ti->current_skb = NULL;
+	ret_code = readb(ti->init_srb + RETCODE_OFST);
+	err = ntohs(readw(ti->init_srb + OPEN_ERROR_CODE_OFST));
+	if (!ret_code) {
 		ti->open_status = OPEN; /* TR adapter is now available */
-                if (ti->open_mode == AUTOMATIC) {
+		if (ti->open_mode == AUTOMATIC) {
 			DPRINTK("Adapter reopened.\n");
-                }
-                writeb(~SRB_RESP_INT, ti->mmio+ACA_OFFSET+ACA_RESET+ISRP_ODD);
-                open_sap(EXTENDED_SAP, dev);
+		}
+		writeb(~SRB_RESP_INT, ti->mmio+ACA_OFFSET+ACA_RESET+ISRP_ODD);
+		open_sap(EXTENDED_SAP, dev);
 		return;
 	}
 	ti->open_failure = YES;
 	if (ret_code == 7){
-               if (err == 0x24) {
+	       if (err == 0x24) {
 			if (!ti->auto_speedsave) {
 				DPRINTK("Open failed: Adapter speed must match "
-                                 "ring speed if Automatic Ring Speed Save is "
+				 "ring speed if Automatic Ring Speed Save is "
 				 "disabled.\n");
 				ti->open_action = FAIL;
 			}else
 				DPRINTK("Retrying open to adjust to "
 					"ring speed, ");
-                } else if (err == 0x2d) {
+		} else if (err == 0x2d) {
 			DPRINTK("Physical Insertion: No Monitor Detected, ");
 			printk("retrying after %ds delay...\n",
 					TR_RETRY_INTERVAL/HZ);
-                } else if (err == 0x11) {
+		} else if (err == 0x11) {
 			DPRINTK("Lobe Media Function Failure (0x11), ");
 			printk(" retrying after %ds delay...\n",
 					TR_RETRY_INTERVAL/HZ);
-                } else {
+		} else {
 			char **prphase = printphase;
 			char **prerror = printerror;
 			int pnr = err / 16 - 1;
@@ -1155,8 +1155,8 @@ static void dir_open_adapter (struct net_device *dev)
 						prphase[pnr], prerror[enr]);
 			printk(" retrying after %ds delay...\n",
 					TR_RETRY_INTERVAL/HZ);
-                }
-        } else DPRINTK("open failed: ret_code = %02X..., ", ret_code);
+		}
+	} else DPRINTK("open failed: ret_code = %02X..., ", ret_code);
 	if (ti->open_action != FAIL) {
 		if (ti->open_mode==AUTOMATIC){
 			ti->open_action = REOPEN;
@@ -1201,14 +1201,14 @@ static irqreturn_t tok_interrupt(int irq, void *dev_id)
 		outb(0, ti->adapter_int_enable);
 	else /* used for PCMCIA cards */
 		outb(0, ti->global_int_enable);
-        if (ti->do_tok_int == FIRST_INT){
-                initial_tok_int(dev);
+	if (ti->do_tok_int == FIRST_INT){
+		initial_tok_int(dev);
 #ifdef ENABLE_PAGING
-                writeb(save_srpr, ti->mmio + ACA_OFFSET + ACA_RW + SRPR_EVEN);
+		writeb(save_srpr, ti->mmio + ACA_OFFSET + ACA_RW + SRPR_EVEN);
 #endif
-                spin_unlock(&(ti->lock));
-                return IRQ_HANDLED;
-        }
+		spin_unlock(&(ti->lock));
+		return IRQ_HANDLED;
+	}
 	/*  Begin interrupt handler HERE inline to avoid the extra
 	    levels of logic and call depth for the original solution. */
 	status = readb(ti->mmio + ACA_OFFSET + ACA_RW + ISRP_ODD);
@@ -1252,13 +1252,13 @@ static irqreturn_t tok_interrupt(int irq, void *dev_id)
 			ti->mmio + ACA_OFFSET + ACA_RESET + ISRP_EVEN);
 		status= readb(ti->mmio+ ACA_OFFSET + ACA_RW + ISRA_EVEN);/*BMS*/
 		DPRINTK("ISRA_EVEN == 0x02%x\n",status);/*BMS*/
-                writeb(INT_ENABLE, ti->mmio + ACA_OFFSET + ACA_SET + ISRP_EVEN);
+		writeb(INT_ENABLE, ti->mmio + ACA_OFFSET + ACA_SET + ISRP_EVEN);
 #ifdef ENABLE_PAGING
-                writeb(save_srpr, ti->mmio + ACA_OFFSET + ACA_RW + SRPR_EVEN);
+		writeb(save_srpr, ti->mmio + ACA_OFFSET + ACA_RW + SRPR_EVEN);
 #endif
-                spin_unlock(&(ti->lock));
-                return IRQ_HANDLED;
-        }
+		spin_unlock(&(ti->lock));
+		return IRQ_HANDLED;
+	}
 	if (status & SRB_RESP_INT) {	/* SRB response */
 		SET_PAGE(ti->srb_page);
 #if TR_VERBOSE
@@ -1371,7 +1371,7 @@ static irqreturn_t tok_interrupt(int irq, void *dev_id)
 		default:
 			DPRINTK("Unknown command %02X encountered\n",
 						(int) readb(ti->srb));
-        	}	/* end switch SRB command check */
+		}	/* end switch SRB command check */
 		writeb(~SRB_RESP_INT, ti->mmio+ ACA_OFFSET+ACA_RESET+ ISRP_ODD);
 	}	/* if SRB response */
 	if (status & ASB_FREE_INT) {	/* ASB response */
@@ -1442,7 +1442,7 @@ static irqreturn_t tok_interrupt(int irq, void *dev_id)
 					ibmtr_readlog(dev);
 			}
 			break;
-          	}
+	  	}
 		case XMIT_DATA_REQ:
 			tr_tx(dev);
 			break;
@@ -1502,7 +1502,7 @@ static void initial_tok_int(struct net_device *dev)
 
 	__u32 encoded_addr, hw_encoded_addr;
 	struct tok_info *ti;
-        unsigned char init_status; /*BMS 12/2000*/
+	unsigned char init_status; /*BMS 12/2000*/
 
 	ti = netdev_priv(dev);
 
@@ -1511,7 +1511,7 @@ static void initial_tok_int(struct net_device *dev)
 	/* we assign the shared-ram address for ISA devices */
 	writeb(ti->sram_base, ti->mmio + ACA_OFFSET + ACA_RW + RRR_EVEN);
 #ifndef PCMCIA
-        ti->sram_virt = ioremap(((__u32)ti->sram_base << 12), ti->avail_shared_ram);
+	ti->sram_virt = ioremap(((__u32)ti->sram_base << 12), ti->avail_shared_ram);
 #endif
 	ti->init_srb = map_address(ti,
 		ntohs(readw(ti->mmio + ACA_OFFSET + WRBR_EVEN)),
@@ -1542,7 +1542,7 @@ static void initial_tok_int(struct net_device *dev)
 
 	hw_encoded_addr = readw(ti->init_srb + ENCODED_ADDRESS_OFST);
 	encoded_addr = ntohs(hw_encoded_addr);
-        init_status= /*BMS 12/2000 check for shallow mode possibility (Turbo)*/
+	init_status= /*BMS 12/2000 check for shallow mode possibility (Turbo)*/
 	readb(ti->init_srb+offsetof(struct srb_init_response,init_status));
 	/*printk("Initial interrupt: init_status= 0x%02x\n",init_status);*/
 	ti->ring_speed = init_status & 0x01 ? 16 : 4;
@@ -1550,7 +1550,7 @@ static void initial_tok_int(struct net_device *dev)
 				ti->ring_speed, (unsigned int)dev->mem_start);
 	ti->auto_speedsave = (readb(ti->init_srb+INIT_STATUS_2_OFST) & 4) != 0;
 
-        if (ti->open_mode == MANUAL)	wake_up(&ti->wait_for_reset);
+	if (ti->open_mode == MANUAL)	wake_up(&ti->wait_for_reset);
 	else				tok_open_adapter((unsigned long)dev);
 
 } /*initial_tok_int() */
@@ -1764,7 +1764,7 @@ static void tr_rx(struct net_device *dev)
 #endif
 
 	/*BMS handle the case she comes in with few hops but leaves with many */
-        skb_size=length-lan_hdr_len+sizeof(struct trh_hdr)+sizeof(struct trllc);
+	skb_size=length-lan_hdr_len+sizeof(struct trh_hdr)+sizeof(struct trllc);
 
 	if (!(skb = dev_alloc_skb(skb_size))) {
 		DPRINTK("out of memory. frame dropped.\n");

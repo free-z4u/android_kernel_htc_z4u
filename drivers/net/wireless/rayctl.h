@@ -124,10 +124,10 @@ struct infra_beacon
     UCHAR beacon_intvl[2];
     UCHAR capability[2];
     UCHAR elements[sizeof(struct essid_element)
-                  + sizeof(struct rates_element)
-                  + sizeof(struct freq_hop_element)
-                  + sizeof(struct japan_call_sign_element)
-                  + sizeof(struct tim_element)];
+		  + sizeof(struct rates_element)
+		  + sizeof(struct freq_hop_element)
+		  + sizeof(struct japan_call_sign_element)
+		  + sizeof(struct tim_element)];
 };
 struct adhoc_beacon
 {
@@ -135,10 +135,10 @@ struct adhoc_beacon
     UCHAR beacon_intvl[2];
     UCHAR capability[2];
     UCHAR elements[sizeof(struct essid_element)
-                  + sizeof(struct rates_element)
-                  + sizeof(struct freq_hop_element)
-                  + sizeof(struct japan_call_sign_element)
-                  + sizeof(struct ibss_element)];
+		  + sizeof(struct rates_element)
+		  + sizeof(struct freq_hop_element)
+		  + sizeof(struct japan_call_sign_element)
+		  + sizeof(struct ibss_element)];
 };
 /*****************************************************************************/
 /*****************************************************************************/
@@ -514,22 +514,22 @@ struct start_timer_cmd {
 
 struct ccs {
     UCHAR buffer_status;                 /* 0 = buffer free, 1 = buffer busy */
-                                         /* 2 = command complete, 3 = failed */
+					 /* 2 = command complete, 3 = failed */
     UCHAR cmd;                           /* command to ECF                   */
     UCHAR link;                          /* link to next CCS, FF=end of list */
     /* command specific parameters      */
     union {
-        char reserved[13];
-        struct update_param_cmd update_param;
-        struct report_param_cmd report_param;
-        UCHAR nummulticast;
-        UCHAR mode;
-        struct start_network_cmd start_network;
-        struct join_network_cmd join_network;
-        struct tx_requested_cmd tx_request;
-        struct memory_dump_cmd memory_dump;
-        struct update_association_cmd update_assoc;
-        struct start_timer_cmd start_timer;
+	char reserved[13];
+	struct update_param_cmd update_param;
+	struct report_param_cmd report_param;
+	UCHAR nummulticast;
+	UCHAR mode;
+	struct start_network_cmd start_network;
+	struct join_network_cmd join_network;
+	struct tx_requested_cmd tx_request;
+	struct memory_dump_cmd memory_dump;
+	struct update_association_cmd update_assoc;
+	struct start_timer_cmd start_timer;
     } var;
 };
 
@@ -602,10 +602,10 @@ struct rcs {
     UCHAR link_field;
     /* command specific parameters      */
     union {
-        UCHAR reserved[13];
-        struct rx_packet_cmd rx_packet;
-        struct rejoin_net_cmplt_cmd rejoin_net_complete;
-        struct japan_call_sign_rxd japan_call_sign;
+	UCHAR reserved[13];
+	struct rx_packet_cmd rx_packet;
+	struct rejoin_net_cmplt_cmd rejoin_net_complete;
+	struct japan_call_sign_rxd japan_call_sign;
     } var;
 };
 

@@ -5623,7 +5623,7 @@ xfs_getbmap(
 			out[cur_ext].bmv_unused2 = 0;
 			ASSERT(((iflags & BMV_IF_DELALLOC) != 0) ||
 			      (map[i].br_startblock != DELAYSTARTBLOCK));
-                        if (map[i].br_startblock == HOLESTARTBLOCK &&
+			if (map[i].br_startblock == HOLESTARTBLOCK &&
 			    whichfork == XFS_ATTR_FORK) {
 				/* came to the end of attribute fork */
 				out[cur_ext].bmv_oflags |= BMV_OF_LAST;

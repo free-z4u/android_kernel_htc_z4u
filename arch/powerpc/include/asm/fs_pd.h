@@ -39,12 +39,12 @@ extern immap_t __iomem *mpc8xx_immr;
 
 static inline int uart_baudrate(void)
 {
-        return get_baudrate();
+	return get_baudrate();
 }
 
 static inline int uart_clock(void)
 {
-        return ppc_proc_freq;
+	return ppc_proc_freq;
 }
 
 #endif

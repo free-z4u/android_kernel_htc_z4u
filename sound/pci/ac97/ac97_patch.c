@@ -1356,7 +1356,7 @@ static int patch_cirrus_spdif(struct snd_ac97 * ac97)
 	ac97->build_ops = &patch_cirrus_ops;
 	ac97->flags |= AC97_CS_SPDIF;
 	ac97->rates[AC97_RATES_SPDIF] &= ~SNDRV_PCM_RATE_32000;
-        ac97->ext_id |= AC97_EI_SPDIF;	/* force the detection of spdif */
+	ac97->ext_id |= AC97_EI_SPDIF;	/* force the detection of spdif */
 	snd_ac97_write_cache(ac97, AC97_CSR_ACMODE, 0x0080);
 	return 0;
 }
@@ -1401,7 +1401,7 @@ static int patch_conexant(struct snd_ac97 * ac97)
 {
 	ac97->build_ops = &patch_conexant_ops;
 	ac97->flags |= AC97_CX_SPDIF;
-        ac97->ext_id |= AC97_EI_SPDIF;	/* force the detection of spdif */
+	ac97->ext_id |= AC97_EI_SPDIF;	/* force the detection of spdif */
 	ac97->rates[AC97_RATES_SPDIF] = SNDRV_PCM_RATE_48000; /* 48k only */
 	return 0;
 }
@@ -2622,8 +2622,8 @@ static const struct snd_kcontrol_new snd_ac97_controls_alc650[] = {
 };
 
 static const struct snd_kcontrol_new snd_ac97_spdif_controls_alc650[] = {
-        AC97_SINGLE(SNDRV_CTL_NAME_IEC958("",CAPTURE,SWITCH), AC97_ALC650_MULTICH, 11, 1, 0),
-        AC97_SINGLE("Analog to IEC958 Output", AC97_ALC650_MULTICH, 12, 1, 0),
+	AC97_SINGLE(SNDRV_CTL_NAME_IEC958("",CAPTURE,SWITCH), AC97_ALC650_MULTICH, 11, 1, 0),
+	AC97_SINGLE("Analog to IEC958 Output", AC97_ALC650_MULTICH, 12, 1, 0),
 	/* disable this controls since it doesn't work as expected */
 	/* AC97_SINGLE("IEC958 Input Monitor", AC97_ALC650_MULTICH, 13, 1, 0), */
 };
@@ -2773,9 +2773,9 @@ static int alc655_iec958_route_put(struct snd_kcontrol *kcontrol, struct snd_ctl
 }
 
 static const struct snd_kcontrol_new snd_ac97_spdif_controls_alc655[] = {
-        AC97_PAGE_SINGLE(SNDRV_CTL_NAME_IEC958("",CAPTURE,SWITCH), AC97_ALC650_MULTICH, 11, 1, 0, 0),
+	AC97_PAGE_SINGLE(SNDRV_CTL_NAME_IEC958("",CAPTURE,SWITCH), AC97_ALC650_MULTICH, 11, 1, 0, 0),
 	/* disable this controls since it doesn't work as expected */
-        /* AC97_PAGE_SINGLE("IEC958 Input Monitor", AC97_ALC650_MULTICH, 14, 1, 0, 0), */
+	/* AC97_PAGE_SINGLE("IEC958 Input Monitor", AC97_ALC650_MULTICH, 14, 1, 0, 0), */
 	{
 		.iface  = SNDRV_CTL_ELEM_IFACE_MIXER,
 		.name   = SNDRV_CTL_NAME_IEC958("",PLAYBACK,NONE) "Source",
@@ -3314,7 +3314,7 @@ static int patch_cm9761(struct snd_ac97 *ac97)
 
 	/* enable spdif */
 	/* force the SPDIF bit in ext_id - codec doesn't set this bit! */
-        ac97->ext_id |= AC97_EI_SPDIF;
+	ac97->ext_id |= AC97_EI_SPDIF;
 	/* to be sure: we overwrite the ext status bits */
 	snd_ac97_write_cache(ac97, AC97_EXTENDED_STATUS, 0x05c0);
 	/* Don't set 0x0200 here.  This results in the silent analog output */

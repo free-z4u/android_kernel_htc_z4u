@@ -54,22 +54,22 @@ asmlinkage void mmc_loader(unsigned short *buf, unsigned long len)
 	mmc_init_progress();
 
 	mmc_update_progress(MMC_PROGRESS_ENTER);
-        /* Initialise SDHI1 */
-        /* PORT184CR: GPIO_FN_SDHICMD1 Control */
-        __raw_writeb(CR_FUNCTION1, PORT184CR);
-        /* PORT179CR: GPIO_FN_SDHICLK1 Control */
-        __raw_writeb(CR_INPUT_ENABLE|CR_FUNCTION1, PORT179CR);
-        /* PORT181CR: GPIO_FN_SDHID1_3 Control */
-        __raw_writeb(CR_FUNCTION1, PORT183CR);
-        /* PORT182CR: GPIO_FN_SDHID1_2 Control */
-        __raw_writeb(CR_FUNCTION1, PORT182CR);
-        /* PORT183CR: GPIO_FN_SDHID1_1 Control */
-        __raw_writeb(CR_FUNCTION1, PORT181CR);
-        /* PORT180CR: GPIO_FN_SDHID1_0 Control */
-        __raw_writeb(CR_FUNCTION1, PORT180CR);
+	/* Initialise SDHI1 */
+	/* PORT184CR: GPIO_FN_SDHICMD1 Control */
+	__raw_writeb(CR_FUNCTION1, PORT184CR);
+	/* PORT179CR: GPIO_FN_SDHICLK1 Control */
+	__raw_writeb(CR_INPUT_ENABLE|CR_FUNCTION1, PORT179CR);
+	/* PORT181CR: GPIO_FN_SDHID1_3 Control */
+	__raw_writeb(CR_FUNCTION1, PORT183CR);
+	/* PORT182CR: GPIO_FN_SDHID1_2 Control */
+	__raw_writeb(CR_FUNCTION1, PORT182CR);
+	/* PORT183CR: GPIO_FN_SDHID1_1 Control */
+	__raw_writeb(CR_FUNCTION1, PORT181CR);
+	/* PORT180CR: GPIO_FN_SDHID1_0 Control */
+	__raw_writeb(CR_FUNCTION1, PORT180CR);
 
-        /* Enable clock to SDHI1 hardware block */
-        __raw_writel(__raw_readl(SMSTPCR3) & ~(1 << 13), SMSTPCR3);
+	/* Enable clock to SDHI1 hardware block */
+	__raw_writel(__raw_readl(SMSTPCR3) & ~(1 << 13), SMSTPCR3);
 
 	/* setup SDHI hardware */
 	mmc_update_progress(MMC_PROGRESS_INIT);
@@ -84,8 +84,8 @@ asmlinkage void mmc_loader(unsigned short *buf, unsigned long len)
 			      (len + TMIO_BBS - 1) / TMIO_BBS, buf))
 		goto err;
 
-        /* Disable clock to SDHI1 hardware block */
-        __raw_writel(__raw_readl(SMSTPCR3) | (1 << 13), SMSTPCR3);
+	/* Disable clock to SDHI1 hardware block */
+	__raw_writel(__raw_readl(SMSTPCR3) | (1 << 13), SMSTPCR3);
 
 	mmc_update_progress(MMC_PROGRESS_DONE);
 

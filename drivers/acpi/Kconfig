@@ -10,17 +10,17 @@ menuconfig ACPI
 	select PNP
 	default y
 	help
-	  Advanced Configuration and Power Interface (ACPI) support for 
+	  Advanced Configuration and Power Interface (ACPI) support for
 	  Linux requires an ACPI-compliant platform (hardware/firmware),
 	  and assumes the presence of OS-directed configuration and power
-	  management (OSPM) software.  This option will enlarge your 
+	  management (OSPM) software.  This option will enlarge your
 	  kernel by about 70K.
 
-	  Linux ACPI provides a robust functional replacement for several 
+	  Linux ACPI provides a robust functional replacement for several
 	  legacy configuration and power management interfaces, including
-	  the Plug-and-Play BIOS specification (PnP BIOS), the 
-	  MultiProcessor Specification (MPS), and the Advanced Power 
-	  Management (APM) specification.  If both ACPI and APM support 
+	  the Plug-and-Play BIOS specification (PnP BIOS), the
+	  MultiProcessor Specification (MPS), and the Advanced Power
+	  Management (APM) specification.  If both ACPI and APM support
 	  are configured, ACPI is used.
 
 	  The project home page for the Linux ACPI subsystem is here:
@@ -61,9 +61,9 @@ config ACPI_PROCFS_POWER
 	depends on PROC_FS
 	help
 	  For backwards compatibility, this option allows
-          deprecated power /proc/acpi/ directories to exist, even when
-          they have been replaced by functions in /sys.
-          The deprecated directories (and their replacements) include:
+	  deprecated power /proc/acpi/ directories to exist, even when
+	  they have been replaced by functions in /sys.
+	  The deprecated directories (and their replacements) include:
 	  /proc/acpi/battery/* (/sys/class/power_supply/*)
 	  /proc/acpi/ac_adapter/* (sys/class/power_supply/*)
 	  This option has no effect on /proc/acpi/ directories
@@ -129,7 +129,7 @@ config ACPI_BATTERY
 	default y
 	help
 	  This driver adds support for battery information through
-	  /proc/acpi/battery. If you have a mobile system with a battery, 
+	  /proc/acpi/battery. If you have a mobile system with a battery,
 	  say Y.
 
 	  To compile this driver as a module, choose M here:
@@ -319,7 +319,7 @@ config X86_PM_TIMER
 	  (TSC) timing source.
 
 	  You should nearly always say Y here because many modern
-	  systems require this timer. 
+	  systems require this timer.
 
 config ACPI_CONTAINER
 	tristate "Container and Module Devices (EXPERIMENTAL)"
@@ -385,9 +385,9 @@ config ACPI_CUSTOM_METHOD
 	  to override that restriction).
 
 config ACPI_BGRT
-        tristate "Boottime Graphics Resource Table support"
-        default n
-        help
+	tristate "Boottime Graphics Resource Table support"
+	default n
+	help
 	  This driver adds support for exposing the ACPI Boottime Graphics
 	  Resource Table, which allows the operating system to obtain
 	  data from the firmware boot splash. It will appear under

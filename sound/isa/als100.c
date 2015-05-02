@@ -342,9 +342,9 @@ static int snd_als100_pnp_resume(struct pnp_card_link *pcard)
 static struct pnp_card_driver als100_pnpc_driver = {
 	.flags          = PNP_DRIVER_RES_DISABLE,
 	.name		= "als100",
-        .id_table       = snd_als100_pnpids,
-        .probe          = snd_als100_pnp_detect,
-        .remove         = __devexit_p(snd_als100_pnp_remove),
+	.id_table       = snd_als100_pnpids,
+	.probe          = snd_als100_pnp_detect,
+	.remove         = __devexit_p(snd_als100_pnp_remove),
 #ifdef CONFIG_PM
 	.suspend	= snd_als100_pnp_suspend,
 	.resume		= snd_als100_pnp_resume,

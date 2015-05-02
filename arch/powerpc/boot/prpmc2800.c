@@ -511,7 +511,7 @@ static void prpmc2800_reset(void)
 static struct gunzip_state gzstate;
 
 void platform_init(unsigned long r3, unsigned long r4, unsigned long r5,
-                   unsigned long r6, unsigned long r7)
+		   unsigned long r6, unsigned long r7)
 {
 	struct elf_info ei;
 	char *heap_start, *dtb;

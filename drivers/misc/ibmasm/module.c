@@ -156,9 +156,9 @@ error_eventbuffer:
 	pci_set_drvdata(pdev, NULL);
 	kfree(sp);
 error_kmalloc:
-        pci_release_regions(pdev);
+	pci_release_regions(pdev);
 error_resources:
-        pci_disable_device(pdev);
+	pci_disable_device(pdev);
 
 	return result;
 }

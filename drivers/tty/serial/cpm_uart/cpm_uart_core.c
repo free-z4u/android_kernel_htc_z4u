@@ -490,8 +490,8 @@ static void cpm_uart_shutdown(struct uart_port *port)
 }
 
 static void cpm_uart_set_termios(struct uart_port *port,
-                                 struct ktermios *termios,
-                                 struct ktermios *old)
+				 struct ktermios *termios,
+				 struct ktermios *old)
 {
 	int baud;
 	unsigned long flags;
@@ -1124,7 +1124,7 @@ static struct uart_ops cpm_uart_pops = {
 struct uart_cpm_port cpm_uart_ports[UART_NR];
 
 static int cpm_uart_init_port(struct device_node *np,
-                              struct uart_cpm_port *pinfo)
+			      struct uart_cpm_port *pinfo)
 {
 	const u32 *data;
 	void __iomem *mem, *pram;

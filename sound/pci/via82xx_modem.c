@@ -202,7 +202,7 @@ DEFINE_VIA_REGSET(MI, 0x50);
 #define  VIA_MC97_CTRL_ENABLE   0x80
 #define  VIA_MC97_CTRL_SECONDARY 0x40
 #define  VIA_MC97_CTRL_INIT     (VIA_MC97_CTRL_ENABLE|\
-                                 VIA_MC97_CTRL_SECONDARY)
+				 VIA_MC97_CTRL_SECONDARY)
 
 
 /*
@@ -220,7 +220,7 @@ struct viadev {
 	unsigned int reg_offset;
 	unsigned long port;
 	int direction;	/* playback = 0, capture = 1 */
-        struct snd_pcm_substream *substream;
+	struct snd_pcm_substream *substream;
 	int running;
 	unsigned int tbl_entries; /* # descriptors */
 	struct snd_dma_buffer table;
@@ -739,18 +739,18 @@ static int snd_via82xx_modem_pcm_open(struct via82xx_modem *chip, struct viadev 
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	int err;
-        static unsigned int rates[] = { 8000,  9600, 12000, 16000 };
-        static struct snd_pcm_hw_constraint_list hw_constraints_rates = {
-                .count = ARRAY_SIZE(rates),
-                .list = rates,
-                .mask = 0,
-        };
+	static unsigned int rates[] = { 8000,  9600, 12000, 16000 };
+	static struct snd_pcm_hw_constraint_list hw_constraints_rates = {
+		.count = ARRAY_SIZE(rates),
+		.list = rates,
+		.mask = 0,
+	};
 
 	runtime->hw = snd_via82xx_hw;
 
-        if ((err = snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
+	if ((err = snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
 					      &hw_constraints_rates)) < 0)
-                return err;
+		return err;
 
 	/* we may remove following constaint when we modify table entries
 	   in interrupt */
@@ -1105,9 +1105,9 @@ static int __devinit snd_via82xx_create(struct snd_card *card,
 {
 	struct via82xx_modem *chip;
 	int err;
-        static struct snd_device_ops ops = {
+	static struct snd_device_ops ops = {
 		.dev_free =	snd_via82xx_dev_free,
-        };
+	};
 
 	if ((err = pci_enable_device(pci)) < 0)
 		return err;

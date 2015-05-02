@@ -75,7 +75,7 @@
 
 #define NVDmaStart(info, par, tag, size) {    \
      if((par)->dmaFree <= (size))             \
-        NVDmaWait(info, size);                \
+	NVDmaWait(info, size);                \
      NVDmaNext(par, ((size) << 18) | (tag));  \
      (par)->dmaFree -= ((size) + 1);          \
 }

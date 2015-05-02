@@ -333,7 +333,7 @@ static __be32 nlmsvc_proc_cancel_msg(struct svc_rqst *rqstp, struct nlm_args *ar
 
 static __be32
 nlmsvc_proc_unlock_msg(struct svc_rqst *rqstp, struct nlm_args *argp,
-                                               void            *resp)
+					       void            *resp)
 {
 	dprintk("lockd: UNLOCK_MSG    called\n");
 	return nlmsvc_callback(rqstp, NLMPROC_UNLOCK_RES, argp, nlmsvc_proc_unlock);
@@ -341,7 +341,7 @@ nlmsvc_proc_unlock_msg(struct svc_rqst *rqstp, struct nlm_args *argp,
 
 static __be32
 nlmsvc_proc_granted_msg(struct svc_rqst *rqstp, struct nlm_args *argp,
-                                                void            *resp)
+						void            *resp)
 {
 	dprintk("lockd: GRANTED_MSG   called\n");
 	return nlmsvc_callback(rqstp, NLMPROC_GRANTED_RES, argp, nlmsvc_proc_granted);
@@ -469,7 +469,7 @@ nlmsvc_proc_sm_notify(struct svc_rqst *rqstp, struct nlm_reboot *argp,
  */
 static __be32
 nlmsvc_proc_granted_res(struct svc_rqst *rqstp, struct nlm_res  *argp,
-                                                void            *resp)
+						void            *resp)
 {
 	if (!nlmsvc_ops)
 		return rpc_success;

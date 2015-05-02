@@ -286,7 +286,7 @@ static struct snd_ca0106_details ca0106_chip_details[] = {
 	 * Sound Blaster Live! 24-bit EAX
 	 * high-definition 7.1 audio processor".
 	 * Fixes ALSA bug#1600
-         */
+	 */
 	{ .serial = 0x30411297,
 	  .name = "Shuttle XPC SD11G5 [SD11G5]",
 	  .gpio_type = 1,
@@ -560,7 +560,7 @@ static int snd_ca0106_pcm_open_playback_channel(struct snd_pcm_substream *substr
 						int channel_id)
 {
 	struct snd_ca0106 *chip = snd_pcm_substream_chip(substream);
-        struct snd_ca0106_channel *channel = &(chip->playback_channels[channel_id]);
+	struct snd_ca0106_channel *channel = &(chip->playback_channels[channel_id]);
 	struct snd_ca0106_pcm *epcm;
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	int err;
@@ -571,27 +571,27 @@ static int snd_ca0106_pcm_open_playback_channel(struct snd_pcm_substream *substr
 		return -ENOMEM;
 	epcm->emu = chip;
 	epcm->substream = substream;
-        epcm->channel_id=channel_id;
+	epcm->channel_id=channel_id;
 
 	runtime->private_data = epcm;
 	runtime->private_free = snd_ca0106_pcm_free_substream;
 
 	runtime->hw = snd_ca0106_playback_hw;
 
-        channel->emu = chip;
-        channel->number = channel_id;
+	channel->emu = chip;
+	channel->number = channel_id;
 
 	channel->use = 1;
 	/*
 	printk(KERN_DEBUG "open:channel_id=%d, chip=%p, channel=%p\n",
 	       channel_id, chip, channel);
 	*/
-        //channel->interrupt = snd_ca0106_pcm_channel_interrupt;
+	//channel->interrupt = snd_ca0106_pcm_channel_interrupt;
 	channel->epcm = epcm;
 	if ((err = snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS)) < 0)
-                return err;
+		return err;
 	if ((err = snd_pcm_hw_constraint_step(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_BYTES, 64)) < 0)
-                return err;
+		return err;
 	snd_pcm_set_sync(substream);
 
 	/* Front channel dac should already be on */
@@ -611,7 +611,7 @@ static int snd_ca0106_pcm_close_playback(struct snd_pcm_substream *substream)
 {
 	struct snd_ca0106 *chip = snd_pcm_substream_chip(substream);
 	struct snd_pcm_runtime *runtime = substream->runtime;
-        struct snd_ca0106_pcm *epcm = runtime->private_data;
+	struct snd_ca0106_pcm *epcm = runtime->private_data;
 	chip->playback_channels[epcm->channel_id].use = 0;
 
 	restore_spdif_bits(chip, epcm->channel_id);
@@ -653,7 +653,7 @@ static int snd_ca0106_pcm_open_capture_channel(struct snd_pcm_substream *substre
 					       int channel_id)
 {
 	struct snd_ca0106 *chip = snd_pcm_substream_chip(substream);
-        struct snd_ca0106_channel *channel = &(chip->capture_channels[channel_id]);
+	struct snd_ca0106_channel *channel = &(chip->capture_channels[channel_id]);
 	struct snd_ca0106_pcm *epcm;
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	int err;
@@ -662,31 +662,31 @@ static int snd_ca0106_pcm_open_capture_channel(struct snd_pcm_substream *substre
 	if (epcm == NULL) {
 		snd_printk(KERN_ERR "open_capture_channel: failed epcm alloc\n");
 		return -ENOMEM;
-        }
+	}
 	epcm->emu = chip;
 	epcm->substream = substream;
-        epcm->channel_id=channel_id;
+	epcm->channel_id=channel_id;
 
 	runtime->private_data = epcm;
 	runtime->private_free = snd_ca0106_pcm_free_substream;
 
 	runtime->hw = snd_ca0106_capture_hw;
 
-        channel->emu = chip;
-        channel->number = channel_id;
+	channel->emu = chip;
+	channel->number = channel_id;
 
 	channel->use = 1;
 	/*
-        printk(KERN_DEBUG "open:channel_id=%d, chip=%p, channel=%p\n",
+	printk(KERN_DEBUG "open:channel_id=%d, chip=%p, channel=%p\n",
 	       channel_id, chip, channel);
 	*/
-        //channel->interrupt = snd_ca0106_pcm_channel_interrupt;
-        channel->epcm = epcm;
+	//channel->interrupt = snd_ca0106_pcm_channel_interrupt;
+	channel->epcm = epcm;
 	if ((err = snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS)) < 0)
-                return err;
+		return err;
 	//snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_SIZE, &hw_constraints_capture_period_sizes);
 	if ((err = snd_pcm_hw_constraint_step(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_BYTES, 64)) < 0)
-                return err;
+		return err;
 	return 0;
 }
 
@@ -695,7 +695,7 @@ static int snd_ca0106_pcm_close_capture(struct snd_pcm_substream *substream)
 {
 	struct snd_ca0106 *chip = snd_pcm_substream_chip(substream);
 	struct snd_pcm_runtime *runtime = substream->runtime;
-        struct snd_ca0106_pcm *epcm = runtime->private_data;
+	struct snd_ca0106_pcm *epcm = runtime->private_data;
 	chip->capture_channels[epcm->channel_id].use = 0;
 	/* FIXME: maybe zero others */
 	return 0;
@@ -792,7 +792,7 @@ static int snd_ca0106_pcm_prepare_playback(struct snd_pcm_substream *substream)
 		reg40_set = 0x10000 << (channel<<1);
 		reg71_set = 0x01010000;
 		break;
-        case 48000:
+	case 48000:
 		reg40_set = 0;
 		reg71_set = 0;
 		break;
@@ -833,7 +833,7 @@ static int snd_ca0106_pcm_prepare_playback(struct snd_pcm_substream *substream)
 	snd_ca0106_ptr_write(emu, 0x71, 0, reg71);
 
 	/* FIXME: Check emu->buffer.size before actually writing to it. */
-        for(i=0; i < runtime->periods; i++) {
+	for(i=0; i < runtime->periods; i++) {
 		table_base[i*2] = runtime->dma_addr + (i * period_size_bytes);
 		table_base[i*2+1] = period_size_bytes << 16;
 	}
@@ -848,7 +848,7 @@ static int snd_ca0106_pcm_prepare_playback(struct snd_pcm_substream *substream)
 	snd_ca0106_ptr_write(emu, PLAYBACK_POINTER, channel, 0);
 	snd_ca0106_ptr_write(emu, 0x07, channel, 0x0);
 	snd_ca0106_ptr_write(emu, 0x08, channel, 0);
-        snd_ca0106_ptr_write(emu, PLAYBACK_MUTE, 0x0, 0x0); /* Unmute output */
+	snd_ca0106_ptr_write(emu, PLAYBACK_MUTE, 0x0, 0x0); /* Unmute output */
 #if 0
 	snd_ca0106_ptr_write(emu, SPCS0, 0,
 			       SPCS_CLKACCY_1000PPM | SPCS_SAMPLERATE_48 |
@@ -884,7 +884,7 @@ static int snd_ca0106_pcm_prepare_capture(struct snd_pcm_substream *substream)
 		   runtime->channels, runtime->buffer_size,
 		   runtime->period_size, runtime->periods,
 		   frames_to_bytes(runtime, 1));
-        snd_printk(KERN_DEBUG "dma_addr=%x, dma_area=%p, table_base=%p\n",
+	snd_printk(KERN_DEBUG "dma_addr=%x, dma_area=%p, table_base=%p\n",
 		   runtime->dma_addr, runtime->dma_area, table_base);
 	snd_printk(KERN_DEBUG "dma_addr=%x, dma_area=%p, dma_bytes(size)=%x\n",
 		   emu->buffer.addr, emu->buffer.area, emu->buffer.bytes);
@@ -894,7 +894,7 @@ static int snd_ca0106_pcm_prepare_capture(struct snd_pcm_substream *substream)
 	case 44100:
 		reg71_set = 0x00004000;
 		break;
-        case 48000:
+	case 48000:
 		reg71_set = 0;
 		break;
 	case 96000:
@@ -928,7 +928,7 @@ static int snd_ca0106_pcm_prepare_capture(struct snd_pcm_substream *substream)
 	reg71 = snd_ca0106_ptr_read(emu, 0x71, 0);
 	reg71 = (reg71 & ~reg71_mask) | reg71_set;
 	snd_ca0106_ptr_write(emu, 0x71, 0, reg71);
-        if (emu->details->i2c_adc == 1) { /* The SB0410 and SB0413 use I2C to control ADC. */
+	if (emu->details->i2c_adc == 1) { /* The SB0410 and SB0413 use I2C to control ADC. */
 	        snd_ca0106_i2c_write(emu, ADC_MASTER, over_sampling); /* Adjust the over sampler to better suit the capture rate. */
 	}
 
@@ -958,7 +958,7 @@ static int snd_ca0106_pcm_trigger_playback(struct snd_pcm_substream *substream,
 	struct snd_ca0106_pcm *epcm;
 	int channel;
 	int result = 0;
-        struct snd_pcm_substream *s;
+	struct snd_pcm_substream *s;
 	u32 basic = 0;
 	u32 extended = 0;
 	u32 bits;
@@ -975,7 +975,7 @@ static int snd_ca0106_pcm_trigger_playback(struct snd_pcm_substream *substream,
 		running = 0;
 		break;
 	}
-        snd_pcm_group_for_each_entry(s, substream) {
+	snd_pcm_group_for_each_entry(s, substream) {
 		if (snd_pcm_substream_chip(s) != emu ||
 		    s->stream != SNDRV_PCM_STREAM_PLAYBACK)
 			continue;
@@ -986,8 +986,8 @@ static int snd_ca0106_pcm_trigger_playback(struct snd_pcm_substream *substream,
 		epcm->running = running;
 		basic |= (0x1 << channel);
 		extended |= (0x10 << channel);
-                snd_pcm_trigger_done(s, substream);
-        }
+		snd_pcm_trigger_done(s, substream);
+	}
 	/* snd_printk(KERN_DEBUG "basic=0x%x, extended=0x%x\n",basic, extended); */
 
 	switch (cmd) {
@@ -1090,7 +1090,7 @@ snd_ca0106_pcm_pointer_capture(struct snd_pcm_substream *substream)
 	ptr1 = snd_ca0106_ptr_read(emu, CAPTURE_POINTER, channel);
 	ptr2 = bytes_to_frames(runtime, ptr1);
 	ptr=ptr2;
-        if (ptr >= runtime->buffer_size)
+	if (ptr >= runtime->buffer_size)
 		ptr -= runtime->buffer_size;
 	/*
 	printk(KERN_DEBUG "ptr1 = 0x%lx, ptr2=0x%lx, ptr=0x%lx, "
@@ -1159,36 +1159,36 @@ static struct snd_pcm_ops snd_ca0106_capture_3_ops = {
 };
 
 static struct snd_pcm_ops snd_ca0106_playback_center_lfe_ops = {
-        .open =         snd_ca0106_pcm_open_playback_center_lfe,
-        .close =        snd_ca0106_pcm_close_playback,
-        .ioctl =        snd_pcm_lib_ioctl,
-        .hw_params =    snd_ca0106_pcm_hw_params_playback,
-        .hw_free =      snd_ca0106_pcm_hw_free_playback,
-        .prepare =      snd_ca0106_pcm_prepare_playback,
-        .trigger =      snd_ca0106_pcm_trigger_playback,
-        .pointer =      snd_ca0106_pcm_pointer_playback,
+	.open =         snd_ca0106_pcm_open_playback_center_lfe,
+	.close =        snd_ca0106_pcm_close_playback,
+	.ioctl =        snd_pcm_lib_ioctl,
+	.hw_params =    snd_ca0106_pcm_hw_params_playback,
+	.hw_free =      snd_ca0106_pcm_hw_free_playback,
+	.prepare =      snd_ca0106_pcm_prepare_playback,
+	.trigger =      snd_ca0106_pcm_trigger_playback,
+	.pointer =      snd_ca0106_pcm_pointer_playback,
 };
 
 static struct snd_pcm_ops snd_ca0106_playback_unknown_ops = {
-        .open =         snd_ca0106_pcm_open_playback_unknown,
-        .close =        snd_ca0106_pcm_close_playback,
-        .ioctl =        snd_pcm_lib_ioctl,
-        .hw_params =    snd_ca0106_pcm_hw_params_playback,
-        .hw_free =      snd_ca0106_pcm_hw_free_playback,
-        .prepare =      snd_ca0106_pcm_prepare_playback,
-        .trigger =      snd_ca0106_pcm_trigger_playback,
-        .pointer =      snd_ca0106_pcm_pointer_playback,
+	.open =         snd_ca0106_pcm_open_playback_unknown,
+	.close =        snd_ca0106_pcm_close_playback,
+	.ioctl =        snd_pcm_lib_ioctl,
+	.hw_params =    snd_ca0106_pcm_hw_params_playback,
+	.hw_free =      snd_ca0106_pcm_hw_free_playback,
+	.prepare =      snd_ca0106_pcm_prepare_playback,
+	.trigger =      snd_ca0106_pcm_trigger_playback,
+	.pointer =      snd_ca0106_pcm_pointer_playback,
 };
 
 static struct snd_pcm_ops snd_ca0106_playback_rear_ops = {
-        .open =         snd_ca0106_pcm_open_playback_rear,
-        .close =        snd_ca0106_pcm_close_playback,
-        .ioctl =        snd_pcm_lib_ioctl,
-        .hw_params =    snd_ca0106_pcm_hw_params_playback,
+	.open =         snd_ca0106_pcm_open_playback_rear,
+	.close =        snd_ca0106_pcm_close_playback,
+	.ioctl =        snd_pcm_lib_ioctl,
+	.hw_params =    snd_ca0106_pcm_hw_params_playback,
 		.hw_free =      snd_ca0106_pcm_hw_free_playback,
-        .prepare =      snd_ca0106_pcm_prepare_playback,
-        .trigger =      snd_ca0106_pcm_trigger_playback,
-        .pointer =      snd_ca0106_pcm_pointer_playback,
+	.prepare =      snd_ca0106_pcm_prepare_playback,
+	.trigger =      snd_ca0106_pcm_trigger_playback,
+	.pointer =      snd_ca0106_pcm_pointer_playback,
 };
 
 
@@ -1275,21 +1275,21 @@ static irqreturn_t snd_ca0106_interrupt(int irq, void *dev_id)
 	struct snd_ca0106 *chip = dev_id;
 	int i;
 	int mask;
-        unsigned int stat76;
+	unsigned int stat76;
 	struct snd_ca0106_channel *pchannel;
 
 	status = inl(chip->port + IPR);
 	if (! status)
 		return IRQ_NONE;
 
-        stat76 = snd_ca0106_ptr_read(chip, EXTENDED_INT, 0);
+	stat76 = snd_ca0106_ptr_read(chip, EXTENDED_INT, 0);
 	/*
 	snd_printk(KERN_DEBUG "interrupt status = 0x%08x, stat76=0x%08x\n",
 		   status, stat76);
 	snd_printk(KERN_DEBUG "ptr=0x%08x\n",
 		   snd_ca0106_ptr_read(chip, PLAYBACK_POINTER, 0));
 	*/
-        mask = 0x11; /* 0x1 for one half, 0x10 for the other half period. */
+	mask = 0x11; /* 0x1 for one half, 0x10 for the other half period. */
 	for(i = 0; i < 4; i++) {
 		pchannel = &(chip->playback_channels[i]);
 		if (stat76 & mask) {
@@ -1297,13 +1297,13 @@ static irqreturn_t snd_ca0106_interrupt(int irq, void *dev_id)
 			if(pchannel->use) {
 				snd_pcm_period_elapsed(pchannel->epcm->substream);
 				//printk(KERN_INFO "interrupt [%d] used\n", i);
-                        }
+			}
 		}
 	        //printk(KERN_INFO "channel=%p\n",pchannel);
 	        //printk(KERN_INFO "interrupt stat76[%d] = %08x, use=%d, channel=%d\n", i, stat76, pchannel->use, pchannel->number);
 		mask <<= 1;
 	}
-        mask = 0x110000; /* 0x1 for one half, 0x10 for the other half period. */
+	mask = 0x110000; /* 0x1 for one half, 0x10 for the other half period. */
 	for(i = 0; i < 4; i++) {
 		pchannel = &(chip->capture_channels[i]);
 		if (stat76 & mask) {
@@ -1311,14 +1311,14 @@ static irqreturn_t snd_ca0106_interrupt(int irq, void *dev_id)
 			if(pchannel->use) {
 				snd_pcm_period_elapsed(pchannel->epcm->substream);
 				//printk(KERN_INFO "interrupt [%d] used\n", i);
-                        }
+			}
 		}
 	        //printk(KERN_INFO "channel=%p\n",pchannel);
 	        //printk(KERN_INFO "interrupt stat76[%d] = %08x, use=%d, channel=%d\n", i, stat76, pchannel->use, pchannel->number);
 		mask <<= 1;
 	}
 
-        snd_ca0106_ptr_write(chip, EXTENDED_INT, 0, stat76);
+	snd_ca0106_ptr_write(chip, EXTENDED_INT, 0, stat76);
 
 	if (chip->midi.dev_id &&
 	    (status & (chip->midi.ipr_tx|chip->midi.ipr_rx))) {
@@ -1350,20 +1350,20 @@ static int __devinit snd_ca0106_pcm(struct snd_ca0106 *emu, int device)
 	case 0:
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_ca0106_playback_front_ops);
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_ca0106_capture_0_ops);
-          break;
+	  break;
 	case 1:
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_ca0106_playback_rear_ops);
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_ca0106_capture_1_ops);
-          break;
+	  break;
 	case 2:
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_ca0106_playback_center_lfe_ops);
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_ca0106_capture_2_ops);
-          break;
+	  break;
 	case 3:
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_ca0106_playback_unknown_ops);
 	  snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_ca0106_capture_3_ops);
-          break;
-        }
+	  break;
+	}
 
 	pcm->info_flags = 0;
 	strcpy(pcm->name, "CA0106");
@@ -1466,12 +1466,12 @@ static void ca0106_init_chip(struct snd_ca0106 *chip, int resume)
 	snd_ca0106_ptr_write(chip, SPCS2, 0, chip->spdif_str_bits[2]);
 	snd_ca0106_ptr_write(chip, SPCS3, 0, chip->spdif_str_bits[3]);
 
-        snd_ca0106_ptr_write(chip, PLAYBACK_MUTE, 0, 0x00fc0000);
-        snd_ca0106_ptr_write(chip, CAPTURE_MUTE, 0, 0x00fc0000);
+	snd_ca0106_ptr_write(chip, PLAYBACK_MUTE, 0, 0x00fc0000);
+	snd_ca0106_ptr_write(chip, CAPTURE_MUTE, 0, 0x00fc0000);
 
-        /* Write 0x8000 to AC97_REC_GAIN to mute it. */
-        outb(AC97_REC_GAIN, chip->port + AC97ADDRESS);
-        outw(0x8000, chip->port + AC97DATA);
+	/* Write 0x8000 to AC97_REC_GAIN to mute it. */
+	outb(AC97_REC_GAIN, chip->port + AC97ADDRESS);
+	outw(0x8000, chip->port + AC97DATA);
 #if 0 /* FIXME: what are these? */
 	snd_ca0106_ptr_write(chip, SPCS0, 0, 0x2108006);
 	snd_ca0106_ptr_write(chip, 0x42, 0, 0x2108006);

@@ -1,6 +1,6 @@
 /*
    md_p.h : physical layout of Linux RAID devices
-          Copyright (C) 1996-98 Ingo Molnar, Gadi Oxman
+	  Copyright (C) 1996-98 Ingo Molnar, Gadi Oxman
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

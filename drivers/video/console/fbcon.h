@@ -69,7 +69,7 @@ struct fbcon_ops {
 	struct timer_list cursor_timer; /* Cursor timer */
 	struct fb_cursor cursor_state;
 	struct display *p;
-        int    currcon;	                /* Current VC. */
+	int    currcon;	                /* Current VC. */
 	int    cursor_flash;
 	int    cursor_reset;
 	int    blank_state;
@@ -249,10 +249,10 @@ static inline int get_attribute(struct fb_info *info, u16 c)
 }
 
 #define FBCON_SWAP(i,r,v) ({ \
-        typeof(r) _r = (r);  \
-        typeof(v) _v = (v);  \
-        (void) (&_r == &_v); \
-        (i == FB_ROTATE_UR || i == FB_ROTATE_UD) ? _r : _v; })
+	typeof(r) _r = (r);  \
+	typeof(v) _v = (v);  \
+	(void) (&_r == &_v); \
+	(i == FB_ROTATE_UR || i == FB_ROTATE_UD) ? _r : _v; })
 
 #ifdef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
 extern void fbcon_set_rotate(struct fbcon_ops *ops);

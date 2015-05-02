@@ -45,14 +45,14 @@ static int find_boot_record(struct NFTLrecord *nftl)
 	struct mtd_info *mtd = nftl->mbd.mtd;
 	unsigned int i;
 
-        /* Assume logical EraseSize == physical erasesize for starting the scan.
+	/* Assume logical EraseSize == physical erasesize for starting the scan.
 	   We'll sort it out later if we find a MediaHeader which says otherwise */
 	/* Actually, we won't.  The new DiskOnChip driver has already scanned
 	   the MediaHeader and adjusted the virtual erasesize it presents in
 	   the mtd device accordingly.  We could even get rid of
 	   nftl->EraseSize if there were any point in doing so. */
 	nftl->EraseSize = nftl->mbd.mtd->erasesize;
-        nftl->nb_blocks = (u32)nftl->mbd.mtd->size / nftl->EraseSize;
+	nftl->nb_blocks = (u32)nftl->mbd.mtd->size / nftl->EraseSize;
 
 	nftl->MediaUnit = BLOCK_NIL;
 	nftl->SpareMediaUnit = BLOCK_NIL;

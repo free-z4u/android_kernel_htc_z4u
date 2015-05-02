@@ -565,12 +565,12 @@ static EDD_DEVICE_ATTR(extensions, 0444, edd_show_extensions, edd_has_edd_info);
 static EDD_DEVICE_ATTR(info_flags, 0444, edd_show_info_flags, edd_has_edd_info);
 static EDD_DEVICE_ATTR(sectors, 0444, edd_show_sectors, edd_has_edd_info);
 static EDD_DEVICE_ATTR(legacy_max_cylinder, 0444,
-                       edd_show_legacy_max_cylinder,
+		       edd_show_legacy_max_cylinder,
 		       edd_has_legacy_max_cylinder);
 static EDD_DEVICE_ATTR(legacy_max_head, 0444, edd_show_legacy_max_head,
 		       edd_has_legacy_max_head);
 static EDD_DEVICE_ATTR(legacy_sectors_per_track, 0444,
-                       edd_show_legacy_sectors_per_track,
+		       edd_show_legacy_sectors_per_track,
 		       edd_has_legacy_sectors_per_track);
 static EDD_DEVICE_ATTR(default_cylinders, 0444, edd_show_default_cylinders,
 		       edd_has_default_cylinders);

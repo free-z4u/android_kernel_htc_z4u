@@ -117,10 +117,10 @@ struct kbsentry {
 #define KDSKBSENT	0x4B49	/* sets one function key string entry */
 
 struct kbdiacr {
-        unsigned char diacr, base, result;
+	unsigned char diacr, base, result;
 };
 struct kbdiacrs {
-        unsigned int kb_cnt;    /* number of entries in following array */
+	unsigned int kb_cnt;    /* number of entries in following array */
 	struct kbdiacr kbdiacr[256];    /* MAX_DIACR from keyboard.h */
 };
 #define KDGKBDIACR      0x4B4A  /* read kernel accent table */
@@ -130,7 +130,7 @@ struct kbdiacruc {
 	unsigned int diacr, base, result;
 };
 struct kbdiacrsuc {
-        unsigned int kb_cnt;    /* number of entries in following array */
+	unsigned int kb_cnt;    /* number of entries in following array */
 	struct kbdiacruc kbdiacruc[256];    /* MAX_DIACR from keyboard.h */
 };
 #define KDGKBDIACRUC    0x4BFA  /* read kernel accent table - UCS */

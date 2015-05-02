@@ -1072,8 +1072,8 @@ static int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
 		/* the em2800 can only scale down to 50% */
 		height = height > (3 * maxh / 4) ? maxh : maxh / 2;
 		width = width > (3 * maxw / 4) ? maxw : maxw / 2;
-                /* MaxPacketSize for em2800 is too small to capture at full resolution
-                 * use half of maxw as the scaler can only scale to 50% */
+		/* MaxPacketSize for em2800 is too small to capture at full resolution
+		 * use half of maxw as the scaler can only scale to 50% */
 		if (width == maxw && height == maxh)
 			width /= 2;
 	} else {
@@ -2524,10 +2524,10 @@ int em28xx_register_analog_devices(struct em28xx *dev)
 	dev->format = &format[0];
 
 	maxw = norm_maxw(dev);
-        /* MaxPacketSize for em2800 is too small to capture at full resolution
-         * use half of maxw as the scaler can only scale to 50% */
-        if (dev->board.is_em2800)
-            maxw /= 2;
+	/* MaxPacketSize for em2800 is too small to capture at full resolution
+	 * use half of maxw as the scaler can only scale to 50% */
+	if (dev->board.is_em2800)
+	    maxw /= 2;
 
 	em28xx_set_video_format(dev, format[0].fourcc,
 				maxw, norm_maxh(dev));

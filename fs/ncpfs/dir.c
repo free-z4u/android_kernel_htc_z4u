@@ -198,14 +198,14 @@ static inline int ncp_is_server_root(struct inode *inode)
 static int
 ncp_force_unlink(struct inode *dir, struct dentry* dentry)
 {
-        int res=0x9c,res2;
+	int res=0x9c,res2;
 	struct nw_modify_dos_info info;
 	__le32 old_nwattr;
 	struct inode *inode;
 
 	memset(&info, 0, sizeof(info));
 
-        /* remove the Read-Only flag on the NW server */
+	/* remove the Read-Only flag on the NW server */
 	inode = dentry->d_inode;
 
 	old_nwattr = NCP_FINFO(inode)->nwattr;
@@ -214,28 +214,28 @@ ncp_force_unlink(struct inode *dir, struct dentry* dentry)
 	if (res2)
 		goto leave_me;
 
-        /* now try again the delete operation */
-        res = ncp_del_file_or_subdir2(NCP_SERVER(dir), dentry);
+	/* now try again the delete operation */
+	res = ncp_del_file_or_subdir2(NCP_SERVER(dir), dentry);
 
-        if (res)  /* delete failed, set R bit again */
-        {
+	if (res)  /* delete failed, set R bit again */
+	{
 		info.attributes = old_nwattr;
 		res2 = ncp_modify_file_or_subdir_dos_info_path(NCP_SERVER(inode), inode, NULL, DM_ATTRIBUTES, &info);
 		if (res2)
-                        goto leave_me;
-        }
+			goto leave_me;
+	}
 leave_me:
-        return(res);
+	return(res);
 }
 #endif	/* CONFIG_NCPFS_STRONG */
 
 #ifdef CONFIG_NCPFS_STRONG
 static int
 ncp_force_rename(struct inode *old_dir, struct dentry* old_dentry, char *_old_name,
-                 struct inode *new_dir, struct dentry* new_dentry, char *_new_name)
+		 struct inode *new_dir, struct dentry* new_dentry, char *_new_name)
 {
 	struct nw_modify_dos_info info;
-        int res=0x90,res2;
+	int res=0x90,res2;
 	struct inode *old_inode = old_dentry->d_inode;
 	__le32 old_nwattr = NCP_FINFO(old_inode)->nwattr;
 	__le32 new_nwattr = 0; /* shut compiler warning */
@@ -244,7 +244,7 @@ ncp_force_rename(struct inode *old_dir, struct dentry* old_dentry, char *_old_na
 
 	memset(&info, 0, sizeof(info));
 
-        /* remove the Read-Only flag on the NW server */
+	/* remove the Read-Only flag on the NW server */
 
 	info.attributes = old_nwattr & ~(aRONLY|aRENAMEINHIBIT|aDELETEINHIBIT);
 	res2 = ncp_modify_file_or_subdir_dos_info_path(NCP_SERVER(old_inode), old_inode, NULL, DM_ATTRIBUTES, &info);
@@ -257,12 +257,12 @@ ncp_force_rename(struct inode *old_dir, struct dentry* old_dentry, char *_old_na
 		if (!res2)
 			new_nwattr_changed = 1;
 	}
-        /* now try again the rename operation */
+	/* now try again the rename operation */
 	/* but only if something really happened */
 	if (new_nwattr_changed || old_nwattr_changed) {
 	        res = ncp_ren_or_mov_file_or_subdir(NCP_SERVER(old_dir),
-        	                                    old_dir, _old_name,
-                	                            new_dir, _new_name);
+		                                    old_dir, _old_name,
+			                            new_dir, _new_name);
 	}
 	if (res)
 		goto leave_me;
@@ -284,7 +284,7 @@ leave_me:;
 		res2 = ncp_modify_file_or_subdir_dos_info_path(NCP_SERVER(new_dir), new_dir, _new_name, DM_ATTRIBUTES, &info);
 		/* ignore errors */
 	}
-        return(res);
+	return(res);
 }
 #endif	/* CONFIG_NCPFS_STRONG */
 
@@ -1183,8 +1183,8 @@ static int ncp_rename(struct inode *old_dir, struct dentry *old_dentry,
 #endif
 	switch (error) {
 		case 0x00:
-               	        DPRINTK("ncp renamed %s -> %s.\n",
-                                old_dentry->d_name.name,new_dentry->d_name.name);
+	       	        DPRINTK("ncp renamed %s -> %s.\n",
+				old_dentry->d_name.name,new_dentry->d_name.name);
 			break;
 		case 0x9E:
 			error = -ENAMETOOLONG;

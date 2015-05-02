@@ -331,8 +331,8 @@ static int mt_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 		return -1;
 
 	/* Only map fields from TouchScreen or TouchPad collections.
-         * We need to ignore fields that belong to other collections
-         * such as Mouse that might have the same GenericDesktop usages. */
+	 * We need to ignore fields that belong to other collections
+	 * such as Mouse that might have the same GenericDesktop usages. */
 	if (field->application == HID_DG_TOUCHSCREEN)
 		set_bit(INPUT_PROP_DIRECT, hi->input->propbit);
 	else if (field->application == HID_DG_TOUCHPAD)

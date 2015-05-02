@@ -125,7 +125,7 @@ restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
 	unsigned int err = 0;
 	unsigned long old_usp;
 
-        /* Always make any pending restarted system calls return -EINTR */
+	/* Always make any pending restarted system calls return -EINTR */
 	current_thread_info()->restart_block.fn = do_no_restart_syscall;
 
 	/* restore the regs from &sc->regs (same as sc, since regs is first)
@@ -134,7 +134,7 @@ restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
 	 */
 
 	if (__copy_from_user(regs, sc, sizeof(struct pt_regs)))
-                goto badframe;
+		goto badframe;
 
 	/* make sure the U-flag is set so user-mode cannot fool us */
 
@@ -163,18 +163,18 @@ badframe:
 /* Define dummy arguments to be able to reach the regs argument.  */
 
 asmlinkage int sys_sigreturn(long r10, long r11, long r12, long r13, long mof,
-                             long srp, struct pt_regs *regs)
+			     long srp, struct pt_regs *regs)
 {
 	struct sigframe __user *frame = (struct sigframe *)rdusp();
 	sigset_t set;
 
-        /*
-         * Since we stacked the signal on a dword boundary,
-         * then frame should be dword aligned here.  If it's
-         * not, then the user is trying to mess with us.
-         */
-        if (((long)frame) & 3)
-                goto badframe;
+	/*
+	 * Since we stacked the signal on a dword boundary,
+	 * then frame should be dword aligned here.  If it's
+	 * not, then the user is trying to mess with us.
+	 */
+	if (((long)frame) & 3)
+		goto badframe;
 
 	if (!access_ok(VERIFY_READ, frame, sizeof(*frame)))
 		goto badframe;
@@ -205,18 +205,18 @@ badframe:
 /* Define dummy arguments to be able to reach the regs argument.  */
 
 asmlinkage int sys_rt_sigreturn(long r10, long r11, long r12, long r13,
-                                long mof, long srp, struct pt_regs *regs)
+				long mof, long srp, struct pt_regs *regs)
 {
 	struct rt_sigframe __user *frame = (struct rt_sigframe *)rdusp();
 	sigset_t set;
 
-        /*
-         * Since we stacked the signal on a dword boundary,
-         * then frame should be dword aligned here.  If it's
-         * not, then the user is trying to mess with us.
-         */
-        if (((long)frame) & 3)
-                goto badframe;
+	/*
+	 * Since we stacked the signal on a dword boundary,
+	 * then frame should be dword aligned here.  If it's
+	 * not, then the user is trying to mess with us.
+	 */
+	if (((long)frame) & 3)
+		goto badframe;
 
 	if (!access_ok(VERIFY_READ, frame, sizeof(*frame)))
 		goto badframe;
@@ -256,10 +256,10 @@ static int setup_sigcontext(struct sigcontext __user *sc,
 
 	err |= __copy_to_user(sc, regs, sizeof(struct pt_regs));
 
-        /* Set the frametype to CRIS_FRAME_NORMAL for the execution of
-           the signal handler. The frametype will be restored to its previous
-           value in restore_sigcontext. */
-        regs->frametype = CRIS_FRAME_NORMAL;
+	/* Set the frametype to CRIS_FRAME_NORMAL for the execution of
+	   the signal handler. The frametype will be restored to its previous
+	   value in restore_sigcontext. */
+	regs->frametype = CRIS_FRAME_NORMAL;
 
 	/* then some other stuff */
 
@@ -374,7 +374,7 @@ static int setup_rt_frame(int sig, struct k_sigaction *ka, siginfo_t *info,
 		goto give_sigsegv;
 
 	/* Clear all the bits of the ucontext we don't use.  */
-        err |= __clear_user(&frame->uc, offsetof(struct ucontext, uc_mcontext));
+	err |= __clear_user(&frame->uc, offsetof(struct ucontext, uc_mcontext));
 
 	err |= setup_sigcontext(&frame->uc.uc_mcontext, regs, set->sig[0]);
 
@@ -497,7 +497,7 @@ void do_signal(int canrestart, struct pt_regs *regs)
 {
 	siginfo_t info;
 	int signr;
-        struct k_sigaction ka;
+	struct k_sigaction ka;
 	sigset_t *oldset;
 
 	/*

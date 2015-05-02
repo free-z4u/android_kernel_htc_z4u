@@ -125,9 +125,9 @@ mk_conf_addr(struct pci_bus *pbus, unsigned int device_fn, int where,
 
 	if (!pbus->parent) /* No parent means peer PCI bus. */
 		bus = 0;
-        *type1 = (bus != 0);
+	*type1 = (bus != 0);
 
-        addr = (bus << 16) | (device_fn << 8) | where;
+	addr = (bus << 16) | (device_fn << 8) | where;
 	addr |= hose->config_space_base;
 
 	*pci_addr = addr;

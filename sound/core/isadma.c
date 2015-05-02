@@ -41,7 +41,7 @@
  */
 void snd_dma_program(unsigned long dma,
 		     unsigned long addr, unsigned int size,
-                     unsigned short mode)
+		     unsigned short mode)
 {
 	unsigned long flags;
 

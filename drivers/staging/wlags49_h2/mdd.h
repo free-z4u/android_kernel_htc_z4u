@@ -347,9 +347,9 @@ typedef struct {
     hcf_16      len;
     hcf_16      typ;
     hcf_32      DbMsgCount, 	// ds (nicram) address of a counter
-                DbMsgBuffer, 	// ds (nicram) address of the buffer
-                DbMsgSize, 		// number of entries (each 3 word in size) in this buffer
-                DbMsgIntrvl;	// ds (nicram) address of interval for generating InfDrop event
+		DbMsgBuffer, 	// ds (nicram) address of the buffer
+		DbMsgSize, 		// number of entries (each 3 word in size) in this buffer
+		DbMsgIntrvl;	// ds (nicram) address of interval for generating InfDrop event
 } CFG_FW_PRINTF_BUFFER_LOCATION_STRCT;
 
 XX3( CFG_RANGES,	hcf_16, role, hcf_16, id, CFG_RANGE_SPEC_STRCT, var_rec[ 1] ) /*Actor/Supplier range (1 variant)*/

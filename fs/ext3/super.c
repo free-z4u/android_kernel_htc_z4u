@@ -1340,9 +1340,9 @@ static int ext3_setup_super(struct super_block *sb, struct ext3_super_block *es,
 			"running e2fsck is recommended");
 #if 0
 		/* @@@ We _will_ want to clear the valid bit if we find
-                   inconsistencies, to force a fsck at reboot.  But for
-                   a plain journaled filesystem we can keep it set as
-                   valid forever! :) */
+		   inconsistencies, to force a fsck at reboot.  But for
+		   a plain journaled filesystem we can keep it set as
+		   valid forever! :) */
 	es->s_state &= cpu_to_le16(~EXT3_VALID_FS);
 #endif
 	if (!le16_to_cpu(es->s_max_mnt_count))
@@ -1998,8 +1998,8 @@ static int ext3_fill_super (struct super_block *sb, void *data, int silent)
 	switch (test_opt(sb, DATA_FLAGS)) {
 	case 0:
 		/* No mode set, assume a default based on the journal
-                   capabilities: ORDERED_DATA if the journal can
-                   cope, else JOURNAL_DATA */
+		   capabilities: ORDERED_DATA if the journal can
+		   cope, else JOURNAL_DATA */
 		if (journal_check_available_features
 		    (sbi->s_journal, 0, 0, JFS_FEATURE_INCOMPAT_REVOKE))
 			set_opt(sbi->s_mount_opt, DEFAULT_DATA_MODE);
@@ -3063,7 +3063,7 @@ static int __init init_ext3_fs(void)
 	err = init_inodecache();
 	if (err)
 		goto out1;
-        err = register_filesystem(&ext3_fs_type);
+	err = register_filesystem(&ext3_fs_type);
 	if (err)
 		goto out;
 	return 0;

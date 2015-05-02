@@ -308,13 +308,13 @@ asmlinkage long compat_sys_rt_sigqueueinfo(int pid, int sig,
 asmlinkage long compat_sys_sigaction(int sig, struct old_sigaction32 __user *act,
 				     struct old_sigaction32 __user *oact)
 {
-        struct k_sigaction new_ka, old_ka;
-        int ret;
+	struct k_sigaction new_ka, old_ka;
+	int ret;
 
 	WARN_ON_ONCE(sig >= 0);
 	sig = -sig;
 
-        if (act) {
+	if (act) {
 		compat_old_sigset_t mask;
 		u32 u_handler, u_restorer;
 
@@ -328,16 +328,16 @@ asmlinkage long compat_sys_sigaction(int sig, struct old_sigaction32 __user *act
 			return ret;
 		new_ka.ka_restorer = NULL;
 		siginitset(&new_ka.sa.sa_mask, mask);
-        }
+	}
 
-        ret = do_sigaction(sig, act ? &new_ka : NULL, oact ? &old_ka : NULL);
+	ret = do_sigaction(sig, act ? &new_ka : NULL, oact ? &old_ka : NULL);
 
 	if (!ret && oact) {
 		ret = put_user(ptr_to_compat(old_ka.sa.sa_handler), &oact->sa_handler);
 		ret |= __put_user(ptr_to_compat(old_ka.sa.sa_restorer), &oact->sa_restorer);
 		ret |= __put_user(old_ka.sa.sa_flags, &oact->sa_flags);
 		ret |= __put_user(old_ka.sa.sa_mask.sig[0], &oact->sa_mask);
-        }
+	}
 
 	return ret;
 }
@@ -348,15 +348,15 @@ asmlinkage long compat_sys_rt_sigaction(int sig,
 					void __user *restorer,
 					compat_size_t sigsetsize)
 {
-        struct k_sigaction new_ka, old_ka;
-        int ret;
+	struct k_sigaction new_ka, old_ka;
+	int ret;
 	compat_sigset_t set32;
 
-        /* XXX: Don't preclude handling different sized sigset_t's.  */
-        if (sigsetsize != sizeof(compat_sigset_t))
-                return -EINVAL;
+	/* XXX: Don't preclude handling different sized sigset_t's.  */
+	if (sigsetsize != sizeof(compat_sigset_t))
+		return -EINVAL;
 
-        if (act) {
+	if (act) {
 		u32 u_handler, u_restorer;
 
 		new_ka.ka_restorer = restorer;
@@ -372,8 +372,8 @@ asmlinkage long compat_sys_rt_sigaction(int sig,
 		ret |= __get_user(new_ka.sa.sa_flags, &act->sa_flags);
 		ret |= __get_user(u_restorer, &act->sa_restorer);
 		new_ka.sa.sa_restorer = compat_ptr(u_restorer);
-                if (ret)
-                	return -EFAULT;
+		if (ret)
+			return -EFAULT;
 	}
 
 	ret = do_sigaction(sig, act ? &new_ka : NULL, oact ? &old_ka : NULL);
@@ -391,9 +391,9 @@ asmlinkage long compat_sys_rt_sigaction(int sig,
 		ret |= __put_user(ptr_to_compat(old_ka.sa.sa_restorer), &oact->sa_restorer);
 		if (ret)
 			ret = -EFAULT;
-        }
+	}
 
-        return ret;
+	return ret;
 }
 
 /*

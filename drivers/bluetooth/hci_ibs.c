@@ -387,10 +387,10 @@ static void hci_ibs_wake_retrans_timeout(unsigned long arg)
 	struct ibs_struct *ibs = hu->priv;
 	unsigned long flags;
 	unsigned long retransmit = 0;
-        if (!ibs) {
+	if (!ibs) {
 		BT_INFO("IBS device already closed");
 		return;
-        }
+	}
 	BT_DBG("hu %p wake retransmit timeout in %lu state",
 		hu, ibs->tx_ibs_state);
 

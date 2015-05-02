@@ -79,9 +79,9 @@ do { \
   if (!(x)) \
   { \
     printk(KERN_ERR "\nDLM:  Assertion failed on line %d of file %s\n" \
-               "DLM:  assertion:  \"%s\"\n" \
-               "DLM:  time = %lu\n", \
-               __LINE__, __FILE__, #x, jiffies); \
+	       "DLM:  assertion:  \"%s\"\n" \
+	       "DLM:  time = %lu\n", \
+	       __LINE__, __FILE__, #x, jiffies); \
     {do} \
     printk("\n"); \
     BUG(); \

@@ -244,7 +244,7 @@ struct sonicvibes {
 
 static DEFINE_PCI_DEVICE_TABLE(snd_sonic_ids) = {
 	{ PCI_VDEVICE(S3, 0xca00), 0, },
-        { 0, }
+	{ 0, }
 };
 
 MODULE_DEVICE_TABLE(pci, snd_sonic_ids);
@@ -461,8 +461,8 @@ static void snd_sonicvibes_debug(struct sonicvibes * sonic)
 #endif
 
 static void snd_sonicvibes_setfmt(struct sonicvibes * sonic,
-                                  unsigned char mask,
-                                  unsigned char value)
+				  unsigned char mask,
+				  unsigned char value)
 {
 	unsigned long flags;
 
@@ -517,8 +517,8 @@ static void snd_sonicvibes_pll(unsigned int rate,
 }
 
 static void snd_sonicvibes_setpll(struct sonicvibes * sonic,
-                                  unsigned char reg,
-                                  unsigned int rate)
+				  unsigned char reg,
+				  unsigned int rate)
 {
 	unsigned long flags;
 	unsigned int r, m, n;
@@ -1264,12 +1264,12 @@ static int __devinit snd_sonicvibes_create(struct snd_card *card,
 	if ((err = pci_enable_device(pci)) < 0)
 		return err;
 	/* check, if we can restrict PCI DMA transfers to 24 bits */
-        if (pci_set_dma_mask(pci, DMA_BIT_MASK(24)) < 0 ||
+	if (pci_set_dma_mask(pci, DMA_BIT_MASK(24)) < 0 ||
 	    pci_set_consistent_dma_mask(pci, DMA_BIT_MASK(24)) < 0) {
 		snd_printk(KERN_ERR "architecture does not support 24bit PCI busmaster DMA\n");
 		pci_disable_device(pci);
-                return -ENXIO;
-        }
+		return -ENXIO;
+	}
 
 	sonic = kzalloc(sizeof(*sonic), GFP_KERNEL);
 	if (sonic == NULL) {

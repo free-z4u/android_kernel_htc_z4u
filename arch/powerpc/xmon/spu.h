@@ -77,7 +77,7 @@ enum spu_insns {
 #include "spu-insns.h"
 #undef APUOP
 #undef APUOPFB
-        M_SPU_MAX
+	M_SPU_MAX
 };
 
 struct spu_opcode

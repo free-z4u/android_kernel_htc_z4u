@@ -826,10 +826,10 @@ static void vx2_set_input_level(struct snd_vx222 *chip)
 	miclevel = chip->mic_level;
 	miclevel += V2_MICRO_LEVEL_RANGE; /* add 318 - 0xff */
 	preamp = 0;
-        while (miclevel > 210) { /* limitation to +9dB of 3310 real gain */
+	while (miclevel > 210) { /* limitation to +9dB of 3310 real gain */
 		preamp++;	/* raise pre ampli + 18dB */
 		miclevel -= (18 * 2);   /* lower level 18 dB (*2 because of 0.5 dB steps !) */
-        }
+	}
 	if (snd_BUG_ON(preamp >= 4))
 		return;
 

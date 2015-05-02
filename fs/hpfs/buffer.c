@@ -111,7 +111,7 @@ void *hpfs_map_4sectors(struct super_block *s, unsigned secno, struct quad_buffe
 /* Don't read sectors */
 
 void *hpfs_get_4sectors(struct super_block *s, unsigned secno,
-                          struct quad_buffer_head *qbh)
+			  struct quad_buffer_head *qbh)
 {
 	cond_resched();
 

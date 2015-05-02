@@ -222,7 +222,7 @@ static const u8 W83627THF_PWM_ENABLE_SHIFT[] = { 2, 4, 1 };
 
 static const u8 regpwm_627hf[] = { W83627HF_REG_PWM1, W83627HF_REG_PWM2 };
 static const u8 regpwm[] = { W83627THF_REG_PWM1, W83627THF_REG_PWM2,
-                             W83627THF_REG_PWM3 };
+			     W83627THF_REG_PWM3 };
 #define W836X7HF_REG_PWM(type, nr) (((type) == w83627hf) ? \
 				    regpwm_627hf[nr] : regpwm[nr])
 
@@ -275,14 +275,14 @@ static inline u8 FAN_TO_REG(long rpm, int div)
  */
 static u8 TEMP_TO_REG(long temp)
 {
-        int ntemp = SENSORS_LIMIT(temp, TEMP_MIN, TEMP_MAX);
-        ntemp += (ntemp<0 ? -500 : 500);
-        return (u8)(ntemp / 1000);
+	int ntemp = SENSORS_LIMIT(temp, TEMP_MIN, TEMP_MAX);
+	ntemp += (ntemp<0 ? -500 : 500);
+	return (u8)(ntemp / 1000);
 }
 
 static int TEMP_FROM_REG(u8 reg)
 {
-        return (s8)reg * 1000;
+	return (s8)reg * 1000;
 }
 
 #define FAN_FROM_REG(val,div) ((val)==0?-1:(val)==255?0:1350000/((val)*(div)))

@@ -1775,9 +1775,9 @@ struct msm_camera_v4l2_ioctl_t {
 };
 
 struct msm_ver_num_info {
-        uint32_t main;
-        uint32_t minor;
-        uint32_t rev;
+	uint32_t main;
+	uint32_t minor;
+	uint32_t rev;
 };
 
 #endif /* __LINUX_MSM_CAMERA_H */

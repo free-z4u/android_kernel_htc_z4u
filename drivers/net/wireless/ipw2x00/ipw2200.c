@@ -8440,7 +8440,7 @@ static void ipw_rx(struct ipw_priv *priv)
 				if (priv->ieee->iw_mode == IW_MODE_MONITOR) {
 #ifdef CONFIG_IPW2200_RADIOTAP
 
-                ipw_handle_data_packet_monitor(priv,
+		ipw_handle_data_packet_monitor(priv,
 					       rxb,
 					       &stats);
 #else
@@ -9099,20 +9099,20 @@ static int ipw_wx_set_essid(struct net_device *dev,
 			    union iwreq_data *wrqu, char *extra)
 {
 	struct ipw_priv *priv = libipw_priv(dev);
-        int length;
+	int length;
 	DECLARE_SSID_BUF(ssid);
 
-        mutex_lock(&priv->mutex);
+	mutex_lock(&priv->mutex);
 
-        if (!wrqu->essid.flags)
-        {
-                IPW_DEBUG_WX("Setting ESSID to ANY\n");
-                ipw_disassociate(priv);
-                priv->config &= ~CFG_STATIC_ESSID;
-                ipw_associate(priv);
-                mutex_unlock(&priv->mutex);
-                return 0;
-        }
+	if (!wrqu->essid.flags)
+	{
+		IPW_DEBUG_WX("Setting ESSID to ANY\n");
+		ipw_disassociate(priv);
+		priv->config &= ~CFG_STATIC_ESSID;
+		ipw_associate(priv);
+		mutex_unlock(&priv->mutex);
+		return 0;
+	}
 
 	length = min((int)wrqu->essid.length, IW_ESSID_MAX_SIZE);
 

@@ -52,7 +52,7 @@ static inline unsigned int connlimit_iphash(__be32 addr)
 
 static inline unsigned int
 connlimit_iphash6(const union nf_inet_addr *addr,
-                  const union nf_inet_addr *mask)
+		  const union nf_inet_addr *mask)
 {
 	union nf_inet_addr res;
 	unsigned int i;

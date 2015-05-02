@@ -67,7 +67,7 @@ static void friq_write_regr( PIA *pi, int cont, int regr, int val)
 
 {	int r;
 
-        r = regr + cont_map[cont];
+	r = regr + cont_map[cont];
 
 	CMD(r);
 	w0(val);
@@ -78,27 +78,27 @@ static void friq_read_block_int( PIA *pi, char * buf, int count, int regr )
 
 {       int     h, l, k, ph;
 
-        switch(pi->mode) {
+	switch(pi->mode) {
 
-        case 0: CMD(regr);
-                for (k=0;k<count;k++) {
-                        w2(6); l = r1();
-                        w2(4); h = r1();
-                        buf[k] = j44(l,h);
-                }
-                w2(4);
-                break;
+	case 0: CMD(regr);
+		for (k=0;k<count;k++) {
+			w2(6); l = r1();
+			w2(4); h = r1();
+			buf[k] = j44(l,h);
+		}
+		w2(4);
+		break;
 
-        case 1: ph = 2;
-                CMD(regr+0xc0);
-                w0(0xff);
-                for (k=0;k<count;k++) {
-                        w2(0xa4 + ph);
-                        buf[k] = r0();
-                        ph = 2 - ph;
-                }
-                w2(0xac); w2(0xa4); w2(4);
-                break;
+	case 1: ph = 2;
+		CMD(regr+0xc0);
+		w0(0xff);
+		for (k=0;k<count;k++) {
+			w2(0xa4 + ph);
+			buf[k] = r0();
+			ph = 2 - ph;
+		}
+		w2(0xac); w2(0xa4); w2(4);
+		break;
 
 	case 2: CMD(regr+0x80);
 		for (k=0;k<count-2;k++) buf[k] = r4();
@@ -109,24 +109,24 @@ static void friq_read_block_int( PIA *pi, char * buf, int count, int regr )
 		break;
 
 	case 3: CMD(regr+0x80);
-                for (k=0;k<(count/2)-1;k++) ((u16 *)buf)[k] = r4w();
-                w2(0xac); w2(0xa4);
-                buf[count-2] = r4();
-                buf[count-1] = r4();
-                w2(4);
-                break;
+		for (k=0;k<(count/2)-1;k++) ((u16 *)buf)[k] = r4w();
+		w2(0xac); w2(0xa4);
+		buf[count-2] = r4();
+		buf[count-1] = r4();
+		w2(4);
+		break;
 
 	case 4: CMD(regr+0x80);
-                for (k=0;k<(count/4)-1;k++) ((u32 *)buf)[k] = r4l();
-                buf[count-4] = r4();
-                buf[count-3] = r4();
-                w2(0xac); w2(0xa4);
-                buf[count-2] = r4();
-                buf[count-1] = r4();
-                w2(4);
-                break;
+		for (k=0;k<(count/4)-1;k++) ((u32 *)buf)[k] = r4l();
+		buf[count-4] = r4();
+		buf[count-3] = r4();
+		w2(0xac); w2(0xa4);
+		buf[count-2] = r4();
+		buf[count-1] = r4();
+		w2(4);
+		break;
 
-        }
+	}
 }
 
 static void friq_read_block( PIA *pi, char * buf, int count)
@@ -142,7 +142,7 @@ static void friq_write_block( PIA *pi, char * buf, int count )
 
 	case 0:
 	case 1: CMD(8); w2(5);
-        	for (k=0;k<count;k++) {
+		for (k=0;k<count;k++) {
 			w0(buf[k]);
 			w2(7);w2(5);
 		}
@@ -154,22 +154,22 @@ static void friq_write_block( PIA *pi, char * buf, int count )
 		w2(4);
 		break;
 
-        case 3: CMD(0xc8); w2(5);
-                for (k=0;k<count/2;k++) w4w(((u16 *)buf)[k]);
-                w2(4);
-                break;
+	case 3: CMD(0xc8); w2(5);
+		for (k=0;k<count/2;k++) w4w(((u16 *)buf)[k]);
+		w2(4);
+		break;
 
-        case 4: CMD(0xc8); w2(5);
-                for (k=0;k<count/4;k++) w4l(((u32 *)buf)[k]);
-                w2(4);
-                break;
+	case 4: CMD(0xc8); w2(5);
+		for (k=0;k<count/4;k++) w4l(((u32 *)buf)[k]);
+		w2(4);
+		break;
 	}
 }
 
 static void friq_connect ( PIA *pi  )
 
 {       pi->saved_r0 = r0();
-        pi->saved_r2 = r2();
+	pi->saved_r2 = r2();
 	w2(4);
 }
 
@@ -177,7 +177,7 @@ static void friq_disconnect ( PIA *pi )
 
 {       CMD(0x20);
 	w0(pi->saved_r0);
-        w2(pi->saved_r2);
+	w2(pi->saved_r2);
 }
 
 static int friq_test_proto( PIA *pi, char * scratch, int verbose )
@@ -192,27 +192,27 @@ static int friq_test_proto( PIA *pi, char * scratch, int verbose )
 
 	friq_connect(pi);
 	for (j=0;j<2;j++) {
-                friq_write_regr(pi,0,6,0xa0+j*0x10);
-                for (k=0;k<256;k++) {
-                        friq_write_regr(pi,0,2,k^0xaa);
-                        friq_write_regr(pi,0,3,k^0x55);
-                        if (friq_read_regr(pi,0,2) != (k^0xaa)) e[j]++;
-                        }
-                }
+		friq_write_regr(pi,0,6,0xa0+j*0x10);
+		for (k=0;k<256;k++) {
+			friq_write_regr(pi,0,2,k^0xaa);
+			friq_write_regr(pi,0,3,k^0x55);
+			if (friq_read_regr(pi,0,2) != (k^0xaa)) e[j]++;
+			}
+		}
 	friq_disconnect(pi);
 
 	friq_connect(pi);
-        friq_read_block_int(pi,scratch,512,0x10);
-        r = 0;
-        for (k=0;k<128;k++) if (scratch[k] != k) r++;
+	friq_read_block_int(pi,scratch,512,0x10);
+	r = 0;
+	for (k=0;k<128;k++) if (scratch[k] != k) r++;
 	friq_disconnect(pi);
 
-        if (verbose)  {
-            printk("%s: friq: port 0x%x, mode %d, test=(%d,%d,%d)\n",
-                   pi->device,pi->port,pi->mode,e[0],e[1],r);
-        }
+	if (verbose)  {
+	    printk("%s: friq: port 0x%x, mode %d, test=(%d,%d,%d)\n",
+		   pi->device,pi->port,pi->mode,e[0],e[1],r);
+	}
 
-        return (r || (e[0] && e[1]));
+	return (r || (e[0] && e[1]));
 }
 
 
@@ -221,9 +221,9 @@ static void friq_log_adapter( PIA *pi, char * scratch, int verbose )
 {       char    *mode_string[6] = {"4-bit","8-bit",
 				   "EPP-8","EPP-16","EPP-32"};
 
-        printk("%s: friq %s, Freecom IQ ASIC-2 adapter at 0x%x, ", pi->device,
+	printk("%s: friq %s, Freecom IQ ASIC-2 adapter at 0x%x, ", pi->device,
 		FRIQ_VERSION,pi->port);
-        printk("mode %d (%s), delay %d\n",pi->mode,
+	printk("mode %d (%s), delay %d\n",pi->mode,
 		mode_string[pi->mode],pi->delay);
 
 	pi->private = 1;

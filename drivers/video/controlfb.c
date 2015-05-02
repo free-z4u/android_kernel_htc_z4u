@@ -283,7 +283,7 @@ static int controlfb_pan_display(struct fb_var_screeninfo *var,
  * Note there's no locking in here; it's done in fb_mmap() in fbmem.c.
  */
 static int controlfb_mmap(struct fb_info *info,
-                       struct vm_area_struct *vma)
+		       struct vm_area_struct *vma)
 {
        unsigned long off, start;
        u32 len;
@@ -294,15 +294,15 @@ static int controlfb_mmap(struct fb_info *info,
        start = info->fix.smem_start;
        len = PAGE_ALIGN((start & ~PAGE_MASK)+info->fix.smem_len);
        if (off >= len) {
-               /* memory mapped io */
-               off -= len;
-               if (info->var.accel_flags)
-                       return -EINVAL;
-               start = info->fix.mmio_start;
-               len = PAGE_ALIGN((start & ~PAGE_MASK)+info->fix.mmio_len);
+	       /* memory mapped io */
+	       off -= len;
+	       if (info->var.accel_flags)
+		       return -EINVAL;
+	       start = info->fix.mmio_start;
+	       len = PAGE_ALIGN((start & ~PAGE_MASK)+info->fix.mmio_len);
 	       vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
        } else {
-               /* framebuffer */
+	       /* framebuffer */
 	       vma->vm_page_prot = pgprot_cached_wthru(vma->vm_page_prot);
        }
        start &= PAGE_MASK;
@@ -311,8 +311,8 @@ static int controlfb_mmap(struct fb_info *info,
        off += start;
        vma->vm_pgoff = off >> PAGE_SHIFT;
        if (io_remap_pfn_range(vma, vma->vm_start, off >> PAGE_SHIFT,
-           vma->vm_end - vma->vm_start, vma->vm_page_prot))
-               return -EAGAIN;
+	   vma->vm_end - vma->vm_start, vma->vm_page_prot))
+	       return -EAGAIN;
 
        return 0;
 }
@@ -676,7 +676,7 @@ static void __init find_vram_size(struct fb_info_control *p)
 		p->vram_attr = 0x31;
 	}
 
-        p->total_vram = (bank1 + bank2) * 0x200000;
+	p->total_vram = (bank1 + bank2) * 0x200000;
 
 	printk(KERN_INFO "controlfb: VRAM Total = %dMB "
 			"(%dMB @ bank 1, %dMB @ bank 2)\n",
@@ -1048,7 +1048,7 @@ static void __init control_init_info(struct fb_info *info, struct fb_info_contro
 	info->par = &p->par;
 	info->fbops = &controlfb_ops;
 	info->pseudo_palette = p->pseudo_palette;
-        info->flags = FBINFO_DEFAULT | FBINFO_HWACCEL_YPAN;
+	info->flags = FBINFO_DEFAULT | FBINFO_HWACCEL_YPAN;
 	info->screen_base = p->frame_buffer + CTRLFB_OFF;
 
 	fb_alloc_cmap(&info->cmap, 256, 0);
@@ -1060,9 +1060,9 @@ static void __init control_init_info(struct fb_info *info, struct fb_info_contro
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	info->fix.smem_start = p->frame_buffer_phys + CTRLFB_OFF;
 	info->fix.smem_len = p->total_vram - CTRLFB_OFF;
-        info->fix.ywrapstep = 0;
-        info->fix.type_aux = 0;
-        info->fix.accel = FB_ACCEL_NONE;
+	info->fix.ywrapstep = 0;
+	info->fix.type_aux = 0;
+	info->fix.accel = FB_ACCEL_NONE;
 }
 
 

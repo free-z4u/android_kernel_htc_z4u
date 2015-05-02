@@ -180,8 +180,8 @@
 #define ESP_STEP_SID          0x01     /* One msg byte sent */
 #define ESP_STEP_NCMD         0x02     /* Was not in command phase */
 #define ESP_STEP_PPC          0x03     /* Early phase chg caused cmnd
-                                        * bytes to be lost
-                                        */
+					* bytes to be lost
+					*/
 #define ESP_STEP_FINI4        0x04     /* Command was sent ok */
 
 /* Ho hum, some ESP's set the step register to this as well... */
@@ -223,7 +223,7 @@
 #define ESP_BUS_TIMEOUT        250     /* In milli-seconds */
 #define ESP_TIMEO_CONST       8192
 #define ESP_NEG_DEFP(mhz, cfact) \
-        ((ESP_BUS_TIMEOUT * ((mhz) / 1000)) / (8192 * (cfact)))
+	((ESP_BUS_TIMEOUT * ((mhz) / 1000)) / (8192 * (cfact)))
 #define ESP_HZ_TO_CYCLE(hertz)  ((1000000000) / ((hertz) / 1000))
 #define ESP_TICK(ccf, cycle)  ((7682 * (ccf) * (cycle) / 1000))
 

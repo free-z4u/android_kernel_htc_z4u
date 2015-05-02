@@ -69,9 +69,9 @@ static void __init trout_init(void)
 	platform_add_devices(devices, ARRAY_SIZE(devices));
 
 #ifdef CONFIG_MMC
-        rc = trout_init_mmc(system_rev);
-        if (rc)
-                printk(KERN_CRIT "%s: MMC init failure (%d)\n", __func__, rc);
+	rc = trout_init_mmc(system_rev);
+	if (rc)
+		printk(KERN_CRIT "%s: MMC init failure (%d)\n", __func__, rc);
 #endif
 
 }

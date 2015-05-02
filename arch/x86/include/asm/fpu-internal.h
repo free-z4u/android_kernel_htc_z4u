@@ -69,7 +69,7 @@ static __always_inline __pure bool use_xsave(void)
 
 static __always_inline __pure bool use_fxsr(void)
 {
-        return static_cpu_has(X86_FEATURE_FXSR);
+	return static_cpu_has(X86_FEATURE_FXSR);
 }
 
 extern void __sanitize_i387_state(struct task_struct *);

@@ -148,9 +148,9 @@ struct mon_bin_get32 {
 };
 
 struct mon_bin_mfetch32 {
-        u32 offvec32;
-        u32 nfetch32;
-        u32 nflush32;
+	u32 offvec32;
+	u32 nfetch32;
+	u32 nflush32;
 };
 #endif
 

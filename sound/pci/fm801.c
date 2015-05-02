@@ -263,7 +263,7 @@ static void snd_fm801_codec_write(struct snd_ac97 *ac97,
 	outw(reg | (ac97->addr << FM801_AC97_ADDR_SHIFT), FM801_REG(chip, AC97_CMD));
 	/*
 	 *  Wait until the write command is not completed..
-         */
+	 */
 	for (idx = 0; idx < 1000; idx++) {
 		if (!(inw(FM801_REG(chip, AC97_CMD)) & FM801_AC97_BUSY))
 			return;
@@ -889,7 +889,7 @@ static int snd_fm801_get_double(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
 {
 	struct fm801 *chip = snd_kcontrol_chip(kcontrol);
-        int reg = kcontrol->private_value & 0xff;
+	int reg = kcontrol->private_value & 0xff;
 	int shift_left = (kcontrol->private_value >> 8) & 0x0f;
 	int shift_right = (kcontrol->private_value >> 12) & 0x0f;
 	int mask = (kcontrol->private_value >> 16) & 0xff;
@@ -948,23 +948,23 @@ static int snd_fm801_get_mux(struct snd_kcontrol *kcontrol,
 			     struct snd_ctl_elem_value *ucontrol)
 {
 	struct fm801 *chip = snd_kcontrol_chip(kcontrol);
-        unsigned short val;
+	unsigned short val;
 
 	val = inw(FM801_REG(chip, REC_SRC)) & 7;
 	if (val > 4)
 		val = 4;
-        ucontrol->value.enumerated.item[0] = val;
-        return 0;
+	ucontrol->value.enumerated.item[0] = val;
+	return 0;
 }
 
 static int snd_fm801_put_mux(struct snd_kcontrol *kcontrol,
 			     struct snd_ctl_elem_value *ucontrol)
 {
 	struct fm801 *chip = snd_kcontrol_chip(kcontrol);
-        unsigned short val;
+	unsigned short val;
 
-        if ((val = ucontrol->value.enumerated.item[0]) > 4)
-                return -EINVAL;
+	if ((val = ucontrol->value.enumerated.item[0]) > 4)
+		return -EINVAL;
 	return snd_fm801_update_bits(chip, FM801_REC_SRC, 7, val);
 }
 
@@ -1293,8 +1293,8 @@ static int __devinit snd_card_fm801_probe(struct pci_dev *pci,
 	struct snd_opl3 *opl3;
 	int err;
 
-        if (dev >= SNDRV_CARDS)
-                return -ENODEV;
+	if (dev >= SNDRV_CARDS)
+		return -ENODEV;
 	if (!enable[dev]) {
 		dev++;
 		return -ENOENT;

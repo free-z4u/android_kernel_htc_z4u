@@ -43,9 +43,9 @@ struct output_device *video_output_register(const char *name,
 void video_output_unregister(struct output_device *dev);
 #else
 static struct output_device *video_output_register(const char *name,
-        struct device *dev,
-        void *devdata,
-        struct output_properties *op)
+	struct device *dev,
+	void *devdata,
+	struct output_properties *op)
 {
 	return ERR_PTR(-ENODEV);
 }

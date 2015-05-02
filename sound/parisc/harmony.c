@@ -213,7 +213,7 @@ snd_harmony_interrupt(int irq, void *dev)
 				      h->pbuf.addr + h->pbuf.buf);
 			h->stats.play_intr++;
 			spin_unlock(&h->lock);
-                        snd_pcm_period_elapsed(h->psubs);
+			snd_pcm_period_elapsed(h->psubs);
 		} else {
 			spin_lock(&h->lock);
 			harmony_write(h, HARMONY_PNXTADD, h->sdma.addr);
@@ -232,7 +232,7 @@ snd_harmony_interrupt(int irq, void *dev)
 				      h->cbuf.addr + h->cbuf.buf);
 			h->stats.rec_intr++;
 			spin_unlock(&h->lock);
-                        snd_pcm_period_elapsed(h->csubs);
+			snd_pcm_period_elapsed(h->csubs);
 		} else {
 			spin_lock(&h->lock);
 			harmony_write(h, HARMONY_RNXTADD, h->gdma.addr);
@@ -283,23 +283,23 @@ static struct snd_pcm_hardware snd_harmony_playback =
 
 static struct snd_pcm_hardware snd_harmony_capture =
 {
-        .info = (SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_INTERLEAVED |
-                 SNDRV_PCM_INFO_JOINT_DUPLEX | SNDRV_PCM_INFO_MMAP_VALID |
-                 SNDRV_PCM_INFO_BLOCK_TRANSFER),
-        .formats = (SNDRV_PCM_FMTBIT_S16_BE | SNDRV_PCM_FMTBIT_MU_LAW |
-                    SNDRV_PCM_FMTBIT_A_LAW),
-        .rates = (SNDRV_PCM_RATE_5512 | SNDRV_PCM_RATE_8000_48000 |
+	.info = (SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_INTERLEAVED |
+		 SNDRV_PCM_INFO_JOINT_DUPLEX | SNDRV_PCM_INFO_MMAP_VALID |
+		 SNDRV_PCM_INFO_BLOCK_TRANSFER),
+	.formats = (SNDRV_PCM_FMTBIT_S16_BE | SNDRV_PCM_FMTBIT_MU_LAW |
+		    SNDRV_PCM_FMTBIT_A_LAW),
+	.rates = (SNDRV_PCM_RATE_5512 | SNDRV_PCM_RATE_8000_48000 |
 		  SNDRV_PCM_RATE_KNOT),
-        .rate_min = 5512,
-        .rate_max = 48000,
-        .channels_min = 1,
-        .channels_max = 2,
-        .buffer_bytes_max = MAX_BUF_SIZE,
-        .period_bytes_min = BUF_SIZE,
-        .period_bytes_max = BUF_SIZE,
-        .periods_min = 1,
-        .periods_max = MAX_BUFS,
-        .fifo_size = 0,
+	.rate_min = 5512,
+	.rate_max = 48000,
+	.channels_min = 1,
+	.channels_max = 2,
+	.buffer_bytes_max = MAX_BUF_SIZE,
+	.period_bytes_min = BUF_SIZE,
+	.period_bytes_max = BUF_SIZE,
+	.periods_min = 1,
+	.periods_max = MAX_BUFS,
+	.fifo_size = 0,
 };
 
 static int
@@ -341,37 +341,37 @@ snd_harmony_playback_trigger(struct snd_pcm_substream *ss, int cmd)
 static int
 snd_harmony_capture_trigger(struct snd_pcm_substream *ss, int cmd)
 {
-        struct snd_harmony *h = snd_pcm_substream_chip(ss);
+	struct snd_harmony *h = snd_pcm_substream_chip(ss);
 
 	if (h->st.playing)
 		return -EBUSY;
 
 	spin_lock(&h->lock);
-        switch (cmd) {
-        case SNDRV_PCM_TRIGGER_START:
+	switch (cmd) {
+	case SNDRV_PCM_TRIGGER_START:
 		h->st.capturing = 1;
-                harmony_write(h, HARMONY_PNXTADD, h->sdma.addr);
-                harmony_write(h, HARMONY_RNXTADD, h->cbuf.addr);
+		harmony_write(h, HARMONY_PNXTADD, h->sdma.addr);
+		harmony_write(h, HARMONY_RNXTADD, h->cbuf.addr);
 		harmony_unmute(h);
-                harmony_enable_interrupts(h);
+		harmony_enable_interrupts(h);
 		break;
-        case SNDRV_PCM_TRIGGER_STOP:
+	case SNDRV_PCM_TRIGGER_STOP:
 		h->st.capturing = 0;
 		harmony_mute(h);
 		harmony_write(h, HARMONY_RNXTADD, h->gdma.addr);
 		harmony_disable_interrupts(h);
 		break;
-        case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-        case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-        case SNDRV_PCM_TRIGGER_SUSPEND:
+	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+	case SNDRV_PCM_TRIGGER_SUSPEND:
 	default:
 		spin_unlock(&h->lock);
 		snd_BUG();
-                return -EINVAL;
-        }
+		return -EINVAL;
+	}
 	spin_unlock(&h->lock);
 
-        return 0;
+	return 0;
 }
 
 static int
@@ -437,31 +437,31 @@ snd_harmony_playback_prepare(struct snd_pcm_substream *ss)
 static int
 snd_harmony_capture_prepare(struct snd_pcm_substream *ss)
 {
-        struct snd_harmony *h = snd_pcm_substream_chip(ss);
-        struct snd_pcm_runtime *rt = ss->runtime;
+	struct snd_harmony *h = snd_pcm_substream_chip(ss);
+	struct snd_pcm_runtime *rt = ss->runtime;
 
 	if (h->st.playing)
 		return -EBUSY;
 
-        h->cbuf.size = snd_pcm_lib_buffer_bytes(ss);
-        h->cbuf.count = snd_pcm_lib_period_bytes(ss);
+	h->cbuf.size = snd_pcm_lib_buffer_bytes(ss);
+	h->cbuf.count = snd_pcm_lib_period_bytes(ss);
 	if (h->cbuf.buf >= h->cbuf.size)
 	        h->cbuf.buf = 0;
 	h->st.capturing = 0;
 
-        h->st.rate = snd_harmony_rate_bits(rt->rate);
-        h->st.format = snd_harmony_set_data_format(h, rt->format, 0);
+	h->st.rate = snd_harmony_rate_bits(rt->rate);
+	h->st.format = snd_harmony_set_data_format(h, rt->format, 0);
 
-        if (rt->channels == 2)
-                h->st.stereo = HARMONY_SS_STEREO;
-        else
-                h->st.stereo = HARMONY_SS_MONO;
+	if (rt->channels == 2)
+		h->st.stereo = HARMONY_SS_STEREO;
+	else
+		h->st.stereo = HARMONY_SS_MONO;
 
-        harmony_set_control(h);
+	harmony_set_control(h);
 
-        h->cbuf.addr = rt->dma_addr;
+	h->cbuf.addr = rt->dma_addr;
 
-        return 0;
+	return 0;
 }
 
 static snd_pcm_uframes_t
@@ -496,30 +496,30 @@ snd_harmony_playback_pointer(struct snd_pcm_substream *ss)
 static snd_pcm_uframes_t
 snd_harmony_capture_pointer(struct snd_pcm_substream *ss)
 {
-        struct snd_pcm_runtime *rt = ss->runtime;
-        struct snd_harmony *h = snd_pcm_substream_chip(ss);
-        unsigned long rcuradd;
-        unsigned long caught;
+	struct snd_pcm_runtime *rt = ss->runtime;
+	struct snd_harmony *h = snd_pcm_substream_chip(ss);
+	unsigned long rcuradd;
+	unsigned long caught;
 
-        if (!(h->st.capturing) || (h->csubs == NULL))
-                return 0;
+	if (!(h->st.capturing) || (h->csubs == NULL))
+		return 0;
 
-        if ((h->cbuf.addr == 0) || (h->cbuf.size == 0))
-                return 0;
+	if ((h->cbuf.addr == 0) || (h->cbuf.size == 0))
+		return 0;
 
-        rcuradd = harmony_read(h, HARMONY_RCURADD);
-        caught = rcuradd - h->cbuf.addr;
+	rcuradd = harmony_read(h, HARMONY_RCURADD);
+	caught = rcuradd - h->cbuf.addr;
 
 #ifdef HARMONY_DEBUG
-        printk(KERN_DEBUG PFX "capture_pointer is 0x%lx-0x%lx = %d bytes\n",
-               rcuradd, h->cbuf.addr, caught);
+	printk(KERN_DEBUG PFX "capture_pointer is 0x%lx-0x%lx = %d bytes\n",
+	       rcuradd, h->cbuf.addr, caught);
 #endif
 
-        if (rcuradd > h->cbuf.addr + h->cbuf.size) {
+	if (rcuradd > h->cbuf.addr + h->cbuf.size) {
 		return 0;
 	}
 
-        return bytes_to_frames(rt, caught);
+	return bytes_to_frames(rt, caught);
 }
 
 static int
@@ -544,20 +544,20 @@ snd_harmony_playback_open(struct snd_pcm_substream *ss)
 static int
 snd_harmony_capture_open(struct snd_pcm_substream *ss)
 {
-        struct snd_harmony *h = snd_pcm_substream_chip(ss);
-        struct snd_pcm_runtime *rt = ss->runtime;
-        int err;
+	struct snd_harmony *h = snd_pcm_substream_chip(ss);
+	struct snd_pcm_runtime *rt = ss->runtime;
+	int err;
 
-        h->csubs = ss;
-        rt->hw = snd_harmony_capture;
-        snd_pcm_hw_constraint_list(rt, 0, SNDRV_PCM_HW_PARAM_RATE,
-                                   &hw_constraint_rates);
+	h->csubs = ss;
+	rt->hw = snd_harmony_capture;
+	snd_pcm_hw_constraint_list(rt, 0, SNDRV_PCM_HW_PARAM_RATE,
+				   &hw_constraint_rates);
 
-        err = snd_pcm_hw_constraint_integer(rt, SNDRV_PCM_HW_PARAM_PERIODS);
-        if (err < 0)
-                return err;
+	err = snd_pcm_hw_constraint_integer(rt, SNDRV_PCM_HW_PARAM_PERIODS);
+	if (err < 0)
+		return err;
 
-        return 0;
+	return 0;
 }
 
 static int
@@ -571,9 +571,9 @@ snd_harmony_playback_close(struct snd_pcm_substream *ss)
 static int
 snd_harmony_capture_close(struct snd_pcm_substream *ss)
 {
-        struct snd_harmony *h = snd_pcm_substream_chip(ss);
-        h->csubs = NULL;
-        return 0;
+	struct snd_harmony *h = snd_pcm_substream_chip(ss);
+	h->csubs = NULL;
+	return 0;
 }
 
 static int
@@ -608,14 +608,14 @@ static struct snd_pcm_ops snd_harmony_playback_ops = {
 };
 
 static struct snd_pcm_ops snd_harmony_capture_ops = {
-        .open = snd_harmony_capture_open,
-        .close = snd_harmony_capture_close,
-        .ioctl = snd_pcm_lib_ioctl,
-        .hw_params = snd_harmony_hw_params,
-        .hw_free = snd_harmony_hw_free,
-        .prepare = snd_harmony_capture_prepare,
-        .trigger = snd_harmony_capture_trigger,
-        .pointer = snd_harmony_capture_pointer,
+	.open = snd_harmony_capture_open,
+	.close = snd_harmony_capture_close,
+	.ioctl = snd_pcm_lib_ioctl,
+	.hw_params = snd_harmony_hw_params,
+	.hw_free = snd_harmony_hw_free,
+	.prepare = snd_harmony_capture_prepare,
+	.trigger = snd_harmony_capture_trigger,
+	.pointer = snd_harmony_capture_pointer,
 };
 
 static int
@@ -832,7 +832,7 @@ snd_harmony_captureroute_put(struct snd_kcontrol *kc,
   .info = snd_harmony_mixercontrol_info,                             \
   .get = snd_harmony_volume_get, .put = snd_harmony_volume_put,      \
   .private_value = ((left_shift) | ((right_shift) << 8) |            \
-                   ((mask) << 16) | ((invert) << 24)) }
+		   ((mask) << 16) | ((invert) << 24)) }
 
 static struct snd_kcontrol_new snd_harmony_controls[] = {
 	HARMONY_VOLUME("Master Playback Volume", HARMONY_GAIN_LO_SHIFT,
@@ -891,10 +891,10 @@ snd_harmony_mixer_init(struct snd_harmony *h)
 static int
 snd_harmony_free(struct snd_harmony *h)
 {
-        if (h->gdma.addr)
-                snd_dma_free_pages(&h->gdma);
-        if (h->sdma.addr)
-                snd_dma_free_pages(&h->sdma);
+	if (h->gdma.addr)
+		snd_dma_free_pages(&h->gdma);
+	if (h->sdma.addr)
+		snd_dma_free_pages(&h->sdma);
 
 	if (h->irq >= 0)
 		free_irq(h->irq, h);
@@ -956,10 +956,10 @@ snd_harmony_create(struct snd_card *card,
 	spin_lock_init(&h->mixer_lock);
 	spin_lock_init(&h->lock);
 
-        if ((err = snd_device_new(card, SNDRV_DEV_LOWLEVEL,
-                                  h, &ops)) < 0) {
-                goto free_and_ret;
-        }
+	if ((err = snd_device_new(card, SNDRV_DEV_LOWLEVEL,
+				  h, &ops)) < 0) {
+		goto free_and_ret;
+	}
 
 	snd_card_set_dev(card, &padev->dev);
 

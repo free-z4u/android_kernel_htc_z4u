@@ -437,8 +437,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
  */
 
 static int save_image(struct swap_map_handle *handle,
-                      struct snapshot_handle *snapshot,
-                      unsigned int nr_to_write)
+		      struct snapshot_handle *snapshot,
+		      unsigned int nr_to_write)
 {
 	unsigned int m;
 	int ret;
@@ -573,8 +573,8 @@ static int lzo_compress_threadfn(void *data)
  * @nr_to_write: Number of pages to save.
  */
 static int save_image_lzo(struct swap_map_handle *handle,
-                          struct snapshot_handle *snapshot,
-                          unsigned int nr_to_write)
+			  struct snapshot_handle *snapshot,
+			  unsigned int nr_to_write)
 {
 	unsigned int m;
 	int ret = 0;
@@ -962,8 +962,8 @@ static int swap_reader_finish(struct swap_map_handle *handle)
  */
 
 static int load_image(struct swap_map_handle *handle,
-                      struct snapshot_handle *snapshot,
-                      unsigned int nr_to_read)
+		      struct snapshot_handle *snapshot,
+		      unsigned int nr_to_read)
 {
 	unsigned int m;
 	int ret = 0;
@@ -1062,8 +1062,8 @@ static int lzo_decompress_threadfn(void *data)
  * @nr_to_read: Number of pages to load.
  */
 static int load_image_lzo(struct swap_map_handle *handle,
-                          struct snapshot_handle *snapshot,
-                          unsigned int nr_to_read)
+			  struct snapshot_handle *snapshot,
+			  unsigned int nr_to_read)
 {
 	unsigned int m;
 	int ret = 0;

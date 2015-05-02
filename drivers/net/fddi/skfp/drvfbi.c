@@ -404,7 +404,7 @@ static void led_indication(struct s_smc *smc, int led_event)
 	mib_b = phy->mib ;
 
 #ifdef	PCI
-        led_state = 0 ;
+	led_state = 0 ;
 
 	/* Ring up = yellow led OFF*/
 	if (led_event == LED_Y_ON) {
@@ -431,7 +431,7 @@ static void led_indication(struct s_smc *smc, int led_event)
 		}
 	}
 
-        outp(ADDR(B0_LED), led_state) ;
+	outp(ADDR(B0_LED), led_state) ;
 #endif	/* PCI */
 
 }
@@ -455,7 +455,7 @@ void rmt_indication(struct s_smc *smc, int i)
 	/* Call a driver special function if defined */
 	DRV_RMT_INDICATION(smc,i) ;
 
-        led_indication(smc, i ? LED_Y_OFF : LED_Y_ON) ;
+	led_indication(smc, i ? LED_Y_OFF : LED_Y_ON) ;
 }
 
 

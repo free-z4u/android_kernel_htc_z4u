@@ -230,11 +230,11 @@ static struct {
  Internal error types:
        0x14   in fpu_etc.c
        0x1nn  in a *.c file:
-              0x101  in reg_add_sub.c
-              0x102  in reg_mul.c
-              0x104  in poly_atan.c
-              0x105  in reg_mul.c
-              0x107  in fpu_trig.c
+	      0x101  in reg_add_sub.c
+	      0x102  in reg_mul.c
+	      0x104  in poly_atan.c
+	      0x105  in reg_mul.c
+	      0x107  in fpu_trig.c
 	      0x108  in reg_compare.c
 	      0x109  in reg_compare.c
 	      0x110  in reg_add_sub.c
@@ -261,8 +261,8 @@ static struct {
 	      0x133  in get_address.c
 	      0x140  in load_store.c
 	      0x141  in load_store.c
-              0x150  in poly_sin.c
-              0x151  in poly_sin.c
+	      0x150  in poly_sin.c
+	      0x151  in poly_sin.c
 	      0x160  in reg_ld_str.c
 	      0x161  in reg_ld_str.c
 	      0x162  in reg_ld_str.c
@@ -273,18 +273,18 @@ static struct {
 	      0x172  in fpu_tags.c
 	      0x180  in reg_convert.c
        0x2nn  in an *.S file:
-              0x201  in reg_u_add.S
-              0x202  in reg_u_div.S
-              0x203  in reg_u_div.S
-              0x204  in reg_u_div.S
-              0x205  in reg_u_mul.S
-              0x206  in reg_u_sub.S
-              0x207  in wm_sqrt.S
+	      0x201  in reg_u_add.S
+	      0x202  in reg_u_div.S
+	      0x203  in reg_u_div.S
+	      0x204  in reg_u_div.S
+	      0x205  in reg_u_mul.S
+	      0x206  in reg_u_sub.S
+	      0x207  in wm_sqrt.S
 	      0x208  in reg_div.S
-              0x209  in reg_u_sub.S
-              0x210  in reg_u_sub.S
-              0x211  in reg_u_sub.S
-              0x212  in reg_u_sub.S
+	      0x209  in reg_u_sub.S
+	      0x210  in reg_u_sub.S
+	      0x211  in reg_u_sub.S
+	      0x212  in reg_u_sub.S
 	      0x213  in wm_sqrt.S
 	      0x214  in wm_sqrt.S
 	      0x215  in wm_sqrt.S

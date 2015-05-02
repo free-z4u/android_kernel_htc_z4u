@@ -67,9 +67,9 @@
  *      Used to write a block of data (firmware etc) before the card is running
  */
 struct fstioc_write {
-        unsigned int  size;
-        unsigned int  offset;
-        unsigned char data[0];
+	unsigned int  size;
+	unsigned int  offset;
+	unsigned char data[0];
 };
 
 
@@ -96,67 +96,67 @@ struct fstioc_write {
  *      might be used to indicate a different (expanded) structure.
  */
 struct fstioc_info {
-        unsigned int   valid;           /* Bits of structure that are valid */
-        unsigned int   nports;          /* Number of serial ports */
-        unsigned int   type;            /* Type index of card */
-        unsigned int   state;           /* State of card */
-        unsigned int   index;           /* Index of port ioctl was issued on */
-        unsigned int   smcFirmwareVersion;
-        unsigned long  kernelVersion;   /* What Kernel version we are working with */
-        unsigned short lineInterface;   /* Physical interface type */
-        unsigned char  proto;           /* Line protocol */
-        unsigned char  internalClock;   /* 1 => internal clock, 0 => external */
-        unsigned int   lineSpeed;       /* Speed in bps */
-        unsigned int   v24IpSts;        /* V.24 control input status */
-        unsigned int   v24OpSts;        /* V.24 control output status */
-        unsigned short clockStatus;     /* lsb: 0=> present, 1=> absent */
-        unsigned short cableStatus;     /* lsb: 0=> present, 1=> absent */
-        unsigned short cardMode;        /* lsb: LED id mode */
-        unsigned short debug;           /* Debug flags */
-        unsigned char  transparentMode; /* Not used always 0 */
-        unsigned char  invertClock;     /* Invert clock feature for syncing */
-        unsigned char  startingSlot;    /* Time slot to use for start of tx */
-        unsigned char  clockSource;     /* External or internal */
-        unsigned char  framing;         /* E1, T1 or J1 */
-        unsigned char  structure;       /* unframed, double, crc4, f4, f12, */
-                                        /* f24 f72 */
-        unsigned char  interface;       /* rj48c or bnc */
-        unsigned char  coding;          /* hdb3 b8zs */
-        unsigned char  lineBuildOut;    /* 0, -7.5, -15, -22 */
-        unsigned char  equalizer;       /* short or lon haul settings */
-        unsigned char  loopMode;        /* various loopbacks */
-        unsigned char  range;           /* cable lengths */
-        unsigned char  txBufferMode;    /* tx elastic buffer depth */
-        unsigned char  rxBufferMode;    /* rx elastic buffer depth */
-        unsigned char  losThreshold;    /* Attenuation on LOS signal */
-        unsigned char  idleCode;        /* Value to send as idle timeslot */
-        unsigned int   receiveBufferDelay; /* delay thro rx buffer timeslots */
-        unsigned int   framingErrorCount; /* framing errors */
-        unsigned int   codeViolationCount; /* code violations */
-        unsigned int   crcErrorCount;   /* CRC errors */
-        int            lineAttenuation; /* in dB*/
-        unsigned short lossOfSignal;
-        unsigned short receiveRemoteAlarm;
-        unsigned short alarmIndicationSignal;
+	unsigned int   valid;           /* Bits of structure that are valid */
+	unsigned int   nports;          /* Number of serial ports */
+	unsigned int   type;            /* Type index of card */
+	unsigned int   state;           /* State of card */
+	unsigned int   index;           /* Index of port ioctl was issued on */
+	unsigned int   smcFirmwareVersion;
+	unsigned long  kernelVersion;   /* What Kernel version we are working with */
+	unsigned short lineInterface;   /* Physical interface type */
+	unsigned char  proto;           /* Line protocol */
+	unsigned char  internalClock;   /* 1 => internal clock, 0 => external */
+	unsigned int   lineSpeed;       /* Speed in bps */
+	unsigned int   v24IpSts;        /* V.24 control input status */
+	unsigned int   v24OpSts;        /* V.24 control output status */
+	unsigned short clockStatus;     /* lsb: 0=> present, 1=> absent */
+	unsigned short cableStatus;     /* lsb: 0=> present, 1=> absent */
+	unsigned short cardMode;        /* lsb: LED id mode */
+	unsigned short debug;           /* Debug flags */
+	unsigned char  transparentMode; /* Not used always 0 */
+	unsigned char  invertClock;     /* Invert clock feature for syncing */
+	unsigned char  startingSlot;    /* Time slot to use for start of tx */
+	unsigned char  clockSource;     /* External or internal */
+	unsigned char  framing;         /* E1, T1 or J1 */
+	unsigned char  structure;       /* unframed, double, crc4, f4, f12, */
+					/* f24 f72 */
+	unsigned char  interface;       /* rj48c or bnc */
+	unsigned char  coding;          /* hdb3 b8zs */
+	unsigned char  lineBuildOut;    /* 0, -7.5, -15, -22 */
+	unsigned char  equalizer;       /* short or lon haul settings */
+	unsigned char  loopMode;        /* various loopbacks */
+	unsigned char  range;           /* cable lengths */
+	unsigned char  txBufferMode;    /* tx elastic buffer depth */
+	unsigned char  rxBufferMode;    /* rx elastic buffer depth */
+	unsigned char  losThreshold;    /* Attenuation on LOS signal */
+	unsigned char  idleCode;        /* Value to send as idle timeslot */
+	unsigned int   receiveBufferDelay; /* delay thro rx buffer timeslots */
+	unsigned int   framingErrorCount; /* framing errors */
+	unsigned int   codeViolationCount; /* code violations */
+	unsigned int   crcErrorCount;   /* CRC errors */
+	int            lineAttenuation; /* in dB*/
+	unsigned short lossOfSignal;
+	unsigned short receiveRemoteAlarm;
+	unsigned short alarmIndicationSignal;
 };
 
 /* "valid" bitmask */
 #define FSTVAL_NONE     0x00000000      /* Nothing valid (firmware not running).
-                                         * Slight misnomer. In fact nports,
-                                         * type, state and index will be set
-                                         * based on hardware detected.
-                                         */
+					 * Slight misnomer. In fact nports,
+					 * type, state and index will be set
+					 * based on hardware detected.
+					 */
 #define FSTVAL_OMODEM   0x0000001F      /* First 5 bits correspond to the
-                                         * output status bits defined for
-                                         * v24OpSts
-                                         */
+					 * output status bits defined for
+					 * v24OpSts
+					 */
 #define FSTVAL_SPEED    0x00000020      /* internalClock, lineSpeed, clockStatus
-                                         */
+					 */
 #define FSTVAL_CABLE    0x00000040      /* lineInterface, cableStatus */
 #define FSTVAL_IMODEM   0x00000080      /* v24IpSts */
 #define FSTVAL_CARD     0x00000100      /* nports, type, state, index,
-                                         * smcFirmwareVersion
-                                         */
+					 * smcFirmwareVersion
+					 */
 #define FSTVAL_PROTO    0x00000200      /* proto */
 #define FSTVAL_MODE     0x00000400      /* cardMode */
 #define FSTVAL_PHASE    0x00000800      /* Clock phase */
@@ -179,7 +179,7 @@ struct fstioc_info {
 
 /* "state" */
 #define FST_UNINIT      0               /* Raw uninitialised state following
-                                         * system startup */
+					 * system startup */
 #define FST_RESET       1               /* Processor held in reset state */
 #define FST_DOWNLOAD    2               /* Card being downloaded */
 #define FST_STARTING    3               /* Released following download */
@@ -187,8 +187,8 @@ struct fstioc_info {
 #define FST_BADVERSION  5               /* Bad shared memory version detected */
 #define FST_HALTED      6               /* Processor flagged a halt */
 #define FST_IFAILED     7               /* Firmware issued initialisation failed
-                                         * interrupt
-                                         */
+					 * interrupt
+					 */
 /* "lineInterface" */
 #define V24             1
 #define X21             2
@@ -219,7 +219,7 @@ struct fstioc_info {
 #define OPSTS_CONTROL   OPSTS_RTS
 #define OPSTS_DTR       0x00000002      /* Data Terminal Ready */
 #define OPSTS_DSRS      0x00000004      /* Data Signalling Rate Select (Not
-                                         * Supported) */
+					 * Supported) */
 #define OPSTS_SS        0x00000008      /* Select Standby (Not Supported) */
 #define OPSTS_LL        0x00000010      /* Maintenance Test (Not Supported) */
 
@@ -330,10 +330,10 @@ struct fstioc_info {
 #if FST_DEBUG
 
 extern int fst_debug_mask;              /* Bit mask of actions to debug, bits
-                                         * listed below. Note: Bit 0 is used
-                                         * to trigger the inclusion of this
-                                         * code, without enabling any actions.
-                                         */
+					 * listed below. Note: Bit 0 is used
+					 * to trigger the inclusion of this
+					 * code, without enabling any actions.
+					 */
 #define DBG_INIT        0x0002          /* Card detection and initialisation */
 #define DBG_OPEN        0x0004          /* Open and close sequences */
 #define DBG_PCI         0x0008          /* PCI config operations */
@@ -344,8 +344,8 @@ extern int fst_debug_mask;              /* Bit mask of actions to debug, bits
 #define DBG_CMD         0x0100          /* Port command issuing */
 
 #define DBG_ASS         0xFFFF          /* Assert like statements. Code that
-                                         * should never be reached, if you see
-                                         * one of these then I've been an ass
-                                         */
+					 * should never be reached, if you see
+					 * one of these then I've been an ass
+					 */
 #endif  /* FST_DEBUG */
 

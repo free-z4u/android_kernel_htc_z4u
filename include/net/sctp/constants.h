@@ -300,7 +300,7 @@ enum { SCTP_MAX_GABS = 16 };
 					 * window
 					 */
 #define SCTP_DEFAULT_MAXSEGMENT 1500	/* MTU size, this is the limit
-                                         * to which we will raise the P-MTU.
+					 * to which we will raise the P-MTU.
 					 */
 #define SCTP_DEFAULT_MINSEGMENT 512	/* MTU size ... if no mtu disc */
 #define SCTP_HOW_MANY_SECRETS 2		/* How many secrets I keep */

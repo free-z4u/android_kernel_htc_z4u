@@ -204,7 +204,7 @@ void
 block_irq(int irq, int cpu)
 {
 	int intr_mask;
-        unsigned long flags;
+	unsigned long flags;
 
 	spin_lock_irqsave(&irq_lock, flags);
 	/* Remember, 1 let thru, 0 block. */
@@ -221,16 +221,16 @@ block_irq(int irq, int cpu)
 		REG_WR_INT_VECT(intr_vect, irq_regs[cpu], rw_mask,
 			1, intr_mask);
 	}
-        spin_unlock_irqrestore(&irq_lock, flags);
+	spin_unlock_irqrestore(&irq_lock, flags);
 }
 
 void
 unblock_irq(int irq, int cpu)
 {
 	int intr_mask;
-        unsigned long flags;
+	unsigned long flags;
 
-        spin_lock_irqsave(&irq_lock, flags);
+	spin_lock_irqsave(&irq_lock, flags);
 	/* Remember, 1 let thru, 0 block. */
 	if (irq - FIRST_IRQ < 32) {
 		intr_mask = REG_RD_INT_VECT(intr_vect, irq_regs[cpu],
@@ -245,24 +245,24 @@ unblock_irq(int irq, int cpu)
 		REG_WR_INT_VECT(intr_vect, irq_regs[cpu], rw_mask,
 			1, intr_mask);
 	}
-        spin_unlock_irqrestore(&irq_lock, flags);
+	spin_unlock_irqrestore(&irq_lock, flags);
 }
 
 /* Find out which CPU the irq should be allocated to. */
 static int irq_cpu(int irq)
 {
 	int cpu;
-        unsigned long flags;
+	unsigned long flags;
 
-        spin_lock_irqsave(&irq_lock, flags);
-        cpu = irq_allocations[irq - FIRST_IRQ].cpu;
+	spin_lock_irqsave(&irq_lock, flags);
+	cpu = irq_allocations[irq - FIRST_IRQ].cpu;
 
 	/* Fixed interrupts stay on the local CPU. */
 	if (cpu == CPU_FIXED)
-        {
+	{
 		spin_unlock_irqrestore(&irq_lock, flags);
 		return smp_processor_id();
-        }
+	}
 
 
 	/* Let the interrupt stay if possible */
@@ -332,10 +332,10 @@ void
 crisv32_do_IRQ(int irq, int block, struct pt_regs* regs)
 {
 	/* Interrupts that may not be moved to another CPU and
-         * are IRQF_DISABLED may skip blocking. This is currently
-         * only valid for the timer IRQ and the IPI and is used
-         * for the timer interrupt to avoid watchdog starvation.
-         */
+	 * are IRQF_DISABLED may skip blocking. This is currently
+	 * only valid for the timer IRQ and the IPI and is used
+	 * for the timer interrupt to avoid watchdog starvation.
+	 */
 	if (!block) {
 		do_IRQ(irq, regs);
 		return;
@@ -369,7 +369,7 @@ crisv32_do_multiple(struct pt_regs* regs)
 	cpu = smp_processor_id();
 
 	/* An extra irq_enter here to prevent softIRQs to run after
-         * each do_IRQ. This will decrease the interrupt latency.
+	 * each do_IRQ. This will decrease the interrupt latency.
 	 */
 	irq_enter();
 

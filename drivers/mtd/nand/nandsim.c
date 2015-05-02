@@ -191,9 +191,9 @@ MODULE_PARM_DESC(bch,		 "Enable BCH ecc and set how many bits should "
 
 /* Busy-wait delay macros (microseconds, milliseconds) */
 #define NS_UDELAY(us) \
-        do { if (do_delays) udelay(us); } while(0)
+	do { if (do_delays) udelay(us); } while(0)
 #define NS_MDELAY(us) \
-        do { if (do_delays) mdelay(us); } while(0)
+	do { if (do_delays) mdelay(us); } while(0)
 
 /* Is the nandsim structure initialized ? */
 #define NS_IS_INITIALIZED(ns) ((ns)->geom.totsz != 0)
@@ -353,12 +353,12 @@ struct nandsim {
 	} regs;
 
 	/* NAND flash lines state */
-        struct {
-                int ce;  /* chip Enable */
-                int cle; /* command Latch Enable */
-                int ale; /* address Latch Enable */
-                int wp;  /* write Protect */
-        } lines;
+	struct {
+		int ce;  /* chip Enable */
+		int cle; /* command Latch Enable */
+		int ale; /* address Latch Enable */
+		int wp;  /* write Protect */
+	} lines;
 
 	/* Fields needed when using a cache file */
 	struct file *cfile; /* Open file */
@@ -660,9 +660,9 @@ static int init_nandsim(struct mtd_info *mtd)
 	}
 
 	/* Detect how many ID bytes the NAND chip outputs */
-        for (i = 0; nand_flash_ids[i].name != NULL; i++) {
-                if (second_id_byte != nand_flash_ids[i].id)
-                        continue;
+	for (i = 0; nand_flash_ids[i].name != NULL; i++) {
+		if (second_id_byte != nand_flash_ids[i].id)
+			continue;
 		if (!(nand_flash_ids[i].options & NAND_NO_AUTOINCR))
 			ns->options |= OPT_AUTOINCR;
 	}
@@ -2252,7 +2252,7 @@ static int __init ns_init_module(void)
 		return -ENOMEM;
 	}
 	chip        = (struct nand_chip *)(nsmtd + 1);
-        nsmtd->priv = (void *)chip;
+	nsmtd->priv = (void *)chip;
 	nand        = (struct nandsim *)(chip + 1);
 	chip->priv  = (void *)nand;
 
@@ -2388,7 +2388,7 @@ static int __init ns_init_module(void)
 	if (retval != 0)
 		goto err_exit;
 
-        return 0;
+	return 0;
 
 err_exit:
 	free_nandsim(nand);

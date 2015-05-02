@@ -251,8 +251,8 @@ static void __devinit pci_d3delay_fixup(struct pci_dev *dev)
 {
 	/* PCI fixups are effectively decided compile time. If we have a dual
 	   SoC/non-SoC kernel we don't want to mangle d3 on non SoC devices */
-        if (!pci_soc_mode)
-            return;
+	if (!pci_soc_mode)
+	    return;
 	/* true pci devices in lincroft should allow type 1 access, the rest
 	 * are langwell fake pci devices.
 	 */

@@ -53,7 +53,7 @@ wl_cfgp2p_has_ie(u8 *ie, u8 **tlvs, u32 *tlvs_len, const u8 *oui, u32 oui_len, u
 
 static s32
 wl_cfgp2p_vndr_ie(struct wl_priv *wl, struct net_device *ndev, s32 bssidx, s32 pktflag,
-            s8 *oui, s32 ie_id, s8 *data, s32 data_len, s32 delete);
+	    s8 *oui, s32 ie_id, s8 *data, s32 data_len, s32 delete);
 
 static int wl_cfgp2p_start_xmit(struct sk_buff *skb, struct net_device *ndev);
 static int wl_cfgp2p_do_ioctl(struct net_device *net, struct ifreq *ifr, int cmd);
@@ -334,7 +334,7 @@ wl_cfgp2p_set_firm_p2p(struct wl_priv *wl)
  */
 s32
 wl_cfgp2p_ifadd(struct wl_priv *wl, struct ether_addr *mac, u8 if_type,
-            chanspec_t chspec)
+	    chanspec_t chspec)
 {
 	wl_p2p_if_t ifreq;
 	s32 err;
@@ -384,7 +384,7 @@ wl_cfgp2p_ifdel(struct wl_priv *wl, struct ether_addr *mac)
  */
 s32
 wl_cfgp2p_ifchange(struct wl_priv *wl, struct ether_addr *mac, u8 if_type,
-            chanspec_t chspec)
+	    chanspec_t chspec)
 {
 	wl_p2p_if_t ifreq;
 	s32 err;
@@ -1111,7 +1111,7 @@ wl_cfgp2p_find_wfdie(u8 *parse, u32 len)
 }
 static s32
 wl_cfgp2p_vndr_ie(struct wl_priv *wl, struct net_device *ndev, s32 bssidx, s32 pktflag,
-            s8 *oui, s32 ie_id, s8 *data, s32 data_len, s32 delete)
+	    s8 *oui, s32 ie_id, s8 *data, s32 data_len, s32 delete)
 {
 	s32 err = BCME_OK;
 	s32 buf_len;
@@ -1195,7 +1195,7 @@ exit:
  */
 s32
 wl_cfgp2p_listen_complete(struct wl_priv *wl, struct net_device *ndev,
-            const wl_event_msg_t *e, void *data)
+	    const wl_event_msg_t *e, void *data)
 {
 	s32 ret = BCME_OK;
 
@@ -1320,7 +1320,7 @@ wl_cfgp2p_discover_enable_search(struct wl_priv *wl, u8 enable)
  */
 s32
 wl_cfgp2p_action_tx_complete(struct wl_priv *wl, struct net_device *ndev,
-            const wl_event_msg_t *e, void *data)
+	    const wl_event_msg_t *e, void *data)
 {
 	s32 ret = BCME_OK;
 	u32 event_type = ntoh32(e->event_type);
@@ -1399,7 +1399,7 @@ exit:
  */
 void
 wl_cfgp2p_generate_bss_mac(struct ether_addr *primary_addr,
-            struct ether_addr *out_dev_addr, struct ether_addr *out_int_addr)
+	    struct ether_addr *out_dev_addr, struct ether_addr *out_int_addr)
 {
 	memset(out_dev_addr, 0, sizeof(*out_dev_addr));
 	memset(out_int_addr, 0, sizeof(*out_int_addr));

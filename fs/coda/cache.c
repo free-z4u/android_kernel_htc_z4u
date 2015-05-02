@@ -35,9 +35,9 @@ void coda_cache_enter(struct inode *inode, int mask)
 	cii->c_cached_epoch = atomic_read(&permission_epoch);
 	if (cii->c_uid != current_fsuid()) {
 		cii->c_uid = current_fsuid();
-                cii->c_cached_perm = mask;
-        } else
-                cii->c_cached_perm |= mask;
+		cii->c_cached_perm = mask;
+	} else
+		cii->c_cached_perm |= mask;
 	spin_unlock(&cii->c_lock);
 }
 

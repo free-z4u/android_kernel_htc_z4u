@@ -32,10 +32,10 @@
 	(((itte) >> TIO_ITTE_VALID_SHIFT) & TIO_ITTE_VALID_MASK)
 
 #define TIO_ITTE_PUT(nasid, bigwin, widget, addr, valid) \
-        REMOTE_HUB_S((nasid), TIO_ITTE(bigwin), \
-                (((((addr) >> TIO_BWIN_SIZE_BITS) & \
-                   TIO_ITTE_OFFSET_MASK) << TIO_ITTE_OFFSET_SHIFT) | \
-                (((widget) & TIO_ITTE_WIDGET_MASK) << TIO_ITTE_WIDGET_SHIFT)) | \
+	REMOTE_HUB_S((nasid), TIO_ITTE(bigwin), \
+		(((((addr) >> TIO_BWIN_SIZE_BITS) & \
+		   TIO_ITTE_OFFSET_MASK) << TIO_ITTE_OFFSET_SHIFT) | \
+		(((widget) & TIO_ITTE_WIDGET_MASK) << TIO_ITTE_WIDGET_SHIFT)) | \
 		(( (valid) & TIO_ITTE_VALID_MASK) << TIO_ITTE_VALID_SHIFT))
 
 #endif /*  _ASM_IA64_SN_TIO_H */

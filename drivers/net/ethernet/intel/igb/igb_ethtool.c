@@ -1571,8 +1571,8 @@ static int igb_check_lbtest_frame(struct sk_buff *skb, unsigned int frame_size)
 }
 
 static int igb_clean_test_rings(struct igb_ring *rx_ring,
-                                struct igb_ring *tx_ring,
-                                unsigned int size)
+				struct igb_ring *tx_ring,
+				unsigned int size)
 {
 	union e1000_adv_rx_desc *rx_desc;
 	struct igb_rx_buffer *rx_buffer_info;

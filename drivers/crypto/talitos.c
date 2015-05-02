@@ -2179,7 +2179,7 @@ static struct talitos_alg_template driver_algs[] = {
 			.cra_driver_name = "cbc-aes-talitos",
 			.cra_blocksize = AES_BLOCK_SIZE,
 			.cra_flags = CRYPTO_ALG_TYPE_ABLKCIPHER |
-                                     CRYPTO_ALG_ASYNC,
+				     CRYPTO_ALG_ASYNC,
 			.cra_type = &crypto_ablkcipher_type,
 			.cra_ablkcipher = {
 				.setkey = ablkcipher_setkey,
@@ -2201,7 +2201,7 @@ static struct talitos_alg_template driver_algs[] = {
 			.cra_driver_name = "cbc-3des-talitos",
 			.cra_blocksize = DES3_EDE_BLOCK_SIZE,
 			.cra_flags = CRYPTO_ALG_TYPE_ABLKCIPHER |
-                                     CRYPTO_ALG_ASYNC,
+				     CRYPTO_ALG_ASYNC,
 			.cra_type = &crypto_ablkcipher_type,
 			.cra_ablkcipher = {
 				.setkey = ablkcipher_setkey,

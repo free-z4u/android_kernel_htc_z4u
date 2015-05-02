@@ -163,7 +163,7 @@ struct powerpc_operand
      operand value into an instruction, check this field.
 
      If it is NULL, execute
-         i |= (op & ((1 << o->bits) - 1)) << o->shift;
+	 i |= (op & ((1 << o->bits) - 1)) << o->shift;
      (i is the instruction which we are filling in, o is a pointer to
      this structure, and op is the opcode value; this assumes twos
      complement arithmetic).
@@ -182,7 +182,7 @@ struct powerpc_operand
      extract this operand type from an instruction, check this field.
 
      If it is NULL, compute
-         op = ((i) >> o->shift) & ((1 << o->bits) - 1);
+	 op = ((i) >> o->shift) & ((1 << o->bits) - 1);
 	 if ((o->flags & PPC_OPERAND_SIGNED) != 0
 	     && (op & (1 << (o->bits - 1))) != 0)
 	   op -= 1 << o->bits;

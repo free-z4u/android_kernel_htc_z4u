@@ -344,7 +344,7 @@ static struct rpc_task *__nlm_async_call(struct nlm_rqst *req, u32 proc, struct 
 	msg->rpc_proc = &clnt->cl_procinfo[proc];
 	task_setup_data.rpc_client = clnt;
 
-        /* bootstrap and kick off the async RPC call */
+	/* bootstrap and kick off the async RPC call */
 	return rpc_run_task(&task_setup_data);
 out_err:
 	tk_ops->rpc_release(req);

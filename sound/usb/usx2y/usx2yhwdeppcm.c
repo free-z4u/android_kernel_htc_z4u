@@ -22,20 +22,20 @@
  It provides the alsa kernel half of the usx2y-alsa-jack driver pair.
  The pair uses a hardware dependent alsa-device for mmaped pcm transport.
  Advantage achieved:
-         The usb_hc moves pcm data from/into memory via DMA.
-         That memory is mmaped by jack's usx2y driver.
-         Jack's usx2y driver is the first/last to read/write pcm data.
-         Read/write is a combination of power of 2 period shaping and
-         float/int conversation.
-         Compared to mainline alsa/jack we leave out power of 2 period shaping inside
-         snd-usb-usx2y which needs memcpy() and additional buffers.
-         As a side effect possible unwanted pcm-data coruption resulting of
-         standard alsa's snd-usb-usx2y period shaping scheme falls away.
-         Result is sane jack operation at buffering schemes down to 128frames,
-         2 periods.
-         plain usx2y alsa mode is able to achieve 64frames, 4periods, but only at the
-         cost of easier triggered i.e. aeolus xruns (128 or 256frames,
-         2periods works but is useless cause of crackling).
+	 The usb_hc moves pcm data from/into memory via DMA.
+	 That memory is mmaped by jack's usx2y driver.
+	 Jack's usx2y driver is the first/last to read/write pcm data.
+	 Read/write is a combination of power of 2 period shaping and
+	 float/int conversation.
+	 Compared to mainline alsa/jack we leave out power of 2 period shaping inside
+	 snd-usb-usx2y which needs memcpy() and additional buffers.
+	 As a side effect possible unwanted pcm-data coruption resulting of
+	 standard alsa's snd-usb-usx2y period shaping scheme falls away.
+	 Result is sane jack operation at buffering schemes down to 128frames,
+	 2 periods.
+	 plain usx2y alsa mode is able to achieve 64frames, 4periods, but only at the
+	 cost of easier triggered i.e. aeolus xruns (128 or 256frames,
+	 2periods works but is useless cause of crackling).
 
  This is a first "proof of concept" implementation.
  Later, functionalities should migrate to more appropriate places:

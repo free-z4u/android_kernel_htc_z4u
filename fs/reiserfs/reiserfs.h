@@ -93,33 +93,33 @@ typedef enum {
 #define set_sb_root_block(sbp,v)    ((sbp)->s_v1.s_root_block = cpu_to_le32(v))
 
 #define sb_jp_journal_1st_block(sbp)  \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_1st_block))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_1st_block))
 #define set_sb_jp_journal_1st_block(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_1st_block = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_1st_block = cpu_to_le32(v))
 #define sb_jp_journal_dev(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_dev))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_dev))
 #define set_sb_jp_journal_dev(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_dev = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_dev = cpu_to_le32(v))
 #define sb_jp_journal_size(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_size))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_size))
 #define set_sb_jp_journal_size(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_size = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_size = cpu_to_le32(v))
 #define sb_jp_journal_trans_max(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_trans_max))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_trans_max))
 #define set_sb_jp_journal_trans_max(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_trans_max = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_trans_max = cpu_to_le32(v))
 #define sb_jp_journal_magic(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_magic))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_magic))
 #define set_sb_jp_journal_magic(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_magic = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_magic = cpu_to_le32(v))
 #define sb_jp_journal_max_batch(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_max_batch))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_max_batch))
 #define set_sb_jp_journal_max_batch(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_max_batch = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_max_batch = cpu_to_le32(v))
 #define sb_jp_jourmal_max_commit_age(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_max_commit_age))
+	      (le32_to_cpu((sbp)->s_v1.s_journal.jp_journal_max_commit_age))
 #define set_sb_jp_journal_max_commit_age(sbp,v) \
-              ((sbp)->s_v1.s_journal.jp_journal_max_commit_age = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_journal.jp_journal_max_commit_age = cpu_to_le32(v))
 
 #define sb_blocksize(sbp)          (le16_to_cpu((sbp)->s_v1.s_blocksize))
 #define set_sb_blocksize(sbp,v)    ((sbp)->s_v1.s_blocksize = cpu_to_le16(v))
@@ -132,9 +132,9 @@ typedef enum {
 #define sb_fs_state(sbp)           (le16_to_cpu((sbp)->s_v1.s_fs_state))
 #define set_sb_fs_state(sbp,v)     ((sbp)->s_v1.s_fs_state = cpu_to_le16(v))
 #define sb_hash_function_code(sbp) \
-              (le32_to_cpu((sbp)->s_v1.s_hash_function_code))
+	      (le32_to_cpu((sbp)->s_v1.s_hash_function_code))
 #define set_sb_hash_function_code(sbp,v) \
-              ((sbp)->s_v1.s_hash_function_code = cpu_to_le32(v))
+	      ((sbp)->s_v1.s_hash_function_code = cpu_to_le32(v))
 #define sb_tree_height(sbp)        (le16_to_cpu((sbp)->s_v1.s_tree_height))
 #define set_sb_tree_height(sbp,v)  ((sbp)->s_v1.s_tree_height = cpu_to_le16(v))
 #define sb_bmap_nr(sbp)            (le16_to_cpu((sbp)->s_v1.s_bmap_nr))
@@ -146,9 +146,9 @@ typedef enum {
 #define set_sb_mnt_count(sbp, v)   ((sbp)->s_mnt_count = cpu_to_le16(v))
 
 #define sb_reserved_for_journal(sbp) \
-              (le16_to_cpu((sbp)->s_v1.s_reserved_for_journal))
+	      (le16_to_cpu((sbp)->s_v1.s_reserved_for_journal))
 #define set_sb_reserved_for_journal(sbp,v) \
-              ((sbp)->s_v1.s_reserved_for_journal = cpu_to_le16(v))
+	      ((sbp)->s_v1.s_reserved_for_journal = cpu_to_le16(v))
 
 /* LOGGING -- */
 
@@ -863,19 +863,19 @@ struct reiserfs_super_block {
 #define SB_DISK_SUPER_BLOCK(s) (REISERFS_SB(s)->s_rs)
 #define SB_V1_DISK_SUPER_BLOCK(s) (&(SB_DISK_SUPER_BLOCK(s)->s_v1))
 #define SB_BLOCKSIZE(s) \
-        le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_blocksize))
+	le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_blocksize))
 #define SB_BLOCK_COUNT(s) \
-        le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_block_count))
+	le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_block_count))
 #define SB_FREE_BLOCKS(s) \
-        le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_free_blocks))
+	le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_free_blocks))
 #define SB_REISERFS_MAGIC(s) \
-        (SB_V1_DISK_SUPER_BLOCK(s)->s_magic)
+	(SB_V1_DISK_SUPER_BLOCK(s)->s_magic)
 #define SB_ROOT_BLOCK(s) \
-        le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_root_block))
+	le32_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_root_block))
 #define SB_TREE_HEIGHT(s) \
-        le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_tree_height))
+	le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_tree_height))
 #define SB_REISERFS_STATE(s) \
-        le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_umount_state))
+	le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_umount_state))
 #define SB_VERSION(s) le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_version))
 #define SB_BMAP_NR(s) le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_bmap_nr))
 
@@ -896,19 +896,19 @@ struct reiserfs_super_block {
 
 #define SB_ONDISK_JP(s) (&SB_V1_DISK_SUPER_BLOCK(s)->s_journal)
 #define SB_ONDISK_JOURNAL_SIZE(s) \
-         le32_to_cpu ((SB_ONDISK_JP(s)->jp_journal_size))
+	 le32_to_cpu ((SB_ONDISK_JP(s)->jp_journal_size))
 #define SB_ONDISK_JOURNAL_1st_BLOCK(s) \
-         le32_to_cpu ((SB_ONDISK_JP(s)->jp_journal_1st_block))
+	 le32_to_cpu ((SB_ONDISK_JP(s)->jp_journal_1st_block))
 #define SB_ONDISK_JOURNAL_DEVICE(s) \
-         le32_to_cpu ((SB_ONDISK_JP(s)->jp_journal_dev))
+	 le32_to_cpu ((SB_ONDISK_JP(s)->jp_journal_dev))
 #define SB_ONDISK_RESERVED_FOR_JOURNAL(s) \
-         le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_reserved_for_journal))
+	 le16_to_cpu ((SB_V1_DISK_SUPER_BLOCK(s)->s_reserved_for_journal))
 
 #define is_block_in_log_or_reserved_area(s, block) \
-         block >= SB_JOURNAL_1st_RESERVED_BLOCK(s) \
-         && block < SB_JOURNAL_1st_RESERVED_BLOCK(s) +  \
-         ((!is_reiserfs_jr(SB_DISK_SUPER_BLOCK(s)) ? \
-         SB_ONDISK_JOURNAL_SIZE(s) + 1 : SB_ONDISK_RESERVED_FOR_JOURNAL(s)))
+	 block >= SB_JOURNAL_1st_RESERVED_BLOCK(s) \
+	 && block < SB_JOURNAL_1st_RESERVED_BLOCK(s) +  \
+	 ((!is_reiserfs_jr(SB_DISK_SUPER_BLOCK(s)) ? \
+	 SB_ONDISK_JOURNAL_SIZE(s) + 1 : SB_ONDISK_RESERVED_FOR_JOURNAL(s)))
 
 int is_reiserfs_3_5(struct reiserfs_super_block *rs);
 int is_reiserfs_3_6(struct reiserfs_super_block *rs);
@@ -980,19 +980,19 @@ static inline int bmap_would_wrap(unsigned bmap_nr)
     ((REISERFS_I(inode)->i_flags & i_item_key_version_mask) ? KEY_FORMAT_3_6 : KEY_FORMAT_3_5)
 
 #define set_inode_item_key_version( inode, version )                           \
-         ({ if((version)==KEY_FORMAT_3_6)                                      \
-                REISERFS_I(inode)->i_flags |= i_item_key_version_mask;      \
-            else                                                               \
-                REISERFS_I(inode)->i_flags &= ~i_item_key_version_mask; })
+	 ({ if((version)==KEY_FORMAT_3_6)                                      \
+		REISERFS_I(inode)->i_flags |= i_item_key_version_mask;      \
+	    else                                                               \
+		REISERFS_I(inode)->i_flags &= ~i_item_key_version_mask; })
 
 #define get_inode_sd_version(inode)                                            \
     ((REISERFS_I(inode)->i_flags & i_stat_data_version_mask) ? STAT_DATA_V2 : STAT_DATA_V1)
 
 #define set_inode_sd_version(inode, version)                                   \
-         ({ if((version)==STAT_DATA_V2)                                        \
-                REISERFS_I(inode)->i_flags |= i_stat_data_version_mask;     \
-            else                                                               \
-                REISERFS_I(inode)->i_flags &= ~i_stat_data_version_mask; })
+	 ({ if((version)==STAT_DATA_V2)                                        \
+		REISERFS_I(inode)->i_flags |= i_stat_data_version_mask;     \
+	    else                                                               \
+		REISERFS_I(inode)->i_flags &= ~i_stat_data_version_mask; })
 
 /* This is an aggressive tail suppression policy, I am hoping it
    improves our benchmarks. The principle behind it is that percentage
@@ -1525,9 +1525,9 @@ struct stat_data_v1 {
 #define sd_v1_blocks(sdp)       (le32_to_cpu((sdp)->u.sd_blocks))
 #define set_sd_v1_blocks(sdp,v) ((sdp)->u.sd_blocks = cpu_to_le32(v))
 #define sd_v1_first_direct_byte(sdp) \
-                                (le32_to_cpu((sdp)->sd_first_direct_byte))
+				(le32_to_cpu((sdp)->sd_first_direct_byte))
 #define set_sd_v1_first_direct_byte(sdp,v) \
-                                ((sdp)->sd_first_direct_byte = cpu_to_le32(v))
+				((sdp)->sd_first_direct_byte = cpu_to_le32(v))
 
 /* inode flags stored in sd_attrs (nee sd_reserved) */
 
@@ -1622,7 +1622,7 @@ struct stat_data {
    | directory     |N-1| N-2 | ....   |   1st |0th|
    | entry headers |   |     |        |       |   |
    |_______________|___|_____|________|_______|___|
-                    <----   directory entries         ------>
+		    <----   directory entries         ------>
 
  First directory item has k_offset component 1. We store "." and ".."
  in one item, always, we never split "." and ".." into differing
@@ -2661,7 +2661,7 @@ int reiserfs_proc_info_global_done(void);
 #define __PINFO( sb ) REISERFS_SB(sb) -> s_proc_info_data
 #define PROC_INFO_MAX( sb, field, value )								\
     __PINFO( sb ).field =												\
-        max( REISERFS_SB( sb ) -> s_proc_info_data.field, value )
+	max( REISERFS_SB( sb ) -> s_proc_info_data.field, value )
 #define PROC_INFO_INC( sb, field ) ( ++ ( __PINFO( sb ).field ) )
 #define PROC_INFO_ADD( sb, field, val ) ( __PINFO( sb ).field += ( val ) )
 #define PROC_INFO_BH_STAT( sb, bh, level )							\

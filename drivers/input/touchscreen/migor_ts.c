@@ -165,8 +165,8 @@ static int migor_ts_probe(struct i2c_client *client,
 	input_set_drvdata(input, priv);
 
 	error = request_threaded_irq(priv->irq, NULL, migor_ts_isr,
-                                     IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-                                     client->name, priv);
+				     IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+				     client->name, priv);
 	if (error) {
 		dev_err(&client->dev, "Unable to request touchscreen IRQ.\n");
 		goto err_free_mem;

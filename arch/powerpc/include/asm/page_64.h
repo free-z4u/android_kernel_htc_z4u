@@ -54,8 +54,8 @@ static __inline__ void clear_page(void *addr)
 1:      dcbz	0,%0\n\
 	add	%0,%0,%3\n\
 	bdnz+	1b"
-        : "=r" (addr)
-        : "r" (lines), "0" (addr), "r" (line_size)
+	: "=r" (addr)
+	: "r" (lines), "0" (addr), "r" (line_size)
 	: "ctr", "memory");
 }
 

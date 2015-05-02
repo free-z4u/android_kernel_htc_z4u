@@ -124,13 +124,13 @@ MODULE_SUPPORTED_DEVICE("{{RME,Digi32}," "{RME,Digi32/8}," "{RME,Digi32 PRO}}");
 /* Write control register bits */
 #define RME32_WCR_START     (1 << 0)    /* startbit */
 #define RME32_WCR_MONO      (1 << 1)    /* 0=stereo, 1=mono
-                                           Setting the whole card to mono
-                                           doesn't seem to be very useful.
-                                           A software-solution can handle
-                                           full-duplex with one direction in
-                                           stereo and the other way in mono.
-                                           So, the hardware should work all
-                                           the time in stereo! */
+					   Setting the whole card to mono
+					   doesn't seem to be very useful.
+					   A software-solution can handle
+					   full-duplex with one direction in
+					   stereo and the other way in mono.
+					   So, the hardware should work all
+					   the time in stereo! */
 #define RME32_WCR_MODE24    (1 << 2)    /* 0=16bit, 1=32bit */
 #define RME32_WCR_SEL       (1 << 3)    /* 0=input on output, 1=normal playback/capture */
 #define RME32_WCR_FREQ_0    (1 << 4)    /* frequency (play) */
@@ -399,9 +399,9 @@ static struct snd_pcm_hardware snd_rme32_adat_fd_info =
 
 static void snd_rme32_reset_dac(struct rme32 *rme32)
 {
-        writel(rme32->wcreg | RME32_WCR_PD,
-               rme32->iobase + RME32_IO_CONTROL_REGISTER);
-        writel(rme32->wcreg, rme32->iobase + RME32_IO_CONTROL_REGISTER);
+	writel(rme32->wcreg | RME32_WCR_PD,
+	       rme32->iobase + RME32_IO_CONTROL_REGISTER);
+	writel(rme32->wcreg, rme32->iobase + RME32_IO_CONTROL_REGISTER);
 }
 
 static int snd_rme32_playback_getrate(struct rme32 * rme32)
@@ -432,14 +432,14 @@ static int snd_rme32_capture_getrate(struct rme32 * rme32, int *is_adat)
 
 	*is_adat = 0;
 	if (rme32->rcreg & RME32_RCR_LOCK) {
-                /* ADAT rate */
-                *is_adat = 1;
+		/* ADAT rate */
+		*is_adat = 1;
 	}
 	if (rme32->rcreg & RME32_RCR_ERF) {
 		return -1;
 	}
 
-        /* S/PDIF rate */
+	/* S/PDIF rate */
 	n = ((rme32->rcreg >> RME32_RCR_BITPOS_F0) & 1) +
 		(((rme32->rcreg >> RME32_RCR_BITPOS_F1) & 1) << 1) +
 		(((rme32->rcreg >> RME32_RCR_BITPOS_F2) & 1) << 2);
@@ -490,9 +490,9 @@ static int snd_rme32_capture_getrate(struct rme32 * rme32, int *is_adat)
 
 static int snd_rme32_playback_setrate(struct rme32 * rme32, int rate)
 {
-        int ds;
+	int ds;
 
-        ds = rme32->wcreg & RME32_WCR_DS_BM;
+	ds = rme32->wcreg & RME32_WCR_DS_BM;
 	switch (rate) {
 	case 32000:
 		rme32->wcreg &= ~RME32_WCR_DS_BM;
@@ -533,13 +533,13 @@ static int snd_rme32_playback_setrate(struct rme32 * rme32, int rate)
 	default:
 		return -EINVAL;
 	}
-        if ((!ds && rme32->wcreg & RME32_WCR_DS_BM) ||
-            (ds && !(rme32->wcreg & RME32_WCR_DS_BM)))
-        {
-                /* change to/from double-speed: reset the DAC (if available) */
-                snd_rme32_reset_dac(rme32);
-        } else {
-                writel(rme32->wcreg, rme32->iobase + RME32_IO_CONTROL_REGISTER);
+	if ((!ds && rme32->wcreg & RME32_WCR_DS_BM) ||
+	    (ds && !(rme32->wcreg & RME32_WCR_DS_BM)))
+	{
+		/* change to/from double-speed: reset the DAC (if available) */
+		snd_rme32_reset_dac(rme32);
+	} else {
+		writel(rme32->wcreg, rme32->iobase + RME32_IO_CONTROL_REGISTER);
 	}
 	return 0;
 }
@@ -736,15 +736,15 @@ snd_rme32_capture_hw_params(struct snd_pcm_substream *substream,
 		return err;
 	}
 	if ((rate = snd_rme32_capture_getrate(rme32, &isadat)) > 0) {
-                if ((int)params_rate(params) != rate) {
+		if ((int)params_rate(params) != rate) {
 			spin_unlock_irq(&rme32->lock);
-                        return -EIO;
-                }
-                if ((isadat && runtime->hw.channels_min == 2) ||
-                    (!isadat && runtime->hw.channels_min == 8)) {
+			return -EIO;
+		}
+		if ((isadat && runtime->hw.channels_min == 2) ||
+		    (!isadat && runtime->hw.channels_min == 8)) {
 			spin_unlock_irq(&rme32->lock);
-                        return -EIO;
-                }
+			return -EIO;
+		}
 	}
 	/* AutoSync off for recording */
 	rme32->wcreg &= ~RME32_WCR_AUTOSYNC;
@@ -893,10 +893,10 @@ static int snd_rme32_capture_spdif_open(struct snd_pcm_substream *substream)
 	snd_pcm_set_sync(substream);
 
 	spin_lock_irq(&rme32->lock);
-        if (rme32->capture_substream != NULL) {
+	if (rme32->capture_substream != NULL) {
 		spin_unlock_irq(&rme32->lock);
-                return -EBUSY;
-        }
+		return -EBUSY;
+	}
 	rme32->capture_substream = substream;
 	spin_unlock_irq(&rme32->lock);
 
@@ -932,10 +932,10 @@ snd_rme32_playback_adat_open(struct snd_pcm_substream *substream)
 	snd_pcm_set_sync(substream);
 
 	spin_lock_irq(&rme32->lock);
-        if (rme32->playback_substream != NULL) {
+	if (rme32->playback_substream != NULL) {
 		spin_unlock_irq(&rme32->lock);
-                return -EBUSY;
-        }
+		return -EBUSY;
+	}
 	rme32->wcreg |= RME32_WCR_ADAT;
 	writel(rme32->wcreg, rme32->iobase + RME32_IO_CONTROL_REGISTER);
 	rme32->playback_substream = substream;
@@ -947,10 +947,10 @@ snd_rme32_playback_adat_open(struct snd_pcm_substream *substream)
 		runtime->hw = snd_rme32_adat_info;
 	if ((rme32->rcreg & RME32_RCR_KMODE) &&
 	    (rate = snd_rme32_capture_getrate(rme32, &dummy)) > 0) {
-                /* AutoSync */
-                runtime->hw.rates = snd_pcm_rate_to_rate_bit(rate);
-                runtime->hw.rate_min = rate;
-                runtime->hw.rate_max = rate;
+		/* AutoSync */
+		runtime->hw.rates = snd_pcm_rate_to_rate_bit(rate);
+		runtime->hw.rate_min = rate;
+		runtime->hw.rate_max = rate;
 	}
 
 	snd_rme32_set_buffer_constraint(rme32, runtime);
@@ -972,10 +972,10 @@ snd_rme32_capture_adat_open(struct snd_pcm_substream *substream)
 		if (!isadat) {
 			return -EIO;
 		}
-                runtime->hw.rates = snd_pcm_rate_to_rate_bit(rate);
-                runtime->hw.rate_min = rate;
-                runtime->hw.rate_max = rate;
-        }
+		runtime->hw.rates = snd_pcm_rate_to_rate_bit(rate);
+		runtime->hw.rate_min = rate;
+		runtime->hw.rate_max = rate;
+	}
 
 	snd_pcm_set_sync(substream);
 
@@ -983,7 +983,7 @@ snd_rme32_capture_adat_open(struct snd_pcm_substream *substream)
 	if (rme32->capture_substream != NULL) {
 		spin_unlock_irq(&rme32->lock);
 		return -EBUSY;
-        }
+	}
 	rme32->capture_substream = substream;
 	spin_unlock_irq(&rme32->lock);
 
@@ -1428,8 +1428,8 @@ static int __devinit snd_rme32_create(struct rme32 * rme32)
 	/* make sure playback/capture is stopped, if by some reason active */
 	snd_rme32_pcm_stop(rme32, 0);
 
-        /* reset DAC */
-        snd_rme32_reset_dac(rme32);
+	/* reset DAC */
+	snd_rme32_reset_dac(rme32);
 
 	/* reset buffer pointer */
 	writel(0, rme32->iobase + RME32_IO_RESET_POS);
@@ -1947,7 +1947,7 @@ snd_rme32_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
 	rme32->card = card;
 	rme32->pci = pci;
 	snd_card_set_dev(card, &pci->dev);
-        if (fullduplex[dev])
+	if (fullduplex[dev])
 		rme32->fullduplex_mode = 1;
 	if ((err = snd_rme32_create(rme32)) < 0) {
 		snd_card_free(card);

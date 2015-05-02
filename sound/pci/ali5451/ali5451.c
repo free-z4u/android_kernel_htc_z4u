@@ -784,22 +784,22 @@ static void snd_ali_enable_spdif_out(struct snd_ali *codec)
 {
 	unsigned short wVal;
 	unsigned char bVal;
-        struct pci_dev *pci_dev;
+	struct pci_dev *pci_dev;
 
-        pci_dev = codec->pci_m1533;
-        if (pci_dev == NULL)
-                return;
-        pci_read_config_byte(pci_dev, 0x61, &bVal);
-        bVal |= 0x40;
-        pci_write_config_byte(pci_dev, 0x61, bVal);
-        pci_read_config_byte(pci_dev, 0x7d, &bVal);
-        bVal |= 0x01;
-        pci_write_config_byte(pci_dev, 0x7d, bVal);
+	pci_dev = codec->pci_m1533;
+	if (pci_dev == NULL)
+		return;
+	pci_read_config_byte(pci_dev, 0x61, &bVal);
+	bVal |= 0x40;
+	pci_write_config_byte(pci_dev, 0x61, bVal);
+	pci_read_config_byte(pci_dev, 0x7d, &bVal);
+	bVal |= 0x01;
+	pci_write_config_byte(pci_dev, 0x7d, bVal);
 
-        pci_read_config_byte(pci_dev, 0x7e, &bVal);
-        bVal &= (~0x20);
-        bVal |= 0x10;
-        pci_write_config_byte(pci_dev, 0x7e, bVal);
+	pci_read_config_byte(pci_dev, 0x7e, &bVal);
+	bVal &= (~0x20);
+	bVal |= 0x10;
+	pci_write_config_byte(pci_dev, 0x7e, bVal);
 
 	bVal = inb(ALI_REG(codec, ALI_SCTRL));
 	outb(bVal | ALI_SPDIF_OUT_ENABLE, ALI_REG(codec, ALI_SCTRL));
@@ -2016,7 +2016,7 @@ static int snd_ali_chip_init(struct snd_ali *codec)
 	}
 
 	if (codec->revision == ALI_5451_V02) {
-        	pci_dev = codec->pci_m1533;
+		pci_dev = codec->pci_m1533;
 		pci_read_config_byte(pci_dev, 0x59, &temp);
 		temp |= 0x80;
 		pci_write_config_byte(pci_dev, 0x59, temp);
@@ -2116,7 +2116,7 @@ static int __devinit snd_ali_create(struct snd_card *card,
 	unsigned short cmdw;
 	static struct snd_device_ops ops = {
 		.dev_free = snd_ali_dev_free,
-        };
+	};
 
 	*r_ali = NULL;
 

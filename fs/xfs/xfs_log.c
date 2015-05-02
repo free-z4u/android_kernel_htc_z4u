@@ -1441,7 +1441,7 @@ xlog_sync(xlog_t		*log,
 	roundoff = count - count_init;
 	ASSERT(roundoff >= 0);
 	ASSERT((v2 && log->l_mp->m_sb.sb_logsunit > 1 &&
-                roundoff < log->l_mp->m_sb.sb_logsunit)
+		roundoff < log->l_mp->m_sb.sb_logsunit)
 		||
 		(log->l_mp->m_sb.sb_logsunit <= 1 &&
 		 roundoff < BBTOB(1)));
@@ -3231,7 +3231,7 @@ xlog_ticket_alloc(
 	} else {
 		/* BB roundoff */
 		unit_bytes += 2*BBSIZE;
-        }
+	}
 
 	atomic_set(&tic->t_ref, 1);
 	tic->t_task		= current;

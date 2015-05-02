@@ -283,7 +283,7 @@ BOOL PSbSendNullPacket(void *hDeviceContext)
 	pTxPacket->p80211Header = (PUWLAN_80211HDR)((PBYTE)pTxPacket + sizeof(STxMgmtPacket));
 
 	flags = WLAN_SET_FC_FTYPE(WLAN_TYPE_DATA) |
-                        WLAN_SET_FC_FSTYPE(WLAN_FSTYPE_NULL);
+			WLAN_SET_FC_FSTYPE(WLAN_FSTYPE_NULL);
 
 	if (pDevice->bEnablePSMode)
 		flags |= WLAN_SET_FC_PWRMGT(1);

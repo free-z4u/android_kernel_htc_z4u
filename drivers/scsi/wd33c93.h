@@ -341,7 +341,7 @@ struct WD33C93_hostdata {
 
 
 void wd33c93_init (struct Scsi_Host *instance, const wd33c93_regs regs,
-         dma_setup_t setup, dma_stop_t stop, int clock_freq);
+	 dma_setup_t setup, dma_stop_t stop, int clock_freq);
 int wd33c93_abort (struct scsi_cmnd *cmd);
 int wd33c93_queuecommand (struct Scsi_Host *h, struct scsi_cmnd *cmd);
 void wd33c93_intr (struct Scsi_Host *instance);

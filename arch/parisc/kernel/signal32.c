@@ -122,7 +122,7 @@ int sys32_rt_sigpending(compat_sigset_t __user *uset, unsigned int sigsetsize)
 
 long
 sys32_rt_sigaction(int sig, const struct sigaction32 __user *act, struct sigaction32 __user *oact,
-                 size_t sigsetsize)
+		 size_t sigsetsize)
 {
 	struct k_sigaction32 new_sa32, old_sa32;
 	struct k_sigaction new_sa, old_sa;

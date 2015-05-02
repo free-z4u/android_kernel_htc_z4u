@@ -152,7 +152,7 @@ static int sysv_mkdir(struct inode * dir, struct dentry *dentry, umode_t mode)
 	if (err)
 		goto out_fail;
 
-        d_instantiate(dentry, inode);
+	d_instantiate(dentry, inode);
 out:
 	return err;
 

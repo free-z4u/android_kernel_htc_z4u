@@ -80,9 +80,9 @@ dbl_fmpy(
 					 * and zero
 					 */
 					if (Is_invalidtrap_enabled())
-                                		return(INVALIDEXCEPTION);
-                                	Set_invalidflag();
-                                	Dbl_makequietnan(resultp1,resultp2);
+						return(INVALIDEXCEPTION);
+					Set_invalidflag();
+					Dbl_makequietnan(resultp1,resultp2);
 					Dbl_copytoptr(resultp1,resultp2,dstptr);
 					return(NOEXCEPTION);
 				}
@@ -95,35 +95,35 @@ dbl_fmpy(
 			}
 		}
 		else {
-                	/*
-                 	 * is NaN; signaling or quiet?
-                 	 */
-                	if (Dbl_isone_signaling(opnd1p1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Dbl_set_quiet(opnd1p1);
-                	}
+			/*
+		 	 * is NaN; signaling or quiet?
+		 	 */
+			if (Dbl_isone_signaling(opnd1p1)) {
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Dbl_set_quiet(opnd1p1);
+			}
 			/*
 			 * is second operand a signaling NaN?
 			 */
 			else if (Dbl_is_signalingnan(opnd2p1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Dbl_set_quiet(opnd2p1);
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Dbl_set_quiet(opnd2p1);
 				Dbl_copytoptr(opnd2p1,opnd2p2,dstptr);
-                		return(NOEXCEPTION);
+				return(NOEXCEPTION);
 			}
-                	/*
-                 	 * return quiet NaN
-                 	 */
+			/*
+		 	 * return quiet NaN
+		 	 */
 			Dbl_copytoptr(opnd1p1,opnd1p2,dstptr);
-                	return(NOEXCEPTION);
+			return(NOEXCEPTION);
 		}
 	}
 	/*
@@ -134,9 +134,9 @@ dbl_fmpy(
 			if (Dbl_iszero_exponentmantissa(opnd1p1,opnd1p2)) {
 				/* invalid since operands are zero & infinity */
 				if (Is_invalidtrap_enabled())
-                                	return(INVALIDEXCEPTION);
-                                Set_invalidflag();
-                                Dbl_makequietnan(opnd2p1,opnd2p2);
+					return(INVALIDEXCEPTION);
+				Set_invalidflag();
+				Dbl_makequietnan(opnd2p1,opnd2p2);
 				Dbl_copytoptr(opnd2p1,opnd2p2,dstptr);
 				return(NOEXCEPTION);
 			}
@@ -147,21 +147,21 @@ dbl_fmpy(
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
 			return(NOEXCEPTION);
 		}
-                /*
-                 * is NaN; signaling or quiet?
-                 */
-                if (Dbl_isone_signaling(opnd2p1)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Dbl_set_quiet(opnd2p1);
-                }
-                /*
-                 * return quiet NaN
-                 */
+		/*
+		 * is NaN; signaling or quiet?
+		 */
+		if (Dbl_isone_signaling(opnd2p1)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Dbl_set_quiet(opnd2p1);
+		}
+		/*
+		 * return quiet NaN
+		 */
 		Dbl_copytoptr(opnd2p1,opnd2p2,dstptr);
-                return(NOEXCEPTION);
+		return(NOEXCEPTION);
 	}
 	/*
 	 * Generate exponent
@@ -182,9 +182,9 @@ dbl_fmpy(
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
 			return(NOEXCEPTION);
 		}
-                /* is denormalized, adjust exponent */
-                Dbl_clear_signexponent(opnd1p1);
-                Dbl_leftshiftby1(opnd1p1,opnd1p2);
+		/* is denormalized, adjust exponent */
+		Dbl_clear_signexponent(opnd1p1);
+		Dbl_leftshiftby1(opnd1p1,opnd1p2);
 		Dbl_normalize(opnd1p1,opnd1p2,dest_exponent);
 	}
 	/* opnd2 needs to have hidden bit set with msb in hidden bit */
@@ -198,9 +198,9 @@ dbl_fmpy(
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
 			return(NOEXCEPTION);
 		}
-                /* is denormalized; want to normalize */
-                Dbl_clear_signexponent(opnd2p1);
-                Dbl_leftshiftby1(opnd2p1,opnd2p2);
+		/* is denormalized; want to normalize */
+		Dbl_clear_signexponent(opnd2p1);
+		Dbl_leftshiftby1(opnd2p1,opnd2p2);
 		Dbl_normalize(opnd2p1,opnd2p2,dest_exponent);
 	}
 
@@ -209,28 +209,28 @@ dbl_fmpy(
 	/* make room for guard bits */
 	Dbl_leftshiftby7(opnd2p1,opnd2p2);
 	Dbl_setzero(opnd3p1,opnd3p2);
-        /*
-         * Four bits at a time are inspected in each loop, and a
-         * simple shift and add multiply algorithm is used.
-         */
+	/*
+	 * Four bits at a time are inspected in each loop, and a
+	 * simple shift and add multiply algorithm is used.
+	 */
 	for (count=1;count<=DBL_P;count+=4) {
 		stickybit |= Dlow4p2(opnd3p2);
 		Dbl_rightshiftby4(opnd3p1,opnd3p2);
 		if (Dbit28p2(opnd1p2)) {
 	 		/* Twoword_add should be an ADDC followed by an ADD. */
-                        Twoword_add(opnd3p1, opnd3p2, opnd2p1<<3 | opnd2p2>>29,
+			Twoword_add(opnd3p1, opnd3p2, opnd2p1<<3 | opnd2p2>>29,
 				    opnd2p2<<3);
 		}
 		if (Dbit29p2(opnd1p2)) {
-                        Twoword_add(opnd3p1, opnd3p2, opnd2p1<<2 | opnd2p2>>30,
+			Twoword_add(opnd3p1, opnd3p2, opnd2p1<<2 | opnd2p2>>30,
 				    opnd2p2<<2);
 		}
 		if (Dbit30p2(opnd1p2)) {
-                        Twoword_add(opnd3p1, opnd3p2, opnd2p1<<1 | opnd2p2>>31,
+			Twoword_add(opnd3p1, opnd3p2, opnd2p1<<1 | opnd2p2>>31,
 				    opnd2p2<<1);
 		}
 		if (Dbit31p2(opnd1p2)) {
-                        Twoword_add(opnd3p1, opnd3p2, opnd2p1, opnd2p2);
+			Twoword_add(opnd3p1, opnd3p2, opnd2p1, opnd2p2);
 		}
 		Dbl_rightshiftby4(opnd1p1,opnd1p2);
 	}
@@ -280,15 +280,15 @@ dbl_fmpy(
 	}
 	Dbl_set_mantissa(resultp1,resultp2,opnd3p1,opnd3p2);
 
-        /*
-         * Test for overflow
-         */
+	/*
+	 * Test for overflow
+	 */
 	if (dest_exponent >= DBL_INFINITY_EXPONENT) {
-                /* trap if OVERFLOWTRAP enabled */
-                if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
+		/* trap if OVERFLOWTRAP enabled */
+		if (Is_overflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
 			Dbl_setwrapped_exponent(resultp1,dest_exponent,ovfl);
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
 			if (inexact)
@@ -296,21 +296,21 @@ dbl_fmpy(
 				return (OVERFLOWEXCEPTION | INEXACTEXCEPTION);
 			    else Set_inexactflag();
 			return (OVERFLOWEXCEPTION);
-                }
+		}
 		inexact = TRUE;
 		Set_overflowflag();
-                /* set result to infinity or largest number */
+		/* set result to infinity or largest number */
 		Dbl_setoverflow(resultp1,resultp2);
 	}
-        /*
-         * Test for underflow
-         */
+	/*
+	 * Test for underflow
+	 */
 	else if (dest_exponent <= 0) {
-                /* trap if UNDERFLOWTRAP enabled */
-                if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
+		/* trap if UNDERFLOWTRAP enabled */
+		if (Is_underflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
 			Dbl_setwrapped_exponent(resultp1,dest_exponent,unfl);
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
 			if (inexact)
@@ -318,7 +318,7 @@ dbl_fmpy(
 				return (UNDERFLOWEXCEPTION | INEXACTEXCEPTION);
 			    else Set_inexactflag();
 			return (UNDERFLOWEXCEPTION);
-                }
+		}
 
 		/* Determine if should set underflow flag */
 		is_tiny = TRUE;
@@ -328,7 +328,7 @@ dbl_fmpy(
 				if (Dbl_iszero_sign(resultp1)) {
 					Dbl_increment(opnd3p1,opnd3p2);
 					if (Dbl_isone_hiddenoverflow(opnd3p1))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Dbl_decrement(opnd3p1,opnd3p2);
 				}
 				break;
@@ -336,7 +336,7 @@ dbl_fmpy(
 				if (Dbl_isone_sign(resultp1)) {
 					Dbl_increment(opnd3p1,opnd3p2);
 					if (Dbl_isone_hiddenoverflow(opnd3p1))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Dbl_decrement(opnd3p1,opnd3p2);
 				}
 				break;
@@ -345,7 +345,7 @@ dbl_fmpy(
 				    Dbl_isone_lowmantissap2(opnd3p2))) {
 				      	Dbl_increment(opnd3p1,opnd3p2);
 					if (Dbl_isone_hiddenoverflow(opnd3p1))
-                			    is_tiny = FALSE;
+					    is_tiny = FALSE;
 					Dbl_decrement(opnd3p1,opnd3p2);
 				}
 				break;
@@ -379,7 +379,7 @@ dbl_fmpy(
 				}
 				break;
 			}
-                	if (is_tiny) Set_underflowflag();
+			if (is_tiny) Set_underflowflag();
 		}
 		Dbl_set_exponentmantissa(resultp1,resultp2,opnd3p1,opnd3p2);
 	}

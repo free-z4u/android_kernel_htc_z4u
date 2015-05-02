@@ -72,21 +72,21 @@ static inline void * phys_to_virt(unsigned long address)
 #else
 static inline unsigned long virt_to_phys(void *address)
 {
-        unsigned long phys = (unsigned long)address;
+	unsigned long phys = (unsigned long)address;
 
 	/* Sign-extend from bit 41.  */
 	phys <<= (64 - 41);
 	phys = (long)phys >> (64 - 41);
 
 	/* Crop to the physical address width of the processor.  */
-        phys &= (1ul << hwrpb->pa_bits) - 1;
+	phys &= (1ul << hwrpb->pa_bits) - 1;
 
-        return phys;
+	return phys;
 }
 
 static inline void * phys_to_virt(unsigned long address)
 {
-        return (void *)(IDENT_ADDR + (address & ((1ul << 41) - 1)));
+	return (void *)(IDENT_ADDR + (address & ((1ul << 41) - 1)));
 }
 #endif
 

@@ -286,13 +286,13 @@ static int ipmi_ioctl(struct file   *file,
 		}
 
 		/* We claim a mutex because we don't want two
-                   users getting something from the queue at a time.
-                   Since we have to release the spinlock before we can
-                   copy the data to the user, it's possible another
-                   user will grab something from the queue, too.  Then
-                   the messages might get out of order if something
-                   fails and the message gets put back onto the
-                   queue.  This mutex prevents that problem. */
+		   users getting something from the queue at a time.
+		   Since we have to release the spinlock before we can
+		   copy the data to the user, it's possible another
+		   user will grab something from the queue, too.  Then
+		   the messages might get out of order if something
+		   fails and the message gets put back onto the
+		   queue.  This mutex prevents that problem. */
 		mutex_lock(&priv->recv_mutex);
 
 		/* Grab the message off the list. */

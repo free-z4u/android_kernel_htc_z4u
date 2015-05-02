@@ -2034,10 +2034,10 @@ do { \
 #define AdvWriteDWordLramNoSwap(iop_base, addr, dword) \
     ((ADV_MEM_WRITEW((iop_base) + IOPW_RAM_ADDR, (addr)), \
       ADV_MEM_WRITEW((iop_base) + IOPW_RAM_DATA, \
-                     cpu_to_le16((ushort) ((dword) & 0xFFFF)))), \
+		     cpu_to_le16((ushort) ((dword) & 0xFFFF)))), \
      (ADV_MEM_WRITEW((iop_base) + IOPW_RAM_ADDR, (addr) + 2), \
       ADV_MEM_WRITEW((iop_base) + IOPW_RAM_DATA, \
-                     cpu_to_le16((ushort) ((dword >> 16) & 0xFFFF)))))
+		     cpu_to_le16((ushort) ((dword >> 16) & 0xFFFF)))))
 
 /* Read word (2 bytes) from LRAM assuming that the address is already set. */
 #define AdvReadWordAutoIncLram(iop_base) \
@@ -2080,8 +2080,8 @@ do { \
  *      ADV_FALSE(0) - Queue was not found on the active queue list.
  */
 #define AdvAbortQueue(asc_dvc, scsiq) \
-        AdvSendIdleCmd((asc_dvc), (ushort) IDLE_CMD_ABORT, \
-                       (ADV_DCNT) (scsiq))
+	AdvSendIdleCmd((asc_dvc), (ushort) IDLE_CMD_ABORT, \
+		       (ADV_DCNT) (scsiq))
 
 /*
  * Send a Bus Device Reset Message to the specified target ID.
@@ -2095,8 +2095,8 @@ do { \
  *                     are not purged.
  */
 #define AdvResetDevice(asc_dvc, target_id) \
-        AdvSendIdleCmd((asc_dvc), (ushort) IDLE_CMD_DEVICE_RESET, \
-                    (ADV_DCNT) (target_id))
+	AdvSendIdleCmd((asc_dvc), (ushort) IDLE_CMD_DEVICE_RESET, \
+		    (ADV_DCNT) (target_id))
 
 /*
  * SCSI Wide Type definition.
@@ -2166,8 +2166,8 @@ do { \
  */
 
 #define ADV_SG_LIST_MAX_BYTE_SIZE \
-         (sizeof(ADV_SG_BLOCK) * \
-          ((ADV_MAX_SG_LIST + (NO_OF_SG_PER_BLOCK - 1))/NO_OF_SG_PER_BLOCK))
+	 (sizeof(ADV_SG_BLOCK) * \
+	  ((ADV_MAX_SG_LIST + (NO_OF_SG_PER_BLOCK - 1))/NO_OF_SG_PER_BLOCK))
 
 /* struct asc_board flags */
 #define ASC_IS_WIDE_BOARD       0x04	/* AdvanSys Wide Board */
@@ -2185,12 +2185,12 @@ do { \
 
 #define ASC_PRT_NEXT() \
     if (cp) { \
-        totlen += len; \
-        leftlen -= len; \
-        if (leftlen == 0) { \
-            return totlen; \
-        } \
-        cp += len; \
+	totlen += len; \
+	leftlen -= len; \
+	if (leftlen == 0) { \
+	    return totlen; \
+	} \
+	cp += len; \
     }
 #endif /* CONFIG_PROC_FS */
 
@@ -2225,32 +2225,32 @@ do { \
  */
 #define ASC_PRINT(s) \
     { \
-        printk("advansys: "); \
-        printk(s); \
+	printk("advansys: "); \
+	printk(s); \
     }
 
 #define ASC_PRINT1(s, a1) \
     { \
-        printk("advansys: "); \
-        printk((s), (a1)); \
+	printk("advansys: "); \
+	printk((s), (a1)); \
     }
 
 #define ASC_PRINT2(s, a1, a2) \
     { \
-        printk("advansys: "); \
-        printk((s), (a1), (a2)); \
+	printk("advansys: "); \
+	printk((s), (a1), (a2)); \
     }
 
 #define ASC_PRINT3(s, a1, a2, a3) \
     { \
-        printk("advansys: "); \
-        printk((s), (a1), (a2), (a3)); \
+	printk("advansys: "); \
+	printk((s), (a1), (a2), (a3)); \
     }
 
 #define ASC_PRINT4(s, a1, a2, a3, a4) \
     { \
-        printk("advansys: "); \
-        printk((s), (a1), (a2), (a3), (a4)); \
+	printk("advansys: "); \
+	printk((s), (a1), (a2), (a3), (a4)); \
     }
 
 #ifndef ADVANSYS_DEBUG
@@ -2283,47 +2283,47 @@ do { \
 
 #define ASC_DBG_PRT_SCSI_HOST(lvl, s) \
     { \
-        if (asc_dbglvl >= (lvl)) { \
-            asc_prt_scsi_host(s); \
-        } \
+	if (asc_dbglvl >= (lvl)) { \
+	    asc_prt_scsi_host(s); \
+	} \
     }
 
 #define ASC_DBG_PRT_ASC_SCSI_Q(lvl, scsiqp) \
     { \
-        if (asc_dbglvl >= (lvl)) { \
-            asc_prt_asc_scsi_q(scsiqp); \
-        } \
+	if (asc_dbglvl >= (lvl)) { \
+	    asc_prt_asc_scsi_q(scsiqp); \
+	} \
     }
 
 #define ASC_DBG_PRT_ASC_QDONE_INFO(lvl, qdone) \
     { \
-        if (asc_dbglvl >= (lvl)) { \
-            asc_prt_asc_qdone_info(qdone); \
-        } \
+	if (asc_dbglvl >= (lvl)) { \
+	    asc_prt_asc_qdone_info(qdone); \
+	} \
     }
 
 #define ASC_DBG_PRT_ADV_SCSI_REQ_Q(lvl, scsiqp) \
     { \
-        if (asc_dbglvl >= (lvl)) { \
-            asc_prt_adv_scsi_req_q(scsiqp); \
-        } \
+	if (asc_dbglvl >= (lvl)) { \
+	    asc_prt_adv_scsi_req_q(scsiqp); \
+	} \
     }
 
 #define ASC_DBG_PRT_HEX(lvl, name, start, length) \
     { \
-        if (asc_dbglvl >= (lvl)) { \
-            asc_prt_hex((name), (start), (length)); \
-        } \
+	if (asc_dbglvl >= (lvl)) { \
+	    asc_prt_hex((name), (start), (length)); \
+	} \
     }
 
 #define ASC_DBG_PRT_CDB(lvl, cdb, len) \
-        ASC_DBG_PRT_HEX((lvl), "CDB", (uchar *) (cdb), (len));
+	ASC_DBG_PRT_HEX((lvl), "CDB", (uchar *) (cdb), (len));
 
 #define ASC_DBG_PRT_SENSE(lvl, sense, len) \
-        ASC_DBG_PRT_HEX((lvl), "SENSE", (uchar *) (sense), (len));
+	ASC_DBG_PRT_HEX((lvl), "SENSE", (uchar *) (sense), (len));
 
 #define ASC_DBG_PRT_INQUIRY(lvl, inq, len) \
-        ASC_DBG_PRT_HEX((lvl), "INQUIRY", (uchar *) (inq), (len));
+	ASC_DBG_PRT_HEX((lvl), "INQUIRY", (uchar *) (inq), (len));
 #endif /* ADVANSYS_DEBUG */
 
 #ifdef ADVANSYS_STATS
@@ -12204,7 +12204,7 @@ static int __devinit advansys_board_found(struct Scsi_Host *shost,
 	 */
 	shost->cmd_per_lun = 1;
 /* #else
-            shost->cmd_per_lun = 0;
+	    shost->cmd_per_lun = 0;
 #endif */
 
 	/*

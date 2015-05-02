@@ -202,7 +202,7 @@ static struct sctp_auth_bytes *sctp_auth_make_key_vector(
 	__u32	offset = 0;
 
 	len = ntohs(random->param_hdr.length) + ntohs(hmacs->param_hdr.length);
-        if (chunks)
+	if (chunks)
 		len += ntohs(chunks->param_hdr.length);
 
 	new = kmalloc(sizeof(struct sctp_auth_bytes) + len, gfp);

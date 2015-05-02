@@ -57,17 +57,17 @@
 #define ISRP_EVEN       0x08
 
 #define TCR_INT    0x10    /* Bit 4 - Timer interrupt.  The TVR_EVEN timer has
-                                                                   expired. */
+								   expired. */
 #define ERR_INT	   0x08    /* Bit 3 - Error interrupt.  The adapter has had an
-                                                            internal error. */
+							    internal error. */
 #define ACCESS_INT 0x04    /* Bit 2 - Access interrupt.  You have attempted to
 				      write to an invalid area of shared RAM
 				      or an invalid register within the MMIO. */
 /* In addition, the following bits within ISRP_EVEN can be turned on or off   */
 /* by you to control the interrupt processing:   */
 #define INT_ENABLE 0x40 /* Bit 6 - Interrupt enable.  If 0, no interrupts will
-                                   occur.  If 1, interrupts will occur normally.
-                                                         Normally set to 1.  */
+				   occur.  If 1, interrupts will occur normally.
+							 Normally set to 1.  */
 /* Bit 0 - Primary or alternate adapter.  Set to zero if this adapter is the
 		primary adapter, 1 if this adapter is the alternate adapter. */
 
@@ -75,22 +75,22 @@
 #define ISRP_ODD        0x09
 
 #define ADAP_CHK_INT 0x40 /* Bit 6 - Adapter check.  the adapter has
-                             encountered a serious problem and has closed
-                             itself.  Whoa.  */
+			     encountered a serious problem and has closed
+			     itself.  Whoa.  */
 #define SRB_RESP_INT 0x20 /* Bit 5 - SRB response.  The adapter has accepted
-                             an SRB request and set the return code within
-                             the SRB. */
+			     an SRB request and set the return code within
+			     the SRB. */
 #define ASB_FREE_INT 0x10 /* Bit 4 - ASB free.  The adapter has read the ASB
-                             and this area can be safely reused. This interrupt
-                             is only used if your application has set the ASB
-                             free request bit in ISRA_ODD or if an error was
-                             detected in your response. */
+			     and this area can be safely reused. This interrupt
+			     is only used if your application has set the ASB
+			     free request bit in ISRA_ODD or if an error was
+			     detected in your response. */
 #define ARB_CMD_INT  0x08 /* Bit 3 - ARB command.  The adapter has given you a
-                             command for action.  The command is located in the
-                             ARB area of shared memory. */
+			     command for action.  The command is located in the
+			     ARB area of shared memory. */
 #define SSB_RESP_INT 0x04 /* Bit 2 - SSB response.  The adapter has posted a
-                             response to your SRB (the response is located in
-                             the SSB area of shared memory). */
+			     response to your SRB (the response is located in
+			     the SSB area of shared memory). */
 /* Bit 1 - Bridge frame forward complete. */
 
 
@@ -107,11 +107,11 @@
 
 #define ISRA_ODD        0x0B
 #define CMD_IN_SRB  0x20 /* Bit 5  - Indicates that you have placed a new
-                           command in the SRB and are ready for the adapter to
-                           process the command. */
+			   command in the SRB and are ready for the adapter to
+			   process the command. */
 #define RESP_IN_ASB 0x10 /* Bit 4 - Indicates that you have placed a response
-                            (an ASB) in the shared RAM which is available for
-                            the adapter's use. */
+			    (an ASB) in the shared RAM which is available for
+			    the adapter's use. */
 /* Bit 3 - Indicates that you are ready to put an SRB in the shared RAM, but
 	that a previous command is still pending.  The adapter will then
 	interrupt you when the previous command is completed */
@@ -176,7 +176,7 @@ struct tok_info {
 	unsigned char token_release;
 	unsigned char avail_shared_ram;
 	unsigned char shared_ram_paging;
-        unsigned char turbo;
+	unsigned char turbo;
 	unsigned short dhb_size4mb;
 	unsigned short rbuf_len4;
 	unsigned short rbuf_cnt4;
@@ -199,11 +199,11 @@ struct tok_info {
 	void __iomem *ssb;                /* System Status Block address */
 	void __iomem *arb;                /* Adapter Request Block address */
 	void __iomem *asb;                /* Adapter Status Block address */
-        __u8  init_srb_page;
-        __u8  srb_page;
-        __u8  ssb_page;
-        __u8  arb_page;
-        __u8  asb_page;
+	__u8  init_srb_page;
+	__u8  srb_page;
+	__u8  ssb_page;
+	__u8  arb_page;
+	__u8  asb_page;
 	unsigned short exsap_station_id;
 	unsigned short global_int_enable;
 	struct sk_buff *current_skb;
@@ -215,7 +215,7 @@ struct tok_info {
 	enum {NO, YES}			open_failure;
 	unsigned char readlog_pending;
 	unsigned short adapter_int_enable; /* Adapter-specific int enable */
-        struct timer_list tr_timer;
+	struct timer_list tr_timer;
 	unsigned char ring_speed;
 	spinlock_t lock;		/* SMP protection */
 };

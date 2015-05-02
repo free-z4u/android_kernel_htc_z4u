@@ -364,7 +364,7 @@ typedef enum { HV_VERSION = _HV_VERSION } HV_VersionNumber;
  * @param chip_rev_num Revision number of the chip the client was built for.
  */
 void hv_init(HV_VersionNumber interface_version_number,
-             int chip_num, int chip_rev_num);
+	     int chip_num, int chip_rev_num);
 
 
 /** Queries we can make for hv_sysconf().
@@ -660,12 +660,12 @@ void hv_set_rtc(HV_RTCTime time);
  * @return Zero on success, or a hypervisor error code on failure.
  */
 int hv_install_context(HV_PhysAddr page_table, HV_PTE access, HV_ASID asid,
-                       __hv32 flags);
+		       __hv32 flags);
 
 #endif /* !__ASSEMBLER__ */
 
 #define HV_CTX_DIRECTIO     0x1   /**< Direct I/O requests are accepted from
-                                       PL0. */
+				       PL0. */
 
 #ifndef __ASSEMBLER__
 
@@ -743,7 +743,7 @@ int hv_flush_page(HV_VirtAddr address, HV_PageSize page_size);
  * @return Zero on success, or a hypervisor error code on failure.
  */
 int hv_flush_pages(HV_VirtAddr start, HV_PageSize page_size,
-                   unsigned long size);
+		   unsigned long size);
 
 
 /** Flushes all non-global translations (if preserve_global is true),
@@ -918,7 +918,7 @@ typedef enum
 typedef struct
 {
   HV_Coord coord;   /**< Relative tile coordinates of the port used by a
-                         specified tile to communicate with this controller. */
+			 specified tile to communicate with this controller. */
   __hv64 speed;     /**< Speed of this controller in bytes per second. */
 } HV_MemoryControllerInfo;
 
@@ -944,7 +944,7 @@ typedef struct
  * @return Information about the controller.
  */
 HV_MemoryControllerInfo hv_inquire_memory_controller(HV_Coord coord,
-                                                     int controller);
+						     int controller);
 
 
 /** A range of virtual memory. */
@@ -1198,7 +1198,7 @@ unsigned long long hv_physaddr_read64(HV_PhysAddr addr, HV_PTE access);
  * @param val The 64-bit value to write to the given address
  */
 void hv_physaddr_write64(HV_PhysAddr addr, HV_PTE access,
-                         unsigned long long val);
+			 unsigned long long val);
 
 
 /** Get the value of the command-line for the supervisor, if any.
@@ -1384,7 +1384,7 @@ typedef struct
  * @param buflen Length of message data.
  **/
 int hv_send_message(HV_Recipient *recips, int nrecip,
-                    HV_VirtAddr buf, int buflen);
+		    HV_VirtAddr buf, int buflen);
 
 /** Maximum hypervisor message size, in bytes */
 #define HV_MAX_MESSAGE_SIZE 28
@@ -1441,7 +1441,7 @@ typedef struct
  */
 
 HV_RcvMsgInfo hv_receive_message(HV_MsgState msgstate, HV_VirtAddr buf,
-                                 int buflen);
+				 int buflen);
 
 
 /** Start remaining tiles owned by this supervisor.  Initially, only one tile
@@ -1512,21 +1512,21 @@ int hv_dev_close(int devhdl);
  *         the number of bytes successfully transferred.
  */
 int hv_dev_pread(int devhdl, __hv32 flags, HV_VirtAddr va, __hv32 len,
-                 __hv64 offset);
+		 __hv64 offset);
 
 #define HV_DEV_NB_EMPTY     0x1   /**< Don't block when no bytes of data can
-                                       be transferred. */
+				       be transferred. */
 #define HV_DEV_NB_PARTIAL   0x2   /**< Don't block when some bytes, but not all
-                                       of the requested bytes, can be
-                                       transferred. */
+				       of the requested bytes, can be
+				       transferred. */
 #define HV_DEV_NOCACHE      0x4   /**< The caller warrants that none of the
-                                       cache lines which might contain data
-                                       from the requested buffer are valid.
-                                       Useful with asynchronous operations
-                                       only. */
+				       cache lines which might contain data
+				       from the requested buffer are valid.
+				       Useful with asynchronous operations
+				       only. */
 
 #define HV_DEV_ALLFLAGS     (HV_DEV_NB_EMPTY | HV_DEV_NB_PARTIAL | \
-                             HV_DEV_NOCACHE)   /**< All HV_DEV_xxx flags */
+			     HV_DEV_NOCACHE)   /**< All HV_DEV_xxx flags */
 
 /** Write data to a hypervisor device synchronously.
  *
@@ -1555,7 +1555,7 @@ int hv_dev_pread(int devhdl, __hv32 flags, HV_VirtAddr va, __hv32 len,
  *         the number of bytes successfully transferred.
  */
 int hv_dev_pwrite(int devhdl, __hv32 flags, HV_VirtAddr va, __hv32 len,
-                  __hv64 offset);
+		  __hv64 offset);
 
 
 /** Interrupt arguments, used in the asynchronous I/O interfaces. */
@@ -1573,7 +1573,7 @@ typedef __hv32 HV_IntArg;
 typedef struct
 {
   HV_IntArg intarg;  /**< Interrupt argument, passed to the poll/preada/pwritea
-                          services */
+			  services */
   HV_IntArg intdata; /**< Interrupt-specific interrupt data */
 } HV_IntrMsg;
 
@@ -1643,14 +1643,14 @@ __attribute__ ((packed, aligned(4)))
 {
   HV_PhysAddr pa;  /**< Client physical address of the buffer segment. */
   HV_PTE pte;      /**< Page table entry describing the caching and location
-                        override characteristics of the buffer segment.  Some
-                        drivers ignore this element and will require that
-                        the NOCACHE flag be set on their requests. */
+			override characteristics of the buffer segment.  Some
+			drivers ignore this element and will require that
+			the NOCACHE flag be set on their requests. */
   __hv32 len;      /**< Length of the buffer segment. */
 } HV_SGL;
 
 #define HV_SGL_MAXLEN 16  /**< Maximum number of entries in a scatter-gather
-                               list */
+			       list */
 
 /** Read data from a hypervisor device asynchronously.
  *
@@ -1694,7 +1694,7 @@ __attribute__ ((packed, aligned(4)))
  *         occurs, but this is not required.
  */
 int hv_dev_preada(int devhdl, __hv32 flags, __hv32 sgl_len,
-                  HV_SGL sgl[/* sgl_len */], __hv64 offset, HV_IntArg intarg);
+		  HV_SGL sgl[/* sgl_len */], __hv64 offset, HV_IntArg intarg);
 
 
 /** Write data to a hypervisor device asynchronously.
@@ -1740,7 +1740,7 @@ int hv_dev_preada(int devhdl, __hv32 flags, __hv32 sgl_len,
  *         occurs, but this is not required.
  */
 int hv_dev_pwritea(int devhdl, __hv32 flags, __hv32 sgl_len,
-                   HV_SGL sgl[/* sgl_len */], __hv64 offset, HV_IntArg intarg);
+		   HV_SGL sgl[/* sgl_len */], __hv64 offset, HV_IntArg intarg);
 
 
 /** Define a pair of tile and ASID to identify a user process context. */
@@ -1786,10 +1786,10 @@ typedef struct
  *        are detected while parsing the arguments.
  */
 int hv_flush_remote(HV_PhysAddr cache_pa, unsigned long cache_control,
-                    unsigned long* cache_cpumask,
-                    HV_VirtAddr tlb_va, unsigned long tlb_length,
-                    unsigned long tlb_pgsize, unsigned long* tlb_cpumask,
-                    HV_Remote_ASID* asids, int asidcount);
+		    unsigned long* cache_cpumask,
+		    HV_VirtAddr tlb_va, unsigned long tlb_length,
+		    unsigned long tlb_pgsize, unsigned long* tlb_cpumask,
+		    HV_Remote_ASID* asids, int asidcount);
 
 /** Include in cache_control to ensure a flush of the entire L2. */
 #define HV_FLUSH_EVICT_L2 (1UL << 31)
@@ -1851,14 +1851,14 @@ int hv_flush_remote(HV_PhysAddr cache_pa, unsigned long cache_control,
 #define HV_PTE_INDEX_USER            10  /**< Page is user-accessible */
 #define HV_PTE_INDEX_ACCESSED        11  /**< Page has been accessed */
 #define HV_PTE_INDEX_DIRTY           12  /**< Page has been written */
-                                         /*   Bits 13-15 are reserved for
-                                              future use. */
+					 /*   Bits 13-15 are reserved for
+					      future use. */
 #define HV_PTE_INDEX_MODE            16  /**< Page mode; see HV_PTE_MODE_xxx */
 #define HV_PTE_MODE_BITS              3  /**< Number of bits in mode */
-                                         /*   Bit 19 is reserved for
-                                              future use. */
+					 /*   Bit 19 is reserved for
+					      future use. */
 #define HV_PTE_INDEX_LOTAR           20  /**< Page's LOTAR; must be high bits
-                                              of word */
+					      of word */
 #define HV_PTE_LOTAR_BITS            12  /**< Number of bits in a LOTAR */
 
 /* Bits in HV_PTE's high word. */
@@ -1866,17 +1866,17 @@ int hv_flush_remote(HV_PhysAddr cache_pa, unsigned long cache_control,
 #define HV_PTE_INDEX_WRITABLE        33  /**< Page is writable */
 #define HV_PTE_INDEX_EXECUTABLE      34  /**< Page is executable */
 #define HV_PTE_INDEX_PTFN            35  /**< Page's PTFN; must be high bits
-                                              of word */
+					      of word */
 #define HV_PTE_PTFN_BITS             29  /**< Number of bits in a PTFN */
 
 /** Position of the PFN field within the PTE (subset of the PTFN). */
 #define HV_PTE_INDEX_PFN (HV_PTE_INDEX_PTFN + (HV_LOG2_PAGE_SIZE_SMALL - \
-                                               HV_LOG2_PAGE_TABLE_ALIGN))
+					       HV_LOG2_PAGE_TABLE_ALIGN))
 
 /** Length of the PFN field within the PTE (subset of the PTFN). */
 #define HV_PTE_INDEX_PFN_BITS (HV_PTE_INDEX_PTFN_BITS - \
-                               (HV_LOG2_PAGE_SIZE_SMALL - \
-                                HV_LOG2_PAGE_TABLE_ALIGN))
+			       (HV_LOG2_PAGE_SIZE_SMALL - \
+				HV_LOG2_PAGE_TABLE_ALIGN))
 
 /*
  * Legal values for the PTE's mode field
@@ -2102,7 +2102,7 @@ int hv_flush_remote(HV_PhysAddr cache_pa, unsigned long cache_control,
  * This bit is ignored in level-1 PTEs unless the Page bit is set.
  */
 #define HV_PTE_CACHED_PRIORITY       (__HV_PTE_ONE << \
-                                      HV_PTE_INDEX_CACHED_PRIORITY)
+				      HV_PTE_INDEX_CACHED_PRIORITY)
 
 /** Is this a readable mapping?
  *
@@ -2159,14 +2159,14 @@ hv_pte_get_##name(HV_PTE pte)                                   \
 {                                                               \
   return (pte.val >> HV_PTE_INDEX_##bit) & 1;                   \
 }                                                               \
-                                                                \
+								\
 static __inline HV_PTE                                          \
 hv_pte_set_##name(HV_PTE pte)                                   \
 {                                                               \
   pte.val |= 1ULL << HV_PTE_INDEX_##bit;                        \
   return pte;                                                   \
 }                                                               \
-                                                                \
+								\
 static __inline HV_PTE                                          \
 hv_pte_clear_##name(HV_PTE pte)                                 \
 {                                                               \
@@ -2206,7 +2206,7 @@ static __inline unsigned int
 hv_pte_get_mode(const HV_PTE pte)
 {
   return (((__hv32) pte.val) >> HV_PTE_INDEX_MODE) &
-         ((1 << HV_PTE_MODE_BITS) - 1);
+	 ((1 << HV_PTE_MODE_BITS) - 1);
 }
 
 /** Set the page mode into a PTE.  See hv_pte_get_mode. */
@@ -2289,7 +2289,7 @@ hv_pte_get_lotar(const HV_PTE pte)
   unsigned int lotar = ((__hv32) pte.val) >> HV_PTE_INDEX_LOTAR;
 
   return HV_XY_TO_LOTAR( (lotar >> (HV_PTE_LOTAR_BITS / 2)),
-                         (lotar & ((1 << (HV_PTE_LOTAR_BITS / 2)) - 1)) );
+			 (lotar & ((1 << (HV_PTE_LOTAR_BITS / 2)) - 1)) );
 }
 
 
@@ -2302,7 +2302,7 @@ hv_pte_set_lotar(HV_PTE pte, unsigned int val)
 
   pte.val &= ~(((1ULL << HV_PTE_LOTAR_BITS)-1) << HV_PTE_INDEX_LOTAR);
   pte.val |= (x << (HV_PTE_INDEX_LOTAR + HV_PTE_LOTAR_BITS / 2)) |
-             (y << HV_PTE_INDEX_LOTAR);
+	     (y << HV_PTE_INDEX_LOTAR);
   return pte;
 }
 

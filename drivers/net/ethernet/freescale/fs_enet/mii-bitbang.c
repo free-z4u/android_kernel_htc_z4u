@@ -109,7 +109,7 @@ static struct mdiobb_ops bb_ops = {
 };
 
 static int __devinit fs_mii_bitbang_init(struct mii_bus *bus,
-                                         struct device_node *np)
+					 struct device_node *np)
 {
 	struct resource res;
 	const u32 *data;

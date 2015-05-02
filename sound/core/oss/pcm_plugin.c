@@ -463,8 +463,8 @@ int snd_pcm_plug_format_plugins(struct snd_pcm_substream *plug,
 			src_access = dst_access;
 		}
 		tmpformat.rate = dstformat.rate;
-        	err = snd_pcm_plugin_build_rate(plug,
-        					&srcformat, &tmpformat,
+		err = snd_pcm_plugin_build_rate(plug,
+						&srcformat, &tmpformat,
 						&plugin);
 		pdprintf("rate down resampling: src=%i, dst=%i returns %i\n", srcformat.rate, tmpformat.rate, err);
 		if (err < 0)
@@ -476,7 +476,7 @@ int snd_pcm_plug_format_plugins(struct snd_pcm_substream *plug,
 		}
 		srcformat = tmpformat;
 		src_access = dst_access;
-        }
+	}
 
 	/* format change */
 	if (srcformat.format != dstformat.format) {

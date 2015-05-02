@@ -356,14 +356,14 @@ void __init mapin_ram(void)
 int
 get_pteptr(struct mm_struct *mm, unsigned long addr, pte_t **ptep, pmd_t **pmdp)
 {
-        pgd_t	*pgd;
+	pgd_t	*pgd;
 	pud_t	*pud;
-        pmd_t	*pmd;
-        pte_t	*pte;
-        int     retval = 0;
+	pmd_t	*pmd;
+	pte_t	*pte;
+	int     retval = 0;
 
-        pgd = pgd_offset(mm, addr & PAGE_MASK);
-        if (pgd) {
+	pgd = pgd_offset(mm, addr & PAGE_MASK);
+	if (pgd) {
 		pud = pud_offset(pgd, addr & PAGE_MASK);
 		if (pud && pud_present(*pud)) {
 			pmd = pmd_offset(pud, addr & PAGE_MASK);
@@ -378,8 +378,8 @@ get_pteptr(struct mm_struct *mm, unsigned long addr, pte_t **ptep, pmd_t **pmdp)
 				}
 			}
 		}
-        }
-        return(retval);
+	}
+	return(retval);
 }
 
 #ifdef CONFIG_DEBUG_PAGEALLOC

@@ -281,7 +281,7 @@ int security_sb_statfs(struct dentry *dentry)
 }
 
 int security_sb_mount(char *dev_name, struct path *path,
-                       char *type, unsigned long flags, void *data)
+		       char *type, unsigned long flags, void *data)
 {
 	return security_ops->sb_mount(dev_name, path, type, flags, data);
 }
@@ -519,8 +519,8 @@ int security_inode_mknod(struct inode *dir, struct dentry *dentry, umode_t mode,
 int security_inode_rename(struct inode *old_dir, struct dentry *old_dentry,
 			   struct inode *new_dir, struct dentry *new_dentry)
 {
-        if (unlikely(IS_PRIVATE(old_dentry->d_inode) ||
-            (new_dentry->d_inode && IS_PRIVATE(new_dentry->d_inode))))
+	if (unlikely(IS_PRIVATE(old_dentry->d_inode) ||
+	    (new_dentry->d_inode && IS_PRIVATE(new_dentry->d_inode))))
 		return 0;
 	return security_ops->inode_rename(old_dir, old_dentry,
 					   new_dir, new_dentry);

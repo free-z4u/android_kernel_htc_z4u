@@ -37,7 +37,7 @@
 ACPI_MODULE_NAME("utils");
 
 /* --------------------------------------------------------------------------
-                            Object Evaluation Helpers
+			    Object Evaluation Helpers
    -------------------------------------------------------------------------- */
 static void
 acpi_util_eval_error(acpi_handle h, acpi_string p, acpi_status s)

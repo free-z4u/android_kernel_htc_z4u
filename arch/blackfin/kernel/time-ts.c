@@ -120,7 +120,7 @@ notrace unsigned long long sched_clock(void)
 
 #if defined(CONFIG_TICKSOURCE_GPTMR0)
 static int bfin_gptmr0_set_next_event(unsigned long cycles,
-                                     struct clock_event_device *evt)
+				     struct clock_event_device *evt)
 {
 	disable_gptimers(TIMER0bit);
 

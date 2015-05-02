@@ -37,8 +37,8 @@
 
 typedef struct
 {
-        unsigned long mask;
-        unsigned long addr;
+	unsigned long mask;
+	unsigned long addr;
 } __attribute__ ((aligned(8))) _psw_t;
 
 typedef struct

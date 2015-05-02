@@ -247,7 +247,7 @@ ahc_linux_pci_dev_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 		if (dma_set_mask(dev, DMA_BIT_MASK(32))) {
 			ahc_free(ahc);
 			printk(KERN_WARNING "aic7xxx: No suitable DMA available.\n");
-                	return (-ENODEV);
+			return (-ENODEV);
 		}
 	}
 	ahc->dev_softc = pci;

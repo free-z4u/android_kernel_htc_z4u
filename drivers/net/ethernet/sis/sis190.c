@@ -308,9 +308,9 @@ enum sis190_phy_type {
 };
 
 static struct mii_chip_info {
-        const char *name;
-        u16 id[2];
-        unsigned int type;
+	const char *name;
+	u16 id[2];
+	unsigned int type;
 	u32 feature;
 } mii_chip_table[] = {
 	{ "Atheros PHY",          { 0x004d, 0xd010 }, LAN, 0 },
@@ -1649,10 +1649,10 @@ static int __devinit sis190_get_mac_addr_from_apc(struct pci_dev *pdev,
 	udelay(50);
 	pci_read_config_byte(isa_bridge, 0x48, &reg);
 
-        for (i = 0; i < ETH_ALEN; i++) {
-                outb(0x9 + i, 0x78);
-                dev->dev_addr[i] = inb(0x79);
-        }
+	for (i = 0; i < ETH_ALEN; i++) {
+		outb(0x9 + i, 0x78);
+		dev->dev_addr[i] = inb(0x79);
+	}
 
 	outb(0x12, 0x78);
 	reg = inb(0x79);

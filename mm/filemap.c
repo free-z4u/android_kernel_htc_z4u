@@ -1692,13 +1692,13 @@ inline int generic_write_checks(struct file *file, loff_t *pos, size_t *count, i
 	struct inode *inode = file->f_mapping->host;
 	unsigned long limit = rlimit(RLIMIT_FSIZE);
 
-        if (unlikely(*pos < 0))
-                return -EINVAL;
+	if (unlikely(*pos < 0))
+		return -EINVAL;
 
 	if (!isblk) {
 		/* FIXME: this is for backwards compatibility with 2.4 */
 		if (file->f_flags & O_APPEND)
-                        *pos = i_size_read(inode);
+			*pos = i_size_read(inode);
 
 		if (limit != RLIM_INFINITY) {
 			if (*pos >= limit) {

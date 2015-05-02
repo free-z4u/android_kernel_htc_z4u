@@ -48,7 +48,7 @@ static char *dot2underscore(char *name)
 {
 	if (name[0] == '.') {
 		name[0] = '_';
-                name[1] = toupper(name[1]);
+		name[1] = toupper(name[1]);
 	}
 	return name;
 }

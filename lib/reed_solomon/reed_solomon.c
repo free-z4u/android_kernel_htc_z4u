@@ -64,7 +64,7 @@ static DEFINE_MUTEX(rslistlock);
  * en/decoding. Fill the arrays according to the given parameters.
  */
 static struct rs_control *rs_init(int symsize, int gfpoly, int (*gffunc)(int),
-                                  int fcr, int prim, int nroots)
+				  int fcr, int prim, int nroots)
 {
 	struct rs_control *rs;
 	int i, j, sr, root, iprim;
@@ -197,8 +197,8 @@ void free_rs(struct rs_control *rs)
  *  @nroots:	RS code generator polynomial degree (number of roots)
  */
 static struct rs_control *init_rs_internal(int symsize, int gfpoly,
-                                           int (*gffunc)(int), int fcr,
-                                           int prim, int nroots)
+					   int (*gffunc)(int), int fcr,
+					   int prim, int nroots)
 {
 	struct list_head	*tmp;
 	struct rs_control	*rs;
@@ -258,7 +258,7 @@ out:
  *  @nroots:	RS code generator polynomial degree (number of roots)
  */
 struct rs_control *init_rs(int symsize, int gfpoly, int fcr, int prim,
-                           int nroots)
+			   int nroots)
 {
 	return init_rs_internal(symsize, gfpoly, NULL, fcr, prim, nroots);
 }
@@ -277,7 +277,7 @@ struct rs_control *init_rs(int symsize, int gfpoly, int fcr, int prim,
  *  @nroots:	RS code generator polynomial degree (number of roots)
  */
 struct rs_control *init_rs_non_canonical(int symsize, int (*gffunc)(int),
-                                         int fcr, int prim, int nroots)
+					 int fcr, int prim, int nroots)
 {
 	return init_rs_internal(symsize, 0, gffunc, fcr, prim, nroots);
 }

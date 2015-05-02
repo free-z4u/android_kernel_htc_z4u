@@ -778,134 +778,134 @@ typedef struct {
  * Multicast Table Structure
  */
 typedef struct {
-        __u8    address[6];
-        __u8    instance_count;
+	__u8    address[6];
+	__u8    instance_count;
 } McTable;
 
 /*
  * Fragment Descriptor Definition
  */
 typedef struct {
-        __u8  *fragment_ptr;
-        __u32   fragment_length;
+	__u8  *fragment_ptr;
+	__u32   fragment_length;
 } FragmentStructure;
 
 /*
  * Data Buffer Structure Definition
  */
 typedef struct {
-        __u32 fragment_count;
-        FragmentStructure       fragment_list[MAXFRAGMENTS];
+	__u32 fragment_count;
+	FragmentStructure       fragment_list[MAXFRAGMENTS];
 } DataBufferStructure;
 
 #pragma pack(1)
 typedef struct {
-                __u8    IType;
-                __u8    ISubtype;
+		__u8    IType;
+		__u8    ISubtype;
 } Interrupt_Status_Word;
 
 #pragma pack(1)
 typedef struct BDBlockType {
-                __u16                   info;                   /* 02 */
-                __u32                   trc_next_ptr;           /* 06 */
-                __u32                   trc_data_block_ptr;     /* 10 */
-                __u16                   buffer_length;          /* 12 */
+		__u16                   info;                   /* 02 */
+		__u32                   trc_next_ptr;           /* 06 */
+		__u32                   trc_data_block_ptr;     /* 10 */
+		__u16                   buffer_length;          /* 12 */
 
-                __u16                   *data_block_ptr;        /* 16 */
-                struct  BDBlockType     *next_ptr;              /* 20 */
-                struct  BDBlockType     *back_ptr;              /* 24 */
-                __u8                    filler[8];              /* 32 */
+		__u16                   *data_block_ptr;        /* 16 */
+		struct  BDBlockType     *next_ptr;              /* 20 */
+		struct  BDBlockType     *back_ptr;              /* 24 */
+		__u8                    filler[8];              /* 32 */
 } BDBlock;
 
 #pragma pack(1)
 typedef struct FCBlockType {
-                __u16                   frame_status;           /* 02 */
-                __u16                   info;                   /* 04 */
-                __u32                   trc_next_ptr;           /* 08 */
-                __u32                   trc_bdb_ptr;            /* 12 */
-                __u16                   frame_length;           /* 14 */
+		__u16                   frame_status;           /* 02 */
+		__u16                   info;                   /* 04 */
+		__u32                   trc_next_ptr;           /* 08 */
+		__u32                   trc_bdb_ptr;            /* 12 */
+		__u16                   frame_length;           /* 14 */
 
-                BDBlock                 *bdb_ptr;               /* 18 */
-                struct  FCBlockType     *next_ptr;              /* 22 */
-                struct  FCBlockType     *back_ptr;              /* 26 */
-                __u16                   memory_alloc;           /* 28 */
-                __u8                    filler[4];              /* 32 */
+		BDBlock                 *bdb_ptr;               /* 18 */
+		struct  FCBlockType     *next_ptr;              /* 22 */
+		struct  FCBlockType     *back_ptr;              /* 26 */
+		__u16                   memory_alloc;           /* 28 */
+		__u8                    filler[4];              /* 32 */
 
 } FCBlock;
 
 #pragma pack(1)
 typedef struct SBlockType{
-                __u8                           Internal_Error_Count;
-                __u8                           Line_Error_Count;
-                __u8                           AC_Error_Count;
-                __u8                           Burst_Error_Count;
-                __u8                            RESERVED_COUNTER_0;
-                __u8                            AD_TRANS_Count;
-                __u8                            RCV_Congestion_Count;
-                __u8                            Lost_FR_Error_Count;
-                __u8                            FREQ_Error_Count;
-                __u8                            FR_Copied_Error_Count;
-                __u8                            RESERVED_COUNTER_1;
-                __u8                            Token_Error_Count;
+		__u8                           Internal_Error_Count;
+		__u8                           Line_Error_Count;
+		__u8                           AC_Error_Count;
+		__u8                           Burst_Error_Count;
+		__u8                            RESERVED_COUNTER_0;
+		__u8                            AD_TRANS_Count;
+		__u8                            RCV_Congestion_Count;
+		__u8                            Lost_FR_Error_Count;
+		__u8                            FREQ_Error_Count;
+		__u8                            FR_Copied_Error_Count;
+		__u8                            RESERVED_COUNTER_1;
+		__u8                            Token_Error_Count;
 
-                __u16                           TI_NDIS_Ring_Status;
-                __u16                           BCN_Type;
-                __u16                           Error_Code;
-                __u16                           SA_of_Last_AMP_SMP[3];
-                __u16                           UNA[3];
-                __u16                           Ucode_Version_Number;
-                __u16                           Status_CHG_Indicate;
-                __u16                           RESERVED_STATUS_0;
+		__u16                           TI_NDIS_Ring_Status;
+		__u16                           BCN_Type;
+		__u16                           Error_Code;
+		__u16                           SA_of_Last_AMP_SMP[3];
+		__u16                           UNA[3];
+		__u16                           Ucode_Version_Number;
+		__u16                           Status_CHG_Indicate;
+		__u16                           RESERVED_STATUS_0;
 } SBlock;
 
 #pragma pack(1)
 typedef struct ACBlockType {
-                __u16                   cmd_done_status;    /* 02 */
-                __u16                   cmd_info;           /* 04 */
-                __u32                   trc_next_ptr;           /* 08 */
-                __u16                   cmd;                /* 10 */
-                __u16                   subcmd;             /* 12 */
-                __u16                   data_offset_lo;         /* 14 */
-                __u16                   data_offset_hi;         /* 16 */
+		__u16                   cmd_done_status;    /* 02 */
+		__u16                   cmd_info;           /* 04 */
+		__u32                   trc_next_ptr;           /* 08 */
+		__u16                   cmd;                /* 10 */
+		__u16                   subcmd;             /* 12 */
+		__u16                   data_offset_lo;         /* 14 */
+		__u16                   data_offset_hi;         /* 16 */
 
-                struct  ACBlockType     *next_ptr;              /* 20 */
+		struct  ACBlockType     *next_ptr;              /* 20 */
 
-                __u8                    filler[12];             /* 32 */
+		__u8                    filler[12];             /* 32 */
 } ACBlock;
 
 #define NUM_OF_INTERRUPTS               0x20
 
 #pragma pack(1)
 typedef struct {
-                Interrupt_Status_Word   IStatus[NUM_OF_INTERRUPTS];
+		Interrupt_Status_Word   IStatus[NUM_OF_INTERRUPTS];
 } ISBlock;
 
 #pragma pack(1)
 typedef struct {
-                __u16                   valid_command;          /* 02 */
-                __u16                   iack_code;              /* 04 */
-                __u16                   resume_control;         /* 06 */
-                __u16                   int_mask_control;       /* 08 */
-                __u16                   int_mask_state;         /* 10 */
+		__u16                   valid_command;          /* 02 */
+		__u16                   iack_code;              /* 04 */
+		__u16                   resume_control;         /* 06 */
+		__u16                   int_mask_control;       /* 08 */
+		__u16                   int_mask_state;         /* 10 */
 
-                __u8                    filler[6];              /* 16 */
+		__u8                    filler[6];              /* 16 */
 } SCLBlock;
 
 #pragma pack(1)
 typedef struct
 {
-                __u16                   config;                 /* 02 */
-                __u32                   trc_sclb_ptr;           /* 06 */
-                __u32                   trc_acb_ptr;            /* 10 */
-                __u32                   trc_isb_ptr;            /* 14 */
-                __u16                   isbsiz;                 /* 16 */
+		__u16                   config;                 /* 02 */
+		__u32                   trc_sclb_ptr;           /* 06 */
+		__u32                   trc_acb_ptr;            /* 10 */
+		__u32                   trc_isb_ptr;            /* 14 */
+		__u16                   isbsiz;                 /* 16 */
 
-                SCLBlock                *sclb_ptr;              /* 20 */
-                ACBlock                 *acb_ptr;               /* 24 */
-                ISBlock                 *isb_ptr;               /* 28 */
+		SCLBlock                *sclb_ptr;              /* 20 */
+		ACBlock                 *acb_ptr;               /* 24 */
+		ISBlock                 *isb_ptr;               /* 28 */
 
-                __u16                   Non_Mac_Rx_Bdbs;        /* 30 DEBUG */
-                __u8                    filler[2];              /* 32 */
+		__u16                   Non_Mac_Rx_Bdbs;        /* 30 DEBUG */
+		__u8                    filler[2];              /* 32 */
 
 } SCGBlock;
 
@@ -919,13 +919,13 @@ typedef struct
 
 typedef struct net_local {
 	ISCPBlock       *iscpb_ptr;
-        SCGBlock        *scgb_ptr;
-        SCLBlock        *sclb_ptr;
-        ISBlock         *isb_ptr;
+	SCGBlock        *scgb_ptr;
+	SCLBlock        *sclb_ptr;
+	ISBlock         *isb_ptr;
 
 	ACBlock         *acb_head;
-        ACBlock         *acb_curr;
-        ACBlock         *acb_next;
+	ACBlock         *acb_curr;
+	ACBlock         *acb_next;
 
 	__u8		adapter_name[12];
 
@@ -967,9 +967,9 @@ typedef struct net_local {
 	__u16		authorized_function_classes;
 	__u16		authorized_access_priority;
 
-        __u16            num_acbs;
-        __u16            num_acbs_used;
-        __u16            acb_pending;
+	__u16            num_acbs;
+	__u16            num_acbs_used;
+	__u16            acb_pending;
 
 	__u16		current_isb_index;
 
@@ -1006,28 +1006,28 @@ typedef struct net_local {
 	__u16            max_packet_size;
 
 	__u16            config_word0;
-        __u16            config_word1;
+	__u16            config_word1;
 
 	__u8            trc_mask;
 
 	__u16            source_ring_number;
-        __u16            target_ring_number;
+	__u16            target_ring_number;
 
 	__u16		microcode_version;
 
 	__u16            bic_type;
-        __u16            nic_type;
-        __u16            board_id;
+	__u16            nic_type;
+	__u16            board_id;
 
 	__u16            rom_size;
 	__u32		rom_base;
-        __u16            ram_size;
-        __u16            ram_usable;
+	__u16            ram_size;
+	__u16            ram_usable;
 	__u32		ram_base;
 	__u32		ram_access;
 
 	__u16            extra_info;
-        __u16            mode_bits;
+	__u16            mode_bits;
 	__u16		media_menu;
 	__u16		media_type;
 	__u16		adapter_bus;
@@ -1036,15 +1036,15 @@ typedef struct net_local {
 	__u16            receive_mask;
 
 	__u16            group_address_0;
-        __u16            group_address[2];
-        __u16            functional_address_0;
-        __u16            functional_address[2];
-        __u16            bitwise_group_address[2];
+	__u16            group_address[2];
+	__u16            functional_address_0;
+	__u16            functional_address[2];
+	__u16            bitwise_group_address[2];
 
 	__u8		cleanup;
 
 	struct sk_buff_head SendSkbQueue;
-        __u16 QueueSkb;
+	__u16 QueueSkb;
 
 	struct tr_statistics MacStat;   /* MAC statistics structure */
 
@@ -1056,28 +1056,28 @@ typedef struct net_local {
  ************************************/
 
 typedef struct {
-        __u8           LnkSigStr[12]; /* signature string "SmcLinkTable" */
-        __u8           LnkDrvTyp;     /* 1=Redbox ODI, 2=ODI DOS, 3=ODI OS/2, 4=NDIS DOS */
-        __u8           LnkFlg;        /* 0 if no agent linked, 1 if agent linked */
-        void           *LnkNfo;       /* routine which returns pointer to NIC info */
-        void           *LnkAgtRcv;    /* pointer to agent receive trap entry */
-        void           *LnkAgtXmt;            /* pointer to agent transmit trap
+	__u8           LnkSigStr[12]; /* signature string "SmcLinkTable" */
+	__u8           LnkDrvTyp;     /* 1=Redbox ODI, 2=ODI DOS, 3=ODI OS/2, 4=NDIS DOS */
+	__u8           LnkFlg;        /* 0 if no agent linked, 1 if agent linked */
+	void           *LnkNfo;       /* routine which returns pointer to NIC info */
+	void           *LnkAgtRcv;    /* pointer to agent receive trap entry */
+	void           *LnkAgtXmt;            /* pointer to agent transmit trap
 entry  */
 void           *LnkGet;                  /* pointer to NIC receive data
 copy routine */
-        void           *LnkSnd;                  /* pointer to NIC send routine
+	void           *LnkSnd;                  /* pointer to NIC send routine
 */
-        void           *LnkRst;                  /* pointer to NIC driver reset
+	void           *LnkRst;                  /* pointer to NIC driver reset
 routine */
-        void           *LnkMib;                  /* pointer to MIB data base */
-        void           *LnkMibAct;            /* pointer to MIB action routine list */
-        __u16           LnkCntOffset;  /* offset to error counters */
-        __u16           LnkCntNum;     /* number of error counters */
-        __u16           LnkCntSize;    /* size of error counters i.e. 32 = 32 bits */
-        void           *LnkISR;       /* pointer to interrupt vector */
-        __u8           LnkFrmTyp;     /* 1=Ethernet, 2=Token Ring */
-        __u8           LnkDrvVer1 ;   /* driver major version */
-        __u8           LnkDrvVer2 ;   /* driver minor version */
+	void           *LnkMib;                  /* pointer to MIB data base */
+	void           *LnkMibAct;            /* pointer to MIB action routine list */
+	__u16           LnkCntOffset;  /* offset to error counters */
+	__u16           LnkCntNum;     /* number of error counters */
+	__u16           LnkCntSize;    /* size of error counters i.e. 32 = 32 bits */
+	void           *LnkISR;       /* pointer to interrupt vector */
+	__u8           LnkFrmTyp;     /* 1=Ethernet, 2=Token Ring */
+	__u8           LnkDrvVer1 ;   /* driver major version */
+	__u8           LnkDrvVer2 ;   /* driver minor version */
 } AgentLink;
 
 /*
@@ -1257,9 +1257,9 @@ routine */
 #define NEEDS_MEDIA_TYPE        0x0004
 #define EARLY_RX_DONE           0x0008
 #define PNP_BOOT_BIT            0x0010  /* activates PnP & config on power-up */
-                                        /* clear => regular PnP operation */
+					/* clear => regular PnP operation */
 #define PNP_ENABLE              0x0020  /* regular PnP operation clear => */
-                                        /* no PnP, overrides PNP_BOOT_BIT */
+					/* no PnP, overrides PNP_BOOT_BIT */
 #define SATURN_ENABLE           0x0040
 
 #define ADAPTER_REMOVABLE       0x0080 	/* adapter is hot swappable */
@@ -1534,7 +1534,7 @@ routine */
 #define SOURCE_ROUTING_SPANNING_BITS    0x00C0  /* Spanning Tree Frames */
 #define SOURCE_ROUTING_EXPLORER_BIT     0x0040  /* Explorer and Single Route */
 
-        /* write */
+	/* write */
 
 #define CSR_MSK_ALL             0x80    // Bic 587 Only
 #define CSR_MSKTINT             0x20
@@ -1544,7 +1544,7 @@ routine */
 #define CSR_WCSS                0x02
 #define CSR_CA                  0x01
 
-        /* read */
+	/* read */
 
 #define CSR_TINT                0x20
 #define CSR_CINT                0x10
@@ -1562,24 +1562,24 @@ routine */
 #define IMCCR_EIL               0x04
 
 typedef struct {
-        __u8            ac;                             /* Access Control */
-        __u8            fc;                             /* Frame Control */
-        __u8            da[6];                          /* Dest Addr */
-        __u8            sa[6];                          /* Source Addr */
+	__u8            ac;                             /* Access Control */
+	__u8            fc;                             /* Frame Control */
+	__u8            da[6];                          /* Dest Addr */
+	__u8            sa[6];                          /* Source Addr */
 
-        __u16            vl;                             /* Vector Length */
-        __u8            dc_sc;                          /* Dest/Source Class */
-        __u8            vc;                             /* Vector Code */
-        } MAC_HEADER;
+	__u16            vl;                             /* Vector Length */
+	__u8            dc_sc;                          /* Dest/Source Class */
+	__u8            vc;                             /* Vector Code */
+	} MAC_HEADER;
 
 #define MAX_SUB_VECTOR_INFO     (RX_DATA_BUFFER_SIZE - sizeof(MAC_HEADER) - 2)
 
 typedef struct
-        {
-        __u8            svl;                            /* Sub-vector Length */
-        __u8            svi;                            /* Sub-vector Code */
-        __u8            svv[MAX_SUB_VECTOR_INFO];       /* Sub-vector Info */
-        } MAC_SUB_VECTOR;
+	{
+	__u8            svl;                            /* Sub-vector Length */
+	__u8            svi;                            /* Sub-vector Code */
+	__u8            svv[MAX_SUB_VECTOR_INFO];       /* Sub-vector Info */
+	} MAC_SUB_VECTOR;
 
 #endif	/* __KERNEL__ */
 #endif	/* __LINUX_SMCTR_H */

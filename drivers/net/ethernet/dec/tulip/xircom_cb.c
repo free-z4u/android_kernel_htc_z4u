@@ -187,7 +187,7 @@ static const struct net_device_ops netdev_ops = {
    it sets up the hardware and registers the device to the networklayer.
 
    TODO: Send 1 or 2 "dummy" packets here as the card seems to discard the
-         first two packets that get send, and pump hates that.
+	 first two packets that get send, and pump hates that.
 
  */
 static int __devinit xircom_probe(struct pci_dev *pdev, const struct pci_device_id *id)
@@ -1020,13 +1020,13 @@ static void transceiver_voodoo(struct xircom_private *card)
 	spin_lock_irqsave(&card->lock, flags);
 
 	outl(0x0008, card->io_port + CSR15);
-        udelay(25);
-        outl(0xa8050000, card->io_port + CSR15);
-        udelay(25);
-        outl(0xa00f0000, card->io_port + CSR15);
-        udelay(25);
+	udelay(25);
+	outl(0xa8050000, card->io_port + CSR15);
+	udelay(25);
+	outl(0xa00f0000, card->io_port + CSR15);
+	udelay(25);
 
-        spin_unlock_irqrestore(&card->lock, flags);
+	spin_unlock_irqrestore(&card->lock, flags);
 
 	netif_start_queue(card->dev);
 }

@@ -34,7 +34,7 @@ do { \
 	if (unlikely(!(assertion))) { \
 		gfs2_assert_i(sdp); \
 		BUG(); \
-        } \
+	} \
 } while (0)
 
 
@@ -113,7 +113,7 @@ static inline int gfs2_metatype_check_i(struct gfs2_sbd *sdp,
 	if (unlikely(magic != GFS2_MAGIC))
 		return gfs2_meta_check_ii(sdp, bh, "magic number", function,
 					  file, line);
-        if (unlikely(t != type))
+	if (unlikely(t != type))
 		return gfs2_metatype_check_ii(sdp, bh, type, t, function,
 					      file, line);
 	return 0;

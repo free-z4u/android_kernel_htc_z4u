@@ -59,7 +59,7 @@ int ui__getch(int delay_secs)
 		timeout.tv_usec = 0;
 	}
 
-        err = select(1, &read_set, NULL, NULL, ptimeout);
+	err = select(1, &read_set, NULL, NULL, ptimeout);
 
 	if (err == 0)
 		return K_TIMER;
@@ -78,7 +78,7 @@ int ui__getch(int delay_secs)
 	FD_SET(0, &read_set);
 	timeout.tv_sec = 0;
 	timeout.tv_usec = 20;
-        err = select(1, &read_set, NULL, NULL, &timeout);
+	err = select(1, &read_set, NULL, NULL, &timeout);
 	if (err == 0)
 		return K_ESC;
 

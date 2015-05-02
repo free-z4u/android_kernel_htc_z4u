@@ -415,7 +415,7 @@ static int __devinit gxfb_probe(struct pci_dev *pdev,
 
 
 	/* Clear the frame buffer of garbage. */
-        memset_io(info->screen_base, 0, info->fix.smem_len);
+	memset_io(info->screen_base, 0, info->fix.smem_len);
 
 	gxfb_check_var(&info->var, info);
 	gxfb_set_par(info);

@@ -164,7 +164,7 @@ void ftrace_function_trampoline(unsigned long parent,
 		unsigned long sp;
 		unsigned long *parent_rp;
 
-                asm volatile ("copy %%r30, %0" : "=r"(sp));
+		asm volatile ("copy %%r30, %0" : "=r"(sp));
 		/* sanity check: is stack pointer which we got from
 		   assembler function in entry.S in a reasonable
 		   range compared to current stack pointer? */

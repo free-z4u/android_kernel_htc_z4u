@@ -115,7 +115,7 @@ struct thread_struct {
 	   switch, or of the register save area built for a kernel mode
 	   exception.  It is used for backtracing the stack of a sleeping task
 	   or one that traps in kernel mode. */
-        struct pt_regs *kregs;
+	struct pt_regs *kregs;
 	/* This stores the address of the pt_regs constructed on entry from
 	   user mode.  It is a fixed value over the lifetime of a process, or
 	   NULL for a kernel thread. */
@@ -136,7 +136,7 @@ struct thread_struct {
 	.sp		= sizeof(init_stack) +	\
 			  (long) &init_stack,	\
 	.pc		= 0,			\
-        .kregs		= &fake_swapper_regs,	\
+	.kregs		= &fake_swapper_regs,	\
 	.uregs	        = NULL,			\
 	.trap_no	= 0,			\
 	.error_code	= 0,			\

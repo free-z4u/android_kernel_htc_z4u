@@ -269,9 +269,9 @@ ia64_global_tlb_purge (struct mm_struct *mm, unsigned long start,
 	if (need_ptcg_sem)
 		up_spin(&ptcg_sem);
 
-        if (mm != active_mm) {
-                activate_context(active_mm);
-        }
+	if (mm != active_mm) {
+		activate_context(active_mm);
+	}
 }
 
 void

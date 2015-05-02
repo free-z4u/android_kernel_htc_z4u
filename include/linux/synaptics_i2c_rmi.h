@@ -52,124 +52,124 @@
 #define SENSOR_ID_CHECKING_EN   1 << 16
 
 enum {
-        SYNAPTICS_FLIP_X = 1UL << 0,
-        SYNAPTICS_FLIP_Y = 1UL << 1,
-        SYNAPTICS_SWAP_XY = 1UL << 2,
-        SYNAPTICS_SNAP_TO_INACTIVE_EDGE = 1UL << 3,
+	SYNAPTICS_FLIP_X = 1UL << 0,
+	SYNAPTICS_FLIP_Y = 1UL << 1,
+	SYNAPTICS_SWAP_XY = 1UL << 2,
+	SYNAPTICS_SNAP_TO_INACTIVE_EDGE = 1UL << 3,
 };
 
 enum {
-        FINGER_1_REPORT = 1 << 0,
-        FINGER_2_REPORT = 1 << 1,
+	FINGER_1_REPORT = 1 << 0,
+	FINGER_2_REPORT = 1 << 1,
 };
 
 struct synaptics_virtual_key {
-        int index;
-        int keycode;
-        int x_range_min;
-        int x_range_max;
-        int y_range_min;
-        int y_range_max;
+	int index;
+	int keycode;
+	int x_range_min;
+	int x_range_max;
+	int y_range_min;
+	int y_range_max;
 };
 
 struct synaptics_i2c_rmi_platform_data {
-        uint32_t version;       /* Use this entry for panels with */
-                                /* (major << 8 | minor) version or above. */
-                                /* If non-zero another array entry follows */
-        int (*power)(int on);   /* Only valid in first array entry */
-        int (*lpm_power)(int on);
-        struct synaptics_virtual_key *virtual_key;
-        uint8_t virtual_key_num;
-        struct kobject *vk_obj;
-        struct kobj_attribute *vk2Use;
-        uint8_t sensitivity;
-        uint8_t finger_support;
-        uint32_t gap_area;
-        uint32_t key_area;
-        uint32_t flags;
-        unsigned long irqflags;
-        uint32_t inactive_left; /* 0x10000 = screen width */
-        uint32_t inactive_right; /* 0x10000 = screen width */
-        uint32_t inactive_top; /* 0x10000 = screen height */
-        uint32_t inactive_bottom; /* 0x10000 = screen height */
-        uint32_t snap_left_on; /* 0x10000 = screen width */
-        uint32_t snap_left_off; /* 0x10000 = screen width */
-        uint32_t snap_right_on; /* 0x10000 = screen width */
-        uint32_t snap_right_off; /* 0x10000 = screen width */
-        uint32_t snap_top_on; /* 0x10000 = screen height */
-        uint32_t snap_top_off; /* 0x10000 = screen height */
-        uint32_t snap_bottom_on; /* 0x10000 = screen height */
-        uint32_t snap_bottom_off; /* 0x10000 = screen height */
-        uint32_t fuzz_x; /* 0x10000 = screen width */
-        uint32_t fuzz_y; /* 0x10000 = screen height */
-        int abs_x_min;
-        int abs_x_max;
-        int abs_y_min;
-        int abs_y_max;
-        int fuzz_p;
-        int fuzz_w;
-        uint32_t display_width;
-        uint32_t display_height;
-        int8_t sensitivity_adjust;
-        uint32_t dup_threshold;
-        uint32_t margin_inactive_pixel[4];
-        uint16_t filter_level[4];
-        uint8_t reduce_report_level[5];
-        uint8_t noise_information;
-        uint8_t jumpfq_enable;
-        uint8_t cable_support;
-        uint8_t config[SYN_CONFIG_SIZE];
-        int gpio_irq;
-        int gpio_reset;
-        #if defined(CONFIG_CPLD)
-        int cpld_gpio_reset;
-        #endif
-        uint8_t default_config;
-        uint8_t report_type;
-        uint8_t large_obj_check;
-        uint16_t tw_pin_mask;
-        uint32_t sensor_id;
-        uint32_t packrat_number;
-        uint8_t support_htc_event;
-        uint8_t mfg_flag;
-        uint8_t customer_register[CUS_REG_SIZE];
-        uint8_t segmentation_bef_unlock;
-        uint8_t threshold_bef_unlock;
-        uint16_t saturation_bef_unlock;
-        uint8_t i2c_err_handler_en;
-        uint8_t energy_ratio_relaxation;
-        uint8_t multitouch_calibration;
-        uint8_t psensor_detection;
-        uint8_t PixelTouchThreshold_bef_unlock;
+	uint32_t version;       /* Use this entry for panels with */
+				/* (major << 8 | minor) version or above. */
+				/* If non-zero another array entry follows */
+	int (*power)(int on);   /* Only valid in first array entry */
+	int (*lpm_power)(int on);
+	struct synaptics_virtual_key *virtual_key;
+	uint8_t virtual_key_num;
+	struct kobject *vk_obj;
+	struct kobj_attribute *vk2Use;
+	uint8_t sensitivity;
+	uint8_t finger_support;
+	uint32_t gap_area;
+	uint32_t key_area;
+	uint32_t flags;
+	unsigned long irqflags;
+	uint32_t inactive_left; /* 0x10000 = screen width */
+	uint32_t inactive_right; /* 0x10000 = screen width */
+	uint32_t inactive_top; /* 0x10000 = screen height */
+	uint32_t inactive_bottom; /* 0x10000 = screen height */
+	uint32_t snap_left_on; /* 0x10000 = screen width */
+	uint32_t snap_left_off; /* 0x10000 = screen width */
+	uint32_t snap_right_on; /* 0x10000 = screen width */
+	uint32_t snap_right_off; /* 0x10000 = screen width */
+	uint32_t snap_top_on; /* 0x10000 = screen height */
+	uint32_t snap_top_off; /* 0x10000 = screen height */
+	uint32_t snap_bottom_on; /* 0x10000 = screen height */
+	uint32_t snap_bottom_off; /* 0x10000 = screen height */
+	uint32_t fuzz_x; /* 0x10000 = screen width */
+	uint32_t fuzz_y; /* 0x10000 = screen height */
+	int abs_x_min;
+	int abs_x_max;
+	int abs_y_min;
+	int abs_y_max;
+	int fuzz_p;
+	int fuzz_w;
+	uint32_t display_width;
+	uint32_t display_height;
+	int8_t sensitivity_adjust;
+	uint32_t dup_threshold;
+	uint32_t margin_inactive_pixel[4];
+	uint16_t filter_level[4];
+	uint8_t reduce_report_level[5];
+	uint8_t noise_information;
+	uint8_t jumpfq_enable;
+	uint8_t cable_support;
+	uint8_t config[SYN_CONFIG_SIZE];
+	int gpio_irq;
+	int gpio_reset;
+	#if defined(CONFIG_CPLD)
+	int cpld_gpio_reset;
+	#endif
+	uint8_t default_config;
+	uint8_t report_type;
+	uint8_t large_obj_check;
+	uint16_t tw_pin_mask;
+	uint32_t sensor_id;
+	uint32_t packrat_number;
+	uint8_t support_htc_event;
+	uint8_t mfg_flag;
+	uint8_t customer_register[CUS_REG_SIZE];
+	uint8_t segmentation_bef_unlock;
+	uint8_t threshold_bef_unlock;
+	uint16_t saturation_bef_unlock;
+	uint8_t i2c_err_handler_en;
+	uint8_t energy_ratio_relaxation;
+	uint8_t multitouch_calibration;
+	uint8_t psensor_detection;
+	uint8_t PixelTouchThreshold_bef_unlock;
 };
 
 struct page_description {
-        uint8_t addr;
-        uint8_t value;
+	uint8_t addr;
+	uint8_t value;
 };
 
 struct syn_finger_data {
-        int x;
-        int y;
-        int w;
-        int z;
+	int x;
+	int y;
+	int w;
+	int z;
 };
 
 struct function_t {
-        uint8_t function_type;
-        uint8_t interrupt_source;
-        uint16_t data_base;
-        uint16_t control_base;
-        uint16_t command_base;
-        uint16_t query_base;
+	uint8_t function_type;
+	uint8_t interrupt_source;
+	uint16_t data_base;
+	uint16_t control_base;
+	uint16_t command_base;
+	uint16_t query_base;
 };
 enum {
-        QUERY_BASE,
-        COMMAND_BASE,
-        CONTROL_BASE,
-        DATA_BASE,
-        INTR_SOURCE,
-        FUNCTION
+	QUERY_BASE,
+	COMMAND_BASE,
+	CONTROL_BASE,
+	DATA_BASE,
+	INTR_SOURCE,
+	FUNCTION
 };
 
 extern uint8_t getPowerKeyState(void);

@@ -76,7 +76,7 @@ extern void __udivsi3(void);
 extern void __umoddi3(void);
 extern void __umodsi3(void);
 
-        /* gcc lib functions */
+	/* gcc lib functions */
 EXPORT_SYMBOL(__gcc_bcmp);
 EXPORT_SYMBOL(__ashldi3);
 EXPORT_SYMBOL(__ashrdi3);

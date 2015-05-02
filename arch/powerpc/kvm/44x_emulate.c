@@ -34,7 +34,7 @@
 #define XOP_TLBWE   978
 
 int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                           unsigned int inst, int *advance)
+			   unsigned int inst, int *advance)
 {
 	int emulated = EMULATE_DONE;
 	int dcrn;

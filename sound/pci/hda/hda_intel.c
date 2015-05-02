@@ -1211,7 +1211,7 @@ static void azx_init_pci(struct azx *chip)
 		snd_printdd(SFX "SCH snoop: %s\n",
 				(snoop & INTEL_SCH_HDA_DEVC_NOSNOOP)
 				? "Disabled" : "Enabled");
-        }
+	}
 }
 
 

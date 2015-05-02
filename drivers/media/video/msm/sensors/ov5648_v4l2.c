@@ -588,23 +588,23 @@ int ov5648_check_otp(int index)
 
      if (index<2)
      {
-         // read otp --Bank 0
-         ov5648_otp_write(0x3d84, 0xc0);
-         ov5648_otp_write(0x3d85, 0x00);
-         ov5648_otp_write(0x3d86, 0x0f);
-         ov5648_otp_write(0x3d81, 0x01);
+	 // read otp --Bank 0
+	 ov5648_otp_write(0x3d84, 0xc0);
+	 ov5648_otp_write(0x3d85, 0x00);
+	 ov5648_otp_write(0x3d86, 0x0f);
+	 ov5648_otp_write(0x3d81, 0x01);
 
-         usleep_range(10000, 10500);
-         address = 0x3d05 + index*9;
+	 usleep_range(10000, 10500);
+	 address = 0x3d05 + index*9;
      }
      else{
-         // read otp --Bank 1
-         ov5648_otp_write(0x3d84, 0xc0);
-         ov5648_otp_write(0x3d85, 0x10);
-         ov5648_otp_write(0x3d86, 0x1f);
-         ov5648_otp_write(0x3d81, 0x01);
-         usleep_range(10000, 10500);
-         address = 0x3d05 + index*9-16;
+	 // read otp --Bank 1
+	 ov5648_otp_write(0x3d84, 0xc0);
+	 ov5648_otp_write(0x3d85, 0x10);
+	 ov5648_otp_write(0x3d86, 0x1f);
+	 ov5648_otp_write(0x3d81, 0x01);
+	 usleep_range(10000, 10500);
+	 address = 0x3d05 + index*9-16;
      }
      temp = ov5648_otp_read(address);
 
@@ -613,17 +613,17 @@ int ov5648_check_otp(int index)
 
      // clear otp buffer
      for (i=0;i<16;i++) {
-         ov5648_otp_write(0x3d00 + i, 0x00);
+	 ov5648_otp_write(0x3d00 + i, 0x00);
      }
 
      if (!temp) {
-         return 0;
+	 return 0;
      }
      else if ((!(temp & 0x80)) && (temp&0x7f)) {
-         return 2;
+	 return 2;
      }
      else {
-         return 1;
+	 return 1;
      }
 }
 
@@ -637,22 +637,22 @@ int ov5648_read_otp(int index, struct otp_struct * otp_ptr)
      // read otp into buffer
      if (index<2)
      {
-         // read otp --Bank 0
-         ov5648_otp_write(0x3d84, 0xc0);
-         ov5648_otp_write(0x3d85, 0x00);
-         ov5648_otp_write(0x3d86, 0x0f);
-         ov5648_otp_write(0x3d81, 0x01);
-         usleep_range(10000, 10500);
-         address = 0x3d05 + index*9;
+	 // read otp --Bank 0
+	 ov5648_otp_write(0x3d84, 0xc0);
+	 ov5648_otp_write(0x3d85, 0x00);
+	 ov5648_otp_write(0x3d86, 0x0f);
+	 ov5648_otp_write(0x3d81, 0x01);
+	 usleep_range(10000, 10500);
+	 address = 0x3d05 + index*9;
      }
      else{
-         // read otp --Bank 1
-         ov5648_otp_write(0x3d84, 0xc0);
-         ov5648_otp_write(0x3d85, 0x10);
-         ov5648_otp_write(0x3d86, 0x1f);
-         ov5648_otp_write(0x3d81, 0x01);
-         usleep_range(10000, 10500);
-         address = 0x3d05 + index*9-16;
+	 // read otp --Bank 1
+	 ov5648_otp_write(0x3d84, 0xc0);
+	 ov5648_otp_write(0x3d85, 0x10);
+	 ov5648_otp_write(0x3d86, 0x1f);
+	 ov5648_otp_write(0x3d81, 0x01);
+	 usleep_range(10000, 10500);
+	 address = 0x3d05 + index*9-16;
      }
 
      (*otp_ptr).customer_id = (ov5648_otp_read(address) & 0x7f);
@@ -681,7 +681,7 @@ int ov5648_read_otp(int index, struct otp_struct * otp_ptr)
 
      // clear otp buffer
      for (i=0;i<16;i++) {
-         ov5648_otp_write(0x3d00 + i, 0x00);
+	 ov5648_otp_write(0x3d00 + i, 0x00);
      }
 
      return 0;
@@ -694,18 +694,18 @@ int ov5648_read_otp(int index, struct otp_struct * otp_ptr)
 int ov5648_update_awb_gain(int R_gain, int G_gain, int B_gain)
 {
      if (R_gain>0x400) {
-         ov5648_otp_write(0x5186, R_gain>>8);
-         ov5648_otp_write(0x5187, R_gain & 0x00ff);
+	 ov5648_otp_write(0x5186, R_gain>>8);
+	 ov5648_otp_write(0x5187, R_gain & 0x00ff);
      }
 
      if (G_gain>0x400) {
-         ov5648_otp_write(0x5188, G_gain>>8);
-         ov5648_otp_write(0x5189, G_gain & 0x00ff);
+	 ov5648_otp_write(0x5188, G_gain>>8);
+	 ov5648_otp_write(0x5189, G_gain & 0x00ff);
      }
 
      if (B_gain>0x400) {
-         ov5648_otp_write(0x518a, B_gain>>8);
-         ov5648_otp_write(0x518b, B_gain & 0x00ff);
+	 ov5648_otp_write(0x518a, B_gain>>8);
+	 ov5648_otp_write(0x518b, B_gain & 0x00ff);
      }
      return 0;
 }
@@ -728,82 +728,82 @@ int ov5648_update_otp(struct msm_sensor_ctrl_t *s_ctrl)
      // R/G and B/G of current camera module is read out from sensor OTP
      // check first OTP with valid data
      for(i=0;i<3;i++) {
-         temp = ov5648_check_otp(i);
-         if (temp == 2) {
-              otp_index = i;
-              break;
-         }
+	 temp = ov5648_check_otp(i);
+	 if (temp == 2) {
+	      otp_index = i;
+	      break;
+	 }
      }
 
      if (i==3) {
-         // no valid wb OTP data
-         return 1;
+	 // no valid wb OTP data
+	 return 1;
      }
 
      ov5648_read_otp(otp_index, &current_otp);
 
      if(current_otp.light_rg==0) {
-         // no light source information in OTP
-         rg = current_otp.rg_ratio;
+	 // no light source information in OTP
+	 rg = current_otp.rg_ratio;
      }
      else {
-         // light source information found in OTP
-         rg = current_otp.rg_ratio * (current_otp.light_rg +512) / 1024;
+	 // light source information found in OTP
+	 rg = current_otp.rg_ratio * (current_otp.light_rg +512) / 1024;
      }
 
      if(current_otp.light_bg==0) {
-         // no light source information in OTP
-         bg = current_otp.bg_ratio;
+	 // no light source information in OTP
+	 bg = current_otp.bg_ratio;
      }
      else {
-         // light source information found in OTP
-         bg = current_otp.bg_ratio * (current_otp.light_bg +512) / 1024;
+	 // light source information found in OTP
+	 bg = current_otp.bg_ratio * (current_otp.light_bg +512) / 1024;
      }
 
 
      //calculate G gain
      //0x400 = 1x gain
      if(bg < BG_Ratio_Typical) {
-         if (rg< RG_Ratio_Typical) {
-              // current_otp.bg_ratio < BG_Ratio_typical &&
-              // current_otp.rg_ratio < RG_Ratio_typical
-              G_gain = 0x400;
-              B_gain = 0x400 * BG_Ratio_Typical / bg;
-              R_gain = 0x400 * RG_Ratio_Typical / rg;
-         }
-         else {
-              // current_otp.bg_ratio < BG_Ratio_typical &&
-              // current_otp.rg_ratio >= RG_Ratio_typical
-              R_gain = 0x400;
-              G_gain = 0x400 * rg / RG_Ratio_Typical;
-              B_gain = G_gain * BG_Ratio_Typical /bg;
-         }
+	 if (rg< RG_Ratio_Typical) {
+	      // current_otp.bg_ratio < BG_Ratio_typical &&
+	      // current_otp.rg_ratio < RG_Ratio_typical
+	      G_gain = 0x400;
+	      B_gain = 0x400 * BG_Ratio_Typical / bg;
+	      R_gain = 0x400 * RG_Ratio_Typical / rg;
+	 }
+	 else {
+	      // current_otp.bg_ratio < BG_Ratio_typical &&
+	      // current_otp.rg_ratio >= RG_Ratio_typical
+	      R_gain = 0x400;
+	      G_gain = 0x400 * rg / RG_Ratio_Typical;
+	      B_gain = G_gain * BG_Ratio_Typical /bg;
+	 }
      }
      else {
-         if (rg < RG_Ratio_Typical) {
-              // current_otp.bg_ratio >= BG_Ratio_typical &&
-              // current_otp.rg_ratio < RG_Ratio_typical
-              B_gain = 0x400;
-              G_gain = 0x400 * bg / BG_Ratio_Typical;
-              R_gain = G_gain * RG_Ratio_Typical / rg;
-         }
-         else {
-              // current_otp.bg_ratio >= BG_Ratio_typical &&
-              // current_otp.rg_ratio >= RG_Ratio_typical
-              G_gain_B = 0x400 * bg / BG_Ratio_Typical;
-              G_gain_R = 0x400 * rg / RG_Ratio_Typical;
+	 if (rg < RG_Ratio_Typical) {
+	      // current_otp.bg_ratio >= BG_Ratio_typical &&
+	      // current_otp.rg_ratio < RG_Ratio_typical
+	      B_gain = 0x400;
+	      G_gain = 0x400 * bg / BG_Ratio_Typical;
+	      R_gain = G_gain * RG_Ratio_Typical / rg;
+	 }
+	 else {
+	      // current_otp.bg_ratio >= BG_Ratio_typical &&
+	      // current_otp.rg_ratio >= RG_Ratio_typical
+	      G_gain_B = 0x400 * bg / BG_Ratio_Typical;
+	      G_gain_R = 0x400 * rg / RG_Ratio_Typical;
 
-              if(G_gain_B > G_gain_R ) {
-                  B_gain = 0x400;
-                  G_gain = G_gain_B;
-                  R_gain = G_gain * RG_Ratio_Typical /rg;
-              }
-              else {
-                   R_gain = 0x400;
-                   G_gain = G_gain_R;
-                   B_gain = G_gain * BG_Ratio_Typical / bg;
-              }
-         }
+	      if(G_gain_B > G_gain_R ) {
+		  B_gain = 0x400;
+		  G_gain = G_gain_B;
+		  R_gain = G_gain * RG_Ratio_Typical /rg;
+	      }
+	      else {
+		   R_gain = 0x400;
+		   G_gain = G_gain_R;
+		   B_gain = G_gain * BG_Ratio_Typical / bg;
+	      }
+	 }
      }
 
      ov5648_update_awb_gain(R_gain, G_gain, B_gain);

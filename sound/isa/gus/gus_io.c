@@ -104,7 +104,7 @@ static inline void __snd_gf1_adlib_write(struct snd_gus_card * gus,
 }
 
 static inline void __snd_gf1_write_addr(struct snd_gus_card * gus, unsigned char reg,
-                                        unsigned int addr, int w_16bit)
+					unsigned int addr, int w_16bit)
 {
 	if (gus->gf1.enh_mode) {
 		if (w_16bit)
@@ -167,21 +167,21 @@ unsigned short snd_gf1_look16(struct snd_gus_card * gus, unsigned char reg)
 }
 
 void snd_gf1_adlib_write(struct snd_gus_card * gus,
-                         unsigned char reg,
-                         unsigned char data)
+			 unsigned char reg,
+			 unsigned char data)
 {
 	__snd_gf1_adlib_write(gus, reg, data);
 }
 
 void snd_gf1_write_addr(struct snd_gus_card * gus, unsigned char reg,
-                        unsigned int addr, short w_16bit)
+			unsigned int addr, short w_16bit)
 {
 	__snd_gf1_write_addr(gus, reg, addr, w_16bit);
 }
 
 unsigned int snd_gf1_read_addr(struct snd_gus_card * gus,
-                               unsigned char reg,
-                               short w_16bit)
+			       unsigned char reg,
+			       short w_16bit)
 {
 	return __snd_gf1_read_addr(gus, reg, w_16bit);
 }
@@ -201,7 +201,7 @@ void snd_gf1_i_ctrl_stop(struct snd_gus_card * gus, unsigned char reg)
 
 void snd_gf1_i_write8(struct snd_gus_card * gus,
 		      unsigned char reg,
-                      unsigned char data)
+		      unsigned char data)
 {
 	unsigned long flags;
 

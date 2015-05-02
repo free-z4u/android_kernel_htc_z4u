@@ -58,9 +58,9 @@ MODULE_LICENSE("GPL");
 #define FRAME_OVERHEAD          3       /* CHAR_SOF,CHAR_EOF,LENGTH = 3 */
 
 /*
-        Atmel events and response IDs contained in frame.
-        Programmer has no control over these numbers.
-        TODO there are holes - specifically  1,7,0x0a
+	Atmel events and response IDs contained in frame.
+	Programmer has no control over these numbers.
+	TODO there are holes - specifically  1,7,0x0a
 */
 #define VERSION_ID              0       /* Get Version (request/response) */
 #define KEYBD_ID                2       /* Keyboard (event) */
@@ -189,7 +189,7 @@ static void h3600ts_process_packet(struct h3600_dev *ts)
 					break;
 				case H3600_SCANCODE_CALENDAR:
 					key = KEY_PROG1;
-                                        break;
+					break;
 				case H3600_SCANCODE_CONTACTS:
 					key = KEY_PROG2;
 					break;
@@ -273,16 +273,16 @@ static int h3600ts_event(struct input_dev *dev, unsigned int type,
 }
 
 /*
-        Frame format
+	Frame format
   byte    1       2               3              len + 4
-        +-------+---------------+---------------+--=------------+
-        |SOF    |id     |len    | len bytes     | Chksum        |
-        +-------+---------------+---------------+--=------------+
+	+-------+---------------+---------------+--=------------+
+	|SOF    |id     |len    | len bytes     | Chksum        |
+	+-------+---------------+---------------+--=------------+
   bit   0     7  8    11 12   15 16
 
-        +-------+---------------+-------+
-        |SOF    |id     |0      |Chksum | - Note Chksum does not include SOF
-        +-------+---------------+-------+
+	+-------+---------------+-------+
+	|SOF    |id     |0      |Chksum | - Note Chksum does not include SOF
+	+-------+---------------+-------+
   bit   0     7  8    11 12   15 16
 
 */
@@ -296,7 +296,7 @@ static int state;
 #define STATE_EOF       3       /* state where we decode checksum or EOF */
 
 static irqreturn_t h3600ts_interrupt(struct serio *serio, unsigned char data,
-                                     unsigned int flags)
+				     unsigned int flags)
 {
 	struct h3600_dev *ts = serio_get_drvdata(serio);
 

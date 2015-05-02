@@ -331,7 +331,7 @@ static ssize_t perf_write(struct file *file, const char __user *buf, size_t coun
 
 	/* First check the machine type is correct for
 	   the requested image */
-        if (((perf_processor_interface == CUDA_INTF) &&
+	if (((perf_processor_interface == CUDA_INTF) &&
 		       (interface_type != CUDA_INTF)) ||
 	    ((perf_processor_interface == ONYX_INTF) &&
 	               (interface_type != ONYX_INTF)))

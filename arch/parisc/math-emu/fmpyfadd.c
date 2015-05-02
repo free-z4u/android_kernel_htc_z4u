@@ -311,17 +311,17 @@ dbl_fmpyfadd(
 			 */
 			else if (Dbl_iszero_exponent(opnd3p1) &&
 			         Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Dbl_signextendedsign(opnd3p1);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Dbl_signextendedsign(opnd3p1);
 				result_exponent = 0;
-                    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
-                    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
-                    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
-                    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
+		    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
+		    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
+		    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
+		    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
 							unfl);
-                    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
 			return(NOEXCEPTION);
@@ -353,16 +353,16 @@ dbl_fmpyfadd(
 			 */
 			else if (Dbl_iszero_exponent(opnd3p1) &&
 			    Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Dbl_signextendedsign(opnd3p1);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Dbl_signextendedsign(opnd3p1);
 				result_exponent = 0;
-                    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
-                    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
-                    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
-                    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
+		    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
+		    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
+		    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
+		    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
 							unfl);
-                    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
-                    		/* inexact = FALSE */
+		    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
+		    		/* inexact = FALSE */
 				return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
@@ -669,37 +669,37 @@ dbl_fmpyfadd(
 		if (Dbl_isone_hiddenoverflow(resultp1)) result_exponent++;
 	}
 	if (result_exponent >= DBL_INFINITY_EXPONENT) {
-                /* trap if OVERFLOWTRAP enabled */
-                if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Dbl_setwrapped_exponent(resultp1,result_exponent,ovfl);
-                        Dbl_copytoptr(resultp1,resultp2,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_OVERFLOWEXCEPTION |
+		/* trap if OVERFLOWTRAP enabled */
+		if (Is_overflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
+			Dbl_setwrapped_exponent(resultp1,result_exponent,ovfl);
+			Dbl_copytoptr(resultp1,resultp2,dstptr);
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_OVERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
-                        return (OPC_2E_OVERFLOWEXCEPTION);
-                }
-                inexact = TRUE;
-                Set_overflowflag();
-                /* set result to infinity or largest number */
-                Dbl_setoverflow(resultp1,resultp2);
+			    else Set_inexactflag();
+			return (OPC_2E_OVERFLOWEXCEPTION);
+		}
+		inexact = TRUE;
+		Set_overflowflag();
+		/* set result to infinity or largest number */
+		Dbl_setoverflow(resultp1,resultp2);
 
 	} else if (result_exponent <= 0) {	/* underflow case */
 		if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                	Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
+			/*
+			 * Adjust bias of result
+			 */
+			Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_UNDERFLOWEXCEPTION |
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_UNDERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
+			    else Set_inexactflag();
 	    		return(OPC_2E_UNDERFLOWEXCEPTION);
 		}
 		else if (inexact && is_tiny) Set_underflowflag();
@@ -971,17 +971,17 @@ unsigned int *status;
 			 */
 			else if (Dbl_iszero_exponent(opnd3p1) &&
 			         Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Dbl_signextendedsign(opnd3p1);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Dbl_signextendedsign(opnd3p1);
 				result_exponent = 0;
-                    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
-                    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
-                    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
-                    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
+		    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
+		    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
+		    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
+		    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
 							unfl);
-                    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
 			return(NOEXCEPTION);
@@ -1013,17 +1013,17 @@ unsigned int *status;
 			 */
 			else if (Dbl_iszero_exponent(opnd3p1) &&
 			    Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Dbl_signextendedsign(opnd3p1);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Dbl_signextendedsign(opnd3p1);
 				result_exponent = 0;
-                    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
-                    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
-                    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
-                    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
+		    		Dbl_leftshiftby1(opnd3p1,opnd3p2);
+		    		Dbl_normalize(opnd3p1,opnd3p2,result_exponent);
+		    		Dbl_set_sign(opnd3p1,/*using*/sign_save);
+		    		Dbl_setwrapped_exponent(opnd3p1,result_exponent,
 							unfl);
-                    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Dbl_copytoptr(opnd3p1,opnd3p2,dstptr);
 			return(NOEXCEPTION);
@@ -1331,33 +1331,33 @@ unsigned int *status;
 	if (result_exponent >= DBL_INFINITY_EXPONENT) {
 		/* Overflow */
 		if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Dbl_setwrapped_exponent(resultp1,result_exponent,ovfl);
-                        Dbl_copytoptr(resultp1,resultp2,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_OVERFLOWEXCEPTION |
+			/*
+			 * Adjust bias of result
+			 */
+			Dbl_setwrapped_exponent(resultp1,result_exponent,ovfl);
+			Dbl_copytoptr(resultp1,resultp2,dstptr);
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_OVERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
-                        return (OPC_2E_OVERFLOWEXCEPTION);
+			    else Set_inexactflag();
+			return (OPC_2E_OVERFLOWEXCEPTION);
 		}
 		inexact = TRUE;
 		Set_overflowflag();
 		Dbl_setoverflow(resultp1,resultp2);
 	} else if (result_exponent <= 0) {	/* underflow case */
 		if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                	Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
+			/*
+			 * Adjust bias of result
+			 */
+			Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_UNDERFLOWEXCEPTION |
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_UNDERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
+			    else Set_inexactflag();
 	    		return(OPC_2E_UNDERFLOWEXCEPTION);
 		}
 		else if (inexact && is_tiny) Set_underflowflag();
@@ -1627,17 +1627,17 @@ unsigned int *status;
 			 */
 			else if (Sgl_iszero_exponent(opnd3) &&
 			         Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Sgl_signextendedsign(opnd3);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Sgl_signextendedsign(opnd3);
 				result_exponent = 0;
-                    		Sgl_leftshiftby1(opnd3);
-                    		Sgl_normalize(opnd3,result_exponent);
-                    		Sgl_set_sign(opnd3,/*using*/sign_save);
-                    		Sgl_setwrapped_exponent(opnd3,result_exponent,
+		    		Sgl_leftshiftby1(opnd3);
+		    		Sgl_normalize(opnd3,result_exponent);
+		    		Sgl_set_sign(opnd3,/*using*/sign_save);
+		    		Sgl_setwrapped_exponent(opnd3,result_exponent,
 							unfl);
-                    		Sgl_copytoptr(opnd3,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Sgl_copytoptr(opnd3,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Sgl_copytoptr(opnd3,dstptr);
 			return(NOEXCEPTION);
@@ -1669,17 +1669,17 @@ unsigned int *status;
 			 */
 			else if (Sgl_iszero_exponent(opnd3) &&
 			    Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Sgl_signextendedsign(opnd3);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Sgl_signextendedsign(opnd3);
 				result_exponent = 0;
-                    		Sgl_leftshiftby1(opnd3);
-                    		Sgl_normalize(opnd3,result_exponent);
-                    		Sgl_set_sign(opnd3,/*using*/sign_save);
-                    		Sgl_setwrapped_exponent(opnd3,result_exponent,
+		    		Sgl_leftshiftby1(opnd3);
+		    		Sgl_normalize(opnd3,result_exponent);
+		    		Sgl_set_sign(opnd3,/*using*/sign_save);
+		    		Sgl_setwrapped_exponent(opnd3,result_exponent,
 							unfl);
-                    		Sgl_copytoptr(opnd3,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Sgl_copytoptr(opnd3,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Sgl_copytoptr(opnd3,dstptr);
 			return(NOEXCEPTION);
@@ -1972,33 +1972,33 @@ unsigned int *status;
 	if (result_exponent >= SGL_INFINITY_EXPONENT) {
 		/* Overflow */
 		if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Sgl_setwrapped_exponent(resultp1,result_exponent,ovfl);
-                        Sgl_copytoptr(resultp1,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_OVERFLOWEXCEPTION |
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(resultp1,result_exponent,ovfl);
+			Sgl_copytoptr(resultp1,dstptr);
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_OVERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
-                        return (OPC_2E_OVERFLOWEXCEPTION);
+			    else Set_inexactflag();
+			return (OPC_2E_OVERFLOWEXCEPTION);
 		}
 		inexact = TRUE;
 		Set_overflowflag();
 		Sgl_setoverflow(resultp1);
 	} else if (result_exponent <= 0) {	/* underflow case */
 		if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                	Sgl_setwrapped_exponent(resultp1,result_exponent,unfl);
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(resultp1,result_exponent,unfl);
 			Sgl_copytoptr(resultp1,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_UNDERFLOWEXCEPTION |
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_UNDERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
+			    else Set_inexactflag();
 	    		return(OPC_2E_UNDERFLOWEXCEPTION);
 		}
 		else if (inexact && is_tiny) Set_underflowflag();
@@ -2269,17 +2269,17 @@ unsigned int *status;
 			 */
 			else if (Sgl_iszero_exponent(opnd3) &&
 			         Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Sgl_signextendedsign(opnd3);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Sgl_signextendedsign(opnd3);
 				result_exponent = 0;
-                    		Sgl_leftshiftby1(opnd3);
-                    		Sgl_normalize(opnd3,result_exponent);
-                    		Sgl_set_sign(opnd3,/*using*/sign_save);
-                    		Sgl_setwrapped_exponent(opnd3,result_exponent,
+		    		Sgl_leftshiftby1(opnd3);
+		    		Sgl_normalize(opnd3,result_exponent);
+		    		Sgl_set_sign(opnd3,/*using*/sign_save);
+		    		Sgl_setwrapped_exponent(opnd3,result_exponent,
 							unfl);
-                    		Sgl_copytoptr(opnd3,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Sgl_copytoptr(opnd3,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Sgl_copytoptr(opnd3,dstptr);
 			return(NOEXCEPTION);
@@ -2311,17 +2311,17 @@ unsigned int *status;
 			 */
 			else if (Sgl_iszero_exponent(opnd3) &&
 			    Is_underflowtrap_enabled()) {
-                    		/* need to normalize results mantissa */
-                    		sign_save = Sgl_signextendedsign(opnd3);
+		    		/* need to normalize results mantissa */
+		    		sign_save = Sgl_signextendedsign(opnd3);
 				result_exponent = 0;
-                    		Sgl_leftshiftby1(opnd3);
-                    		Sgl_normalize(opnd3,result_exponent);
-                    		Sgl_set_sign(opnd3,/*using*/sign_save);
-                    		Sgl_setwrapped_exponent(opnd3,result_exponent,
+		    		Sgl_leftshiftby1(opnd3);
+		    		Sgl_normalize(opnd3,result_exponent);
+		    		Sgl_set_sign(opnd3,/*using*/sign_save);
+		    		Sgl_setwrapped_exponent(opnd3,result_exponent,
 							unfl);
-                    		Sgl_copytoptr(opnd3,dstptr);
-                    		/* inexact = FALSE */
-                    		return(OPC_2E_UNDERFLOWEXCEPTION);
+		    		Sgl_copytoptr(opnd3,dstptr);
+		    		/* inexact = FALSE */
+		    		return(OPC_2E_UNDERFLOWEXCEPTION);
 			}
 			Sgl_copytoptr(opnd3,dstptr);
 			return(NOEXCEPTION);
@@ -2614,33 +2614,33 @@ unsigned int *status;
 	if (result_exponent >= SGL_INFINITY_EXPONENT) {
 		/* Overflow */
 		if (Is_overflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Sgl_setwrapped_exponent(resultp1,result_exponent,ovfl);
-                        Sgl_copytoptr(resultp1,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_OVERFLOWEXCEPTION |
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(resultp1,result_exponent,ovfl);
+			Sgl_copytoptr(resultp1,dstptr);
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_OVERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
-                        return (OPC_2E_OVERFLOWEXCEPTION);
+			    else Set_inexactflag();
+			return (OPC_2E_OVERFLOWEXCEPTION);
 		}
 		inexact = TRUE;
 		Set_overflowflag();
 		Sgl_setoverflow(resultp1);
 	} else if (result_exponent <= 0) {	/* underflow case */
 		if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                	Sgl_setwrapped_exponent(resultp1,result_exponent,unfl);
+			/*
+			 * Adjust bias of result
+			 */
+			Sgl_setwrapped_exponent(resultp1,result_exponent,unfl);
 			Sgl_copytoptr(resultp1,dstptr);
-                        if (inexact)
-                            if (Is_inexacttrap_enabled())
-                                return (OPC_2E_UNDERFLOWEXCEPTION |
+			if (inexact)
+			    if (Is_inexacttrap_enabled())
+				return (OPC_2E_UNDERFLOWEXCEPTION |
 					OPC_2E_INEXACTEXCEPTION);
-                            else Set_inexactflag();
+			    else Set_inexactflag();
 	    		return(OPC_2E_UNDERFLOWEXCEPTION);
 		}
 		else if (inexact && is_tiny) Set_underflowflag();

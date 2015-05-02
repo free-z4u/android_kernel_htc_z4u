@@ -88,7 +88,7 @@ struct eerbuffer {
 	int buffersize;
 	int buffer_page_count;
 	int head;
-        int tail;
+	int tail;
 	int residual;
 };
 
@@ -549,9 +549,9 @@ static int dasd_eer_open(struct inode *inp, struct file *filp)
 	eerb->buffersize = eerb->buffer_page_count * PAGE_SIZE;
 	eerb->buffer = kmalloc(eerb->buffer_page_count * sizeof(char *),
 			       GFP_KERNEL);
-        if (!eerb->buffer) {
+	if (!eerb->buffer) {
 		kfree(eerb);
-                return -ENOMEM;
+		return -ENOMEM;
 	}
 	if (dasd_eer_allocate_buffer_pages(eerb->buffer,
 					   eerb->buffer_page_count)) {
@@ -588,7 +588,7 @@ static ssize_t dasd_eer_read(struct file *filp, char __user *buf,
 {
 	int tc,rc;
 	int tailcount,effective_count;
-        unsigned long flags;
+	unsigned long flags;
 	struct eerbuffer *eerb;
 
 	eerb = (struct eerbuffer *) filp->private_data;

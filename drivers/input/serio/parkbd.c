@@ -90,7 +90,7 @@ static int parkbd_write(struct serio *port, unsigned char c)
 
 	if (!parkbd_mode) return -1;
 
-        p = c ^ (c >> 4);
+	p = c ^ (c >> 4);
 	p = p ^ (p >> 2);
 	p = p ^ (p >> 1);
 
@@ -202,7 +202,7 @@ static int __init parkbd_init(void)
 	serio_register_port(parkbd_port);
 
 	printk(KERN_INFO "serio: PARKBD %s adapter on %s\n",
-                        parkbd_mode ? "AT" : "XT", parkbd_dev->port->name);
+			parkbd_mode ? "AT" : "XT", parkbd_dev->port->name);
 
 	return 0;
 }

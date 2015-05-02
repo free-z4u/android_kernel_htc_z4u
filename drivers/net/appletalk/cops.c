@@ -169,10 +169,10 @@ static unsigned int cops_debug = COPS_DEBUG;
 
 struct cops_local
 {
-        int board;			/* Holds what board type is. */
+	int board;			/* Holds what board type is. */
 	int nodeid;			/* Set to 1 once have nodeid. */
-        unsigned char node_acquire;	/* Node ID when acquired. */
-        struct atalk_addr node_addr;	/* Full node address */
+	unsigned char node_acquire;	/* Node ID when acquired. */
+	struct atalk_addr node_addr;	/* Full node address */
 	spinlock_t lock;		/* RX/TX lock */
 };
 
@@ -259,10 +259,10 @@ out:
 
 static const struct net_device_ops cops_netdev_ops = {
 	.ndo_open               = cops_open,
-        .ndo_stop               = cops_close,
+	.ndo_stop               = cops_close,
 	.ndo_start_xmit   	= cops_send_packet,
 	.ndo_tx_timeout		= cops_timeout,
-        .ndo_do_ioctl           = cops_ioctl,
+	.ndo_do_ioctl           = cops_ioctl,
 	.ndo_set_rx_mode	= set_multicast_list,
 };
 
@@ -273,24 +273,24 @@ static const struct net_device_ops cops_netdev_ops = {
  */
 static int __init cops_probe1(struct net_device *dev, int ioaddr)
 {
-        struct cops_local *lp;
+	struct cops_local *lp;
 	static unsigned version_printed;
 	int board = board_type;
 	int retval;
 
-        if(cops_debug && version_printed++ == 0)
+	if(cops_debug && version_printed++ == 0)
 		printk("%s", version);
 
 	/* Grab the region so no one else tries to probe our ioports. */
 	if (!request_region(ioaddr, COPS_IO_EXTENT, dev->name))
 		return -EBUSY;
 
-        /*
-         * Since this board has jumpered interrupts, allocate the interrupt
-         * vector now. There is no point in waiting since no other device
-         * can use the interrupt, and this marks the irq as busy. Jumpered
-         * interrupts are typically not reported by the boards, and we must
-         * used AutoIRQ to find them.
+	/*
+	 * Since this board has jumpered interrupts, allocate the interrupt
+	 * vector now. There is no point in waiting since no other device
+	 * can use the interrupt, and this marks the irq as busy. Jumpered
+	 * interrupts are typically not reported by the boards, and we must
+	 * used AutoIRQ to find them.
 	 */
 	dev->irq = irq;
 	switch (dev->irq)
@@ -333,8 +333,8 @@ static int __init cops_probe1(struct net_device *dev, int ioaddr)
 
 	dev->base_addr = ioaddr;
 
-        lp = netdev_priv(dev);
-        spin_lock_init(&lp->lock);
+	lp = netdev_priv(dev);
+	spin_lock_init(&lp->lock);
 
 	/* Copy local board variable to lp struct. */
 	lp->board               = board;
@@ -356,7 +356,7 @@ static int __init cops_probe1(struct net_device *dev, int ioaddr)
 				dev->name, cardname, ioaddr);
 
 	}
-        return 0;
+	return 0;
 
 err_out:
 	release_region(ioaddr, COPS_IO_EXTENT);
@@ -365,47 +365,47 @@ err_out:
 
 static int __init cops_irq (int ioaddr, int board)
 {       /*
-         * This does not use the IRQ to determine where the IRQ is. We just
-         * assume that when we get a correct status response that it's the IRQ.
-         * This really just verifies the IO port but since we only have access
-         * to such a small number of IRQs (5, 4, 3) this is not bad.
-         * This will probably not work for more than one card.
-         */
-        int irqaddr=0;
-        int i, x, status;
+	 * This does not use the IRQ to determine where the IRQ is. We just
+	 * assume that when we get a correct status response that it's the IRQ.
+	 * This really just verifies the IO port but since we only have access
+	 * to such a small number of IRQs (5, 4, 3) this is not bad.
+	 * This will probably not work for more than one card.
+	 */
+	int irqaddr=0;
+	int i, x, status;
 
-        if(board==DAYNA)
-        {
-                outb(0, ioaddr+DAYNA_RESET);
-                inb(ioaddr+DAYNA_RESET);
-                mdelay(333);
-        }
-        if(board==TANGENT)
-        {
-                inb(ioaddr);
-                outb(0, ioaddr);
-                outb(0, ioaddr+TANG_RESET);
-        }
+	if(board==DAYNA)
+	{
+		outb(0, ioaddr+DAYNA_RESET);
+		inb(ioaddr+DAYNA_RESET);
+		mdelay(333);
+	}
+	if(board==TANGENT)
+	{
+		inb(ioaddr);
+		outb(0, ioaddr);
+		outb(0, ioaddr+TANG_RESET);
+	}
 
-        for(i=0; cops_irqlist[i] !=0; i++)
-        {
-                irqaddr = cops_irqlist[i];
-                for(x = 0xFFFF; x>0; x --)    /* wait for response */
-                {
-                        if(board==DAYNA)
-                        {
-                                status = (inb(ioaddr+DAYNA_CARD_STATUS)&3);
-                                if(status == 1)
-                                        return irqaddr;
-                        }
-                        if(board==TANGENT)
-                        {
-                                if((inb(ioaddr+TANG_CARD_STATUS)& TANG_TX_READY) !=0)
-                                        return irqaddr;
-                        }
-                }
-        }
-        return 0;       /* no IRQ found */
+	for(i=0; cops_irqlist[i] !=0; i++)
+	{
+		irqaddr = cops_irqlist[i];
+		for(x = 0xFFFF; x>0; x --)    /* wait for response */
+		{
+			if(board==DAYNA)
+			{
+				status = (inb(ioaddr+DAYNA_CARD_STATUS)&3);
+				if(status == 1)
+					return irqaddr;
+			}
+			if(board==TANGENT)
+			{
+				if((inb(ioaddr+TANG_CARD_STATUS)& TANG_TX_READY) !=0)
+					return irqaddr;
+			}
+		}
+	}
+	return 0;       /* no IRQ found */
 }
 
 /*
@@ -440,7 +440,7 @@ static int cops_open(struct net_device *dev)
 	cops_jumpstart(dev);	/* Start the card up. */
 
 	netif_start_queue(dev);
-        return 0;
+	return 0;
 }
 
 /*
@@ -451,11 +451,11 @@ static int cops_jumpstart(struct net_device *dev)
 	struct cops_local *lp = netdev_priv(dev);
 
 	/*
-         *      Once the card has the firmware loaded and has acquired
-         *      the nodeid, if it is reset it will lose it all.
-         */
-        cops_reset(dev,1);	/* Need to reset card before load firmware. */
-        cops_load(dev);		/* Load the firmware. */
+	 *      Once the card has the firmware loaded and has acquired
+	 *      the nodeid, if it is reset it will lose it all.
+	 */
+	cops_reset(dev,1);	/* Need to reset card before load firmware. */
+	cops_load(dev);		/* Load the firmware. */
 
 	/*
 	 *	If atalkd already gave us a nodeid we will use that
@@ -482,116 +482,116 @@ static void tangent_wait_reset(int ioaddr)
  */
 static void cops_reset(struct net_device *dev, int sleep)
 {
-        struct cops_local *lp = netdev_priv(dev);
-        int ioaddr=dev->base_addr;
+	struct cops_local *lp = netdev_priv(dev);
+	int ioaddr=dev->base_addr;
 
-        if(lp->board==TANGENT)
-        {
-                inb(ioaddr);		/* Clear request latch. */
-                outb(0,ioaddr);		/* Clear the TANG_TX_READY flop. */
-                outb(0, ioaddr+TANG_RESET);	/* Reset the adapter. */
+	if(lp->board==TANGENT)
+	{
+		inb(ioaddr);		/* Clear request latch. */
+		outb(0,ioaddr);		/* Clear the TANG_TX_READY flop. */
+		outb(0, ioaddr+TANG_RESET);	/* Reset the adapter. */
 
 		tangent_wait_reset(ioaddr);
-                outb(0, ioaddr+TANG_CLEAR_INT);
-        }
-        if(lp->board==DAYNA)
-        {
-                outb(0, ioaddr+DAYNA_RESET);	/* Assert the reset port */
-                inb(ioaddr+DAYNA_RESET);	/* Clear the reset */
+		outb(0, ioaddr+TANG_CLEAR_INT);
+	}
+	if(lp->board==DAYNA)
+	{
+		outb(0, ioaddr+DAYNA_RESET);	/* Assert the reset port */
+		inb(ioaddr+DAYNA_RESET);	/* Clear the reset */
 		if (sleep)
 			msleep(333);
 		else
 			mdelay(333);
-        }
+	}
 
 	netif_wake_queue(dev);
 }
 
 static void cops_load (struct net_device *dev)
 {
-        struct ifreq ifr;
-        struct ltfirmware *ltf= (struct ltfirmware *)&ifr.ifr_ifru;
-        struct cops_local *lp = netdev_priv(dev);
-        int ioaddr=dev->base_addr;
+	struct ifreq ifr;
+	struct ltfirmware *ltf= (struct ltfirmware *)&ifr.ifr_ifru;
+	struct cops_local *lp = netdev_priv(dev);
+	int ioaddr=dev->base_addr;
 	int length, i = 0;
 
-        strcpy(ifr.ifr_name,"lt0");
+	strcpy(ifr.ifr_name,"lt0");
 
-        /* Get card's firmware code and do some checks on it. */
+	/* Get card's firmware code and do some checks on it. */
 #ifdef CONFIG_COPS_DAYNA
-        if(lp->board==DAYNA)
-        {
-                ltf->length=sizeof(ffdrv_code);
-                ltf->data=ffdrv_code;
-        }
-        else
+	if(lp->board==DAYNA)
+	{
+		ltf->length=sizeof(ffdrv_code);
+		ltf->data=ffdrv_code;
+	}
+	else
 #endif
 #ifdef CONFIG_COPS_TANGENT
-        if(lp->board==TANGENT)
-        {
-                ltf->length=sizeof(ltdrv_code);
-                ltf->data=ltdrv_code;
-        }
-        else
+	if(lp->board==TANGENT)
+	{
+		ltf->length=sizeof(ltdrv_code);
+		ltf->data=ltdrv_code;
+	}
+	else
 #endif
 	{
 		printk(KERN_INFO "%s; unsupported board type.\n", dev->name);
 		return;
 	}
 
-        /* Check to make sure firmware is correct length. */
-        if(lp->board==DAYNA && ltf->length!=5983)
-        {
-                printk(KERN_WARNING "%s: Firmware is not length of FFDRV.BIN.\n", dev->name);
-                return;
-        }
-        if(lp->board==TANGENT && ltf->length!=2501)
-        {
-                printk(KERN_WARNING "%s: Firmware is not length of DRVCODE.BIN.\n", dev->name);
-                return;
-        }
+	/* Check to make sure firmware is correct length. */
+	if(lp->board==DAYNA && ltf->length!=5983)
+	{
+		printk(KERN_WARNING "%s: Firmware is not length of FFDRV.BIN.\n", dev->name);
+		return;
+	}
+	if(lp->board==TANGENT && ltf->length!=2501)
+	{
+		printk(KERN_WARNING "%s: Firmware is not length of DRVCODE.BIN.\n", dev->name);
+		return;
+	}
 
-        if(lp->board==DAYNA)
-        {
-                /*
-                 *      We must wait for a status response
-                 *      with the DAYNA board.
-                 */
-                while(++i<65536)
-                {
-                       if((inb(ioaddr+DAYNA_CARD_STATUS)&3)==1)
-                                break;
-                }
+	if(lp->board==DAYNA)
+	{
+		/*
+		 *      We must wait for a status response
+		 *      with the DAYNA board.
+		 */
+		while(++i<65536)
+		{
+		       if((inb(ioaddr+DAYNA_CARD_STATUS)&3)==1)
+				break;
+		}
 
-                if(i==65536)
-                        return;
-        }
+		if(i==65536)
+			return;
+	}
 
-        /*
-         *      Upload the firmware and kick. Byte-by-byte works nicely here.
-         */
+	/*
+	 *      Upload the firmware and kick. Byte-by-byte works nicely here.
+	 */
 	i=0;
-        length = ltf->length;
-        while(length--)
-        {
-                outb(ltf->data[i], ioaddr);
-                i++;
-        }
+	length = ltf->length;
+	while(length--)
+	{
+		outb(ltf->data[i], ioaddr);
+		i++;
+	}
 
 	if(cops_debug > 1)
 		printk("%s: Uploaded firmware - %d bytes of %d bytes.\n",
 			dev->name, i, ltf->length);
 
-        if(lp->board==DAYNA) 	/* Tell Dayna to run the firmware code. */
-                outb(1, ioaddr+DAYNA_INT_CARD);
+	if(lp->board==DAYNA) 	/* Tell Dayna to run the firmware code. */
+		outb(1, ioaddr+DAYNA_INT_CARD);
 	else			/* Tell Tang to run the firmware code. */
 		inb(ioaddr);
 
-        if(lp->board==TANGENT)
-        {
-                tangent_wait_reset(ioaddr);
-                inb(ioaddr);	/* Clear initial ready signal. */
-        }
+	if(lp->board==TANGENT)
+	{
+		tangent_wait_reset(ioaddr);
+		inb(ioaddr);	/* Clear initial ready signal. */
+	}
 }
 
 /*
@@ -606,56 +606,56 @@ static int cops_nodeid (struct net_device *dev, int nodeid)
 	int ioaddr = dev->base_addr;
 
 	if(lp->board == DAYNA)
-        {
-        	/* Empty any pending adapter responses. */
-                while((inb(ioaddr+DAYNA_CARD_STATUS)&DAYNA_TX_READY)==0)
-                {
+	{
+		/* Empty any pending adapter responses. */
+		while((inb(ioaddr+DAYNA_CARD_STATUS)&DAYNA_TX_READY)==0)
+		{
 			outb(0, ioaddr+COPS_CLEAR_INT);	/* Clear interrupts. */
-        		if((inb(ioaddr+DAYNA_CARD_STATUS)&0x03)==DAYNA_RX_REQUEST)
-                		cops_rx(dev);	/* Kick any packets waiting. */
+			if((inb(ioaddr+DAYNA_CARD_STATUS)&0x03)==DAYNA_RX_REQUEST)
+				cops_rx(dev);	/* Kick any packets waiting. */
 			schedule();
-                }
+		}
 
-                outb(2, ioaddr);       	/* Output command packet length as 2. */
-                outb(0, ioaddr);
-                outb(LAP_INIT, ioaddr);	/* Send LAP_INIT command byte. */
-                outb(nodeid, ioaddr);  	/* Suggest node address. */
-        }
+		outb(2, ioaddr);       	/* Output command packet length as 2. */
+		outb(0, ioaddr);
+		outb(LAP_INIT, ioaddr);	/* Send LAP_INIT command byte. */
+		outb(nodeid, ioaddr);  	/* Suggest node address. */
+	}
 
 	if(lp->board == TANGENT)
-        {
-                /* Empty any pending adapter responses. */
-                while(inb(ioaddr+TANG_CARD_STATUS)&TANG_RX_READY)
-                {
+	{
+		/* Empty any pending adapter responses. */
+		while(inb(ioaddr+TANG_CARD_STATUS)&TANG_RX_READY)
+		{
 			outb(0, ioaddr+COPS_CLEAR_INT);	/* Clear interrupt. */
-                	cops_rx(dev);          	/* Kick out packets waiting. */
+			cops_rx(dev);          	/* Kick out packets waiting. */
 			schedule();
-                }
+		}
 
 		/* Not sure what Tangent does if nodeid picked is used. */
-                if(nodeid == 0)	         		/* Seed. */
-                	nodeid = jiffies&0xFF;		/* Get a random try */
-                outb(2, ioaddr);        		/* Command length LSB */
-                outb(0, ioaddr);       			/* Command length MSB */
-                outb(LAP_INIT, ioaddr); 		/* Send LAP_INIT byte */
-                outb(nodeid, ioaddr); 		  	/* LAP address hint. */
-                outb(0xFF, ioaddr);     		/* Int. level to use */
-        }
+		if(nodeid == 0)	         		/* Seed. */
+			nodeid = jiffies&0xFF;		/* Get a random try */
+		outb(2, ioaddr);        		/* Command length LSB */
+		outb(0, ioaddr);       			/* Command length MSB */
+		outb(LAP_INIT, ioaddr); 		/* Send LAP_INIT byte */
+		outb(nodeid, ioaddr); 		  	/* LAP address hint. */
+		outb(0xFF, ioaddr);     		/* Int. level to use */
+	}
 
 	lp->node_acquire=0;		/* Set nodeid holder to 0. */
-        while(lp->node_acquire==0)	/* Get *True* nodeid finally. */
+	while(lp->node_acquire==0)	/* Get *True* nodeid finally. */
 	{
 		outb(0, ioaddr+COPS_CLEAR_INT);	/* Clear any interrupt. */
 
 		if(lp->board == DAYNA)
 		{
-                	if((inb(ioaddr+DAYNA_CARD_STATUS)&0x03)==DAYNA_RX_REQUEST)
-                		cops_rx(dev);	/* Grab the nodeid put in lp->node_acquire. */
+			if((inb(ioaddr+DAYNA_CARD_STATUS)&0x03)==DAYNA_RX_REQUEST)
+				cops_rx(dev);	/* Grab the nodeid put in lp->node_acquire. */
 		}
 		if(lp->board == TANGENT)
 		{
 			if(inb(ioaddr+TANG_CARD_STATUS)&TANG_RX_READY)
-                                cops_rx(dev);   /* Grab the nodeid put in lp->node_acquire. */
+				cops_rx(dev);   /* Grab the nodeid put in lp->node_acquire. */
 		}
 		schedule();
 	}
@@ -666,7 +666,7 @@ static int cops_nodeid (struct net_device *dev, int nodeid)
 
 	lp->nodeid=1;	/* Set got nodeid to 1. */
 
-        return 0;
+	return 0;
 }
 
 /*
@@ -706,28 +706,28 @@ static void cops_poll(unsigned long ltdev)
  */
 static irqreturn_t cops_interrupt(int irq, void *dev_id)
 {
-        struct net_device *dev = dev_id;
-        struct cops_local *lp;
-        int ioaddr, status;
-        int boguscount = 0;
+	struct net_device *dev = dev_id;
+	struct cops_local *lp;
+	int ioaddr, status;
+	int boguscount = 0;
 
-        ioaddr = dev->base_addr;
-        lp = netdev_priv(dev);
+	ioaddr = dev->base_addr;
+	lp = netdev_priv(dev);
 
 	if(lp->board==DAYNA)
 	{
 		do {
 			outb(0, ioaddr + COPS_CLEAR_INT);
-                       	status=inb(ioaddr+DAYNA_CARD_STATUS);
-                       	if((status&0x03)==DAYNA_RX_REQUEST)
-                       	        cops_rx(dev);
-                	netif_wake_queue(dev);
+		       	status=inb(ioaddr+DAYNA_CARD_STATUS);
+		       	if((status&0x03)==DAYNA_RX_REQUEST)
+		       	        cops_rx(dev);
+			netif_wake_queue(dev);
 		} while(++boguscount < 20);
 	}
 	else
 	{
 		do {
-                       	status=inb(ioaddr+TANG_CARD_STATUS);
+		       	status=inb(ioaddr+TANG_CARD_STATUS);
 			if(status & TANG_RX_READY)
 				cops_rx(dev);
 			if(status & TANG_TX_READY)
@@ -736,7 +736,7 @@ static irqreturn_t cops_interrupt(int irq, void *dev_id)
 		} while((++boguscount < 20) && (status&(TANG_RX_READY|TANG_TX_READY)));
 	}
 
-        return IRQ_HANDLED;
+	return IRQ_HANDLED;
 }
 
 /*
@@ -744,120 +744,120 @@ static irqreturn_t cops_interrupt(int irq, void *dev_id)
  */
 static void cops_rx(struct net_device *dev)
 {
-        int pkt_len = 0;
-        int rsp_type = 0;
-        struct sk_buff *skb = NULL;
-        struct cops_local *lp = netdev_priv(dev);
-        int ioaddr = dev->base_addr;
-        int boguscount = 0;
-        unsigned long flags;
+	int pkt_len = 0;
+	int rsp_type = 0;
+	struct sk_buff *skb = NULL;
+	struct cops_local *lp = netdev_priv(dev);
+	int ioaddr = dev->base_addr;
+	int boguscount = 0;
+	unsigned long flags;
 
 
 	spin_lock_irqsave(&lp->lock, flags);
 
-        if(lp->board==DAYNA)
-        {
-                outb(0, ioaddr);                /* Send out Zero length. */
-                outb(0, ioaddr);
-                outb(DATA_READ, ioaddr);        /* Send read command out. */
-
-                /* Wait for DMA to turn around. */
-                while(++boguscount<1000000)
-                {
-			barrier();
-                        if((inb(ioaddr+DAYNA_CARD_STATUS)&0x03)==DAYNA_RX_READY)
-                                break;
-                }
-
-                if(boguscount==1000000)
-                {
-                        printk(KERN_WARNING "%s: DMA timed out.\n",dev->name);
-			spin_unlock_irqrestore(&lp->lock, flags);
-                        return;
-                }
-        }
-
-        /* Get response length. */
 	if(lp->board==DAYNA)
-        	pkt_len = inb(ioaddr) & 0xFF;
+	{
+		outb(0, ioaddr);                /* Send out Zero length. */
+		outb(0, ioaddr);
+		outb(DATA_READ, ioaddr);        /* Send read command out. */
+
+		/* Wait for DMA to turn around. */
+		while(++boguscount<1000000)
+		{
+			barrier();
+			if((inb(ioaddr+DAYNA_CARD_STATUS)&0x03)==DAYNA_RX_READY)
+				break;
+		}
+
+		if(boguscount==1000000)
+		{
+			printk(KERN_WARNING "%s: DMA timed out.\n",dev->name);
+			spin_unlock_irqrestore(&lp->lock, flags);
+			return;
+		}
+	}
+
+	/* Get response length. */
+	if(lp->board==DAYNA)
+		pkt_len = inb(ioaddr) & 0xFF;
 	else
 		pkt_len = inb(ioaddr) & 0x00FF;
-        pkt_len |= (inb(ioaddr) << 8);
-        /* Input IO code. */
-        rsp_type=inb(ioaddr);
+	pkt_len |= (inb(ioaddr) << 8);
+	/* Input IO code. */
+	rsp_type=inb(ioaddr);
 
-        /* Malloc up new buffer. */
-        skb = dev_alloc_skb(pkt_len);
-        if(skb == NULL)
-        {
-                printk(KERN_WARNING "%s: Memory squeeze, dropping packet.\n",
+	/* Malloc up new buffer. */
+	skb = dev_alloc_skb(pkt_len);
+	if(skb == NULL)
+	{
+		printk(KERN_WARNING "%s: Memory squeeze, dropping packet.\n",
 			dev->name);
-                dev->stats.rx_dropped++;
-                while(pkt_len--)        /* Discard packet */
-                        inb(ioaddr);
-                spin_unlock_irqrestore(&lp->lock, flags);
-                return;
-        }
-        skb->dev = dev;
-        skb_put(skb, pkt_len);
-        skb->protocol = htons(ETH_P_LOCALTALK);
+		dev->stats.rx_dropped++;
+		while(pkt_len--)        /* Discard packet */
+			inb(ioaddr);
+		spin_unlock_irqrestore(&lp->lock, flags);
+		return;
+	}
+	skb->dev = dev;
+	skb_put(skb, pkt_len);
+	skb->protocol = htons(ETH_P_LOCALTALK);
 
-        insb(ioaddr, skb->data, pkt_len);               /* Eat the Data */
+	insb(ioaddr, skb->data, pkt_len);               /* Eat the Data */
 
-        if(lp->board==DAYNA)
-                outb(1, ioaddr+DAYNA_INT_CARD);         /* Interrupt the card */
+	if(lp->board==DAYNA)
+		outb(1, ioaddr+DAYNA_INT_CARD);         /* Interrupt the card */
 
-        spin_unlock_irqrestore(&lp->lock, flags);  /* Restore interrupts. */
+	spin_unlock_irqrestore(&lp->lock, flags);  /* Restore interrupts. */
 
-        /* Check for bad response length */
-        if(pkt_len < 0 || pkt_len > MAX_LLAP_SIZE)
-        {
+	/* Check for bad response length */
+	if(pkt_len < 0 || pkt_len > MAX_LLAP_SIZE)
+	{
 		printk(KERN_WARNING "%s: Bad packet length of %d bytes.\n",
 			dev->name, pkt_len);
-                dev->stats.tx_errors++;
-                dev_kfree_skb_any(skb);
-                return;
-        }
+		dev->stats.tx_errors++;
+		dev_kfree_skb_any(skb);
+		return;
+	}
 
-        /* Set nodeid and then get out. */
-        if(rsp_type == LAP_INIT_RSP)
-        {	/* Nodeid taken from received packet. */
-                lp->node_acquire = skb->data[0];
-                dev_kfree_skb_any(skb);
-                return;
-        }
+	/* Set nodeid and then get out. */
+	if(rsp_type == LAP_INIT_RSP)
+	{	/* Nodeid taken from received packet. */
+		lp->node_acquire = skb->data[0];
+		dev_kfree_skb_any(skb);
+		return;
+	}
 
-        /* One last check to make sure we have a good packet. */
-        if(rsp_type != LAP_RESPONSE)
-        {
-                printk(KERN_WARNING "%s: Bad packet type %d.\n", dev->name, rsp_type);
-                dev->stats.tx_errors++;
-                dev_kfree_skb_any(skb);
-                return;
-        }
+	/* One last check to make sure we have a good packet. */
+	if(rsp_type != LAP_RESPONSE)
+	{
+		printk(KERN_WARNING "%s: Bad packet type %d.\n", dev->name, rsp_type);
+		dev->stats.tx_errors++;
+		dev_kfree_skb_any(skb);
+		return;
+	}
 
-        skb_reset_mac_header(skb);    /* Point to entire packet. */
-        skb_pull(skb,3);
-        skb_reset_transport_header(skb);    /* Point to data (Skip header). */
+	skb_reset_mac_header(skb);    /* Point to entire packet. */
+	skb_pull(skb,3);
+	skb_reset_transport_header(skb);    /* Point to data (Skip header). */
 
-        /* Update the counters. */
-        dev->stats.rx_packets++;
-        dev->stats.rx_bytes += skb->len;
+	/* Update the counters. */
+	dev->stats.rx_packets++;
+	dev->stats.rx_bytes += skb->len;
 
-        /* Send packet to a higher place. */
-        netif_rx(skb);
+	/* Send packet to a higher place. */
+	netif_rx(skb);
 }
 
 static void cops_timeout(struct net_device *dev)
 {
-        struct cops_local *lp = netdev_priv(dev);
-        int ioaddr = dev->base_addr;
+	struct cops_local *lp = netdev_priv(dev);
+	int ioaddr = dev->base_addr;
 
 	dev->stats.tx_errors++;
-        if(lp->board==TANGENT)
-        {
+	if(lp->board==TANGENT)
+	{
 		if((inb(ioaddr+TANG_CARD_STATUS)&TANG_TX_READY)==0)
-               		printk(KERN_WARNING "%s: No TX complete interrupt.\n", dev->name);
+	       		printk(KERN_WARNING "%s: No TX complete interrupt.\n", dev->name);
 	}
 	printk(KERN_WARNING "%s: Transmit timed out.\n", dev->name);
 	cops_jumpstart(dev);	/* Restart the card. */
@@ -873,12 +873,12 @@ static void cops_timeout(struct net_device *dev)
 static netdev_tx_t cops_send_packet(struct sk_buff *skb,
 					  struct net_device *dev)
 {
-        struct cops_local *lp = netdev_priv(dev);
-        int ioaddr = dev->base_addr;
-        unsigned long flags;
+	struct cops_local *lp = netdev_priv(dev);
+	int ioaddr = dev->base_addr;
+	unsigned long flags;
 
-        /*
-         * Block a timer-based transmit from overlapping.
+	/*
+	 * Block a timer-based transmit from overlapping.
 	 */
 
 	netif_stop_queue(dev);
@@ -894,7 +894,7 @@ static netdev_tx_t cops_send_packet(struct sk_buff *skb,
 	/* Output IO length. */
 	outb(skb->len, ioaddr);
 	if(lp->board == DAYNA)
-               	outb(skb->len >> 8, ioaddr);
+	       	outb(skb->len >> 8, ioaddr);
 	else
 		outb((skb->len >> 8)&0x0FF, ioaddr);
 
@@ -902,7 +902,7 @@ static netdev_tx_t cops_send_packet(struct sk_buff *skb,
 	outb(LAP_WRITE, ioaddr);
 
 	if(lp->board == DAYNA)	/* Check the transmit buffer again. */
-        	while((inb(ioaddr+DAYNA_CARD_STATUS)&DAYNA_TX_READY)==0);
+		while((inb(ioaddr+DAYNA_CARD_STATUS)&DAYNA_TX_READY)==0);
 
 	outsb(ioaddr, skb->data, skb->len);	/* Send out the data. */
 
@@ -924,7 +924,7 @@ static netdev_tx_t cops_send_packet(struct sk_buff *skb,
 
 static void set_multicast_list(struct net_device *dev)
 {
-        if(cops_debug >= 3)
+	if(cops_debug >= 3)
 		printk("%s: set_multicast_list executed\n", dev->name);
 }
 
@@ -934,34 +934,34 @@ static void set_multicast_list(struct net_device *dev)
 
 static int cops_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 {
-        struct cops_local *lp = netdev_priv(dev);
-        struct sockaddr_at *sa = (struct sockaddr_at *)&ifr->ifr_addr;
-        struct atalk_addr *aa = (struct atalk_addr *)&lp->node_addr;
+	struct cops_local *lp = netdev_priv(dev);
+	struct sockaddr_at *sa = (struct sockaddr_at *)&ifr->ifr_addr;
+	struct atalk_addr *aa = (struct atalk_addr *)&lp->node_addr;
 
-        switch(cmd)
-        {
-                case SIOCSIFADDR:
+	switch(cmd)
+	{
+		case SIOCSIFADDR:
 			/* Get and set the nodeid and network # atalkd wants. */
 			cops_nodeid(dev, sa->sat_addr.s_node);
 			aa->s_net               = sa->sat_addr.s_net;
-                        aa->s_node              = lp->node_acquire;
+			aa->s_node              = lp->node_acquire;
 
 			/* Set broardcast address. */
-                        dev->broadcast[0]       = 0xFF;
+			dev->broadcast[0]       = 0xFF;
 
 			/* Set hardware address. */
-                        dev->dev_addr[0]        = aa->s_node;
-                        dev->addr_len           = 1;
-                        return 0;
+			dev->dev_addr[0]        = aa->s_node;
+			dev->addr_len           = 1;
+			return 0;
 
-                case SIOCGIFADDR:
-                        sa->sat_addr.s_net      = aa->s_net;
-                        sa->sat_addr.s_node     = aa->s_node;
-                        return 0;
+		case SIOCGIFADDR:
+			sa->sat_addr.s_net      = aa->s_net;
+			sa->sat_addr.s_node     = aa->s_node;
+			return 0;
 
-                default:
-                        return -EOPNOTSUPP;
-        }
+		default:
+			return -EOPNOTSUPP;
+	}
 }
 
 /*
@@ -978,7 +978,7 @@ static int cops_close(struct net_device *dev)
 		del_timer(&cops_timer);
 
 	netif_stop_queue(dev);
-        return 0;
+	return 0;
 }
 
 
@@ -998,7 +998,7 @@ static int __init cops_module_init(void)
 	cops_dev = cops_probe(-1);
 	if (IS_ERR(cops_dev))
 		return PTR_ERR(cops_dev);
-        return 0;
+	return 0;
 }
 
 static void __exit cops_module_exit(void)

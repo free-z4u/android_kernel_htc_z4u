@@ -51,8 +51,8 @@ typedef unsigned long   DWORD;          // 32-bit
 // which is NOT really a floating point number.
 typedef union tagUQuadWord {
     struct {
-        DWORD   dwLowDword;
-        DWORD   dwHighDword;
+	DWORD   dwLowDword;
+	DWORD   dwHighDword;
     } u;
     double      DoNotUseThisField;
 } UQuadWord;

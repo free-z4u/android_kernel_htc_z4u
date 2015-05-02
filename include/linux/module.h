@@ -139,13 +139,13 @@ extern const struct gtype##_id __mod_##gtype##_table		\
 /* Version of form [<epoch>:]<version>[-<extra-version>].
    Or for CVS/RCS ID version, everything but the number is stripped.
   <epoch>: A (small) unsigned integer which allows you to start versions
-           anew. If not mentioned, it's zero.  eg. "2:1.0" is after
+	   anew. If not mentioned, it's zero.  eg. "2:1.0" is after
 	   "1:2.0".
   <version>: The <version> may contain only alphanumerics and the
-           character `.'.  Ordered by numeric sort for numeric parts,
+	   character `.'.  Ordered by numeric sort for numeric parts,
 	   ascii sort for ascii parts (as per RPM or DEB algorithm).
   <extraversion>: Like <version>, but inserted for local
-           customizations, eg "rh3" or "rusty1".
+	   customizations, eg "rh3" or "rusty1".
 
   Using this automatically adds a checksum of the .c files and the
   local headers in "srcversion".

@@ -173,10 +173,10 @@ static int print_buffer(struct sk_buff *buf);
 
 static inline void solos_pop(struct atm_vcc *vcc, struct sk_buff *skb)
 {
-        if (vcc->pop)
-                vcc->pop(vcc, skb);
-        else
-                dev_kfree_skb_any(skb);
+	if (vcc->pop)
+		vcc->pop(vcc, skb);
+	else
+		dev_kfree_skb_any(skb);
 }
 
 static ssize_t solos_param_show(struct device *dev, struct device_attribute *attr,

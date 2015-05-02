@@ -87,20 +87,20 @@ typedef struct sctp_chunkhdr {
  */
 typedef enum {
 	SCTP_CID_DATA			= 0,
-        SCTP_CID_INIT			= 1,
-        SCTP_CID_INIT_ACK		= 2,
-        SCTP_CID_SACK			= 3,
-        SCTP_CID_HEARTBEAT		= 4,
-        SCTP_CID_HEARTBEAT_ACK		= 5,
-        SCTP_CID_ABORT			= 6,
-        SCTP_CID_SHUTDOWN		= 7,
-        SCTP_CID_SHUTDOWN_ACK		= 8,
-        SCTP_CID_ERROR			= 9,
-        SCTP_CID_COOKIE_ECHO		= 10,
-        SCTP_CID_COOKIE_ACK	        = 11,
-        SCTP_CID_ECN_ECNE		= 12,
-        SCTP_CID_ECN_CWR		= 13,
-        SCTP_CID_SHUTDOWN_COMPLETE	= 14,
+	SCTP_CID_INIT			= 1,
+	SCTP_CID_INIT_ACK		= 2,
+	SCTP_CID_SACK			= 3,
+	SCTP_CID_HEARTBEAT		= 4,
+	SCTP_CID_HEARTBEAT_ACK		= 5,
+	SCTP_CID_ABORT			= 6,
+	SCTP_CID_SHUTDOWN		= 7,
+	SCTP_CID_SHUTDOWN_ACK		= 8,
+	SCTP_CID_ERROR			= 9,
+	SCTP_CID_COOKIE_ECHO		= 10,
+	SCTP_CID_COOKIE_ACK	        = 11,
+	SCTP_CID_ECN_ECNE		= 12,
+	SCTP_CID_ECN_CWR		= 13,
+	SCTP_CID_SHUTDOWN_COMPLETE	= 14,
 
 	/* AUTH Extension Section 4.1 */
 	SCTP_CID_AUTH			= 0x0F,
@@ -231,8 +231,8 @@ typedef struct sctp_datahdr {
 } __packed sctp_datahdr_t;
 
 typedef struct sctp_data_chunk {
-        sctp_chunkhdr_t chunk_hdr;
-        sctp_datahdr_t  data_hdr;
+	sctp_chunkhdr_t chunk_hdr;
+	sctp_datahdr_t  data_hdr;
 } __packed sctp_data_chunk_t;
 
 /* DATA Chuck Specific Flags */
@@ -369,7 +369,7 @@ typedef __be32 sctp_dup_tsn_t;
 
 typedef union {
 	sctp_gap_ack_block_t	gab;
-        sctp_dup_tsn_t		dup;
+	sctp_dup_tsn_t		dup;
 } sctp_sack_variable_t;
 
 typedef struct sctp_sackhdr {
@@ -408,7 +408,7 @@ typedef struct sctp_heartbeat_chunk {
  * chunk descriptor.
  */
 typedef struct sctp_abort_chunk {
-        sctp_chunkhdr_t uh;
+	sctp_chunkhdr_t uh;
 } __packed sctp_abort_chunk_t;
 
 
@@ -420,8 +420,8 @@ typedef struct sctp_shutdownhdr {
 } __packed sctp_shutdownhdr_t;
 
 struct sctp_shutdown_chunk_t {
-        sctp_chunkhdr_t    chunk_hdr;
-        sctp_shutdownhdr_t shutdown_hdr;
+	sctp_chunkhdr_t    chunk_hdr;
+	sctp_shutdownhdr_t shutdown_hdr;
 } __packed;
 
 /* RFC 2960.  Section 3.3.10 Operation Error (ERROR) (9) */
@@ -433,7 +433,7 @@ typedef struct sctp_errhdr {
 } __packed sctp_errhdr_t;
 
 typedef struct sctp_operr_chunk {
-        sctp_chunkhdr_t chunk_hdr;
+	sctp_chunkhdr_t chunk_hdr;
 	sctp_errhdr_t   err_hdr;
 } __packed sctp_operr_chunk_t;
 

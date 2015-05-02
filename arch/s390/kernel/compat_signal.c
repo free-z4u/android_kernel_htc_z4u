@@ -165,11 +165,11 @@ asmlinkage long
 sys32_sigaction(int sig, const struct old_sigaction32 __user *act,
 		 struct old_sigaction32 __user *oact)
 {
-        struct k_sigaction new_ka, old_ka;
+	struct k_sigaction new_ka, old_ka;
 	unsigned long sa_handler, sa_restorer;
-        int ret;
+	int ret;
 
-        if (act) {
+	if (act) {
 		compat_old_sigset_t mask;
 		if (!access_ok(VERIFY_READ, act, sizeof(*act)) ||
 		    __get_user(sa_handler, &act->sa_handler) ||
@@ -180,9 +180,9 @@ sys32_sigaction(int sig, const struct old_sigaction32 __user *act,
 		new_ka.sa.sa_handler = (__sighandler_t) sa_handler;
 		new_ka.sa.sa_restorer = (void (*)(void)) sa_restorer;
 		siginitset(&new_ka.sa.sa_mask, mask);
-        }
+	}
 
-        ret = do_sigaction(sig, act ? &new_ka : NULL, oact ? &old_ka : NULL);
+	ret = do_sigaction(sig, act ? &new_ka : NULL, oact ? &old_ka : NULL);
 
 	if (!ret && oact) {
 		sa_handler = (unsigned long) old_ka.sa.sa_handler;
@@ -193,7 +193,7 @@ sys32_sigaction(int sig, const struct old_sigaction32 __user *act,
 		    __put_user(old_ka.sa.sa_flags, &oact->sa_flags) ||
 		    __put_user(old_ka.sa.sa_mask.sig[0], &oact->sa_mask))
 			return -EFAULT;
-        }
+	}
 
 	return ret;
 }
@@ -453,7 +453,7 @@ static inline int map_signal(int sig)
 	    && current_thread_info()->exec_domain->signal_invmap
 	    && sig < 32)
 		return current_thread_info()->exec_domain->signal_invmap[sig];
-        else
+	else
 		return sig;
 }
 
@@ -486,7 +486,7 @@ static int setup_frame32(int sig, struct k_sigaction *ka,
 		if (__put_user(S390_SYSCALL_OPCODE | __NR_sigreturn,
 			       (u16 __force __user *)(frame->retcode)))
 			goto give_sigsegv;
-        }
+	}
 
 	/* Set up backchain. */
 	if (__put_user(regs->gprs[15], (unsigned int __user *) frame))

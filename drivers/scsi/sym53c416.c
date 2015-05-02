@@ -216,11 +216,11 @@ typedef struct
 } host;
 
 static host hosts[MAXHOSTS] = {
-                       {0, 0, SYM53C416_SCSI_ID},
-                       {0, 0, SYM53C416_SCSI_ID},
-                       {0, 0, SYM53C416_SCSI_ID},
-                       {0, 0, SYM53C416_SCSI_ID}
-                       };
+		       {0, 0, SYM53C416_SCSI_ID},
+		       {0, 0, SYM53C416_SCSI_ID},
+		       {0, 0, SYM53C416_SCSI_ID},
+		       {0, 0, SYM53C416_SCSI_ID}
+		       };
 
 static int host_index = 0;
 static char info[120];
@@ -558,12 +558,12 @@ void sym53c416_setup(char *str, int *ints)
 	}
 	for(i = 0; i < host_index && i >= 0; i++)
 	        if(hosts[i].base == ints[1])
-        		i = -2;
+			i = -2;
 	if(i >= 0)
 	{
-        	hosts[host_index].base = ints[1];
-        	hosts[host_index].irq = (ints[0] == 2)? ints[2] : 0;
-        	host_index++;
+		hosts[host_index].base = ints[1];
+		hosts[host_index].irq = (ints[0] == 2)? ints[2] : 0;
+		host_index++;
 	}
 }
 

@@ -53,7 +53,7 @@ void machine_kexec_cleanup(struct kimage *image)
 
 static void kexec_info(struct kimage *image)
 {
-        int i;
+	int i;
 	printk("kexec information\n");
 	for (i = 0; i < image->nr_segments; i++) {
 	        printk("  segment[%d]: 0x%08x - 0x%08x (0x%08x)\n",

@@ -1287,24 +1287,24 @@ static void do_unbind_rebind(struct usb_device *udev, int action)
 
        config = udev->actconfig;
        if (config) {
-               for (i = 0; i < config->desc.bNumInterfaces; ++i) {
-                       intf = config->interface[i];
-                       switch (action) {
-                       case DO_UNBIND:
+	       for (i = 0; i < config->desc.bNumInterfaces; ++i) {
+		       intf = config->interface[i];
+		       switch (action) {
+		       case DO_UNBIND:
 								pr_info("[usbh][rene] %s(%d) DO_UNBIND i=%d \n", __func__, __LINE__, i);
-                               if (intf->dev.driver) {
-                                       drv = to_usb_driver(intf->dev.driver);
-                                       if (!drv->suspend || !drv->resume)
-                                               usb_forced_unbind_intf(intf);
-                               }
-                               break;
-                       case DO_REBIND:
+			       if (intf->dev.driver) {
+				       drv = to_usb_driver(intf->dev.driver);
+				       if (!drv->suspend || !drv->resume)
+					       usb_forced_unbind_intf(intf);
+			       }
+			       break;
+		       case DO_REBIND:
 							pr_info("[usbh][rene] %s(%d) DO_REBIND i=%d \n", __func__, __LINE__, i);
-                               if (intf->needs_binding)
-                                       usb_rebind_intf(intf);
-                               break;
-                       }
-               }
+			       if (intf->needs_binding)
+				       usb_rebind_intf(intf);
+			       break;
+		       }
+	       }
        }
 }
 

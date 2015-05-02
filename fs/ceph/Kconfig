@@ -1,5 +1,5 @@
 config CEPH_FS
-        tristate "Ceph distributed file system (EXPERIMENTAL)"
+	tristate "Ceph distributed file system (EXPERIMENTAL)"
 	depends on INET && EXPERIMENTAL
 	select CEPH_LIB
 	select LIBCRC32C

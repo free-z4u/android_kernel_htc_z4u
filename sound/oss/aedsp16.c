@@ -416,7 +416,7 @@ static int      ver[CARDVERDIGITS] __initdata = {0, 0};	/* DSP Ver:
 
 #if defined(CONFIG_SC6600)
 static int	hard_cfg[2]     /* lo<-hard_cfg[0] hi<-hard_cfg[1]      */
-                     __initdata = { 0, 0};
+		     __initdata = { 0, 0};
 #endif /* CONFIG_SC6600 */
 
 #if defined(CONFIG_SC6600)

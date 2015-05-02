@@ -31,15 +31,15 @@
 
    Here's a block diagram of how most of the cards work:
 
-                  +-----------+
-           record |           |<-------------------- Inputs
-          <-------|           |        |
+		  +-----------+
+	   record |           |<-------------------- Inputs
+	  <-------|           |        |
      PCI          | Transport |        |
      bus          |  engine   |       \|/
-          ------->|           |    +-------+
-            play  |           |--->|monitor|-------> Outputs
-                  +-----------+    | mixer |
-                                   +-------+
+	  ------->|           |    +-------+
+	    play  |           |--->|monitor|-------> Outputs
+		  +-----------+    | mixer |
+				   +-------+
 
    The lines going to and from the PCI bus represent "pipes".  A pipe performs
    audio transport - moving audio data to and from buffers on the host via
@@ -60,15 +60,15 @@
    Mia has a feature called "virtual outputs."
 
 
-                  +-----------+
-           record |           |<----------------------------- Inputs
-          <-------|           |                  |
+		  +-----------+
+	   record |           |<----------------------------- Inputs
+	  <-------|           |                  |
      PCI          | Transport |                  |
      bus          |  engine   |                 \|/
-          ------->|           |   +------+   +-------+
-            play  |           |-->|vmixer|-->|monitor|-------> Outputs
-                  +-----------+   +------+   | mixer |
-                                             +-------+
+	  ------->|           |   +------+   +-------+
+	    play  |           |-->|vmixer|-->|monitor|-------> Outputs
+		  +-----------+   +------+   | mixer |
+					     +-------+
 
 
    Obviously, the difference here is the box labeled "vmixer."  Vmixer is

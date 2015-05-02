@@ -640,7 +640,7 @@ static netdev_tx_t sirdev_hard_xmit(struct sk_buff *skb,
 	/* serialize with write completion */
 	spin_lock_irqsave(&dev->tx_lock, flags);
 
-        /* Copy skb to tx_buff while wrapping, stuffing and making CRC */
+	/* Copy skb to tx_buff while wrapping, stuffing and making CRC */
 	dev->tx_buff.len = async_wrap_skb(skb, dev->tx_buff.data, dev->tx_buff.truesize);
 
 	/* transmission will start now - disable receive.

@@ -449,7 +449,7 @@ struct cmd {
 #define TX_RING_BASE		0x3800
 
 struct tx_desc{
-        aceaddr	addr;
+	aceaddr	addr;
 	u32	flagsize;
 #if 0
 /*

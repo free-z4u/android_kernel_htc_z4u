@@ -510,7 +510,7 @@ static int dhd_toe_set(dhd_info_t *dhd, int idx, uint32 toe_ol);
 #endif /* TOE */
 
 static int dhd_wl_host_event(dhd_info_t *dhd, int *ifidx, void *pktdata,
-                             wl_event_msg_t *event_ptr, void **data_ptr);
+			     wl_event_msg_t *event_ptr, void **data_ptr);
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) && defined(CONFIG_PM_SLEEP)
 static int dhd_sleep_pm_callback(struct notifier_block *nfb, unsigned long action, void *ignored)
@@ -1638,7 +1638,7 @@ dhd_toe_set(dhd_info_t *dhd, int ifidx, uint32 toe_ol)
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 24)
 static void dhd_ethtool_get_drvinfo(struct net_device *net,
-                                    struct ethtool_drvinfo *info)
+				    struct ethtool_drvinfo *info)
 {
 	dhd_info_t *dhd = *(dhd_info_t **)netdev_priv(net);
 

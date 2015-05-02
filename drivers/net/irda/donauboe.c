@@ -253,23 +253,23 @@ toshoboe_dumpregs (struct toshoboe_cb *self)
 
   printk (KERN_ERR DRIVER_NAME ": Register dump:\n");
   printk (KERN_ERR "Interrupts: Tx:%d Rx:%d TxUnder:%d RxOver:%d Sip:%d\n",
-          self->int_tx, self->int_rx, self->int_txunder, self->int_rxover,
-          self->int_sip);
+	  self->int_tx, self->int_rx, self->int_txunder, self->int_rxover,
+	  self->int_sip);
   printk (KERN_ERR "RX %02x TX %02x RingBase %08x\n",
-          INB (OBOE_RXSLOT), INB (OBOE_TXSLOT), ringbase);
+	  INB (OBOE_RXSLOT), INB (OBOE_TXSLOT), ringbase);
   printk (KERN_ERR "RING_SIZE %02x IER %02x ISR %02x\n",
-          INB (OBOE_RING_SIZE), INB (OBOE_IER), INB (OBOE_ISR));
+	  INB (OBOE_RING_SIZE), INB (OBOE_IER), INB (OBOE_ISR));
   printk (KERN_ERR "CONFIG1 %02x STATUS %02x\n",
-          INB (OBOE_CONFIG1), INB (OBOE_STATUS));
+	  INB (OBOE_CONFIG1), INB (OBOE_STATUS));
   printk (KERN_ERR "CONFIG0 %02x%02x ENABLE %02x%02x\n",
-          INB (OBOE_CONFIG0H), INB (OBOE_CONFIG0L),
-          INB (OBOE_ENABLEH), INB (OBOE_ENABLEL));
+	  INB (OBOE_CONFIG0H), INB (OBOE_CONFIG0L),
+	  INB (OBOE_ENABLEH), INB (OBOE_ENABLEL));
   printk (KERN_ERR "NEW_PCONFIG %02x%02x CURR_PCONFIG %02x%02x\n",
-          INB (OBOE_NEW_PCONFIGH), INB (OBOE_NEW_PCONFIGL),
-          INB (OBOE_CURR_PCONFIGH), INB (OBOE_CURR_PCONFIGL));
+	  INB (OBOE_NEW_PCONFIGH), INB (OBOE_NEW_PCONFIGL),
+	  INB (OBOE_CURR_PCONFIGH), INB (OBOE_CURR_PCONFIGL));
   printk (KERN_ERR "MAXLEN %02x%02x RXCOUNT %02x%02x\n",
-          INB (OBOE_MAXLENH), INB (OBOE_MAXLENL),
-          INB (OBOE_RXCOUNTL), INB (OBOE_RXCOUNTH));
+	  INB (OBOE_MAXLENH), INB (OBOE_MAXLENL),
+	  INB (OBOE_RXCOUNTL), INB (OBOE_RXCOUNTH));
 
   if (self->ring)
     {
@@ -278,11 +278,11 @@ toshoboe_dumpregs (struct toshoboe_cb *self)
       printk (KERN_ERR "Ring at %08x:\n", ringbase);
       printk (KERN_ERR "RX:");
       for (i = 0; i < RX_SLOTS; ++i)
-        printk (" (%d,%02x)",self->ring->rx[i].len,self->ring->rx[i].control);
+	printk (" (%d,%02x)",self->ring->rx[i].len,self->ring->rx[i].control);
       printk ("\n");
       printk (KERN_ERR "TX:");
       for (i = 0; i < RX_SLOTS; ++i)
-        printk (" (%d,%02x)",self->ring->tx[i].len,self->ring->tx[i].control);
+	printk (" (%d,%02x)",self->ring->tx[i].len,self->ring->tx[i].control);
       printk ("\n");
     }
 }
@@ -369,7 +369,7 @@ toshoboe_setbaud (struct toshoboe_cb *self)
     default:
 
       printk (KERN_ERR DRIVER_NAME ": switch to unsupported baudrate %d\n",
-              self->speed);
+	      self->speed);
       return;
     }
 
@@ -424,21 +424,21 @@ toshoboe_setbaud (struct toshoboe_cb *self)
     case 115200:
       config0l = OBOE_CONFIG0L_ENSIR;
       if (self->async)
-        {
-          /*Set to character based reception */
-          /*System will lock if MAXLEN=0 */
-          /*so have to be careful */
-          OUTB (0x01, OBOE_MAXLENH);
-          OUTB (0x01, OBOE_MAXLENL);
-          OUTB (0x00, OBOE_MAXLENH);
-        }
+	{
+	  /*Set to character based reception */
+	  /*System will lock if MAXLEN=0 */
+	  /*so have to be careful */
+	  OUTB (0x01, OBOE_MAXLENH);
+	  OUTB (0x01, OBOE_MAXLENL);
+	  OUTB (0x00, OBOE_MAXLENH);
+	}
       else
-        {
-          /*Set to packet based reception */
-          config0l |= OBOE_CONFIG0L_ENSIRF;
-          OUTB (RX_LEN >> 8, OBOE_MAXLENH);
-          OUTB (RX_LEN & 0xff, OBOE_MAXLENL);
-        }
+	{
+	  /*Set to packet based reception */
+	  config0l |= OBOE_CONFIG0L_ENSIRF;
+	  OUTB (RX_LEN >> 8, OBOE_MAXLENH);
+	  OUTB (RX_LEN & 0xff, OBOE_MAXLENL);
+	}
       break;
 
 #ifdef USE_MIR
@@ -568,7 +568,7 @@ toshoboe_startchip (struct toshoboe_cb *self)
 
   /*Enable ints */
   OUTB (OBOE_INT_TXDONE  | OBOE_INT_RXDONE |
-        OBOE_INT_TXUNDER | OBOE_INT_RXOVER | OBOE_INT_SIP , OBOE_IER);
+	OBOE_INT_TXUNDER | OBOE_INT_RXOVER | OBOE_INT_SIP , OBOE_IER);
 
   /*Acknoledge any pending interrupts */
   OUTB (0xff, OBOE_ISR);
@@ -643,7 +643,7 @@ toshoboe_makemttpacket (struct toshoboe_cb *self, void *buf, int mtt)
   if (xbofs > TX_LEN)
     {
       printk (KERN_ERR DRIVER_NAME ": wanted %d bytes MTT but TX_LEN is %d\n",
-              xbofs, TX_LEN);
+	      xbofs, TX_LEN);
       xbofs = TX_LEN;
     }
 
@@ -722,11 +722,11 @@ toshoboe_probeinterrupt (int irq, void *dev_id)
 
       txp = INB (OBOE_TXSLOT) & OBOE_SLOT_MASK;
       if (self->ring->tx[txp].control & OBOE_CTL_TX_HW_OWNS)
-        {
-          self->int_tx+=100;
-          PROBE_DEBUG("S");
-          toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX | OBOE_CONFIG0H_LOOP);
-        }
+	{
+	  self->int_tx+=100;
+	  PROBE_DEBUG("S");
+	  toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX | OBOE_CONFIG0H_LOOP);
+	}
     }
 
   if (irqstat & OBOE_INT_RXDONE) {
@@ -827,10 +827,10 @@ toshoboe_probe (struct toshoboe_cb *self)
   IRDA_DEBUG (4, "%s()\n", __func__);
 
   if (request_irq (self->io.irq, toshoboe_probeinterrupt,
-                   self->io.irqflags, "toshoboe", (void *) self))
+		   self->io.irqflags, "toshoboe", (void *) self))
     {
       printk (KERN_ERR DRIVER_NAME ": probe failed to allocate irq %d\n",
-              self->io.irq);
+	      self->io.irq);
       return 0;
     }
 
@@ -854,35 +854,35 @@ toshoboe_probe (struct toshoboe_cb *self)
       self->ring->tx[self->txs].control =
 /*   (FIR only) OBOE_CTL_TX_SIP needed for switching to next slot */
 /*    MIR: all received data is stored in one slot */
-        (fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX
-              : OBOE_CTL_TX_HW_OWNS ;
+	(fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX
+	      : OBOE_CTL_TX_HW_OWNS ;
       self->ring->tx[self->txs].len =
-        toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
+	toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
       self->txs++;
       self->txs %= TX_SLOTS;
 
       self->ring->tx[self->txs].control =
-        (fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_SIP
-              : OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX ;
+	(fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_SIP
+	      : OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX ;
       self->ring->tx[self->txs].len =
-        toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
+	toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
       self->txs++;
       self->txs %= TX_SLOTS;
 
       self->ring->tx[self->txs].control =
-        (fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX
-              : OBOE_CTL_TX_HW_OWNS ;
+	(fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX
+	      : OBOE_CTL_TX_HW_OWNS ;
       self->ring->tx[self->txs].len =
-        toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
+	toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
       self->txs++;
       self->txs %= TX_SLOTS;
 
       self->ring->tx[self->txs].control =
-        (fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX
-              | OBOE_CTL_TX_SIP     | OBOE_CTL_TX_BAD_CRC
-              : OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX ;
+	(fir) ? OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX
+	      | OBOE_CTL_TX_SIP     | OBOE_CTL_TX_BAD_CRC
+	      : OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX ;
       self->ring->tx[self->txs].len =
-        toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
+	toshoboe_maketestpacket (self->tx_bufs[self->txs], 0, fir);
       self->txs++;
       self->txs %= TX_SLOTS;
 
@@ -893,21 +893,21 @@ toshoboe_probe (struct toshoboe_cb *self)
       i = 0;
       n = fir ? 1 : 4;
       while (toshoboe_numvalidrcvs (self) != n)
-        {
-          if (i > 4800)
-              return toshoboe_probefail (self, "filter test");
-          udelay ((9600*(TT_LEN+16))/self->speed);
-          i++;
-        }
+	{
+	  if (i > 4800)
+	      return toshoboe_probefail (self, "filter test");
+	  udelay ((9600*(TT_LEN+16))/self->speed);
+	  i++;
+	}
 
       n = fir ? 203 : 102;
       while ((toshoboe_numrcvs(self) != self->int_rx) || (self->int_tx != n))
-        {
-          if (i > 4800)
-              return toshoboe_probefail (self, "interrupt test");
-          udelay ((9600*(TT_LEN+16))/self->speed);
-          i++;
-        }
+	{
+	  if (i > 4800)
+	      return toshoboe_probefail (self, "interrupt test");
+	  udelay ((9600*(TT_LEN+16))/self->speed);
+	  i++;
+	}
      toshoboe_dumprx (self,i);
 
      }
@@ -939,7 +939,7 @@ toshoboe_probe (struct toshoboe_cb *self)
   while (toshoboe_numvalidrcvs (self) != 4)
     {
       if (i > 100)
-          return toshoboe_probefail (self, "Async test");
+	  return toshoboe_probefail (self, "Async test");
       udelay (100);
       i++;
     }
@@ -947,7 +947,7 @@ toshoboe_probe (struct toshoboe_cb *self)
   while ((toshoboe_numrcvs (self) != self->int_rx) || (self->int_tx != 1))
     {
       if (i > 100)
-          return toshoboe_probefail (self, "Async interrupt test");
+	  return toshoboe_probefail (self, "Async interrupt test");
       udelay (100);
       i++;
     }
@@ -1010,32 +1010,32 @@ toshoboe_hard_xmit (struct sk_buff *skb, struct net_device *dev)
       spin_lock_irqsave(&self->spinlock, flags);
 
       if (self->txpending || skb->len)
-        {
-          self->new_speed = speed;
-          IRDA_DEBUG (1, "%s: Queued TxDone scheduled speed change %d\n" ,
+	{
+	  self->new_speed = speed;
+	  IRDA_DEBUG (1, "%s: Queued TxDone scheduled speed change %d\n" ,
 		      __func__, speed);
-          /* if no data, that's all! */
-          if (!skb->len)
-            {
+	  /* if no data, that's all! */
+	  if (!skb->len)
+	    {
 	      spin_unlock_irqrestore(&self->spinlock, flags);
-              dev_kfree_skb (skb);
-              return NETDEV_TX_OK;
-            }
-          /* True packet, go on, but */
-          /* do not accept anything before change speed execution */
-          netif_stop_queue(dev);
-          /* ready to process TxDone interrupt */
+	      dev_kfree_skb (skb);
+	      return NETDEV_TX_OK;
+	    }
+	  /* True packet, go on, but */
+	  /* do not accept anything before change speed execution */
+	  netif_stop_queue(dev);
+	  /* ready to process TxDone interrupt */
 	  spin_unlock_irqrestore(&self->spinlock, flags);
-        }
+	}
       else
-        {
-          /* idle and no data, change speed now */
-          self->speed = speed;
-          toshoboe_setbaud (self);
+	{
+	  /* idle and no data, change speed now */
+	  self->speed = speed;
+	  toshoboe_setbaud (self);
 	  spin_unlock_irqrestore(&self->spinlock, flags);
-          dev_kfree_skb (skb);
-          return NETDEV_TX_OK;
-        }
+	  dev_kfree_skb (skb);
+	  return NETDEV_TX_OK;
+	}
 
     }
 
@@ -1045,10 +1045,10 @@ toshoboe_hard_xmit (struct sk_buff *skb, struct net_device *dev)
       spin_lock_irqsave(&self->spinlock, flags);
 
       if (self->txpending)
-        {
+	{
 	  spin_unlock_irqrestore(&self->spinlock, flags);
-          return NETDEV_TX_BUSY;
-        }
+	  return NETDEV_TX_BUSY;
+	}
 
       /* If in SIR mode we need to generate a string of XBOFs */
       /* In MIR and FIR we need to generate a string of data */
@@ -1056,38 +1056,38 @@ toshoboe_hard_xmit (struct sk_buff *skb, struct net_device *dev)
 
       mtt = toshoboe_makemttpacket (self, self->tx_bufs[self->txs], mtt);
       IRDA_DEBUG (1, "%s.mtt:%x(%x)%d\n", __func__
-          ,skb->len,mtt,self->txpending);
+	  ,skb->len,mtt,self->txpending);
       if (mtt)
-        {
-          self->ring->tx[self->txs].len = mtt & 0xfff;
+	{
+	  self->ring->tx[self->txs].len = mtt & 0xfff;
 
-          ctl = OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX;
-          if (INB (OBOE_ENABLEH) & OBOE_ENABLEH_FIRON)
-            {
-              ctl |= OBOE_CTL_TX_BAD_CRC | OBOE_CTL_TX_SIP ;
-            }
+	  ctl = OBOE_CTL_TX_HW_OWNS | OBOE_CTL_TX_RTCENTX;
+	  if (INB (OBOE_ENABLEH) & OBOE_ENABLEH_FIRON)
+	    {
+	      ctl |= OBOE_CTL_TX_BAD_CRC | OBOE_CTL_TX_SIP ;
+	    }
 #ifdef USE_MIR
-          else if (INB (OBOE_ENABLEH) & OBOE_ENABLEH_MIRON)
-            {
-              ctl |= OBOE_CTL_TX_BAD_CRC;
-            }
+	  else if (INB (OBOE_ENABLEH) & OBOE_ENABLEH_MIRON)
+	    {
+	      ctl |= OBOE_CTL_TX_BAD_CRC;
+	    }
 #endif
-          self->ring->tx[self->txs].control = ctl;
+	  self->ring->tx[self->txs].control = ctl;
 
-          OUTB (0x0, OBOE_ENABLEH);
-          /* It is only a timer. Do not send mtt packet outside! */
-          toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX | OBOE_CONFIG0H_LOOP);
+	  OUTB (0x0, OBOE_ENABLEH);
+	  /* It is only a timer. Do not send mtt packet outside! */
+	  toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX | OBOE_CONFIG0H_LOOP);
 
-          self->txpending++;
+	  self->txpending++;
 
-          self->txs++;
-          self->txs %= TX_SLOTS;
+	  self->txs++;
+	  self->txs %= TX_SLOTS;
 
-        }
+	}
       else
-        {
-          printk(KERN_ERR DRIVER_NAME ": problem with mtt packet - ignored\n");
-        }
+	{
+	  printk(KERN_ERR DRIVER_NAME ": problem with mtt packet - ignored\n");
+	}
       spin_unlock_irqrestore(&self->spinlock, flags);
     }
 
@@ -1100,7 +1100,7 @@ dumpbufs(skb->data,skb->len,'>');
   if (self->ring->tx[self->txs].control & OBOE_CTL_TX_HW_OWNS)
     {
       IRDA_DEBUG (0, "%s.ful:%x(%x)%x\n", __func__
-          ,skb->len, self->ring->tx[self->txs].control, self->txpending);
+	  ,skb->len, self->ring->tx[self->txs].control, self->txpending);
       toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX);
       spin_unlock_irqrestore(&self->spinlock, flags);
       return NETDEV_TX_BUSY;
@@ -1173,146 +1173,146 @@ toshoboe_interrupt (int irq, void *dev_id)
       self->txpending = 0;
 
       for (i = 0; i < TX_SLOTS; ++i)
-        {
-          if (self->ring->tx[i].control & OBOE_CTL_TX_HW_OWNS)
-              self->txpending++;
-        }
+	{
+	  if (self->ring->tx[i].control & OBOE_CTL_TX_HW_OWNS)
+	      self->txpending++;
+	}
       IRDA_DEBUG (1, "%s.txd(%x)%x/%x\n", __func__
-          ,irqstat,txp,self->txpending);
+	  ,irqstat,txp,self->txpending);
 
       txp = INB (OBOE_TXSLOT) & OBOE_SLOT_MASK;
 
       /* Got anything queued ? start it together */
       if (self->ring->tx[txp].control & OBOE_CTL_TX_HW_OWNS)
-        {
-          txpc = txp;
+	{
+	  txpc = txp;
 #ifdef OPTIMIZE_TX
-          while (self->ring->tx[txpc].control & OBOE_CTL_TX_HW_OWNS)
-            {
-              txp = txpc;
-              txpc++;
-              txpc %= TX_SLOTS;
-              self->netdev->stats.tx_packets++;
-              if (self->ring->tx[txpc].control & OBOE_CTL_TX_HW_OWNS)
-                  self->ring->tx[txp].control &= ~OBOE_CTL_TX_RTCENTX;
-            }
-          self->netdev->stats.tx_packets--;
+	  while (self->ring->tx[txpc].control & OBOE_CTL_TX_HW_OWNS)
+	    {
+	      txp = txpc;
+	      txpc++;
+	      txpc %= TX_SLOTS;
+	      self->netdev->stats.tx_packets++;
+	      if (self->ring->tx[txpc].control & OBOE_CTL_TX_HW_OWNS)
+		  self->ring->tx[txp].control &= ~OBOE_CTL_TX_RTCENTX;
+	    }
+	  self->netdev->stats.tx_packets--;
 #else
-          self->netdev->stats.tx_packets++;
+	  self->netdev->stats.tx_packets++;
 #endif
-          toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX);
-        }
+	  toshoboe_start_DMA(self, OBOE_CONFIG0H_ENTX);
+	}
 
       if ((!self->txpending) && (self->new_speed))
-        {
-          self->speed = self->new_speed;
-          IRDA_DEBUG (1, "%s: Executed TxDone scheduled speed change %d\n",
+	{
+	  self->speed = self->new_speed;
+	  IRDA_DEBUG (1, "%s: Executed TxDone scheduled speed change %d\n",
 		      __func__, self->speed);
-          toshoboe_setbaud (self);
-        }
+	  toshoboe_setbaud (self);
+	}
 
       /* Tell network layer that we want more frames */
       if (!self->new_speed)
-          netif_wake_queue(self->netdev);
+	  netif_wake_queue(self->netdev);
     }
 
   if (irqstat & OBOE_INT_RXDONE)
     {
       while (!(self->ring->rx[self->rxs].control & OBOE_CTL_RX_HW_OWNS))
-        {
-          int len = self->ring->rx[self->rxs].len;
-          skb = NULL;
-          IRDA_DEBUG (3, "%s.rcv:%x(%x)\n", __func__
+	{
+	  int len = self->ring->rx[self->rxs].len;
+	  skb = NULL;
+	  IRDA_DEBUG (3, "%s.rcv:%x(%x)\n", __func__
 		      ,len,self->ring->rx[self->rxs].control);
 
 #ifdef DUMP_PACKETS
 dumpbufs(self->rx_bufs[self->rxs],len,'<');
 #endif
 
-          if (self->ring->rx[self->rxs].control == 0)
-            {
-              __u8 enable = INB (OBOE_ENABLEH);
+	  if (self->ring->rx[self->rxs].control == 0)
+	    {
+	      __u8 enable = INB (OBOE_ENABLEH);
 
-              /* In SIR mode we need to check the CRC as this */
-              /* hasn't been done by the hardware */
-              if (enable & OBOE_ENABLEH_SIRON)
-                {
-                  if (!toshoboe_checkfcs (self->rx_bufs[self->rxs], len))
-                      len = 0;
-                  /*Trim off the CRC */
-                  if (len > 1)
-                      len -= 2;
-                  else
-                      len = 0;
-                  IRDA_DEBUG (1, "%s.SIR:%x(%x)\n", __func__, len,enable);
-                }
+	      /* In SIR mode we need to check the CRC as this */
+	      /* hasn't been done by the hardware */
+	      if (enable & OBOE_ENABLEH_SIRON)
+		{
+		  if (!toshoboe_checkfcs (self->rx_bufs[self->rxs], len))
+		      len = 0;
+		  /*Trim off the CRC */
+		  if (len > 1)
+		      len -= 2;
+		  else
+		      len = 0;
+		  IRDA_DEBUG (1, "%s.SIR:%x(%x)\n", __func__, len,enable);
+		}
 
 #ifdef USE_MIR
-              else if (enable & OBOE_ENABLEH_MIRON)
-                {
-                  if (len > 1)
-                      len -= 2;
-                  else
-                      len = 0;
-                  IRDA_DEBUG (2, "%s.MIR:%x(%x)\n", __func__, len,enable);
-                }
+	      else if (enable & OBOE_ENABLEH_MIRON)
+		{
+		  if (len > 1)
+		      len -= 2;
+		  else
+		      len = 0;
+		  IRDA_DEBUG (2, "%s.MIR:%x(%x)\n", __func__, len,enable);
+		}
 #endif
-              else if (enable & OBOE_ENABLEH_FIRON)
-                {
-                  if (len > 3)
-                      len -= 4;   /*FIXME: check this */
-                  else
-                      len = 0;
-                  IRDA_DEBUG (1, "%s.FIR:%x(%x)\n", __func__, len,enable);
-                }
-              else
-                  IRDA_DEBUG (0, "%s.?IR:%x(%x)\n", __func__, len,enable);
+	      else if (enable & OBOE_ENABLEH_FIRON)
+		{
+		  if (len > 3)
+		      len -= 4;   /*FIXME: check this */
+		  else
+		      len = 0;
+		  IRDA_DEBUG (1, "%s.FIR:%x(%x)\n", __func__, len,enable);
+		}
+	      else
+		  IRDA_DEBUG (0, "%s.?IR:%x(%x)\n", __func__, len,enable);
 
-              if (len)
-                {
-                  skb = dev_alloc_skb (len + 1);
-                  if (skb)
-                    {
-                      skb_reserve (skb, 1);
+	      if (len)
+		{
+		  skb = dev_alloc_skb (len + 1);
+		  if (skb)
+		    {
+		      skb_reserve (skb, 1);
 
-                      skb_put (skb, len);
-                      skb_copy_to_linear_data(skb, self->rx_bufs[self->rxs],
+		      skb_put (skb, len);
+		      skb_copy_to_linear_data(skb, self->rx_bufs[self->rxs],
 					      len);
-                      self->netdev->stats.rx_packets++;
-                      skb->dev = self->netdev;
-                      skb_reset_mac_header(skb);
-                      skb->protocol = htons (ETH_P_IRDA);
-                    }
-                  else
-                    {
-                      printk (KERN_INFO
-                              "%s(), memory squeeze, dropping frame.\n",
+		      self->netdev->stats.rx_packets++;
+		      skb->dev = self->netdev;
+		      skb_reset_mac_header(skb);
+		      skb->protocol = htons (ETH_P_IRDA);
+		    }
+		  else
+		    {
+		      printk (KERN_INFO
+			      "%s(), memory squeeze, dropping frame.\n",
 			      __func__);
-                    }
-                }
-            }
-          else
-            {
-            /* TODO: =========================================== */
-            /*  if OBOE_CTL_RX_LENGTH, our buffers are too small */
-            /* (MIR or FIR) data is lost. */
-            /* (SIR) data is splitted in several slots. */
-            /* we have to join all the received buffers received */
-            /*in a large buffer before checking CRC. */
-            IRDA_DEBUG (0, "%s.err:%x(%x)\n", __func__
-                ,len,self->ring->rx[self->rxs].control);
-            }
+		    }
+		}
+	    }
+	  else
+	    {
+	    /* TODO: =========================================== */
+	    /*  if OBOE_CTL_RX_LENGTH, our buffers are too small */
+	    /* (MIR or FIR) data is lost. */
+	    /* (SIR) data is splitted in several slots. */
+	    /* we have to join all the received buffers received */
+	    /*in a large buffer before checking CRC. */
+	    IRDA_DEBUG (0, "%s.err:%x(%x)\n", __func__
+		,len,self->ring->rx[self->rxs].control);
+	    }
 
-          self->ring->rx[self->rxs].len = 0x0;
-          self->ring->rx[self->rxs].control = OBOE_CTL_RX_HW_OWNS;
+	  self->ring->rx[self->rxs].len = 0x0;
+	  self->ring->rx[self->rxs].control = OBOE_CTL_RX_HW_OWNS;
 
-          self->rxs++;
-          self->rxs %= RX_SLOTS;
+	  self->rxs++;
+	  self->rxs %= RX_SLOTS;
 
-          if (skb)
-              netif_rx (skb);
+	  if (skb)
+	      netif_rx (skb);
 
-        }
+	}
     }
 
   if (irqstat & OBOE_INT_TXUNDER)
@@ -1352,7 +1352,7 @@ toshoboe_net_open (struct net_device *dev)
     return 0;
 
   rc = request_irq (self->io.irq, toshoboe_interrupt,
-                    IRQF_SHARED | IRQF_DISABLED, dev->name, self);
+		    IRQF_SHARED | IRQF_DISABLED, dev->name, self);
   if (rc)
   	return rc;
 
@@ -1437,7 +1437,7 @@ toshoboe_net_ioctl (struct net_device *dev, struct ifreq *rq, int cmd)
        * interrupt context.
        */
       IRDA_DEBUG (1, "%s(BANDWIDTH), %s, (%X/%ld\n", __func__
-          ,dev->name, INB (OBOE_STATUS), irq->ifr_baudrate );
+	  ,dev->name, INB (OBOE_STATUS), irq->ifr_baudrate );
       if (!in_interrupt () && !capable (CAP_NET_ADMIN)) {
 	ret = -EPERM;
 	goto out;
@@ -1450,7 +1450,7 @@ toshoboe_net_ioctl (struct net_device *dev, struct ifreq *rq, int cmd)
       break;
     case SIOCSMEDIABUSY:       /* Set media busy */
       IRDA_DEBUG (1, "%s(MEDIABUSY), %s, (%X/%x)\n", __func__
-          ,dev->name, INB (OBOE_STATUS), capable (CAP_NET_ADMIN) );
+	  ,dev->name, INB (OBOE_STATUS), capable (CAP_NET_ADMIN) );
       if (!capable (CAP_NET_ADMIN)) {
 	ret = -EPERM;
 	goto out;
@@ -1460,7 +1460,7 @@ toshoboe_net_ioctl (struct net_device *dev, struct ifreq *rq, int cmd)
     case SIOCGRECEIVING:       /* Check if we are receiving right now */
       irq->ifr_receiving = (INB (OBOE_STATUS) & OBOE_STATUS_RXBUSY) ? 1 : 0;
       IRDA_DEBUG (3, "%s(RECEIVING), %s, (%X/%x)\n", __func__
-          ,dev->name, INB (OBOE_STATUS), irq->ifr_receiving );
+	  ,dev->name, INB (OBOE_STATUS), irq->ifr_receiving );
       break;
     default:
       IRDA_DEBUG (1, "%s(?), %s, (cmd=0x%X)\n", __func__, dev->name, cmd);
@@ -1547,7 +1547,7 @@ toshoboe_open (struct pci_dev *pci_dev, const struct pci_device_id *pdid)
   if (dev == NULL)
     {
       printk (KERN_ERR DRIVER_NAME ": can't allocate memory for "
-              "IrDA control block\n");
+	      "IrDA control block\n");
       return -ENOMEM;
     }
 
@@ -1633,14 +1633,14 @@ toshoboe_open (struct pci_dev *pci_dev, const struct pci_device_id *pdid)
     {
       self->tx_bufs[i] = kmalloc (TX_BUF_SZ, GFP_KERNEL);
       if (!self->tx_bufs[i])
-        ok = 0;
+	ok = 0;
     }
 
   for (i = 0; i < RX_SLOTS; ++i)
     {
       self->rx_bufs[i] = kmalloc (RX_BUF_SZ, GFP_KERNEL);
       if (!self->rx_bufs[i])
-        ok = 0;
+	ok = 0;
     }
 
   if (!ok)
@@ -1654,8 +1654,8 @@ toshoboe_open (struct pci_dev *pci_dev, const struct pci_device_id *pdid)
   if (do_probe)
     if (!toshoboe_probe (self))
       {
-        err = -ENODEV;
-        goto freebufs;
+	err = -ENODEV;
+	goto freebufs;
       }
 #endif
 

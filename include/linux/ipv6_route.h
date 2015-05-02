@@ -50,7 +50,7 @@ struct in6_rtmsg {
 	__u16			rtmsg_src_len;
 	__u32			rtmsg_metric;
 	unsigned long		rtmsg_info;
-        __u32			rtmsg_flags;
+	__u32			rtmsg_flags;
 	int			rtmsg_ifindex;
 };
 

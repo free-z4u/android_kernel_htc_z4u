@@ -566,7 +566,7 @@ void qlogicfas408_setup(int qbase, int id, int int_type)
 
 int qlogicfas408_detect(int qbase, int int_type)
 {
-        REG1;
+	REG1;
 	return (((inb(qbase + 0xe) ^ inb(qbase + 0xe)) == 7) &&
 	       ((inb(qbase + 0xe) ^ inb(qbase + 0xe)) == 7));
 }

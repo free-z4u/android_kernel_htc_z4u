@@ -7172,9 +7172,9 @@ static int btrfs_rename(struct inode *old_dir, struct dentry *old_dentry,
 	 */
 	trans = btrfs_start_transaction(root, 20);
 	if (IS_ERR(trans)) {
-                ret = PTR_ERR(trans);
-                goto out_notrans;
-        }
+		ret = PTR_ERR(trans);
+		goto out_notrans;
+	}
 
 	if (dest != root)
 		btrfs_record_root_in_trans(trans, dest);

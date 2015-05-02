@@ -16,7 +16,7 @@
 	  (Uses true 32 bit transfers rather than 16i compatibility mode)
 
    Example Module usage:
-        insmod eth16i.o io=0x2a0 mediatype=bnc
+	insmod eth16i.o io=0x2a0 mediatype=bnc
 
 	mediatype can be one of the following: bnc,tp,dix,auto,eprom
 
@@ -36,7 +36,7 @@
      - The Fujitsu MB86965 databook.
 
    Author thanks following persons due to their valueble assistance:
-        Markku Viima (ICL)
+	Markku Viima (ICL)
 	Ari Valve (ICL)
 	Donald Becker
 	Kurt Huwig <kurt@huwig.de>
@@ -49,26 +49,26 @@
    0.02         23.01-95        Interrupt is now hooked correctly
    0.03         01.02-95        Rewrote initialization part
    0.04         07.02-95        Base skeleton done...
-                                Made a few changes to signature checking
-                                to make it a bit reliable.
-                                - fixed bug in tx_buf mapping
-                                - fixed bug in initialization (DLC_EN
-                                  wasn't enabled when initialization
-                                  was done.)
+				Made a few changes to signature checking
+				to make it a bit reliable.
+				- fixed bug in tx_buf mapping
+				- fixed bug in initialization (DLC_EN
+				  wasn't enabled when initialization
+				  was done.)
    0.05         08.02-95        If there were more than one packet to send,
-                                transmit was jammed due to invalid
-                                register write...now fixed
+				transmit was jammed due to invalid
+				register write...now fixed
    0.06         19.02-95        Rewrote interrupt handling
    0.07         13.04-95        Wrote EEPROM read routines
-                                Card configuration now set according to
-                                data read from EEPROM
+				Card configuration now set according to
+				data read from EEPROM
    0.08         23.06-95        Wrote part that tries to probe used interface
-                                port if AUTO is selected
+				port if AUTO is selected
 
    0.09         01.09-95        Added module support
 
    0.10         04.09-95        Fixed receive packet allocation to work
-                                with kernels > 1.3.x
+				with kernels > 1.3.x
 
    0.20		20.09-95	Added support for EtherTeam32 EISA
 
@@ -99,22 +99,22 @@
    0.29         29.10-97        Multiple card support for module users
 
    0.30         30.10-97        Fixed irq allocation bug.
-                                (request_irq moved from probe to open)
+				(request_irq moved from probe to open)
 
    0.30a        21.08-98        Card detection made more relaxed. Driver
-                                had problems with some TCP/IP-PROM boots
+				had problems with some TCP/IP-PROM boots
 				to find the card. Suggested by
 				Kurt Huwig <kurt@huwig.de>
 
    0.31         28.08-98        Media interface port can now be selected
-                                with module parameters or kernel
+				with module parameters or kernel
 				boot parameters.
 
    0.32         31.08-98        IRQ was never freed if open/close
-                                pair wasn't called. Now fixed.
+				pair wasn't called. Now fixed.
 
    0.33         10.09-98        When eth16i_open() was called after
-                                eth16i_close() chip never recovered.
+				eth16i_close() chip never recovered.
 				Now more shallow reset is made on
 				close.
 
@@ -122,7 +122,7 @@
 				Changed ioaddr -> io for consistency
 
    0.35         01.07-99        transmit,-receive bytes were never
-                                updated in stats.
+				updated in stats.
 
    Bugs:
 	In some cases the media interface autoprobing code doesn't find
@@ -270,7 +270,7 @@ static char *version =
 #define TRANSMIT_START_REG     10
 #define TRANSMIT_START_RB      2
 #define TX_START               BIT(7)       /* Rest of register bit indicate*/
-                                            /* number of packets in tx buffer*/
+					    /* number of packets in tx buffer*/
 /* Node ID registers (DLCR8-13) */
 #define NODE_ID_0              8
 #define NODE_ID_RB             0
@@ -1381,13 +1381,13 @@ static ushort eth16i_parse_mediatype(const char* s)
 	if(!s)
 		return E_PORT_FROM_EPROM;
 
-        if (!strncmp(s, "bnc", 3))
+	if (!strncmp(s, "bnc", 3))
 		return E_PORT_BNC;
-        else if (!strncmp(s, "tp", 2))
-                return E_PORT_TP;
-        else if (!strncmp(s, "dix", 3))
-                return E_PORT_DIX;
-        else if (!strncmp(s, "auto", 4))
+	else if (!strncmp(s, "tp", 2))
+		return E_PORT_TP;
+	else if (!strncmp(s, "dix", 3))
+		return E_PORT_DIX;
+	else if (!strncmp(s, "auto", 4))
 		return E_PORT_AUTO;
 	else
 		return E_PORT_FROM_EPROM;

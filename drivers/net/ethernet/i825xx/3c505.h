@@ -209,8 +209,8 @@ struct Info {
 
 struct Memdump {
        word size,
-            off,
-            seg;
+	    off,
+	    seg;
 };
 
 /*
@@ -287,6 +287,6 @@ typedef struct {
 	unsigned long busy;
 
 	unsigned int rx_active;  /* number of receive PCBs */
-        volatile unsigned char hcr_val;  /* what we think the HCR contains */
-        spinlock_t lock;	/* Interrupt v tx lock */
+	volatile unsigned char hcr_val;  /* what we think the HCR contains */
+	spinlock_t lock;	/* Interrupt v tx lock */
 } elp_device;

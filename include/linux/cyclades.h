@@ -70,10 +70,10 @@
 #include <linux/types.h>
 
 struct cyclades_monitor {
-        unsigned long           int_count;
-        unsigned long           char_count;
-        unsigned long           char_max;
-        unsigned long           char_last;
+	unsigned long           int_count;
+	unsigned long           char_count;
+	unsigned long           char_max;
+	unsigned long           char_last;
 };
 
 /*
@@ -132,12 +132,12 @@ struct cyclades_idle_stats {
 
 #define CYZ_BOOT_NWORDS 0x100
 struct CYZ_BOOT_CTRL {
-        unsigned short  nboard;
-        int             status[MAX_BOARD];
-        int             nchannel[MAX_BOARD];
-        int             fw_rev[MAX_BOARD];
-        unsigned long   offset;
-        unsigned long   data[CYZ_BOOT_NWORDS];
+	unsigned short  nboard;
+	int             status[MAX_BOARD];
+	int             nchannel[MAX_BOARD];
+	int             fw_rev[MAX_BOARD];
+	unsigned long   offset;
+	unsigned long   data[CYZ_BOOT_NWORDS];
 };
 
 
@@ -571,8 +571,8 @@ struct cyclades_port {
 	int			xmit_head;
 	int			xmit_tail;
 	int			xmit_cnt;
-        int                     default_threshold;
-        int                     default_timeout;
+	int                     default_threshold;
+	int                     default_timeout;
 	unsigned long		rflush_count;
 	struct cyclades_monitor	mon;
 	struct cyclades_idle_stats	idle_stats;
@@ -731,10 +731,10 @@ struct cyclades_port {
 #define CyCOR3		(0x0A*2)
 #define      CySPL_CH_DRANGE	(0x80)  /* special character detect range */
 #define      CySPL_CH_DET1	(0x40)  /* enable special character detection
-                                                               on SCHR4-SCHR3 */
+							       on SCHR4-SCHR3 */
 #define      CyFL_CTRL_TRNSP	(0x20)  /* Flow Control Transparency */
 #define      CySPL_CH_DET2	(0x10)  /* Enable special character detection
-                                                               on SCHR2-SCHR1 */
+							       on SCHR2-SCHR1 */
 #define      CyREC_FIFO		(0x0F)  /* Receive FIFO threshold */
 #define CyCOR4		(0x1E*2)
 #define CyCOR5		(0x1F*2)

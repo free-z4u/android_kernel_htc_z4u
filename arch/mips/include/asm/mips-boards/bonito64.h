@@ -418,9 +418,9 @@ extern unsigned long _pcictrl_bonito_pcicfg;
 #define BONITO_PCIMEMBASECFG_ADDRTRANS(WIN, CFG) ((((CFG) & BONITO_PCIMEMBASECFG_MEMBASE##WIN##_TRANS) >> BONITO_PCIMEMBASECFG_MEMBASE##WIN##_TRANS_SHIFT) << BONITO_PCIMEMBASECFG_ASHIFT)
 
 #define BONITO_PCITOPHYS(WIN, ADDR, CFG)          ( \
-                                                  (((ADDR) & (~(BONITO_PCIMEMBASECFG_MASK))) & (~(BONITO_PCIMEMBASECFG_ADDRMASK(WIN, CFG)))) | \
-                                                  (BONITO_PCIMEMBASECFG_ADDRTRANS(WIN, CFG)) \
-                                                )
+						  (((ADDR) & (~(BONITO_PCIMEMBASECFG_MASK))) & (~(BONITO_PCIMEMBASECFG_ADDRMASK(WIN, CFG)))) | \
+						  (BONITO_PCIMEMBASECFG_ADDRTRANS(WIN, CFG)) \
+						)
 
 /* PCICmd */
 

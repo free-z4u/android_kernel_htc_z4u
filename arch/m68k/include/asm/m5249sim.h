@@ -258,7 +258,7 @@
 	movel	#0x00080000,%d0			/* GPIO19, IDE reset bit */
 	orl	%d0,0xc(%a1)			/* function GPIO19 */
 	orl	%d0,0x8(%a1)			/* enable GPIO19 as output */
-        orl	%d0,0x4(%a1)			/* de-assert IDE reset */
+	orl	%d0,0x4(%a1)			/* de-assert IDE reset */
 .endm
 
 #define	PLATFORM_SETUP	m5249c3_setup

@@ -363,7 +363,7 @@ static int kvmppc_handle_exit(struct kvm_run *run, struct kvm_vcpu *vcpu,
 }
 
 int kvm_arch_vcpu_ioctl_get_sregs(struct kvm_vcpu *vcpu,
-                                  struct kvm_sregs *sregs)
+				  struct kvm_sregs *sregs)
 {
 	int i;
 
@@ -379,7 +379,7 @@ int kvm_arch_vcpu_ioctl_get_sregs(struct kvm_vcpu *vcpu,
 }
 
 int kvm_arch_vcpu_ioctl_set_sregs(struct kvm_vcpu *vcpu,
-                                  struct kvm_sregs *sregs)
+				  struct kvm_sregs *sregs)
 {
 	int i, j;
 
@@ -1399,7 +1399,7 @@ void kvmppc_mmu_pte_pflush(struct kvm_vcpu *vcpu, ulong pa_start, ulong pa_end)
 
 /* We don't need to emulate any privileged instructions or dcbz */
 int kvmppc_core_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                           unsigned int inst, int *advance)
+			   unsigned int inst, int *advance)
 {
 	return EMULATE_FAIL;
 }

@@ -807,7 +807,7 @@ static int __devinit asd_pci_probe(struct pci_dev *dev,
 		goto Err_remove;
 
 	err = asd_create_ha_caches(asd_ha);
-        if (err)
+	if (err)
 		goto Err_unmap;
 
 	err = asd_init_hw(asd_ha);

@@ -19,7 +19,7 @@
 /* Macros given a pcibus structure */
 #define IS_PCIX(ps)     ((ps)->pbi_bridge_mode & BUSTYPE_MASK)
 #define IS_PCI_BRIDGE_ASIC(asic) (asic == PCIIO_ASIC_TYPE_PIC || \
-                asic == PCIIO_ASIC_TYPE_TIOCP)
+		asic == PCIIO_ASIC_TYPE_TIOCP)
 #define IS_PIC_SOFT(ps)     (ps->pbi_bridge_type == PCIBR_BRIDGETYPE_PIC)
 #define IS_TIOCP_SOFT(ps)   (ps->pbi_bridge_type == PCIBR_BRIDGETYPE_TIOCP)
 
@@ -46,7 +46,7 @@
 #define PCI32_DIRECT_BASE               0x80000000
 
 #define IS_PCI32_MAPPED(x)              ((u64)(x) < PCI32_DIRECT_BASE && \
-                                         (u64)(x) >= PCI32_MAPPED_BASE)
+					 (u64)(x) >= PCI32_MAPPED_BASE)
 #define IS_PCI32_DIRECT(x)              ((u64)(x) >= PCI32_MAPPED_BASE)
 
 

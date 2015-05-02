@@ -524,10 +524,10 @@ pci_write_config(struct file* filp, struct kobject *kobj,
 	if ((off & 3) && size > 2) {
 		u16 val = data[off - init_off];
 		val |= (u16) data[off - init_off + 1] << 8;
-                pci_user_write_config_word(dev, off, val);
-                off += 2;
-                size -= 2;
-        }
+		pci_user_write_config_word(dev, off, val);
+		off += 2;
+		size -= 2;
+	}
 
 	while (size > 3) {
 		u32 val = data[off - init_off];
@@ -606,15 +606,15 @@ pci_read_legacy_io(struct file *filp, struct kobject *kobj,
 		   struct bin_attribute *bin_attr,
 		   char *buf, loff_t off, size_t count)
 {
-        struct pci_bus *bus = to_pci_bus(container_of(kobj,
-                                                      struct device,
+	struct pci_bus *bus = to_pci_bus(container_of(kobj,
+						      struct device,
 						      kobj));
 
-        /* Only support 1, 2 or 4 byte accesses */
-        if (count != 1 && count != 2 && count != 4)
-                return -EINVAL;
+	/* Only support 1, 2 or 4 byte accesses */
+	if (count != 1 && count != 2 && count != 4)
+		return -EINVAL;
 
-        return pci_legacy_read(bus, off, (u32 *)buf, count);
+	return pci_legacy_read(bus, off, (u32 *)buf, count);
 }
 
 /**
@@ -634,14 +634,14 @@ pci_write_legacy_io(struct file *filp, struct kobject *kobj,
 		    struct bin_attribute *bin_attr,
 		    char *buf, loff_t off, size_t count)
 {
-        struct pci_bus *bus = to_pci_bus(container_of(kobj,
+	struct pci_bus *bus = to_pci_bus(container_of(kobj,
 						      struct device,
 						      kobj));
-        /* Only support 1, 2 or 4 byte accesses */
-        if (count != 1 && count != 2 && count != 4)
-                return -EINVAL;
+	/* Only support 1, 2 or 4 byte accesses */
+	if (count != 1 && count != 2 && count != 4)
+		return -EINVAL;
 
-        return pci_legacy_write(bus, off, *(u32 *)buf, count);
+	return pci_legacy_write(bus, off, *(u32 *)buf, count);
 }
 
 /**
@@ -658,13 +658,13 @@ pci_write_legacy_io(struct file *filp, struct kobject *kobj,
 static int
 pci_mmap_legacy_mem(struct file *filp, struct kobject *kobj,
 		    struct bin_attribute *attr,
-                    struct vm_area_struct *vma)
+		    struct vm_area_struct *vma)
 {
-        struct pci_bus *bus = to_pci_bus(container_of(kobj,
-                                                      struct device,
+	struct pci_bus *bus = to_pci_bus(container_of(kobj,
+						      struct device,
 						      kobj));
 
-        return pci_mmap_legacy_page_range(bus, vma, pci_mmap_mem);
+	return pci_mmap_legacy_page_range(bus, vma, pci_mmap_mem);
 }
 
 /**
@@ -683,11 +683,11 @@ pci_mmap_legacy_io(struct file *filp, struct kobject *kobj,
 		   struct bin_attribute *attr,
 		   struct vm_area_struct *vma)
 {
-        struct pci_bus *bus = to_pci_bus(container_of(kobj,
-                                                      struct device,
+	struct pci_bus *bus = to_pci_bus(container_of(kobj,
+						      struct device,
 						      kobj));
 
-        return pci_mmap_legacy_page_range(bus, vma, pci_mmap_io);
+	return pci_mmap_legacy_page_range(bus, vma, pci_mmap_io);
 }
 
 /**

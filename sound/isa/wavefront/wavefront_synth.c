@@ -865,7 +865,7 @@ wavefront_send_sample (snd_wavefront_t *dev,
 	   and used conventionally to refer to sample sizes,
 	   which are given in 8-bit units (bytes), need to be
 	   divided by 2.
-        */
+	*/
 
 	u16 sample_short = 0;
 	u32 length;

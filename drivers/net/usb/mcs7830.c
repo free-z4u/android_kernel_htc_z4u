@@ -426,7 +426,7 @@ static void mcs7830_hif_update_multicast_hash(struct usbnet *dev)
 static void mcs7830_hif_update_config(struct usbnet *dev)
 {
 	/* implementation specific to data->config
-           (argument needs to be heap-based anyway - USB DMA!) */
+	   (argument needs to be heap-based anyway - USB DMA!) */
 	struct mcs7830_data *data = mcs7830_get_data(dev);
 	mcs7830_set_reg_async(dev, HIF_REG_CONFIG, 1, &data->config);
 }
@@ -671,7 +671,7 @@ MODULE_DEVICE_TABLE(usb, products);
 static int mcs7830_reset_resume (struct usb_interface *intf)
 {
  	/* YES, this function is successful enough that ethtool -d
-           does show same output pre-/post-suspend */
+	   does show same output pre-/post-suspend */
 
 	struct usbnet		*dev = usb_get_intfdata(intf);
 

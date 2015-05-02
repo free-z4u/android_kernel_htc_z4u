@@ -24,8 +24,8 @@ static u32 i810fb_rop[] = {
 /* Macros */
 #define PUT_RING(n) {                                        \
 	i810_writel(par->cur_tail, par->iring.virtual, n);   \
-        par->cur_tail += 4;                                  \
-        par->cur_tail &= RING_SIZE_MASK;                     \
+	par->cur_tail += 4;                                  \
+	par->cur_tail &= RING_SIZE_MASK;                     \
 }
 
 extern void flush_cache(void);

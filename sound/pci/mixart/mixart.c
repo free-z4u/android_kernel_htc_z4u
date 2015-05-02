@@ -577,7 +577,7 @@ static int mixart_set_format(struct mixart_stream *stream, snd_pcm_format_t form
  *  HW_PARAMS callback for all pcms
  */
 static int snd_mixart_hw_params(struct snd_pcm_substream *subs,
-                                struct snd_pcm_hw_params *hw)
+				struct snd_pcm_hw_params *hw)
 {
 	struct snd_mixart *chip = snd_pcm_substream_chip(subs);
 	struct mixart_mgr *mgr = chip->mgr;
@@ -1145,7 +1145,7 @@ static struct snd_info_entry_ops snd_mixart_proc_ops_BA1 = {
 
 
 static void snd_mixart_proc_read(struct snd_info_entry *entry,
-                                 struct snd_info_buffer *buffer)
+				 struct snd_info_buffer *buffer)
 {
 	struct snd_mixart *chip = entry->private_data;
 	u32 ref;

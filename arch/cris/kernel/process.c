@@ -154,5 +154,5 @@ void flush_thread(void)
 /* Fill in the fpu structure for a core dump. */
 int dump_fpu(struct pt_regs *regs, elf_fpregset_t *fpu)
 {
-        return 0;
+	return 0;
 }

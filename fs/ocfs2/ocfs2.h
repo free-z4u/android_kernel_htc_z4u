@@ -768,7 +768,7 @@ static inline u64 ocfs2_align_bytes_to_blocks(struct super_block *sb,
 {
 	u64 blocks;
 
-        blocks = ocfs2_blocks_for_bytes(sb, bytes);
+	blocks = ocfs2_blocks_for_bytes(sb, bytes);
 	return blocks << sb->s_blocksize_bits;
 }
 
@@ -798,7 +798,7 @@ static inline pgoff_t ocfs2_align_clusters_to_page_index(struct super_block *sb,
 							u32 clusters)
 {
 	unsigned int cbits = OCFS2_SB(sb)->s_clustersize_bits;
-        pgoff_t index = clusters;
+	pgoff_t index = clusters;
 
 	if (PAGE_CACHE_SHIFT > cbits) {
 		index = (pgoff_t)clusters >> (PAGE_CACHE_SHIFT - cbits);

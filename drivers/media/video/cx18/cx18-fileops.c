@@ -632,10 +632,10 @@ unsigned int cx18_v4l2_enc_poll(struct file *filp, poll_table *wait)
 	if ((s->vb_type == V4L2_BUF_TYPE_VIDEO_CAPTURE) &&
 		(id->type == CX18_ENC_STREAM_TYPE_YUV)) {
 		int videobuf_poll = videobuf_poll_stream(filp, &s->vbuf_q, wait);
-                if (eof && videobuf_poll == POLLERR)
-                        return POLLHUP;
-                else
-                        return videobuf_poll;
+		if (eof && videobuf_poll == POLLERR)
+			return POLLHUP;
+		else
+			return videobuf_poll;
 	}
 
 	/* add stream's waitq to the poll list */

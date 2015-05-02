@@ -160,9 +160,9 @@
  *	Some symbol defines for the Parallel Port Pin Assignment Register
  */
 #define MCFSIM_PAR_DREQ0        0x40            /* Set to select DREQ0 input */
-                                                /* Clear to select par I/O */
+						/* Clear to select par I/O */
 #define MCFSIM_PAR_DREQ1        0x20            /* Select DREQ1 input */
-                                                /* Clear to select par I/O */
+						/* Clear to select par I/O */
 
 /*
  *       Defines for the IRQPAR Register

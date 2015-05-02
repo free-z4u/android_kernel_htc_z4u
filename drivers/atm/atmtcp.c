@@ -262,22 +262,22 @@ static void atmtcp_c_close(struct atm_vcc *vcc)
 
 static struct atm_vcc *find_vcc(struct atm_dev *dev, short vpi, int vci)
 {
-        struct hlist_head *head;
-        struct atm_vcc *vcc;
-        struct hlist_node *node;
-        struct sock *s;
+	struct hlist_head *head;
+	struct atm_vcc *vcc;
+	struct hlist_node *node;
+	struct sock *s;
 
-        head = &vcc_hash[vci & (VCC_HTABLE_SIZE -1)];
+	head = &vcc_hash[vci & (VCC_HTABLE_SIZE -1)];
 
-        sk_for_each(s, node, head) {
-                vcc = atm_sk(s);
-                if (vcc->dev == dev &&
-                    vcc->vci == vci && vcc->vpi == vpi &&
-                    vcc->qos.rxtp.traffic_class != ATM_NONE) {
-                                return vcc;
-                }
-        }
-        return NULL;
+	sk_for_each(s, node, head) {
+		vcc = atm_sk(s);
+		if (vcc->dev == dev &&
+		    vcc->vci == vci && vcc->vpi == vpi &&
+		    vcc->qos.rxtp.traffic_class != ATM_NONE) {
+				return vcc;
+		}
+	}
+	return NULL;
 }
 
 

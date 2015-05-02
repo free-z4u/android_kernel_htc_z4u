@@ -115,7 +115,7 @@ static int irqs[4] __initdata = {3, 4, 5, 9};
 
 /* From the D-Link ADF file: */
 static unsigned int dlink_addresses[4] __initdata =
-                {0x300, 0x320, 0x340, 0x360};
+		{0x300, 0x320, 0x340, 0x360};
 static int dlink_irqs[8] __initdata = {3, 4, 5, 9, 10, 11, 14, 15};
 
 struct ne2_adapters_t {
@@ -127,7 +127,7 @@ static struct ne2_adapters_t ne2_adapters[] __initdata = {
 	{ 0x6354, "Arco Ethernet Adapter AE/2" },
 	{ 0x70DE, "Compex ENET-16 MC/P" },
 	{ 0x7154, "Novell Ethernet Adapter NE/2" },
-        { 0x56ea, "D-Link DE-320CT" },
+	{ 0x56ea, "D-Link DE-320CT" },
 	{ 0x0000, NULL }
 };
 
@@ -221,7 +221,7 @@ static unsigned int __init dlink_get_eeprom(unsigned int eeaddr, unsigned int ad
 	dlink_put_eeprom(0x09, addr);
 
 	/* send one start bit, read command (1 - 0), plus the address to
-           the EEPROM */
+	   the EEPROM */
 
 	dlink_send_eeprom_word(0x0180 | (eeaddr & 0x3f), 9, addr);
 
@@ -339,7 +339,7 @@ static int __init ne2_probe1(struct net_device *dev, int slot)
 		base_addr = dlink_addresses[(POS >> 5) & 0x03];
 		irq = dlink_irqs[(POS >> 2) & 0x07];
 	}
-        else {
+	else {
 		i = (POS & 0xE)>>1;
 		/* printk("Halleluja sdog, als er na de pijl een 1 staat is 1 - 1 == 0"
 	   	" en zou het moeten werken -> %d\n", i);
@@ -430,8 +430,8 @@ static int __init ne2_probe1(struct net_device *dev, int slot)
 	}
 
 	/* I don't know whether the previous sequence includes the general
-           board reset procedure, so better don't omit it and just overwrite
-           the garbage read from a DE-320 with correct stuff. */
+	   board reset procedure, so better don't omit it and just overwrite
+	   the garbage read from a DE-320 with correct stuff. */
 
 	if (mca_read_stored_pos(slot, 0) == 0xea) {
 		unsigned int v;

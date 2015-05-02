@@ -31,7 +31,7 @@ static int op_mips_setup(void)
 	/* Configure the registers on all cpus.  */
 	on_each_cpu(model->cpu_setup, NULL, 1);
 
-        return 0;
+	return 0;
 }
 
 static int op_mips_create_files(struct super_block *sb, struct dentry *root)

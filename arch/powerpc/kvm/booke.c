@@ -128,13 +128,13 @@ void kvmppc_set_msr(struct kvm_vcpu *vcpu, u32 new_msr)
 }
 
 static void kvmppc_booke_queue_irqprio(struct kvm_vcpu *vcpu,
-                                       unsigned int priority)
+				       unsigned int priority)
 {
 	set_bit(priority, &vcpu->arch.pending_exceptions);
 }
 
 static void kvmppc_core_queue_dtlb_miss(struct kvm_vcpu *vcpu,
-                                        ulong dear_flags, ulong esr_flags)
+					ulong dear_flags, ulong esr_flags)
 {
 	vcpu->arch.queued_dear = dear_flags;
 	vcpu->arch.queued_esr = esr_flags;
@@ -142,7 +142,7 @@ static void kvmppc_core_queue_dtlb_miss(struct kvm_vcpu *vcpu,
 }
 
 static void kvmppc_core_queue_data_storage(struct kvm_vcpu *vcpu,
-                                           ulong dear_flags, ulong esr_flags)
+					   ulong dear_flags, ulong esr_flags)
 {
 	vcpu->arch.queued_dear = dear_flags;
 	vcpu->arch.queued_esr = esr_flags;
@@ -150,7 +150,7 @@ static void kvmppc_core_queue_data_storage(struct kvm_vcpu *vcpu,
 }
 
 static void kvmppc_core_queue_inst_storage(struct kvm_vcpu *vcpu,
-                                           ulong esr_flags)
+					   ulong esr_flags)
 {
 	vcpu->arch.queued_esr = esr_flags;
 	kvmppc_booke_queue_irqprio(vcpu, BOOKE_IRQPRIO_INST_STORAGE);
@@ -178,7 +178,7 @@ void kvmppc_core_dequeue_dec(struct kvm_vcpu *vcpu)
 }
 
 void kvmppc_core_queue_external(struct kvm_vcpu *vcpu,
-                                struct kvm_interrupt *irq)
+				struct kvm_interrupt *irq)
 {
 	unsigned int prio = BOOKE_IRQPRIO_EXTERNAL;
 
@@ -189,7 +189,7 @@ void kvmppc_core_queue_external(struct kvm_vcpu *vcpu,
 }
 
 void kvmppc_core_dequeue_external(struct kvm_vcpu *vcpu,
-                                  struct kvm_interrupt *irq)
+				  struct kvm_interrupt *irq)
 {
 	clear_bit(BOOKE_IRQPRIO_EXTERNAL, &vcpu->arch.pending_exceptions);
 	clear_bit(BOOKE_IRQPRIO_EXTERNAL_LEVEL, &vcpu->arch.pending_exceptions);
@@ -197,7 +197,7 @@ void kvmppc_core_dequeue_external(struct kvm_vcpu *vcpu,
 
 /* Deliver the interrupt of the corresponding priority, if possible. */
 static int kvmppc_booke_irqprio_deliver(struct kvm_vcpu *vcpu,
-                                        unsigned int priority)
+					unsigned int priority)
 {
 	int allowed = 0;
 	ulong uninitialized_var(msr_mask);
@@ -369,7 +369,7 @@ out:
  * Return value is in the form (errcode<<2 | RESUME_FLAG_HOST | RESUME_FLAG_NV)
  */
 int kvmppc_handle_exit(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                       unsigned int exit_nr)
+		       unsigned int exit_nr)
 {
 	enum emulation_result er;
 	int r = RESUME_HOST;
@@ -736,7 +736,7 @@ int kvm_arch_vcpu_ioctl_set_regs(struct kvm_vcpu *vcpu, struct kvm_regs *regs)
 }
 
 static void get_sregs_base(struct kvm_vcpu *vcpu,
-                           struct kvm_sregs *sregs)
+			   struct kvm_sregs *sregs)
 {
 	u64 tb = get_tb();
 
@@ -755,7 +755,7 @@ static void get_sregs_base(struct kvm_vcpu *vcpu,
 }
 
 static int set_sregs_base(struct kvm_vcpu *vcpu,
-                          struct kvm_sregs *sregs)
+			  struct kvm_sregs *sregs)
 {
 	if (!(sregs->u.e.features & KVM_SREGS_E_BASE))
 		return 0;
@@ -782,7 +782,7 @@ static int set_sregs_base(struct kvm_vcpu *vcpu,
 }
 
 static void get_sregs_arch206(struct kvm_vcpu *vcpu,
-                              struct kvm_sregs *sregs)
+			      struct kvm_sregs *sregs)
 {
 	sregs->u.e.features |= KVM_SREGS_E_ARCH206;
 
@@ -794,7 +794,7 @@ static void get_sregs_arch206(struct kvm_vcpu *vcpu,
 }
 
 static int set_sregs_arch206(struct kvm_vcpu *vcpu,
-                             struct kvm_sregs *sregs)
+			     struct kvm_sregs *sregs)
 {
 	if (!(sregs->u.e.features & KVM_SREGS_E_ARCH206))
 		return 0;
@@ -858,7 +858,7 @@ int kvmppc_set_sregs_ivor(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs)
 }
 
 int kvm_arch_vcpu_ioctl_get_sregs(struct kvm_vcpu *vcpu,
-                                  struct kvm_sregs *sregs)
+				  struct kvm_sregs *sregs)
 {
 	sregs->pvr = vcpu->arch.pvr;
 
@@ -869,7 +869,7 @@ int kvm_arch_vcpu_ioctl_get_sregs(struct kvm_vcpu *vcpu,
 }
 
 int kvm_arch_vcpu_ioctl_set_sregs(struct kvm_vcpu *vcpu,
-                                  struct kvm_sregs *sregs)
+				  struct kvm_sregs *sregs)
 {
 	int ret;
 
@@ -908,7 +908,7 @@ int kvm_arch_vcpu_ioctl_set_fpu(struct kvm_vcpu *vcpu, struct kvm_fpu *fpu)
 }
 
 int kvm_arch_vcpu_ioctl_translate(struct kvm_vcpu *vcpu,
-                                  struct kvm_translation *tr)
+				  struct kvm_translation *tr)
 {
 	int r;
 

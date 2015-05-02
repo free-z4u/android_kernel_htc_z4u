@@ -2072,7 +2072,7 @@ int hid_add_device(struct hid_device *hdev)
 	/* we need to kill them here, otherwise they will stay allocated to
 	 * wait for coming driver */
 	if (!(hdev->quirks & HID_QUIRK_NO_IGNORE)
-            && (hid_ignore(hdev) || (hdev->quirks & HID_QUIRK_IGNORE)))
+	    && (hid_ignore(hdev) || (hdev->quirks & HID_QUIRK_IGNORE)))
 		return -ENODEV;
 
 	/* XXX hack, any other cleaner solution after the driver core

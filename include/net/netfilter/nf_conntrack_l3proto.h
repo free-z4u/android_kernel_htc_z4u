@@ -25,7 +25,7 @@ struct nf_conntrack_l3proto {
 
 	/*
 	 * Try to fill in the third arg: nhoff is offset of l3 proto
-         * hdr.  Return true if possible.
+	 * hdr.  Return true if possible.
 	 */
 	bool (*pkt_to_tuple)(const struct sk_buff *skb, unsigned int nhoff,
 			     struct nf_conntrack_tuple *tuple);

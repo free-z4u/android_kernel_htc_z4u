@@ -323,7 +323,7 @@ static inline void scc_notify(struct scc_channel *scc, int event)
 	struct sk_buff *skb;
 	char *bp;
 
-        if (scc->kiss.fulldup != KISS_DUPLEX_OPTIMA)
+	if (scc->kiss.fulldup != KISS_DUPLEX_OPTIMA)
 		return;
 
 	skb = dev_alloc_skb(2);
@@ -893,7 +893,7 @@ static void init_channel(struct scc_channel *scc)
 
 
 /* ----> scc_key_trx sets the time constant for the baudrate
-         generator and keys the transmitter		     <---- */
+	 generator and keys the transmitter		     <---- */
 
 static void scc_key_trx(struct scc_channel *scc, char tx)
 {
@@ -1500,7 +1500,7 @@ static void z8530_init(void)
 		wr(scc, R2, chip*16);			/* interrupt vector */
 		wr(scc, R9, VIS);			/* vector includes status */
 		spin_unlock_irqrestore(&scc->lock, flags);
-        }
+	}
 
 
 	Driver_Initialized = 1;
@@ -2071,7 +2071,7 @@ static int scc_net_seq_show(struct seq_file *seq, void *v)
 		seq_putc(seq, '\n');
 	}
 
-        return 0;
+	return 0;
 }
 
 static const struct seq_operations scc_net_seq_ops = {

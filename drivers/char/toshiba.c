@@ -111,7 +111,7 @@ static struct miscdevice tosh_device = {
 #ifdef CONFIG_PROC_FS
 static int tosh_fn_status(void)
 {
-        unsigned char scan;
+	unsigned char scan;
 	unsigned long flags;
 
 	if (tosh_fn!=0) {
@@ -123,7 +123,7 @@ static int tosh_fn_status(void)
 		local_irq_restore(flags);
 	}
 
-        return (int) scan;
+	return (int) scan;
 }
 #endif
 
@@ -291,8 +291,8 @@ static long tosh_ioctl(struct file *fp, unsigned int cmd, unsigned long arg)
 			return -EINVAL;
 	}
 
-        if (copy_to_user(argp, &regs, sizeof(SMMRegisters)))
-        	return -EFAULT;
+	if (copy_to_user(argp, &regs, sizeof(SMMRegisters)))
+		return -EFAULT;
 
 	return (err==0) ? 0:-EINVAL;
 }

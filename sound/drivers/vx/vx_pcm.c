@@ -145,7 +145,7 @@ static int vx_set_stream_format(struct vx_core *chip, struct vx_pipe *pipe,
 		    CMD_FORMAT_STREAM_IN : CMD_FORMAT_STREAM_OUT);
 	rmh.Cmd[0] |= pipe->number << FIELD_SIZE;
 
-        /* Command might be longer since we may have to add a timestamp */
+	/* Command might be longer since we may have to add a timestamp */
 	vx_set_differed_time(chip, &rmh, pipe);
 
 	rmh.Cmd[rmh.LgCmd] = (data & 0xFFFFFF00) >> 8;
@@ -184,7 +184,7 @@ static int vx_set_format(struct vx_core *chip, struct vx_pipe *pipe,
 	default :
 		snd_BUG();
 		return -EINVAL;
-        };
+	};
 
 	return vx_set_stream_format(chip, pipe, header);
 }

@@ -54,36 +54,36 @@
 #define CDROMRESUME		0x5302 /* Resume paused Audio Operation */
 #define CDROMPLAYMSF		0x5303 /* Play Audio MSF (struct cdrom_msf) */
 #define CDROMPLAYTRKIND		0x5304 /* Play Audio Track/index
-                                           (struct cdrom_ti) */
+					   (struct cdrom_ti) */
 #define CDROMREADTOCHDR		0x5305 /* Read TOC header
-                                           (struct cdrom_tochdr) */
+					   (struct cdrom_tochdr) */
 #define CDROMREADTOCENTRY	0x5306 /* Read TOC entry
-                                           (struct cdrom_tocentry) */
+					   (struct cdrom_tocentry) */
 #define CDROMSTOP		0x5307 /* Stop the cdrom drive */
 #define CDROMSTART		0x5308 /* Start the cdrom drive */
 #define CDROMEJECT		0x5309 /* Ejects the cdrom media */
 #define CDROMVOLCTRL		0x530a /* Control output volume
-                                           (struct cdrom_volctrl) */
+					   (struct cdrom_volctrl) */
 #define CDROMSUBCHNL		0x530b /* Read subchannel data
-                                           (struct cdrom_subchnl) */
+					   (struct cdrom_subchnl) */
 #define CDROMREADMODE2		0x530c /* Read CDROM mode 2 data (2336 Bytes)
-                                           (struct cdrom_read) */
+					   (struct cdrom_read) */
 #define CDROMREADMODE1		0x530d /* Read CDROM mode 1 data (2048 Bytes)
-                                           (struct cdrom_read) */
+					   (struct cdrom_read) */
 #define CDROMREADAUDIO		0x530e /* (struct cdrom_read_audio) */
 #define CDROMEJECT_SW		0x530f /* enable(1)/disable(0) auto-ejecting */
 #define CDROMMULTISESSION	0x5310 /* Obtain the start-of-last-session
-                                           address of multi session disks
-                                           (struct cdrom_multisession) */
+					   address of multi session disks
+					   (struct cdrom_multisession) */
 #define CDROM_GET_MCN		0x5311 /* Obtain the "Universal Product Code"
-                                           if available (struct cdrom_mcn) */
+					   if available (struct cdrom_mcn) */
 #define CDROM_GET_UPC		CDROM_GET_MCN  /* This one is deprecated,
-                                          but here anyway for compatibility */
+					  but here anyway for compatibility */
 #define CDROMRESET		0x5312 /* hard-reset the drive */
 #define CDROMVOLREAD		0x5313 /* Get the drive's volume setting
-                                          (struct cdrom_volctrl) */
+					  (struct cdrom_volctrl) */
 #define CDROMREADRAW		0x5314	/* read data in raw mode (2352 Bytes)
-                                           (struct cdrom_read) */
+					   (struct cdrom_read) */
 /*
  * These ioctls are used only used in aztcd.c and optcd.c
  */
@@ -810,13 +810,13 @@ typedef struct {
 	__be16 disc_information_length;
 #if defined(__BIG_ENDIAN_BITFIELD)
 	__u8 reserved1			: 3;
-        __u8 erasable			: 1;
-        __u8 border_status		: 2;
-        __u8 disc_status		: 2;
+	__u8 erasable			: 1;
+	__u8 border_status		: 2;
+	__u8 disc_status		: 2;
 #elif defined(__LITTLE_ENDIAN_BITFIELD)
-        __u8 disc_status		: 2;
-        __u8 border_status		: 2;
-        __u8 erasable			: 1;
+	__u8 disc_status		: 2;
+	__u8 border_status		: 2;
+	__u8 erasable			: 1;
 	__u8 reserved1			: 3;
 #else
 #error "Please fix <asm/byteorder.h>"
@@ -827,17 +827,17 @@ typedef struct {
 	__u8 last_track_lsb;
 #if defined(__BIG_ENDIAN_BITFIELD)
 	__u8 did_v			: 1;
-        __u8 dbc_v			: 1;
-        __u8 uru			: 1;
-        __u8 reserved2			: 2;
+	__u8 dbc_v			: 1;
+	__u8 uru			: 1;
+	__u8 reserved2			: 2;
 	__u8 dbit			: 1;
 	__u8 mrw_status			: 2;
 #elif defined(__LITTLE_ENDIAN_BITFIELD)
 	__u8 mrw_status			: 2;
 	__u8 dbit			: 1;
-        __u8 reserved2			: 2;
-        __u8 uru			: 1;
-        __u8 dbc_v			: 1;
+	__u8 reserved2			: 2;
+	__u8 uru			: 1;
+	__u8 dbc_v			: 1;
 	__u8 did_v			: 1;
 #endif
 	__u8 disc_type;
@@ -859,9 +859,9 @@ typedef struct {
 	__u8 reserved1;
 #if defined(__BIG_ENDIAN_BITFIELD)
 	__u8 reserved2			: 2;
-        __u8 damage			: 1;
-        __u8 copy			: 1;
-        __u8 track_mode			: 4;
+	__u8 damage			: 1;
+	__u8 copy			: 1;
+	__u8 track_mode			: 4;
 	__u8 rt				: 1;
 	__u8 blank			: 1;
 	__u8 packet			: 1;
@@ -871,9 +871,9 @@ typedef struct {
 	__u8 lra_v			: 1;
 	__u8 nwa_v			: 1;
 #elif defined(__LITTLE_ENDIAN_BITFIELD)
-        __u8 track_mode			: 4;
-        __u8 copy			: 1;
-        __u8 damage			: 1;
+	__u8 track_mode			: 4;
+	__u8 copy			: 1;
+	__u8 damage			: 1;
 	__u8 reserved2			: 2;
 	__u8 data_mode			: 4;
 	__u8 fp				: 1;
@@ -950,9 +950,9 @@ struct cdrom_device_info {
     	int use_count;                  /* number of times device opened */
     	char name[20];                  /* name of the device type */
 /* per-device flags */
-        __u8 sanyo_slot		: 2;	/* Sanyo 3 CD changer support */
-        __u8 keeplocked		: 1;	/* CDROM_LOCKDOOR status */
-        __u8 reserved		: 5;	/* not used yet */
+	__u8 sanyo_slot		: 2;	/* Sanyo 3 CD changer support */
+	__u8 keeplocked		: 1;	/* CDROM_LOCKDOOR status */
+	__u8 reserved		: 5;	/* not used yet */
 	int cdda_method;		/* see flags */
 	__u8 last_sense;
 	__u8 media_written;		/* dirty flag, DVD+RW bookkeeping */
@@ -1077,12 +1077,12 @@ typedef struct {
 	__u8 ps			: 1;
 	__u8 reserved1		: 1;
 	__u8 page_code		: 6;
-        __u8 page_length;
+	__u8 page_length;
 	__u8 reserved2		: 1;
 	__u8 bufe		: 1;
 	__u8 ls_v		: 1;
 	__u8 test_write		: 1;
-        __u8 write_type		: 4;
+	__u8 write_type		: 4;
 	__u8 multi_session	: 2; /* or border, DVD */
 	__u8 fp			: 1;
 	__u8 copy		: 1;
@@ -1093,8 +1093,8 @@ typedef struct {
 	__u8 page_code		: 6;
 	__u8 reserved1		: 1;
 	__u8 ps			: 1;
-        __u8 page_length;
-        __u8 write_type		: 4;
+	__u8 page_length;
+	__u8 write_type		: 4;
 	__u8 test_write		: 1;
 	__u8 ls_v		: 1;
 	__u8 bufe		: 1;

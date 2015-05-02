@@ -37,7 +37,7 @@
  */
 static __inline void
 invalidate_icache(const void* addr, unsigned long size,
-                  unsigned long page_size)
+		  unsigned long page_size)
 {
   const unsigned long cache_way_size =
     CHIP_L1I_CACHE_SIZE() / CHIP_L1I_ASSOC();

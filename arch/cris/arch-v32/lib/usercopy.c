@@ -75,8 +75,8 @@ __copy_user (void __user *pdst, const void *psrc, unsigned long pn)
        to the function prologue/epilogue, and make non-movem sizes
        suboptimal.  */
     __asm__ volatile ("\
-        ;; Check that the register asm declaration got right.		\n\
-        ;; The GCC manual explicitly says TRT will happen.		\n\
+	;; Check that the register asm declaration got right.		\n\
+	;; The GCC manual explicitly says TRT will happen.		\n\
 	.ifnc %0%1%2%3,$r13$r11$r12$r10					\n\
 	.err								\n\
 	.endif								\n\

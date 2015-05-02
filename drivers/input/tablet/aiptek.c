@@ -207,7 +207,7 @@
 #define AIPTEK_COORDINATE_ABSOLUTE_MODE			1
 
        /* XTilt and YTilt values
-        */
+	*/
 #define AIPTEK_TILT_MIN					(-128)
 #define AIPTEK_TILT_MAX					127
 #define AIPTEK_TILT_DISABLE				(-10101)
@@ -327,16 +327,16 @@ struct aiptek {
 };
 
 static const int eventTypes[] = {
-        EV_KEY, EV_ABS, EV_REL, EV_MSC,
+	EV_KEY, EV_ABS, EV_REL, EV_MSC,
 };
 
 static const int absEvents[] = {
-        ABS_X, ABS_Y, ABS_PRESSURE, ABS_TILT_X, ABS_TILT_Y,
-        ABS_WHEEL, ABS_MISC,
+	ABS_X, ABS_Y, ABS_PRESSURE, ABS_TILT_X, ABS_TILT_Y,
+	ABS_WHEEL, ABS_MISC,
 };
 
 static const int relEvents[] = {
-        REL_X, REL_Y, REL_WHEEL,
+	REL_X, REL_Y, REL_WHEEL,
 };
 
 static const int buttonEvents[] = {
@@ -1709,11 +1709,11 @@ aiptek_probe(struct usb_interface *intf, const struct usb_device_id *id)
 		dev_warn(&intf->dev,
 			 "cannot allocate memory or input device\n");
 		goto fail1;
-        }
+	}
 
 	aiptek->data = usb_alloc_coherent(usbdev, AIPTEK_PACKET_LENGTH,
 					  GFP_ATOMIC, &aiptek->data_dma);
-        if (!aiptek->data) {
+	if (!aiptek->data) {
 		dev_warn(&intf->dev, "cannot allocate usb buffer\n");
 		goto fail1;
 	}
@@ -1870,7 +1870,7 @@ aiptek_probe(struct usb_interface *intf, const struct usb_device_id *id)
 		dev_warn(&intf->dev, "cannot create sysfs group err: %d\n",
 			 err);
 		goto fail3;
-        }
+	}
 
 	/* Register the tablet as an Input Device
 	 */
@@ -1879,7 +1879,7 @@ aiptek_probe(struct usb_interface *intf, const struct usb_device_id *id)
 		dev_warn(&intf->dev,
 			 "input_register_device returned err: %d\n", err);
 		goto fail4;
-        }
+	}
 	return 0;
 
  fail4:	sysfs_remove_group(&intf->dev.kobj, &aiptek_attribute_group);

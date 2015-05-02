@@ -613,7 +613,7 @@ extern void ssb_chipco_suspend(struct ssb_chipcommon *cc);
 extern void ssb_chipco_resume(struct ssb_chipcommon *cc);
 
 extern void ssb_chipco_get_clockcpu(struct ssb_chipcommon *cc,
-                                    u32 *plltype, u32 *n, u32 *m);
+				    u32 *plltype, u32 *n, u32 *m);
 extern void ssb_chipco_get_clockcontrol(struct ssb_chipcommon *cc,
 					u32 *plltype, u32 *n, u32 *m);
 extern void ssb_chipco_timing_init(struct ssb_chipcommon *cc,

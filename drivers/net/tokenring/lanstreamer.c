@@ -144,7 +144,7 @@
  */
 
 static char version[] = "LanStreamer.c v0.4.0 03/08/01 - Mike Sullivan\n"
-                        "              v0.5.3 11/13/02 - Kent Yoder";
+			"              v0.5.3 11/13/02 - Kent Yoder";
 
 static DEFINE_PCI_DEVICE_TABLE(streamer_pci_tbl) = {
 	{ PCI_VENDOR_ID_IBM, PCI_DEVICE_ID_IBM_TR, PCI_ANY_ID, PCI_ANY_ID,},
@@ -490,7 +490,7 @@ static int streamer_reset(struct net_device *dev)
 		       dev->name);
 	} else {
 	        struct streamer_rx_desc *rx_ring;
-                u8 *data;
+		u8 *data;
 
 		rx_ring=(struct streamer_rx_desc *)skb->data;
 		data=((u8 *)skb->data)+sizeof(struct streamer_rx_desc);
@@ -1073,8 +1073,8 @@ static irqreturn_t streamer_interrupt(int irq, void *dev_id)
 
 			if (misr & MISR_RX_NOBUF) {
 				/* According to the documentation, we don't have to do anything,
-                                 * but trapping it keeps it out of /var/log/messages.
-                                 */
+				 * but trapping it keeps it out of /var/log/messages.
+				 */
 			}		/* SISR_RX_NOBUF */
 
 			writew(~misr, streamer_mmio + MISR_RUM);

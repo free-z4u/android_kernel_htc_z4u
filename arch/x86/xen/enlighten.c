@@ -873,12 +873,12 @@ static void xen_apic_icr_write(u32 low, u32 id)
 
 static void xen_apic_wait_icr_idle(void)
 {
-        return;
+	return;
 }
 
 static u32 xen_safe_apic_wait_icr_idle(void)
 {
-        return 0;
+	return 0;
 }
 
 static void set_xen_basic_apic_ops(void)

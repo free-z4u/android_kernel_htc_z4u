@@ -48,7 +48,7 @@ struct vma_to_fileoffset_map {	/* map of sections within an SPU program */
 	unsigned int offset;	/* offset of section into elf file */
 	unsigned int guard_ptr;
 	unsigned int guard_val;
-        /*
+	/*
 	 * The guard pointer is an entry in the _ovly_buf_table,
 	 * computed using ovly.buf as the index into the table.  Since
 	 * ovly.buf values begin at '1' to reference the first (or 0th)

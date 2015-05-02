@@ -102,7 +102,7 @@ static void mdfld_wait_for_SPL_PKG_SENT(struct drm_device *dev, u32 pipe)
 	}
 
 	if (timeout == 20000)
-                DRM_ERROR("MIPI: SPL_PKT_SENT_INTERRUPT was not sent successfully!\n");
+		DRM_ERROR("MIPI: SPL_PKT_SENT_INTERRUPT was not sent successfully!\n");
 }
 
 /* For TC35876X */

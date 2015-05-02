@@ -88,16 +88,16 @@ struct viawget_wpa_param {
 		} generic_elem;
 
 		struct {
-        	u8 bssid[6];
+		u8 bssid[6];
 			u8 ssid[32];
 			u8 ssid_len;
-        	u8 *wpa_ie;
-        	u16 wpa_ie_len;
-        	int pairwise_suite;
-        	int group_suite;
-        	int key_mgmt_suite;
-        	int auth_alg;
-        	int mode;
+		u8 *wpa_ie;
+		u16 wpa_ie_len;
+		int pairwise_suite;
+		int group_suite;
+		int key_mgmt_suite;
+		int auth_alg;
+		int mode;
 
 		} wpa_associate;
 

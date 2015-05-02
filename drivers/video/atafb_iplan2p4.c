@@ -205,7 +205,7 @@ void atafb_iplan2p4_copyarea(struct fb_info *info, u_long next_line,
 }
 
 void atafb_iplan2p4_fillrect(struct fb_info *info, u_long next_line, u32 color,
-                             int sy, int sx, int height, int width)
+			     int sy, int sx, int height, int width)
 {
 	u32 *dest;
 	int rows, i;
@@ -251,8 +251,8 @@ void atafb_iplan2p4_fillrect(struct fb_info *info, u_long next_line, u32 color,
 }
 
 void atafb_iplan2p4_linefill(struct fb_info *info, u_long next_line,
-                             int dy, int dx, u32 width,
-                             const u8 *data, u32 bgcolor, u32 fgcolor)
+			     int dy, int dx, u32 width,
+			     const u8 *data, u32 bgcolor, u32 fgcolor)
 {
 	u32 *dest;
 	const u16 *data16;

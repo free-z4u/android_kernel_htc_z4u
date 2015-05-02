@@ -281,11 +281,11 @@ static unsigned int startup_bridge_irq(struct irq_data *d)
 	device |= (pin << (pin*3));
 	bridge->b_int_device = device;
 
-        bridge->b_wid_tflush;
+	bridge->b_wid_tflush;
 
 	intr_connect_level(cpu, swlevel);
 
-        return 0;       /* Never anything pending.  */
+	return 0;       /* Never anything pending.  */
 }
 
 /* Shutdown one of the (PCI ...) IRQs routes over a bridge.  */

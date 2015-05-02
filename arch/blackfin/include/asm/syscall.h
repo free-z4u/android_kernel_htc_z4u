@@ -48,7 +48,7 @@ syscall_get_return_value(struct task_struct *task, struct pt_regs *regs)
 
 static inline void
 syscall_set_return_value(struct task_struct *task, struct pt_regs *regs,
-                         int error, long val)
+			 int error, long val)
 {
 	regs->r0 = error ? -error : val;
 }
@@ -65,7 +65,7 @@ syscall_set_return_value(struct task_struct *task, struct pt_regs *regs,
  */
 static inline void
 syscall_get_arguments(struct task_struct *task, struct pt_regs *regs,
-                      unsigned int i, unsigned int n, unsigned long *args)
+		      unsigned int i, unsigned int n, unsigned long *args)
 {
 	/*
 	 * Assume the ptrace layout doesn't change -- r5 is first in memory,
@@ -83,7 +83,7 @@ syscall_get_arguments(struct task_struct *task, struct pt_regs *regs,
 /* See syscall_get_arguments() comments */
 static inline void
 syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
-                      unsigned int i, unsigned int n, const unsigned long *args)
+		      unsigned int i, unsigned int n, const unsigned long *args)
 {
 	long *aregs = &regs->r0 - i;
 

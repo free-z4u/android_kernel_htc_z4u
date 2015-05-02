@@ -2610,12 +2610,12 @@ static int wireless_set_scan(struct net_device *dev, struct iw_request_info *inf
     	wl_act_int_off( lp );
 
 	/*
-         * This looks like a nice place to test if the HCF is still
-         * communicating with the card. It seems that sometimes BAP_1
-         * gets corrupted. By looking at the comments in HCF the
-         * cause is still a mystery. Okay, the communication to the
-         * card is dead, reset the card to revive.
-         */
+	 * This looks like a nice place to test if the HCF is still
+	 * communicating with the card. It seems that sometimes BAP_1
+	 * gets corrupted. By looking at the comments in HCF the
+	 * cause is still a mystery. Okay, the communication to the
+	 * card is dead, reset the card to revive.
+	 */
 	if((lp->hcfCtx.IFB_CardStat & CARD_STAT_DEFUNCT) != 0)
 	{
 		DBG_TRACE( DbgInfo, "CARD is in DEFUNCT mode, reset it to bring it back to life\n" );
@@ -3273,15 +3273,15 @@ struct iw_statistics * wl_wireless_stats( struct net_device *dev )
 			pStats->qual.noise = (u_char) dbm( CNV_LITTLE_TO_INT( pQual->noise_lvl ));
 
 			pStats->qual.updated |= (IW_QUAL_QUAL_UPDATED  |
-                                                 IW_QUAL_LEVEL_UPDATED |
-                                                 IW_QUAL_NOISE_UPDATED |
-                                                 IW_QUAL_DBM);
+						 IW_QUAL_LEVEL_UPDATED |
+						 IW_QUAL_NOISE_UPDATED |
+						 IW_QUAL_DBM);
 		} else {
 			memset( &( pStats->qual ), 0, sizeof( pStats->qual ));
 		}
 
 		/* Get the current tallies from the adapter */
-                /* Only possible when the device is open */
+		/* Only possible when the device is open */
 		if(lp->portState == WVLAN_PORT_STATE_DISABLED) {
 			if( wl_get_tallies( lp, &tallies ) == 0 ) {
 				/* No endian translation is needed here, as CFG_TALLIES is an
@@ -3955,34 +3955,34 @@ static const iw_handler wl_handler[] =
 
 static const iw_handler wl_private_handler[] =
 {                                                       /* SIOCIWFIRSTPRIV + */
-                wvlan_set_netname,                      /* 0: SIOCSIWNETNAME */
-                wvlan_get_netname,                      /* 1: SIOCGIWNETNAME */
-                wvlan_set_station_nickname,             /* 2: SIOCSIWSTANAME */
-                wvlan_get_station_nickname,             /* 3: SIOCGIWSTANAME */
+		wvlan_set_netname,                      /* 0: SIOCSIWNETNAME */
+		wvlan_get_netname,                      /* 1: SIOCGIWNETNAME */
+		wvlan_set_station_nickname,             /* 2: SIOCSIWSTANAME */
+		wvlan_get_station_nickname,             /* 3: SIOCGIWSTANAME */
 #if 1 //;? (HCF_TYPE) & HCF_TYPE_STA
-                wvlan_set_porttype,                     /* 4: SIOCSIWPORTTYPE */
-                wvlan_get_porttype,                     /* 5: SIOCGIWPORTTYPE */
+		wvlan_set_porttype,                     /* 4: SIOCSIWPORTTYPE */
+		wvlan_get_porttype,                     /* 5: SIOCGIWPORTTYPE */
 #endif
 };
 
 struct iw_priv_args wl_priv_args[] = {
-        {SIOCSIWNETNAME,    IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN, 0, "snetwork_name" },
-        {SIOCGIWNETNAME, 0, IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN,    "gnetwork_name" },
-        {SIOCSIWSTANAME,    IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN, 0, "sstation_name" },
-        {SIOCGIWSTANAME, 0, IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN,    "gstation_name" },
+	{SIOCSIWNETNAME,    IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN, 0, "snetwork_name" },
+	{SIOCGIWNETNAME, 0, IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN,    "gnetwork_name" },
+	{SIOCSIWSTANAME,    IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN, 0, "sstation_name" },
+	{SIOCGIWSTANAME, 0, IW_PRIV_TYPE_CHAR | HCF_MAX_NAME_LEN,    "gstation_name" },
 #if 1 //;? #if (HCF_TYPE) & HCF_TYPE_STA
-        {SIOCSIWPORTTYPE,    IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "sport_type" },
-        {SIOCGIWPORTTYPE, 0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1,    "gport_type" },
+	{SIOCSIWPORTTYPE,    IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1, 0, "sport_type" },
+	{SIOCGIWPORTTYPE, 0, IW_PRIV_TYPE_INT | IW_PRIV_SIZE_FIXED | 1,    "gport_type" },
 #endif
 };
 
 const struct iw_handler_def wl_iw_handler_def =
 {
-        .num_private        = sizeof(wl_private_handler) / sizeof(iw_handler),
-        .private            = (iw_handler *) wl_private_handler,
-        .private_args       = (struct iw_priv_args *) wl_priv_args,
-        .num_private_args   = sizeof(wl_priv_args) / sizeof(struct iw_priv_args),
-        .num_standard       = sizeof(wl_handler) / sizeof(iw_handler),
-        .standard           = (iw_handler *) wl_handler,
-        .get_wireless_stats = wl_get_wireless_stats,
+	.num_private        = sizeof(wl_private_handler) / sizeof(iw_handler),
+	.private            = (iw_handler *) wl_private_handler,
+	.private_args       = (struct iw_priv_args *) wl_priv_args,
+	.num_private_args   = sizeof(wl_priv_args) / sizeof(struct iw_priv_args),
+	.num_standard       = sizeof(wl_handler) / sizeof(iw_handler),
+	.standard           = (iw_handler *) wl_handler,
+	.get_wireless_stats = wl_get_wireless_stats,
 };

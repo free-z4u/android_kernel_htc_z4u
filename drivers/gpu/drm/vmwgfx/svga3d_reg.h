@@ -1067,9 +1067,9 @@ typedef enum {
 typedef struct {
    union {
       struct {
-         uint16  function;       /* SVGA3dFogFunction */
-         uint8   type;           /* SVGA3dFogType */
-         uint8   base;           /* SVGA3dFogBase */
+	 uint16  function;       /* SVGA3dFogFunction */
+	 uint8   type;           /* SVGA3dFogType */
+	 uint8   base;           /* SVGA3dFogBase */
       };
       uint32     uintValue;
    };

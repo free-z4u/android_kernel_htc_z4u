@@ -154,21 +154,21 @@ asmlinkage long sys32_msgrcv(int msqid,
 
 asmlinkage int sys32_sendfile(int out_fd, int in_fd, compat_off_t __user *offset, s32 count)
 {
-        mm_segment_t old_fs = get_fs();
-        int ret;
-        off_t of;
+	mm_segment_t old_fs = get_fs();
+	int ret;
+	off_t of;
 
-        if (offset && get_user(of, offset))
-                return -EFAULT;
+	if (offset && get_user(of, offset))
+		return -EFAULT;
 
-        set_fs(KERNEL_DS);
-        ret = sys_sendfile(out_fd, in_fd, offset ? (off_t __user *)&of : NULL, count);
-        set_fs(old_fs);
+	set_fs(KERNEL_DS);
+	ret = sys_sendfile(out_fd, in_fd, offset ? (off_t __user *)&of : NULL, count);
+	set_fs(old_fs);
 
-        if (offset && put_user(of, offset))
-                return -EFAULT;
+	if (offset && put_user(of, offset))
+		return -EFAULT;
 
-        return ret;
+	return ret;
 }
 
 asmlinkage int sys32_sendfile64(int out_fd, int in_fd, compat_loff_t __user *offset, s32 count)
@@ -202,15 +202,15 @@ asmlinkage int sys32_lseek(unsigned int fd, int offset, unsigned int origin)
 
 asmlinkage long sys32_semctl(int semid, int semnum, int cmd, union semun arg)
 {
-        union semun u;
+	union semun u;
 
-        if (cmd == SETVAL) {
-                /* Ugh.  arg is a union of int,ptr,ptr,ptr, so is 8 bytes.
-                 * The int should be in the first 4, but our argument
-                 * frobbing has left it in the last 4.
-                 */
-                u.val = *((int *)&arg + 1);
-                return sys_semctl (semid, semnum, cmd, u);
+	if (cmd == SETVAL) {
+		/* Ugh.  arg is a union of int,ptr,ptr,ptr, so is 8 bytes.
+		 * The int should be in the first 4, but our argument
+		 * frobbing has left it in the last 4.
+		 */
+		u.val = *((int *)&arg + 1);
+		return sys_semctl (semid, semnum, cmd, u);
 	}
 	return sys_semctl (semid, semnum, cmd, arg);
 }
@@ -225,8 +225,8 @@ long sys32_lookup_dcookie(u32 cookie_high, u32 cookie_low, char __user *buf,
 asmlinkage long compat_sys_fallocate(int fd, int mode, u32 offhi, u32 offlo,
 				u32 lenhi, u32 lenlo)
 {
-        return sys_fallocate(fd, mode, ((loff_t)offhi << 32) | offlo,
-                             ((loff_t)lenhi << 32) | lenlo);
+	return sys_fallocate(fd, mode, ((loff_t)offhi << 32) | offlo,
+			     ((loff_t)lenhi << 32) | lenlo);
 }
 
 asmlinkage long compat_sys_fanotify_mark(int fan_fd, int flags, u32 mask_hi,

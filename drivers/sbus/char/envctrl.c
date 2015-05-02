@@ -135,38 +135,38 @@
  * Property of a port or channel as defined by the firmware.
  */
 struct pcf8584_channel {
-        unsigned char chnl_no;
-        unsigned char io_direction;
-        unsigned char type;
-        unsigned char last;
+	unsigned char chnl_no;
+	unsigned char io_direction;
+	unsigned char type;
+	unsigned char last;
 };
 
 /* Each child device may have one or more tables of bytes to help decode
  * data. Table property as defined by the firmware.
  */
 struct pcf8584_tblprop {
-        unsigned int type;
-        unsigned int scale;
-        unsigned int offset; /* offset from the beginning of the table */
-        unsigned int size;
+	unsigned int type;
+	unsigned int scale;
+	unsigned int offset; /* offset from the beginning of the table */
+	unsigned int size;
 };
 
 /* i2c child */
 struct i2c_child_t {
 	/* Either ADC or GPIO. */
 	unsigned char i2ctype;
-        unsigned long addr;
-        struct pcf8584_channel chnl_array[PCF8584_MAX_CHANNELS];
+	unsigned long addr;
+	struct pcf8584_channel chnl_array[PCF8584_MAX_CHANNELS];
 
 	/* Channel info. */
 	unsigned int total_chnls;	/* Number of monitor channels. */
 	unsigned char fan_mask;		/* Byte mask for fan status channels. */
 	unsigned char voltage_mask;	/* Byte mask for voltage status channels. */
-        struct pcf8584_tblprop tblprop_array[PCF8584_MAX_CHANNELS];
+	struct pcf8584_tblprop tblprop_array[PCF8584_MAX_CHANNELS];
 
 	/* Properties of all monitor channels. */
 	unsigned int total_tbls;	/* Number of monitor tables. */
-        char *tables;			/* Pointer to table(s). */
+	char *tables;			/* Pointer to table(s). */
 	char chnls_desc[CHANNEL_DESC_SZ]; /* Channel description. */
 	char mon_type[PCF8584_MAX_CHANNELS];
 };
@@ -380,7 +380,7 @@ static int envctrl_read_cpu_info(int cpu, struct i2c_child_t *pchild,
 	if (j != cpu)
 		return 0;
 
-        /* Read data from address and port. */
+	/* Read data from address and port. */
 	data = envctrl_i2c_read_8591((unsigned char)pchild->addr,
 				     (unsigned char)pchild->chnl_array[i].chnl_no);
 
@@ -411,7 +411,7 @@ static int envctrl_read_noncpu_info(struct i2c_child_t *pchild,
 	if (i >= PCF8584_MAX_CHANNELS)
 		return 0;
 
-        /* Read data from address and port. */
+	/* Read data from address and port. */
 	data = envctrl_i2c_read_8591((unsigned char)pchild->addr,
 				     (unsigned char)pchild->chnl_array[i].chnl_no);
 
@@ -875,20 +875,20 @@ static void envctrl_init_i2c_child(struct device_node *dp,
 	pval = of_get_property(dp, "translation", &len);
 	if (pval && len > 0) {
 		memcpy(pchild->tblprop_array, pval, len);
-                pchild->total_tbls = len / sizeof(struct pcf8584_tblprop);
+		pchild->total_tbls = len / sizeof(struct pcf8584_tblprop);
 		for (i = 0; i < pchild->total_tbls; i++) {
 			if ((pchild->tblprop_array[i].size + pchild->tblprop_array[i].offset) > tbls_size) {
 				tbls_size = pchild->tblprop_array[i].size + pchild->tblprop_array[i].offset;
 			}
 		}
 
-                pchild->tables = kmalloc(tbls_size, GFP_KERNEL);
+		pchild->tables = kmalloc(tbls_size, GFP_KERNEL);
 		if (pchild->tables == NULL){
 			printk(KERN_ERR PFX "Failed to allocate table.\n");
 			return;
 		}
 		pval = of_get_property(dp, "tables", &len);
-                if (!pval || len <= 0) {
+		if (!pval || len <= 0) {
 			printk(KERN_ERR PFX "Failed to get table.\n");
 			return;
 		}

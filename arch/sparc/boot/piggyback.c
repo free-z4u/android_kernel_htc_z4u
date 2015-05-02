@@ -109,7 +109,7 @@ static int end_line(const char *line)
  * Return 0 if either start or end is not found
  */
 static int get_start_end(const char *filename, unsigned int *start,
-                                               unsigned int *end)
+					       unsigned int *end)
 {
 	FILE *map;
 	char buffer[1024];

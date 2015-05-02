@@ -56,7 +56,7 @@ static int dmic_probe(struct snd_soc_codec *codec)
 
 	snd_soc_dapm_new_controls(dapm, dmic_dapm_widgets,
 				  ARRAY_SIZE(dmic_dapm_widgets));
-        snd_soc_dapm_add_routes(dapm, intercon, ARRAY_SIZE(intercon));
+	snd_soc_dapm_add_routes(dapm, intercon, ARRAY_SIZE(intercon));
 	snd_soc_dapm_new_widgets(dapm);
 
 	return 0;

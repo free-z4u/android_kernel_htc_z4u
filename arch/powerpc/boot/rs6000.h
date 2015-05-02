@@ -19,7 +19,7 @@ struct external_filehdr {
 	char f_flags[2];	/* flags			*/
 };
 
-        /* IBM RS/6000 */
+	/* IBM RS/6000 */
 #define U802WRMAGIC     0730    /* writeable text segments **chh**      */
 #define U802ROMAGIC     0735    /* readonly sharable text segments      */
 #define U802TOCMAGIC    0737    /* readonly text segments and TOC       */
@@ -195,7 +195,7 @@ union external_auxent {
 		char x_nlinno[2];	/* # line numbers */
 	} x_scn;
 
-        struct {
+	struct {
 		char x_tvfill[4];	/* tv fill value */
 		char x_tvlen[2];	/* length of .tv */
 		char x_tvran[2][2];	/* tv range */

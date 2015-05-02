@@ -75,10 +75,10 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
 	dbg_hcs_params(ehci, "reset");
 	dbg_hcc_params(ehci, "reset");
 
-        /* ehci_init() causes memory for DMA transfers to be
-         * allocated.  Thus, any vendor-specific workarounds based on
-         * limiting the type of memory used for DMA transfers must
-         * happen before ehci_init() is called. */
+	/* ehci_init() causes memory for DMA transfers to be
+	 * allocated.  Thus, any vendor-specific workarounds based on
+	 * limiting the type of memory used for DMA transfers must
+	 * happen before ehci_init() is called. */
 	switch (pdev->vendor) {
 	case PCI_VENDOR_ID_NVIDIA:
 		/* NVidia reports that certain chips don't handle

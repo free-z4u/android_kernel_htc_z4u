@@ -197,17 +197,17 @@ static void set_ch_t(struct ch_t *geo, __u32 cyl, __u8 head)
 
 static int
 check_XRC (struct ccw1         *de_ccw,
-           struct DE_eckd_data *data,
-           struct dasd_device  *device)
+	   struct DE_eckd_data *data,
+	   struct dasd_device  *device)
 {
-        struct dasd_eckd_private *private;
+	struct dasd_eckd_private *private;
 	int rc;
 
-        private = (struct dasd_eckd_private *) device->private;
+	private = (struct dasd_eckd_private *) device->private;
 	if (!private->rdc_data.facilities.XRC_supported)
 		return 0;
 
-        /* switch on System Time Stamp - needed for XRC Support */
+	/* switch on System Time Stamp - needed for XRC Support */
 	data->ga_extended |= 0x08; /* switch on 'Time Stamp Valid'   */
 	data->ga_extended |= 0x02; /* switch on 'Extended Parameter' */
 
@@ -3640,10 +3640,10 @@ dasd_eckd_get_attrib(struct dasd_device *device, void __user *argp)
 	struct attrib_data_t attrib = private->attrib;
 	int rc;
 
-        if (!capable(CAP_SYS_ADMIN))
-                return -EACCES;
+	if (!capable(CAP_SYS_ADMIN))
+		return -EACCES;
 	if (!argp)
-                return -EINVAL;
+		return -EINVAL;
 
 	rc = 0;
 	if (copy_to_user(argp, (long *) &attrib,

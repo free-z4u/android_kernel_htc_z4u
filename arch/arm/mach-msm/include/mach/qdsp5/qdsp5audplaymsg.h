@@ -26,7 +26,7 @@ GNU General Public License for more details.
 *====*====*====*====*====*====*====*====*====*====*====*====*====*====*====*/
 /*===========================================================================
 
-                      EDIT HISTORY FOR FILE
+		      EDIT HISTORY FOR FILE
 
 This section contains comments describing changes made to this file.
 Notice that changes are listed in reverse chronological order.

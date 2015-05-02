@@ -29,7 +29,7 @@ static inline int scx200_gpio_get(unsigned index) {
    state of the GPIO right now if the GPIO is configured as an input) */
 
 static inline int scx200_gpio_current(unsigned index) {
-        __SCx200_GPIO_BANK;
+	__SCx200_GPIO_BANK;
 	__SCx200_GPIO_INDEX;
 
 	return (scx200_gpio_shadow[bank] & (1<<index)) ? 1 : 0;

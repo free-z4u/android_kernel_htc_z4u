@@ -312,20 +312,20 @@ void finish_atomic_sections (struct pt_regs *regs)
 
 static inline
 int in_mem(unsigned long addr, unsigned long size,
-           unsigned long start, unsigned long end)
+	   unsigned long start, unsigned long end)
 {
 	return addr >= start && addr + size <= end;
 }
 static inline
 int in_mem_const_off(unsigned long addr, unsigned long size, unsigned long off,
-                     unsigned long const_addr, unsigned long const_size)
+		     unsigned long const_addr, unsigned long const_size)
 {
 	return const_size &&
 	       in_mem(addr, size, const_addr + off, const_addr + const_size);
 }
 static inline
 int in_mem_const(unsigned long addr, unsigned long size,
-                 unsigned long const_addr, unsigned long const_size)
+		 unsigned long const_addr, unsigned long const_size)
 {
 	return in_mem_const_off(addr, size, 0, const_addr, const_size);
 }

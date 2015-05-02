@@ -61,7 +61,7 @@ int iop_fw_load_spu(const unsigned char *fw_name, unsigned int spu_inst)
 		.fsm =            regk_iop_spu_no,
 	};
 	reg_iop_sw_cpu_r_mc_stat mc_stat;
-        const struct firmware *fw_entry;
+	const struct firmware *fw_entry;
 	u32 *data;
 	unsigned int timeout;
 	int retval, i;
@@ -130,7 +130,7 @@ int iop_fw_load_mpu(unsigned char *fw_name)
 {
 	const unsigned int start_addr = 0;
 	reg_iop_mpu_rw_ctrl mpu_ctrl;
-        const struct firmware *fw_entry;
+	const struct firmware *fw_entry;
 	u32 *data;
 	int retval, i;
 

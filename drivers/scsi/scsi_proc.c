@@ -75,7 +75,7 @@ static int proc_scsi_read(char *buffer, char **start, off_t offset,
  * @data: pointer to &struct Scsi_Host
  */
 static int proc_scsi_write_proc(struct file *file, const char __user *buf,
-                           unsigned long count, void *data)
+			   unsigned long count, void *data)
 {
 	struct Scsi_Host *shost = data;
 	ssize_t ret = -ENOMEM;
@@ -112,7 +112,7 @@ void scsi_proc_hostdir_add(struct scsi_host_template *sht)
 	mutex_lock(&global_host_template_mutex);
 	if (!sht->present++) {
 		sht->proc_dir = proc_mkdir(sht->proc_name, proc_scsi);
-        	if (!sht->proc_dir)
+		if (!sht->proc_dir)
 			printk(KERN_ERR "%s: proc_mkdir failed for %s\n",
 			       __func__, sht->proc_name);
 	}

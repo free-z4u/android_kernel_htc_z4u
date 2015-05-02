@@ -184,9 +184,9 @@ static inline u32 jiffies_to_AHZ(unsigned long x)
 	return x / (HZ / AHZ);
 # endif
 #else
-        u64 tmp = (u64)x * TICK_NSEC;
-        do_div(tmp, (NSEC_PER_SEC / AHZ));
-        return (long)tmp;
+	u64 tmp = (u64)x * TICK_NSEC;
+	do_div(tmp, (NSEC_PER_SEC / AHZ));
+	return (long)tmp;
 #endif
 }
 
@@ -199,10 +199,10 @@ static inline u64 nsec_to_AHZ(u64 x)
 	do_div(x, (NSEC_PER_SEC / 512));
 #else
 	/*
-         * max relative error 5.7e-8 (1.8s per year) for AHZ <= 1024,
-         * overflow after 64.99 years.
-         * exact for AHZ=60, 72, 90, 120, 144, 180, 300, 600, 900, ...
-         */
+	 * max relative error 5.7e-8 (1.8s per year) for AHZ <= 1024,
+	 * overflow after 64.99 years.
+	 * exact for AHZ=60, 72, 90, 120, 144, 180, 300, 600, 900, ...
+	 */
 	x *= 9;
 	do_div(x, (unsigned long)((9ull * NSEC_PER_SEC + (AHZ/2))
 	                          / AHZ));

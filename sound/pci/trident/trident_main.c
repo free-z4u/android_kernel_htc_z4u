@@ -110,10 +110,10 @@ static void snd_trident_print_voice_regs(struct snd_trident *trident, int voice)
    unsigned short snd_trident_codec_read(struct snd_ac97 *ac97, unsigned short reg)
 
    Description: This routine will do all of the reading from the external
-                CODEC (AC97).
+		CODEC (AC97).
 
    Parameters:  ac97 - ac97 codec structure
-                reg - CODEC register index, from AC97 Hal.
+		reg - CODEC register index, from AC97 Hal.
 
    returns:     16 bit value read from the AC97.
 
@@ -170,11 +170,11 @@ static unsigned short snd_trident_codec_read(struct snd_ac97 *ac97, unsigned sho
    unsigned short wdata)
 
    Description: This routine will do all of the writing to the external
-                CODEC (AC97).
+		CODEC (AC97).
 
    Parameters:	ac97 - ac97 codec structure
    	        reg - CODEC register index, from AC97 Hal.
-                data  - Lower 16 bits are the data to write to CODEC.
+		data  - Lower 16 bits are the data to write to CODEC.
 
    returns:     TRUE if everything went ok, else FALSE.
 
@@ -239,9 +239,9 @@ static void snd_trident_codec_write(struct snd_ac97 *ac97, unsigned short reg,
    void snd_trident_enable_eso(struct snd_trident *trident)
 
    Description: This routine will enable end of loop interrupts.
-                End of loop interrupts will occur when a running
-                channel reaches ESO.
-                Also enables middle of loop interrupts.
+		End of loop interrupts will occur when a running
+		channel reaches ESO.
+		Also enables middle of loop interrupts.
 
    Parameters:  trident - pointer to target device class for 4DWave.
 
@@ -263,12 +263,12 @@ static void snd_trident_enable_eso(struct snd_trident * trident)
    void snd_trident_disable_eso(struct snd_trident *trident)
 
    Description: This routine will disable end of loop interrupts.
-                End of loop interrupts will occur when a running
-                channel reaches ESO.
-                Also disables middle of loop interrupts.
+		End of loop interrupts will occur when a running
+		channel reaches ESO.
+		Also disables middle of loop interrupts.
 
    Parameters:
-                trident - pointer to target device class for 4DWave.
+		trident - pointer to target device class for 4DWave.
 
    returns:     TRUE if everything went ok, else FALSE.
 
@@ -288,11 +288,11 @@ static void snd_trident_disable_eso(struct snd_trident * trident)
    void snd_trident_start_voice(struct snd_trident * trident, unsigned int voice)
 
     Description: Start a voice, any channel 0 thru 63.
-                 This routine automatically handles the fact that there are
-                 more than 32 channels available.
+		 This routine automatically handles the fact that there are
+		 more than 32 channels available.
 
     Parameters : voice - Voice number 0 thru n.
-                 trident - pointer to target device class for 4DWave.
+		 trident - pointer to target device class for 4DWave.
 
     Return Value: None.
 
@@ -312,11 +312,11 @@ EXPORT_SYMBOL(snd_trident_start_voice);
    void snd_trident_stop_voice(struct snd_trident * trident, unsigned int voice)
 
     Description: Stop a voice, any channel 0 thru 63.
-                 This routine automatically handles the fact that there are
-                 more than 32 channels available.
+		 This routine automatically handles the fact that there are
+		 more than 32 channels available.
 
     Parameters : voice - Voice number 0 thru n.
-                 trident - pointer to target device class for 4DWave.
+		 trident - pointer to target device class for 4DWave.
 
     Return Value: None.
 
@@ -434,11 +434,11 @@ static void snd_trident_free_synth_channel(struct snd_trident *trident, int chan
    snd_trident_write_voice_regs
 
    Description: This routine will complete and write the 5 hardware channel
-                registers to hardware.
+		registers to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                Each register field.
+		voice - synthesizer voice structure
+		Each register field.
 
   ---------------------------------------------------------------------------*/
 
@@ -517,11 +517,11 @@ EXPORT_SYMBOL(snd_trident_write_voice_regs);
    snd_trident_write_cso_reg
 
    Description: This routine will write the new CSO offset
-                register to hardware.
+		register to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                CSO - new CSO value
+		voice - synthesizer voice structure
+		CSO - new CSO value
 
   ---------------------------------------------------------------------------*/
 
@@ -543,11 +543,11 @@ static void snd_trident_write_cso_reg(struct snd_trident * trident,
    snd_trident_write_eso_reg
 
    Description: This routine will write the new ESO offset
-                register to hardware.
+		register to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                ESO - new ESO value
+		voice - synthesizer voice structure
+		ESO - new ESO value
 
   ---------------------------------------------------------------------------*/
 
@@ -569,11 +569,11 @@ static void snd_trident_write_eso_reg(struct snd_trident * trident,
    snd_trident_write_vol_reg
 
    Description: This routine will write the new voice volume
-                register to hardware.
+		register to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                Vol - new voice volume
+		voice - synthesizer voice structure
+		Vol - new voice volume
 
   ---------------------------------------------------------------------------*/
 
@@ -600,11 +600,11 @@ static void snd_trident_write_vol_reg(struct snd_trident * trident,
    snd_trident_write_pan_reg
 
    Description: This routine will write the new voice pan
-                register to hardware.
+		register to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                Pan - new pan value
+		voice - synthesizer voice structure
+		Pan - new pan value
 
   ---------------------------------------------------------------------------*/
 
@@ -622,11 +622,11 @@ static void snd_trident_write_pan_reg(struct snd_trident * trident,
    snd_trident_write_rvol_reg
 
    Description: This routine will write the new reverb volume
-                register to hardware.
+		register to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                RVol - new reverb volume
+		voice - synthesizer voice structure
+		RVol - new reverb volume
 
   ---------------------------------------------------------------------------*/
 
@@ -646,11 +646,11 @@ static void snd_trident_write_rvol_reg(struct snd_trident * trident,
    snd_trident_write_cvol_reg
 
    Description: This routine will write the new chorus volume
-                register to hardware.
+		register to hardware.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                voice - synthesizer voice structure
-                CVol - new chorus volume
+		voice - synthesizer voice structure
+		CVol - new chorus volume
 
   ---------------------------------------------------------------------------*/
 
@@ -672,7 +672,7 @@ static void snd_trident_write_cvol_reg(struct snd_trident * trident,
    Description: This routine converts rate in HZ to hardware delta value.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                rate - Real or Virtual channel number.
+		rate - Real or Virtual channel number.
 
    Returns:     Delta value.
 
@@ -702,7 +702,7 @@ static unsigned int snd_trident_convert_rate(unsigned int rate)
    Description: This routine converts rate in HZ to hardware delta value.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                rate - Real or Virtual channel number.
+		rate - Real or Virtual channel number.
 
    Returns:     Delta value.
 
@@ -732,7 +732,7 @@ static unsigned int snd_trident_convert_adc_rate(unsigned int rate)
    Description: This routine converts rate in HZ to spurious threshold.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                rate - Real or Virtual channel number.
+		rate - Real or Virtual channel number.
 
    Returns:     Delta value.
 
@@ -754,7 +754,7 @@ static unsigned int snd_trident_spurious_threshold(unsigned int rate,
    Description: This routine returns a control mode for a PCM channel.
 
    Parameters:  trident - pointer to target device class for 4DWave.
-                substream  - PCM substream
+		substream  - PCM substream
 
    Returns:     Control value.
 
@@ -787,8 +787,8 @@ static unsigned int snd_trident_control_mode(struct snd_pcm_substream *substream
    Description: Device I/O control handler for playback/capture parameters.
 
    Parameters:   substream  - PCM substream class
-                cmd     - what ioctl message to process
-                arg     - additional message infoarg
+		cmd     - what ioctl message to process
+		arg     - additional message infoarg
 
    Returns:     Error status
 
@@ -1876,7 +1876,7 @@ static int snd_trident_playback_open(struct snd_pcm_substream *substream)
    snd_trident_playback_close
 
    Description: This routine will close the 4DWave playback device. For now
-                we will simply free the dma transfer buffer.
+		we will simply free the dma transfer buffer.
 
    Parameters:	substream  - PCM substream class
 
@@ -2004,7 +2004,7 @@ static int snd_trident_capture_open(struct snd_pcm_substream *substream)
    snd_trident_capture_close
 
    Description: This routine will close the 4DWave capture device. For now
-                we will simply free the dma transfer buffer.
+		we will simply free the dma transfer buffer.
 
    Parameters:	substream  - PCM substream class
 
@@ -3168,7 +3168,7 @@ static int snd_trident_gameport_cooked_read(struct gameport *gameport, int *axes
 		if (axes[i] == 0xffff) axes[i] = -1;
 	}
 
-        return 0;
+	return 0;
 }
 
 static int snd_trident_gameport_open(struct gameport *gameport, int mode)
@@ -3527,13 +3527,13 @@ static int snd_trident_sis_init(struct snd_trident *trident)
    snd_trident_create
 
    Description: This routine will create the device specific class for
-                the 4DWave card. It will also perform basic initialization.
+		the 4DWave card. It will also perform basic initialization.
 
    Parameters:  card  - which card to create
-                pci   - interface to PCI bus resource info
-                dma1ptr - playback dma buffer
-                dma2ptr - capture dma buffer
-                irqptr  -  interrupt resource info
+		pci   - interface to PCI bus resource info
+		dma1ptr - playback dma buffer
+		dma2ptr - capture dma buffer
+		irqptr  -  interrupt resource info
 
    Returns:     4DWave device class private data
 
@@ -3673,7 +3673,7 @@ int __devinit snd_trident_create(struct snd_card *card,
    snd_trident_free
 
    Description: This routine will free the device specific class for
-                the 4DWave card.
+		the 4DWave card.
 
    Parameters:  trident  - device specific private data for 4DWave card
 
@@ -3716,11 +3716,11 @@ static int snd_trident_free(struct snd_trident *trident)
    Parameters:  trident  - device specific private data for 4DWave card
 
    Problems:    It seems that Trident chips generates interrupts more than
-                one time in special cases. The spurious interrupts are
-                detected via sample timer (T4D_STIMER) and computing
-                corresponding delta value. The limits are detected with
-                the method try & fail so it is possible that it won't
-                work on all computers. [jaroslav]
+		one time in special cases. The spurious interrupts are
+		detected via sample timer (T4D_STIMER) and computing
+		corresponding delta value. The limits are detected with
+		the method try & fail so it is possible that it won't
+		work on all computers. [jaroslav]
 
    Returns:     None.
 

@@ -265,7 +265,7 @@ static __init int isram_write_test(char *sdram, void *l1inst)
 
 static __init int
 _isram_memcpy_test(char pattern, void *sdram, void *l1inst, const char *smemcpy,
-                   void *(*fmemcpy)(void *, const void *, size_t))
+		   void *(*fmemcpy)(void *, const void *, size_t))
 {
 	memset(sdram, pattern, test_len);
 	fmemcpy(l1inst, sdram, test_len);

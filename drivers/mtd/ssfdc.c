@@ -353,7 +353,7 @@ static void ssfdcr_add_mtd(struct mtd_blktrans_ops *tr, struct mtd_info *mtd)
 
 out_err:
 	kfree(ssfdc->logic_block_map);
-        kfree(ssfdc);
+	kfree(ssfdc);
 }
 
 static void ssfdcr_remove_dev(struct mtd_blktrans_dev *dev)

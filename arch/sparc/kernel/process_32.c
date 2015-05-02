@@ -123,7 +123,7 @@ void cpu_idle(void)
 /* This is being executed in task 0 'user space'. */
 void cpu_idle(void)
 {
-        set_thread_flag(TIF_POLLING_NRFLAG);
+	set_thread_flag(TIF_POLLING_NRFLAG);
 	/* endless idle loop with no priority at all */
 	while(1) {
 #ifdef CONFIG_SPARC_LEON
@@ -192,8 +192,8 @@ void __show_backtrace(unsigned long fp)
 	spin_lock_irqsave(&sparc_backtrace_lock, flags);
 
 	rw = (struct reg_window32 *)fp;
-        while(rw && (((unsigned long) rw) >= PAGE_OFFSET) &&
-            !(((unsigned long) rw) & 0x7)) {
+	while(rw && (((unsigned long) rw) >= PAGE_OFFSET) &&
+	    !(((unsigned long) rw) & 0x7)) {
 		printk("CPU[%d]: ARGS[%08lx,%08lx,%08lx,%08lx,%08lx,%08lx] "
 		       "FP[%08lx] CALLER[%08lx]: ", cpu,
 		       rw->ins[0], rw->ins[1], rw->ins[2], rw->ins[3],
@@ -265,7 +265,7 @@ void show_regs(struct pt_regs *r)
 {
 	struct reg_window32 *rw = (struct reg_window32 *) r->u_regs[14];
 
-        printk("PSR: %08lx PC: %08lx NPC: %08lx Y: %08lx    %s\n",
+	printk("PSR: %08lx PC: %08lx NPC: %08lx Y: %08lx    %s\n",
 	       r->psr, r->pc, r->npc, r->y, print_tainted());
 	printk("PC: <%pS>\n", (void *) r->pc);
 	printk("%%G: %08lx %08lx  %08lx %08lx  %08lx %08lx  %08lx %08lx\n",
@@ -416,9 +416,9 @@ clone_stackframe(struct sparc_stackf __user *dst,
 }
 
 asmlinkage int sparc_do_fork(unsigned long clone_flags,
-                             unsigned long stack_start,
-                             struct pt_regs *regs,
-                             unsigned long stack_size)
+			     unsigned long stack_start,
+			     struct pt_regs *regs,
+			     unsigned long stack_size)
 {
 	unsigned long parent_tid_ptr, child_tid_ptr;
 	unsigned long orig_i1 = regs->u_regs[UREG_I1];
@@ -685,12 +685,12 @@ unsigned long get_wchan(struct task_struct *task)
 {
 	unsigned long pc, fp, bias = 0;
 	unsigned long task_base = (unsigned long) task;
-        unsigned long ret = 0;
+	unsigned long ret = 0;
 	struct reg_window32 *rw;
 	int count = 0;
 
 	if (!task || task == current ||
-            task->state == TASK_RUNNING)
+	    task->state == TASK_RUNNING)
 		goto out;
 
 	fp = task_thread_info(task)->ksp + bias;

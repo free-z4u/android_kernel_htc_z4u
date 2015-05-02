@@ -144,7 +144,7 @@ cris_do_profile(struct pt_regs* regs)
 {
 
 #ifdef CONFIG_SYSTEM_PROFILER
-        cris_profile_sample(regs);
+	cris_profile_sample(regs);
 #endif
 
 #ifdef CONFIG_PROFILING

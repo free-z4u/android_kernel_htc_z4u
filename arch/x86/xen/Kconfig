@@ -33,8 +33,8 @@ config XEN_MAX_DOMAIN_MEMORY
        default 64 if X86_32
        depends on XEN
        help
-         This only affects the sizing of some bss arrays, the unused
-         portions of which are freed.
+	 This only affects the sizing of some bss arrays, the unused
+	 portions of which are freed.
 
 config XEN_SAVE_RESTORE
        bool

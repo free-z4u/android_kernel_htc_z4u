@@ -16,7 +16,7 @@
   --------------------------------------------------------------------------
 
    Description:  This module will handshake with the DSP bootloader to
-                 download the DSP runtime image.
+		 download the DSP runtime image.
 
 ---------------------------------------------------------------------------*/
 

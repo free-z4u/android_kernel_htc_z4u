@@ -2,8 +2,8 @@
 
      Driver for Atmel at76c502 at76c504 and at76c506 wireless cards.
 
-        Copyright 2000-2001 ATMEL Corporation.
-        Copyright 2003 Simon Kelley.
+	Copyright 2000-2001 ATMEL Corporation.
+	Copyright 2003 Simon Kelley.
 
     This code was developed from version 2.1.1 of the Atmel drivers,
     released by Atmel corp. under the GPL in December 2002. It also
@@ -201,14 +201,14 @@ static int atmel_resume(struct pcmcia_device *link)
 			PCMCIA_DEV_ID_MATCH_CARD_ID, \
 	.manf_id = (manf), \
 	.card_id = (card), \
-        .driver_info = (kernel_ulong_t)(info), }
+	.driver_info = (kernel_ulong_t)(info), }
 
 #define PCMCIA_DEVICE_PROD_ID12_INFO(v1, v2, vh1, vh2, info) { \
 	.match_flags = PCMCIA_DEV_ID_MATCH_PROD_ID1| \
 			PCMCIA_DEV_ID_MATCH_PROD_ID2, \
 	.prod_id = { (v1), (v2), NULL, NULL }, \
 	.prod_id_hash = { (vh1), (vh2), 0, 0 }, \
-        .driver_info = (kernel_ulong_t)(info), }
+	.driver_info = (kernel_ulong_t)(info), }
 
 static const struct pcmcia_device_id atmel_ids[] = {
 	PCMCIA_DEVICE_MANF_CARD_INFO(0x0101, 0x0620, ATMEL_FW_TYPE_502_3COM),
@@ -249,12 +249,12 @@ static struct pcmcia_driver atmel_driver = {
 
 static int __init atmel_cs_init(void)
 {
-        return pcmcia_register_driver(&atmel_driver);
+	return pcmcia_register_driver(&atmel_driver);
 }
 
 static void __exit atmel_cs_cleanup(void)
 {
-        pcmcia_unregister_driver(&atmel_driver);
+	pcmcia_unregister_driver(&atmel_driver);
 }
 
 /*

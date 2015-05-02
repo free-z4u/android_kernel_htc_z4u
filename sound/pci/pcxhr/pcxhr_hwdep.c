@@ -326,17 +326,17 @@ static int pcxhr_dsp_load(struct pcxhr_mgr *mgr, int index,
 
 	/* first communication with embedded */
 	err = pcxhr_init_board(mgr);
-        if (err < 0) {
+	if (err < 0) {
 		snd_printk(KERN_ERR "pcxhr could not be set up\n");
 		return err;
 	}
 	err = pcxhr_config_pipes(mgr);
-        if (err < 0) {
+	if (err < 0) {
 		snd_printk(KERN_ERR "pcxhr pipes could not be set up\n");
 		return err;
 	}
        	/* create devices and mixer in accordance with HW options*/
-        for (card_index = 0; card_index < mgr->num_cards; card_index++) {
+	for (card_index = 0; card_index < mgr->num_cards; card_index++) {
 		struct snd_pcxhr *chip = mgr->chip[card_index];
 
 		if ((err = pcxhr_create_pcm(chip)) < 0)
@@ -350,7 +350,7 @@ static int pcxhr_dsp_load(struct pcxhr_mgr *mgr, int index,
 			return err;
 	}
 	err = pcxhr_start_pipes(mgr);
-        if (err < 0) {
+	if (err < 0) {
 		snd_printk(KERN_ERR "pcxhr pipes could not be started\n");
 		return err;
 	}
@@ -437,7 +437,7 @@ static int pcxhr_hwdep_dsp_status(struct snd_hwdep *hw,
 {
 	struct pcxhr_mgr *mgr = hw->private_data;
 	sprintf(info->id, "pcxhr%d", mgr->fw_file_set);
-        info->num_dsps = PCXHR_FIRMWARE_FILES_MAX_INDEX;
+	info->num_dsps = PCXHR_FIRMWARE_FILES_MAX_INDEX;
 
 	if (hw->dsp_loaded & (1 << PCXHR_FIRMWARE_DSP_MAIN_INDEX))
 		info->chip_ready = 1;

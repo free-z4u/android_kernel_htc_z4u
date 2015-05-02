@@ -52,10 +52,10 @@ ev6_parse_mbox(u64 mm_stat, u64 d_stat, u64 c_stat, int print)
 #define EV6__D_STAT__ECC_ERR_LD		(1UL << 3)
 #define EV6__D_STAT__SEO		(1UL << 4)
 #define EV6__D_STAT__ERRMASK		(EV6__D_STAT__TPERR_P0 |	\
-                                         EV6__D_STAT__TPERR_P1 | 	\
-                                         EV6__D_STAT__ECC_ERR_ST | 	\
-                                         EV6__D_STAT__ECC_ERR_LD | 	\
-                                         EV6__D_STAT__SEO)
+					 EV6__D_STAT__TPERR_P1 | 	\
+					 EV6__D_STAT__ECC_ERR_ST | 	\
+					 EV6__D_STAT__ECC_ERR_LD | 	\
+					 EV6__D_STAT__SEO)
 
 	if (!(d_stat & EV6__D_STAT__ERRMASK) &&
 	    !(mm_stat & EV6__MM_STAT__ERRMASK))

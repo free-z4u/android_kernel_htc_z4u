@@ -458,37 +458,37 @@ WM5100_MIXER_ENUMS(LHPF4, WM5100_HPLP4MIX_INPUT_1_SOURCE);
 
 #define WM5100_MIXER_INPUT_ROUTES(name)	\
 	{ name, "Tone Generator 1", "Tone Generator 1" }, \
-        { name, "Tone Generator 2", "Tone Generator 2" }, \
-        { name, "IN1L", "IN1L PGA" }, \
-        { name, "IN1R", "IN1R PGA" }, \
-        { name, "IN2L", "IN2L PGA" }, \
-        { name, "IN2R", "IN2R PGA" }, \
-        { name, "IN3L", "IN3L PGA" }, \
-        { name, "IN3R", "IN3R PGA" }, \
-        { name, "IN4L", "IN4L PGA" }, \
-        { name, "IN4R", "IN4R PGA" }, \
-        { name, "AIF1RX1", "AIF1RX1" }, \
-        { name, "AIF1RX2", "AIF1RX2" }, \
-        { name, "AIF1RX3", "AIF1RX3" }, \
-        { name, "AIF1RX4", "AIF1RX4" }, \
-        { name, "AIF1RX5", "AIF1RX5" }, \
-        { name, "AIF1RX6", "AIF1RX6" }, \
-        { name, "AIF1RX7", "AIF1RX7" }, \
-        { name, "AIF1RX8", "AIF1RX8" }, \
-        { name, "AIF2RX1", "AIF2RX1" }, \
-        { name, "AIF2RX2", "AIF2RX2" }, \
-        { name, "AIF3RX1", "AIF3RX1" }, \
-        { name, "AIF3RX2", "AIF3RX2" }, \
-        { name, "EQ1", "EQ1" }, \
-        { name, "EQ2", "EQ2" }, \
-        { name, "EQ3", "EQ3" }, \
-        { name, "EQ4", "EQ4" }, \
-        { name, "DRC1L", "DRC1L" }, \
-        { name, "DRC1R", "DRC1R" }, \
-        { name, "LHPF1", "LHPF1" }, \
-        { name, "LHPF2", "LHPF2" }, \
-        { name, "LHPF3", "LHPF3" }, \
-        { name, "LHPF4", "LHPF4" }
+	{ name, "Tone Generator 2", "Tone Generator 2" }, \
+	{ name, "IN1L", "IN1L PGA" }, \
+	{ name, "IN1R", "IN1R PGA" }, \
+	{ name, "IN2L", "IN2L PGA" }, \
+	{ name, "IN2R", "IN2R PGA" }, \
+	{ name, "IN3L", "IN3L PGA" }, \
+	{ name, "IN3R", "IN3R PGA" }, \
+	{ name, "IN4L", "IN4L PGA" }, \
+	{ name, "IN4R", "IN4R PGA" }, \
+	{ name, "AIF1RX1", "AIF1RX1" }, \
+	{ name, "AIF1RX2", "AIF1RX2" }, \
+	{ name, "AIF1RX3", "AIF1RX3" }, \
+	{ name, "AIF1RX4", "AIF1RX4" }, \
+	{ name, "AIF1RX5", "AIF1RX5" }, \
+	{ name, "AIF1RX6", "AIF1RX6" }, \
+	{ name, "AIF1RX7", "AIF1RX7" }, \
+	{ name, "AIF1RX8", "AIF1RX8" }, \
+	{ name, "AIF2RX1", "AIF2RX1" }, \
+	{ name, "AIF2RX2", "AIF2RX2" }, \
+	{ name, "AIF3RX1", "AIF3RX1" }, \
+	{ name, "AIF3RX2", "AIF3RX2" }, \
+	{ name, "EQ1", "EQ1" }, \
+	{ name, "EQ2", "EQ2" }, \
+	{ name, "EQ3", "EQ3" }, \
+	{ name, "EQ4", "EQ4" }, \
+	{ name, "DRC1L", "DRC1L" }, \
+	{ name, "DRC1R", "DRC1R" }, \
+	{ name, "LHPF1", "LHPF1" }, \
+	{ name, "LHPF2", "LHPF2" }, \
+	{ name, "LHPF3", "LHPF3" }, \
+	{ name, "LHPF4", "LHPF4" }
 
 #define WM5100_MIXER_ROUTES(widget, name) \
 	{ widget, NULL, name " Mixer" },         \

@@ -154,15 +154,15 @@ struct irda_skb_cb {
 /* Chip specific info */
 typedef struct {
 	int cfg_base;         /* Config register IO base */
-        int sir_base;         /* SIR IO base */
+	int sir_base;         /* SIR IO base */
 	int fir_base;         /* FIR IO base */
 	int mem_base;         /* Shared memory base */
-        int sir_ext;          /* Length of SIR iobase */
+	int sir_ext;          /* Length of SIR iobase */
 	int fir_ext;          /* Length of FIR iobase */
-        int irq, irq2;        /* Interrupts used */
-        int dma, dma2;        /* DMA channel(s) used */
-        int fifo_size;        /* FIFO size */
-        int irqflags;         /* interrupt flags (ie, IRQF_SHARED|IRQF_DISABLED) */
+	int irq, irq2;        /* Interrupts used */
+	int dma, dma2;        /* DMA channel(s) used */
+	int fifo_size;        /* FIFO size */
+	int irqflags;         /* interrupt flags (ie, IRQF_SHARED|IRQF_DISABLED) */
 	int direction;        /* Link direction, used by some FIR drivers */
 	int enabled;          /* Powered on? */
 	int suspended;        /* Suspended by APM */

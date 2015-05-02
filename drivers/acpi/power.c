@@ -108,7 +108,7 @@ struct acpi_power_resource {
 static struct list_head acpi_power_resource_list;
 
 /* --------------------------------------------------------------------------
-                             Power Resource Management
+			     Power Resource Management
    -------------------------------------------------------------------------- */
 
 static int
@@ -479,7 +479,7 @@ no_power_resource:
  * -ENODEV if the execution of either _DSW or _PSW has failed
  */
 int acpi_device_sleep_wake(struct acpi_device *dev,
-                           int enable, int sleep_state, int dev_state)
+			   int enable, int sleep_state, int dev_state)
 {
 	union acpi_object in_arg[3];
 	struct acpi_object_list arg_list = { 3, in_arg };
@@ -614,7 +614,7 @@ int acpi_disable_wakeup_device_power(struct acpi_device *dev)
 }
 
 /* --------------------------------------------------------------------------
-                             Device Power Management
+			     Device Power Management
    -------------------------------------------------------------------------- */
 
 int acpi_power_get_inferred_state(struct acpi_device *device, int *state)
@@ -694,7 +694,7 @@ int acpi_power_transition(struct acpi_device *device, int state)
 }
 
 /* --------------------------------------------------------------------------
-                                Driver Interface
+				Driver Interface
    -------------------------------------------------------------------------- */
 
 static int acpi_power_add(struct acpi_device *device)

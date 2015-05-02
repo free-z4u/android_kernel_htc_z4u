@@ -26,7 +26,7 @@
 
 /* This is for traps we should NEVER get. */
 #define BAD_TRAP(num) \
-        rd %psr, %l0; mov num, %l7; b bad_trap_handler; rd %wim, %l3;
+	rd %psr, %l0; mov num, %l7; b bad_trap_handler; rd %wim, %l3;
 
 /* This is for traps when we want just skip the instruction which caused it */
 #define SKIP_TRAP(type, name) \
@@ -40,10 +40,10 @@
 
 /* Software trap for Linux system calls. */
 #define LINUX_SYSCALL_TRAP \
-        sethi %hi(sys_call_table), %l7; \
-        or %l7, %lo(sys_call_table), %l7; \
-        b linux_sparc_syscall; \
-        rd %psr, %l0;
+	sethi %hi(sys_call_table), %l7; \
+	or %l7, %lo(sys_call_table), %l7; \
+	b linux_sparc_syscall; \
+	rd %psr, %l0;
 
 #define BREAKPOINT_TRAP \
 	b breakpoint_trap; \
@@ -64,11 +64,11 @@
 
 /* The Get Condition Codes software trap for userland. */
 #define GETCC_TRAP \
-        b getcc_trap_handler; mov %psr, %l0; nop; nop;
+	b getcc_trap_handler; mov %psr, %l0; nop; nop;
 
 /* The Set Condition Codes software trap for userland. */
 #define SETCC_TRAP \
-        b setcc_trap_handler; mov %psr, %l0; nop; nop;
+	b setcc_trap_handler; mov %psr, %l0; nop; nop;
 
 /* The Get PSR software trap for userland. */
 #define GETPSR_TRAP \
@@ -78,7 +78,7 @@
  * gets handled with another macro.
  */
 #define TRAP_ENTRY_INTERRUPT(int_level) \
-        mov int_level, %l7; rd %psr, %l0; b real_irq_entry; rd %wim, %l3;
+	mov int_level, %l7; rd %psr, %l0; b real_irq_entry; rd %wim, %l3;
 
 /* NMI's (Non Maskable Interrupts) are special, you can't keep them
  * from coming in, and basically if you get one, the shows over. ;(
@@ -88,15 +88,15 @@
  * command you to do CPU tricks, read your mailbox for more info."
  */
 #define NMI_TRAP \
-        rd %wim, %l3; b linux_trap_nmi_sun4c; mov %psr, %l0; nop;
+	rd %wim, %l3; b linux_trap_nmi_sun4c; mov %psr, %l0; nop;
 
 /* Window overflows/underflows are special and we need to try to be as
  * efficient as possible here....
  */
 #define WINDOW_SPILL \
-        rd %psr, %l0; rd %wim, %l3; b spill_window_entry; andcc %l0, PSR_PS, %g0;
+	rd %psr, %l0; rd %wim, %l3; b spill_window_entry; andcc %l0, PSR_PS, %g0;
 
 #define WINDOW_FILL \
-        rd %psr, %l0; rd %wim, %l3; b fill_window_entry; andcc %l0, PSR_PS, %g0;
+	rd %psr, %l0; rd %wim, %l3; b fill_window_entry; andcc %l0, PSR_PS, %g0;
 
 #endif /* __SPARC_HEAD_H */

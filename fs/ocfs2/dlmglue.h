@@ -101,7 +101,7 @@ void ocfs2_file_lock_res_init(struct ocfs2_lock_res *lockres,
 			      struct ocfs2_file_private *fp);
 struct ocfs2_mem_dqinfo;
 void ocfs2_qinfo_lock_res_init(struct ocfs2_lock_res *lockres,
-                               struct ocfs2_mem_dqinfo *info);
+			       struct ocfs2_mem_dqinfo *info);
 void ocfs2_refcount_lock_res_init(struct ocfs2_lock_res *lockres,
 				  struct ocfs2_super *osb, u64 ref_blkno,
 				  unsigned int generation);

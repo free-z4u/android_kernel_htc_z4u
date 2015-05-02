@@ -23,6 +23,6 @@ struct aio_context {
 
 extern int submit_aio(enum aio_type type, int fd, char *buf, int len,
 		      unsigned long long offset, int reply_fd,
-                      struct aio_context *aio);
+		      struct aio_context *aio);
 
 #endif

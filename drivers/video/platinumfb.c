@@ -318,7 +318,7 @@ static void __devinit platinum_init_info(struct fb_info *info, struct fb_info_pl
 	/* Fill fb_info */
 	info->fbops = &platinumfb_ops;
 	info->pseudo_palette = pinfo->pseudo_palette;
-        info->flags = FBINFO_DEFAULT;
+	info->flags = FBINFO_DEFAULT;
 	info->screen_base = pinfo->frame_buffer + 0x20;
 
 	fb_alloc_cmap(&info->cmap, 256, 0);
@@ -330,11 +330,11 @@ static void __devinit platinum_init_info(struct fb_info *info, struct fb_info_pl
 	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	info->fix.smem_start = pinfo->frame_buffer_phys + 0x20; /* will be updated later */
 	info->fix.smem_len = pinfo->total_vram - 0x20;
-        info->fix.ywrapstep = 0;
+	info->fix.ywrapstep = 0;
 	info->fix.xpanstep = 0;
 	info->fix.ypanstep = 0;
-        info->fix.type_aux = 0;
-        info->fix.accel = FB_ACCEL_NONE;
+	info->fix.type_aux = 0;
+	info->fix.accel = FB_ACCEL_NONE;
 }
 
 
@@ -650,7 +650,7 @@ static int __devexit platinumfb_remove(struct platform_device* odev)
 	struct fb_info		*info = dev_get_drvdata(&odev->dev);
 	struct fb_info_platinum	*pinfo = info->par;
 
-        unregister_framebuffer (info);
+	unregister_framebuffer (info);
 
 	/* Unmap frame buffer and registers */
 	iounmap(pinfo->frame_buffer);

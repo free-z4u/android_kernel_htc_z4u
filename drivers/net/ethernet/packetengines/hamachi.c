@@ -1141,7 +1141,7 @@ static void hamachi_tx_timeout(struct net_device *dev)
 		if (skb == NULL)
 			break;
 
-                hmp->rx_ring[i].addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
+		hmp->rx_ring[i].addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
 			skb->data, hmp->rx_buf_sz, PCI_DMA_FROMDEVICE));
 		hmp->rx_ring[i].status_n_length = cpu_to_le32(DescOwn |
 			DescEndPacket | DescIntr | (hmp->rx_buf_sz - 2));
@@ -1193,7 +1193,7 @@ static void hamachi_init_ring(struct net_device *dev)
 		if (skb == NULL)
 			break;
 		skb_reserve(skb, 2); /* 16 byte align the IP header. */
-                hmp->rx_ring[i].addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
+		hmp->rx_ring[i].addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
 			skb->data, hmp->rx_buf_sz, PCI_DMA_FROMDEVICE));
 		/* -2 because it doesn't REALLY have that first 2 bytes -KDU */
 		hmp->rx_ring[i].status_n_length = cpu_to_le32(DescOwn |
@@ -1243,7 +1243,7 @@ static netdev_tx_t hamachi_start_xmit(struct sk_buff *skb,
 
 	hmp->tx_skbuff[entry] = skb;
 
-        hmp->tx_ring[entry].addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
+	hmp->tx_ring[entry].addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
 		skb->data, skb->len, PCI_DMA_TODEVICE));
 
 	/* Hmmmm, could probably put a DescIntr on these, but the way
@@ -1596,7 +1596,7 @@ static int hamachi_rx(struct net_device *dev)
 			if (skb == NULL)
 				break;		/* Better luck next round. */
 			skb_reserve(skb, 2);	/* Align IP on 16 byte boundaries */
-                	desc->addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
+			desc->addr = cpu_to_leXX(pci_map_single(hmp->pci_dev,
 				skb->data, hmp->rx_buf_sz, PCI_DMA_FROMDEVICE));
 		}
 		desc->status_n_length = cpu_to_le32(hmp->rx_buf_sz);
@@ -1746,11 +1746,11 @@ static struct net_device_stats *hamachi_get_stats(struct net_device *dev)
 	/* We should lock this segment of code for SMP eventually, although
 	   the vulnerability window is very small and statistics are
 	   non-critical. */
-        /* Ok, what goes here?  This appears to be stuck at 21 packets
-           according to ifconfig.  It does get incremented in hamachi_tx(),
-           so I think I'll comment it out here and see if better things
-           happen.
-        */
+	/* Ok, what goes here?  This appears to be stuck at 21 packets
+	   according to ifconfig.  It does get incremented in hamachi_tx(),
+	   so I think I'll comment it out here and see if better things
+	   happen.
+	*/
 	/* dev->stats.tx_packets	= readl(ioaddr + 0x000); */
 
 	/* Total Uni+Brd+Multi */

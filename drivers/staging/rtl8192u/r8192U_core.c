@@ -2329,32 +2329,32 @@ void rtl8192_link_change(struct net_device *dev)
 //	RT_TRACE(COMP_CH, "========>%s(), chan:%d\n", __FUNCTION__, priv->chan);
 //	rtl8192_set_chan(dev, priv->chan);
 	 if (ieee->iw_mode == IW_MODE_INFRA || ieee->iw_mode == IW_MODE_ADHOC)
-        {
-                u32 reg = 0;
-                reg = read_nic_dword(dev, RCR);
-                if (priv->ieee80211->state == IEEE80211_LINKED)
-                        priv->ReceiveConfig = reg |= RCR_CBSSID;
-                else
-                        priv->ReceiveConfig = reg &= ~RCR_CBSSID;
-                write_nic_dword(dev, RCR, reg);
-        }
+	{
+		u32 reg = 0;
+		reg = read_nic_dword(dev, RCR);
+		if (priv->ieee80211->state == IEEE80211_LINKED)
+			priv->ReceiveConfig = reg |= RCR_CBSSID;
+		else
+			priv->ReceiveConfig = reg &= ~RCR_CBSSID;
+		write_nic_dword(dev, RCR, reg);
+	}
 
 //	rtl8192_set_rxconf(dev);
 }
 
 static struct ieee80211_qos_parameters def_qos_parameters = {
-        {3,3,3,3},/* cw_min */
-        {7,7,7,7},/* cw_max */
-        {2,2,2,2},/* aifs */
-        {0,0,0,0},/* flags */
-        {0,0,0,0} /* tx_op_limit */
+	{3,3,3,3},/* cw_min */
+	{7,7,7,7},/* cw_max */
+	{2,2,2,2},/* aifs */
+	{0,0,0,0},/* flags */
+	{0,0,0,0} /* tx_op_limit */
 };
 
 
 void rtl8192_update_beacon(struct work_struct * work)
 {
-        struct r8192_priv *priv = container_of(work, struct r8192_priv, update_beacon_wq.work);
-        struct net_device *dev = priv->ieee80211->dev;
+	struct r8192_priv *priv = container_of(work, struct r8192_priv, update_beacon_wq.work);
+	struct net_device *dev = priv->ieee80211->dev;
  	struct ieee80211_device* ieee = priv->ieee80211;
 	struct ieee80211_network* net = &ieee->current_network;
 
@@ -4122,7 +4122,7 @@ extern	void	rtl819x_watchdog_wqcallback(struct work_struct *work)
 				notify_wx_assoc_event(priv->ieee80211);
 				RemovePeerTS(priv->ieee80211,priv->ieee80211->current_network.bssid);
 				priv->ieee80211->link_change(dev);
-                                queue_work(priv->ieee80211->wq, &priv->ieee80211->associate_procedure_wq);
+				queue_work(priv->ieee80211->wq, &priv->ieee80211->associate_procedure_wq);
 
 			}
 		}
@@ -4819,9 +4819,9 @@ rtl819x_evm_dbtopercentage(
     ret_val = value;
 
     if(ret_val >= 0)
-        ret_val = 0;
+	ret_val = 0;
     if(ret_val <= -33)
-        ret_val = -33;
+	ret_val = -33;
     ret_val = 0 - ret_val;
     ret_val*=3;
 	if(ret_val == 99)

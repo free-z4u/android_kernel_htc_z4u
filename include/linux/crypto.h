@@ -1088,7 +1088,7 @@ static inline void crypto_cipher_clear_flags(struct crypto_cipher *tfm,
 }
 
 static inline int crypto_cipher_setkey(struct crypto_cipher *tfm,
-                                       const u8 *key, unsigned int keylen)
+				       const u8 *key, unsigned int keylen)
 {
 	return crypto_cipher_crt(tfm)->cit_setkey(crypto_cipher_tfm(tfm),
 						  key, keylen);
@@ -1268,16 +1268,16 @@ static inline struct compress_tfm *crypto_comp_crt(struct crypto_comp *tfm)
 }
 
 static inline int crypto_comp_compress(struct crypto_comp *tfm,
-                                       const u8 *src, unsigned int slen,
-                                       u8 *dst, unsigned int *dlen)
+				       const u8 *src, unsigned int slen,
+				       u8 *dst, unsigned int *dlen)
 {
 	return crypto_comp_crt(tfm)->cot_compress(crypto_comp_tfm(tfm),
 						  src, slen, dst, dlen);
 }
 
 static inline int crypto_comp_decompress(struct crypto_comp *tfm,
-                                         const u8 *src, unsigned int slen,
-                                         u8 *dst, unsigned int *dlen)
+					 const u8 *src, unsigned int slen,
+					 u8 *dst, unsigned int *dlen)
 {
 	return crypto_comp_crt(tfm)->cot_decompress(crypto_comp_tfm(tfm),
 						    src, slen, dst, dlen);

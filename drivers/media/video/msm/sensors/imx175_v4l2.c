@@ -339,7 +339,7 @@ static struct msm_camera_i2c_reg_conf imx175_fast_video_settings[] = {
 
 static struct msm_camera_i2c_reg_conf imx175_snap_settings[] = {
 
-          {0x41C0, 0x01},
+	  {0x41C0, 0x01},
 	    {0x0100, 0x00},
 	    {0x030E, 0x01},
 	    {0x0202, 0x09},

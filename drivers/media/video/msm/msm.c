@@ -443,7 +443,7 @@ wait_event:
 				msm_vfe_recover_stop();
 
 #if 0
-                if(Block_IN_VFE_RESET) {
+		if(Block_IN_VFE_RESET) {
 				    BUG();
 				}
 #endif
@@ -3956,7 +3956,7 @@ static uint32_t htccallback_value;
 static uint32_t videochat_value;
 
 static ssize_t htccallback_set(struct device *dev,
-                struct device_attribute *attr, const char *buf, size_t count)
+		struct device_attribute *attr, const char *buf, size_t count)
 {
 	char *tmp;
 	htccallback_value = simple_strtoul(buf, &tmp, 0);
@@ -4004,13 +4004,13 @@ static int msm_camera_sysfs_init(void)
 
        htccallback_obj = kobject_create_and_add("camera_htccallback", NULL);
        if (htccallback_obj == NULL) {
-              pr_info("htccallback: subsystem_register_htccallback failed\n");
-              ret = -ENOMEM;
-              goto error;
+	      pr_info("htccallback: subsystem_register_htccallback failed\n");
+	      ret = -ENOMEM;
+	      goto error;
        }
 
        ret = sysfs_create_file(htccallback_obj,
-                  &dev_attr_htccallback.attr);
+		  &dev_attr_htccallback.attr);
 	if (ret) {
 		pr_info("htccallback: sysfs_create_htccallback_file failed\n");
 		ret = -EFAULT;
@@ -4025,13 +4025,13 @@ static int msm_camera_sysfs_init(void)
 
        camera_attrs_obj = kobject_create_and_add("camera_attrs", NULL);
        if (camera_attrs_obj == NULL) {
-              pr_info("camera_attrs: subsystem_register_camera_attrs failed\n");
-              ret = -ENOMEM;
-              goto error;
+	      pr_info("camera_attrs: subsystem_register_camera_attrs failed\n");
+	      ret = -ENOMEM;
+	      goto error;
        }
 
        ret = sysfs_create_file(camera_attrs_obj,
-                  &dev_attr_videochat.attr);
+		  &dev_attr_videochat.attr);
 	if (ret) {
 		pr_info("dev_attr_videochat: sysfs_create_dev attr_videochat file failed\n");
 		ret = -EFAULT;

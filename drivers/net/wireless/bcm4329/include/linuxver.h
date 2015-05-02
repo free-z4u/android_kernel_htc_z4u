@@ -236,7 +236,7 @@ static inline int get_order(unsigned long size)
 }
 
 static inline void *pci_alloc_consistent(struct pci_dev *hwdev, size_t size,
-                                         dma_addr_t *dma_handle)
+					 dma_addr_t *dma_handle)
 {
 	void *ret;
 	int gfp = GFP_ATOMIC | GFP_DMA;
@@ -250,7 +250,7 @@ static inline void *pci_alloc_consistent(struct pci_dev *hwdev, size_t size,
 	return ret;
 }
 static inline void pci_free_consistent(struct pci_dev *hwdev, size_t size,
-                                       void *vaddr, dma_addr_t dma_handle)
+				       void *vaddr, dma_addr_t dma_handle)
 {
 	free_pages((unsigned long)vaddr, get_order(size));
 }
@@ -298,8 +298,8 @@ static inline void tasklet_schedule(struct tasklet_struct *tasklet)
 }
 
 static inline void tasklet_init(struct tasklet_struct *tasklet,
-                                void (*func)(unsigned long),
-                                unsigned long data)
+				void (*func)(unsigned long),
+				unsigned long data)
 {
 	tasklet->next = NULL;
 	tasklet->sync = 0;

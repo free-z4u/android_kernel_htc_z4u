@@ -80,8 +80,8 @@ extern struct mutex xfrm_cfg_mutex;
 
    dst -. xfrm  .-> xfrm_state #1
     |---. child .-> dst -. xfrm .-> xfrm_state #2
-                     |---. child .-> dst -. xfrm .-> xfrm_state #3
-                                      |---. child .-> NULL
+		     |---. child .-> dst -. xfrm .-> xfrm_state #3
+				      |---. child .-> NULL
 
    Bundles are cached at xrfm_policy struct (field ->bundles).
 
@@ -591,9 +591,9 @@ struct xfrm_skb_cb {
 	union {
 		struct inet_skb_parm h4;
 		struct inet6_skb_parm h6;
-        } header;
+	} header;
 
-        /* Sequence number for replay protection. */
+	/* Sequence number for replay protection. */
 	union {
 		struct {
 			__u32 low;

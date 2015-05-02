@@ -170,7 +170,7 @@ struct r3964_block_header
 {
 	unsigned int length;             /* length in chars without header */
 	unsigned char *data;             /* usually data is located
-                                        immediately behind this struct */
+					immediately behind this struct */
 	unsigned int locks;              /* only used in rx_buffer */
 
     struct r3964_block_header *next;
@@ -212,10 +212,10 @@ struct r3964_info {
 	struct r3964_block_header *tx_first;
 	struct r3964_block_header *tx_last;
 	unsigned int tx_position;
-        unsigned int rx_position;
+	unsigned int rx_position;
 	unsigned char last_rx;
 	unsigned char bcc;
-        unsigned int  blocks_in_rx_queue;
+	unsigned int  blocks_in_rx_queue;
 
 
 	struct r3964_client_info *firstClient;

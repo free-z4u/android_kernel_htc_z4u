@@ -703,7 +703,7 @@ static void ft1000_hbchk(u_long data)
 				  (dev, FT1000_MAG_HI_HO,
 				   FT1000_MAG_HI_HO_INDX));
 		}
-        // Let's write hi again if fail
+	// Let's write hi again if fail
 		if (tempword != hi) {
 			if (info->AsicID == ELECTRABUZZ_ID) {
 				ft1000_write_dpram(dev, FT1000_HI_HO, hi);
@@ -804,13 +804,13 @@ static void ft1000_send_cmd (struct net_device *dev, u16 *ptempbuffer, int size,
     tempword = ft1000_read_reg(dev, FT1000_REG_DOORBELL);
     i=0;
     while (tempword & FT1000_DB_DPRAM_TX) {
-        mdelay(10);
-        i++;
-        if (i==10) {
-            spin_unlock_irqrestore(&info->dpram_lock, flags);
-            return;
-        }
-        tempword = ft1000_read_reg(dev, FT1000_REG_DOORBELL);
+	mdelay(10);
+	i++;
+	if (i==10) {
+	    spin_unlock_irqrestore(&info->dpram_lock, flags);
+	    return;
+	}
+	tempword = ft1000_read_reg(dev, FT1000_REG_DOORBELL);
     }
 
 	if (info->AsicID == ELECTRABUZZ_ID) {
@@ -981,10 +981,10 @@ static void ft1000_proc_drvmsg(struct net_device *dev)
 	} convert;
 
     if (info->AsicID == ELECTRABUZZ_ID) {
-        tempword = FT1000_DPRAM_RX_BASE+2;
+	tempword = FT1000_DPRAM_RX_BASE+2;
     }
     else {
-        tempword = FT1000_DPRAM_MAG_RX_BASE;
+	tempword = FT1000_DPRAM_MAG_RX_BASE;
     }
     if ( ft1000_receive_cmd(dev, &cmdbuffer[0], MAX_CMD_SQSIZE, &tempword) ) {
 
@@ -1061,16 +1061,16 @@ static void ft1000_proc_drvmsg(struct net_device *dev)
 					info->ConTm = 0;
 				}
 			}
-            }
-            else {
-                DEBUG(1,"Media is down\n");
-                if (info->mediastate == 1) {
-                    info->mediastate = 0;
-                    netif_carrier_off(dev);
-                    netif_stop_queue(dev);
-                    info->ConTm = 0;
-                }
-            }
+	    }
+	    else {
+		DEBUG(1,"Media is down\n");
+		if (info->mediastate == 1) {
+		    info->mediastate = 0;
+		    netif_carrier_off(dev);
+		    netif_stop_queue(dev);
+		    info->ConTm = 0;
+		}
+	    }
 			break;
 		case DSP_INIT_MSG:
 			pdspinitmsg = (struct dsp_init_msg *) & cmdbuffer[0];
@@ -1198,10 +1198,10 @@ static void ft1000_proc_drvmsg(struct net_device *dev)
 				// Insert application id
 				ppseudo_hdr->portsrc = 0;
 				// Calculate new checksum
-                ppseudo_hdr->checksum = *pmsg++;
-                for (i=1; i<7; i++) {
-                    ppseudo_hdr->checksum ^= *pmsg++;
-                }
+		ppseudo_hdr->checksum = *pmsg++;
+		for (i=1; i<7; i++) {
+		    ppseudo_hdr->checksum ^= *pmsg++;
+		}
 				pmsg = (u16 *) & tempbuffer[16];
 				*pmsg++ = htons(RSP_DRV_ERR_RPT_MSG);
 				*pmsg++ = htons(0x000e);
@@ -1313,10 +1313,10 @@ static int ft1000_parse_dpram_msg(struct net_device *dev)
 		DEBUG(1, "FT1000:ft1000_parse_dpram_msg:total length = %d\n",
 			  total_len);
 		if ((total_len < MAX_CMD_SQSIZE) && (total_len > sizeof(struct pseudo_hdr))) {
-            total_len += nxtph;
-            cnt = 0;
-            // ft1000_read_reg will return a value that needs to be byteswap
-            // in order to get DSP_QID_OFFSET.
+	    total_len += nxtph;
+	    cnt = 0;
+	    // ft1000_read_reg will return a value that needs to be byteswap
+	    // in order to get DSP_QID_OFFSET.
 			if (info->AsicID == ELECTRABUZZ_ID) {
 				portid =
 					(ft1000_read_dpram
@@ -2029,9 +2029,9 @@ static irqreturn_t ft1000_interrupt(int irq, void *dev_id)
 	DEBUG(1, "ft1000_hw: interrupt status register = 0x%x\n", tempword);
 	ft1000_write_reg(dev, FT1000_REG_SUP_ISR, tempword);
 
-        // Read interrupt type
-        inttype = ft1000_read_reg (dev, FT1000_REG_SUP_ISR);
-        DEBUG(1,"ft1000_hw: interrupt status register after clear = 0x%x\n",inttype);
+	// Read interrupt type
+	inttype = ft1000_read_reg (dev, FT1000_REG_SUP_ISR);
+	DEBUG(1,"ft1000_hw: interrupt status register after clear = 0x%x\n",inttype);
     }
 	ft1000_enable_interrupts(dev);
 	return IRQ_HANDLED;

@@ -36,7 +36,7 @@ int sun3_hwclk(int set, struct rtc_time *t)
 	volatile struct intersil_dt *todintersil;
 	unsigned long flags;
 
-        todintersil = (struct intersil_dt *) &intersil_clock->counter;
+	todintersil = (struct intersil_dt *) &intersil_clock->counter;
 
 	local_irq_save(flags);
 

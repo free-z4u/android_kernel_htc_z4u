@@ -326,7 +326,7 @@ typedef struct tagWLAN_IE_RSN_EXT {
     BYTE abyMulticast[4];
     WORD wPKCount;
     struct {
-        BYTE abyOUI[4];
+	BYTE abyOUI[4];
     } PKSList[1]; // the rest is variable so need to
     // overlay ieauth structure
 } WLAN_IE_RSN_EXT, *PWLAN_IE_RSN_EXT;
@@ -335,7 +335,7 @@ typedef struct tagWLAN_IE_RSN_EXT {
 typedef struct tagWLAN_IE_RSN_AUTH {
     WORD wAuthCount;
     struct {
-        BYTE abyOUI[4];
+	BYTE abyOUI[4];
     } AuthKSList[1];
 } WLAN_IE_RSN_AUTH, *PWLAN_IE_RSN_AUTH;
 

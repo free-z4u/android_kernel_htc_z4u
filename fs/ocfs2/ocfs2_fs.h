@@ -407,7 +407,7 @@ static struct ocfs2_system_inode_info ocfs2_system_inodes[NUM_SYSTEM_INODES] = {
 #define OCFS2_DIR_ROUND			(OCFS2_DIR_PAD - 1)
 #define OCFS2_DIR_MEMBER_LEN 		offsetof(struct ocfs2_dir_entry, name)
 #define OCFS2_DIR_REC_LEN(name_len)	(((name_len) + OCFS2_DIR_MEMBER_LEN + \
-                                          OCFS2_DIR_ROUND) & \
+					  OCFS2_DIR_ROUND) & \
 					 ~OCFS2_DIR_ROUND)
 #define OCFS2_DIR_MIN_REC_LEN	OCFS2_DIR_REC_LEN(1)
 
@@ -1600,11 +1600,11 @@ static inline int ocfs2_sprintf_system_inode_name(char *buf, int len,
 {
 	int chars;
 
-        /*
-         * Global system inodes can only have one copy.  Everything
-         * after OCFS2_LAST_GLOBAL_SYSTEM_INODE in the system inode
-         * list has a copy per slot.
-         */
+	/*
+	 * Global system inodes can only have one copy.  Everything
+	 * after OCFS2_LAST_GLOBAL_SYSTEM_INODE in the system inode
+	 * list has a copy per slot.
+	 */
 	if (type <= OCFS2_LAST_GLOBAL_SYSTEM_INODE)
 		chars = snprintf(buf, len, "%s",
 				 ocfs2_system_inodes[type].si_name);

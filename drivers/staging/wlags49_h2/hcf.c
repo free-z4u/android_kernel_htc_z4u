@@ -243,7 +243,7 @@ IFBP BASED assert_ifbp = NULL;          //to make asserts easily work under MMD 
 
 /* SNAP header to be inserted in Ethernet-II frames */
 HCF_STATIC  hcf_8 BASED snap_header[] = { 0xAA, 0xAA, 0x03, 0x00, 0x00, //5 bytes signature +
-                                          0 };                          //1 byte protocol identifier
+					  0 };                          //1 byte protocol identifier
 
 #if (HCF_TYPE) & HCF_TYPE_WPA
 HCF_STATIC hcf_8 BASED mic_pad[8] = { 0x5A, 0, 0, 0, 0, 0, 0, 0 };      //MIC padding of message

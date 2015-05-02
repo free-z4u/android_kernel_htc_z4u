@@ -151,7 +151,7 @@ static struct attribute_group iscsi_transport_group = {
 
 #define ISCSI_ATTR(_prefix,_name,_mode,_show,_store)	\
 struct device_attribute dev_attr_##_prefix##_##_name =	\
-        __ATTR(_name,_mode,_show,_store)
+	__ATTR(_name,_mode,_show,_store)
 
 static void iscsi_endpoint_release(struct device *dev)
 {
@@ -219,8 +219,8 @@ iscsi_create_endpoint(int dd_size)
 	ep->dev.class = &iscsi_endpoint_class;
 	dev_set_name(&ep->dev, "ep-%llu", (unsigned long long) id);
 	err = device_register(&ep->dev);
-        if (err)
-                goto free_ep;
+	if (err)
+		goto free_ep;
 
 	err = sysfs_create_group(&ep->dev.kobj, &iscsi_endpoint_group);
 	if (err)
@@ -2835,8 +2835,8 @@ static int iscsi_host_match(struct attribute_container *cont,
 	    shost->transportt->host_attrs.ac.class != &iscsi_host_class.class)
 		return 0;
 
-        priv = to_iscsi_internal(shost->transportt);
-        return &priv->t.host_attrs.ac == cont;
+	priv = to_iscsi_internal(shost->transportt);
+	return &priv->t.host_attrs.ac == cont;
 }
 
 struct scsi_transport_template *

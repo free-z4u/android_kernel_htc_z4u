@@ -306,7 +306,7 @@ inline char *acpi_battery_units(struct acpi_battery *battery)
 #endif
 
 /* --------------------------------------------------------------------------
-                               Battery Management
+			       Battery Management
    -------------------------------------------------------------------------- */
 struct acpi_offsets {
 	size_t offset;		/* offset inside struct acpi_sbs_battery */
@@ -603,9 +603,9 @@ static void acpi_battery_quirks(struct acpi_battery *battery)
 	if (test_bit(ACPI_BATTERY_QUIRK_PERCENTAGE_CAPACITY, &battery->flags))
 		return ;
 
-        if (battery->full_charge_capacity == 100 &&
-            battery->rate_now == ACPI_BATTERY_VALUE_UNKNOWN &&
-            battery->capacity_now >=0 && battery->capacity_now <= 100) {
+	if (battery->full_charge_capacity == 100 &&
+	    battery->rate_now == ACPI_BATTERY_VALUE_UNKNOWN &&
+	    battery->capacity_now >=0 && battery->capacity_now <= 100) {
 		set_bit(ACPI_BATTERY_QUIRK_PERCENTAGE_CAPACITY, &battery->flags);
 		battery->full_charge_capacity = battery->design_capacity;
 		battery->capacity_now = (battery->capacity_now *
@@ -661,7 +661,7 @@ static void acpi_battery_refresh(struct acpi_battery *battery)
 }
 
 /* --------------------------------------------------------------------------
-                              FS Interface (/proc)
+			      FS Interface (/proc)
    -------------------------------------------------------------------------- */
 
 #ifdef CONFIG_ACPI_PROCFS_POWER
@@ -934,7 +934,7 @@ static void acpi_battery_remove_fs(struct acpi_device *device)
 #endif
 
 /* --------------------------------------------------------------------------
-                                 Driver Interface
+				 Driver Interface
    -------------------------------------------------------------------------- */
 
 static void acpi_battery_notify(struct acpi_device *device, u32 event)

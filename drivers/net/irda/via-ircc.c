@@ -159,7 +159,7 @@ static int __init via_ircc_init(void)
 static int __devinit via_init_one (struct pci_dev *pcidev, const struct pci_device_id *id)
 {
 	int rc;
-        u8 temp,oldPCI_40,oldPCI_44,bTmp,bTmp1;
+	u8 temp,oldPCI_40,oldPCI_44,bTmp,bTmp1;
 	u16 Chipset,FirDRQ1,FirDRQ0,FirIRQ,FirIOBase;
 	chipio_t info;
 
@@ -172,7 +172,7 @@ static int __devinit via_init_one (struct pci_dev *pcidev, const struct pci_devi
 	}
 
 	// South Bridge exist
-        if ( ReadLPCReg(0x20) != 0x3C )
+	if ( ReadLPCReg(0x20) != 0x3C )
 		Chipset=0x3096;
 	else
 		Chipset=0x3076;
@@ -1111,7 +1111,7 @@ static int via_ircc_dma_receive_complete(struct via_ircc_cb *self,
 		// It maybe have MAX_RX_WINDOW package receive by
 		// receive_complete before Timer IRQ
 /* F01_S
-          if (st_fifo->len < (MAX_RX_WINDOW+2 )) {
+	  if (st_fifo->len < (MAX_RX_WINDOW+2 )) {
 		  RXStart(iobase,ON);
 	  	  SetTimer(iobase,4);
 	  }

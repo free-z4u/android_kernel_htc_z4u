@@ -3,12 +3,12 @@
     Written 1994, 1995 by David C. Davies.
 
 
-                      Copyright 1994 David C. Davies
+		      Copyright 1994 David C. Davies
 		                   and
 			 United States Government
 	 (as represented by the Director, National Security Agency).
 
-               Copyright 1995  Digital Equipment Corporation.
+	       Copyright 1995  Digital Equipment Corporation.
 
 
     This software may be used and distributed according to the terms of
@@ -17,7 +17,7 @@
     This driver is written for the Digital Equipment Corporation series
     of DEPCA and EtherWORKS ethernet cards:
 
-        DEPCA       (the original)
+	DEPCA       (the original)
     	DE100
     	DE101
 	DE200 Turbo
@@ -134,7 +134,7 @@
     5) insmod depca.o [irq=7] [io=0x200] [mem=0xd0000] [adapter_name=DE100]
        [Alan Cox: Changed the code to allow command line irq/io assignments]
        [Dave Davies: Changed the code to allow command line mem/name
-                                                                assignments]
+								assignments]
     6) run the net startup bits for your eth?? interface manually
     (usually /etc/rc.inet[12] at boot time).
     7) enjoy!
@@ -162,10 +162,10 @@
     Currently known bugs/limitations:
 
     Note:  with the MCA stuff as a module, it trusts the MCA configuration,
-           not the command line for IRQ and memory address.  You can
-           specify them if you want, but it will throw your values out.
-           You still have to pass the IO address it was configured as
-           though.
+	   not the command line for IRQ and memory address.  You can
+	   specify them if you want, but it will throw your values out.
+	   You still have to pass the IO address it was configured as
+	   though.
 
     ************************************************************************
     TO DO:
@@ -183,7 +183,7 @@
       0.31     4-feb-94   Added DE202 recognition.
       0.32    19-feb-94   Tidy up. Improve multi-DEPCA support.
       0.33    25-feb-94   Fix DEPCA ethernet ROM counter enable.
-                          Add jabber packet fix from murf@perftech.com
+			  Add jabber packet fix from murf@perftech.com
 			  and becker@super.org
       0.34     7-mar-94   Fix DEPCA max network memory RAM & NICSR access.
       0.35     8-mar-94   Added DE201 recognition. Tidied up.
@@ -191,23 +191,23 @@
       0.36    16-may-94   DE422 fix released.
       0.37    22-jul-94   Added MODULE support
       0.38    15-aug-94   Added DBR ROM switch in depca_close().
-                          Multi DEPCA bug fix.
+			  Multi DEPCA bug fix.
       0.38axp 15-sep-94   Special version for Alpha AXP Linux V1.0.
       0.381   12-dec-94   Added DE101 recognition, fix multicast bug.
       0.382    9-feb-95   Fix recognition bug reported by <bkm@star.rl.ac.uk>.
       0.383   22-feb-95   Fix for conflict with VESA SCSI reported by
-                          <stromain@alf.dec.com>
+			  <stromain@alf.dec.com>
       0.384   17-mar-95   Fix a ring full bug reported by <bkm@star.rl.ac.uk>
       0.385    3-apr-95   Fix a recognition bug reported by
-                                                <ryan.niemi@lastfrontier.com>
+						<ryan.niemi@lastfrontier.com>
       0.386   21-apr-95   Fix the last fix...sorry, must be galloping senility
       0.40    25-May-95   Rewrite for portability & updated.
-                          ALPHA support from <jestabro@amt.tay1.dec.com>
+			  ALPHA support from <jestabro@amt.tay1.dec.com>
       0.41    26-Jun-95   Added verify_area() calls in depca_ioctl() from
-                          suggestion by <heiko@colossus.escape.de>
+			  suggestion by <heiko@colossus.escape.de>
       0.42    27-Dec-95   Add 'mem' shared memory assignment for loadable
-                          modules.
-                          Add 'adapter_name' for loadable modules when no PROM.
+			  modules.
+			  Add 'adapter_name' for loadable modules when no PROM.
 			  Both above from a suggestion by
 			  <pchen@woodruffs121.residence.gatech.edu>.
 			  Add new multicasting code.
@@ -216,15 +216,15 @@
       0.423    7-Jun-96   Fix module load bug <kmg@barco.be>
       0.43    16-Aug-96   Update alloc_device() to conform to de4x5.c
       0.44     1-Sep-97   Fix *_probe() to test check_region() first - bug
-                           reported by <mmogilvi@elbert.uccs.edu>
+			   reported by <mmogilvi@elbert.uccs.edu>
       0.45     3-Nov-98   Added support for MCA EtherWORKS (DE210/DE212) cards
-                           by <tymm@computer.org>
+			   by <tymm@computer.org>
       0.451    5-Nov-98   Fixed mca stuff cuz I'm a dummy. <tymm@computer.org>
       0.5     14-Nov-98   Re-spin for 2.1.x kernels.
       0.51    27-Jun-99   Correct received packet length for CRC from
-                           report by <worm@dkik.dk>
+			   report by <worm@dkik.dk>
       0.52    16-Oct-00   Fixes for 2.3 io memory accesses
-                          Fix show-stopper (ints left masked) in depca_interrupt
+			  Fix show-stopper (ints left masked) in depca_interrupt
 			   by <peterd@pnd-pc.demon.co.uk>
       0.53    12-Jan-01	  Release resources on failure, bss tidbits
       			   by acme@conectiva.com.br
@@ -326,10 +326,10 @@ static struct {
 */
 #define DEPCA_SIGNATURE {"DEPCA",\
 			 "DE100","DE101",\
-                         "DE200","DE201","DE202",\
+			 "DE200","DE201","DE202",\
 			 "DE210","DE212",\
-                         "DE422",\
-                         ""}
+			 "DE422",\
+			 ""}
 
 static char* __initdata depca_signature[] = DEPCA_SIGNATURE;
 
@@ -464,10 +464,10 @@ struct depca_private {
 	char adapter_name[DEPCA_STRLEN];	/* /proc/ioports string                  */
 	enum depca_type adapter;		/* Adapter type */
 	enum {
-                DEPCA_BUS_MCA = 1,
-                DEPCA_BUS_ISA,
-                DEPCA_BUS_EISA,
-        } depca_bus;	        /* type of bus */
+		DEPCA_BUS_MCA = 1,
+		DEPCA_BUS_ISA,
+		DEPCA_BUS_EISA,
+	} depca_bus;	        /* type of bus */
 	struct depca_init init_block;	/* Shadow Initialization block            */
 /* CPU address space fields */
 	struct depca_rx_desc __iomem *rx_ring;	/* Pointer to start of RX descriptor ring */
@@ -511,7 +511,7 @@ struct depca_private {
 */
 #define TX_BUFFS_AVAIL ((lp->tx_old<=lp->tx_new)?\
 			 lp->tx_old+lp->txRingMask-lp->tx_new:\
-                         lp->tx_old               -lp->tx_new-1)
+			 lp->tx_old               -lp->tx_new-1)
 
 /*
 ** Public Functions
@@ -1416,7 +1416,7 @@ static int __init depca_mca_probe(struct device *device)
 		sizeof(mdev->name));
 	mca_device_set_claim(mdev, 1);
 
-        /*
+	/*
 	** Get everything allocated and initialized...  (almost just
 	** like the ISA and EISA probes)
 	*/
@@ -2091,10 +2091,10 @@ static void __exit depca_module_exit (void)
 {
 	int i;
 #ifdef CONFIG_MCA
-        mca_unregister_driver (&depca_mca_driver);
+	mca_unregister_driver (&depca_mca_driver);
 #endif
 #ifdef CONFIG_EISA
-        eisa_driver_unregister (&depca_eisa_driver);
+	eisa_driver_unregister (&depca_eisa_driver);
 #endif
 	platform_driver_unregister (&depca_isa_driver);
 

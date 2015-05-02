@@ -397,7 +397,7 @@ void mvme16x_sched_init (irq_handler_t timer_routine)
     if (p->brdno == 0x0162 || p->brdno == 0x172)
 	irq = MVME162_IRQ_ABORT;
     else
-        irq = MVME167_IRQ_ABORT;
+	irq = MVME167_IRQ_ABORT;
     if (request_irq(irq, mvme16x_abort_int, 0,
 				"abort", mvme16x_abort_int))
 	panic ("Couldn't register abort int");

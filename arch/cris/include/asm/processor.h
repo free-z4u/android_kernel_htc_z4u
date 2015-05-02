@@ -65,7 +65,7 @@ extern unsigned long thread_saved_pc(struct task_struct *tsk);
 /* Free all resources held by a thread. */
 static inline void release_thread(struct task_struct *dead_task)
 {
-        /* Nothing needs to be done.  */
+	/* Nothing needs to be done.  */
 }
 
 #define init_stack      (init_thread_union.stack)

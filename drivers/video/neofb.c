@@ -596,7 +596,7 @@ neofb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
 
 	/* Is the mode larger than the LCD panel? */
 	if (par->internal_display &&
-            ((var->xres > par->NeoPanelWidth) ||
+	    ((var->xres > par->NeoPanelWidth) ||
 	     (var->yres > par->NeoPanelHeight))) {
 		printk(KERN_INFO
 		       "Mode (%dx%d) larger than the LCD panel (%dx%d)\n",
@@ -1988,28 +1988,28 @@ static struct fb_info *__devinit neo_alloc_fb_info(struct pci_dev *dev, const st
 				"MagicGraph 256AV");
 		info->flags |= FBINFO_HWACCEL_IMAGEBLIT |
 		               FBINFO_HWACCEL_COPYAREA |
-                	       FBINFO_HWACCEL_FILLRECT;
+			       FBINFO_HWACCEL_FILLRECT;
 		break;
 	case FB_ACCEL_NEOMAGIC_NM2230:
 		snprintf(info->fix.id, sizeof(info->fix.id),
 				"MagicGraph 256AV+");
 		info->flags |= FBINFO_HWACCEL_IMAGEBLIT |
 		               FBINFO_HWACCEL_COPYAREA |
-                	       FBINFO_HWACCEL_FILLRECT;
+			       FBINFO_HWACCEL_FILLRECT;
 		break;
 	case FB_ACCEL_NEOMAGIC_NM2360:
 		snprintf(info->fix.id, sizeof(info->fix.id),
 				"MagicGraph 256ZX");
 		info->flags |= FBINFO_HWACCEL_IMAGEBLIT |
 		               FBINFO_HWACCEL_COPYAREA |
-                	       FBINFO_HWACCEL_FILLRECT;
+			       FBINFO_HWACCEL_FILLRECT;
 		break;
 	case FB_ACCEL_NEOMAGIC_NM2380:
 		snprintf(info->fix.id, sizeof(info->fix.id),
 				"MagicGraph 256XL+");
 		info->flags |= FBINFO_HWACCEL_IMAGEBLIT |
 		               FBINFO_HWACCEL_COPYAREA |
-                	       FBINFO_HWACCEL_FILLRECT;
+			       FBINFO_HWACCEL_FILLRECT;
 		break;
 	}
 

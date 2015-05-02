@@ -72,7 +72,7 @@ extern void dhd_bus_isr(bool * InterruptRecognized, bool * QueueMiniportHandleIn
 
 /* Check for and handle local prot-specific iovar commands */
 extern int dhd_bus_iovar_op(dhd_pub_t *dhdp, const char *name,
-                            void *params, int plen, void *arg, int len, bool set);
+			    void *params, int plen, void *arg, int len, bool set);
 
 /* Add bus dump output to a buffer */
 extern void dhd_bus_dump(dhd_pub_t *dhdp, struct bcmstrbuf *strbuf);

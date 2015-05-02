@@ -541,7 +541,7 @@ void free_initmem(void)
 void mark_rodata_ro(void)
 {
 	/* rodata memory was already mapped with KERNEL_RO access rights by
-           pagetable_init() and map_pages(). No need to do additional stuff here */
+	   pagetable_init() and map_pages(). No need to do additional stuff here */
 	printk (KERN_INFO "Write protecting the kernel read-only data: %luk\n",
 		(unsigned long)(__end_rodata - __start_rodata) >> 10);
 }
@@ -719,7 +719,7 @@ void show_mem(unsigned int filter)
 			else
 				shared += page_count(p) - 1;
 			pgdat_resize_unlock(NODE_DATA(i), &flags);
-        	}
+		}
 	}
 #endif
 	printk(KERN_INFO "%d pages of RAM\n", total);

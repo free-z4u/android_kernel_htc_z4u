@@ -195,7 +195,7 @@ segment_by_name (char *name)
  */
 static inline int
 dcss_diag(int *func, void *parameter,
-           unsigned long *ret1, unsigned long *ret2)
+	   unsigned long *ret1, unsigned long *ret2)
 {
 	unsigned long rx, ry;
 	int rc;

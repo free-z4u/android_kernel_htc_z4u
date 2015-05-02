@@ -157,11 +157,11 @@ static int __init ali_ircc_init(void)
 	IRDA_DEBUG(2, "%s(), ---------------- Start ----------------\n", __func__);
 
 	ret = platform_driver_register(&ali_ircc_driver);
-        if (ret) {
-                IRDA_ERROR("%s, Can't register driver!\n",
+	if (ret) {
+		IRDA_ERROR("%s, Can't register driver!\n",
 			   ALI_IRCC_DRIVER_NAME);
-                return ret;
-        }
+		return ret;
+	}
 
 	ret = -ENODEV;
 
@@ -320,10 +320,10 @@ static int ali_ircc_open(int i, chipio_t *info)
 	self->io.cfg_base  = info->cfg_base;	/* In ali_ircc_probe_53 assign 		*/
 	self->io.fir_base  = info->fir_base;	/* info->sir_base = info->fir_base 	*/
 	self->io.sir_base  = info->sir_base; 	/* ALi SIR and FIR use the same address */
-        self->io.irq       = info->irq;
-        self->io.fir_ext   = CHIP_IO_EXTENT;
-        self->io.dma       = info->dma;
-        self->io.fifo_size = 16;		/* SIR: 16, FIR: 32 Benjamin 2000/11/1 */
+	self->io.irq       = info->irq;
+	self->io.fir_ext   = CHIP_IO_EXTENT;
+	self->io.dma       = info->dma;
+	self->io.fifo_size = 16;		/* SIR: 16, FIR: 32 Benjamin 2000/11/1 */
 
 	/* Reserve the ioports that we need */
 	if (!request_region(self->io.fir_base, self->io.fir_ext,
@@ -427,7 +427,7 @@ static int __exit ali_ircc_close(struct ali_ircc_cb *self)
 
 	IRDA_ASSERT(self != NULL, return -1;);
 
-        iobase = self->io.fir_base;
+	iobase = self->io.fir_base;
 
 	/* Remove netdevice */
 	unregister_netdev(self->netdev);
@@ -885,7 +885,7 @@ static void ali_ircc_sir_receive(struct ali_ircc_cb *self)
 
 	/*
 	 * Receive all characters in Rx FIFO, unwrap and unstuff them.
-         * async_unwrap_char will deliver all found frames
+	 * async_unwrap_char will deliver all found frames
 	 */
 	do {
 		async_unwrap_char(self->netdev, &self->netdev->stats, &self->rx_buff,
@@ -1325,7 +1325,7 @@ static int ali_ircc_sir_write(int iobase, int fifo_size, __u8 *buf, int len)
 		actual++;
 	}
 
-        IRDA_DEBUG(2, "%s(), ----------------- End ------------------\n", __func__ );
+	IRDA_DEBUG(2, "%s(), ----------------- End ------------------\n", __func__ );
 	return actual;
 }
 
@@ -2004,7 +2004,7 @@ static netdev_tx_t ali_ircc_sir_hard_xmit(struct sk_buff *skb,
 	/* Init tx buffer */
 	self->tx_buff.data = self->tx_buff.head;
 
-        /* Copy skb to tx_buff while wrapping, stuffing and making CRC */
+	/* Copy skb to tx_buff while wrapping, stuffing and making CRC */
 	self->tx_buff.len = async_wrap_skb(skb, self->tx_buff.data,
 					   self->tx_buff.truesize);
 

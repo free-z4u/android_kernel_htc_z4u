@@ -50,7 +50,7 @@
 			(e), ((e) & _PAGE_COMBO) ? \
 				(pte_val(*((p) + PTRS_PER_PTE))) : 0 })
 #define __rpte_to_hidx(r,index)	((pte_val((r).pte) & _PAGE_COMBO) ? \
-        (((r).hidx >> ((index)<<2)) & 0xf) : ((pte_val((r).pte) >> 12) & 0xf))
+	(((r).hidx >> ((index)<<2)) & 0xf) : ((pte_val((r).pte) >> 12) & 0xf))
 #define __rpte_to_pte(r)	((r).pte)
 #define __rpte_sub_valid(rpte, index) \
 	(pte_val(rpte.pte) & (_PAGE_HPTE_SUB0 >> (index)))
@@ -59,11 +59,11 @@
  * a 16M page as well as we want only one iteration
  */
 #define pte_iterate_hashed_subpages(rpte, psize, va, index, shift)	    \
-        do {                                                                \
-                unsigned long __end = va + PAGE_SIZE;                       \
-                unsigned __split = (psize == MMU_PAGE_4K ||                 \
+	do {                                                                \
+		unsigned long __end = va + PAGE_SIZE;                       \
+		unsigned __split = (psize == MMU_PAGE_4K ||                 \
 				    psize == MMU_PAGE_64K_AP);              \
-                shift = mmu_psize_defs[psize].shift;                        \
+		shift = mmu_psize_defs[psize].shift;                        \
 		for (index = 0; va < __end; index++, va += (1L << shift)) { \
 		        if (!__split || __rpte_sub_valid(rpte, index)) do { \
 

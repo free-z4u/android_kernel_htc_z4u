@@ -97,7 +97,7 @@
  Linux       Driver      Driver
  Version     Version     Date         Support/Notes
 
-             0.0          3 May 1992  V2.0 BIOS; 1800 chip
+	     0.0          3 May 1992  V2.0 BIOS; 1800 chip
  0.97        1.9         28 Jul 1992
  0.98.6      3.1         27 Nov 1992
  0.99        3.2          9 Dec 1992
@@ -128,7 +128,7 @@
  2.1.1       5.45         2 Oct 1996  Update ROM accesses for 2.1.x
  2.1.97      5.46	 23 Apr 1998  Rewritten PCI detection routines [mj]
  2.1.11x     5.47	  9 Aug 1998  Touched for 8 SCSI disk majors support
-             5.48        18 Nov 1998  BIOS no longer needed for PCI detection
+	     5.48        18 Nov 1998  BIOS no longer needed for PCI detection
  2.2.0       5.50        28 Dec 1998  Support insmod parameters
 
 
@@ -547,7 +547,7 @@ static void print_banner( struct Scsi_Host *shpnt )
    if (interrupt_level)
    	printk("%d", interrupt_level);
    else
-        printk("<none>");
+	printk("<none>");
 
    printk( "\n" );
 }
@@ -1173,9 +1173,9 @@ static irqreturn_t do_fdomain_16x0_intr(int irq, void *dev_id)
 #if EVERY_ACCESS
 	 printk( " AFAIL " );
 #endif
-         spin_lock_irqsave(current_SC->device->host->host_lock, flags);
+	 spin_lock_irqsave(current_SC->device->host->host_lock, flags);
 	 my_done( DID_BUS_BUSY << 16 );
-         spin_unlock_irqrestore(current_SC->device->host->host_lock, flags);
+	 spin_unlock_irqrestore(current_SC->device->host->host_lock, flags);
 	 return IRQ_HANDLED;
       }
       current_SC->SCp.phase = in_selection;
@@ -1199,9 +1199,9 @@ static irqreturn_t do_fdomain_16x0_intr(int irq, void *dev_id)
 #if EVERY_ACCESS
 	    printk( " SFAIL " );
 #endif
-            spin_lock_irqsave(current_SC->device->host->host_lock, flags);
+	    spin_lock_irqsave(current_SC->device->host->host_lock, flags);
 	    my_done( DID_NO_CONNECT << 16 );
-            spin_unlock_irqrestore(current_SC->device->host->host_lock, flags);
+	    spin_unlock_irqrestore(current_SC->device->host->host_lock, flags);
 	    return IRQ_HANDLED;
 	 } else {
 #if EVERY_ACCESS

@@ -115,7 +115,7 @@ void __cpuinit xtalk_probe_node(cnodeid_t nid)
 		return;
 
 	widget_id = *(volatile widgetreg_t *)
-                       (RAW_NODE_SWIN_BASE(nasid, 0x0) + WIDGET_ID);
+		       (RAW_NODE_SWIN_BASE(nasid, 0x0) + WIDGET_ID);
 	partnum = XWIDGET_PART_NUM(widget_id);
 
 	printk(KERN_INFO "Cpu %d, Nasid 0x%x: partnum 0x%x is ",

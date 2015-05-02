@@ -229,8 +229,8 @@ xfs_inode_item_format(
 			ASSERT(iip->ili_extents_buf == NULL);
 
 #ifdef XFS_NATIVE_HOST
-                       if (ip->i_d.di_nextents == ip->i_df.if_bytes /
-                                               (uint)sizeof(xfs_bmbt_rec_t)) {
+		       if (ip->i_d.di_nextents == ip->i_df.if_bytes /
+					       (uint)sizeof(xfs_bmbt_rec_t)) {
 				/*
 				 * There are no delayed allocation
 				 * extents, so just point to the

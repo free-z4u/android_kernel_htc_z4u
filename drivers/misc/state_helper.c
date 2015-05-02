@@ -122,11 +122,11 @@ static int __init status_helper_init(void)
 	dev1 = device_create(status_helper, NULL, 0, "%s", "proximity");
 	if (IS_ERR(status_helper))
 		return PTR_ERR(status_helper);
-        dev2 = device_create(status_helper, NULL, 0, "%s", "phone");
-        if (IS_ERR(status_helper))
-                return PTR_ERR(status_helper);
+	dev2 = device_create(status_helper, NULL, 0, "%s", "phone");
+	if (IS_ERR(status_helper))
+		return PTR_ERR(status_helper);
 
-        ret = device_create_file(dev1, &dev_attr_psensor_release_wakelock_event);
+	ret = device_create_file(dev1, &dev_attr_psensor_release_wakelock_event);
 	ret = device_create_file(dev2, &dev_attr_phone_event);
 	return 0;
 

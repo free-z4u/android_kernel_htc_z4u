@@ -54,7 +54,7 @@ MODULE_DESCRIPTION("Large Receive Offload (ipv4 / tcp)");
 static int lro_tcp_ip_check(const struct iphdr *iph, const struct tcphdr *tcph,
 			    int len, const struct net_lro_desc *lro_desc)
 {
-        /* check ip header: don't aggregate padded frames */
+	/* check ip header: don't aggregate padded frames */
 	if (ntohs(iph->tot_len) != len)
 		return -1;
 

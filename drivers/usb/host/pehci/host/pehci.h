@@ -465,8 +465,8 @@ struct _isp1763_hcd;
 #define USBNET
 #ifdef USBNET
 struct isp1763_async_cleanup_urb {
-        struct list_head urb_list;
-        struct urb *urb;
+	struct list_head urb_list;
+	struct urb *urb;
 };
 #endif
 

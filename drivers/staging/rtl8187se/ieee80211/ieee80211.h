@@ -94,7 +94,7 @@
 typedef struct ieee_param {
 	u32 cmd;
 	u8 sta_addr[ETH_ALEN];
-        union {
+	union {
 		struct {
 			u8 name;
 			u32 value;
@@ -157,7 +157,7 @@ extern u32 ieee80211_debug_level;
 #define IEEE80211_DEBUG(level, fmt, args...) \
 do { if (ieee80211_debug_level & (level)) \
   printk(KERN_DEBUG "ieee80211: %c %s " fmt, \
-         in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
+	 in_interrupt() ? 'I' : 'U', __func__ , ## args); } while (0)
 #else
 #define IEEE80211_DEBUG(level, fmt, args...) do {} while (0)
 #endif	/* CONFIG_IEEE80211_DEBUG */
@@ -238,10 +238,10 @@ do { if (ieee80211_debug_level & (level)) \
 
 struct ieee80211_snap_hdr {
 
-        u8    dsap;   /* always 0xAA */
-        u8    ssap;   /* always 0xAA */
-        u8    ctrl;   /* always 0x03 */
-        u8    oui[P80211_OUI_LEN];    /* organizational universal id */
+	u8    dsap;   /* always 0xAA */
+	u8    ssap;   /* always 0xAA */
+	u8    ctrl;   /* always 0x03 */
+	u8    oui[P80211_OUI_LEN];    /* organizational universal id */
 
 } __attribute__ ((packed));
 
@@ -302,8 +302,8 @@ struct ieee80211_snap_hdr {
 #define IEEE80211_CCK_BASIC_RATES_MASK	(IEEE80211_CCK_RATE_1MB_MASK | \
 	IEEE80211_CCK_RATE_2MB_MASK)
 #define IEEE80211_CCK_DEFAULT_RATES_MASK	(IEEE80211_CCK_BASIC_RATES_MASK | \
-        IEEE80211_CCK_RATE_5MB_MASK | \
-        IEEE80211_CCK_RATE_11MB_MASK)
+	IEEE80211_CCK_RATE_5MB_MASK | \
+	IEEE80211_CCK_RATE_11MB_MASK)
 
 #define IEEE80211_OFDM_RATES_MASK		0x00000FF0
 #define IEEE80211_OFDM_BASIC_RATES_MASK	(IEEE80211_OFDM_RATE_6MB_MASK | \
@@ -316,7 +316,7 @@ struct ieee80211_snap_hdr {
 	IEEE80211_OFDM_RATE_48MB_MASK | \
 	IEEE80211_OFDM_RATE_54MB_MASK)
 #define IEEE80211_DEFAULT_RATES_MASK (IEEE80211_OFDM_DEFAULT_RATES_MASK | \
-                                IEEE80211_CCK_DEFAULT_RATES_MASK)
+				IEEE80211_CCK_DEFAULT_RATES_MASK)
 
 #define IEEE80211_NUM_OFDM_RATES	    8
 #define IEEE80211_NUM_CCK_RATES	            4
@@ -426,10 +426,10 @@ struct ieee80211_device;
 
 struct ieee80211_security {
 	u16 active_key:2,
-            enabled:1,
+	    enabled:1,
 	    auth_mode:2,
-            auth_algo:4,
-            unicast_uses_group:1;
+	    auth_algo:4,
+	    unicast_uses_group:1;
 	u8 key_sizes[WEP_KEYS];
 	u8 keys[WEP_KEYS][WEP_KEY_LEN_MODIF];
 	u8 level;
@@ -1063,8 +1063,8 @@ struct ieee80211_device {
 	unsigned long NumRxOkTotal;
 	unsigned long NumRxUnicast;//YJ,add,080828,for keep alive
 	bool bHwRadioOff;
-        struct delayed_work softmac_scan_wq;
-        struct delayed_work associate_retry_wq;
+	struct delayed_work softmac_scan_wq;
+	struct delayed_work associate_retry_wq;
 	struct delayed_work hw_wakeup_wq;
 	struct delayed_work hw_sleep_wq;//+by amy 080324
 	struct delayed_work watch_dog_wq;
@@ -1328,14 +1328,14 @@ extern int ieee80211_wx_get_encode(struct ieee80211_device *ieee,
 				   struct iw_request_info *info,
 				   union iwreq_data *wrqu, char *key);
 extern int ieee80211_wx_set_encode_ext(struct ieee80211_device *ieee,
-                            struct iw_request_info *info,
-                            union iwreq_data* wrqu, char *extra);
+			    struct iw_request_info *info,
+			    union iwreq_data* wrqu, char *extra);
 int ieee80211_wx_set_auth(struct ieee80211_device *ieee,
-                               struct iw_request_info *info,
-                               struct iw_param *data, char *extra);
+			       struct iw_request_info *info,
+			       struct iw_param *data, char *extra);
 int ieee80211_wx_set_mlme(struct ieee80211_device *ieee,
-                               struct iw_request_info *info,
-                               union iwreq_data *wrqu, char *extra);
+			       struct iw_request_info *info,
+			       union iwreq_data *wrqu, char *extra);
 
 int ieee80211_wx_set_gen_ie(struct ieee80211_device *ieee, u8 *ie, size_t len);
 /* ieee80211_softmac.c */
@@ -1377,7 +1377,7 @@ extern void ieee80211_rtl_start_scan(struct ieee80211_device *ieee);
 //Add for RF power on power off by lizhaoming 080512
 extern void SendDisassociation(struct ieee80211_device *ieee,
        			 u8*                     asSta,
-        		 u8                      asRsn);
+			 u8                      asRsn);
 
 /* ieee80211_crypt_ccmp&tkip&wep.c */
 extern void ieee80211_tkip_null(void);

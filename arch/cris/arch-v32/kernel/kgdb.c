@@ -213,7 +213,7 @@ struct register_image
 	unsigned char  vr;    /* 0x41; P1, Version register (8-bit) */
 	unsigned int   pid;   /* 0x42; P2, Process ID */
 	unsigned char  srs;   /* 0x46; P3, Support register select (8-bit) */
-        unsigned short wz;    /* 0x47; P4, 16-bit zero register */
+	unsigned short wz;    /* 0x47; P4, 16-bit zero register */
 	unsigned int   exs;   /* 0x49; P5, Exception status */
 	unsigned int   eda;   /* 0x4D; P6, Exception data address */
 	unsigned int   mof;   /* 0x51; P7, Multiply overflow register */
@@ -542,10 +542,10 @@ gdb_cris_strtol(const char *s, char **endptr, int base)
 	for (s1 = (char*)s; (sd = gdb_cris_memchr(hex_asc, *s1, base)) != NULL; ++s1)
 		x = x * base + (sd - hex_asc);
 
-        if (endptr) {
-                /* Unconverted suffix is stored in endptr unless endptr is NULL. */
-                *endptr = s1;
-        }
+	if (endptr) {
+		/* Unconverted suffix is stored in endptr unless endptr is NULL. */
+		*endptr = s1;
+	}
 
 	return x;
 }
@@ -559,7 +559,7 @@ write_register(int regno, char *val)
 {
 	int status = SUCCESS;
 
-        if (regno >= R0 && regno <= ACR) {
+	if (regno >= R0 && regno <= ACR) {
 		/* Consecutive 32-bit registers. */
 		hex2mem((unsigned char *)&reg.r0 + (regno - R0) * sizeof(unsigned int),
 			val, sizeof(unsigned int));
@@ -583,12 +583,12 @@ write_register(int regno, char *val)
 			 val, sizeof(unsigned int));
 
        } else if (regno == PC) {
-               /* Pseudo-register. Treat as read-only. */
-               status = E02;
+	       /* Pseudo-register. Treat as read-only. */
+	       status = E02;
 
        } else if (regno >= S0 && regno <= S15) {
-               /* 32-bit registers. */
-               hex2mem((unsigned char *)&sreg.s0_0 + (reg.srs * 16 * sizeof(unsigned int)) + (regno - S0) * sizeof(unsigned int), val, sizeof(unsigned int));
+	       /* 32-bit registers. */
+	       hex2mem((unsigned char *)&sreg.s0_0 + (reg.srs * 16 * sizeof(unsigned int)) + (regno - S0) * sizeof(unsigned int), val, sizeof(unsigned int));
 	} else {
 		/* Non-existing register. */
 		status = E05;
@@ -613,7 +613,7 @@ read_register(char regno, unsigned int *valptr)
 	} else if (regno == BZ || regno == VR) {
 		/* Consecutive 8-bit registers. */
 		*valptr = (unsigned int)(*(unsigned char *)
-                                         ((char *)&reg.bz + (regno - BZ) * sizeof(char)));
+					 ((char *)&reg.bz + (regno - BZ) * sizeof(char)));
 
 	} else if (regno == PID) {
 		/* 32-bit register. */
@@ -667,20 +667,20 @@ mem2hex(char *buf, unsigned char *mem, int count)
 	int i;
 	int ch;
 
-        if (mem == NULL) {
+	if (mem == NULL) {
 		/* Invalid address, caught by 'm' packet handler. */
-                for (i = 0; i < count; i++) {
-                        *buf++ = '0';
-                        *buf++ = '0';
-                }
-        } else {
-                /* Valid mem address. */
+		for (i = 0; i < count; i++) {
+			*buf++ = '0';
+			*buf++ = '0';
+		}
+	} else {
+		/* Valid mem address. */
 		for (i = 0; i < count; i++) {
 			ch = *mem++;
 			buf = hex_byte_pack(buf, ch);
 		}
-        }
-        /* Terminate properly. */
+	}
+	/* Terminate properly. */
 	*buf = '\0';
 	return buf;
 }
@@ -696,9 +696,9 @@ mem2hex_nbo(char *buf, unsigned char *mem, int count)
 	for (i = 0; i < count; i++) {
 		ch = *mem--;
 		buf = hex_byte_pack(buf, ch);
-        }
+	}
 
-        /* Terminate properly. */
+	/* Terminate properly. */
 	*buf = '\0';
 	return buf;
 }
@@ -853,9 +853,9 @@ putDebugString(const unsigned char *str, int len)
 	asm("move $r10, $spc");
 	asm("nosstep:");
 
-        output_buffer[0] = 'O';
-        mem2hex(&output_buffer[1], (unsigned char *)str, len);
-        putpacket(output_buffer);
+	output_buffer[0] = 'O';
+	mem2hex(&output_buffer[1], (unsigned char *)str, len);
+	putpacket(output_buffer);
 
 	asm("spccont:");
 }
@@ -863,14 +863,14 @@ putDebugString(const unsigned char *str, int len)
 /********************************** Handle exceptions ************************/
 /* Build and send a response packet in order to inform the host the
    stub is stopped. TAAn...:r...;n...:r...;n...:r...;
-                    AA = signal number
-                    n... = register number (hex)
-                    r... = register contents
-                    n... = `thread'
-                    r... = thread process ID.  This is a hex integer.
-                    n... = other string not starting with valid hex digit.
-                    gdb should ignore this n,r pair and go on to the next.
-                    This way we can extend the protocol. */
+		    AA = signal number
+		    n... = register number (hex)
+		    r... = register contents
+		    n... = `thread'
+		    r... = thread process ID.  This is a hex integer.
+		    n... = other string not starting with valid hex digit.
+		    gdb should ignore this n,r pair and go on to the next.
+		    This way we can extend the protocol. */
 static void
 stub_is_stopped(int sigval)
 {
@@ -1006,11 +1006,11 @@ stub_is_stopped(int sigval)
 	*ptr++ = ';';
 
 	/* Send ERP as well; this will save us an entire register fetch in some cases. */
-        read_register(ERP, &reg_cont);
+	read_register(ERP, &reg_cont);
 	ptr = hex_byte_pack(ptr, ERP);
-        *ptr++ = ':';
-        ptr = mem2hex(ptr, (unsigned char *)&reg_cont, register_size[ERP]);
-        *ptr++ = ';';
+	*ptr++ = ':';
+	ptr = mem2hex(ptr, (unsigned char *)&reg_cont, register_size[ERP]);
+	*ptr++ = ';';
 
 	/* null-terminate and send it off */
 	*ptr = 0;
@@ -1082,7 +1082,7 @@ void register_fixup(int sigval)
 
 			/* Break 8. */
 
-                        /* Static (compiled) breakpoints must return to the next instruction
+			/* Static (compiled) breakpoints must return to the next instruction
 			   in order to avoid infinite loops (default value of ERP). Dynamic
 			   (gdb-invoked) must subtract the size of the break instruction from
 			   the ERP so that the instruction that was originally in the break
@@ -1368,9 +1368,9 @@ handle_exception(int sigval)
 				   retrieve 108 byte from base address 6000120a.
 				   Failure: void. */
 				{
-                                        char *suffix;
+					char *suffix;
 					unsigned char *addr = (unsigned char *)gdb_cris_strtol(&input_buffer[1],
-                                                                                               &suffix, 16);
+											       &suffix, 16);
 					int len = gdb_cris_strtol(suffix+1, 0, 16);
 
 					/* Bogus read (i.e. outside the kernel's
@@ -1379,8 +1379,8 @@ handle_exception(int sigval)
 					      (unsigned int)addr < 0xd0000000))
 						addr = NULL;
 
-                                        mem2hex(output_buffer, addr, len);
-                                }
+					mem2hex(output_buffer, addr, len);
+				}
 				break;
 
 			case 'X':
@@ -1462,36 +1462,36 @@ handle_exception(int sigval)
 				reg.ccs |= (1 << (S_CCS_BITNR + CCS_SHIFT));
 				return;
 
-                       case 'Z':
+		       case 'Z':
 
-                               /* Insert breakpoint or watchpoint, Ztype,addr,length.
-                                  Remote protocol says: A remote target shall return an empty string
-                                  for an unrecognized breakpoint or watchpoint packet type. */
-                               {
-                                       char *lenptr;
-                                       char *dataptr;
-                                       int addr = gdb_cris_strtol(&input_buffer[3], &lenptr, 16);
-                                       int len = gdb_cris_strtol(lenptr + 1, &dataptr, 16);
-                                       char type = input_buffer[1];
+			       /* Insert breakpoint or watchpoint, Ztype,addr,length.
+				  Remote protocol says: A remote target shall return an empty string
+				  for an unrecognized breakpoint or watchpoint packet type. */
+			       {
+				       char *lenptr;
+				       char *dataptr;
+				       int addr = gdb_cris_strtol(&input_buffer[3], &lenptr, 16);
+				       int len = gdb_cris_strtol(lenptr + 1, &dataptr, 16);
+				       char type = input_buffer[1];
 
 				       insert_watchpoint(type, addr, len);
-                                       break;
-                               }
+				       break;
+			       }
 
-                       case 'z':
-                               /* Remove breakpoint or watchpoint, Ztype,addr,length.
-                                  Remote protocol says: A remote target shall return an empty string
-                                  for an unrecognized breakpoint or watchpoint packet type. */
-                               {
-                                       char *lenptr;
-                                       char *dataptr;
-                                       int addr = gdb_cris_strtol(&input_buffer[3], &lenptr, 16);
-                                       int len = gdb_cris_strtol(lenptr + 1, &dataptr, 16);
-                                       char type = input_buffer[1];
+		       case 'z':
+			       /* Remove breakpoint or watchpoint, Ztype,addr,length.
+				  Remote protocol says: A remote target shall return an empty string
+				  for an unrecognized breakpoint or watchpoint packet type. */
+			       {
+				       char *lenptr;
+				       char *dataptr;
+				       int addr = gdb_cris_strtol(&input_buffer[3], &lenptr, 16);
+				       int len = gdb_cris_strtol(lenptr + 1, &dataptr, 16);
+				       char type = input_buffer[1];
 
-                                       remove_watchpoint(type, addr, len);
-                                       break;
-                               }
+				       remove_watchpoint(type, addr, len);
+				       break;
+			       }
 
 
 			case '?':

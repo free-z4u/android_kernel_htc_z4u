@@ -60,7 +60,7 @@ static int radeon_bl_update_status(struct backlight_device *bd)
 	 * backlight. This provides some greater power saving and the display
 	 * is useless without backlight anyway.
 	 */
-        if (bd->props.power != FB_BLANK_UNBLANK ||
+	if (bd->props.power != FB_BLANK_UNBLANK ||
 	    bd->props.fb_blank != FB_BLANK_UNBLANK)
 		level = 0;
 	else

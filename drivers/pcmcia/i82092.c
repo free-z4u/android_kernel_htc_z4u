@@ -398,18 +398,18 @@ static int i82092aa_init(struct pcmcia_socket *sock)
 {
 	int i;
 	struct resource res = { .start = 0, .end = 0x0fff };
-        pccard_io_map io = { 0, 0, 0, 0, 1 };
+	pccard_io_map io = { 0, 0, 0, 0, 1 };
 	pccard_mem_map mem = { .res = &res, };
 
-        enter("i82092aa_init");
+	enter("i82092aa_init");
 
-        for (i = 0; i < 2; i++) {
-        	io.map = i;
-                i82092aa_set_io_map(sock, &io);
+	for (i = 0; i < 2; i++) {
+		io.map = i;
+		i82092aa_set_io_map(sock, &io);
 	}
-        for (i = 0; i < 5; i++) {
-        	mem.map = i;
-                i82092aa_set_mem_map(sock, &mem);
+	for (i = 0; i < 5; i++) {
+		mem.map = i;
+		i82092aa_set_mem_map(sock, &mem);
 	}
 
 	leave("i82092aa_init");

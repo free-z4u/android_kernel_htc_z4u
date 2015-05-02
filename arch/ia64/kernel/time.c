@@ -52,7 +52,7 @@ EXPORT_SYMBOL(last_cli_ip);
    weak default version */
 unsigned long long sched_clock(void)
 {
-        return paravirt_sched_clock();
+	return paravirt_sched_clock();
 }
 #endif
 
@@ -459,16 +459,16 @@ void update_vsyscall(struct timespec *wall, struct timespec *wtm,
 {
 	write_seqcount_begin(&fsyscall_gtod_data.seq);
 
-        /* copy fsyscall clock data */
-        fsyscall_gtod_data.clk_mask = c->mask;
-        fsyscall_gtod_data.clk_mult = mult;
-        fsyscall_gtod_data.clk_shift = c->shift;
-        fsyscall_gtod_data.clk_fsys_mmio = c->archdata.fsys_mmio;
-        fsyscall_gtod_data.clk_cycle_last = c->cycle_last;
+	/* copy fsyscall clock data */
+	fsyscall_gtod_data.clk_mask = c->mask;
+	fsyscall_gtod_data.clk_mult = mult;
+	fsyscall_gtod_data.clk_shift = c->shift;
+	fsyscall_gtod_data.clk_fsys_mmio = c->archdata.fsys_mmio;
+	fsyscall_gtod_data.clk_cycle_last = c->cycle_last;
 
 	/* copy kernel time structures */
-        fsyscall_gtod_data.wall_time.tv_sec = wall->tv_sec;
-        fsyscall_gtod_data.wall_time.tv_nsec = wall->tv_nsec;
+	fsyscall_gtod_data.wall_time.tv_sec = wall->tv_sec;
+	fsyscall_gtod_data.wall_time.tv_nsec = wall->tv_nsec;
 	fsyscall_gtod_data.monotonic_time.tv_sec = wtm->tv_sec
 							+ wall->tv_sec;
 	fsyscall_gtod_data.monotonic_time.tv_nsec = wtm->tv_nsec

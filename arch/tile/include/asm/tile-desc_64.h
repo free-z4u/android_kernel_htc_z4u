@@ -474,9 +474,9 @@ struct tilegx_decoded_instruction
 
 /* Disassemble a bundle into a struct for machine processing. */
 extern int parse_insn_tilegx(tilegx_bundle_bits bits,
-                             unsigned long long pc,
-                             struct tilegx_decoded_instruction
-                             decoded[TILEGX_MAX_INSTRUCTIONS_PER_BUNDLE]);
+			     unsigned long long pc,
+			     struct tilegx_decoded_instruction
+			     decoded[TILEGX_MAX_INSTRUCTIONS_PER_BUNDLE]);
 
 
 

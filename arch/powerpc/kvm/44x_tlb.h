@@ -24,10 +24,10 @@
 #include <asm/mmu-44x.h>
 
 extern int kvmppc_44x_tlb_index(struct kvm_vcpu *vcpu, gva_t eaddr,
-                                unsigned int pid, unsigned int as);
+				unsigned int pid, unsigned int as);
 
 extern int kvmppc_44x_emul_tlbsx(struct kvm_vcpu *vcpu, u8 rt, u8 ra, u8 rb,
-                                 u8 rc);
+				 u8 rc);
 extern int kvmppc_44x_emul_tlbwe(struct kvm_vcpu *vcpu, u8 ra, u8 rs, u8 ws);
 
 /* TLB helper functions */

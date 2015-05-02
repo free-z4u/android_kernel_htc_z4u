@@ -95,10 +95,10 @@ static int ubd_getgeo(struct block_device *bdev, struct hd_geometry *geo);
 #define MAX_DEV (16)
 
 static const struct block_device_operations ubd_blops = {
-        .owner		= THIS_MODULE,
-        .open		= ubd_open,
-        .release	= ubd_release,
-        .ioctl		= ubd_ioctl,
+	.owner		= THIS_MODULE,
+	.open		= ubd_open,
+	.release	= ubd_release,
+	.ioctl		= ubd_ioctl,
 	.getgeo		= ubd_getgeo,
 };
 

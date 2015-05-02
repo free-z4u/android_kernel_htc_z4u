@@ -117,7 +117,7 @@ op_axp_create_files(struct super_block *sb, struct dentry *root)
 		dir = oprofilefs_mkdir(sb, root, buf);
 
 		oprofilefs_create_ulong(sb, dir, "enabled", &ctr[i].enabled);
-                oprofilefs_create_ulong(sb, dir, "event", &ctr[i].event);
+		oprofilefs_create_ulong(sb, dir, "event", &ctr[i].event);
 		oprofilefs_create_ulong(sb, dir, "count", &ctr[i].count);
 		/* Dummies.  */
 		oprofilefs_create_ulong(sb, dir, "kernel", &ctr[i].kernel);

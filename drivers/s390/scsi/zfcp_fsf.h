@@ -353,8 +353,8 @@ struct fsf_qtcb_bottom_support {
 	u32 service_class;
 	u8  res3[3];
 	u8  timeout;
-        u32 lun_access_info;
-        u8  res4[180];
+	u32 lun_access_info;
+	u8  res4[180];
 	u32 els1_length;
 	u32 els2_length;
 	u32 req_buf_length;

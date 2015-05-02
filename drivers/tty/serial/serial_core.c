@@ -52,9 +52,9 @@ extern u8 modem_fatal;
 static int uart2_handshaking_mask = 0;
 #define MODULE_NAME "[GSM_RADIO]"
 #define pr_uartdm_debug(x...) do {                             \
-                if (uart2_handshaking_mask) \
-                        printk(KERN_DEBUG MODULE_NAME " "x);            \
-        } while (0)
+		if (uart2_handshaking_mask) \
+			printk(KERN_DEBUG MODULE_NAME " "x);            \
+	} while (0)
 #endif
 
 static DEFINE_MUTEX(port_mutex);

@@ -102,7 +102,7 @@ struct nf_conn_help {
 
 struct nf_conn {
 	/* Usage count in here is 1 for hash table/destruct timer, 1 per skb,
-           plus 1 for any connection(s) we are `master' for */
+	   plus 1 for any connection(s) we are `master' for */
 	struct nf_conntrack ct_general;
 
 	spinlock_t lock;
@@ -331,6 +331,6 @@ do {							\
 } while (0)
 
 #define MODULE_ALIAS_NFCT_HELPER(helper) \
-        MODULE_ALIAS("nfct-helper-" helper)
+	MODULE_ALIAS("nfct-helper-" helper)
 
 #endif /* _NF_CONNTRACK_H */

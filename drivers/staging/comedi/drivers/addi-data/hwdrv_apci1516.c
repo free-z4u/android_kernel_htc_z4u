@@ -493,13 +493,13 @@ int i_APCI1516_StartStopWriteWatchdog(struct comedi_device *dev, struct comedi_s
 +----------------------------------------------------------------------------+
 | Function   Name   : int i_APCI1516_ReadWatchdog                            |
 |			(struct comedi_device *dev,struct comedi_subdevice *s,struct comedi_insn *insn,
-                    unsigned int *data); 	                                     |
+		    unsigned int *data); 	                                     |
 +----------------------------------------------------------------------------+
 | Task              : Read The Watchdog                                      |
 +----------------------------------------------------------------------------+
 | Input Parameters  :   struct comedi_device *dev      : Driver handle              |
 |                     struct comedi_subdevice *s,   :pointer to subdevice structure
-                      struct comedi_insn *insn      :pointer to insn structure      |
+		      struct comedi_insn *insn      :pointer to insn structure      |
 |                     unsigned int *data          : Data Pointer to read status  |
 +----------------------------------------------------------------------------+
 | Output Parameters :	--													 |

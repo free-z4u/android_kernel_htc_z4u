@@ -86,18 +86,18 @@
 #define IrSR_XMITIR_UART_MODE 0x0
 
 #define IrSR_IR_RECEIVE_ON (\
-                IrSR_RXPL_NEG_IS_ZERO | \
-                IrSR_TXPL_POS_IS_ZERO | \
-                IrSR_XMODE_PULSE_3_16 | \
-                IrSR_RCVEIR_IR_MODE   | \
-                IrSR_XMITIR_UART_MODE)
+		IrSR_RXPL_NEG_IS_ZERO | \
+		IrSR_TXPL_POS_IS_ZERO | \
+		IrSR_XMODE_PULSE_3_16 | \
+		IrSR_RCVEIR_IR_MODE   | \
+		IrSR_XMITIR_UART_MODE)
 
 #define IrSR_IR_TRANSMIT_ON (\
-                IrSR_RXPL_NEG_IS_ZERO | \
-                IrSR_TXPL_POS_IS_ZERO | \
-                IrSR_XMODE_PULSE_3_16 | \
-                IrSR_RCVEIR_UART_MODE | \
-                IrSR_XMITIR_IR_MODE)
+		IrSR_RXPL_NEG_IS_ZERO | \
+		IrSR_TXPL_POS_IS_ZERO | \
+		IrSR_XMODE_PULSE_3_16 | \
+		IrSR_RCVEIR_UART_MODE | \
+		IrSR_XMITIR_IR_MODE)
 
 struct pxa_irda {
 	int			speed;
@@ -313,7 +313,7 @@ static irqreturn_t pxa_irda_sir_irq(int irq, void *dev_id)
 			dev->stats.tx_packets++;
 			dev->stats.tx_bytes += si->tx_buff.data - si->tx_buff.head;
 
-                        /* We need to ensure that the transmitter has finished. */
+			/* We need to ensure that the transmitter has finished. */
 			while ((STLSR & LSR_TEMT) == 0)
 				cpu_relax();
 			si->last_oscr = OSCR;

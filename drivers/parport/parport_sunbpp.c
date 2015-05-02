@@ -306,10 +306,10 @@ static int __devinit bpp_probe(struct platform_device *op)
 	dma = PARPORT_DMA_NONE;
 
 	ops = kmalloc(sizeof(struct parport_operations), GFP_KERNEL);
-        if (!ops)
+	if (!ops)
 		goto out_unmap;
 
-        memcpy (ops, &parport_sunbpp_ops, sizeof(struct parport_operations));
+	memcpy (ops, &parport_sunbpp_ops, sizeof(struct parport_operations));
 
 	dprintk(("register_port\n"));
 	if (!(p = parport_register_port((unsigned long)base, irq, dma, ops)))

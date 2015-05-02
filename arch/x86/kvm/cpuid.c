@@ -623,7 +623,7 @@ not_found:
  * This is to satisfy the CPUID specification.
  */
 static struct kvm_cpuid_entry2* check_cpuid_limit(struct kvm_vcpu *vcpu,
-                                                  u32 function, u32 index)
+						  u32 function, u32 index)
 {
 	struct kvm_cpuid_entry2 *maxlevel;
 

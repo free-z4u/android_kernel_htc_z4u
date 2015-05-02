@@ -3637,26 +3637,26 @@ void r600_set_pcie_lanes(struct radeon_device *rdev, int lanes)
 
 	WREG32_PCIE_P(RADEON_PCIE_LC_LINK_WIDTH_CNTL, link_width_cntl);
 
-        /* some northbridges can renegotiate the link rather than requiring
-         * a complete re-config.
-         * e.g., AMD 780/790 northbridges (pci ids: 0x5956, 0x5957, 0x5958, etc.)
-         */
-        if (link_width_cntl & R600_PCIE_LC_RENEGOTIATION_SUPPORT)
+	/* some northbridges can renegotiate the link rather than requiring
+	 * a complete re-config.
+	 * e.g., AMD 780/790 northbridges (pci ids: 0x5956, 0x5957, 0x5958, etc.)
+	 */
+	if (link_width_cntl & R600_PCIE_LC_RENEGOTIATION_SUPPORT)
 		link_width_cntl |= R600_PCIE_LC_RENEGOTIATE_EN | R600_PCIE_LC_UPCONFIGURE_SUPPORT;
-        else
+	else
 		link_width_cntl |= R600_PCIE_LC_RECONFIG_ARC_MISSING_ESCAPE;
 
 	WREG32_PCIE_P(RADEON_PCIE_LC_LINK_WIDTH_CNTL, (link_width_cntl |
 						       RADEON_PCIE_LC_RECONFIG_NOW));
 
-        if (rdev->family >= CHIP_RV770)
+	if (rdev->family >= CHIP_RV770)
 		target_reg = R700_TARGET_AND_CURRENT_PROFILE_INDEX;
-        else
+	else
 		target_reg = R600_TARGET_AND_CURRENT_PROFILE_INDEX;
 
-        /* wait for lane set to complete */
-        link_width_cntl = RREG32(target_reg);
-        while (link_width_cntl == 0xffffffff)
+	/* wait for lane set to complete */
+	link_width_cntl = RREG32(target_reg);
+	while (link_width_cntl == 0xffffffff)
 		link_width_cntl = RREG32(target_reg);
 
 }

@@ -528,7 +528,7 @@
 #define OUTREG16(addr, val)    writew((val),(u16 __iomem *)(dinfo->mmio_base + \
 							   (addr)))
 #define OUTREG(addr, val)     writel((val),(u32 __iomem *)(dinfo->mmio_base + \
-                                     (addr)))
+				     (addr)))
 
 /* Ring buffer macros */
 #define OUT_RING(n)	do {						\

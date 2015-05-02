@@ -610,12 +610,12 @@ static struct compressor ppp_deflate_draft = {
 
 static int __init deflate_init(void)
 {
-        int answer = ppp_register_compressor(&ppp_deflate);
-        if (answer == 0)
-                printk(KERN_INFO
+	int answer = ppp_register_compressor(&ppp_deflate);
+	if (answer == 0)
+		printk(KERN_INFO
 		       "PPP Deflate Compression module registered\n");
 	ppp_register_compressor(&ppp_deflate_draft);
-        return answer;
+	return answer;
 }
 
 static void __exit deflate_cleanup(void)

@@ -477,8 +477,8 @@ int __init smu_init (void)
 	const u32 *data;
 	int ret = 0;
 
-        np = of_find_node_by_type(NULL, "smu");
-        if (np == NULL)
+	np = of_find_node_by_type(NULL, "smu");
+	if (np == NULL)
 		return -ENODEV;
 
 	printk(KERN_INFO "SMU: Driver %s %s\n", VERSION, AUTHOR);

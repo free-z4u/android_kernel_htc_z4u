@@ -106,7 +106,7 @@ static const struct mctl maven_controls[] =
 #define MAVCTRLS ARRAY_SIZE(maven_controls)
 
 /* Return: positive number: id found
-           -EINVAL:         id not found, return failure
+	   -EINVAL:         id not found, return failure
 	   -ENOENT:         id not found, create fake disabled control */
 static int get_ctrl_id(__u32 v4l2_id) {
 	int i;
@@ -1161,7 +1161,7 @@ static int maven_out_verify_mode(void* md, u_int32_t arg) {
 }
 
 static int maven_out_get_queryctrl(void* md, struct v4l2_queryctrl* p) {
-        return maven_get_queryctrl(md, p);
+	return maven_get_queryctrl(md, p);
 }
 
 static int maven_out_get_ctrl(void* md, struct v4l2_control* p) {

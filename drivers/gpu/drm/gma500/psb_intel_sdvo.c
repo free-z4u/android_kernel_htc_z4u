@@ -45,7 +45,7 @@
 #define SDVO_TV_MASK   (SDVO_OUTPUT_CVBS0 | SDVO_OUTPUT_SVID0)
 
 #define SDVO_OUTPUT_MASK (SDVO_TMDS_MASK | SDVO_RGB_MASK | SDVO_LVDS_MASK |\
-                         SDVO_TV_MASK)
+			 SDVO_TV_MASK)
 
 #define IS_TV(c)	(c->output_flag & SDVO_TV_MASK)
 #define IS_TMDS(c)	(c->output_flag & SDVO_TMDS_MASK)

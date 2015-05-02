@@ -145,25 +145,25 @@ struct async_icount_24 {
 #if 0
 
 struct serial_state {
-        int     magic;
-        int     baud_base;
-        unsigned long   port;
-        int     irq;
-        int     flags;
-        int     hub6;
-        int     type;
-        int     line;
-        int     revision;       /* Chip revision (950) */
-        int     xmit_fifo_size;
-        int     custom_divisor;
-        int     count;
-        u8      *iomem_base;
-        u16     iomem_reg_shift;
-        unsigned short  close_delay;
-        unsigned short  closing_wait; /* time to wait before closing */
-        struct async_icount_24     icount;
-        int     io_type;
-        struct async_struct *info;
+	int     magic;
+	int     baud_base;
+	unsigned long   port;
+	int     irq;
+	int     flags;
+	int     hub6;
+	int     type;
+	int     line;
+	int     revision;       /* Chip revision (950) */
+	int     xmit_fifo_size;
+	int     custom_divisor;
+	int     count;
+	u8      *iomem_base;
+	u16     iomem_reg_shift;
+	unsigned short  close_delay;
+	unsigned short  closing_wait; /* time to wait before closing */
+	struct async_icount_24     icount;
+	int     io_type;
+	struct async_struct *info;
 };
 #endif
 
@@ -970,10 +970,10 @@ static void change_speed(ser_info_t *info)
 	 bits++;
 	 idx = PORT_NUM(state->smc_scc_num);
 	 if (state->smc_scc_num & NUM_IS_SCC) {
-         sccp = &pquicc->scc_regs[idx];
-         sccp->scc_psmr = (sbits << 12) | scval;
+	 sccp = &pquicc->scc_regs[idx];
+	 sccp->scc_psmr = (sbits << 12) | scval;
      } else {
-         smcp = &pquicc->smc_regs[idx];
+	 smcp = &pquicc->smc_regs[idx];
 
 		/* Set the mode register.  We want to keep a copy of the
 		 * enables, because we want to put them back if they were

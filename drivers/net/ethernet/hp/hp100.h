@@ -583,7 +583,7 @@ typedef struct hp100_ring {
  */
 
 #define hp100_inb( reg ) \
-        inb( ioaddr + HP100_REG_##reg )
+	inb( ioaddr + HP100_REG_##reg )
 #define hp100_inw( reg ) \
 	inw( ioaddr + HP100_REG_##reg )
 #define hp100_inl( reg ) \

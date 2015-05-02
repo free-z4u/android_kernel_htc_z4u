@@ -114,7 +114,7 @@ EXPORT_SYMBOL(load_mixer_volumes);
 
 static int set_mixer_levels(void __user * arg)
 {
-        /* mixer_vol_table is 174 bytes, so IMHO no reason to not allocate it on the stack */
+	/* mixer_vol_table is 174 bytes, so IMHO no reason to not allocate it on the stack */
 	mixer_vol_table buf;
 
 	if (__copy_from_user(&buf, arg, sizeof(buf)))

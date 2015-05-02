@@ -70,12 +70,12 @@ struct sys_pt_regs {
 
 #define UM_SET_SYSCALL_RETURN(_regs, result)	        \
 do {                                                    \
-        if (result < 0) {				\
+	if (result < 0) {				\
 		(_regs)->regs[PT_CCR] |= 0x10000000;	\
 		UM_SYSCALL_RET((_regs)) = -result;	\
-        } else {					\
+	} else {					\
 		UM_SYSCALL_RET((_regs)) = result;	\
-        }                                               \
+	}                                               \
 } while(0)
 
 extern void shove_aux_table(unsigned long sp);

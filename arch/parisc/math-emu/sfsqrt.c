@@ -60,41 +60,41 @@ sgl_fsqrt(
 	register boolean guardbit = FALSE, even_exponent;
 
 	src = *srcptr;
-        /*
-         * check source operand for NaN or infinity
-         */
-        if ((src_exponent = Sgl_exponent(src)) == SGL_INFINITY_EXPONENT) {
-                /*
-                 * is signaling NaN?
-                 */
-                if (Sgl_isone_signaling(src)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Sgl_set_quiet(src);
-                }
-                /*
-                 * Return quiet NaN or positive infinity.
-		 *  Fall through to negative test if negative infinity.
-                 */
-		if (Sgl_iszero_sign(src) || Sgl_isnotzero_mantissa(src)) {
-                	*dstptr = src;
-                	return(NOEXCEPTION);
+	/*
+	 * check source operand for NaN or infinity
+	 */
+	if ((src_exponent = Sgl_exponent(src)) == SGL_INFINITY_EXPONENT) {
+		/*
+		 * is signaling NaN?
+		 */
+		if (Sgl_isone_signaling(src)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Sgl_set_quiet(src);
 		}
-        }
+		/*
+		 * Return quiet NaN or positive infinity.
+		 *  Fall through to negative test if negative infinity.
+		 */
+		if (Sgl_iszero_sign(src) || Sgl_isnotzero_mantissa(src)) {
+			*dstptr = src;
+			return(NOEXCEPTION);
+		}
+	}
 
-        /*
-         * check for zero source operand
-         */
+	/*
+	 * check for zero source operand
+	 */
 	if (Sgl_iszero_exponentmantissa(src)) {
 		*dstptr = src;
 		return(NOEXCEPTION);
 	}
 
-        /*
-         * check for negative source operand
-         */
+	/*
+	 * check for negative source operand
+	 */
 	if (Sgl_isone_sign(src)) {
 		/* trap if INVALIDTRAP enabled */
 		if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);

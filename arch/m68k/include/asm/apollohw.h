@@ -59,11 +59,11 @@ struct mc146818 {
 #endif
 
 struct mc146818 {
-        unsigned char second, alarm_second;
-        unsigned char minute, alarm_minute;
-        unsigned char hours, alarm_hours;
-        unsigned char day_of_week, day_of_month;
-        unsigned char month, year;
+	unsigned char second, alarm_second;
+	unsigned char minute, alarm_minute;
+	unsigned char hours, alarm_hours;
+	unsigned char day_of_week, day_of_month;
+	unsigned char month, year;
 };
 
 

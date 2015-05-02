@@ -186,10 +186,10 @@ ufs_inode_getfrag(struct inode *inode, u64 fragment,
 	     "metadata %d\n", inode->i_ino, (unsigned long long)fragment,
 	     (unsigned long long)new_fragment, required, !phys);
 
-        /* TODO : to be done for write support
-        if ( (flags & UFS_TYPE_MASK) == UFS_TYPE_UFS2)
-             goto ufs2;
-         */
+	/* TODO : to be done for write support
+	if ( (flags & UFS_TYPE_MASK) == UFS_TYPE_UFS2)
+	     goto ufs2;
+	 */
 
 	block = ufs_fragstoblks (fragment);
 	blockoff = ufs_fragnum (fragment);
@@ -298,7 +298,7 @@ repeat:
 	return result;
 
      /* This part : To be implemented ....
-        Required only for writing, not required for READ-ONLY.
+	Required only for writing, not required for READ-ONLY.
 ufs2:
 
 	u2_block = ufs_fragstoblks(fragment);
@@ -431,7 +431,7 @@ int ufs_getfrag_block(struct inode *inode, sector_t fragment, struct buffer_head
 		return 0;
 	}
 
-        /* This code entered only while writing ....? */
+	/* This code entered only while writing ....? */
 
 	err = -EIO;
 	new = 0;
@@ -642,9 +642,9 @@ static int ufs2_read_inode(struct inode *inode, struct ufs2_inode *ufs2_inode)
 		return -1;
 	}
 
-        /*
-         * Linux now has 32-bit uid and gid, so we can support EFT.
-         */
+	/*
+	 * Linux now has 32-bit uid and gid, so we can support EFT.
+	 */
 	inode->i_uid = fs32_to_cpu(sb, ufs2_inode->ui_uid);
 	inode->i_gid = fs32_to_cpu(sb, ufs2_inode->ui_gid);
 

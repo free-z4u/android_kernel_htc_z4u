@@ -16,10 +16,10 @@
 #define SDC_DAT1_DISWAKE 3
 
 struct embedded_sdio_data {
-        struct sdio_cis cis;
-        struct sdio_cccr cccr;
-        struct sdio_embedded_func *funcs;
-        int num_funcs;
+	struct sdio_cis cis;
+	struct sdio_cccr cccr;
+	struct sdio_embedded_func *funcs;
+	int num_funcs;
 };
 
 /* This structure keeps information per regulator */
@@ -150,14 +150,14 @@ struct mmc_platform_data {
 	/* More capabilities */
 	unsigned int uhs_caps2;
 	void (*sdio_lpm_gpio_setup)(struct device *, unsigned int);
-        unsigned int status_irq;
+	unsigned int status_irq;
 	unsigned int status_gpio;
 	/* Indicates the polarity of the GPIO line when card is inserted */
 	bool is_status_gpio_active_low;
-        unsigned int sdiowakeup_irq;
-        unsigned long irq_flags;
-        unsigned long mmc_bus_width;
-        int (*wpswitch) (struct device *);
+	unsigned int sdiowakeup_irq;
+	unsigned long irq_flags;
+	unsigned long mmc_bus_width;
+	int (*wpswitch) (struct device *);
 	unsigned int msmsdcc_fmin;
 	unsigned int msmsdcc_fmid;
 	unsigned int msmsdcc_fmax;

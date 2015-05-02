@@ -86,7 +86,7 @@ void hw_timer_init(void)
 
   prescaler = 8;
   pquicc->timer_tmr1 = 0x001a | /* or=1, frr=1, iclk=01b */
-                           (unsigned short)((prescaler - 1) << 8);
+			   (unsigned short)((prescaler - 1) << 8);
 
   pquicc->timer_tcn1 = 0x0000; /* initial count */
   /* calculate interval for 100Hz based on the _system_clock: */
@@ -148,13 +148,13 @@ void config_BSP(char *command, int len)
      unsigned int local_pllcr = (unsigned int)(pquicc->sim_pllcr);
      if( local_pllcr & MCU_PREEN ) // If the prescaler is dividing by 128
      {
-         int mf = (int)(pquicc->sim_pllcr & 0x0fff);
-         system_clock = (OSCILLATOR / 128) * (mf + 1);
+	 int mf = (int)(pquicc->sim_pllcr & 0x0fff);
+	 system_clock = (OSCILLATOR / 128) * (mf + 1);
      }
      else
      {
-         int mf = (int)(pquicc->sim_pllcr & 0x0fff);
-         system_clock = (OSCILLATOR) * (mf + 1);
+	 int mf = (int)(pquicc->sim_pllcr & 0x0fff);
+	 system_clock = (OSCILLATOR) * (mf + 1);
      }
   }
 
@@ -164,7 +164,7 @@ void config_BSP(char *command, int len)
   printk(KERN_INFO "uCquicc serial string [%s]\n",getserialnum());
   p = scc1_hwaddr = gethwaddr(0);
   printk(KERN_INFO "uCquicc hwaddr %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n",
-         p[0], p[1], p[2], p[3], p[4], p[5]);
+	 p[0], p[1], p[2], p[3], p[4], p[5]);
 
   p = getbenv("APPEND");
   if (p)

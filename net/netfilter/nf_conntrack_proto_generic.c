@@ -95,7 +95,7 @@ generic_timeout_obj_to_nlattr(struct sk_buff *skb, const void *data)
 	return 0;
 
 nla_put_failure:
-        return -ENOSPC;
+	return -ENOSPC;
 }
 
 static const struct nla_policy

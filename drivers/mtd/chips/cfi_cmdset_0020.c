@@ -65,8 +65,8 @@ static struct mtd_chip_driver cfi_staa_chipdrv = {
 #ifdef DEBUG_CFI_FEATURES
 static void cfi_tell_features(struct cfi_pri_intelext *extp)
 {
-        int i;
-        printk("  Feature/Command Support: %4.4X\n", extp->FeatureSupport);
+	int i;
+	printk("  Feature/Command Support: %4.4X\n", extp->FeatureSupport);
 	printk("     - Chip Erase:         %s\n", extp->FeatureSupport&1?"supported":"unsupported");
 	printk("     - Suspend Erase:      %s\n", extp->FeatureSupport&2?"supported":"unsupported");
 	printk("     - Suspend Program:    %s\n", extp->FeatureSupport&4?"supported":"unsupported");
@@ -428,16 +428,16 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 	DECLARE_WAITQUEUE(wait, current);
 	int wbufsize, z;
 
-        /* M58LW064A requires bus alignment for buffer wriets -- saw */
-        if (adr & (map_bankwidth(map)-1))
-            return -EINVAL;
+	/* M58LW064A requires bus alignment for buffer wriets -- saw */
+	if (adr & (map_bankwidth(map)-1))
+	    return -EINVAL;
 
-        wbufsize = cfi_interleave(cfi) << cfi->cfiq->MaxBufWriteSize;
-        adr += chip->start;
+	wbufsize = cfi_interleave(cfi) << cfi->cfiq->MaxBufWriteSize;
+	adr += chip->start;
 	cmd_adr = adr & ~(wbufsize-1);
 
 	/* Let's determine this according to the interleave only once */
-        status_OK = CMD(0x80);
+	status_OK = CMD(0x80);
 
 	timeo = jiffies + HZ;
  retry:
@@ -459,7 +459,7 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 	case FL_CFI_QUERY:
 	case FL_JEDEC_QUERY:
 		map_write(map, CMD(0x70), cmd_adr);
-                chip->state = FL_STATUS;
+		chip->state = FL_STATUS;
 #ifdef DEBUG_CFI_FEATURES
 	printk("%s: 1 status[%x]\n", __func__, map_read(map, cmd_adr));
 #endif
@@ -471,8 +471,8 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 		/* Urgh. Chip not yet ready to talk to us. */
 		if (time_after(jiffies, timeo)) {
 			mutex_unlock(&chip->mutex);
-                        printk(KERN_ERR "waiting for chip to be ready timed out in buffer write Xstatus = %lx, status = %lx\n",
-                               status.x[0], map_read(map, cmd_adr).x[0]);
+			printk(KERN_ERR "waiting for chip to be ready timed out in buffer write Xstatus = %lx, status = %lx\n",
+			       status.x[0], map_read(map, cmd_adr).x[0]);
 			return -EIO;
 		}
 
@@ -510,7 +510,7 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 		if (++z > 100) {
 			/* Argh. Not ready for write to buffer */
 			DISABLE_VPP(map);
-                        map_write(map, CMD(0x70), cmd_adr);
+			map_write(map, CMD(0x70), cmd_adr);
 			chip->state = FL_STATUS;
 			mutex_unlock(&chip->mutex);
 			printk(KERN_ERR "Chip not ready for buffer write. Xstatus = %lx\n", status.x[0]);
@@ -557,10 +557,10 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 
 		/* OK Still waiting */
 		if (time_after(jiffies, timeo)) {
-                        /* clear status */
-                        map_write(map, CMD(0x50), cmd_adr);
-                        /* put back into read status register mode */
-                        map_write(map, CMD(0x70), adr);
+			/* clear status */
+			map_write(map, CMD(0x50), cmd_adr);
+			/* put back into read status register mode */
+			map_write(map, CMD(0x70), adr);
 			chip->state = FL_STATUS;
 			DISABLE_VPP(map);
 			mutex_unlock(&chip->mutex);
@@ -586,8 +586,8 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 	DISABLE_VPP(map);
 	chip->state = FL_STATUS;
 
-        /* check for errors: 'lock bit', 'VPP', 'dead cell'/'unerased cell' or 'incorrect cmd' -- saw */
-        if (map_word_bitsset(map, status, CMD(0x3a))) {
+	/* check for errors: 'lock bit', 'VPP', 'dead cell'/'unerased cell' or 'incorrect cmd' -- saw */
+	if (map_word_bitsset(map, status, CMD(0x3a))) {
 #ifdef DEBUG_CFI_FEATURES
 		printk("%s: 2 status[%lx]\n", __func__, status.x[0]);
 #endif
@@ -602,7 +602,7 @@ static inline int do_write_buffer(struct map_info *map, struct flchip *chip,
 	wake_up(&chip->wq);
 	mutex_unlock(&chip->mutex);
 
-        return 0;
+	return 0;
 }
 
 static int cfi_staa_write_buffers (struct mtd_info *mtd, loff_t to,
@@ -624,15 +624,15 @@ static int cfi_staa_write_buffers (struct mtd_info *mtd, loff_t to,
 	printk("%s: ofs[%x] len[%x]\n", __func__, ofs, len);
 #endif
 
-        /* Write buffer is worth it only if more than one word to write... */
-        while (len > 0) {
+	/* Write buffer is worth it only if more than one word to write... */
+	while (len > 0) {
 		/* We must not cross write block boundaries */
 		int size = wbufsize - (ofs & (wbufsize-1));
 
-                if (size > len)
-                    size = len;
+		if (size > len)
+		    size = len;
 
-                ret = do_write_buffer(map, &cfi->chips[chipnum],
+		ret = do_write_buffer(map, &cfi->chips[chipnum],
 				      ofs, buf, size);
 		if (ret)
 			return ret;
@@ -1292,7 +1292,7 @@ static int cfi_staa_unlock(struct mtd_info *mtd, loff_t ofs, uint64_t len)
 		unsigned long temp_len = len;
 
 		cfi_send_gen_cmd(0x90, 0x55, 0, map, cfi, cfi->device_type, NULL);
-                while (temp_len) {
+		while (temp_len) {
 			printk("before unlock %x: block status register is %x\n",temp_adr,cfi_read_query(map, temp_adr+(2*ofs_factor)));
 			temp_adr += mtd->erasesize;
 			temp_len -= mtd->erasesize;

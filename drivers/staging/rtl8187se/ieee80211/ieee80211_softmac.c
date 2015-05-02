@@ -131,14 +131,14 @@ void ieee80211_WMM_Info(struct ieee80211_device *ieee, u8 **tag_p) {
 void ieee80211_TURBO_Info(struct ieee80211_device *ieee, u8 **tag_p) {
 	u8 *tag = *tag_p;
 
-        *tag++ = MFIE_TYPE_GENERIC; //0
-        *tag++ = 7;
-        *tag++ = 0x00;
-        *tag++ = 0xe0;
-        *tag++ = 0x4c;
-        *tag++ = 0x01;//5
-        *tag++ = 0x02;
-        *tag++ = 0x11;
+	*tag++ = MFIE_TYPE_GENERIC; //0
+	*tag++ = 7;
+	*tag++ = 0x00;
+	*tag++ = 0xe0;
+	*tag++ = 0x4c;
+	*tag++ = 0x01;//5
+	*tag++ = 0x02;
+	*tag++ = 0x11;
 	*tag++ = 0x00;
 
 	*tag_p = tag;
@@ -300,18 +300,18 @@ inline struct sk_buff *ieee80211_disassociate_skb(
 }
 void
 SendDisassociation(
-        struct ieee80211_device *ieee,
-        u8*                     asSta,
-        u8                      asRsn
+	struct ieee80211_device *ieee,
+	u8*                     asSta,
+	u8                      asRsn
 )
 {
-        struct ieee80211_network *beacon = &ieee->current_network;
-        struct sk_buff *skb;
-        skb = ieee80211_disassociate_skb(beacon,ieee,asRsn);
-        if (skb){
-                softmac_mgmt_xmit(skb, ieee);
-                //dev_kfree_skb_any(skb);//edit by thomas
-        }
+	struct ieee80211_network *beacon = &ieee->current_network;
+	struct sk_buff *skb;
+	skb = ieee80211_disassociate_skb(beacon,ieee,asRsn);
+	if (skb){
+		softmac_mgmt_xmit(skb, ieee);
+		//dev_kfree_skb_any(skb);//edit by thomas
+	}
 }
 
 //by amy for power save
@@ -503,10 +503,10 @@ out:
 void ieee80211_softmac_ips_scan_syncro(struct ieee80211_device *ieee)
 {
 	int ch;
-        unsigned int watch_dog = 0;
+	unsigned int watch_dog = 0;
 	u8 channel_map[MAX_CHANNEL_NUMBER+1];
 	memcpy(channel_map, GET_DOT11D_INFO(ieee)->channel_map, MAX_CHANNEL_NUMBER+1);
-        down(&ieee->scan_sem);
+	down(&ieee->scan_sem);
 	ch = ieee->current_network.channel;
 //      	if(ieee->sync_scan_hurryup)
 //	{
@@ -516,25 +516,25 @@ void ieee80211_softmac_ips_scan_syncro(struct ieee80211_device *ieee)
 //  	}
 //	printk("=======hh===============>ips scan\n");
      	while(1)
-        {
-                /* this function can be called in two situations
-                 * 1- We have switched to ad-hoc mode and we are
-                 *    performing a complete syncro scan before conclude
-                 *    there are no interesting cell and to create a
-                 *    new one. In this case the link state is
-                 *    IEEE80211_NOLINK until we found an interesting cell.
-                 *    If so the ieee8021_new_net, called by the RX path
-                 *    will set the state to IEEE80211_LINKED, so we stop
-                 *    scanning
-                 * 2- We are linked and the root uses run iwlist scan.
-                 *    So we switch to IEEE80211_LINKED_SCANNING to remember
-                 *    that we are still logically linked (not interested in
-                 *    new network events, despite for updating the net list,
-                 *    but we are temporarly 'unlinked' as the driver shall
-                 *    not filter RX frames and the channel is changing.
-                 * So the only situation in witch are interested is to check
-                 * if the state become LINKED because of the #1 situation
-                 */
+	{
+		/* this function can be called in two situations
+		 * 1- We have switched to ad-hoc mode and we are
+		 *    performing a complete syncro scan before conclude
+		 *    there are no interesting cell and to create a
+		 *    new one. In this case the link state is
+		 *    IEEE80211_NOLINK until we found an interesting cell.
+		 *    If so the ieee8021_new_net, called by the RX path
+		 *    will set the state to IEEE80211_LINKED, so we stop
+		 *    scanning
+		 * 2- We are linked and the root uses run iwlist scan.
+		 *    So we switch to IEEE80211_LINKED_SCANNING to remember
+		 *    that we are still logically linked (not interested in
+		 *    new network events, despite for updating the net list,
+		 *    but we are temporarly 'unlinked' as the driver shall
+		 *    not filter RX frames and the channel is changing.
+		 * So the only situation in witch are interested is to check
+		 * if the state become LINKED because of the #1 situation
+		 */
 		if (ieee->state == IEEE80211_LINKED)
 		{
 			goto out;
@@ -548,10 +548,10 @@ void ieee80211_softmac_ips_scan_syncro(struct ieee80211_device *ieee)
 		{
 //			printk("====send probe request\n");
 			ieee80211_send_probe_requests(ieee);
-                }
+		}
 		/* this prevent excessive time wait when we
-                 * need to wait for a syncro scan to end..
-                 */
+		 * need to wait for a syncro scan to end..
+		 */
 //                if (ieee->sync_scan_hurryup)
 //                        goto out;
 
@@ -564,7 +564,7 @@ void ieee80211_softmac_ips_scan_syncro(struct ieee80211_device *ieee)
 
 			ieee->current_network.channel = (ieee->current_network.channel + 1)%MAX_CHANNEL_NUMBER;
 		}while(!channel_map[ieee->current_network.channel]);
-        }
+	}
 out:
 	//ieee->sync_scan_hurryup = 0;
    	//ieee->set_chan(ieee->dev, ch);
@@ -1125,9 +1125,9 @@ inline struct sk_buff *ieee80211_association_req(struct ieee80211_network *beaco
 	  ieee80211_WMM_Info(ieee, &tag);
 	}
 	tag = skb_put(skb,turbo_info_len);
-        if(turbo_info_len) {
-                ieee80211_TURBO_Info(ieee, &tag);
-        }
+	if(turbo_info_len) {
+		ieee80211_TURBO_Info(ieee, &tag);
+	}
 
 	return skb;
 }
@@ -1594,7 +1594,7 @@ void ieee80211_sta_ps_send_null_frame(struct ieee80211_device *ieee, short pwr)
 
 short ieee80211_sta_ps_sleep(struct ieee80211_device *ieee, u32 *time_h, u32 *time_l)
 {
-        int timeout = 0;
+	int timeout = 0;
 
 	u8 dtim;
 	/*if(ieee->ps == IEEE80211_PS_DISABLED ||
@@ -1608,8 +1608,8 @@ short ieee80211_sta_ps_sleep(struct ieee80211_device *ieee, u32 *time_h, u32 *ti
 
 	if(!(dtim & IEEE80211_DTIM_VALID))
 		return 0;
-        else
-                timeout = ieee->current_network.beacon_interval;
+	else
+		timeout = ieee->current_network.beacon_interval;
 
 	//printk("VALID\n");
 	ieee->current_network.dtim_data = IEEE80211_DTIM_INVALID;

@@ -876,7 +876,7 @@ static void *sba_alloc_consistent(struct device *hwdev, size_t size,
 		return NULL;
 	}
 
-        ret = (void *) __get_free_pages(gfp, get_order(size));
+	ret = (void *) __get_free_pages(gfp, get_order(size));
 
 	if (ret) {
 		memset(ret, 0, size);
@@ -1114,7 +1114,7 @@ PAT_MOD(mod)->mod_info.ioc         = PAT_GET_IOC(temp);
 static void *
 sba_alloc_pdir(unsigned int pdir_size)
 {
-        unsigned long pdir_base;
+	unsigned long pdir_base;
 	unsigned long pdir_order = get_order(pdir_size);
 
 	pdir_base = __get_free_pages(GFP_KERNEL, pdir_order);
@@ -1216,7 +1216,7 @@ struct ibase_data_struct {
 static int setup_ibase_imask_callback(struct device *dev, void *data)
 {
 	/* lba_set_iregs() is in drivers/parisc/lba_pci.c */
-        extern void lba_set_iregs(struct parisc_device *, u32, u32);
+	extern void lba_set_iregs(struct parisc_device *, u32, u32);
 	struct parisc_device *lba = to_parisc_device(dev);
 	struct ibase_data_struct *ibd = data;
 	int rope_num = (lba->hpa.start >> 13) & 0xf;

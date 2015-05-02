@@ -469,7 +469,7 @@ static void twl_aen_sync_time(TW_Device_Extension *tw_dev, int request_id)
 	param->parameter_size_bytes = cpu_to_le16(4);
 
 	/* Convert system time in UTC to local time seconds since last
-           Sunday 12:00AM */
+	   Sunday 12:00AM */
 	do_gettimeofday(&utc);
 	local_time = (u32)(utc.tv_sec - (sys_tz.tz_minuteswest * 60));
 	schedulertime = local_time - (3 * 86400);
@@ -1291,7 +1291,7 @@ static int twl_poll_register(TW_Device_Extension *tw_dev, void *reg, u32 value, 
 	reg_value = readl(reg);
 	before = jiffies;
 
-        while ((reg_value & value) != result) {
+	while ((reg_value & value) != result) {
 		reg_value = readl(reg);
 		if (time_after(jiffies, before + HZ * seconds))
 			goto out;

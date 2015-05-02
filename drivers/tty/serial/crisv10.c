@@ -52,7 +52,7 @@ static char *serial_version = "$Revision: 1.25 $";
 #endif
 
 #if defined(CONFIG_ETRAX_SERIAL_RX_TIMEOUT_TICKS) && \
-           (CONFIG_ETRAX_SERIAL_RX_TIMEOUT_TICKS == 0)
+	   (CONFIG_ETRAX_SERIAL_RX_TIMEOUT_TICKS == 0)
 #error "RX_TIMEOUT_TICKS == 0 not allowed, use 1"
 #endif
 
@@ -253,7 +253,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_owner   = dma_ser0,
 	  .io_if       = if_serial_0,
 #ifdef CONFIG_ETRAX_SERIAL_PORT0
-          .enabled  = 1,
+	  .enabled  = 1,
 #ifdef CONFIG_ETRAX_SERIAL_PORT0_DMA6_OUT
 	  .dma_out_enabled = 1,
 	  .dma_out_nbr = SER0_TX_DMA_NBR,
@@ -281,7 +281,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_in_irq_description = NULL,
 #endif
 #else
-          .enabled  = 0,
+	  .enabled  = 0,
 	  .io_if_description = NULL,
 	  .dma_out_enabled = 0,
 	  .dma_in_enabled = 0
@@ -307,7 +307,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_owner   = dma_ser1,
 	  .io_if       = if_serial_1,
 #ifdef CONFIG_ETRAX_SERIAL_PORT1
-          .enabled  = 1,
+	  .enabled  = 1,
 	  .io_if_description = "ser1",
 #ifdef CONFIG_ETRAX_SERIAL_PORT1_DMA8_OUT
 	  .dma_out_enabled = 1,
@@ -337,7 +337,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_in_irq_description = NULL,
 #endif
 #else
-          .enabled  = 0,
+	  .enabled  = 0,
 	  .io_if_description = NULL,
 	  .dma_in_irq_nbr = 0,
 	  .dma_out_enabled = 0,
@@ -363,7 +363,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_owner   = dma_ser2,
 	  .io_if       = if_serial_2,
 #ifdef CONFIG_ETRAX_SERIAL_PORT2
-          .enabled  = 1,
+	  .enabled  = 1,
 	  .io_if_description = "ser2",
 #ifdef CONFIG_ETRAX_SERIAL_PORT2_DMA2_OUT
 	  .dma_out_enabled = 1,
@@ -392,7 +392,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_in_irq_description = NULL,
 #endif
 #else
-          .enabled  = 0,
+	  .enabled  = 0,
 	  .io_if_description = NULL,
 	  .dma_out_enabled = 0,
 	  .dma_in_enabled = 0
@@ -417,7 +417,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_owner   = dma_ser3,
 	  .io_if       = if_serial_3,
 #ifdef CONFIG_ETRAX_SERIAL_PORT3
-          .enabled  = 1,
+	  .enabled  = 1,
 	  .io_if_description = "ser3",
 #ifdef CONFIG_ETRAX_SERIAL_PORT3_DMA4_OUT
 	  .dma_out_enabled = 1,
@@ -446,7 +446,7 @@ static struct e100_serial rs_table[] = {
 	  .dma_in_irq_description = NULL
 #endif
 #else
-          .enabled  = 0,
+	  .enabled  = 0,
 	  .io_if_description = NULL,
 	  .dma_out_enabled = 0,
 	  .dma_in_enabled = 0
@@ -1006,7 +1006,7 @@ cflag_to_baud(unsigned int cflag)
 
 	static int ext_baud_table[] = {
 		0, 57600, 115200, 230400, 460800, 921600, 1843200, 6250000,
-                0, 0, 0, 0, 0, 0, 0, 0 };
+		0, 0, 0, 0, 0, 0, 0, 0 };
 
 	if (cflag & CBAUDEX)
 		return ext_baud_table[(cflag & CBAUD) & ~CBAUDEX];
@@ -1427,7 +1427,7 @@ e100_enable_rs485(struct tty_struct *tty, struct serial_rs485 *r)
 
 static int
 e100_write_rs485(struct tty_struct *tty,
-                 const unsigned char *buf, int count)
+		 const unsigned char *buf, int count)
 {
 	struct e100_serial * info = (struct e100_serial *)tty->driver_data;
 	int old_value = (info->rs485.flags) & SER_RS485_ENABLED;
@@ -1704,10 +1704,10 @@ static void flush_timeout_function(unsigned long data);
     TIMERD(DEBUG_LOG(info->line, "start_timer %i ", info->line)); \
     TIMERD(DEBUG_LOG(info->line, "num started: %i\n", serial_fast_timer_started)); \
     start_one_shot_timer(&fast_timers[info->line], \
-                         flush_timeout_function, \
-                         (unsigned long)info, \
-                         (usec), \
-                         string); \
+			 flush_timeout_function, \
+			 (unsigned long)info, \
+			 (usec), \
+			 string); \
   } \
   else { \
     TIMERD(DEBUG_LOG(info->line, "timer %i already running\n", info->line)); \
@@ -1921,7 +1921,7 @@ static int start_recv_dma(struct e100_serial *info)
 {
 	struct etrax_dma_descr *descr = info->rec_descr;
 	struct etrax_recv_buffer *buffer;
-        int i;
+	int i;
 
 	/* Set up the receiving descriptors */
 	for (i = 0; i < SERIAL_RECV_DESCRIPTORS; i++) {
@@ -2254,8 +2254,8 @@ If RXD pin is 0 we can expect another character (see 2. below).
 
     B          B          E or F__________________..__ V
 .._|__________|__________|______    |                 |valid data
-                          "valid" or
-                          parity error
+			  "valid" or
+			  parity error
 
 Multiple frame errors with data == 0x00 (B),
 but the part of the break trigs is interpreted as a start bit (and possibly
@@ -4114,7 +4114,7 @@ rs_open(struct tty_struct *tty, struct file * filp)
 		return -ENODEV;
 
 #ifdef SERIAL_DEBUG_OPEN
-        printk("[%d] rs_open %s, count = %d\n", current->pid, tty->name,
+	printk("[%d] rs_open %s, count = %d\n", current->pid, tty->name,
  	       info->count);
 #endif
 
@@ -4401,7 +4401,7 @@ static const struct tty_operations rs_ops = {
 	.flush_buffer = rs_flush_buffer,
 	.ioctl = rs_ioctl,
 	.throttle = rs_throttle,
-        .unthrottle = rs_unthrottle,
+	.unthrottle = rs_unthrottle,
 	.set_termios = rs_set_termios,
 	.stop = rs_stop,
 	.start = rs_start,
@@ -4471,7 +4471,7 @@ static int __init rs_init(void)
 	driver->flags = TTY_DRIVER_REAL_RAW | TTY_DRIVER_DYNAMIC_DEV;
 
 	tty_set_operations(driver, &rs_ops);
-        serial_driver = driver;
+	serial_driver = driver;
 	if (tty_register_driver(driver))
 		panic("Couldn't register serial driver\n");
 	/* do some initializing for the separate ports */

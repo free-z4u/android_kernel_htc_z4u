@@ -1573,7 +1573,7 @@ static int __test__rdpmc(void)
 		.exclude_kernel = 1,
 	};
 	u64 delta_sum = 0;
-        struct sigaction sa;
+	struct sigaction sa;
 
 	sigfillset(&sa.sa_mask);
 	sa.sa_sigaction = segfault_handler;

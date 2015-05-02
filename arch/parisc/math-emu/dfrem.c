@@ -66,43 +66,43 @@ dbl_frem (dbl_floating_point * srcptr1, dbl_floating_point * srcptr2,
 			if (Dbl_isnotnan(opnd2p1,opnd2p2)) {
 				/* invalid since first operand is infinity */
 				if (Is_invalidtrap_enabled())
-                                	return(INVALIDEXCEPTION);
-                                Set_invalidflag();
-                                Dbl_makequietnan(resultp1,resultp2);
+					return(INVALIDEXCEPTION);
+				Set_invalidflag();
+				Dbl_makequietnan(resultp1,resultp2);
 				Dbl_copytoptr(resultp1,resultp2,dstptr);
 				return(NOEXCEPTION);
 			}
 		}
 		else {
-                	/*
-                 	 * is NaN; signaling or quiet?
-                 	 */
-                	if (Dbl_isone_signaling(opnd1p1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Dbl_set_quiet(opnd1p1);
-                	}
+			/*
+		 	 * is NaN; signaling or quiet?
+		 	 */
+			if (Dbl_isone_signaling(opnd1p1)) {
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Dbl_set_quiet(opnd1p1);
+			}
 			/*
 			 * is second operand a signaling NaN?
 			 */
 			else if (Dbl_is_signalingnan(opnd2p1)) {
-                        	/* trap if INVALIDTRAP enabled */
-                        	if (Is_invalidtrap_enabled())
-                            		return(INVALIDEXCEPTION);
-                        	/* make NaN quiet */
-                        	Set_invalidflag();
-                        	Dbl_set_quiet(opnd2p1);
+				/* trap if INVALIDTRAP enabled */
+				if (Is_invalidtrap_enabled())
+			    		return(INVALIDEXCEPTION);
+				/* make NaN quiet */
+				Set_invalidflag();
+				Dbl_set_quiet(opnd2p1);
 				Dbl_copytoptr(opnd2p1,opnd2p2,dstptr);
-                		return(NOEXCEPTION);
+				return(NOEXCEPTION);
 			}
-                	/*
-                 	 * return quiet NaN
-                 	 */
+			/*
+		 	 * return quiet NaN
+		 	 */
 			Dbl_copytoptr(opnd1p1,opnd1p2,dstptr);
-                	return(NOEXCEPTION);
+			return(NOEXCEPTION);
 		}
 	}
 	/*
@@ -116,21 +116,21 @@ dbl_frem (dbl_floating_point * srcptr1, dbl_floating_point * srcptr2,
 			Dbl_copytoptr(opnd1p1,opnd1p2,dstptr);
 			return(NOEXCEPTION);
 		}
-                /*
-                 * is NaN; signaling or quiet?
-                 */
-                if (Dbl_isone_signaling(opnd2p1)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Dbl_set_quiet(opnd2p1);
-                }
-                /*
-                 * return quiet NaN
-                 */
+		/*
+		 * is NaN; signaling or quiet?
+		 */
+		if (Dbl_isone_signaling(opnd2p1)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Dbl_set_quiet(opnd2p1);
+		}
+		/*
+		 * return quiet NaN
+		 */
 		Dbl_copytoptr(opnd2p1,opnd2p2,dstptr);
-                return(NOEXCEPTION);
+		return(NOEXCEPTION);
 	}
 	/*
 	 * check second operand for zero
@@ -138,8 +138,8 @@ dbl_frem (dbl_floating_point * srcptr1, dbl_floating_point * srcptr2,
 	if (Dbl_iszero_exponentmantissa(opnd2p1,opnd2p2)) {
 		/* invalid since second operand is zero */
 		if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                Set_invalidflag();
-                Dbl_makequietnan(resultp1,resultp2);
+		Set_invalidflag();
+		Dbl_makequietnan(resultp1,resultp2);
 		Dbl_copytoptr(resultp1,resultp2,dstptr);
 		return(NOEXCEPTION);
 	}
@@ -197,9 +197,9 @@ dbl_frem (dbl_floating_point * srcptr1, dbl_floating_point * srcptr2,
 			Dbl_subtract(opnd2p1,opnd2p2,opnd1p1,opnd1p2,
 			 opnd2p1,opnd2p2);
 			/* now normalize */
-                	while (Dbl_iszero_hidden(opnd2p1)) {
-                        	Dbl_leftshiftby1(opnd2p1,opnd2p2);
-                        	dest_exponent--;
+			while (Dbl_iszero_hidden(opnd2p1)) {
+				Dbl_leftshiftby1(opnd2p1,opnd2p2);
+				dest_exponent--;
 			}
 			Dbl_set_exponentmantissa(resultp1,resultp2,opnd2p1,opnd2p2);
 			goto testforunderflow;
@@ -259,35 +259,35 @@ dbl_frem (dbl_floating_point * srcptr1, dbl_floating_point * srcptr2,
 	}
 
 	/* normalize result's mantissa */
-        while (Dbl_iszero_hidden(opnd1p1)) {
-                dest_exponent--;
-                Dbl_leftshiftby1(opnd1p1,opnd1p2);
-        }
+	while (Dbl_iszero_hidden(opnd1p1)) {
+		dest_exponent--;
+		Dbl_leftshiftby1(opnd1p1,opnd1p2);
+	}
 	Dbl_set_exponentmantissa(resultp1,resultp2,opnd1p1,opnd1p2);
 
-        /*
-         * Test for underflow
-         */
+	/*
+	 * Test for underflow
+	 */
     testforunderflow:
 	if (dest_exponent <= 0) {
-                /* trap if UNDERFLOWTRAP enabled */
-                if (Is_underflowtrap_enabled()) {
-                        /*
-                         * Adjust bias of result
-                         */
-                        Dbl_setwrapped_exponent(resultp1,dest_exponent,unfl);
+		/* trap if UNDERFLOWTRAP enabled */
+		if (Is_underflowtrap_enabled()) {
+			/*
+			 * Adjust bias of result
+			 */
+			Dbl_setwrapped_exponent(resultp1,dest_exponent,unfl);
 			/* frem is always exact */
 			Dbl_copytoptr(resultp1,resultp2,dstptr);
 			return(UNDERFLOWEXCEPTION);
-                }
-                /*
-                 * denormalize result or set to signed zero
-                 */
-                if (dest_exponent >= (1 - DBL_P)) {
+		}
+		/*
+		 * denormalize result or set to signed zero
+		 */
+		if (dest_exponent >= (1 - DBL_P)) {
 			Dbl_rightshift_exponentmantissa(resultp1,resultp2,
 			 1-dest_exponent);
-                }
-                else {
+		}
+		else {
 			Dbl_setzero_exponentmantissa(resultp1,resultp2);
 		}
 	}

@@ -270,9 +270,9 @@ void sctp_chunk_assign_ssn(struct sctp_chunk *);
 
 int sctp_do_sm(sctp_event_t event_type, sctp_subtype_t subtype,
 	       sctp_state_t state,
-               struct sctp_endpoint *,
-               struct sctp_association *asoc,
-               void *event_arg,
+	       struct sctp_endpoint *,
+	       struct sctp_association *asoc,
+	       void *event_arg,
 	       gfp_t gfp);
 
 /* 2nd level prototypes */
@@ -401,8 +401,8 @@ sctp_vtag_verify(const struct sctp_chunk *chunk,
 	 * Verification Tag value does not match the receiver's own
 	 * tag value, the receiver shall silently discard the packet...
 	 */
-        if (ntohl(chunk->sctp_hdr->vtag) == asoc->c.my_vtag)
-                return 1;
+	if (ntohl(chunk->sctp_hdr->vtag) == asoc->c.my_vtag)
+		return 1;
 
 	return 0;
 }
@@ -414,7 +414,7 @@ static inline int
 sctp_vtag_verify_either(const struct sctp_chunk *chunk,
 			const struct sctp_association *asoc)
 {
-        /* RFC 2960 Section 8.5.1, sctpimpguide Section 2.41
+	/* RFC 2960 Section 8.5.1, sctpimpguide Section 2.41
 	 *
 	 * B) The receiver of a ABORT MUST accept the packet
 	 *    if the Verification Tag field of the packet matches its own tag
@@ -435,11 +435,11 @@ sctp_vtag_verify_either(const struct sctp_chunk *chunk,
 	 *    and take no further action.  An endpoint MUST ignore the
 	 *    SHUTDOWN COMPLETE if it is not in the SHUTDOWN-ACK-SENT state.
 	 */
-        if ((!sctp_test_T_bit(chunk) &&
-             (ntohl(chunk->sctp_hdr->vtag) == asoc->c.my_vtag)) ||
+	if ((!sctp_test_T_bit(chunk) &&
+	     (ntohl(chunk->sctp_hdr->vtag) == asoc->c.my_vtag)) ||
 	    (sctp_test_T_bit(chunk) && asoc->c.peer_vtag &&
 	     (ntohl(chunk->sctp_hdr->vtag) == asoc->c.peer_vtag))) {
-                return 1;
+		return 1;
 	}
 
 	return 0;

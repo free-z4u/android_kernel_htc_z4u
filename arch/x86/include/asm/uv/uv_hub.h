@@ -199,12 +199,12 @@ static inline int is_uv2_2_hub(void)
 union uvh_apicid {
     unsigned long       v;
     struct uvh_apicid_s {
-        unsigned long   local_apic_mask  : 24;
-        unsigned long   local_apic_shift :  5;
-        unsigned long   unused1          :  3;
-        unsigned long   pnode_mask       : 24;
-        unsigned long   pnode_shift      :  5;
-        unsigned long   unused2          :  3;
+	unsigned long   local_apic_mask  : 24;
+	unsigned long   local_apic_shift :  5;
+	unsigned long   unused1          :  3;
+	unsigned long   pnode_mask       : 24;
+	unsigned long   pnode_shift      :  5;
+	unsigned long   unused2          :  3;
     } s;
 };
 

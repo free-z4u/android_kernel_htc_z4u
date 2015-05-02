@@ -61,7 +61,7 @@ static const struct mctl g450_controls[] =
 #define G450CTRLS ARRAY_SIZE(g450_controls)
 
 /* Return: positive number: id found
-           -EINVAL:         id not found, return failure
+	   -EINVAL:         id not found, return failure
 	   -ENOENT:         id not found, create fake disabled control */
 static int get_ctrl_id(__u32 v4l2_id) {
 	int i;

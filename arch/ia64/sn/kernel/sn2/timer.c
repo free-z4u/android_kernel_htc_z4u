@@ -28,11 +28,11 @@ static cycle_t read_sn2(struct clocksource *cs)
 }
 
 static struct clocksource clocksource_sn2 = {
-        .name           = "sn2_rtc",
-        .rating         = 450,
-        .read           = read_sn2,
-        .mask           = (1LL << 55) - 1,
-        .flags          = CLOCK_SOURCE_IS_CONTINUOUS,
+	.name           = "sn2_rtc",
+	.rating         = 450,
+	.read           = read_sn2,
+	.mask           = (1LL << 55) - 1,
+	.flags          = CLOCK_SOURCE_IS_CONTINUOUS,
 };
 
 /*

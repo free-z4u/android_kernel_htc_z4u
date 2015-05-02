@@ -118,7 +118,7 @@ static inline void *snd_sgbuf_get_ptr(struct snd_sg_buf *sgbuf, size_t offset)
 int snd_dma_alloc_pages(int type, struct device *dev, size_t size,
 			struct snd_dma_buffer *dmab);
 int snd_dma_alloc_pages_fallback(int type, struct device *dev, size_t size,
-                                 struct snd_dma_buffer *dmab);
+				 struct snd_dma_buffer *dmab);
 void snd_dma_free_pages(struct snd_dma_buffer *dmab);
 
 /* buffer-preservation managements */

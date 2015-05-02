@@ -138,8 +138,8 @@ unsigned long CRCdwCrc32 (unsigned char *pbyData, unsigned int cbByte, unsigned 
 
     dwCrc = dwCrcSeed;
     while (cbByte--) {
-        dwCrc = s_adwCrc32Table[(unsigned char)((dwCrc ^ (*pbyData)) & 0xFF)] ^ (dwCrc >> 8);
-        pbyData++;
+	dwCrc = s_adwCrc32Table[(unsigned char)((dwCrc ^ (*pbyData)) & 0xFF)] ^ (dwCrc >> 8);
+	pbyData++;
     }
 
     return dwCrc;

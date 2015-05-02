@@ -98,7 +98,7 @@ config SPI_BCM63XX
 	tristate "Broadcom BCM63xx SPI controller"
 	depends on BCM63XX
 	help
-          Enable support for the SPI controller on the Broadcom BCM63xx SoCs.
+	  Enable support for the SPI controller on the Broadcom BCM63xx SoCs.
 
 config SPI_BITBANG
 	tristate "Utilities for Bitbanging SPI masters"
@@ -419,7 +419,7 @@ config SPI_QUP
 	default n
 	help
 	  Support for Serial Peripheral Interface for Qualcomm Universal
-          Peripheral.
+	  Peripheral.
 
 	  This driver can also be built as a module.  If so, the module
 	  will be called spi_qsd.

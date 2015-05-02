@@ -32,7 +32,7 @@ struct irqaction;
 
 extern unsigned long irq_hwmask[];
 extern int setup_irq_smtc(unsigned int irq, struct irqaction * new,
-                          unsigned long hwmask);
+			  unsigned long hwmask);
 
 static inline void smtc_im_ack_irq(unsigned int irq)
 {

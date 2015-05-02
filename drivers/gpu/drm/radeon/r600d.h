@@ -885,7 +885,7 @@
 #define	PACKET3_EVENT_WRITE				0x46
 #define		EVENT_TYPE(x)                           ((x) << 0)
 #define		EVENT_INDEX(x)                          ((x) << 8)
-                /* 0 - any non-TS event
+		/* 0 - any non-TS event
 		 * 1 - ZPASS_DONE
 		 * 2 - SAMPLE_PIPELINESTAT
 		 * 3 - SAMPLE_STREAMOUTSTAT*
@@ -894,13 +894,13 @@
 		 */
 #define	PACKET3_EVENT_WRITE_EOP				0x47
 #define		DATA_SEL(x)                             ((x) << 29)
-                /* 0 - discard
+		/* 0 - discard
 		 * 1 - send low 32bit data
 		 * 2 - send 64bit data
 		 * 3 - send 64bit counter value
 		 */
 #define		INT_SEL(x)                              ((x) << 24)
-                /* 0 - none
+		/* 0 - none
 		 * 1 - interrupt only (DATA_SEL = 0)
 		 * 2 - interrupt when data write is confirmed
 		 */

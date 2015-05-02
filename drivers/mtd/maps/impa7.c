@@ -66,7 +66,7 @@ static int __init init_impa7(void)
 	static struct { u_long addr; u_long size; } pt[NUM_FLASHBANKS] = {
 	  { WINDOW_ADDR0, WINDOW_SIZE0 },
 	  { WINDOW_ADDR1, WINDOW_SIZE1 },
-        };
+	};
 	int devicesfound = 0;
 
 	for(i=0; i<NUM_FLASHBANKS; i++)

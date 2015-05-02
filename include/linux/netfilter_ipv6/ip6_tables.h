@@ -222,7 +222,7 @@ struct ip6t_replace {
 	char name[XT_TABLE_MAXNAMELEN];
 
 	/* Which hook entry points are valid: bitmask.  You can't
-           change this. */
+	   change this. */
 	unsigned int valid_hooks;
 
 	/* Number of entries */

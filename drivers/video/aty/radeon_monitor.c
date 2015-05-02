@@ -65,12 +65,12 @@ static char *radeon_get_mon_name(int type)
 static int __devinit radeon_parse_montype_prop(struct device_node *dp, u8 **out_EDID,
 					       int hdno)
 {
-        static char *propnames[] = { "DFP,EDID", "LCD,EDID", "EDID",
+	static char *propnames[] = { "DFP,EDID", "LCD,EDID", "EDID",
 				     "EDID1", "EDID2",  NULL };
 	const u8 *pedid = NULL;
 	const u8 *pmt = NULL;
 	u8 *tmp;
-        int i, mt = MT_NONE;
+	int i, mt = MT_NONE;
 
 	pr_debug("analyzing OF properties...\n");
 	pmt = of_get_property(dp, "display-type", NULL);
@@ -118,12 +118,12 @@ static int __devinit radeon_parse_montype_prop(struct device_node *dp, u8 **out_
 static int __devinit radeon_probe_OF_head(struct radeonfb_info *rinfo, int head_no,
 					  u8 **out_EDID)
 {
-        struct device_node *dp;
+	struct device_node *dp;
 
 	pr_debug("radeon_probe_OF_head\n");
 
-        dp = rinfo->of_node;
-        while (dp == NULL)
+	dp = rinfo->of_node;
+	while (dp == NULL)
 		return MT_NONE;
 
 	if (rinfo->has_CRTC2) {
@@ -158,7 +158,7 @@ static int __devinit radeon_probe_OF_head(struct radeonfb_info *rinfo, int head_
 			return MT_NONE;
 		return radeon_parse_montype_prop(dp, out_EDID, -1);
 	}
-        return MT_NONE;
+	return MT_NONE;
 }
 #endif /* CONFIG_PPC_OF || CONFIG_SPARC */
 

@@ -52,7 +52,7 @@ static long efi_rtc_ioctl(struct file *file, unsigned int cmd,
 							unsigned long arg);
 
 #define is_leap(year) \
-          ((year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0))
+	  ((year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0))
 
 static const unsigned short int __mon_yday[2][13] =
 {
@@ -363,15 +363,15 @@ efi_rtc_get_status(char *buf)
 
 static int
 efi_rtc_read_proc(char *page, char **start, off_t off,
-                                 int count, int *eof, void *data)
+				 int count, int *eof, void *data)
 {
-        int len = efi_rtc_get_status(page);
-        if (len <= off+count) *eof = 1;
-        *start = page + off;
-        len -= off;
-        if (len>count) len = count;
-        if (len<0) len = 0;
-        return len;
+	int len = efi_rtc_get_status(page);
+	if (len <= off+count) *eof = 1;
+	*start = page + off;
+	len -= off;
+	if (len>count) len = count;
+	if (len<0) len = 0;
+	return len;
 }
 
 static int __init

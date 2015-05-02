@@ -27,7 +27,7 @@
 static inline unsigned long
 flat_get_relocate_addr (unsigned long relval)
 {
-        return relval & 0x00ffffff; /* Mask out top 8-bits */
+	return relval & 0x00ffffff; /* Mask out top 8-bits */
 }
 
 #define	flat_m32r_get_reloc_type(relval)	((relval) >> 24)
@@ -43,14 +43,14 @@ flat_get_relocate_addr (unsigned long relval)
 					/* High 16bits of an address used
 					   when the lower 16bbits are treated
 					   as unsigned.
-                                           To create SETH instruction only.
+					   To create SETH instruction only.
 					   0x1X: X means a number of register.
 					   0x10 - 0x3F are reserved. */
 #define FLAT_M32R_HI16_ULO	0x10	/* reloc for SETH Rn,#high(imm16) */
 					/* High 16bits of an address used
 					   when the lower 16bbits are treated
 					   as signed.
-                                           To create SETH instruction only.
+					   To create SETH instruction only.
 					   0x2X: X means a number of register.
 					   0x20 - 0x4F are reserved. */
 #define FLAT_M32R_HI16_SLO	0x20	/* reloc for SETH Rn,#shigh(imm16) */
@@ -58,10 +58,10 @@ flat_get_relocate_addr (unsigned long relval)
 static unsigned long textlen_for_m32r_lo16_data = 0;
 
 static inline unsigned long m32r_flat_get_addr_from_rp (unsigned long *rp,
-                                                        unsigned long relval,
+							unsigned long relval,
 						        unsigned long textlen)
 {
-        unsigned int reloc = flat_m32r_get_reloc_type (relval);
+	unsigned int reloc = flat_m32r_get_reloc_type (relval);
 	textlen_for_m32r_lo16_data = 0;
 	if (reloc & 0xf0) {
 		unsigned long addr = htonl(*rp);
@@ -83,7 +83,7 @@ static inline unsigned long m32r_flat_get_addr_from_rp (unsigned long *rp,
 		case FLAT_M32R_LO16:
 			return htonl(*rp) & 0xFFFF;
 		case FLAT_M32R_LO16_DATA:
-                        /* FIXME: The return value will decrease by textlen
+			/* FIXME: The return value will decrease by textlen
 			   at m32r_flat_put_addr_at_rp () */
 			textlen_for_m32r_lo16_data = textlen;
 			return (htonl(*rp) & 0xFFFF) + textlen;
@@ -102,9 +102,9 @@ static inline unsigned long m32r_flat_get_addr_from_rp (unsigned long *rp,
 
 static inline void m32r_flat_put_addr_at_rp (unsigned long *rp,
 					     unsigned long addr,
-                                             unsigned long relval)
+					     unsigned long relval)
 {
-        unsigned int reloc = flat_m32r_get_reloc_type (relval);
+	unsigned int reloc = flat_m32r_get_reloc_type (relval);
 	if (reloc & 0xf0) {
 		unsigned long Rn = reloc & 0x0f; /* get a number of register */
 		Rn <<= 24; /* 0x0R000000 */

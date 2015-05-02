@@ -1,9 +1,9 @@
 /******************************************************************************
-         iphase.c: Device driver for Interphase ATM PCI adapter cards
-                    Author: Peter Wang  <pwang@iphase.com>
+	 iphase.c: Device driver for Interphase ATM PCI adapter cards
+		    Author: Peter Wang  <pwang@iphase.com>
 		   Some fixes: Arnaldo Carvalho de Melo <acme@conectiva.com.br>
-                   Interphase Corporation  <www.iphase.com>
-                               Version: 1.0
+		   Interphase Corporation  <www.iphase.com>
+			       Version: 1.0
 *******************************************************************************
 
       This software may be used and distributed according to the terms
@@ -23,18 +23,18 @@
       in terms of PHY type, the size of control memory and the size of
       packet memory. The followings are the change log and history:
 
-          Bugfix the Mona's UBR driver.
-          Modify the basic memory allocation and dma logic.
-          Port the driver to the latest kernel from 2.0.46.
-          Complete the ABR logic of the driver, and added the ABR work-
-              around for the hardware anormalies.
-          Add the CBR support.
+	  Bugfix the Mona's UBR driver.
+	  Modify the basic memory allocation and dma logic.
+	  Port the driver to the latest kernel from 2.0.46.
+	  Complete the ABR logic of the driver, and added the ABR work-
+	      around for the hardware anormalies.
+	  Add the CBR support.
 	  Add the flow control logic to the driver to allow rate-limit VC.
-          Add 4K VC support to the board with 512K control memory.
-          Add the support of all the variants of the Interphase ATM PCI
-          (i)Chip adapter cards including x575 (155M OC3 and UTP155), x525
-          (25M UTP25) and x531 (DS3 and E3).
-          Add SMP support.
+	  Add 4K VC support to the board with 512K control memory.
+	  Add the support of all the variants of the Interphase ATM PCI
+	  (i)Chip adapter cards including x575 (155M OC3 and UTP155), x525
+	  (25M UTP25) and x531 (DS3 and E3).
+	  Add SMP support.
 
       Support and updates available at: ftp://ftp.iphase.com/pub/atm
 
@@ -80,7 +80,7 @@ static DEFINE_TIMER(ia_timer, ia_led_timer, 0, 0);
 static int IA_TX_BUF = DFL_TX_BUFFERS, IA_TX_BUF_SZ = DFL_TX_BUF_SZ;
 static int IA_RX_BUF = DFL_RX_BUFFERS, IA_RX_BUF_SZ = DFL_RX_BUF_SZ;
 static uint IADebugFlag = /* IF_IADBG_ERR | IF_IADBG_CBR| IF_IADBG_INIT_ADAPTER
-            |IF_IADBG_ABR | IF_IADBG_EVENT*/ 0;
+	    |IF_IADBG_ABR | IF_IADBG_EVENT*/ 0;
 
 module_param(IA_TX_BUF, int, 0);
 module_param(IA_TX_BUF_SZ, int, 0);
@@ -147,29 +147,29 @@ static void ia_hack_tcq(IADEV *dev) {
      desc1 = *(u_short *)(dev->seg_ram + dev->host_tcq_wr);
      if (!desc1) ;
      else if (!dev->desc_tbl[desc1 -1].timestamp) {
-        IF_ABR(printk(" Desc %d is reset at %ld\n", desc1 -1, jiffies);)
-        *(u_short *) (dev->seg_ram + dev->host_tcq_wr) = 0;
+	IF_ABR(printk(" Desc %d is reset at %ld\n", desc1 -1, jiffies);)
+	*(u_short *) (dev->seg_ram + dev->host_tcq_wr) = 0;
      }
      else if (dev->desc_tbl[desc1 -1].timestamp) {
-        if (!(iavcc_r = dev->desc_tbl[desc1 -1].iavcc)) {
-           printk("IA: Fatal err in get_desc\n");
-           continue;
-        }
-        iavcc_r->vc_desc_cnt--;
-        dev->desc_tbl[desc1 -1].timestamp = 0;
-        IF_EVENT(printk("ia_hack: return_q skb = 0x%p desc = %d\n",
-                                   dev->desc_tbl[desc1 -1].txskb, desc1);)
-        if (iavcc_r->pcr < dev->rate_limit) {
-           IA_SKB_STATE (dev->desc_tbl[desc1-1].txskb) |= IA_TX_DONE;
-           if (ia_enque_rtn_q(&dev->tx_return_q, dev->desc_tbl[desc1 -1]) < 0)
-              printk("ia_hack_tcq: No memory available\n");
-        }
-        dev->desc_tbl[desc1 -1].iavcc = NULL;
-        dev->desc_tbl[desc1 -1].txskb = NULL;
+	if (!(iavcc_r = dev->desc_tbl[desc1 -1].iavcc)) {
+	   printk("IA: Fatal err in get_desc\n");
+	   continue;
+	}
+	iavcc_r->vc_desc_cnt--;
+	dev->desc_tbl[desc1 -1].timestamp = 0;
+	IF_EVENT(printk("ia_hack: return_q skb = 0x%p desc = %d\n",
+				   dev->desc_tbl[desc1 -1].txskb, desc1);)
+	if (iavcc_r->pcr < dev->rate_limit) {
+	   IA_SKB_STATE (dev->desc_tbl[desc1-1].txskb) |= IA_TX_DONE;
+	   if (ia_enque_rtn_q(&dev->tx_return_q, dev->desc_tbl[desc1 -1]) < 0)
+	      printk("ia_hack_tcq: No memory available\n");
+	}
+	dev->desc_tbl[desc1 -1].iavcc = NULL;
+	dev->desc_tbl[desc1 -1].txskb = NULL;
      }
      dev->host_tcq_wr += 2;
      if (dev->host_tcq_wr > dev->ffL.tcq_ed)
-        dev->host_tcq_wr = dev->ffL.tcq_st;
+	dev->host_tcq_wr = dev->ffL.tcq_st;
   }
 } /* ia_hack_tcq */
 
@@ -186,29 +186,29 @@ static u16 get_desc (IADEV *dev, struct ia_vcc *iavcc) {
      timer = jiffies;
      i=0;
      while (i < dev->num_tx_desc) {
-        if (!dev->desc_tbl[i].timestamp) {
-           i++;
-           continue;
-        }
-        ltimeout = dev->desc_tbl[i].iavcc->ltimeout;
-        delta = jiffies - dev->desc_tbl[i].timestamp;
-        if (delta >= ltimeout) {
-           IF_ABR(printk("RECOVER run!! desc_tbl %d = %d  delta = %ld, time = %ld\n", i,dev->desc_tbl[i].timestamp, delta, jiffies);)
-           if (dev->ffL.tcq_rd == dev->ffL.tcq_st)
-              dev->ffL.tcq_rd =  dev->ffL.tcq_ed;
-           else
-              dev->ffL.tcq_rd -= 2;
-           *(u_short *)(dev->seg_ram + dev->ffL.tcq_rd) = i+1;
-           if (!(skb = dev->desc_tbl[i].txskb) ||
-                          !(iavcc_r = dev->desc_tbl[i].iavcc))
-              printk("Fatal err, desc table vcc or skb is NULL\n");
-           else
-              iavcc_r->vc_desc_cnt--;
-           dev->desc_tbl[i].timestamp = 0;
-           dev->desc_tbl[i].iavcc = NULL;
-           dev->desc_tbl[i].txskb = NULL;
-        }
-        i++;
+	if (!dev->desc_tbl[i].timestamp) {
+	   i++;
+	   continue;
+	}
+	ltimeout = dev->desc_tbl[i].iavcc->ltimeout;
+	delta = jiffies - dev->desc_tbl[i].timestamp;
+	if (delta >= ltimeout) {
+	   IF_ABR(printk("RECOVER run!! desc_tbl %d = %d  delta = %ld, time = %ld\n", i,dev->desc_tbl[i].timestamp, delta, jiffies);)
+	   if (dev->ffL.tcq_rd == dev->ffL.tcq_st)
+	      dev->ffL.tcq_rd =  dev->ffL.tcq_ed;
+	   else
+	      dev->ffL.tcq_rd -= 2;
+	   *(u_short *)(dev->seg_ram + dev->ffL.tcq_rd) = i+1;
+	   if (!(skb = dev->desc_tbl[i].txskb) ||
+			  !(iavcc_r = dev->desc_tbl[i].iavcc))
+	      printk("Fatal err, desc table vcc or skb is NULL\n");
+	   else
+	      iavcc_r->vc_desc_cnt--;
+	   dev->desc_tbl[i].timestamp = 0;
+	   dev->desc_tbl[i].iavcc = NULL;
+	   dev->desc_tbl[i].txskb = NULL;
+	}
+	i++;
      } /* while */
   }
   if (dev->ffL.tcq_rd == dev->host_tcq_wr)
@@ -222,7 +222,7 @@ static u16 get_desc (IADEV *dev, struct ia_vcc *iavcc) {
      if (dev->ffL.tcq_rd > dev->ffL.tcq_ed)
 	dev->ffL.tcq_rd = dev->ffL.tcq_st;
      if (dev->ffL.tcq_rd == dev->host_tcq_wr)
-        return 0xFFFF;
+	return 0xFFFF;
      desc_num = *(u_short *)(dev->seg_ram + dev->ffL.tcq_rd);
   }
 
@@ -245,44 +245,44 @@ static void clear_lockup (struct atm_vcc *vcc, IADEV *dev) {
      vcstatus->cnt++;
      foundLockUp = 0;
      if( vcstatus->cnt == 0x05 ) {
-        abr_vc += vcc->vci;
+	abr_vc += vcc->vci;
 	eabr_vc += vcc->vci;
 	if( eabr_vc->last_desc ) {
 	   if( (abr_vc->status & 0x07) == ABR_STATE /* 0x2 */ ) {
-              /* Wait for 10 Micro sec */
-              udelay(10);
+	      /* Wait for 10 Micro sec */
+	      udelay(10);
 	      if ((eabr_vc->last_desc)&&((abr_vc->status & 0x07)==ABR_STATE))
 		 foundLockUp = 1;
-           }
+	   }
 	   else {
 	      tempCellSlot = abr_vc->last_cell_slot;
-              tempFract    = abr_vc->fraction;
-              if((tempCellSlot == dev->testTable[vcc->vci]->lastTime)
-                         && (tempFract == dev->testTable[vcc->vci]->fract))
+	      tempFract    = abr_vc->fraction;
+	      if((tempCellSlot == dev->testTable[vcc->vci]->lastTime)
+			 && (tempFract == dev->testTable[vcc->vci]->fract))
 	         foundLockUp = 1;
-              dev->testTable[vcc->vci]->lastTime = tempCellSlot;
-              dev->testTable[vcc->vci]->fract = tempFract;
+	      dev->testTable[vcc->vci]->lastTime = tempCellSlot;
+	      dev->testTable[vcc->vci]->fract = tempFract;
 	   }
-        } /* last descriptor */
-        vcstatus->cnt = 0;
+	} /* last descriptor */
+	vcstatus->cnt = 0;
      } /* vcstatus->cnt */
 
      if (foundLockUp) {
-        IF_ABR(printk("LOCK UP found\n");)
+	IF_ABR(printk("LOCK UP found\n");)
 	writew(0xFFFD, dev->seg_reg+MODE_REG_0);
-        /* Wait for 10 Micro sec */
-        udelay(10);
-        abr_vc->status &= 0xFFF8;
-        abr_vc->status |= 0x0001;  /* state is idle */
+	/* Wait for 10 Micro sec */
+	udelay(10);
+	abr_vc->status &= 0xFFF8;
+	abr_vc->status |= 0x0001;  /* state is idle */
 	shd_tbl = (u_short *)dev->ABR_SCHED_TABLE_ADDR;
 	for( i = 0; ((i < dev->num_vc) && (shd_tbl[i])); i++ );
 	if (i < dev->num_vc)
-           shd_tbl[i] = vcc->vci;
-        else
-           IF_ERR(printk("ABR Seg. may not continue on VC %x\n",vcc->vci);)
-        writew(T_ONLINE, dev->seg_reg+MODE_REG_0);
-        writew(~(TRANSMIT_DONE|TCQ_NOT_EMPTY), dev->seg_reg+SEG_MASK_REG);
-        writew(TRANSMIT_DONE, dev->seg_reg+SEG_INTR_STATUS_REG);
+	   shd_tbl[i] = vcc->vci;
+	else
+	   IF_ERR(printk("ABR Seg. may not continue on VC %x\n",vcc->vci);)
+	writew(T_ONLINE, dev->seg_reg+MODE_REG_0);
+	writew(~(TRANSMIT_DONE|TCQ_NOT_EMPTY), dev->seg_reg+SEG_MASK_REG);
+	writew(TRANSMIT_DONE, dev->seg_reg+SEG_INTR_STATUS_REG);
 	vcstatus->cnt = 0;
      } /* foundLockUp */
 
@@ -372,7 +372,7 @@ static void init_abr_vc (IADEV *dev, srv_cls_param_t *srv_p) {
 
 static int
 ia_open_abr_vc(IADEV *dev, srv_cls_param_t *srv_p,
-                                                struct atm_vcc *vcc, u8 flag)
+						struct atm_vcc *vcc, u8 flag)
 {
   f_vc_abr_entry  *f_abr_vc;
   r_vc_abr_entry  *r_abr_vc;
@@ -385,9 +385,9 @@ ia_open_abr_vc(IADEV *dev, srv_cls_param_t *srv_p,
      case 1: /* FFRED initialization */
 #if 0  /* sanity check */
        if (srv_p->pcr == 0)
-          return INVALID_PCR;
+	  return INVALID_PCR;
        if (srv_p->pcr > dev->LineRate)
-          srv_p->pcr = dev->LineRate;
+	  srv_p->pcr = dev->LineRate;
        if ((srv_p->mcr + dev->sum_mcr) > dev->LineRate)
 	  return MCR_UNAVAILABLE;
        if (srv_p->mcr > srv_p->pcr)
@@ -405,7 +405,7 @@ ia_open_abr_vc(IADEV *dev, srv_cls_param_t *srv_p,
        if (srv_p->trm > MAX_TRM)
 	  return INVALID_TRM;
        if (srv_p->adtf > MAX_ADTF)
-          return INVALID_ADTF;
+	  return INVALID_ADTF;
        else if (srv_p->adtf == 0)
 	  srv_p->adtf = 1;
        if (srv_p->cdf > MAX_CDF)
@@ -477,7 +477,7 @@ static int ia_cbr_setup (IADEV *dev, struct atm_vcc *vcc) {
    rate = vcc->qos.txtp.max_pcr;
    entries = rate / dev->Granularity;
    IF_CBR(printk("CBR: CBR entries=0x%x for rate=0x%x & Gran=0x%x\n",
-                                entries, rate, dev->Granularity);)
+				entries, rate, dev->Granularity);)
    if (entries < 1)
       IF_CBR(printk("CBR: Bandwidth smaller than granularity of CBR table\n");)
    rateLow  =  entries * dev->Granularity;
@@ -487,7 +487,7 @@ static int ia_cbr_setup (IADEV *dev, struct atm_vcc *vcc) {
    if (entries > dev->CbrRemEntries) {
       IF_CBR(printk("CBR: Not enough bandwidth to support this PCR.\n");)
       IF_CBR(printk("Entries = 0x%x, CbrRemEntries = 0x%x.\n",
-                                       entries, dev->CbrRemEntries);)
+				       entries, dev->CbrRemEntries);)
       return -EBUSY;
    }
 
@@ -510,18 +510,18 @@ static int ia_cbr_setup (IADEV *dev, struct atm_vcc *vcc) {
       // as close to entryPoint as possible.
       if (toBeAssigned == entries)
       {
-         idealSlot = dev->CbrEntryPt;
-         dev->CbrEntryPt += 2;    // Adding 2 helps to prevent clumping
-         if (dev->CbrEntryPt >= dev->CbrTotEntries)
-            dev->CbrEntryPt -= dev->CbrTotEntries;// Wrap if necessary
+	 idealSlot = dev->CbrEntryPt;
+	 dev->CbrEntryPt += 2;    // Adding 2 helps to prevent clumping
+	 if (dev->CbrEntryPt >= dev->CbrTotEntries)
+	    dev->CbrEntryPt -= dev->CbrTotEntries;// Wrap if necessary
       } else {
-         idealSlot += (u32)(spacing + fracSlot); // Point to the next location
-         // in the table that would be  smoothest
-         fracSlot = ((sp_mod + sp_mod2) / entries);  // get new integer part
-         sp_mod2  = ((sp_mod + sp_mod2) % entries);  // calc new fractional part
+	 idealSlot += (u32)(spacing + fracSlot); // Point to the next location
+	 // in the table that would be  smoothest
+	 fracSlot = ((sp_mod + sp_mod2) / entries);  // get new integer part
+	 sp_mod2  = ((sp_mod + sp_mod2) % entries);  // calc new fractional part
       }
       if (idealSlot >= (int)dev->CbrTotEntries)
-         idealSlot -= dev->CbrTotEntries;
+	 idealSlot -= dev->CbrTotEntries;
       // Continuously check around this ideal value until a null
       // location is encountered.
       SchedTbl = (u16*)(dev->seg_ram+CBR_SCHED_TABLE*dev->memSize);
@@ -529,33 +529,33 @@ static int ia_cbr_setup (IADEV *dev, struct atm_vcc *vcc) {
       testSlot = idealSlot;
       TstSchedTbl = (u16*)(SchedTbl+testSlot);  //set index and read in value
       IF_CBR(printk("CBR Testslot 0x%x AT Location 0x%p, NumToAssign=%d\n",
-                                testSlot, TstSchedTbl,toBeAssigned);)
+				testSlot, TstSchedTbl,toBeAssigned);)
       memcpy((caddr_t)&cbrVC,(caddr_t)TstSchedTbl,sizeof(cbrVC));
       while (cbrVC)  // If another VC at this location, we have to keep looking
       {
-          inc++;
-          testSlot = idealSlot - inc;
-          if (testSlot < 0) { // Wrap if necessary
-             testSlot += dev->CbrTotEntries;
-             IF_CBR(printk("Testslot Wrap. STable Start=0x%p,Testslot=%d\n",
-                                                       SchedTbl,testSlot);)
-          }
-          TstSchedTbl = (u16 *)(SchedTbl + testSlot);  // set table index
-          memcpy((caddr_t)&cbrVC,(caddr_t)TstSchedTbl,sizeof(cbrVC));
-          if (!cbrVC)
-             break;
-          testSlot = idealSlot + inc;
-          if (testSlot >= (int)dev->CbrTotEntries) { // Wrap if necessary
-             testSlot -= dev->CbrTotEntries;
-             IF_CBR(printk("TotCbrEntries=%d",dev->CbrTotEntries);)
-             IF_CBR(printk(" Testslot=0x%x ToBeAssgned=%d\n",
-                                            testSlot, toBeAssigned);)
-          }
-          // set table index and read in value
-          TstSchedTbl = (u16*)(SchedTbl + testSlot);
-          IF_CBR(printk("Reading CBR Tbl from 0x%p, CbrVal=0x%x Iteration %d\n",
-                          TstSchedTbl,cbrVC,inc);)
-          memcpy((caddr_t)&cbrVC,(caddr_t)TstSchedTbl,sizeof(cbrVC));
+	  inc++;
+	  testSlot = idealSlot - inc;
+	  if (testSlot < 0) { // Wrap if necessary
+	     testSlot += dev->CbrTotEntries;
+	     IF_CBR(printk("Testslot Wrap. STable Start=0x%p,Testslot=%d\n",
+						       SchedTbl,testSlot);)
+	  }
+	  TstSchedTbl = (u16 *)(SchedTbl + testSlot);  // set table index
+	  memcpy((caddr_t)&cbrVC,(caddr_t)TstSchedTbl,sizeof(cbrVC));
+	  if (!cbrVC)
+	     break;
+	  testSlot = idealSlot + inc;
+	  if (testSlot >= (int)dev->CbrTotEntries) { // Wrap if necessary
+	     testSlot -= dev->CbrTotEntries;
+	     IF_CBR(printk("TotCbrEntries=%d",dev->CbrTotEntries);)
+	     IF_CBR(printk(" Testslot=0x%x ToBeAssgned=%d\n",
+					    testSlot, toBeAssigned);)
+	  }
+	  // set table index and read in value
+	  TstSchedTbl = (u16*)(SchedTbl + testSlot);
+	  IF_CBR(printk("Reading CBR Tbl from 0x%p, CbrVal=0x%x Iteration %d\n",
+			  TstSchedTbl,cbrVC,inc);)
+	  memcpy((caddr_t)&cbrVC,(caddr_t)TstSchedTbl,sizeof(cbrVC));
        } /* while */
        // Move this VCI number into this location of the CBR Sched table.
        memcpy((caddr_t)TstSchedTbl, (caddr_t)&vcIndex, sizeof(*TstSchedTbl));
@@ -587,9 +587,9 @@ static void ia_cbrVc_close (struct atm_vcc *vcc) {
    for (i=0; i < iadev->CbrTotEntries; i++)
    {
       if (*SchedTbl == vcc->vci) {
-         iadev->CbrRemEntries++;
-         *SchedTbl = NullVci;
-         IF_CBR(NumFound++;)
+	 iadev->CbrRemEntries++;
+	 *SchedTbl = NullVci;
+	 IF_CBR(NumFound++;)
       }
       SchedTbl++;
    }
@@ -603,7 +603,7 @@ static int ia_avail_descs(IADEV *iadev) {
       tmp = (iadev->host_tcq_wr - iadev->ffL.tcq_rd) / 2;
    else
       tmp = (iadev->ffL.tcq_ed - iadev->ffL.tcq_rd + 2 + iadev->host_tcq_wr -
-                   iadev->ffL.tcq_st) / 2;
+		   iadev->ffL.tcq_st) / 2;
    return tmp;
 }
 
@@ -617,17 +617,17 @@ static int ia_que_tx (IADEV *iadev) {
 
    while (num_desc && (skb = skb_dequeue(&iadev->tx_backlog))) {
       if (!(vcc = ATM_SKB(skb)->vcc)) {
-         dev_kfree_skb_any(skb);
-         printk("ia_que_tx: Null vcc\n");
-         break;
+	 dev_kfree_skb_any(skb);
+	 printk("ia_que_tx: Null vcc\n");
+	 break;
       }
       if (!test_bit(ATM_VF_READY,&vcc->flags)) {
-         dev_kfree_skb_any(skb);
-         printk("Free the SKB on closed vci %d \n", vcc->vci);
-         break;
+	 dev_kfree_skb_any(skb);
+	 printk("Free the SKB on closed vci %d \n", vcc->vci);
+	 break;
       }
       if (ia_pkt_tx (vcc, skb)) {
-         skb_queue_head(&iadev->tx_backlog, skb);
+	 skb_queue_head(&iadev->tx_backlog, skb);
       }
       num_desc--;
    }
@@ -644,51 +644,51 @@ static void ia_tx_poll (IADEV *iadev) {
    while ( (rtne = ia_deque_rtn_q(&iadev->tx_return_q))) {
        skb = rtne->data.txskb;
        if (!skb) {
-           printk("ia_tx_poll: skb is null\n");
-           goto out;
+	   printk("ia_tx_poll: skb is null\n");
+	   goto out;
        }
        vcc = ATM_SKB(skb)->vcc;
        if (!vcc) {
-           printk("ia_tx_poll: vcc is null\n");
-           dev_kfree_skb_any(skb);
+	   printk("ia_tx_poll: vcc is null\n");
+	   dev_kfree_skb_any(skb);
 	   goto out;
        }
 
        iavcc = INPH_IA_VCC(vcc);
        if (!iavcc) {
-           printk("ia_tx_poll: iavcc is null\n");
-           dev_kfree_skb_any(skb);
+	   printk("ia_tx_poll: iavcc is null\n");
+	   dev_kfree_skb_any(skb);
 	   goto out;
        }
 
        skb1 = skb_dequeue(&iavcc->txing_skb);
        while (skb1 && (skb1 != skb)) {
-          if (!(IA_SKB_STATE(skb1) & IA_TX_DONE)) {
-             printk("IA_tx_intr: Vci %d lost pkt!!!\n", vcc->vci);
-          }
-          IF_ERR(printk("Release the SKB not match\n");)
-          if ((vcc->pop) && (skb1->len != 0))
-          {
-             vcc->pop(vcc, skb1);
-             IF_EVENT(printk("Tansmit Done - skb 0x%lx return\n",
-                                                          (long)skb1);)
-          }
-          else
-             dev_kfree_skb_any(skb1);
-          skb1 = skb_dequeue(&iavcc->txing_skb);
+	  if (!(IA_SKB_STATE(skb1) & IA_TX_DONE)) {
+	     printk("IA_tx_intr: Vci %d lost pkt!!!\n", vcc->vci);
+	  }
+	  IF_ERR(printk("Release the SKB not match\n");)
+	  if ((vcc->pop) && (skb1->len != 0))
+	  {
+	     vcc->pop(vcc, skb1);
+	     IF_EVENT(printk("Tansmit Done - skb 0x%lx return\n",
+							  (long)skb1);)
+	  }
+	  else
+	     dev_kfree_skb_any(skb1);
+	  skb1 = skb_dequeue(&iavcc->txing_skb);
        }
        if (!skb1) {
-          IF_EVENT(printk("IA: Vci %d - skb not found requed\n",vcc->vci);)
-          ia_enque_head_rtn_q (&iadev->tx_return_q, rtne);
-          break;
+	  IF_EVENT(printk("IA: Vci %d - skb not found requed\n",vcc->vci);)
+	  ia_enque_head_rtn_q (&iadev->tx_return_q, rtne);
+	  break;
        }
        if ((vcc->pop) && (skb->len != 0))
        {
-          vcc->pop(vcc, skb);
-          IF_EVENT(printk("Tx Done - skb 0x%lx return\n",(long)skb);)
+	  vcc->pop(vcc, skb);
+	  IF_EVENT(printk("Tx Done - skb 0x%lx return\n",(long)skb);)
        }
        else
-          dev_kfree_skb_any(skb);
+	  dev_kfree_skb_any(skb);
        kfree(rtne);
     }
     ia_que_tx(iadev);
@@ -698,7 +698,7 @@ out:
 #if 0
 static void ia_eeprom_put (IADEV *iadev, u32 addr, u_short val)
 {
-        u32	t;
+	u32	t;
 	int	i;
 	/*
 	 * Issue a command to enable writes to the NOVRAM
@@ -735,7 +735,7 @@ static void ia_eeprom_put (IADEV *iadev, u32 addr, u_short val)
 static u16 ia_eeprom_get (IADEV *iadev, u32 addr)
 {
 	u_short	val;
-        u32	t;
+	u32	t;
 	int	i;
 	/*
 	 * Read the first bit that was clocked with the falling edge of the
@@ -766,32 +766,32 @@ static void ia_hw_type(IADEV *iadev) {
       iadev->rx_buf_sz = IA_RX_BUF_SZ;
    } else if ((memType & MEM_SIZE_MASK) == MEM_SIZE_512K) {
       if (IA_TX_BUF == DFL_TX_BUFFERS)
-        iadev->num_tx_desc = IA_TX_BUF / 2;
+	iadev->num_tx_desc = IA_TX_BUF / 2;
       else
-        iadev->num_tx_desc = IA_TX_BUF;
+	iadev->num_tx_desc = IA_TX_BUF;
       iadev->tx_buf_sz = IA_TX_BUF_SZ;
       if (IA_RX_BUF == DFL_RX_BUFFERS)
-        iadev->num_rx_desc = IA_RX_BUF / 2;
+	iadev->num_rx_desc = IA_RX_BUF / 2;
       else
-        iadev->num_rx_desc = IA_RX_BUF;
+	iadev->num_rx_desc = IA_RX_BUF;
       iadev->rx_buf_sz = IA_RX_BUF_SZ;
    }
    else {
       if (IA_TX_BUF == DFL_TX_BUFFERS)
-        iadev->num_tx_desc = IA_TX_BUF / 8;
+	iadev->num_tx_desc = IA_TX_BUF / 8;
       else
-        iadev->num_tx_desc = IA_TX_BUF;
+	iadev->num_tx_desc = IA_TX_BUF;
       iadev->tx_buf_sz = IA_TX_BUF_SZ;
       if (IA_RX_BUF == DFL_RX_BUFFERS)
-        iadev->num_rx_desc = IA_RX_BUF / 8;
+	iadev->num_rx_desc = IA_RX_BUF / 8;
       else
-        iadev->num_rx_desc = IA_RX_BUF;
+	iadev->num_rx_desc = IA_RX_BUF;
       iadev->rx_buf_sz = IA_RX_BUF_SZ;
    }
    iadev->rx_pkt_ram = TX_PACKET_RAM + (iadev->num_tx_desc * iadev->tx_buf_sz);
    IF_INIT(printk("BUF: tx=%d,sz=%d rx=%d sz= %d rx_pkt_ram=%d\n",
-         iadev->num_tx_desc, iadev->tx_buf_sz, iadev->num_rx_desc,
-         iadev->rx_buf_sz, iadev->rx_pkt_ram);)
+	 iadev->num_tx_desc, iadev->tx_buf_sz, iadev->num_rx_desc,
+	 iadev->rx_buf_sz, iadev->rx_pkt_ram);)
 
 #if 0
    if ((memType & FE_MASK) == FE_SINGLE_MODE) {
@@ -804,7 +804,7 @@ static void ia_hw_type(IADEV *iadev) {
 
    iadev->phy_type = memType & FE_MASK;
    IF_INIT(printk("memType = 0x%x iadev->phy_type = 0x%x\n",
-                                         memType,iadev->phy_type);)
+					 memType,iadev->phy_type);)
    if (iadev->phy_type == FE_25MBIT_PHY)
       iadev->LineRate = (u32)(((25600000/8)*26)/(27*53));
    else if (iadev->phy_type == FE_DS3_PHY)
@@ -981,27 +981,27 @@ static void xdump( u_char*  cp, int  length, char*  prefix )
     u_char*  pBuf = prntBuf;
     count = 0;
     while(count < length){
-        pBuf += sprintf( pBuf, "%s", prefix );
-        for(col = 0;count + col < length && col < 16; col++){
-            if (col != 0 && (col % 4) == 0)
-                pBuf += sprintf( pBuf, " " );
-            pBuf += sprintf( pBuf, "%02X ", cp[count + col] );
-        }
-        while(col++ < 16){      /* pad end of buffer with blanks */
-            if ((col % 4) == 0)
-                sprintf( pBuf, " " );
-            pBuf += sprintf( pBuf, "   " );
-        }
-        pBuf += sprintf( pBuf, "  " );
-        for(col = 0;count + col < length && col < 16; col++){
-            if (isprint((int)cp[count + col]))
-                pBuf += sprintf( pBuf, "%c", cp[count + col] );
-            else
-                pBuf += sprintf( pBuf, "." );
-                }
-        printk("%s\n", prntBuf);
-        count += col;
-        pBuf = prntBuf;
+	pBuf += sprintf( pBuf, "%s", prefix );
+	for(col = 0;count + col < length && col < 16; col++){
+	    if (col != 0 && (col % 4) == 0)
+		pBuf += sprintf( pBuf, " " );
+	    pBuf += sprintf( pBuf, "%02X ", cp[count + col] );
+	}
+	while(col++ < 16){      /* pad end of buffer with blanks */
+	    if ((col % 4) == 0)
+		sprintf( pBuf, " " );
+	    pBuf += sprintf( pBuf, "   " );
+	}
+	pBuf += sprintf( pBuf, "  " );
+	for(col = 0;count + col < length && col < 16; col++){
+	    if (isprint((int)cp[count + col]))
+		pBuf += sprintf( pBuf, "%c", cp[count + col] );
+	    else
+		pBuf += sprintf( pBuf, "." );
+		}
+	printk("%s\n", prntBuf);
+	count += col;
+	pBuf = prntBuf;
     }
 
 }  /* close xdump(... */
@@ -1028,10 +1028,10 @@ static void desc_dbg(IADEV *iadev) {
   // regval = readl((u32)ia_cmds->maddr);
   tcq_wr_ptr =  readw(iadev->seg_reg+TCQ_WR_PTR);
   printk("B_tcq_wr = 0x%x desc = %d last desc = %d\n",
-                     tcq_wr_ptr, readw(iadev->seg_ram+tcq_wr_ptr),
-                     readw(iadev->seg_ram+tcq_wr_ptr-2));
+		     tcq_wr_ptr, readw(iadev->seg_ram+tcq_wr_ptr),
+		     readw(iadev->seg_ram+tcq_wr_ptr-2));
   printk(" host_tcq_wr = 0x%x  host_tcq_rd = 0x%x \n",  iadev->host_tcq_wr,
-                   iadev->ffL.tcq_rd);
+		   iadev->ffL.tcq_rd);
   tcq_st_ptr =  readw(iadev->seg_reg+TCQ_ST_ADR);
   tcq_ed_ptr =  readw(iadev->seg_reg+TCQ_ED_ADR);
   printk("tcq_st_ptr = 0x%x    tcq_ed_ptr = 0x%x \n", tcq_st_ptr, tcq_ed_ptr);
@@ -1060,19 +1060,19 @@ static void rx_excp_rcvd(struct atm_dev *dev)
   state = readl(iadev->reass_reg + STATE_REG) & 0xffff;
   while((state & EXCPQ_EMPTY) != EXCPQ_EMPTY)
   { printk("state = %x \n", state);
-        excpq_rd_ptr = readw(iadev->reass_reg + EXCP_Q_RD_PTR) & 0xffff;
+	excpq_rd_ptr = readw(iadev->reass_reg + EXCP_Q_RD_PTR) & 0xffff;
  printk("state = %x excpq_rd_ptr = %x \n", state, excpq_rd_ptr);
-        if (excpq_rd_ptr == *(u16*)(iadev->reass_reg + EXCP_Q_WR_PTR))
-            IF_ERR(printk("excpq_rd_ptr is wrong!!!\n");)
-        // TODO: update exception stat
+	if (excpq_rd_ptr == *(u16*)(iadev->reass_reg + EXCP_Q_WR_PTR))
+	    IF_ERR(printk("excpq_rd_ptr is wrong!!!\n");)
+	// TODO: update exception stat
 	vci = readw(iadev->reass_ram+excpq_rd_ptr);
 	error = readw(iadev->reass_ram+excpq_rd_ptr+2) & 0x0007;
-        // pwang_test
+	// pwang_test
 	excpq_rd_ptr += 4;
 	if (excpq_rd_ptr > (readw(iadev->reass_reg + EXCP_Q_ED_ADR)& 0xffff))
  	    excpq_rd_ptr = readw(iadev->reass_reg + EXCP_Q_ST_ADR)& 0xffff;
 	writew( excpq_rd_ptr, iadev->reass_reg + EXCP_Q_RD_PTR);
-        state = readl(iadev->reass_reg + STATE_REG) & 0xffff;
+	state = readl(iadev->reass_reg + STATE_REG) & 0xffff;
   }
 #endif
 }
@@ -1081,7 +1081,7 @@ static void free_desc(struct atm_dev *dev, int desc)
 {
 	IADEV *iadev;
 	iadev = INPH_IA_DEV(dev);
-        writew(desc, iadev->reass_ram+iadev->rfL.fdq_wr);
+	writew(desc, iadev->reass_ram+iadev->rfL.fdq_wr);
 	iadev->rfL.fdq_wr +=2;
 	if (iadev->rfL.fdq_wr > iadev->rfL.fdq_ed)
 		iadev->rfL.fdq_wr =  iadev->rfL.fdq_st;
@@ -1109,10 +1109,10 @@ static int rx_pkt(struct atm_dev *dev)
 	}
 	/* mask 1st 3 bits to get the actual descno. */
 	desc = readw(iadev->reass_ram+iadev->rfL.pcq_rd) & 0x1fff;
-        IF_RX(printk("reass_ram = %p iadev->rfL.pcq_rd = 0x%x desc = %d\n",
-                                    iadev->reass_ram, iadev->rfL.pcq_rd, desc);
-              printk(" pcq_wr_ptr = 0x%x\n",
-                               readw(iadev->reass_reg+PCQ_WR_PTR)&0xffff);)
+	IF_RX(printk("reass_ram = %p iadev->rfL.pcq_rd = 0x%x desc = %d\n",
+				    iadev->reass_ram, iadev->rfL.pcq_rd, desc);
+	      printk(" pcq_wr_ptr = 0x%x\n",
+			       readw(iadev->reass_reg+PCQ_WR_PTR)&0xffff);)
 	/* update the read pointer  - maybe we shud do this in the end*/
 	if ( iadev->rfL.pcq_rd== iadev->rfL.pcq_ed)
 		iadev->rfL.pcq_rd = iadev->rfL.pcq_st;
@@ -1126,16 +1126,16 @@ static int rx_pkt(struct atm_dev *dev)
 	buf_desc_ptr = iadev->RX_DESC_BASE_ADDR;
 	/* make the ptr point to the corresponding buffer desc entry */
 	buf_desc_ptr += desc;
-        if (!desc || (desc > iadev->num_rx_desc) ||
-                      ((buf_desc_ptr->vc_index & 0xffff) > iadev->num_vc)) {
-            free_desc(dev, desc);
-            IF_ERR(printk("IA: bad descriptor desc = %d \n", desc);)
-            return -1;
-        }
+	if (!desc || (desc > iadev->num_rx_desc) ||
+		      ((buf_desc_ptr->vc_index & 0xffff) > iadev->num_vc)) {
+	    free_desc(dev, desc);
+	    IF_ERR(printk("IA: bad descriptor desc = %d \n", desc);)
+	    return -1;
+	}
 	vcc = iadev->rx_open[buf_desc_ptr->vc_index & 0xffff];
 	if (!vcc)
 	{
-                free_desc(dev, desc);
+		free_desc(dev, desc);
 		printk("IA: null vcc, drop PDU\n");
 		return -1;
 	}
@@ -1145,17 +1145,17 @@ static int rx_pkt(struct atm_dev *dev)
 	status = (u_short) (buf_desc_ptr->desc_mode);
 	if (status & (RX_CER | RX_PTE | RX_OFL))
 	{
-                atomic_inc(&vcc->stats->rx_err);
+		atomic_inc(&vcc->stats->rx_err);
 		IF_ERR(printk("IA: bad packet, dropping it");)
-                if (status & RX_CER) {
-                    IF_ERR(printk(" cause: packet CRC error\n");)
-                }
-                else if (status & RX_PTE) {
-                    IF_ERR(printk(" cause: packet time out\n");)
-                }
-                else {
-                    IF_ERR(printk(" cause: buffer overflow\n");)
-                }
+		if (status & RX_CER) {
+		    IF_ERR(printk(" cause: packet CRC error\n");)
+		}
+		else if (status & RX_PTE) {
+		    IF_ERR(printk(" cause: packet time out\n");)
+		}
+		else {
+		    IF_ERR(printk(" cause: buffer overflow\n");)
+		}
 		goto out_free_desc;
 	}
 
@@ -1166,21 +1166,21 @@ static int rx_pkt(struct atm_dev *dev)
 	buf_addr = (buf_desc_ptr->buf_start_hi << 16) | buf_desc_ptr->buf_start_lo;
 	dma_addr = (buf_desc_ptr->dma_start_hi << 16) | buf_desc_ptr->dma_start_lo;
 	len = dma_addr - buf_addr;
-        if (len > iadev->rx_buf_sz) {
-           printk("Over %d bytes sdu received, dropped!!!\n", iadev->rx_buf_sz);
-           atomic_inc(&vcc->stats->rx_err);
+	if (len > iadev->rx_buf_sz) {
+	   printk("Over %d bytes sdu received, dropped!!!\n", iadev->rx_buf_sz);
+	   atomic_inc(&vcc->stats->rx_err);
 	   goto out_free_desc;
-        }
+	}
 
-        if (!(skb = atm_alloc_charge(vcc, len, GFP_ATOMIC))) {
-           if (vcc->vci < 32)
-              printk("Drop control packets\n");
+	if (!(skb = atm_alloc_charge(vcc, len, GFP_ATOMIC))) {
+	   if (vcc->vci < 32)
+	      printk("Drop control packets\n");
 	      goto out_free_desc;
-        }
+	}
 	skb_put(skb,len);
-        // pwang_test
-        ATM_SKB(skb)->vcc = vcc;
-        ATM_DESC(skb) = desc;
+	// pwang_test
+	ATM_SKB(skb)->vcc = vcc;
+	ATM_DESC(skb) = desc;
 	skb_queue_tail(&iadev->rx_dma_q, skb);
 
 	/* Build the DLE structure */
@@ -1192,16 +1192,16 @@ static int rx_pkt(struct atm_dev *dev)
 	wr_ptr->mode = DMA_INT_ENABLE;
 
 	/* shud take care of wrap around here too. */
-        if(++wr_ptr == iadev->rx_dle_q.end)
-             wr_ptr = iadev->rx_dle_q.start;
+	if(++wr_ptr == iadev->rx_dle_q.end)
+	     wr_ptr = iadev->rx_dle_q.start;
 	iadev->rx_dle_q.write = wr_ptr;
 	udelay(1);
 	/* Increment transaction counter */
 	writel(1, iadev->dma+IPHASE5575_RX_COUNTER);
 out:	return 0;
 out_free_desc:
-        free_desc(dev, desc);
-        goto out;
+	free_desc(dev, desc);
+	goto out;
 }
 
 static void rx_intr(struct atm_dev *dev)
@@ -1222,28 +1222,28 @@ static void rx_intr(struct atm_dev *dev)
 	packets till the packet complete queue is empty..
 	*/
 	state = readl(iadev->reass_reg + STATE_REG) & 0xffff;
-        IF_EVENT(printk("Rx intr status: RX_PKT_RCVD %08x\n", status);)
+	IF_EVENT(printk("Rx intr status: RX_PKT_RCVD %08x\n", status);)
 	while(!(state & PCQ_EMPTY))
 	{
-             rx_pkt(dev);
+	     rx_pkt(dev);
 	     state = readl(iadev->reass_reg + STATE_REG) & 0xffff;
 	}
-        iadev->rxing = 1;
+	iadev->rxing = 1;
   }
   if (status & RX_FREEQ_EMPT)
   {
      if (iadev->rxing) {
-        iadev->rx_tmp_cnt = iadev->rx_pkt_cnt;
-        iadev->rx_tmp_jif = jiffies;
-        iadev->rxing = 0;
+	iadev->rx_tmp_cnt = iadev->rx_pkt_cnt;
+	iadev->rx_tmp_jif = jiffies;
+	iadev->rxing = 0;
      }
      else if ((time_after(jiffies, iadev->rx_tmp_jif + 50)) &&
-               ((iadev->rx_pkt_cnt - iadev->rx_tmp_cnt) == 0)) {
-        for (i = 1; i <= iadev->num_rx_desc; i++)
-               free_desc(dev, i);
+	       ((iadev->rx_pkt_cnt - iadev->rx_tmp_cnt) == 0)) {
+	for (i = 1; i <= iadev->num_rx_desc; i++)
+	       free_desc(dev, i);
 printk("Test logic RUN!!!!\n");
-        writew( ~(RX_FREEQ_EMPT|RX_EXCP_RCVD),iadev->reass_reg+REASS_MASK_REG);
-        iadev->rxing = 1;
+	writew( ~(RX_FREEQ_EMPT|RX_EXCP_RCVD),iadev->reass_reg+REASS_MASK_REG);
+	iadev->rxing = 1;
      }
      IF_EVENT(printk("Rx intr status: RX_FREEQ_EMPT %08x\n", status);)
   }
@@ -1291,63 +1291,63 @@ static void rx_dle_intr(struct atm_dev *dev)
       /* free the DMAed skb */
       skb = skb_dequeue(&iadev->rx_dma_q);
       if (!skb)
-         goto INCR_DLE;
+	 goto INCR_DLE;
       desc = ATM_DESC(skb);
       free_desc(dev, desc);
 
       if (!(len = skb->len))
       {
-          printk("rx_dle_intr: skb len 0\n");
+	  printk("rx_dle_intr: skb len 0\n");
 	  dev_kfree_skb_any(skb);
       }
       else
       {
-          struct cpcs_trailer *trailer;
-          u_short length;
-          struct ia_vcc *ia_vcc;
+	  struct cpcs_trailer *trailer;
+	  u_short length;
+	  struct ia_vcc *ia_vcc;
 
 	  pci_unmap_single(iadev->pci, iadev->rx_dle_q.write->sys_pkt_addr,
 	  	len, PCI_DMA_FROMDEVICE);
-          /* no VCC related housekeeping done as yet. lets see */
-          vcc = ATM_SKB(skb)->vcc;
+	  /* no VCC related housekeeping done as yet. lets see */
+	  vcc = ATM_SKB(skb)->vcc;
 	  if (!vcc) {
 	      printk("IA: null vcc\n");
-              dev_kfree_skb_any(skb);
-              goto INCR_DLE;
-          }
-          ia_vcc = INPH_IA_VCC(vcc);
-          if (ia_vcc == NULL)
-          {
-             atomic_inc(&vcc->stats->rx_err);
-             atm_return(vcc, skb->truesize);
-             dev_kfree_skb_any(skb);
-             goto INCR_DLE;
-           }
-          // get real pkt length  pwang_test
-          trailer = (struct cpcs_trailer*)((u_char *)skb->data +
-                                 skb->len - sizeof(*trailer));
+	      dev_kfree_skb_any(skb);
+	      goto INCR_DLE;
+	  }
+	  ia_vcc = INPH_IA_VCC(vcc);
+	  if (ia_vcc == NULL)
+	  {
+	     atomic_inc(&vcc->stats->rx_err);
+	     atm_return(vcc, skb->truesize);
+	     dev_kfree_skb_any(skb);
+	     goto INCR_DLE;
+	   }
+	  // get real pkt length  pwang_test
+	  trailer = (struct cpcs_trailer*)((u_char *)skb->data +
+				 skb->len - sizeof(*trailer));
 	  length = swap_byte_order(trailer->length);
-          if ((length > iadev->rx_buf_sz) || (length >
-                              (skb->len - sizeof(struct cpcs_trailer))))
-          {
-             atomic_inc(&vcc->stats->rx_err);
-             IF_ERR(printk("rx_dle_intr: Bad  AAL5 trailer %d (skb len %d)",
-                                                            length, skb->len);)
-             atm_return(vcc, skb->truesize);
-             dev_kfree_skb_any(skb);
-             goto INCR_DLE;
-          }
-          skb_trim(skb, length);
+	  if ((length > iadev->rx_buf_sz) || (length >
+			      (skb->len - sizeof(struct cpcs_trailer))))
+	  {
+	     atomic_inc(&vcc->stats->rx_err);
+	     IF_ERR(printk("rx_dle_intr: Bad  AAL5 trailer %d (skb len %d)",
+							    length, skb->len);)
+	     atm_return(vcc, skb->truesize);
+	     dev_kfree_skb_any(skb);
+	     goto INCR_DLE;
+	  }
+	  skb_trim(skb, length);
 
 	  /* Display the packet */
 	  IF_RXPKT(printk("\nDmad Recvd data: len = %d \n", skb->len);
-          xdump(skb->data, skb->len, "RX: ");
-          printk("\n");)
+	  xdump(skb->data, skb->len, "RX: ");
+	  printk("\n");)
 
 	  IF_RX(printk("rx_dle_intr: skb push");)
 	  vcc->push(vcc,skb);
 	  atomic_inc(&vcc->stats->rx);
-          iadev->rx_pkt_cnt++;
+	  iadev->rx_pkt_cnt++;
       }
 INCR_DLE:
       if (++dle == iadev->rx_dle_q.end)
@@ -1360,10 +1360,10 @@ INCR_DLE:
   if (!iadev->rxing) {
      state = readl(iadev->reass_reg + STATE_REG) & 0xffff;
      if (!(state & FREEQ_EMPTY)) {
-        state = readl(iadev->reass_reg + REASS_MASK_REG) & 0xffff;
-        writel(state & ~(RX_FREEQ_EMPT |/* RX_EXCP_RCVD |*/ RX_PKT_RCVD),
-                                      iadev->reass_reg+REASS_MASK_REG);
-        iadev->rxing++;
+	state = readl(iadev->reass_reg + REASS_MASK_REG) & 0xffff;
+	writel(state & ~(RX_FREEQ_EMPT |/* RX_EXCP_RCVD |*/ RX_PKT_RCVD),
+				      iadev->reass_reg+REASS_MASK_REG);
+	iadev->rxing++;
      }
   }
 }
@@ -1378,32 +1378,32 @@ static int open_rx(struct atm_vcc *vcc)
 
 	if (vcc->qos.rxtp.traffic_class == ATM_NONE) return 0;
 	iadev = INPH_IA_DEV(vcc->dev);
-        if (vcc->qos.rxtp.traffic_class == ATM_ABR) {
-           if (iadev->phy_type & FE_25MBIT_PHY) {
-               printk("IA:  ABR not support\n");
-               return -EINVAL;
-           }
-        }
+	if (vcc->qos.rxtp.traffic_class == ATM_ABR) {
+	   if (iadev->phy_type & FE_25MBIT_PHY) {
+	       printk("IA:  ABR not support\n");
+	       return -EINVAL;
+	   }
+	}
 	/* Make only this VCI in the vc table valid and let all
 		others be invalid entries */
 	vc_table = iadev->reass_ram+RX_VC_TABLE*iadev->memSize;
 	vc_table += vcc->vci;
 	/* mask the last 6 bits and OR it with 3 for 1K VCs */
 
-        *vc_table = vcc->vci << 6;
+	*vc_table = vcc->vci << 6;
 	/* Also keep a list of open rx vcs so that we can attach them with
 		incoming PDUs later. */
 	if ((vcc->qos.rxtp.traffic_class == ATM_ABR) ||
-                                (vcc->qos.txtp.traffic_class == ATM_ABR))
+				(vcc->qos.txtp.traffic_class == ATM_ABR))
 	{
-                srv_cls_param_t srv_p;
-                init_abr_vc(iadev, &srv_p);
-                ia_open_abr_vc(iadev, &srv_p, vcc, 0);
+		srv_cls_param_t srv_p;
+		init_abr_vc(iadev, &srv_p);
+		ia_open_abr_vc(iadev, &srv_p, vcc, 0);
 	}
        	else {  /* for UBR  later may need to add CBR logic */
-        	reass_ptr = iadev->reass_ram+REASS_TABLE*iadev->memSize;
-           	reass_ptr += vcc->vci;
-           	*reass_ptr = NO_AAL5_PKT;
+		reass_ptr = iadev->reass_ram+REASS_TABLE*iadev->memSize;
+	   	reass_ptr += vcc->vci;
+	   	*reass_ptr = NO_AAL5_PKT;
        	}
 
 	if (iadev->rx_open[vcc->vci])
@@ -1448,11 +1448,11 @@ static int rx_init(struct atm_dev *dev)
 	writel(iadev->rx_dle_dma & 0xfffff000,
 	       iadev->dma + IPHASE5575_RX_LIST_ADDR);
 	IF_INIT(printk("Tx Dle list addr: 0x%p value: 0x%0x\n",
-                      iadev->dma+IPHASE5575_TX_LIST_ADDR,
-                      readl(iadev->dma + IPHASE5575_TX_LIST_ADDR));
+		      iadev->dma+IPHASE5575_TX_LIST_ADDR,
+		      readl(iadev->dma + IPHASE5575_TX_LIST_ADDR));
 	printk("Rx Dle list addr: 0x%p value: 0x%0x\n",
-                      iadev->dma+IPHASE5575_RX_LIST_ADDR,
-                      readl(iadev->dma + IPHASE5575_RX_LIST_ADDR));)
+		      iadev->dma+IPHASE5575_RX_LIST_ADDR,
+		      readl(iadev->dma + IPHASE5575_RX_LIST_ADDR));)
 
 	writew(0xffff, iadev->reass_reg+REASS_MASK_REG);
 	writew(0, iadev->reass_reg+MODE_REG);
@@ -1477,7 +1477,7 @@ static int rx_init(struct atm_dev *dev)
 	writew(iadev->rx_buf_sz, iadev->reass_reg+BUF_SIZE);
 
 	/* Initialize each entry in the Buffer Descriptor Table */
-        iadev->RX_DESC_BASE_ADDR = iadev->reass_ram+RX_DESC_BASE*iadev->memSize;
+	iadev->RX_DESC_BASE_ADDR = iadev->reass_ram+RX_DESC_BASE*iadev->memSize;
 	buf_desc_ptr = iadev->RX_DESC_BASE_ADDR;
 	memset_io(buf_desc_ptr, 0, sizeof(*buf_desc_ptr));
 	buf_desc_ptr++;
@@ -1491,14 +1491,14 @@ static int rx_init(struct atm_dev *dev)
 		rx_pkt_start += iadev->rx_buf_sz;
 	}
 	IF_INIT(printk("Rx Buffer desc ptr: 0x%p\n", buf_desc_ptr);)
-        i = FREE_BUF_DESC_Q*iadev->memSize;
+	i = FREE_BUF_DESC_Q*iadev->memSize;
 	writew(i >> 16,  iadev->reass_reg+REASS_QUEUE_BASE);
-        writew(i, iadev->reass_reg+FREEQ_ST_ADR);
-        writew(i+iadev->num_rx_desc*sizeof(u_short),
-                                         iadev->reass_reg+FREEQ_ED_ADR);
-        writew(i, iadev->reass_reg+FREEQ_RD_PTR);
-        writew(i+iadev->num_rx_desc*sizeof(u_short),
-                                        iadev->reass_reg+FREEQ_WR_PTR);
+	writew(i, iadev->reass_reg+FREEQ_ST_ADR);
+	writew(i+iadev->num_rx_desc*sizeof(u_short),
+					 iadev->reass_reg+FREEQ_ED_ADR);
+	writew(i, iadev->reass_reg+FREEQ_RD_PTR);
+	writew(i+iadev->num_rx_desc*sizeof(u_short),
+					iadev->reass_reg+FREEQ_WR_PTR);
 	/* Fill the FREEQ with all the free descriptors. */
 	freeq_st_adr = readw(iadev->reass_reg+FREEQ_ST_ADR);
 	freeq_start = (u_short *)(iadev->reass_ram+freeq_st_adr);
@@ -1508,34 +1508,34 @@ static int rx_init(struct atm_dev *dev)
 		freeq_start++;
 	}
 	IF_INIT(printk("freeq_start: 0x%p\n", freeq_start);)
-        /* Packet Complete Queue */
-        i = (PKT_COMP_Q * iadev->memSize) & 0xffff;
-        writew(i, iadev->reass_reg+PCQ_ST_ADR);
-        writew(i+iadev->num_vc*sizeof(u_short), iadev->reass_reg+PCQ_ED_ADR);
-        writew(i, iadev->reass_reg+PCQ_RD_PTR);
-        writew(i, iadev->reass_reg+PCQ_WR_PTR);
+	/* Packet Complete Queue */
+	i = (PKT_COMP_Q * iadev->memSize) & 0xffff;
+	writew(i, iadev->reass_reg+PCQ_ST_ADR);
+	writew(i+iadev->num_vc*sizeof(u_short), iadev->reass_reg+PCQ_ED_ADR);
+	writew(i, iadev->reass_reg+PCQ_RD_PTR);
+	writew(i, iadev->reass_reg+PCQ_WR_PTR);
 
-        /* Exception Queue */
-        i = (EXCEPTION_Q * iadev->memSize) & 0xffff;
-        writew(i, iadev->reass_reg+EXCP_Q_ST_ADR);
-        writew(i + NUM_RX_EXCP * sizeof(RX_ERROR_Q),
-                                             iadev->reass_reg+EXCP_Q_ED_ADR);
-        writew(i, iadev->reass_reg+EXCP_Q_RD_PTR);
-        writew(i, iadev->reass_reg+EXCP_Q_WR_PTR);
+	/* Exception Queue */
+	i = (EXCEPTION_Q * iadev->memSize) & 0xffff;
+	writew(i, iadev->reass_reg+EXCP_Q_ST_ADR);
+	writew(i + NUM_RX_EXCP * sizeof(RX_ERROR_Q),
+					     iadev->reass_reg+EXCP_Q_ED_ADR);
+	writew(i, iadev->reass_reg+EXCP_Q_RD_PTR);
+	writew(i, iadev->reass_reg+EXCP_Q_WR_PTR);
 
     	/* Load local copy of FREEQ and PCQ ptrs */
-        iadev->rfL.fdq_st = readw(iadev->reass_reg+FREEQ_ST_ADR) & 0xffff;
+	iadev->rfL.fdq_st = readw(iadev->reass_reg+FREEQ_ST_ADR) & 0xffff;
        	iadev->rfL.fdq_ed = readw(iadev->reass_reg+FREEQ_ED_ADR) & 0xffff ;
 	iadev->rfL.fdq_rd = readw(iadev->reass_reg+FREEQ_RD_PTR) & 0xffff;
 	iadev->rfL.fdq_wr = readw(iadev->reass_reg+FREEQ_WR_PTR) & 0xffff;
-        iadev->rfL.pcq_st = readw(iadev->reass_reg+PCQ_ST_ADR) & 0xffff;
+	iadev->rfL.pcq_st = readw(iadev->reass_reg+PCQ_ST_ADR) & 0xffff;
 	iadev->rfL.pcq_ed = readw(iadev->reass_reg+PCQ_ED_ADR) & 0xffff;
 	iadev->rfL.pcq_rd = readw(iadev->reass_reg+PCQ_RD_PTR) & 0xffff;
 	iadev->rfL.pcq_wr = readw(iadev->reass_reg+PCQ_WR_PTR) & 0xffff;
 
-        IF_INIT(printk("INIT:pcq_st:0x%x pcq_ed:0x%x pcq_rd:0x%x pcq_wr:0x%x",
-              iadev->rfL.pcq_st, iadev->rfL.pcq_ed, iadev->rfL.pcq_rd,
-              iadev->rfL.pcq_wr);)
+	IF_INIT(printk("INIT:pcq_st:0x%x pcq_ed:0x%x pcq_rd:0x%x pcq_wr:0x%x",
+	      iadev->rfL.pcq_st, iadev->rfL.pcq_ed, iadev->rfL.pcq_rd,
+	      iadev->rfL.pcq_wr);)
 	/* just for check - no VP TBL */
 	/* VP Table */
 	/* writew(0x0b80, iadev->reass_reg+VP_LKUP_BASE); */
@@ -1545,23 +1545,23 @@ static int rx_init(struct atm_dev *dev)
 	*/
 
 	/* This seems to work and looks right to me too !!! */
-        i =  REASS_TABLE * iadev->memSize;
+	i =  REASS_TABLE * iadev->memSize;
 	writew((i >> 3), iadev->reass_reg+REASS_TABLE_BASE);
  	/* initialize Reassembly table to I don't know what ???? */
 	reass_table = (u16 *)(iadev->reass_ram+i);
-        j = REASS_TABLE_SZ * iadev->memSize;
+	j = REASS_TABLE_SZ * iadev->memSize;
 	for(i=0; i < j; i++)
 		*reass_table++ = NO_AAL5_PKT;
        i = 8*1024;
        vcsize_sel =  0;
        while (i != iadev->num_vc) {
-          i /= 2;
-          vcsize_sel++;
+	  i /= 2;
+	  vcsize_sel++;
        }
        i = RX_VC_TABLE * iadev->memSize;
        writew(((i>>3) & 0xfff8) | vcsize_sel, iadev->reass_reg+VC_LKUP_BASE);
        vc_table = (u16 *)(iadev->reass_ram+RX_VC_TABLE*iadev->memSize);
-        j = RX_VC_TABLE_SZ * iadev->memSize;
+	j = RX_VC_TABLE_SZ * iadev->memSize;
 	for(i = 0; i < j; i++)
 	{
 		/* shift the reassembly pointer by 3 + lower 3 bits of
@@ -1572,41 +1572,41 @@ static int rx_init(struct atm_dev *dev)
 		*vc_table = (i << 6) | 15;	/* for invalid VCI */
 		vc_table++;
 	}
-        /* ABR VC table */
-        i =  ABR_VC_TABLE * iadev->memSize;
-        writew(i >> 3, iadev->reass_reg+ABR_LKUP_BASE);
+	/* ABR VC table */
+	i =  ABR_VC_TABLE * iadev->memSize;
+	writew(i >> 3, iadev->reass_reg+ABR_LKUP_BASE);
 
-        i = ABR_VC_TABLE * iadev->memSize;
+	i = ABR_VC_TABLE * iadev->memSize;
 	abr_vc_table = (struct abr_vc_table *)(iadev->reass_ram+i);
-        j = REASS_TABLE_SZ * iadev->memSize;
-        memset ((char*)abr_vc_table, 0, j * sizeof(*abr_vc_table));
+	j = REASS_TABLE_SZ * iadev->memSize;
+	memset ((char*)abr_vc_table, 0, j * sizeof(*abr_vc_table));
     	for(i = 0; i < j; i++) {
 		abr_vc_table->rdf = 0x0003;
-             	abr_vc_table->air = 0x5eb1;
+	     	abr_vc_table->air = 0x5eb1;
 	       	abr_vc_table++;
-        }
+	}
 
 	/* Initialize other registers */
 
 	/* VP Filter Register set for VC Reassembly only */
 	writew(0xff00, iadev->reass_reg+VP_FILTER);
-        writew(0, iadev->reass_reg+XTRA_RM_OFFSET);
+	writew(0, iadev->reass_reg+XTRA_RM_OFFSET);
 	writew(0x1,  iadev->reass_reg+PROTOCOL_ID);
 
 	/* Packet Timeout Count  related Registers :
 	   Set packet timeout to occur in about 3 seconds
 	   Set Packet Aging Interval count register to overflow in about 4 us
  	*/
-        writew(0xF6F8, iadev->reass_reg+PKT_TM_CNT );
+	writew(0xF6F8, iadev->reass_reg+PKT_TM_CNT );
 
-        i = (j >> 6) & 0xFF;
-        j += 2 * (j - 1);
-        i |= ((j << 2) & 0xFF00);
-        writew(i, iadev->reass_reg+TMOUT_RANGE);
+	i = (j >> 6) & 0xFF;
+	j += 2 * (j - 1);
+	i |= ((j << 2) & 0xFF00);
+	writew(i, iadev->reass_reg+TMOUT_RANGE);
 
-        /* initiate the desc_tble */
-        for(i=0; i<iadev->num_tx_desc;i++)
-            iadev->desc_tbl[i].timestamp = 0;
+	/* initiate the desc_tble */
+	for(i=0; i<iadev->num_tx_desc;i++)
+	    iadev->desc_tbl[i].timestamp = 0;
 
 	/* to clear the interrupt status register - read it */
 	readw(iadev->reass_reg+REASS_INTR_STATUS_REG);
@@ -1624,8 +1624,8 @@ static int rx_init(struct atm_dev *dev)
 		goto err_free_dle;
 	}
 
-        iadev->rxing = 1;
-        iadev->rx_pkt_cnt = 0;
+	iadev->rxing = 1;
+	iadev->rx_pkt_cnt = 0;
 	/* Mode Register */
 	writew(R_ONLINE, iadev->reass_reg+MODE_REG);
 	return 0;
@@ -1657,21 +1657,21 @@ static void tx_intr(struct atm_dev *dev)
 {
 	IADEV *iadev;
 	unsigned short status;
-        unsigned long flags;
+	unsigned long flags;
 
 	iadev = INPH_IA_DEV(dev);
 
 	status = readl(iadev->seg_reg+SEG_INTR_STATUS_REG);
-        if (status & TRANSMIT_DONE){
+	if (status & TRANSMIT_DONE){
 
-           IF_EVENT(printk("Tansmit Done Intr logic run\n");)
-           spin_lock_irqsave(&iadev->tx_lock, flags);
-           ia_tx_poll(iadev);
-           spin_unlock_irqrestore(&iadev->tx_lock, flags);
-           writew(TRANSMIT_DONE, iadev->seg_reg+SEG_INTR_STATUS_REG);
-           if (iadev->close_pending)
-               wake_up(&iadev->close_wait);
-        }
+	   IF_EVENT(printk("Tansmit Done Intr logic run\n");)
+	   spin_lock_irqsave(&iadev->tx_lock, flags);
+	   ia_tx_poll(iadev);
+	   spin_unlock_irqrestore(&iadev->tx_lock, flags);
+	   writew(TRANSMIT_DONE, iadev->seg_reg+SEG_INTR_STATUS_REG);
+	   if (iadev->close_pending)
+	       wake_up(&iadev->close_wait);
+	}
 	if (status & TCQ_NOT_EMPTY)
 	{
 	    IF_EVENT(printk("TCQ_NOT_EMPTY int received\n");)
@@ -1680,65 +1680,65 @@ static void tx_intr(struct atm_dev *dev)
 
 static void tx_dle_intr(struct atm_dev *dev)
 {
-        IADEV *iadev;
-        struct dle *dle, *cur_dle;
-        struct sk_buff *skb;
-        struct atm_vcc *vcc;
-        struct ia_vcc  *iavcc;
-        u_int dle_lp;
-        unsigned long flags;
+	IADEV *iadev;
+	struct dle *dle, *cur_dle;
+	struct sk_buff *skb;
+	struct atm_vcc *vcc;
+	struct ia_vcc  *iavcc;
+	u_int dle_lp;
+	unsigned long flags;
 
-        iadev = INPH_IA_DEV(dev);
-        spin_lock_irqsave(&iadev->tx_lock, flags);
-        dle = iadev->tx_dle_q.read;
-        dle_lp = readl(iadev->dma+IPHASE5575_TX_LIST_ADDR) &
-                                        (sizeof(struct dle)*DLE_ENTRIES - 1);
-        cur_dle = (struct dle*)(iadev->tx_dle_q.start + (dle_lp >> 4));
-        while (dle != cur_dle)
-        {
-            /* free the DMAed skb */
-            skb = skb_dequeue(&iadev->tx_dma_q);
-            if (!skb) break;
+	iadev = INPH_IA_DEV(dev);
+	spin_lock_irqsave(&iadev->tx_lock, flags);
+	dle = iadev->tx_dle_q.read;
+	dle_lp = readl(iadev->dma+IPHASE5575_TX_LIST_ADDR) &
+					(sizeof(struct dle)*DLE_ENTRIES - 1);
+	cur_dle = (struct dle*)(iadev->tx_dle_q.start + (dle_lp >> 4));
+	while (dle != cur_dle)
+	{
+	    /* free the DMAed skb */
+	    skb = skb_dequeue(&iadev->tx_dma_q);
+	    if (!skb) break;
 
 	    /* Revenge of the 2 dle (skb + trailer) used in ia_pkt_tx() */
 	    if (!((dle - iadev->tx_dle_q.start)%(2*sizeof(struct dle)))) {
 		pci_unmap_single(iadev->pci, dle->sys_pkt_addr, skb->len,
 				 PCI_DMA_TODEVICE);
 	    }
-            vcc = ATM_SKB(skb)->vcc;
-            if (!vcc) {
-                  printk("tx_dle_intr: vcc is null\n");
+	    vcc = ATM_SKB(skb)->vcc;
+	    if (!vcc) {
+		  printk("tx_dle_intr: vcc is null\n");
 		  spin_unlock_irqrestore(&iadev->tx_lock, flags);
-                  dev_kfree_skb_any(skb);
+		  dev_kfree_skb_any(skb);
 
-                  return;
-            }
-            iavcc = INPH_IA_VCC(vcc);
-            if (!iavcc) {
-                  printk("tx_dle_intr: iavcc is null\n");
+		  return;
+	    }
+	    iavcc = INPH_IA_VCC(vcc);
+	    if (!iavcc) {
+		  printk("tx_dle_intr: iavcc is null\n");
 		  spin_unlock_irqrestore(&iadev->tx_lock, flags);
-                  dev_kfree_skb_any(skb);
-                  return;
-            }
-            if (vcc->qos.txtp.pcr >= iadev->rate_limit) {
-               if ((vcc->pop) && (skb->len != 0))
-               {
-                 vcc->pop(vcc, skb);
-               }
-               else {
-                 dev_kfree_skb_any(skb);
-               }
-            }
-            else { /* Hold the rate-limited skb for flow control */
-               IA_SKB_STATE(skb) |= IA_DLED;
-               skb_queue_tail(&iavcc->txing_skb, skb);
-            }
-            IF_EVENT(printk("tx_dle_intr: enque skb = 0x%p \n", skb);)
-            if (++dle == iadev->tx_dle_q.end)
-                 dle = iadev->tx_dle_q.start;
-        }
-        iadev->tx_dle_q.read = dle;
-        spin_unlock_irqrestore(&iadev->tx_lock, flags);
+		  dev_kfree_skb_any(skb);
+		  return;
+	    }
+	    if (vcc->qos.txtp.pcr >= iadev->rate_limit) {
+	       if ((vcc->pop) && (skb->len != 0))
+	       {
+		 vcc->pop(vcc, skb);
+	       }
+	       else {
+		 dev_kfree_skb_any(skb);
+	       }
+	    }
+	    else { /* Hold the rate-limited skb for flow control */
+	       IA_SKB_STATE(skb) |= IA_DLED;
+	       skb_queue_tail(&iavcc->txing_skb, skb);
+	    }
+	    IF_EVENT(printk("tx_dle_intr: enque skb = 0x%p \n", skb);)
+	    if (++dle == iadev->tx_dle_q.end)
+		 dle = iadev->tx_dle_q.start;
+	}
+	iadev->tx_dle_q.read = dle;
+	spin_unlock_irqrestore(&iadev->tx_lock, flags);
 }
 
 static int open_tx(struct atm_vcc *vcc)
@@ -1747,65 +1747,65 @@ static int open_tx(struct atm_vcc *vcc)
 	IADEV *iadev;
 	struct main_vc *vc;
 	struct ext_vc *evc;
-        int ret;
+	int ret;
 	IF_EVENT(printk("iadev: open_tx entered vcc->vci = %d\n", vcc->vci);)
 	if (vcc->qos.txtp.traffic_class == ATM_NONE) return 0;
 	iadev = INPH_IA_DEV(vcc->dev);
 
-        if (iadev->phy_type & FE_25MBIT_PHY) {
-           if (vcc->qos.txtp.traffic_class == ATM_ABR) {
-               printk("IA:  ABR not support\n");
-               return -EINVAL;
-           }
+	if (iadev->phy_type & FE_25MBIT_PHY) {
+	   if (vcc->qos.txtp.traffic_class == ATM_ABR) {
+	       printk("IA:  ABR not support\n");
+	       return -EINVAL;
+	   }
 	  if (vcc->qos.txtp.traffic_class == ATM_CBR) {
-               printk("IA:  CBR not support\n");
-               return -EINVAL;
-          }
-        }
-        ia_vcc =  INPH_IA_VCC(vcc);
-        memset((caddr_t)ia_vcc, 0, sizeof(*ia_vcc));
-        if (vcc->qos.txtp.max_sdu >
-                         (iadev->tx_buf_sz - sizeof(struct cpcs_trailer))){
-           printk("IA:  SDU size over (%d) the configured SDU size %d\n",
+	       printk("IA:  CBR not support\n");
+	       return -EINVAL;
+	  }
+	}
+	ia_vcc =  INPH_IA_VCC(vcc);
+	memset((caddr_t)ia_vcc, 0, sizeof(*ia_vcc));
+	if (vcc->qos.txtp.max_sdu >
+			 (iadev->tx_buf_sz - sizeof(struct cpcs_trailer))){
+	   printk("IA:  SDU size over (%d) the configured SDU size %d\n",
 		  vcc->qos.txtp.max_sdu,iadev->tx_buf_sz);
 	   vcc->dev_data = NULL;
-           kfree(ia_vcc);
-           return -EINVAL;
-        }
+	   kfree(ia_vcc);
+	   return -EINVAL;
+	}
 	ia_vcc->vc_desc_cnt = 0;
-        ia_vcc->txing = 1;
+	ia_vcc->txing = 1;
 
-        /* find pcr */
-        if (vcc->qos.txtp.max_pcr == ATM_MAX_PCR)
-           vcc->qos.txtp.pcr = iadev->LineRate;
-        else if ((vcc->qos.txtp.max_pcr == 0)&&( vcc->qos.txtp.pcr <= 0))
-           vcc->qos.txtp.pcr = iadev->LineRate;
-        else if ((vcc->qos.txtp.max_pcr > vcc->qos.txtp.pcr) && (vcc->qos.txtp.max_pcr> 0))
-           vcc->qos.txtp.pcr = vcc->qos.txtp.max_pcr;
-        if (vcc->qos.txtp.pcr > iadev->LineRate)
-             vcc->qos.txtp.pcr = iadev->LineRate;
-        ia_vcc->pcr = vcc->qos.txtp.pcr;
+	/* find pcr */
+	if (vcc->qos.txtp.max_pcr == ATM_MAX_PCR)
+	   vcc->qos.txtp.pcr = iadev->LineRate;
+	else if ((vcc->qos.txtp.max_pcr == 0)&&( vcc->qos.txtp.pcr <= 0))
+	   vcc->qos.txtp.pcr = iadev->LineRate;
+	else if ((vcc->qos.txtp.max_pcr > vcc->qos.txtp.pcr) && (vcc->qos.txtp.max_pcr> 0))
+	   vcc->qos.txtp.pcr = vcc->qos.txtp.max_pcr;
+	if (vcc->qos.txtp.pcr > iadev->LineRate)
+	     vcc->qos.txtp.pcr = iadev->LineRate;
+	ia_vcc->pcr = vcc->qos.txtp.pcr;
 
-        if (ia_vcc->pcr > (iadev->LineRate / 6) ) ia_vcc->ltimeout = HZ / 10;
-        else if (ia_vcc->pcr > (iadev->LineRate / 130)) ia_vcc->ltimeout = HZ;
-        else if (ia_vcc->pcr <= 170) ia_vcc->ltimeout = 16 * HZ;
-        else ia_vcc->ltimeout = 2700 * HZ  / ia_vcc->pcr;
-        if (ia_vcc->pcr < iadev->rate_limit)
-           skb_queue_head_init (&ia_vcc->txing_skb);
-        if (ia_vcc->pcr < iadev->rate_limit) {
+	if (ia_vcc->pcr > (iadev->LineRate / 6) ) ia_vcc->ltimeout = HZ / 10;
+	else if (ia_vcc->pcr > (iadev->LineRate / 130)) ia_vcc->ltimeout = HZ;
+	else if (ia_vcc->pcr <= 170) ia_vcc->ltimeout = 16 * HZ;
+	else ia_vcc->ltimeout = 2700 * HZ  / ia_vcc->pcr;
+	if (ia_vcc->pcr < iadev->rate_limit)
+	   skb_queue_head_init (&ia_vcc->txing_skb);
+	if (ia_vcc->pcr < iadev->rate_limit) {
 	   struct sock *sk = sk_atm(vcc);
 
 	   if (vcc->qos.txtp.max_sdu != 0) {
-               if (ia_vcc->pcr > 60000)
-                  sk->sk_sndbuf = vcc->qos.txtp.max_sdu * 5;
-               else if (ia_vcc->pcr > 2000)
-                  sk->sk_sndbuf = vcc->qos.txtp.max_sdu * 4;
-               else
-                 sk->sk_sndbuf = vcc->qos.txtp.max_sdu * 3;
-           }
-           else
-             sk->sk_sndbuf = 24576;
-        }
+	       if (ia_vcc->pcr > 60000)
+		  sk->sk_sndbuf = vcc->qos.txtp.max_sdu * 5;
+	       else if (ia_vcc->pcr > 2000)
+		  sk->sk_sndbuf = vcc->qos.txtp.max_sdu * 4;
+	       else
+		 sk->sk_sndbuf = vcc->qos.txtp.max_sdu * 3;
+	   }
+	   else
+	     sk->sk_sndbuf = 24576;
+	}
 
 	vc = (struct main_vc *)iadev->MAIN_VC_TABLE_ADDR;
 	evc = (struct ext_vc *)iadev->EXT_VC_TABLE_ADDR;
@@ -1826,69 +1826,69 @@ static int open_tx(struct atm_vcc *vcc)
 	if (vcc->qos.txtp.traffic_class == ATM_UBR)
 	{
 		vc->type = UBR;
-                vc->status = CRC_APPEND;
+		vc->status = CRC_APPEND;
 		vc->acr = cellrate_to_float(iadev->LineRate);
-                if (vcc->qos.txtp.pcr > 0)
-                   vc->acr = cellrate_to_float(vcc->qos.txtp.pcr);
-                IF_UBR(printk("UBR: txtp.pcr = 0x%x f_rate = 0x%x\n",
-                                             vcc->qos.txtp.max_pcr,vc->acr);)
+		if (vcc->qos.txtp.pcr > 0)
+		   vc->acr = cellrate_to_float(vcc->qos.txtp.pcr);
+		IF_UBR(printk("UBR: txtp.pcr = 0x%x f_rate = 0x%x\n",
+					     vcc->qos.txtp.max_pcr,vc->acr);)
 	}
 	else if (vcc->qos.txtp.traffic_class == ATM_ABR)
 	{       srv_cls_param_t srv_p;
 		IF_ABR(printk("Tx ABR VCC\n");)
-                init_abr_vc(iadev, &srv_p);
-                if (vcc->qos.txtp.pcr > 0)
-                   srv_p.pcr = vcc->qos.txtp.pcr;
-                if (vcc->qos.txtp.min_pcr > 0) {
-                   int tmpsum = iadev->sum_mcr+iadev->sum_cbr+vcc->qos.txtp.min_pcr;
-                   if (tmpsum > iadev->LineRate)
-                       return -EBUSY;
-                   srv_p.mcr = vcc->qos.txtp.min_pcr;
-                   iadev->sum_mcr += vcc->qos.txtp.min_pcr;
-                }
-                else srv_p.mcr = 0;
-                if (vcc->qos.txtp.icr)
-                   srv_p.icr = vcc->qos.txtp.icr;
-                if (vcc->qos.txtp.tbe)
-                   srv_p.tbe = vcc->qos.txtp.tbe;
-                if (vcc->qos.txtp.frtt)
-                   srv_p.frtt = vcc->qos.txtp.frtt;
-                if (vcc->qos.txtp.rif)
-                   srv_p.rif = vcc->qos.txtp.rif;
-                if (vcc->qos.txtp.rdf)
-                   srv_p.rdf = vcc->qos.txtp.rdf;
-                if (vcc->qos.txtp.nrm_pres)
-                   srv_p.nrm = vcc->qos.txtp.nrm;
-                if (vcc->qos.txtp.trm_pres)
-                   srv_p.trm = vcc->qos.txtp.trm;
-                if (vcc->qos.txtp.adtf_pres)
-                   srv_p.adtf = vcc->qos.txtp.adtf;
-                if (vcc->qos.txtp.cdf_pres)
-                   srv_p.cdf = vcc->qos.txtp.cdf;
-                if (srv_p.icr > srv_p.pcr)
-                   srv_p.icr = srv_p.pcr;
-                IF_ABR(printk("ABR:vcc->qos.txtp.max_pcr = %d  mcr = %d\n",
-                                                      srv_p.pcr, srv_p.mcr);)
+		init_abr_vc(iadev, &srv_p);
+		if (vcc->qos.txtp.pcr > 0)
+		   srv_p.pcr = vcc->qos.txtp.pcr;
+		if (vcc->qos.txtp.min_pcr > 0) {
+		   int tmpsum = iadev->sum_mcr+iadev->sum_cbr+vcc->qos.txtp.min_pcr;
+		   if (tmpsum > iadev->LineRate)
+		       return -EBUSY;
+		   srv_p.mcr = vcc->qos.txtp.min_pcr;
+		   iadev->sum_mcr += vcc->qos.txtp.min_pcr;
+		}
+		else srv_p.mcr = 0;
+		if (vcc->qos.txtp.icr)
+		   srv_p.icr = vcc->qos.txtp.icr;
+		if (vcc->qos.txtp.tbe)
+		   srv_p.tbe = vcc->qos.txtp.tbe;
+		if (vcc->qos.txtp.frtt)
+		   srv_p.frtt = vcc->qos.txtp.frtt;
+		if (vcc->qos.txtp.rif)
+		   srv_p.rif = vcc->qos.txtp.rif;
+		if (vcc->qos.txtp.rdf)
+		   srv_p.rdf = vcc->qos.txtp.rdf;
+		if (vcc->qos.txtp.nrm_pres)
+		   srv_p.nrm = vcc->qos.txtp.nrm;
+		if (vcc->qos.txtp.trm_pres)
+		   srv_p.trm = vcc->qos.txtp.trm;
+		if (vcc->qos.txtp.adtf_pres)
+		   srv_p.adtf = vcc->qos.txtp.adtf;
+		if (vcc->qos.txtp.cdf_pres)
+		   srv_p.cdf = vcc->qos.txtp.cdf;
+		if (srv_p.icr > srv_p.pcr)
+		   srv_p.icr = srv_p.pcr;
+		IF_ABR(printk("ABR:vcc->qos.txtp.max_pcr = %d  mcr = %d\n",
+						      srv_p.pcr, srv_p.mcr);)
 		ia_open_abr_vc(iadev, &srv_p, vcc, 1);
 	} else if (vcc->qos.txtp.traffic_class == ATM_CBR) {
-                if (iadev->phy_type & FE_25MBIT_PHY) {
-                    printk("IA:  CBR not support\n");
-                    return -EINVAL;
-                }
-                if (vcc->qos.txtp.max_pcr > iadev->LineRate) {
-                   IF_CBR(printk("PCR is not available\n");)
-                   return -1;
-                }
-                vc->type = CBR;
-                vc->status = CRC_APPEND;
-                if ((ret = ia_cbr_setup (iadev, vcc)) < 0) {
-                    return ret;
-                }
+		if (iadev->phy_type & FE_25MBIT_PHY) {
+		    printk("IA:  CBR not support\n");
+		    return -EINVAL;
+		}
+		if (vcc->qos.txtp.max_pcr > iadev->LineRate) {
+		   IF_CBR(printk("PCR is not available\n");)
+		   return -1;
+		}
+		vc->type = CBR;
+		vc->status = CRC_APPEND;
+		if ((ret = ia_cbr_setup (iadev, vcc)) < 0) {
+		    return ret;
+		}
        }
 	else
-           printk("iadev:  Non UBR, ABR and CBR traffic not supportedn");
+	   printk("iadev:  Non UBR, ABR and CBR traffic not supportedn");
 
-        iadev->testTable[vcc->vci]->vc_status |= VC_ACTIVE;
+	iadev->testTable[vcc->vci]->vc_status |= VC_ACTIVE;
 	IF_EVENT(printk("ia open_tx returning \n");)
 	return 0;
 }
@@ -1907,14 +1907,14 @@ static int tx_init(struct atm_dev *dev)
 	u_short *prq_start;
 	struct main_vc *vc;
 	struct ext_vc *evc;
-        u_short tmp16;
-        u32 vcsize_sel;
+	u_short tmp16;
+	u32 vcsize_sel;
 
 	iadev = INPH_IA_DEV(dev);
-        spin_lock_init(&iadev->tx_lock);
+	spin_lock_init(&iadev->tx_lock);
 
 	IF_INIT(printk("Tx MASK REG: 0x%0x\n",
-                                readw(iadev->seg_reg+SEG_MASK_REG));)
+				readw(iadev->seg_reg+SEG_MASK_REG));)
 
 	/* Allocate 4k (boundary aligned) bytes */
 	dle_addr = pci_alloc_consistent(iadev->pci, DLE_TOTAL_SIZE,
@@ -1934,9 +1934,9 @@ static int tx_init(struct atm_dev *dev)
 	writew(0xffff, iadev->seg_reg+SEG_MASK_REG);
 	writew(0, iadev->seg_reg+MODE_REG_0);
 	writew(RESET_SEG, iadev->seg_reg+SEG_COMMAND_REG);
-        iadev->MAIN_VC_TABLE_ADDR = iadev->seg_ram+MAIN_VC_TABLE*iadev->memSize;
-        iadev->EXT_VC_TABLE_ADDR = iadev->seg_ram+EXT_VC_TABLE*iadev->memSize;
-        iadev->ABR_SCHED_TABLE_ADDR=iadev->seg_ram+ABR_SCHED_TABLE*iadev->memSize;
+	iadev->MAIN_VC_TABLE_ADDR = iadev->seg_ram+MAIN_VC_TABLE*iadev->memSize;
+	iadev->EXT_VC_TABLE_ADDR = iadev->seg_ram+EXT_VC_TABLE*iadev->memSize;
+	iadev->ABR_SCHED_TABLE_ADDR=iadev->seg_ram+ABR_SCHED_TABLE*iadev->memSize;
 
 	/*
 	   Transmit side control memory map
@@ -1974,33 +1974,33 @@ static int tx_init(struct atm_dev *dev)
 		buf_desc_ptr++;
 		tx_pkt_start += iadev->tx_buf_sz;
 	}
-        iadev->tx_buf = kmalloc(iadev->num_tx_desc*sizeof(struct cpcs_trailer_desc), GFP_KERNEL);
-        if (!iadev->tx_buf) {
-            printk(KERN_ERR DEV_LABEL " couldn't get mem\n");
+	iadev->tx_buf = kmalloc(iadev->num_tx_desc*sizeof(struct cpcs_trailer_desc), GFP_KERNEL);
+	if (!iadev->tx_buf) {
+	    printk(KERN_ERR DEV_LABEL " couldn't get mem\n");
 	    goto err_free_dle;
-        }
+	}
        	for (i= 0; i< iadev->num_tx_desc; i++)
        	{
 	    struct cpcs_trailer *cpcs;
 
        	    cpcs = kmalloc(sizeof(*cpcs), GFP_KERNEL|GFP_DMA);
-            if(!cpcs) {
+	    if(!cpcs) {
 		printk(KERN_ERR DEV_LABEL " couldn't get freepage\n");
 		goto err_free_tx_bufs;
-            }
+	    }
 	    iadev->tx_buf[i].cpcs = cpcs;
 	    iadev->tx_buf[i].dma_addr = pci_map_single(iadev->pci,
 		cpcs, sizeof(*cpcs), PCI_DMA_TODEVICE);
-        }
-        iadev->desc_tbl = kmalloc(iadev->num_tx_desc *
-                                   sizeof(struct desc_tbl_t), GFP_KERNEL);
+	}
+	iadev->desc_tbl = kmalloc(iadev->num_tx_desc *
+				   sizeof(struct desc_tbl_t), GFP_KERNEL);
 	if (!iadev->desc_tbl) {
 		printk(KERN_ERR DEV_LABEL " couldn't get mem\n");
 		goto err_free_all_tx_bufs;
 	}
 
 	/* Communication Queues base address */
-        i = TX_COMP_Q * iadev->memSize;
+	i = TX_COMP_Q * iadev->memSize;
 	writew(i >> 16, iadev->seg_reg+SEG_QUEUE_BASE);
 
 	/* Transmit Complete Queue */
@@ -2008,8 +2008,8 @@ static int tx_init(struct atm_dev *dev)
 	writew(i, iadev->seg_reg+TCQ_RD_PTR);
 	writew(i+iadev->num_tx_desc*sizeof(u_short),iadev->seg_reg+TCQ_WR_PTR);
 	iadev->host_tcq_wr = i + iadev->num_tx_desc*sizeof(u_short);
-        writew(i+2 * iadev->num_tx_desc * sizeof(u_short),
-                                              iadev->seg_reg+TCQ_ED_ADR);
+	writew(i+2 * iadev->num_tx_desc * sizeof(u_short),
+					      iadev->seg_reg+TCQ_ED_ADR);
 	/* Fill the TCQ with all the free descriptors. */
 	tcq_st_adr = readw(iadev->seg_reg+TCQ_ST_ADR);
 	tcq_start = (u_short *)(iadev->seg_ram+tcq_st_adr);
@@ -2020,15 +2020,15 @@ static int tx_init(struct atm_dev *dev)
 	}
 
 	/* Packet Ready Queue */
-        i = PKT_RDY_Q * iadev->memSize;
+	i = PKT_RDY_Q * iadev->memSize;
 	writew(i, iadev->seg_reg+PRQ_ST_ADR);
 	writew(i+2 * iadev->num_tx_desc * sizeof(u_short),
-                                              iadev->seg_reg+PRQ_ED_ADR);
+					      iadev->seg_reg+PRQ_ED_ADR);
 	writew(i, iadev->seg_reg+PRQ_RD_PTR);
 	writew(i, iadev->seg_reg+PRQ_WR_PTR);
 
-        /* Load local copy of PRQ and TCQ ptrs */
-        iadev->ffL.prq_st = readw(iadev->seg_reg+PRQ_ST_ADR) & 0xffff;
+	/* Load local copy of PRQ and TCQ ptrs */
+	iadev->ffL.prq_st = readw(iadev->seg_reg+PRQ_ST_ADR) & 0xffff;
 	iadev->ffL.prq_ed = readw(iadev->seg_reg+PRQ_ED_ADR) & 0xffff;
  	iadev->ffL.prq_wr = readw(iadev->seg_reg+PRQ_WR_PTR) & 0xffff;
 
@@ -2046,37 +2046,37 @@ static int tx_init(struct atm_dev *dev)
 		prq_start++;
 	}
 	/* CBR Table */
-        IF_INIT(printk("Start CBR Init\n");)
+	IF_INIT(printk("Start CBR Init\n");)
 #if 1  /* for 1K VC board, CBR_PTR_BASE is 0 */
-        writew(0,iadev->seg_reg+CBR_PTR_BASE);
+	writew(0,iadev->seg_reg+CBR_PTR_BASE);
 #else /* Charlie's logic is wrong ? */
-        tmp16 = (iadev->seg_ram+CBR_SCHED_TABLE*iadev->memSize)>>17;
-        IF_INIT(printk("cbr_ptr_base = 0x%x ", tmp16);)
-        writew(tmp16,iadev->seg_reg+CBR_PTR_BASE);
+	tmp16 = (iadev->seg_ram+CBR_SCHED_TABLE*iadev->memSize)>>17;
+	IF_INIT(printk("cbr_ptr_base = 0x%x ", tmp16);)
+	writew(tmp16,iadev->seg_reg+CBR_PTR_BASE);
 #endif
 
-        IF_INIT(printk("value in register = 0x%x\n",
-                                   readw(iadev->seg_reg+CBR_PTR_BASE));)
-        tmp16 = (CBR_SCHED_TABLE*iadev->memSize) >> 1;
-        writew(tmp16, iadev->seg_reg+CBR_TAB_BEG);
-        IF_INIT(printk("cbr_tab_beg = 0x%x in reg = 0x%x \n", tmp16,
-                                        readw(iadev->seg_reg+CBR_TAB_BEG));)
-        writew(tmp16, iadev->seg_reg+CBR_TAB_END+1); // CBR_PTR;
-        tmp16 = (CBR_SCHED_TABLE*iadev->memSize + iadev->num_vc*6 - 2) >> 1;
-        writew(tmp16, iadev->seg_reg+CBR_TAB_END);
-        IF_INIT(printk("iadev->seg_reg = 0x%p CBR_PTR_BASE = 0x%x\n",
-               iadev->seg_reg, readw(iadev->seg_reg+CBR_PTR_BASE));)
-        IF_INIT(printk("CBR_TAB_BEG = 0x%x, CBR_TAB_END = 0x%x, CBR_PTR = 0x%x\n",
-          readw(iadev->seg_reg+CBR_TAB_BEG), readw(iadev->seg_reg+CBR_TAB_END),
-          readw(iadev->seg_reg+CBR_TAB_END+1));)
+	IF_INIT(printk("value in register = 0x%x\n",
+				   readw(iadev->seg_reg+CBR_PTR_BASE));)
+	tmp16 = (CBR_SCHED_TABLE*iadev->memSize) >> 1;
+	writew(tmp16, iadev->seg_reg+CBR_TAB_BEG);
+	IF_INIT(printk("cbr_tab_beg = 0x%x in reg = 0x%x \n", tmp16,
+					readw(iadev->seg_reg+CBR_TAB_BEG));)
+	writew(tmp16, iadev->seg_reg+CBR_TAB_END+1); // CBR_PTR;
+	tmp16 = (CBR_SCHED_TABLE*iadev->memSize + iadev->num_vc*6 - 2) >> 1;
+	writew(tmp16, iadev->seg_reg+CBR_TAB_END);
+	IF_INIT(printk("iadev->seg_reg = 0x%p CBR_PTR_BASE = 0x%x\n",
+	       iadev->seg_reg, readw(iadev->seg_reg+CBR_PTR_BASE));)
+	IF_INIT(printk("CBR_TAB_BEG = 0x%x, CBR_TAB_END = 0x%x, CBR_PTR = 0x%x\n",
+	  readw(iadev->seg_reg+CBR_TAB_BEG), readw(iadev->seg_reg+CBR_TAB_END),
+	  readw(iadev->seg_reg+CBR_TAB_END+1));)
 
-        /* Initialize the CBR Schedualing Table */
-        memset_io(iadev->seg_ram+CBR_SCHED_TABLE*iadev->memSize,
-                                                          0, iadev->num_vc*6);
-        iadev->CbrRemEntries = iadev->CbrTotEntries = iadev->num_vc*3;
-        iadev->CbrEntryPt = 0;
-        iadev->Granularity = MAX_ATM_155 / iadev->CbrTotEntries;
-        iadev->NumEnabledCBR = 0;
+	/* Initialize the CBR Schedualing Table */
+	memset_io(iadev->seg_ram+CBR_SCHED_TABLE*iadev->memSize,
+							  0, iadev->num_vc*6);
+	iadev->CbrRemEntries = iadev->CbrTotEntries = iadev->num_vc*3;
+	iadev->CbrEntryPt = 0;
+	iadev->Granularity = MAX_ATM_155 / iadev->CbrTotEntries;
+	iadev->NumEnabledCBR = 0;
 
 	/* UBR scheduling Table and wait queue */
 	/* initialize all bytes of UBR scheduler table and wait queue to 0
@@ -2087,23 +2087,23 @@ static int tx_init(struct atm_dev *dev)
 	   can be initialized by one memeset.
 	*/
 
-        vcsize_sel = 0;
-        i = 8*1024;
-        while (i != iadev->num_vc) {
-          i /= 2;
-          vcsize_sel++;
-        }
+	vcsize_sel = 0;
+	i = 8*1024;
+	while (i != iadev->num_vc) {
+	  i /= 2;
+	  vcsize_sel++;
+	}
 
-        i = MAIN_VC_TABLE * iadev->memSize;
-        writew(vcsize_sel | ((i >> 8) & 0xfff8),iadev->seg_reg+VCT_BASE);
-        i =  EXT_VC_TABLE * iadev->memSize;
-        writew((i >> 8) & 0xfffe, iadev->seg_reg+VCTE_BASE);
-        i = UBR_SCHED_TABLE * iadev->memSize;
-        writew((i & 0xffff) >> 11,  iadev->seg_reg+UBR_SBPTR_BASE);
-        i = UBR_WAIT_Q * iadev->memSize;
-        writew((i >> 7) & 0xffff,  iadev->seg_reg+UBRWQ_BASE);
+	i = MAIN_VC_TABLE * iadev->memSize;
+	writew(vcsize_sel | ((i >> 8) & 0xfff8),iadev->seg_reg+VCT_BASE);
+	i =  EXT_VC_TABLE * iadev->memSize;
+	writew((i >> 8) & 0xfffe, iadev->seg_reg+VCTE_BASE);
+	i = UBR_SCHED_TABLE * iadev->memSize;
+	writew((i & 0xffff) >> 11,  iadev->seg_reg+UBR_SBPTR_BASE);
+	i = UBR_WAIT_Q * iadev->memSize;
+	writew((i >> 7) & 0xffff,  iadev->seg_reg+UBRWQ_BASE);
  	memset((caddr_t)(iadev->seg_ram+UBR_SCHED_TABLE*iadev->memSize),
-                                                       0, iadev->num_vc*8);
+						       0, iadev->num_vc*8);
 	/* ABR scheduling Table(0x5000-0x57ff) and wait queue(0x5800-0x5fff)*/
 	/* initialize all bytes of ABR scheduler table and wait queue to 0
 		- SCHEDSZ is 1K (# of entries).
@@ -2112,31 +2112,31 @@ static int tx_init(struct atm_dev *dev)
 	   since the table and wait queues are contiguous, all the bytes
 	   can be initialized by one memeset.
 	*/
-        i = ABR_SCHED_TABLE * iadev->memSize;
-        writew((i >> 11) & 0xffff, iadev->seg_reg+ABR_SBPTR_BASE);
-        i = ABR_WAIT_Q * iadev->memSize;
-        writew((i >> 7) & 0xffff, iadev->seg_reg+ABRWQ_BASE);
+	i = ABR_SCHED_TABLE * iadev->memSize;
+	writew((i >> 11) & 0xffff, iadev->seg_reg+ABR_SBPTR_BASE);
+	i = ABR_WAIT_Q * iadev->memSize;
+	writew((i >> 7) & 0xffff, iadev->seg_reg+ABRWQ_BASE);
 
-        i = ABR_SCHED_TABLE*iadev->memSize;
+	i = ABR_SCHED_TABLE*iadev->memSize;
 	memset((caddr_t)(iadev->seg_ram+i),  0, iadev->num_vc*4);
 	vc = (struct main_vc *)iadev->MAIN_VC_TABLE_ADDR;
 	evc = (struct ext_vc *)iadev->EXT_VC_TABLE_ADDR;
-        iadev->testTable = kmalloc(sizeof(long)*iadev->num_vc, GFP_KERNEL);
-        if (!iadev->testTable) {
-           printk("Get freepage  failed\n");
+	iadev->testTable = kmalloc(sizeof(long)*iadev->num_vc, GFP_KERNEL);
+	if (!iadev->testTable) {
+	   printk("Get freepage  failed\n");
 	   goto err_free_desc_tbl;
-        }
+	}
 	for(i=0; i<iadev->num_vc; i++)
 	{
 		memset((caddr_t)vc, 0, sizeof(*vc));
 		memset((caddr_t)evc, 0, sizeof(*evc));
-                iadev->testTable[i] = kmalloc(sizeof(struct testTable_t),
+		iadev->testTable[i] = kmalloc(sizeof(struct testTable_t),
 						GFP_KERNEL);
 		if (!iadev->testTable[i])
 			goto err_free_test_tables;
-              	iadev->testTable[i]->lastTime = 0;
+	      	iadev->testTable[i]->lastTime = 0;
  		iadev->testTable[i]->fract = 0;
-                iadev->testTable[i]->vc_status = VC_UBR;
+		iadev->testTable[i]->vc_status = VC_UBR;
 		vc++;
 		evc++;
 	}
@@ -2144,30 +2144,30 @@ static int tx_init(struct atm_dev *dev)
 	/* Other Initialization */
 
 	/* Max Rate Register */
-        if (iadev->phy_type & FE_25MBIT_PHY) {
+	if (iadev->phy_type & FE_25MBIT_PHY) {
 	   writew(RATE25, iadev->seg_reg+MAXRATE);
 	   writew((UBR_EN | (0x23 << 2)), iadev->seg_reg+STPARMS);
-        }
-        else {
+	}
+	else {
 	   writew(cellrate_to_float(iadev->LineRate),iadev->seg_reg+MAXRATE);
 	   writew((UBR_EN | ABR_EN | (0x23 << 2)), iadev->seg_reg+STPARMS);
-        }
+	}
 	/* Set Idle Header Reigisters to be sure */
 	writew(0, iadev->seg_reg+IDLEHEADHI);
 	writew(0, iadev->seg_reg+IDLEHEADLO);
 
 	/* Program ABR UBR Priority Register  as  PRI_ABR_UBR_EQUAL */
-        writew(0xaa00, iadev->seg_reg+ABRUBR_ARB);
+	writew(0xaa00, iadev->seg_reg+ABRUBR_ARB);
 
-        iadev->close_pending = 0;
-        init_waitqueue_head(&iadev->close_wait);
-        init_waitqueue_head(&iadev->timeout_wait);
+	iadev->close_pending = 0;
+	init_waitqueue_head(&iadev->close_wait);
+	init_waitqueue_head(&iadev->timeout_wait);
 	skb_queue_head_init(&iadev->tx_dma_q);
 	ia_init_rtn_q(&iadev->tx_return_q);
 
 	/* RM Cell Protocol ID and Message Type */
 	writew(RM_TYPE_4_0, iadev->seg_reg+RM_TYPE);
-        skb_queue_head_init (&iadev->tx_backlog);
+	skb_queue_head_init (&iadev->tx_backlog);
 
 	/* Mode Register 1 */
 	writew(MODE_REG_1_VAL, iadev->seg_reg+MODE_REG_1);
@@ -2179,10 +2179,10 @@ static int tx_init(struct atm_dev *dev)
 	readw(iadev->seg_reg+SEG_INTR_STATUS_REG);
 
 	/* Interrupt Mask Reg- don't mask TCQ_NOT_EMPTY interrupt generation */
-        writew(~(TRANSMIT_DONE | TCQ_NOT_EMPTY), iadev->seg_reg+SEG_MASK_REG);
-        writew(TRANSMIT_DONE, iadev->seg_reg+SEG_INTR_STATUS_REG);
-        iadev->tx_pkt_cnt = 0;
-        iadev->rate_limit = iadev->LineRate / 3;
+	writew(~(TRANSMIT_DONE | TCQ_NOT_EMPTY), iadev->seg_reg+SEG_MASK_REG);
+	writew(TRANSMIT_DONE, iadev->seg_reg+SEG_INTR_STATUS_REG);
+	iadev->tx_pkt_cnt = 0;
+	iadev->rate_limit = iadev->LineRate / 3;
 
 	return 0;
 
@@ -2222,7 +2222,7 @@ static irqreturn_t ia_int(int irq, void *dev_id)
    while( (status = readl(iadev->reg+IPHASE5575_BUS_STATUS_REG) & 0x7f))
    {
 	handled = 1;
-        IF_EVENT(printk("ia_int: status = 0x%x\n", status);)
+	IF_EVENT(printk("ia_int: status = 0x%x\n", status);)
 	if (status & STAT_REASSINT)
 	{
 	   /* do something */
@@ -2238,7 +2238,7 @@ static irqreturn_t ia_int(int irq, void *dev_id)
 	if (status & STAT_SEGINT)
 	{
 	   /* do something */
-           IF_EVENT(printk("IA: tx_intr \n");)
+	   IF_EVENT(printk("IA: tx_intr \n");)
 	   tx_intr(dev);
 	}
 	if (status & STAT_DLETINT)
@@ -2248,8 +2248,8 @@ static irqreturn_t ia_int(int irq, void *dev_id)
 	}
 	if (status & (STAT_FEINT | STAT_ERRINT | STAT_MARKINT))
 	{
-           if (status & STAT_FEINT)
-               ia_frontend_intr(iadev);
+	   if (status & STAT_FEINT)
+	       ia_frontend_intr(iadev);
 	}
    }
    return IRQ_RETVAL(handled);
@@ -2332,19 +2332,19 @@ static int __devinit ia_init(struct atm_dev *dev)
 
 	iadev->pci_map_size = pci_resource_len(iadev->pci, 0);
 
-        if (iadev->pci_map_size == 0x100000){
-          iadev->num_vc = 4096;
+	if (iadev->pci_map_size == 0x100000){
+	  iadev->num_vc = 4096;
 	  dev->ci_range.vci_bits = NR_VCI_4K_LD;
-          iadev->memSize = 4;
-        }
-        else if (iadev->pci_map_size == 0x40000) {
-          iadev->num_vc = 1024;
-          iadev->memSize = 1;
-        }
-        else {
-           printk("Unknown pci_map_size = 0x%x\n", iadev->pci_map_size);
-           return -EINVAL;
-        }
+	  iadev->memSize = 4;
+	}
+	else if (iadev->pci_map_size == 0x40000) {
+	  iadev->num_vc = 1024;
+	  iadev->memSize = 1;
+	}
+	else {
+	   printk("Unknown pci_map_size = 0x%x\n", iadev->pci_map_size);
+	   return -EINVAL;
+	}
 	IF_INIT(printk (DEV_LABEL "map size: %i\n", iadev->pci_map_size);)
 
 	/* enable bus mastering */
@@ -2388,9 +2388,9 @@ static int __devinit ia_init(struct atm_dev *dev)
 
 	/* lets print out the above */
 	IF_INIT(printk("Base addrs: %p %p %p \n %p %p %p %p\n",
-          iadev->reg,iadev->seg_reg,iadev->reass_reg,
-          iadev->phy, iadev->ram, iadev->seg_ram,
-          iadev->reass_ram);)
+	  iadev->reg,iadev->seg_reg,iadev->reass_reg,
+	  iadev->phy, iadev->ram, iadev->seg_ram,
+	  iadev->reass_ram);)
 
 	/* lets try reading the MAC address */
 	error = get_esi(dev);
@@ -2398,23 +2398,23 @@ static int __devinit ia_init(struct atm_dev *dev)
 	  iounmap(iadev->base);
 	  return error;
 	}
-        printk("IA: ");
+	printk("IA: ");
 	for (i=0; i < ESI_LEN; i++)
-                printk("%s%02X",i ? "-" : "",dev->esi[i]);
-        printk("\n");
+		printk("%s%02X",i ? "-" : "",dev->esi[i]);
+	printk("\n");
 
-        /* reset SAR */
-        if (reset_sar(dev)) {
+	/* reset SAR */
+	if (reset_sar(dev)) {
 	   iounmap(iadev->base);
-           printk("IA: reset SAR fail, please try again\n");
-           return 1;
-        }
+	   printk("IA: reset SAR fail, please try again\n");
+	   return 1;
+	}
 	return 0;
 }
 
 static void ia_update_stats(IADEV *iadev) {
     if (!iadev->carrier_detect)
-        return;
+	return;
     iadev->rx_cell_cnt += readw(iadev->reass_reg+CELL_CTR0)&0xffff;
     iadev->rx_cell_cnt += (readw(iadev->reass_reg+CELL_CTR1) & 0xffff) << 16;
     iadev->drop_rxpkt +=  readw(iadev->reass_reg + DRP_PKT_CNTR ) & 0xffff;
@@ -2427,29 +2427,29 @@ static void ia_update_stats(IADEV *iadev) {
 static void ia_led_timer(unsigned long arg) {
  	unsigned long flags;
   	static u_char blinking[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-        u_char i;
-        static u32 ctrl_reg;
-        for (i = 0; i < iadev_count; i++) {
-           if (ia_dev[i]) {
+	u_char i;
+	static u32 ctrl_reg;
+	for (i = 0; i < iadev_count; i++) {
+	   if (ia_dev[i]) {
 	      ctrl_reg = readl(ia_dev[i]->reg+IPHASE5575_BUS_CONTROL_REG);
 	      if (blinking[i] == 0) {
 		 blinking[i]++;
-                 ctrl_reg &= (~CTRL_LED);
-                 writel(ctrl_reg, ia_dev[i]->reg+IPHASE5575_BUS_CONTROL_REG);
-                 ia_update_stats(ia_dev[i]);
-              }
-              else {
+		 ctrl_reg &= (~CTRL_LED);
+		 writel(ctrl_reg, ia_dev[i]->reg+IPHASE5575_BUS_CONTROL_REG);
+		 ia_update_stats(ia_dev[i]);
+	      }
+	      else {
 		 blinking[i] = 0;
 		 ctrl_reg |= CTRL_LED;
-                 writel(ctrl_reg, ia_dev[i]->reg+IPHASE5575_BUS_CONTROL_REG);
-                 spin_lock_irqsave(&ia_dev[i]->tx_lock, flags);
-                 if (ia_dev[i]->close_pending)
-                    wake_up(&ia_dev[i]->close_wait);
-                 ia_tx_poll(ia_dev[i]);
-                 spin_unlock_irqrestore(&ia_dev[i]->tx_lock, flags);
-              }
-           }
-        }
+		 writel(ctrl_reg, ia_dev[i]->reg+IPHASE5575_BUS_CONTROL_REG);
+		 spin_lock_irqsave(&ia_dev[i]->tx_lock, flags);
+		 if (ia_dev[i]->close_pending)
+		    wake_up(&ia_dev[i]->close_wait);
+		 ia_tx_poll(ia_dev[i]);
+		 spin_unlock_irqrestore(&ia_dev[i]->tx_lock, flags);
+	      }
+	   }
+	}
 	mod_timer(&ia_timer, jiffies + HZ / 4);
  	return;
 }
@@ -2500,30 +2500,30 @@ static int __devinit ia_start(struct atm_dev *dev)
 	u32 ctrl_reg;
 	IF_EVENT(printk(">ia_start\n");)
 	iadev = INPH_IA_DEV(dev);
-        if (request_irq(iadev->irq, &ia_int, IRQF_SHARED, DEV_LABEL, dev)) {
-                printk(KERN_ERR DEV_LABEL "(itf %d): IRQ%d is already in use\n",
-                    dev->number, iadev->irq);
+	if (request_irq(iadev->irq, &ia_int, IRQF_SHARED, DEV_LABEL, dev)) {
+		printk(KERN_ERR DEV_LABEL "(itf %d): IRQ%d is already in use\n",
+		    dev->number, iadev->irq);
 		error = -EAGAIN;
 		goto err_out;
-        }
-        /* @@@ should release IRQ on error */
+	}
+	/* @@@ should release IRQ on error */
 	/* enabling memory + master */
-        if ((error = pci_write_config_word(iadev->pci,
+	if ((error = pci_write_config_word(iadev->pci,
 				PCI_COMMAND,
 				PCI_COMMAND_MEMORY | PCI_COMMAND_MASTER )))
 	{
-                printk(KERN_ERR DEV_LABEL "(itf %d): can't enable memory+"
-                    "master (0x%x)\n",dev->number, error);
+		printk(KERN_ERR DEV_LABEL "(itf %d): can't enable memory+"
+		    "master (0x%x)\n",dev->number, error);
 		error = -EIO;
 		goto err_free_irq;
-        }
+	}
 	udelay(10);
 
 	/* Maybe we should reset the front end, initialize Bus Interface Control
 		Registers and see. */
 
 	IF_INIT(printk("Bus ctrl reg: %08x\n",
-                            readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG));)
+			    readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG));)
 	ctrl_reg = readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG);
 	ctrl_reg = (ctrl_reg & (CTRL_LED | CTRL_FE_RST))
 			| CTRL_B8
@@ -2543,11 +2543,11 @@ static int __devinit ia_start(struct atm_dev *dev)
        writel(ctrl_reg, iadev->reg+IPHASE5575_BUS_CONTROL_REG);
 
 	IF_INIT(printk("Bus ctrl reg after initializing: %08x\n",
-                           readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG));
+			   readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG));
 	   printk("Bus status reg after init: %08x\n",
-                            readl(iadev->reg+IPHASE5575_BUS_STATUS_REG));)
+			    readl(iadev->reg+IPHASE5575_BUS_STATUS_REG));)
 
-        ia_hw_type(iadev);
+	ia_hw_type(iadev);
 	error = tx_init(dev);
 	if (error)
 		goto err_free_irq;
@@ -2558,18 +2558,18 @@ static int __devinit ia_start(struct atm_dev *dev)
 	ctrl_reg = readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG);
        	writel(ctrl_reg | CTRL_FE_RST, iadev->reg+IPHASE5575_BUS_CONTROL_REG);
 	IF_INIT(printk("Bus ctrl reg after initializing: %08x\n",
-                               readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG));)
-        phy = 0; /* resolve compiler complaint */
-        IF_INIT (
+			       readl(iadev->reg+IPHASE5575_BUS_CONTROL_REG));)
+	phy = 0; /* resolve compiler complaint */
+	IF_INIT (
 	if ((phy=ia_phy_get(dev,0)) == 0x30)
 		printk("IA: pm5346,rev.%d\n",phy&0x0f);
 	else
 		printk("IA: utopia,rev.%0x\n",phy);)
 
 	if (iadev->phy_type &  FE_25MBIT_PHY)
-           ia_mb25_init(iadev);
+	   ia_mb25_init(iadev);
 	else if (iadev->phy_type & (FE_DS3_PHY | FE_E3_PHY))
-           ia_suni_pm7345_init(iadev);
+	   ia_suni_pm7345_init(iadev);
 	else {
 		error = suni_init(dev);
 		if (error)
@@ -2597,86 +2597,86 @@ err_out:
 static void ia_close(struct atm_vcc *vcc)
 {
 	DEFINE_WAIT(wait);
-        u16 *vc_table;
-        IADEV *iadev;
-        struct ia_vcc *ia_vcc;
-        struct sk_buff *skb = NULL;
-        struct sk_buff_head tmp_tx_backlog, tmp_vcc_backlog;
-        unsigned long closetime, flags;
+	u16 *vc_table;
+	IADEV *iadev;
+	struct ia_vcc *ia_vcc;
+	struct sk_buff *skb = NULL;
+	struct sk_buff_head tmp_tx_backlog, tmp_vcc_backlog;
+	unsigned long closetime, flags;
 
-        iadev = INPH_IA_DEV(vcc->dev);
-        ia_vcc = INPH_IA_VCC(vcc);
+	iadev = INPH_IA_DEV(vcc->dev);
+	ia_vcc = INPH_IA_VCC(vcc);
 	if (!ia_vcc) return;
 
-        IF_EVENT(printk("ia_close: ia_vcc->vc_desc_cnt = %d  vci = %d\n",
-                                              ia_vcc->vc_desc_cnt,vcc->vci);)
+	IF_EVENT(printk("ia_close: ia_vcc->vc_desc_cnt = %d  vci = %d\n",
+					      ia_vcc->vc_desc_cnt,vcc->vci);)
 	clear_bit(ATM_VF_READY,&vcc->flags);
-        skb_queue_head_init (&tmp_tx_backlog);
-        skb_queue_head_init (&tmp_vcc_backlog);
-        if (vcc->qos.txtp.traffic_class != ATM_NONE) {
-           iadev->close_pending++;
+	skb_queue_head_init (&tmp_tx_backlog);
+	skb_queue_head_init (&tmp_vcc_backlog);
+	if (vcc->qos.txtp.traffic_class != ATM_NONE) {
+	   iadev->close_pending++;
 	   prepare_to_wait(&iadev->timeout_wait, &wait, TASK_UNINTERRUPTIBLE);
 	   schedule_timeout(50);
 	   finish_wait(&iadev->timeout_wait, &wait);
-           spin_lock_irqsave(&iadev->tx_lock, flags);
-           while((skb = skb_dequeue(&iadev->tx_backlog))) {
-              if (ATM_SKB(skb)->vcc == vcc){
-                 if (vcc->pop) vcc->pop(vcc, skb);
-                 else dev_kfree_skb_any(skb);
-              }
-              else
-                 skb_queue_tail(&tmp_tx_backlog, skb);
-           }
-           while((skb = skb_dequeue(&tmp_tx_backlog)))
-             skb_queue_tail(&iadev->tx_backlog, skb);
-           IF_EVENT(printk("IA TX Done decs_cnt = %d\n", ia_vcc->vc_desc_cnt);)
-           closetime = 300000 / ia_vcc->pcr;
-           if (closetime == 0)
-              closetime = 1;
-           spin_unlock_irqrestore(&iadev->tx_lock, flags);
-           wait_event_timeout(iadev->close_wait, (ia_vcc->vc_desc_cnt <= 0), closetime);
-           spin_lock_irqsave(&iadev->tx_lock, flags);
-           iadev->close_pending--;
-           iadev->testTable[vcc->vci]->lastTime = 0;
-           iadev->testTable[vcc->vci]->fract = 0;
-           iadev->testTable[vcc->vci]->vc_status = VC_UBR;
-           if (vcc->qos.txtp.traffic_class == ATM_ABR) {
-              if (vcc->qos.txtp.min_pcr > 0)
-                 iadev->sum_mcr -= vcc->qos.txtp.min_pcr;
-           }
-           if (vcc->qos.txtp.traffic_class == ATM_CBR) {
-              ia_vcc = INPH_IA_VCC(vcc);
-              iadev->sum_mcr -= ia_vcc->NumCbrEntry*iadev->Granularity;
-              ia_cbrVc_close (vcc);
-           }
-           spin_unlock_irqrestore(&iadev->tx_lock, flags);
-        }
+	   spin_lock_irqsave(&iadev->tx_lock, flags);
+	   while((skb = skb_dequeue(&iadev->tx_backlog))) {
+	      if (ATM_SKB(skb)->vcc == vcc){
+		 if (vcc->pop) vcc->pop(vcc, skb);
+		 else dev_kfree_skb_any(skb);
+	      }
+	      else
+		 skb_queue_tail(&tmp_tx_backlog, skb);
+	   }
+	   while((skb = skb_dequeue(&tmp_tx_backlog)))
+	     skb_queue_tail(&iadev->tx_backlog, skb);
+	   IF_EVENT(printk("IA TX Done decs_cnt = %d\n", ia_vcc->vc_desc_cnt);)
+	   closetime = 300000 / ia_vcc->pcr;
+	   if (closetime == 0)
+	      closetime = 1;
+	   spin_unlock_irqrestore(&iadev->tx_lock, flags);
+	   wait_event_timeout(iadev->close_wait, (ia_vcc->vc_desc_cnt <= 0), closetime);
+	   spin_lock_irqsave(&iadev->tx_lock, flags);
+	   iadev->close_pending--;
+	   iadev->testTable[vcc->vci]->lastTime = 0;
+	   iadev->testTable[vcc->vci]->fract = 0;
+	   iadev->testTable[vcc->vci]->vc_status = VC_UBR;
+	   if (vcc->qos.txtp.traffic_class == ATM_ABR) {
+	      if (vcc->qos.txtp.min_pcr > 0)
+		 iadev->sum_mcr -= vcc->qos.txtp.min_pcr;
+	   }
+	   if (vcc->qos.txtp.traffic_class == ATM_CBR) {
+	      ia_vcc = INPH_IA_VCC(vcc);
+	      iadev->sum_mcr -= ia_vcc->NumCbrEntry*iadev->Granularity;
+	      ia_cbrVc_close (vcc);
+	   }
+	   spin_unlock_irqrestore(&iadev->tx_lock, flags);
+	}
 
-        if (vcc->qos.rxtp.traffic_class != ATM_NONE) {
-           // reset reass table
-           vc_table = (u16 *)(iadev->reass_ram+REASS_TABLE*iadev->memSize);
-           vc_table += vcc->vci;
-           *vc_table = NO_AAL5_PKT;
-           // reset vc table
-           vc_table = (u16 *)(iadev->reass_ram+RX_VC_TABLE*iadev->memSize);
-           vc_table += vcc->vci;
-           *vc_table = (vcc->vci << 6) | 15;
-           if (vcc->qos.rxtp.traffic_class == ATM_ABR) {
-              struct abr_vc_table __iomem *abr_vc_table =
-                                (iadev->reass_ram+ABR_VC_TABLE*iadev->memSize);
-              abr_vc_table +=  vcc->vci;
-              abr_vc_table->rdf = 0x0003;
-              abr_vc_table->air = 0x5eb1;
-           }
-           // Drain the packets
-           rx_dle_intr(vcc->dev);
-           iadev->rx_open[vcc->vci] = NULL;
-        }
+	if (vcc->qos.rxtp.traffic_class != ATM_NONE) {
+	   // reset reass table
+	   vc_table = (u16 *)(iadev->reass_ram+REASS_TABLE*iadev->memSize);
+	   vc_table += vcc->vci;
+	   *vc_table = NO_AAL5_PKT;
+	   // reset vc table
+	   vc_table = (u16 *)(iadev->reass_ram+RX_VC_TABLE*iadev->memSize);
+	   vc_table += vcc->vci;
+	   *vc_table = (vcc->vci << 6) | 15;
+	   if (vcc->qos.rxtp.traffic_class == ATM_ABR) {
+	      struct abr_vc_table __iomem *abr_vc_table =
+				(iadev->reass_ram+ABR_VC_TABLE*iadev->memSize);
+	      abr_vc_table +=  vcc->vci;
+	      abr_vc_table->rdf = 0x0003;
+	      abr_vc_table->air = 0x5eb1;
+	   }
+	   // Drain the packets
+	   rx_dle_intr(vcc->dev);
+	   iadev->rx_open[vcc->vci] = NULL;
+	}
 	kfree(INPH_IA_VCC(vcc));
-        ia_vcc = NULL;
-        vcc->dev_data = NULL;
-        clear_bit(ATM_VF_ADDR,&vcc->flags);
-        return;
+	ia_vcc = NULL;
+	vcc->dev_data = NULL;
+	clear_bit(ATM_VF_ADDR,&vcc->flags);
+	return;
 }
 
 static int ia_open(struct atm_vcc *vcc)
@@ -2696,7 +2696,7 @@ static int ia_open(struct atm_vcc *vcc)
 	if (vcc->qos.aal != ATM_AAL5)
 		return -EINVAL;
 	IF_EVENT(printk(DEV_LABEL "(itf %d): open %d.%d\n",
-                                 vcc->dev->number, vcc->vpi, vcc->vci);)
+				 vcc->dev->number, vcc->vpi, vcc->vci);)
 
 	/* Device dependent initialization */
 	ia_vcc = kmalloc(sizeof(*ia_vcc), GFP_KERNEL);
@@ -2720,14 +2720,14 @@ static int ia_open(struct atm_vcc *vcc)
 	set_bit(ATM_VF_READY,&vcc->flags);
 
 #if 0
-        {
-           static u8 first = 1;
-           if (first) {
-              ia_timer.expires = jiffies + 3*HZ;
-              add_timer(&ia_timer);
-              first = 0;
-           }
-        }
+	{
+	   static u8 first = 1;
+	   if (first) {
+	      ia_timer.expires = jiffies + 3*HZ;
+	      add_timer(&ia_timer);
+	      first = 0;
+	   }
+	}
 #endif
 	IF_EVENT(printk("ia open returning\n");)
 	return 0;
@@ -2753,7 +2753,7 @@ static int ia_ioctl(struct atm_dev *dev, unsigned int cmd, void __user *arg)
    if (copy_from_user(&ia_cmds, arg, sizeof ia_cmds)) return -EFAULT;
    board = ia_cmds.status;
    if ((board < 0) || (board > iadev_count))
-         board = 0;
+	 board = 0;
    iadev = ia_dev[board];
    switch (ia_cmds.cmd) {
    case MEMDUMP:
@@ -2762,108 +2762,108 @@ static int ia_ioctl(struct atm_dev *dev, unsigned int cmd, void __user *arg)
        	  case MEMDUMP_DEV:
 	     if (!capable(CAP_NET_ADMIN)) return -EPERM;
 	     if (copy_to_user(ia_cmds.buf, iadev, sizeof(IADEV)))
-                return -EFAULT;
-             ia_cmds.status = 0;
-             break;
-          case MEMDUMP_SEGREG:
+		return -EFAULT;
+	     ia_cmds.status = 0;
+	     break;
+	  case MEMDUMP_SEGREG:
 	     if (!capable(CAP_NET_ADMIN)) return -EPERM;
-             tmps = (u16 __user *)ia_cmds.buf;
-             for(i=0; i<0x80; i+=2, tmps++)
-                if(put_user((u16)(readl(iadev->seg_reg+i) & 0xffff), tmps)) return -EFAULT;
-             ia_cmds.status = 0;
-             ia_cmds.len = 0x80;
-             break;
-          case MEMDUMP_REASSREG:
+	     tmps = (u16 __user *)ia_cmds.buf;
+	     for(i=0; i<0x80; i+=2, tmps++)
+		if(put_user((u16)(readl(iadev->seg_reg+i) & 0xffff), tmps)) return -EFAULT;
+	     ia_cmds.status = 0;
+	     ia_cmds.len = 0x80;
+	     break;
+	  case MEMDUMP_REASSREG:
 	     if (!capable(CAP_NET_ADMIN)) return -EPERM;
-             tmps = (u16 __user *)ia_cmds.buf;
-             for(i=0; i<0x80; i+=2, tmps++)
-                if(put_user((u16)(readl(iadev->reass_reg+i) & 0xffff), tmps)) return -EFAULT;
-             ia_cmds.status = 0;
-             ia_cmds.len = 0x80;
-             break;
-          case MEMDUMP_FFL:
-          {
-             ia_regs_t       *regs_local;
-             ffredn_t        *ffL;
-             rfredn_t        *rfL;
+	     tmps = (u16 __user *)ia_cmds.buf;
+	     for(i=0; i<0x80; i+=2, tmps++)
+		if(put_user((u16)(readl(iadev->reass_reg+i) & 0xffff), tmps)) return -EFAULT;
+	     ia_cmds.status = 0;
+	     ia_cmds.len = 0x80;
+	     break;
+	  case MEMDUMP_FFL:
+	  {
+	     ia_regs_t       *regs_local;
+	     ffredn_t        *ffL;
+	     rfredn_t        *rfL;
 
 	     if (!capable(CAP_NET_ADMIN)) return -EPERM;
 	     regs_local = kmalloc(sizeof(*regs_local), GFP_KERNEL);
 	     if (!regs_local) return -ENOMEM;
 	     ffL = &regs_local->ffredn;
 	     rfL = &regs_local->rfredn;
-             /* Copy real rfred registers into the local copy */
+	     /* Copy real rfred registers into the local copy */
  	     for (i=0; i<(sizeof (rfredn_t))/4; i++)
-                ((u_int *)rfL)[i] = readl(iadev->reass_reg + i) & 0xffff;
-             	/* Copy real ffred registers into the local copy */
+		((u_int *)rfL)[i] = readl(iadev->reass_reg + i) & 0xffff;
+	     	/* Copy real ffred registers into the local copy */
 	     for (i=0; i<(sizeof (ffredn_t))/4; i++)
-                ((u_int *)ffL)[i] = readl(iadev->seg_reg + i) & 0xffff;
+		((u_int *)ffL)[i] = readl(iadev->seg_reg + i) & 0xffff;
 
-             if (copy_to_user(ia_cmds.buf, regs_local,sizeof(ia_regs_t))) {
-                kfree(regs_local);
-                return -EFAULT;
-             }
-             kfree(regs_local);
-             printk("Board %d registers dumped\n", board);
-             ia_cmds.status = 0;
+	     if (copy_to_user(ia_cmds.buf, regs_local,sizeof(ia_regs_t))) {
+		kfree(regs_local);
+		return -EFAULT;
+	     }
+	     kfree(regs_local);
+	     printk("Board %d registers dumped\n", board);
+	     ia_cmds.status = 0;
 	 }
     	     break;
-         case READ_REG:
-         {
+	 case READ_REG:
+	 {
 	     if (!capable(CAP_NET_ADMIN)) return -EPERM;
-             desc_dbg(iadev);
-             ia_cmds.status = 0;
-         }
-             break;
-         case 0x6:
-         {
-             ia_cmds.status = 0;
-             printk("skb = 0x%lx\n", (long)skb_peek(&iadev->tx_backlog));
-             printk("rtn_q: 0x%lx\n",(long)ia_deque_rtn_q(&iadev->tx_return_q));
-         }
-             break;
-         case 0x8:
-         {
-             struct k_sonet_stats *stats;
-             stats = &PRIV(_ia_dev[board])->sonet_stats;
-             printk("section_bip: %d\n", atomic_read(&stats->section_bip));
-             printk("line_bip   : %d\n", atomic_read(&stats->line_bip));
-             printk("path_bip   : %d\n", atomic_read(&stats->path_bip));
-             printk("line_febe  : %d\n", atomic_read(&stats->line_febe));
-             printk("path_febe  : %d\n", atomic_read(&stats->path_febe));
-             printk("corr_hcs   : %d\n", atomic_read(&stats->corr_hcs));
-             printk("uncorr_hcs : %d\n", atomic_read(&stats->uncorr_hcs));
-             printk("tx_cells   : %d\n", atomic_read(&stats->tx_cells));
-             printk("rx_cells   : %d\n", atomic_read(&stats->rx_cells));
-         }
-            ia_cmds.status = 0;
-            break;
-         case 0x9:
+	     desc_dbg(iadev);
+	     ia_cmds.status = 0;
+	 }
+	     break;
+	 case 0x6:
+	 {
+	     ia_cmds.status = 0;
+	     printk("skb = 0x%lx\n", (long)skb_peek(&iadev->tx_backlog));
+	     printk("rtn_q: 0x%lx\n",(long)ia_deque_rtn_q(&iadev->tx_return_q));
+	 }
+	     break;
+	 case 0x8:
+	 {
+	     struct k_sonet_stats *stats;
+	     stats = &PRIV(_ia_dev[board])->sonet_stats;
+	     printk("section_bip: %d\n", atomic_read(&stats->section_bip));
+	     printk("line_bip   : %d\n", atomic_read(&stats->line_bip));
+	     printk("path_bip   : %d\n", atomic_read(&stats->path_bip));
+	     printk("line_febe  : %d\n", atomic_read(&stats->line_febe));
+	     printk("path_febe  : %d\n", atomic_read(&stats->path_febe));
+	     printk("corr_hcs   : %d\n", atomic_read(&stats->corr_hcs));
+	     printk("uncorr_hcs : %d\n", atomic_read(&stats->uncorr_hcs));
+	     printk("tx_cells   : %d\n", atomic_read(&stats->tx_cells));
+	     printk("rx_cells   : %d\n", atomic_read(&stats->rx_cells));
+	 }
+	    ia_cmds.status = 0;
+	    break;
+	 case 0x9:
 	    if (!capable(CAP_NET_ADMIN)) return -EPERM;
-            for (i = 1; i <= iadev->num_rx_desc; i++)
-               free_desc(_ia_dev[board], i);
-            writew( ~(RX_FREEQ_EMPT | RX_EXCP_RCVD),
-                                            iadev->reass_reg+REASS_MASK_REG);
-            iadev->rxing = 1;
+	    for (i = 1; i <= iadev->num_rx_desc; i++)
+	       free_desc(_ia_dev[board], i);
+	    writew( ~(RX_FREEQ_EMPT | RX_EXCP_RCVD),
+					    iadev->reass_reg+REASS_MASK_REG);
+	    iadev->rxing = 1;
 
-            ia_cmds.status = 0;
-            break;
+	    ia_cmds.status = 0;
+	    break;
 
-         case 0xb:
+	 case 0xb:
 	    if (!capable(CAP_NET_ADMIN)) return -EPERM;
-            ia_frontend_intr(iadev);
-            break;
-         case 0xa:
+	    ia_frontend_intr(iadev);
+	    break;
+	 case 0xa:
 	    if (!capable(CAP_NET_ADMIN)) return -EPERM;
-         {
-             ia_cmds.status = 0;
-             IADebugFlag = ia_cmds.maddr;
-             printk("New debug option loaded\n");
-         }
-             break;
-         default:
-             ia_cmds.status = 0;
-             break;
+	 {
+	     ia_cmds.status = 0;
+	     IADebugFlag = ia_cmds.maddr;
+	     printk("New debug option loaded\n");
+	 }
+	     break;
+	 default:
+	     ia_cmds.status = 0;
+	     break;
       }
    }
       break;
@@ -2889,42 +2889,42 @@ static int ia_setsockopt(struct atm_vcc *vcc, int level, int optname,
 }
 
 static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
-        IADEV *iadev;
-        struct dle *wr_ptr;
-        struct tx_buf_desc __iomem *buf_desc_ptr;
-        int desc;
-        int comp_code;
-        int total_len;
-        struct cpcs_trailer *trailer;
-        struct ia_vcc *iavcc;
+	IADEV *iadev;
+	struct dle *wr_ptr;
+	struct tx_buf_desc __iomem *buf_desc_ptr;
+	int desc;
+	int comp_code;
+	int total_len;
+	struct cpcs_trailer *trailer;
+	struct ia_vcc *iavcc;
 
-        iadev = INPH_IA_DEV(vcc->dev);
-        iavcc = INPH_IA_VCC(vcc);
-        if (!iavcc->txing) {
-           printk("discard packet on closed VC\n");
-           if (vcc->pop)
+	iadev = INPH_IA_DEV(vcc->dev);
+	iavcc = INPH_IA_VCC(vcc);
+	if (!iavcc->txing) {
+	   printk("discard packet on closed VC\n");
+	   if (vcc->pop)
 		vcc->pop(vcc, skb);
-           else
+	   else
 		dev_kfree_skb_any(skb);
 	   return 0;
-        }
+	}
 
-        if (skb->len > iadev->tx_buf_sz - 8) {
-           printk("Transmit size over tx buffer size\n");
-           if (vcc->pop)
-                 vcc->pop(vcc, skb);
-           else
-                 dev_kfree_skb_any(skb);
-          return 0;
-        }
-        if ((unsigned long)skb->data & 3) {
-           printk("Misaligned SKB\n");
-           if (vcc->pop)
-                 vcc->pop(vcc, skb);
-           else
-                 dev_kfree_skb_any(skb);
-           return 0;
-        }
+	if (skb->len > iadev->tx_buf_sz - 8) {
+	   printk("Transmit size over tx buffer size\n");
+	   if (vcc->pop)
+		 vcc->pop(vcc, skb);
+	   else
+		 dev_kfree_skb_any(skb);
+	  return 0;
+	}
+	if ((unsigned long)skb->data & 3) {
+	   printk("Misaligned SKB\n");
+	   if (vcc->pop)
+		 vcc->pop(vcc, skb);
+	   else
+		 dev_kfree_skb_any(skb);
+	   return 0;
+	}
 	/* Get a descriptor number from our free descriptor queue
 	   We get the descr number from the TCQ now, since I am using
 	   the TCQ as a free buffer queue. Initially TCQ will be
@@ -2939,7 +2939,7 @@ static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
 	if ((desc == 0) || (desc > iadev->num_tx_desc))
 	{
 		IF_ERR(printk(DEV_LABEL "invalid desc for send: %d\n", desc);)
-                atomic_inc(&vcc->stats->tx);
+		atomic_inc(&vcc->stats->tx);
 		if (vcc->pop)
 		    vcc->pop(vcc, skb);
 		else
@@ -2950,17 +2950,17 @@ static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
 	if (comp_code)
 	{
 	    IF_ERR(printk(DEV_LABEL "send desc:%d completion code %d error\n",
-                                                            desc, comp_code);)
+							    desc, comp_code);)
 	}
 
-        /* remember the desc and vcc mapping */
-        iavcc->vc_desc_cnt++;
-        iadev->desc_tbl[desc-1].iavcc = iavcc;
-        iadev->desc_tbl[desc-1].txskb = skb;
-        IA_SKB_STATE(skb) = 0;
+	/* remember the desc and vcc mapping */
+	iavcc->vc_desc_cnt++;
+	iadev->desc_tbl[desc-1].iavcc = iavcc;
+	iadev->desc_tbl[desc-1].txskb = skb;
+	IA_SKB_STATE(skb) = 0;
 
-        iadev->ffL.tcq_rd += 2;
-        if (iadev->ffL.tcq_rd > iadev->ffL.tcq_ed)
+	iadev->ffL.tcq_rd += 2;
+	if (iadev->ffL.tcq_rd > iadev->ffL.tcq_ed)
 	  	iadev->ffL.tcq_rd  = iadev->ffL.tcq_st;
 	writew(iadev->ffL.tcq_rd, iadev->seg_reg+TCQ_RD_PTR);
 
@@ -2970,40 +2970,40 @@ static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
 	*(u16*)(iadev->seg_ram+iadev->ffL.prq_wr) = desc;
 
  	iadev->ffL.prq_wr += 2;
-        if (iadev->ffL.prq_wr > iadev->ffL.prq_ed)
-                iadev->ffL.prq_wr = iadev->ffL.prq_st;
+	if (iadev->ffL.prq_wr > iadev->ffL.prq_ed)
+		iadev->ffL.prq_wr = iadev->ffL.prq_st;
 
 	/* Figure out the exact length of the packet and padding required to
-           make it  aligned on a 48 byte boundary.  */
+	   make it  aligned on a 48 byte boundary.  */
 	total_len = skb->len + sizeof(struct cpcs_trailer);
 	total_len = ((total_len + 47) / 48) * 48;
 	IF_TX(printk("ia packet len:%d padding:%d\n", total_len, total_len - skb->len);)
 
 	/* Put the packet in a tx buffer */
 	trailer = iadev->tx_buf[desc-1].cpcs;
-        IF_TX(printk("Sent: skb = 0x%p skb->data: 0x%p len: %d, desc: %d\n",
-                  skb, skb->data, skb->len, desc);)
+	IF_TX(printk("Sent: skb = 0x%p skb->data: 0x%p len: %d, desc: %d\n",
+		  skb, skb->data, skb->len, desc);)
 	trailer->control = 0;
-        /*big endian*/
+	/*big endian*/
 	trailer->length = ((skb->len & 0xff) << 8) | ((skb->len & 0xff00) >> 8);
 	trailer->crc32 = 0;	/* not needed - dummy bytes */
 
 	/* Display the packet */
 	IF_TXPKT(printk("Sent data: len = %d MsgNum = %d\n",
-                                                        skb->len, tcnter++);
-        xdump(skb->data, skb->len, "TX: ");
-        printk("\n");)
+							skb->len, tcnter++);
+	xdump(skb->data, skb->len, "TX: ");
+	printk("\n");)
 
 	/* Build the buffer descriptor */
 	buf_desc_ptr = iadev->seg_ram+TX_DESC_BASE;
 	buf_desc_ptr += desc;	/* points to the corresponding entry */
 	buf_desc_ptr->desc_mode = AAL5 | EOM_EN | APP_CRC32 | CMPL_INT;
 	/* Huh ? p.115 of users guide describes this as a read-only register */
-        writew(TRANSMIT_DONE, iadev->seg_reg+SEG_INTR_STATUS_REG);
+	writew(TRANSMIT_DONE, iadev->seg_reg+SEG_INTR_STATUS_REG);
 	buf_desc_ptr->vc_index = vcc->vci;
 	buf_desc_ptr->bytes = total_len;
 
-        if (vcc->qos.txtp.traffic_class == ATM_ABR)
+	if (vcc->qos.txtp.traffic_class == ATM_ABR)
 	   clear_lockup (vcc, iadev);
 
 	/* Build the DLE structure */
@@ -3012,13 +3012,13 @@ static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
 	wr_ptr->sys_pkt_addr = pci_map_single(iadev->pci, skb->data,
 		skb->len, PCI_DMA_TODEVICE);
 	wr_ptr->local_pkt_addr = (buf_desc_ptr->buf_start_hi << 16) |
-                                                  buf_desc_ptr->buf_start_lo;
+						  buf_desc_ptr->buf_start_lo;
 	/* wr_ptr->bytes = swap_byte_order(total_len); didn't seem to affect?? */
 	wr_ptr->bytes = skb->len;
 
-        /* hw bug - DLEs of 0x2d, 0x2e, 0x2f cause DMA lockup */
-        if ((wr_ptr->bytes >> 2) == 0xb)
-           wr_ptr->bytes = 0x30;
+	/* hw bug - DLEs of 0x2d, 0x2e, 0x2f cause DMA lockup */
+	if ((wr_ptr->bytes >> 2) == 0xb)
+	   wr_ptr->bytes = 0x30;
 
 	wr_ptr->mode = TX_DLE_PSI;
 	wr_ptr->prq_wr_ptr_data = 0;
@@ -3027,42 +3027,42 @@ static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
 	if (++wr_ptr == iadev->tx_dle_q.end)
 		wr_ptr = iadev->tx_dle_q.start;
 
-        /* Build trailer dle */
-        wr_ptr->sys_pkt_addr = iadev->tx_buf[desc-1].dma_addr;
-        wr_ptr->local_pkt_addr = ((buf_desc_ptr->buf_start_hi << 16) |
-          buf_desc_ptr->buf_start_lo) + total_len - sizeof(struct cpcs_trailer);
+	/* Build trailer dle */
+	wr_ptr->sys_pkt_addr = iadev->tx_buf[desc-1].dma_addr;
+	wr_ptr->local_pkt_addr = ((buf_desc_ptr->buf_start_hi << 16) |
+	  buf_desc_ptr->buf_start_lo) + total_len - sizeof(struct cpcs_trailer);
 
-        wr_ptr->bytes = sizeof(struct cpcs_trailer);
-        wr_ptr->mode = DMA_INT_ENABLE;
-        wr_ptr->prq_wr_ptr_data = iadev->ffL.prq_wr;
+	wr_ptr->bytes = sizeof(struct cpcs_trailer);
+	wr_ptr->mode = DMA_INT_ENABLE;
+	wr_ptr->prq_wr_ptr_data = iadev->ffL.prq_wr;
 
-        /* end is not to be used for the DLE q */
-        if (++wr_ptr == iadev->tx_dle_q.end)
-                wr_ptr = iadev->tx_dle_q.start;
+	/* end is not to be used for the DLE q */
+	if (++wr_ptr == iadev->tx_dle_q.end)
+		wr_ptr = iadev->tx_dle_q.start;
 
 	iadev->tx_dle_q.write = wr_ptr;
-        ATM_DESC(skb) = vcc->vci;
-        skb_queue_tail(&iadev->tx_dma_q, skb);
+	ATM_DESC(skb) = vcc->vci;
+	skb_queue_tail(&iadev->tx_dma_q, skb);
 
-        atomic_inc(&vcc->stats->tx);
-        iadev->tx_pkt_cnt++;
+	atomic_inc(&vcc->stats->tx);
+	iadev->tx_pkt_cnt++;
 	/* Increment transaction counter */
 	writel(2, iadev->dma+IPHASE5575_TX_COUNTER);
 
 #if 0
-        /* add flow control logic */
-        if (atomic_read(&vcc->stats->tx) % 20 == 0) {
-          if (iavcc->vc_desc_cnt > 10) {
-             vcc->tx_quota =  vcc->tx_quota * 3 / 4;
-            printk("Tx1:  vcc->tx_quota = %d \n", (u32)vcc->tx_quota );
-              iavcc->flow_inc = -1;
-              iavcc->saved_tx_quota = vcc->tx_quota;
-           } else if ((iavcc->flow_inc < 0) && (iavcc->vc_desc_cnt < 3)) {
-             // vcc->tx_quota = 3 * iavcc->saved_tx_quota / 4;
-             printk("Tx2:  vcc->tx_quota = %d \n", (u32)vcc->tx_quota );
-              iavcc->flow_inc = 0;
-           }
-        }
+	/* add flow control logic */
+	if (atomic_read(&vcc->stats->tx) % 20 == 0) {
+	  if (iavcc->vc_desc_cnt > 10) {
+	     vcc->tx_quota =  vcc->tx_quota * 3 / 4;
+	    printk("Tx1:  vcc->tx_quota = %d \n", (u32)vcc->tx_quota );
+	      iavcc->flow_inc = -1;
+	      iavcc->saved_tx_quota = vcc->tx_quota;
+	   } else if ((iavcc->flow_inc < 0) && (iavcc->vc_desc_cnt < 3)) {
+	     // vcc->tx_quota = 3 * iavcc->saved_tx_quota / 4;
+	     printk("Tx2:  vcc->tx_quota = %d \n", (u32)vcc->tx_quota );
+	      iavcc->flow_inc = 0;
+	   }
+	}
 #endif
 	IF_TX(printk("ia send done\n");)
 	return 0;
@@ -3070,35 +3070,35 @@ static int ia_pkt_tx (struct atm_vcc *vcc, struct sk_buff *skb) {
 
 static int ia_send(struct atm_vcc *vcc, struct sk_buff *skb)
 {
-        IADEV *iadev;
-        unsigned long flags;
+	IADEV *iadev;
+	unsigned long flags;
 
-        iadev = INPH_IA_DEV(vcc->dev);
-        if ((!skb)||(skb->len>(iadev->tx_buf_sz-sizeof(struct cpcs_trailer))))
-        {
-            if (!skb)
-                printk(KERN_CRIT "null skb in ia_send\n");
-            else dev_kfree_skb_any(skb);
-            return -EINVAL;
-        }
-        spin_lock_irqsave(&iadev->tx_lock, flags);
-        if (!test_bit(ATM_VF_READY,&vcc->flags)){
-            dev_kfree_skb_any(skb);
-            spin_unlock_irqrestore(&iadev->tx_lock, flags);
-            return -EINVAL;
-        }
-        ATM_SKB(skb)->vcc = vcc;
+	iadev = INPH_IA_DEV(vcc->dev);
+	if ((!skb)||(skb->len>(iadev->tx_buf_sz-sizeof(struct cpcs_trailer))))
+	{
+	    if (!skb)
+		printk(KERN_CRIT "null skb in ia_send\n");
+	    else dev_kfree_skb_any(skb);
+	    return -EINVAL;
+	}
+	spin_lock_irqsave(&iadev->tx_lock, flags);
+	if (!test_bit(ATM_VF_READY,&vcc->flags)){
+	    dev_kfree_skb_any(skb);
+	    spin_unlock_irqrestore(&iadev->tx_lock, flags);
+	    return -EINVAL;
+	}
+	ATM_SKB(skb)->vcc = vcc;
 
-        if (skb_peek(&iadev->tx_backlog)) {
-           skb_queue_tail(&iadev->tx_backlog, skb);
-        }
-        else {
-           if (ia_pkt_tx (vcc, skb)) {
-              skb_queue_tail(&iadev->tx_backlog, skb);
-           }
-        }
-        spin_unlock_irqrestore(&iadev->tx_lock, flags);
-        return 0;
+	if (skb_peek(&iadev->tx_backlog)) {
+	   skb_queue_tail(&iadev->tx_backlog, skb);
+	}
+	else {
+	   if (ia_pkt_tx (vcc, skb)) {
+	      skb_queue_tail(&iadev->tx_backlog, skb);
+	   }
+	}
+	spin_unlock_irqrestore(&iadev->tx_lock, flags);
+	return 0;
 
 }
 
@@ -3113,43 +3113,43 @@ static int ia_proc_read(struct atm_dev *dev,loff_t *pos,char *page)
        return n;
      }
      if (iadev->phy_type == FE_DS3_PHY)
-        n = sprintf(page, "  Board Type         :  Iphase-ATM-DS3");
+	n = sprintf(page, "  Board Type         :  Iphase-ATM-DS3");
      else if (iadev->phy_type == FE_E3_PHY)
-        n = sprintf(page, "  Board Type         :  Iphase-ATM-E3");
+	n = sprintf(page, "  Board Type         :  Iphase-ATM-E3");
      else if (iadev->phy_type == FE_UTP_OPTION)
-         n = sprintf(page, "  Board Type         :  Iphase-ATM-UTP155");
+	 n = sprintf(page, "  Board Type         :  Iphase-ATM-UTP155");
      else
-        n = sprintf(page, "  Board Type         :  Iphase-ATM-OC3");
+	n = sprintf(page, "  Board Type         :  Iphase-ATM-OC3");
      tmpPtr = page + n;
      if (iadev->pci_map_size == 0x40000)
-        n += sprintf(tmpPtr, "-1KVC-");
+	n += sprintf(tmpPtr, "-1KVC-");
      else
-        n += sprintf(tmpPtr, "-4KVC-");
+	n += sprintf(tmpPtr, "-4KVC-");
      tmpPtr = page + n;
      if ((iadev->memType & MEM_SIZE_MASK) == MEM_SIZE_1M)
-        n += sprintf(tmpPtr, "1M  \n");
+	n += sprintf(tmpPtr, "1M  \n");
      else if ((iadev->memType & MEM_SIZE_MASK) == MEM_SIZE_512K)
-        n += sprintf(tmpPtr, "512K\n");
+	n += sprintf(tmpPtr, "512K\n");
      else
        n += sprintf(tmpPtr, "128K\n");
      return n;
   }
   if (!left) {
      return  sprintf(page, "  Number of Tx Buffer:  %u\n"
-                           "  Size of Tx Buffer  :  %u\n"
-                           "  Number of Rx Buffer:  %u\n"
-                           "  Size of Rx Buffer  :  %u\n"
-                           "  Packets Receiverd  :  %u\n"
-                           "  Packets Transmitted:  %u\n"
-                           "  Cells Received     :  %u\n"
-                           "  Cells Transmitted  :  %u\n"
-                           "  Board Dropped Cells:  %u\n"
-                           "  Board Dropped Pkts :  %u\n",
-                           iadev->num_tx_desc,  iadev->tx_buf_sz,
-                           iadev->num_rx_desc,  iadev->rx_buf_sz,
-                           iadev->rx_pkt_cnt,   iadev->tx_pkt_cnt,
-                           iadev->rx_cell_cnt, iadev->tx_cell_cnt,
-                           iadev->drop_rxcell, iadev->drop_rxpkt);
+			   "  Size of Tx Buffer  :  %u\n"
+			   "  Number of Rx Buffer:  %u\n"
+			   "  Size of Rx Buffer  :  %u\n"
+			   "  Packets Receiverd  :  %u\n"
+			   "  Packets Transmitted:  %u\n"
+			   "  Cells Received     :  %u\n"
+			   "  Cells Transmitted  :  %u\n"
+			   "  Board Dropped Cells:  %u\n"
+			   "  Board Dropped Pkts :  %u\n",
+			   iadev->num_tx_desc,  iadev->tx_buf_sz,
+			   iadev->num_rx_desc,  iadev->rx_buf_sz,
+			   iadev->rx_pkt_cnt,   iadev->tx_pkt_cnt,
+			   iadev->rx_cell_cnt, iadev->tx_cell_cnt,
+			   iadev->drop_rxcell, iadev->drop_rxpkt);
   }
   return 0;
 }
@@ -3290,7 +3290,7 @@ static void __exit ia_module_exit(void)
 {
 	pci_unregister_driver(&ia_driver);
 
-        del_timer(&ia_timer);
+	del_timer(&ia_timer);
 }
 
 module_init(ia_module_init);

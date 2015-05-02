@@ -1,6 +1,6 @@
 /***************************************************************************
-                          dpti.c  -  description
-                             -------------------
+			  dpti.c  -  description
+			     -------------------
     begin                : Thu Sep 7 2000
     copyright            : (C) 2000 by Adaptec
 
@@ -195,7 +195,7 @@ static int adpt_detect(struct scsi_host_template* sht)
 
 	PINFO("Detecting Adaptec I2O RAID controllers...\n");
 
-        /* search for all Adatpec I2O RAID cards */
+	/* search for all Adatpec I2O RAID cards */
 	while ((pDev = pci_get_device( PCI_DPT_VENDOR_ID, PCI_ANY_ID, pDev))) {
 		if(pDev->device == PCI_DPT_DEVICE_ID ||
 		   pDev->device == PCI_DPT_RAPTOR_DEVICE_ID){
@@ -1078,7 +1078,7 @@ static int adpt_install_hba(struct scsi_host_template* sht, struct pci_dev* pDev
 		return -EINVAL;
 	}
 
-        if(raptorFlag == TRUE) {
+	if(raptorFlag == TRUE) {
 		msg_addr_virt = ioremap(base_addr1_phys, hba_map1_area_size );
 		if (!msg_addr_virt) {
 			PERROR("dpti: adpt_config_hba: io remap failed on BAR1\n");
@@ -1429,7 +1429,7 @@ static void adpt_i2o_post_wait_complete(u32 context, int status)
 		}
 	}
 	spin_unlock(&adpt_post_wait_lock);
-        // If this happens we lose commands that probably really completed
+	// If this happens we lose commands that probably really completed
 	printk(KERN_DEBUG"dpti: Could Not find task %d in wait queue\n",context);
 	printk(KERN_DEBUG"      Tasks in wait queue:\n");
 	for(p1 = adpt_post_wait_queue; p1; p1 = p1->next) {

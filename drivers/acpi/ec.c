@@ -119,7 +119,7 @@ static int EC_FLAGS_VALIDATE_ECDT; /* ASUStec ECDTs need to be validated */
 static int EC_FLAGS_SKIP_DSDT_SCAN; /* Not all BIOS survive early DSDT scan */
 
 /* --------------------------------------------------------------------------
-                             Transaction Management
+			     Transaction Management
    -------------------------------------------------------------------------- */
 
 static inline u8 acpi_ec_read_status(struct acpi_ec *ec)
@@ -515,7 +515,7 @@ static int acpi_ec_query_unlocked(struct acpi_ec *ec, u8 * data)
 }
 
 /* --------------------------------------------------------------------------
-                                Event Management
+				Event Management
    -------------------------------------------------------------------------- */
 int acpi_ec_add_query_handler(struct acpi_ec *ec, u8 query_bit,
 			      acpi_handle handle, acpi_ec_query_func func,
@@ -629,7 +629,7 @@ static u32 acpi_ec_gpe_handler(acpi_handle gpe_device,
 }
 
 /* --------------------------------------------------------------------------
-                             Address Space Management
+			     Address Space Management
    -------------------------------------------------------------------------- */
 
 static acpi_status
@@ -674,7 +674,7 @@ acpi_ec_space_handler(u32 function, acpi_physical_address address,
 }
 
 /* --------------------------------------------------------------------------
-                               Driver Interface
+			       Driver Interface
    -------------------------------------------------------------------------- */
 static acpi_status
 ec_parse_io_ports(struct acpi_resource *resource, void *context);

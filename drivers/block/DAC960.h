@@ -2397,10 +2397,10 @@ typedef struct DAC960_Controller
       dma_addr_t NewLogicalDriveInformationDMA;
 
       DAC960_V1_BackgroundInitializationStatus_T
-        	*BackgroundInitializationStatus;
+		*BackgroundInitializationStatus;
       dma_addr_t BackgroundInitializationStatusDMA;
       DAC960_V1_BackgroundInitializationStatus_T
-        	LastBackgroundInitializationStatus;
+		LastBackgroundInitializationStatus;
 
       DAC960_V1_DeviceState_T
 	DeviceState[DAC960_V1_MaxChannels][DAC960_V1_MaxTargets];
@@ -2688,7 +2688,7 @@ bool DAC960_GEM_HardwareMailboxFullP(void __iomem *ControllerBaseAddress)
   DAC960_GEM_InboundDoorBellRegister_T InboundDoorBellRegister;
   InboundDoorBellRegister.All =
     readl(ControllerBaseAddress +
-          DAC960_GEM_InboundDoorBellRegisterReadSetOffset);
+	  DAC960_GEM_InboundDoorBellRegisterReadSetOffset);
   return InboundDoorBellRegister.Read.HardwareMailboxFull;
 }
 
@@ -2698,7 +2698,7 @@ bool DAC960_GEM_InitializationInProgressP(void __iomem *ControllerBaseAddress)
   DAC960_GEM_InboundDoorBellRegister_T InboundDoorBellRegister;
   InboundDoorBellRegister.All =
     readl(ControllerBaseAddress +
-          DAC960_GEM_InboundDoorBellRegisterReadSetOffset);
+	  DAC960_GEM_InboundDoorBellRegisterReadSetOffset);
   return InboundDoorBellRegister.Read.InitializationInProgress;
 }
 
@@ -2739,7 +2739,7 @@ bool DAC960_GEM_HardwareMailboxStatusAvailableP(void __iomem *ControllerBaseAddr
   DAC960_GEM_OutboundDoorBellRegister_T OutboundDoorBellRegister;
   OutboundDoorBellRegister.All =
     readl(ControllerBaseAddress +
-          DAC960_GEM_OutboundDoorBellRegisterReadSetOffset);
+	  DAC960_GEM_OutboundDoorBellRegisterReadSetOffset);
   return OutboundDoorBellRegister.Read.HardwareMailboxStatusAvailable;
 }
 
@@ -2749,7 +2749,7 @@ bool DAC960_GEM_MemoryMailboxStatusAvailableP(void __iomem *ControllerBaseAddres
   DAC960_GEM_OutboundDoorBellRegister_T OutboundDoorBellRegister;
   OutboundDoorBellRegister.All =
     readl(ControllerBaseAddress +
-          DAC960_GEM_OutboundDoorBellRegisterReadSetOffset);
+	  DAC960_GEM_OutboundDoorBellRegisterReadSetOffset);
   return OutboundDoorBellRegister.Read.MemoryMailboxStatusAvailable;
 }
 
@@ -2781,9 +2781,9 @@ bool DAC960_GEM_InterruptsEnabledP(void __iomem *ControllerBaseAddress)
   DAC960_GEM_InterruptMaskRegister_T InterruptMaskRegister;
   InterruptMaskRegister.All =
     readl(ControllerBaseAddress +
-          DAC960_GEM_InterruptMaskRegisterReadSetOffset);
+	  DAC960_GEM_InterruptMaskRegisterReadSetOffset);
   return !(InterruptMaskRegister.Bits.HardwareMailboxInterrupt ||
-           InterruptMaskRegister.Bits.MemoryMailboxInterrupt);
+	   InterruptMaskRegister.Bits.MemoryMailboxInterrupt);
 }
 
 static inline
@@ -2837,7 +2837,7 @@ DAC960_GEM_ReadErrorStatus(void __iomem *ControllerBaseAddress,
   *Parameter1 =
     readb(ControllerBaseAddress + DAC960_GEM_CommandMailboxBusAddressOffset + 1);
   writel(0x03000000, ControllerBaseAddress +
-         DAC960_GEM_ErrorStatusRegisterClearOffset);
+	 DAC960_GEM_ErrorStatusRegisterClearOffset);
   return true;
 }
 

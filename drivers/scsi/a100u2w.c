@@ -951,7 +951,7 @@ static int inia100_abort(struct scsi_cmnd * cmd)
 /*****************************************************************************
  Function name  : inia100_reset
  Description    : Reset registers, reset a hanging bus and
-                  kill active and disconnected commands for target w/o soft reset
+		  kill active and disconnected commands for target w/o soft reset
  Input          : host  -       Pointer to host adapter structure
  Output         : None.
  Return         : pSRB  -       Pointer to SCSI request block.
@@ -1180,7 +1180,7 @@ static int __devinit inia100_probe_one(struct pci_dev *pdev,
 	return 0;
 
 out_free_irq:
-        free_irq(shost->irq, shost);
+	free_irq(shost->irq, shost);
 out_free_escb_array:
 	pci_free_consistent(pdev, ORC_MAXQUEUE * sizeof(struct orc_extended_scb),
 			host->escb_virt, host->escb_phys);
@@ -1190,7 +1190,7 @@ out_free_scb_array:
 out_host_put:
 	scsi_host_put(shost);
 out_release_region:
-        release_region(port, 256);
+	release_region(port, 256);
 out_disable_device:
 	pci_disable_device(pdev);
 out:
@@ -1204,12 +1204,12 @@ static void __devexit inia100_remove_one(struct pci_dev *pdev)
 
 	scsi_remove_host(shost);
 
-        free_irq(shost->irq, shost);
+	free_irq(shost->irq, shost);
 	pci_free_consistent(pdev, ORC_MAXQUEUE * sizeof(struct orc_extended_scb),
 			host->escb_virt, host->escb_phys);
 	pci_free_consistent(pdev, ORC_MAXQUEUE * sizeof(struct orc_scb),
 			host->scb_virt, host->scb_phys);
-        release_region(shost->io_port, 256);
+	release_region(shost->io_port, 256);
 
 	scsi_host_put(shost);
 }

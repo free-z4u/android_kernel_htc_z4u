@@ -740,14 +740,14 @@ struct ion_flag_data {
  * Invalidate the caches of the handle specified.
  */
 #define ION_IOC_INV_CACHES      _IOWR(ION_IOC_MAGIC, 8, \
-                                                struct ion_flush_data)
+						struct ion_flush_data)
 /**
  * DOC: ION_MSM_IOC_CLEAN_CACHES - clean and invalidate the caches
  *
  * Clean and invalidate the caches of the handle specified.
  */
 #define ION_IOC_CLEAN_INV_CACHES        _IOWR(ION_IOC_MAGIC, 9, \
-                                                struct ion_flush_data)
+						struct ion_flush_data)
 
 /**
  * DOC: ION_IOC_GET_FLAGS - get the flags of the handle

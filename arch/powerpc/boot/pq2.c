@@ -29,7 +29,7 @@ static int pq2_corecnf_map[] = {
  * Returns zero on failure and non-zero on success.
  */
 int pq2_get_clocks(u32 crystal, u32 *sysfreq, u32 *corefreq,
-                   u32 *timebase, u32 *brgfreq)
+		   u32 *timebase, u32 *brgfreq)
 {
 	u32 *immr;
 	u32 sccr, scmr, mainclk, busclk;

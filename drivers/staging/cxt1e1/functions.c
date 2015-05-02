@@ -68,7 +68,7 @@ pci_read_32 (u_int32_t *p)
     FLUSH_PCI_READ ();
     v = le32_to_cpu (*p);
     if (cxt1e1_log_level >= LOG_DEBUG)
-        pr_info("pci_read : %x = %x\n", (u_int32_t) p, v);
+	pr_info("pci_read : %x = %x\n", (u_int32_t) p, v);
     return v;
 #else
     FLUSH_PCI_READ ();              /* */
@@ -81,17 +81,17 @@ pci_write_32 (u_int32_t *p, u_int32_t v)
 {
 #ifdef FLOW_DEBUG
     if (cxt1e1_log_level >= LOG_DEBUG)
-        pr_info("pci_write: %x = %x\n", (u_int32_t) p, v);
+	pr_info("pci_write: %x = %x\n", (u_int32_t) p, v);
 #endif
     *p = cpu_to_le32 (v);
     FLUSH_PCI_WRITE ();             /* This routine is called from routines
-                                     * which do multiple register writes
-                                     * which themselves need flushing between
-                                     * writes in order to guarantee write
-                                     * ordering.  It is less code-cumbersome
-                                     * to flush here-in then to investigate
-                                     * and code the many other register
-                                     * writing routines. */
+				     * which do multiple register writes
+				     * which themselves need flushing between
+				     * writes in order to guarantee write
+				     * ordering.  It is less code-cumbersome
+				     * to flush here-in then to investigate
+				     * and code the many other register
+				     * writing routines. */
 }
 #endif
 
@@ -118,9 +118,9 @@ watchdog_func (unsigned long arg)
 
     if (drvr_state != SBE_DRVR_AVAILABLE)
     {
-        if (cxt1e1_log_level >= LOG_MONITOR)
-            pr_warning("%s: drvr not available (%x)\n", __func__, drvr_state);
-        return;
+	if (cxt1e1_log_level >= LOG_MONITOR)
+	    pr_warning("%s: drvr not available (%x)\n", __func__, drvr_state);
+	return;
     }
     schedule_work (&wd->work);
     mod_timer (&wd->h, jiffies + wd->ticks);
@@ -134,9 +134,9 @@ int OS_init_watchdog(struct watchdog *wdp, void (*f) (void *), void *c, int usec
     INIT_WORK(&wdp->work, (void *)f);
     init_timer (&wdp->h);
     {
-        ci_t       *ci = (ci_t *) c;
+	ci_t       *ci = (ci_t *) c;
 
-        wdp->h.data = (unsigned long) &ci->wd;
+	wdp->h.data = (unsigned long) &ci->wd;
     }
     wdp->h.function = watchdog_func;
     return 0;
@@ -149,17 +149,17 @@ OS_uwait (int usec, char *description)
 
     if (usec >= 1000)
     {
-        mdelay (usec / 1000);
-        /* now delay residual */
-        tmp = (usec / 1000) * 1000; /* round */
-        tmp = usec - tmp;           /* residual */
-        if (tmp)
-        {                           /* wait on residual */
-            udelay (tmp);
-        }
+	mdelay (usec / 1000);
+	/* now delay residual */
+	tmp = (usec / 1000) * 1000; /* round */
+	tmp = usec - tmp;           /* residual */
+	if (tmp)
+	{                           /* wait on residual */
+	    udelay (tmp);
+	}
     } else
     {
-        udelay (usec);
+	udelay (usec);
     }
 }
 
@@ -183,16 +183,16 @@ OS_sem_init (void *sem, int state)
 {
     switch (state)
     {
-        case SEM_TAKEN:
+	case SEM_TAKEN:
 		sema_init((struct semaphore *) sem, 0);
-        break;
+	break;
     case SEM_AVAILABLE:
 	    sema_init((struct semaphore *) sem, 1);
-        break;
+	break;
     default:                        /* otherwise, set sem.count to state's
-                                     * value */
-        sema_init (sem, state);
-        break;
+				     * value */
+	sema_init (sem, state);
+	break;
     }
 }
 
@@ -290,65 +290,65 @@ VMETRO_TRIGGER (ci_t * ci, int x)
     {
     default:
     case 0:
-        data = pci_read_32 ((u_int32_t *) &comet->__res24);     /* 0x90 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res24);     /* 0x90 */
+	break;
     case 1:
-        data = pci_read_32 ((u_int32_t *) &comet->__res25);     /* 0x94 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res25);     /* 0x94 */
+	break;
     case 2:
-        data = pci_read_32 ((u_int32_t *) &comet->__res26);     /* 0x98 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res26);     /* 0x98 */
+	break;
     case 3:
-        data = pci_read_32 ((u_int32_t *) &comet->__res27);     /* 0x9C */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res27);     /* 0x9C */
+	break;
     case 4:
-        data = pci_read_32 ((u_int32_t *) &comet->__res88);     /* 0x220 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res88);     /* 0x220 */
+	break;
     case 5:
-        data = pci_read_32 ((u_int32_t *) &comet->__res89);     /* 0x224 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res89);     /* 0x224 */
+	break;
     case 6:
-        data = pci_read_32 ((u_int32_t *) &comet->__res8A);     /* 0x228 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res8A);     /* 0x228 */
+	break;
     case 7:
-        data = pci_read_32 ((u_int32_t *) &comet->__res8B);     /* 0x22C */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res8B);     /* 0x22C */
+	break;
     case 8:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA0);     /* 0x280 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA0);     /* 0x280 */
+	break;
     case 9:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA1);     /* 0x284 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA1);     /* 0x284 */
+	break;
     case 10:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA2);     /* 0x288 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA2);     /* 0x288 */
+	break;
     case 11:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA3);     /* 0x28C */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA3);     /* 0x28C */
+	break;
     case 12:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA4);     /* 0x290 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA4);     /* 0x290 */
+	break;
     case 13:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA5);     /* 0x294 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA5);     /* 0x294 */
+	break;
     case 14:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA6);     /* 0x298 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA6);     /* 0x298 */
+	break;
     case 15:
-        data = pci_read_32 ((u_int32_t *) &comet->__resA7);     /* 0x29C */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__resA7);     /* 0x29C */
+	break;
     case 16:
-        data = pci_read_32 ((u_int32_t *) &comet->__res74);     /* 0x1D0 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res74);     /* 0x1D0 */
+	break;
     case 17:
-        data = pci_read_32 ((u_int32_t *) &comet->__res75);     /* 0x1D4 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res75);     /* 0x1D4 */
+	break;
     case 18:
-        data = pci_read_32 ((u_int32_t *) &comet->__res76);     /* 0x1D8 */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res76);     /* 0x1D8 */
+	break;
     case 19:
-        data = pci_read_32 ((u_int32_t *) &comet->__res77);     /* 0x1DC */
-        break;
+	data = pci_read_32 ((u_int32_t *) &comet->__res77);     /* 0x1DC */
+	break;
     }
 }
 

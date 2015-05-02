@@ -204,7 +204,7 @@ static int compare_reg(u32 *reg, u32 *range, u32 *rangesize)
 
 /* reg must be MAX_ADDR_CELLS */
 static int find_range(u32 *reg, u32 *ranges, int nregaddr,
-                      int naddr, int nsize, int buflen)
+		      int naddr, int nsize, int buflen)
 {
 	int nrange = nregaddr + naddr + nsize;
 	int i;

@@ -179,9 +179,9 @@ posix_acl_equiv_mode(const struct posix_acl *acl, umode_t *mode_p)
 				return -EINVAL;
 		}
 	}
-        if (mode_p)
-                *mode_p = (*mode_p & ~S_IRWXUGO) | mode;
-        return not_equiv;
+	if (mode_p)
+		*mode_p = (*mode_p & ~S_IRWXUGO) | mode;
+	return not_equiv;
 }
 
 /*
@@ -221,41 +221,41 @@ posix_acl_permission(struct inode *inode, const struct posix_acl *acl, int want)
 	want &= MAY_READ | MAY_WRITE | MAY_EXEC | MAY_NOT_BLOCK;
 
 	FOREACH_ACL_ENTRY(pa, acl, pe) {
-                switch(pa->e_tag) {
-                        case ACL_USER_OBJ:
+		switch(pa->e_tag) {
+			case ACL_USER_OBJ:
 				/* (May have been checked already) */
 				if (inode->i_uid == current_fsuid())
-                                        goto check_perm;
-                                break;
-                        case ACL_USER:
+					goto check_perm;
+				break;
+			case ACL_USER:
 				if (pa->e_id == current_fsuid())
-                                        goto mask;
+					goto mask;
 				break;
-                        case ACL_GROUP_OBJ:
-                                if (in_group_p(inode->i_gid)) {
+			case ACL_GROUP_OBJ:
+				if (in_group_p(inode->i_gid)) {
 					found = 1;
 					if ((pa->e_perm & want) == want)
 						goto mask;
-                                }
+				}
 				break;
-                        case ACL_GROUP:
-                                if (in_group_p(pa->e_id)) {
+			case ACL_GROUP:
+				if (in_group_p(pa->e_id)) {
 					found = 1;
 					if ((pa->e_perm & want) == want)
 						goto mask;
-                                }
-                                break;
-                        case ACL_MASK:
-                                break;
-                        case ACL_OTHER:
+				}
+				break;
+			case ACL_MASK:
+				break;
+			case ACL_OTHER:
 				if (found)
 					return -EACCES;
 				else
 					goto check_perm;
 			default:
 				return -EIO;
-                }
-        }
+		}
+	}
 	return -EIO;
 
 mask:
@@ -291,8 +291,8 @@ static int posix_acl_create_masq(struct posix_acl *acl, umode_t *mode_p)
 	/* assert(atomic_read(acl->a_refcount) == 1); */
 
 	FOREACH_ACL_ENTRY(pa, acl, pe) {
-                switch(pa->e_tag) {
-                        case ACL_USER_OBJ:
+		switch(pa->e_tag) {
+			case ACL_USER_OBJ:
 				pa->e_perm &= (mode >> 6) | ~S_IRWXO;
 				mode &= (pa->e_perm << 6) | ~S_IRWXU;
 				break;
@@ -302,24 +302,24 @@ static int posix_acl_create_masq(struct posix_acl *acl, umode_t *mode_p)
 				not_equiv = 1;
 				break;
 
-                        case ACL_GROUP_OBJ:
+			case ACL_GROUP_OBJ:
 				group_obj = pa;
-                                break;
+				break;
 
-                        case ACL_OTHER:
+			case ACL_OTHER:
 				pa->e_perm &= mode | ~S_IRWXO;
 				mode &= pa->e_perm | ~S_IRWXO;
-                                break;
+				break;
 
-                        case ACL_MASK:
+			case ACL_MASK:
 				mask_obj = pa;
 				not_equiv = 1;
-                                break;
+				break;
 
 			default:
 				return -EIO;
-                }
-        }
+		}
+	}
 
 	if (mask_obj) {
 		mask_obj->e_perm &= (mode >> 3) | ~S_IRWXO;
@@ -332,7 +332,7 @@ static int posix_acl_create_masq(struct posix_acl *acl, umode_t *mode_p)
 	}
 
 	*mode_p = (*mode_p & ~S_IRWXUGO) | mode;
-        return not_equiv;
+	return not_equiv;
 }
 
 /*

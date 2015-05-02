@@ -69,6 +69,6 @@ enum dma_owner
 #define DMA_PANIC_ON_ERROR     ((1<<1)|DMA_VERBOSE_ON_ERROR)
 
 int cris_request_dma(unsigned int dmanr, const char * device_id,
-                     unsigned options, enum dma_owner owner);
+		     unsigned options, enum dma_owner owner);
 
 void cris_free_dma(unsigned int dmanr, const char * device_id);

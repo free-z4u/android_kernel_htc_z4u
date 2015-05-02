@@ -506,9 +506,9 @@ static int mixart_dsp_load(struct mixart_mgr* mgr, int index, const struct firmw
 		break;
 	} /* end of switch file index*/
 
-        /* wait for daughter status == 3 */
-        err = mixart_wait_nice_for_register_value( mgr, MIXART_PSEUDOREG_DXLX_STATUS_OFFSET, 1, 3, 300); /* 3sec */
-        if (err < 0) {
+	/* wait for daughter status == 3 */
+	err = mixart_wait_nice_for_register_value( mgr, MIXART_PSEUDOREG_DXLX_STATUS_OFFSET, 1, 3, 300); /* 3sec */
+	if (err < 0) {
 		snd_printk(KERN_ERR
 			   "daughter board could not be initialised\n");
 		return err;
@@ -519,13 +519,13 @@ static int mixart_dsp_load(struct mixart_mgr* mgr, int index, const struct firmw
 
 	/* first communication with embedded */
 	err = mixart_first_init(mgr);
-        if (err < 0) {
+	if (err < 0) {
 		snd_printk(KERN_ERR "miXart could not be set up\n");
 		return err;
 	}
 
        	/* create devices and mixer in accordance with HW options*/
-        for (card_index = 0; card_index < mgr->num_cards; card_index++) {
+	for (card_index = 0; card_index < mgr->num_cards; card_index++) {
 		struct snd_mixart *chip = mgr->chip[card_index];
 
 		if ((err = snd_mixart_create_pcm(chip)) < 0)
@@ -595,7 +595,7 @@ static int mixart_hwdep_dsp_status(struct snd_hwdep *hw,
 	struct mixart_mgr *mgr = hw->private_data;
 
 	strcpy(info->id, "miXart");
-        info->num_dsps = MIXART_HARDW_FILES_MAX_INDEX;
+	info->num_dsps = MIXART_HARDW_FILES_MAX_INDEX;
 
 	if (mgr->dsp_loaded & (1 <<  MIXART_MOTHERBOARD_ELF_INDEX))
 		info->chip_ready = 1;

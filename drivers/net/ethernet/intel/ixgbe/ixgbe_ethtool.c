@@ -139,8 +139,8 @@ static const struct ixgbe_stats ixgbe_gstrings_stats[] = {
 			 sizeof(((struct ixgbe_adapter *)0)->stats.pxofftxc)) \
 			/ sizeof(u64))
 #define IXGBE_STATS_LEN (IXGBE_GLOBAL_STATS_LEN + \
-                         IXGBE_PB_STATS_LEN + \
-                         IXGBE_QUEUE_STATS_LEN)
+			 IXGBE_PB_STATS_LEN + \
+			 IXGBE_QUEUE_STATS_LEN)
 
 static const char ixgbe_gstrings_test[][ETH_GSTRING_LEN] = {
 	"Register test  (offline)", "Eeprom test    (offline)",
@@ -150,7 +150,7 @@ static const char ixgbe_gstrings_test[][ETH_GSTRING_LEN] = {
 #define IXGBE_TEST_LEN sizeof(ixgbe_gstrings_test) / ETH_GSTRING_LEN
 
 static int ixgbe_get_settings(struct net_device *netdev,
-                              struct ethtool_cmd *ecmd)
+			      struct ethtool_cmd *ecmd)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
@@ -322,7 +322,7 @@ static int ixgbe_get_settings(struct net_device *netdev,
 }
 
 static int ixgbe_set_settings(struct net_device *netdev,
-                              struct ethtool_cmd *ecmd)
+			      struct ethtool_cmd *ecmd)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
@@ -374,7 +374,7 @@ static int ixgbe_set_settings(struct net_device *netdev,
 }
 
 static void ixgbe_get_pauseparam(struct net_device *netdev,
-                                 struct ethtool_pauseparam *pause)
+				 struct ethtool_pauseparam *pause)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
@@ -400,7 +400,7 @@ static void ixgbe_get_pauseparam(struct net_device *netdev,
 }
 
 static int ixgbe_set_pauseparam(struct net_device *netdev,
-                                struct ethtool_pauseparam *pause)
+				struct ethtool_pauseparam *pause)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
@@ -468,7 +468,7 @@ static int ixgbe_get_regs_len(struct net_device *netdev)
 #define IXGBE_GET_STAT(_A_, _R_) _A_->stats._R_
 
 static void ixgbe_get_regs(struct net_device *netdev,
-                           struct ethtool_regs *regs, void *p)
+			   struct ethtool_regs *regs, void *p)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
@@ -784,7 +784,7 @@ static int ixgbe_get_eeprom_len(struct net_device *netdev)
 }
 
 static int ixgbe_get_eeprom(struct net_device *netdev,
-                            struct ethtool_eeprom *eeprom, u8 *bytes)
+			    struct ethtool_eeprom *eeprom, u8 *bytes)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
@@ -890,7 +890,7 @@ err:
 }
 
 static void ixgbe_get_drvinfo(struct net_device *netdev,
-                              struct ethtool_drvinfo *drvinfo)
+			      struct ethtool_drvinfo *drvinfo)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	u32 nvm_track_id;
@@ -912,7 +912,7 @@ static void ixgbe_get_drvinfo(struct net_device *netdev,
 }
 
 static void ixgbe_get_ringparam(struct net_device *netdev,
-                                struct ethtool_ringparam *ring)
+				struct ethtool_ringparam *ring)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_ring *tx_ring = adapter->tx_ring[0];
@@ -925,7 +925,7 @@ static void ixgbe_get_ringparam(struct net_device *netdev,
 }
 
 static int ixgbe_set_ringparam(struct net_device *netdev,
-                               struct ethtool_ringparam *ring)
+			       struct ethtool_ringparam *ring)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_ring *temp_tx_ring, *temp_rx_ring;
@@ -1056,7 +1056,7 @@ static int ixgbe_get_sset_count(struct net_device *netdev, int sset)
 }
 
 static void ixgbe_get_ethtool_stats(struct net_device *netdev,
-                                    struct ethtool_stats *stats, u64 *data)
+				    struct ethtool_stats *stats, u64 *data)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct rtnl_link_stats64 temp;
@@ -1127,7 +1127,7 @@ static void ixgbe_get_ethtool_stats(struct net_device *netdev,
 }
 
 static void ixgbe_get_strings(struct net_device *netdev, u32 stringset,
-                              u8 *data)
+			      u8 *data)
 {
 	char *p = (char *)data;
 	int i;
@@ -1872,7 +1872,7 @@ out:
 }
 
 static void ixgbe_diag_test(struct net_device *netdev,
-                            struct ethtool_test *eth_test, u64 *data)
+			    struct ethtool_test *eth_test, u64 *data)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	bool if_running = netif_running(netdev);
@@ -1968,7 +1968,7 @@ skip_ol_tests:
 }
 
 static int ixgbe_wol_exclusion(struct ixgbe_adapter *adapter,
-                               struct ethtool_wolinfo *wol)
+			       struct ethtool_wolinfo *wol)
 {
 	struct ixgbe_hw *hw = &adapter->hw;
 	int retval = 1;
@@ -2025,7 +2025,7 @@ static int ixgbe_wol_exclusion(struct ixgbe_adapter *adapter,
 }
 
 static void ixgbe_get_wol(struct net_device *netdev,
-                          struct ethtool_wolinfo *wol)
+			  struct ethtool_wolinfo *wol)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -2112,7 +2112,7 @@ static int ixgbe_set_phys_id(struct net_device *netdev,
 }
 
 static int ixgbe_get_coalesce(struct net_device *netdev,
-                              struct ethtool_coalesce *ec)
+			      struct ethtool_coalesce *ec)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 
@@ -2167,7 +2167,7 @@ static bool ixgbe_update_rsc(struct ixgbe_adapter *adapter)
 }
 
 static int ixgbe_set_coalesce(struct net_device *netdev,
-                              struct ethtool_coalesce *ec)
+			      struct ethtool_coalesce *ec)
 {
 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_q_vector *q_vector;

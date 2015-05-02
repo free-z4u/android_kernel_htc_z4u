@@ -59,7 +59,7 @@ static int gapspci_read(struct pci_bus *bus, unsigned int devfn, int where, int 
 	case 4: *val = inl(GAPSPCI_BBA_CONFIG+where); break;
 	}
 
-        return PCIBIOS_SUCCESSFUL;
+	return PCIBIOS_SUCCESSFUL;
 }
 
 static int gapspci_write(struct pci_bus *bus, unsigned int devfn, int where, int size, u32 val)
@@ -73,7 +73,7 @@ static int gapspci_write(struct pci_bus *bus, unsigned int devfn, int where, int
 	case 4: outl((u32)val, GAPSPCI_BBA_CONFIG+where); break;
 	}
 
-        return PCIBIOS_SUCCESSFUL;
+	return PCIBIOS_SUCCESSFUL;
 }
 
 struct pci_ops gapspci_pci_ops = {

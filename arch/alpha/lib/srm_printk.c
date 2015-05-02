@@ -37,5 +37,5 @@ srm_printk(const char *fmt, ...)
 	}
 
 	srm_puts(buf, num_lf+len);
-        return len;
+	return len;
 }

@@ -1066,34 +1066,34 @@ WM2200_MIXER_ENUMS(LHPF2, WM2200_LHPF2MIX_INPUT_1_SOURCE);
 
 #define WM2200_MIXER_INPUT_ROUTES(name)	\
 	{ name, "Tone Generator", "Tone Generator" }, \
-        { name, "IN1L", "IN1L PGA" }, \
-        { name, "IN1R", "IN1R PGA" }, \
-        { name, "IN2L", "IN2L PGA" }, \
-        { name, "IN2R", "IN2R PGA" }, \
-        { name, "IN3L", "IN3L PGA" }, \
-        { name, "IN3R", "IN3R PGA" }, \
-        { name, "DSP1.1", "DSP1" }, \
-        { name, "DSP1.2", "DSP1" }, \
-        { name, "DSP1.3", "DSP1" }, \
-        { name, "DSP1.4", "DSP1" }, \
-        { name, "DSP1.5", "DSP1" }, \
-        { name, "DSP1.6", "DSP1" }, \
-        { name, "DSP2.1", "DSP2" }, \
-        { name, "DSP2.2", "DSP2" }, \
-        { name, "DSP2.3", "DSP2" }, \
-        { name, "DSP2.4", "DSP2" }, \
-        { name, "DSP2.5", "DSP2" }, \
-        { name, "DSP2.6", "DSP2" }, \
-        { name, "AIF1RX1", "AIF1RX1" }, \
-        { name, "AIF1RX2", "AIF1RX2" }, \
-        { name, "AIF1RX3", "AIF1RX3" }, \
-        { name, "AIF1RX4", "AIF1RX4" }, \
-        { name, "AIF1RX5", "AIF1RX5" }, \
-        { name, "AIF1RX6", "AIF1RX6" }, \
-        { name, "EQL", "EQL" }, \
-        { name, "EQR", "EQR" }, \
-        { name, "LHPF1", "LHPF1" }, \
-        { name, "LHPF2", "LHPF2" }
+	{ name, "IN1L", "IN1L PGA" }, \
+	{ name, "IN1R", "IN1R PGA" }, \
+	{ name, "IN2L", "IN2L PGA" }, \
+	{ name, "IN2R", "IN2R PGA" }, \
+	{ name, "IN3L", "IN3L PGA" }, \
+	{ name, "IN3R", "IN3R PGA" }, \
+	{ name, "DSP1.1", "DSP1" }, \
+	{ name, "DSP1.2", "DSP1" }, \
+	{ name, "DSP1.3", "DSP1" }, \
+	{ name, "DSP1.4", "DSP1" }, \
+	{ name, "DSP1.5", "DSP1" }, \
+	{ name, "DSP1.6", "DSP1" }, \
+	{ name, "DSP2.1", "DSP2" }, \
+	{ name, "DSP2.2", "DSP2" }, \
+	{ name, "DSP2.3", "DSP2" }, \
+	{ name, "DSP2.4", "DSP2" }, \
+	{ name, "DSP2.5", "DSP2" }, \
+	{ name, "DSP2.6", "DSP2" }, \
+	{ name, "AIF1RX1", "AIF1RX1" }, \
+	{ name, "AIF1RX2", "AIF1RX2" }, \
+	{ name, "AIF1RX3", "AIF1RX3" }, \
+	{ name, "AIF1RX4", "AIF1RX4" }, \
+	{ name, "AIF1RX5", "AIF1RX5" }, \
+	{ name, "AIF1RX6", "AIF1RX6" }, \
+	{ name, "EQL", "EQL" }, \
+	{ name, "EQR", "EQR" }, \
+	{ name, "LHPF1", "LHPF1" }, \
+	{ name, "LHPF2", "LHPF2" }
 
 #define WM2200_MIXER_ROUTES(widget, name) \
 	{ widget, NULL, name " Mixer" },         \

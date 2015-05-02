@@ -115,7 +115,7 @@ EXPORT_PER_CPU_SYMBOL(processors);
 struct acpi_processor_errata errata __read_mostly;
 
 /* --------------------------------------------------------------------------
-                                Errata Handling
+				Errata Handling
    -------------------------------------------------------------------------- */
 
 static int acpi_processor_errata_piix4(struct pci_dev *dev)
@@ -243,7 +243,7 @@ static int acpi_processor_errata(struct acpi_processor *pr)
 }
 
 /* --------------------------------------------------------------------------
-                                 Driver Interface
+				 Driver Interface
    -------------------------------------------------------------------------- */
 
 static int acpi_processor_get_info(struct acpi_device *device)

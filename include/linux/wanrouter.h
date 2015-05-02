@@ -205,16 +205,16 @@ typedef struct wandev_conf
 	unsigned msize;		/* dual-port memory size */
 	int irq;		/* interrupt request level */
 	int dma;		/* DMA request level */
-        char S514_CPU_no[1];	/* S514 PCI adapter CPU number ('A' or 'B') */
-        unsigned PCI_slot_no;	/* S514 PCI adapter slot number */
+	char S514_CPU_no[1];	/* S514 PCI adapter CPU number ('A' or 'B') */
+	unsigned PCI_slot_no;	/* S514 PCI adapter slot number */
 	char auto_pci_cfg;	/* S515 PCI automatic slot detection */
 	char comm_port;		/* Communication Port (PRI=0, SEC=1) */
 	unsigned bps;		/* data transfer rate */
 	unsigned mtu;		/* maximum transmit unit size */
-        unsigned udp_port;      /* UDP port for management */
+	unsigned udp_port;      /* UDP port for management */
 	unsigned char ttl;	/* Time To Live for UDP security */
 	unsigned char ft1;	/* FT1 Configurator Option */
-        char interface;		/* RS-232/V.35, etc. */
+	char interface;		/* RS-232/V.35, etc. */
 	char clocking;		/* external/internal */
 	char line_coding;	/* NRZ/NRZI/FM0/FM1, etc. */
 	char station;		/* DTE/DCE, primary/secondary, etc. */
@@ -431,8 +431,8 @@ typedef struct wanif_conf
 	unsigned char true_if_encoding;	/* Set the dev->type to true board protocol */
 
 	unsigned char asy_data_trans;     /* async API options */
-        unsigned char rts_hs_for_receive; /* async Protocol options */
-        unsigned char xon_xoff_hs_for_receive;
+	unsigned char rts_hs_for_receive; /* async Protocol options */
+	unsigned char xon_xoff_hs_for_receive;
 	unsigned char xon_xoff_hs_for_transmit;
 	unsigned char dcd_hs_for_transmit;
 	unsigned char cts_hs_for_transmit;
@@ -442,7 +442,7 @@ typedef struct wanif_conf
 	unsigned stop_bits;
 	unsigned char parity;
  	unsigned break_timer;
-        unsigned inter_char_timer;
+	unsigned inter_char_timer;
 	unsigned rx_complete_length;
 	unsigned xon_char;
 	unsigned xoff_char;
@@ -476,7 +476,7 @@ struct wan_device {
 	unsigned bps;			/* data transfer rate */
 	unsigned mtu;			/* max physical transmit unit size */
 	unsigned udp_port;              /* UDP port for management */
-        unsigned char ttl;		/* Time To Live for UDP security */
+	unsigned char ttl;		/* Time To Live for UDP security */
 	unsigned enable_tx_int; 	/* Transmit Interrupt enabled or not */
 	char interface;			/* RS-232/V.35, etc. */
 	char clocking;			/* external/internal */

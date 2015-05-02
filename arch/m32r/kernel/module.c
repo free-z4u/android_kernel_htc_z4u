@@ -106,7 +106,7 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 			break;
 		case R_M32R_HI16_ULO_RELA:
 	    		COPY_UNALIGNED_WORD (*location, value, align);
-                        relocation = (relocation >>16) & 0xffff;
+			relocation = (relocation >>16) & 0xffff;
 			/* RELA must has 0 at relocation field. */
 			value += relocation;
 	    		COPY_UNALIGNED_WORD (value, *location, align);
@@ -114,14 +114,14 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 		case R_M32R_HI16_SLO_RELA:
 	    		COPY_UNALIGNED_WORD (*location, value, align);
 			if (relocation & 0x8000) relocation += 0x10000;
-                        relocation = (relocation >>16) & 0xffff;
+			relocation = (relocation >>16) & 0xffff;
 			/* RELA must has 0 at relocation field. */
 			value += relocation;
 	    		COPY_UNALIGNED_WORD (value, *location, align);
 			break;
 		case R_M32R_16_RELA:
 			hlocation = (unsigned short *)location;
-                        relocation = relocation & 0xffff;
+			relocation = relocation & 0xffff;
 			/* RELA must has 0 at relocation field. */
 			hvalue = relocation;
 	    		COPY_UNALIGNED_WORD (hvalue, *hlocation, align);
@@ -129,14 +129,14 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 		case R_M32R_SDA16_RELA:
 		case R_M32R_LO16_RELA:
 	    		COPY_UNALIGNED_WORD (*location, value, align);
-                        relocation = relocation & 0xffff;
+			relocation = relocation & 0xffff;
 			/* RELA must has 0 at relocation field. */
 			value += relocation;
 	    		COPY_UNALIGNED_WORD (value, *location, align);
 			break;
 		case R_M32R_24_RELA:
 	    		COPY_UNALIGNED_WORD (*location, value, align);
-                        relocation = relocation & 0xffffff;
+			relocation = relocation & 0xffffff;
 			/* RELA must has 0 at relocation field. */
 			value += relocation;
 	    		COPY_UNALIGNED_WORD (value, *location, align);
@@ -157,7 +157,7 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 					me->name, value);
 					return -ENOEXEC;
 				}
-                        relocation = (relocation >> 2) & 0xffff;
+			relocation = (relocation >> 2) & 0xffff;
 			value += relocation;
 	    		COPY_UNALIGNED_WORD (value, *location, align);
 			break;
@@ -168,7 +168,7 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 			svalue = (int)hvalue;
 			svalue = (signed char)svalue << 2;
 			relocation += svalue;
-                        relocation = (relocation >> 2) & 0xff;
+			relocation = (relocation >> 2) & 0xff;
 			hvalue = hvalue & 0xff00;
 			hvalue += relocation;
 	    		COPY_UNALIGNED_HWORD (hvalue, *hlocation, align);
@@ -189,7 +189,7 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 					me->name, value);
 					return -ENOEXEC;
 				}
-                        relocation = (relocation >> 2) & 0xffffff;
+			relocation = (relocation >> 2) & 0xffffff;
 			value += relocation;
 	    		COPY_UNALIGNED_WORD (value, *location, align);
 			break;

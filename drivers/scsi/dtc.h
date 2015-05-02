@@ -65,7 +65,7 @@ static int dtc_bus_reset(Scsi_Cmnd *);
 
 #define dbNCR5380_write(reg, value) do {                                  \
     printk("DTC : write %02x to register %d at address %p\n",         \
-            (value), (reg), DTC_address(reg));     \
+	    (value), (reg), DTC_address(reg));     \
     writeb(value, DTC_address(reg));} while(0)
 
 

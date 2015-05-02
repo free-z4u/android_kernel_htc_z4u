@@ -325,7 +325,7 @@ DECLARE_EVENT_CLASS(block_get_rq,
 		__field( unsigned int,	nr_sector		)
 		__array( char,		rwbs,	RWBS_LEN	)
 		__array( char,		comm,	TASK_COMM_LEN	)
-        ),
+	),
 
 	TP_fast_assign(
 		__entry->dev		= bio ? bio->bi_bdev->bd_dev : 0;
@@ -334,7 +334,7 @@ DECLARE_EVENT_CLASS(block_get_rq,
 		blk_fill_rwbs(__entry->rwbs,
 			      bio ? bio->bi_rw : 0, __entry->nr_sector);
 		memcpy(__entry->comm, current->comm, TASK_COMM_LEN);
-        ),
+	),
 
 	TP_printk("%d,%d %s %llu + %u [%s]",
 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->rwbs,

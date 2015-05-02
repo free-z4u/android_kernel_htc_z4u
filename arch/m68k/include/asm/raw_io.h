@@ -64,7 +64,7 @@ static inline void raw_insb(volatile u8 __iomem *port, u8 *buf, unsigned int len
 {
 	unsigned int i;
 
-        for (i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 		*buf++ = in_8(port);
 }
 
@@ -73,7 +73,7 @@ static inline void raw_outsb(volatile u8 __iomem *port, const u8 *buf,
 {
 	unsigned int i;
 
-        for (i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 		out_8(port, *buf++);
 }
 
@@ -284,7 +284,7 @@ static inline void raw_insw_swapw(volatile u16 __iomem *port, u16 *buf,
 		"rolw  #8,%/d0\n\t"
 		"movew %/d0,%/a1@+\n\t"
 		"dbra %/d6,1b"
-                :
+		:
 		: "g" (port), "g" (buf), "g" (nr)
 		: "d0", "a0", "a1", "d6");
 }
@@ -302,7 +302,7 @@ static inline void raw_outsw_swapw(volatile u16 __iomem *port, const u16 *buf,
 		"rolw  #8,%/d0\n\t"
 		"movew %/d0,%/a0@\n\t"
 		"dbra %/d6,1b"
-                :
+		:
 		: "g" (port), "g" (buf), "g" (nr)
 		: "d0", "a0", "a1", "d6");
     else
@@ -337,7 +337,7 @@ static inline void raw_outsw_swapw(volatile u16 __iomem *port, const u16 *buf,
 		"rolw  #8,%/d0\n\t"
 		"movew %/d0,%/a0@\n\t"
 		"dbra %/d6,1b"
-                :
+		:
 		: "g" (port), "g" (buf), "g" (nr)
 		: "d0", "a0", "a1", "d6");
 }

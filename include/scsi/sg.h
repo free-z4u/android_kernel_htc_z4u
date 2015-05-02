@@ -42,8 +42,8 @@ Major new features in SG 3.x driver (cf SG 2.x drivers)
  indirect IO should be fine. Read the documentation for more information.
 
  ** N.B. To use direct IO 'echo 1 > /proc/scsi/sg/allow_dio' or
-         'echo 1 > /sys/module/sg/parameters/allow_dio' is needed.
-         That attribute is 0 by default. **
+	 'echo 1 > /sys/module/sg/parameters/allow_dio' is needed.
+	 That attribute is 0 by default. **
 
  Historical note: this SCSI pass-through driver has been known as "sg" for
  a decade. In broader kernel discussions "sg" is used to refer to scatter

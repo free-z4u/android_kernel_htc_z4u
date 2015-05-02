@@ -620,7 +620,7 @@ asmlinkage void sparc_breakpoint(struct pt_regs *regs)
 		regs->tnpc &= 0xffffffff;
 	}
 #ifdef DEBUG_SPARC_BREAKPOINT
-        printk ("TRAP: Entering kernel PC=%lx, nPC=%lx\n", regs->tpc, regs->tnpc);
+	printk ("TRAP: Entering kernel PC=%lx, nPC=%lx\n", regs->tpc, regs->tnpc);
 #endif
 	info.si_signo = SIGTRAP;
 	info.si_errno = 0;
@@ -637,7 +637,7 @@ extern void check_pending(int signum);
 
 SYSCALL_DEFINE2(getdomainname, char __user *, name, int, len)
 {
-        int nlen, err;
+	int nlen, err;
 
 	if (len < 0)
 		return -EINVAL;

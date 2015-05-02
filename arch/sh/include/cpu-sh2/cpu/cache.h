@@ -24,11 +24,11 @@
 #define CCR_CACHE_WT	0x02    /* CCR[bit1=1,bit2=1] */
 				/* 0x00000000-0x7fffffff: Write-through  */
 				/* 0x80000000-0x9fffffff: Write-back     */
-                                /* 0xc0000000-0xdfffffff: Write-through  */
+				/* 0xc0000000-0xdfffffff: Write-through  */
 #define CCR_CACHE_CB	0x04    /* CCR[bit1=0,bit2=0] */
 				/* 0x00000000-0x7fffffff: Write-back     */
 				/* 0x80000000-0x9fffffff: Write-through  */
-                                /* 0xc0000000-0xdfffffff: Write-back     */
+				/* 0xc0000000-0xdfffffff: Write-back     */
 #define CCR_CACHE_CF	0x08	/* Cache invalidate */
 
 #define CACHE_OC_ADDRESS_ARRAY	0xf0000000

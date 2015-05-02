@@ -1017,7 +1017,7 @@ static const struct file_operations fops_recv = {
 };
 
 static ssize_t read_file_regidx(struct file *file, char __user *user_buf,
-                                size_t count, loff_t *ppos)
+				size_t count, loff_t *ppos)
 {
 	struct ath_softc *sc = file->private_data;
 	char buf[32];

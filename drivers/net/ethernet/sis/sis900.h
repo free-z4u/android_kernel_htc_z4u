@@ -28,15 +28,15 @@ enum sis900_registers {
 	ier=0x18,               //Interrupt Enable Register
 	epar=0x18,              //Enhanced PHY Access Register
 	txdp=0x20,              //Transmit Descriptor Pointer Register
-        txcfg=0x24,             //Transmit Configuration Register
-        rxdp=0x30,              //Receive Descriptor Pointer Register
-        rxcfg=0x34,             //Receive Configuration Register
-        flctrl=0x38,            //Flow Control Register
-        rxlen=0x3c,             //Receive Packet Length Register
-        rfcr=0x48,              //Receive Filter Control Register
-        rfdr=0x4C,              //Receive Filter Data Register
-        pmctrl=0xB0,            //Power Management Control Register
-        pmer=0xB4               //Power Management Wake-up Event Register
+	txcfg=0x24,             //Transmit Configuration Register
+	rxdp=0x30,              //Receive Descriptor Pointer Register
+	rxcfg=0x34,             //Receive Configuration Register
+	flctrl=0x38,            //Flow Control Register
+	rxlen=0x3c,             //Receive Packet Length Register
+	rfcr=0x48,              //Receive Filter Control Register
+	rfdr=0x4C,              //Receive Filter Data Register
+	pmctrl=0xB0,            //Power Management Control Register
+	pmer=0xB4               //Power Management Wake-up Event Register
 };
 
 /* Symbolic names for bits in various registers */

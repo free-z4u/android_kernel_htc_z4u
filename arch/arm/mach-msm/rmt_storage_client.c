@@ -1369,31 +1369,31 @@ static struct miscdevice rmt_storage_device = {
 
 void htc_rmt_storage_force_sync(void)
 {
-        int ret, count = 0;
+	int ret, count = 0;
 
-        pr_info("%s ++\n", __func__);
-        pr_info("%s: Force RMT storage final sync...\n", __func__);
-        ret = rmt_storage_force_sync(rmt_srv->rpc_client);
-        if (ret)
-               return;
+	pr_info("%s ++\n", __func__);
+	pr_info("%s: Force RMT storage final sync...\n", __func__);
+	ret = rmt_storage_force_sync(rmt_srv->rpc_client);
+	if (ret)
+	       return;
 
-        do {
-               count++;
-               msleep(20);
-               ret = rmt_storage_get_sync_status(rmt_srv->rpc_client);
-        } while (ret != 1 && count < 200);
+	do {
+	       count++;
+	       msleep(20);
+	       ret = rmt_storage_get_sync_status(rmt_srv->rpc_client);
+	} while (ret != 1 && count < 200);
 
-        if (ret == 1)
-                pr_info("%s: RMT storage sync successful.\n", __func__);
-        else
-                pr_err("%s: RMT storage sync failed.\n", __func__);
+	if (ret == 1)
+		pr_info("%s: RMT storage sync successful.\n", __func__);
+	else
+		pr_err("%s: RMT storage sync failed.\n", __func__);
 #if 0
-        pr_info("%s: Un register RMT storage client.\n", __func__);
-        msm_rpc_unregister_client(rmt_srv->rpc_client);
+	pr_info("%s: Un register RMT storage client.\n", __func__);
+	msm_rpc_unregister_client(rmt_srv->rpc_client);
 #endif
-        pr_info("%s --\n", __func__);
+	pr_info("%s --\n", __func__);
 
-        return;
+	return;
 }
 
 EXPORT_SYMBOL(htc_rmt_storage_force_sync);
@@ -1509,7 +1509,7 @@ static int rmt_storage_reboot_call(
 	case SYS_RESTART:
 	case SYS_HALT:
 	case SYS_POWER_OFF:
-                msleep(1500);
+		msleep(1500);
 
 		timeout = timeout - 1.5;
 #if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
@@ -1545,27 +1545,27 @@ static int rmt_storage_reboot_call(
 		else
 			pr_err("%s: RMT storage sync failed.\n", __func__);
 
-                count = 0;
-                while (count < MAX_GET_SYNC_STATUS_TRIES) {
-                       if (atomic_read(&rmc->wcount) == 0) {
-                               break;
-                       } else {
-                               count++;
-                               msleep(RMT_SLEEP_INTERVAL_MS);
-                       }
-                }
+		count = 0;
+		while (count < MAX_GET_SYNC_STATUS_TRIES) {
+		       if (atomic_read(&rmc->wcount) == 0) {
+			       break;
+		       } else {
+			       count++;
+			       msleep(RMT_SLEEP_INTERVAL_MS);
+		       }
+		}
 
-                if (atomic_read(&rmc->wcount))
-                        pr_err("%s: Efs_sync still incomplete, waiting:%dms\n",
+		if (atomic_read(&rmc->wcount))
+			pr_err("%s: Efs_sync still incomplete, waiting:%dms\n",
 						__func__, RMT_SLEEP_INTERVAL_MS*count);
 		else
 			pr_info("%s: Efs_sync completed, waiting:%dms\n",
 						__func__, RMT_SLEEP_INTERVAL_MS*count);
 
-                pr_info("%s: Un register RMT storage client.\n", __func__);
-                msm_rpc_unregister_client(rmt_srv->rpc_client);
-                pr_info("%s --\n", __func__);
-                break;
+		pr_info("%s: Un register RMT storage client.\n", __func__);
+		msm_rpc_unregister_client(rmt_srv->rpc_client);
+		pr_info("%s --\n", __func__);
+		break;
 
 	default:
 		break;
@@ -1581,12 +1581,12 @@ static struct notifier_block rmt_storage_reboot_notifier = {
 
 int unregister_rmt_reboot_notifier(void)
 {
-        int ret;
-        ret = unregister_reboot_notifier(&rmt_storage_reboot_notifier);
-        if (ret){
-                pr_err("%s: Failed to register reboot notifier", __func__);
-        }
-        return ret;
+	int ret;
+	ret = unregister_reboot_notifier(&rmt_storage_reboot_notifier);
+	if (ret){
+		pr_err("%s: Failed to register reboot notifier", __func__);
+	}
+	return ret;
 }
 
 EXPORT_SYMBOL(unregister_rmt_reboot_notifier);

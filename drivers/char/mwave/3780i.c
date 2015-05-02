@@ -71,7 +71,7 @@ static void PaceMsaAccess(unsigned short usDspBaseIO)
 }
 
 unsigned short dsp3780I_ReadMsaCfg(unsigned short usDspBaseIO,
-                                   unsigned long ulMsaAddr)
+				   unsigned long ulMsaAddr)
 {
 	unsigned long flags;
 	unsigned short val;
@@ -92,7 +92,7 @@ unsigned short dsp3780I_ReadMsaCfg(unsigned short usDspBaseIO,
 }
 
 void dsp3780I_WriteMsaCfg(unsigned short usDspBaseIO,
-                          unsigned long ulMsaAddr, unsigned short usValue)
+			  unsigned long ulMsaAddr, unsigned short usValue)
 {
 	unsigned long flags;
 
@@ -143,7 +143,7 @@ static void dsp3780I_WriteGenCfg(unsigned short usDspBaseIO, unsigned uIndex,
 
 #if 0
 unsigned char dsp3780I_ReadGenCfg(unsigned short usDspBaseIO,
-                                  unsigned uIndex)
+				  unsigned uIndex)
 {
 	DSP_ISA_SLAVE_CONTROL rSlaveControl;
 	DSP_ISA_SLAVE_CONTROL rSlaveControl_Save;
@@ -171,8 +171,8 @@ unsigned char dsp3780I_ReadGenCfg(unsigned short usDspBaseIO,
 #endif  /*  0  */
 
 int dsp3780I_EnableDSP(DSP_3780I_CONFIG_SETTINGS * pSettings,
-                       unsigned short *pIrqMap,
-                       unsigned short *pDmaMap)
+		       unsigned short *pIrqMap,
+		       unsigned short *pDmaMap)
 {
 	unsigned long flags;
 	unsigned short usDspBaseIO = pSettings->usDspBaseIO;
@@ -474,7 +474,7 @@ int dsp3780I_Run(DSP_3780I_CONFIG_SETTINGS * pSettings)
 
 
 int dsp3780I_ReadDStore(unsigned short usDspBaseIO, void __user *pvBuffer,
-                        unsigned uCount, unsigned long ulDSPAddr)
+			unsigned uCount, unsigned long ulDSPAddr)
 {
 	unsigned long flags;
 	unsigned short __user *pusBuffer = pvBuffer;
@@ -515,8 +515,8 @@ int dsp3780I_ReadDStore(unsigned short usDspBaseIO, void __user *pvBuffer,
 }
 
 int dsp3780I_ReadAndClearDStore(unsigned short usDspBaseIO,
-                                void __user *pvBuffer, unsigned uCount,
-                                unsigned long ulDSPAddr)
+				void __user *pvBuffer, unsigned uCount,
+				unsigned long ulDSPAddr)
 {
 	unsigned long flags;
 	unsigned short __user *pusBuffer = pvBuffer;
@@ -558,7 +558,7 @@ int dsp3780I_ReadAndClearDStore(unsigned short usDspBaseIO,
 
 
 int dsp3780I_WriteDStore(unsigned short usDspBaseIO, void __user *pvBuffer,
-                         unsigned uCount, unsigned long ulDSPAddr)
+			 unsigned uCount, unsigned long ulDSPAddr)
 {
 	unsigned long flags;
 	unsigned short __user *pusBuffer = pvBuffer;
@@ -600,7 +600,7 @@ int dsp3780I_WriteDStore(unsigned short usDspBaseIO, void __user *pvBuffer,
 
 
 int dsp3780I_ReadIStore(unsigned short usDspBaseIO, void __user *pvBuffer,
-                        unsigned uCount, unsigned long ulDSPAddr)
+			unsigned uCount, unsigned long ulDSPAddr)
 {
 	unsigned long flags;
 	unsigned short __user *pusBuffer = pvBuffer;
@@ -648,7 +648,7 @@ int dsp3780I_ReadIStore(unsigned short usDspBaseIO, void __user *pvBuffer,
 
 
 int dsp3780I_WriteIStore(unsigned short usDspBaseIO, void __user *pvBuffer,
-                         unsigned uCount, unsigned long ulDSPAddr)
+			 unsigned uCount, unsigned long ulDSPAddr)
 {
 	unsigned long flags;
 	unsigned short __user *pusBuffer = pvBuffer;
@@ -697,7 +697,7 @@ int dsp3780I_WriteIStore(unsigned short usDspBaseIO, void __user *pvBuffer,
 
 
 int dsp3780I_GetIPCSource(unsigned short usDspBaseIO,
-                          unsigned short *pusIPCSource)
+			  unsigned short *pusIPCSource)
 {
 	unsigned long flags;
 	DSP_HBRIDGE_CONTROL rHBridgeControl;

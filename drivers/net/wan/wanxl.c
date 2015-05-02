@@ -58,7 +58,7 @@ typedef struct {
 	struct net_device *dev;
 	struct card_t *card;
 	spinlock_t lock;	/* for wanxl_xmit */
-        int node;		/* physical port #0 - 3 */
+	int node;		/* physical port #0 - 3 */
 	unsigned int clock_type;
 	int tx_in, tx_out;
 	struct sk_buff *tx_skbs[TX_BUFFERS];
@@ -88,7 +88,7 @@ typedef struct card_t {
 
 static inline port_t* dev_to_port(struct net_device *dev)
 {
-        return (port_t *)dev_to_hdlc(dev)->priv;
+	return (port_t *)dev_to_hdlc(dev)->priv;
 }
 
 
@@ -164,7 +164,7 @@ static inline void wanxl_tx_intr(port_t *port)
 {
 	struct net_device *dev = port->dev;
 	while (1) {
-                desc_t *desc = &get_status(port)->tx_descs[port->tx_in];
+		desc_t *desc = &get_status(port)->tx_descs[port->tx_in];
 		struct sk_buff *skb = port->tx_skbs[port->tx_in];
 
 		switch (desc->stat) {
@@ -182,12 +182,12 @@ static inline void wanxl_tx_intr(port_t *port)
 			dev->stats.tx_packets++;
 			dev->stats.tx_bytes += skb->len;
 		}
-                desc->stat = PACKET_EMPTY; /* Free descriptor */
+		desc->stat = PACKET_EMPTY; /* Free descriptor */
 		pci_unmap_single(port->card->pdev, desc->address, skb->len,
 				 PCI_DMA_TODEVICE);
 		dev_kfree_skb_irq(skb);
-                port->tx_in = (port->tx_in + 1) % TX_BUFFERS;
-        }
+		port->tx_in = (port->tx_in + 1) % TX_BUFFERS;
+	}
 }
 
 
@@ -245,17 +245,17 @@ static inline void wanxl_rx_intr(card_t *card)
 
 static irqreturn_t wanxl_intr(int irq, void* dev_id)
 {
-        card_t *card = dev_id;
-        int i;
-        u32 stat;
-        int handled = 0;
+	card_t *card = dev_id;
+	int i;
+	u32 stat;
+	int handled = 0;
 
 
-        while((stat = readl(card->plx + PLX_DOORBELL_FROM_CARD)) != 0) {
-                handled = 1;
+	while((stat = readl(card->plx + PLX_DOORBELL_FROM_CARD)) != 0) {
+		handled = 1;
 		writel(stat, card->plx + PLX_DOORBELL_FROM_CARD);
 
-                for (i = 0; i < card->n_ports; i++) {
+		for (i = 0; i < card->n_ports; i++) {
 			if (stat & (1 << (DOORBELL_FROM_CARD_TX_0 + i)))
 				wanxl_tx_intr(&card->ports[i]);
 			if (stat & (1 << (DOORBELL_FROM_CARD_CABLE_0 + i)))
@@ -263,25 +263,25 @@ static irqreturn_t wanxl_intr(int irq, void* dev_id)
 		}
 		if (stat & (1 << DOORBELL_FROM_CARD_RX))
 			wanxl_rx_intr(card);
-        }
+	}
 
-        return IRQ_RETVAL(handled);
+	return IRQ_RETVAL(handled);
 }
 
 
 
 static netdev_tx_t wanxl_xmit(struct sk_buff *skb, struct net_device *dev)
 {
-        port_t *port = dev_to_port(dev);
+	port_t *port = dev_to_port(dev);
 	desc_t *desc;
 
-        spin_lock(&port->lock);
+	spin_lock(&port->lock);
 
 	desc = &get_status(port)->tx_descs[port->tx_out];
-        if (desc->stat != PACKET_EMPTY) {
-                /* should never happen - previous xmit should stop queue */
+	if (desc->stat != PACKET_EMPTY) {
+		/* should never happen - previous xmit should stop queue */
 #ifdef DEBUG_PKT
-                printk(KERN_DEBUG "%s: transmitter buffer full\n", dev->name);
+		printk(KERN_DEBUG "%s: transmitter buffer full\n", dev->name);
 #endif
 		netif_stop_queue(dev);
 		spin_unlock(&port->lock);
@@ -385,7 +385,7 @@ static int wanxl_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 
 	default:
 		return hdlc_ioctl(dev, ifr, cmd);
-        }
+	}
 }
 
 

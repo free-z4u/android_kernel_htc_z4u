@@ -29,7 +29,7 @@ int arch_msi_check_device(struct pci_dev* dev, int nvec, int type)
 		return ppc_md.msi_check_device(dev, nvec, type);
 	}
 
-        return 0;
+	return 0;
 }
 
 int arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)

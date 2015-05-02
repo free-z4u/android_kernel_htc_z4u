@@ -87,8 +87,8 @@ struct dma_buffparms
 	int buffsize;
 
      	/*
-         * Device state tables
-         */
+	 * Device state tables
+	 */
 
 	unsigned long flags;
 #define DMA_BUSY	0x00000001
@@ -120,7 +120,7 @@ struct dma_buffparms
 	int      subdivision;
 
 	int      fragment_size;
-        int	 needs_reorg;
+	int	 needs_reorg;
 	int	 max_fragments;
 
 	int	 bytes_in_use;
@@ -178,10 +178,10 @@ struct audio_driver
 	int (*local_qlen)(int dev);
 	void (*copy_user) (int dev,
 			char *localbuf, int localoffs,
-                        const char __user *userbuf, int useroffs,
-                        int max_in, int max_out,
-                        int *used, int *returned,
-                        int len);
+			const char __user *userbuf, int useroffs,
+			int max_in, int max_out,
+			int *used, int *returned,
+			int len);
 	void (*halt_input) (int dev);
 	void (*halt_output) (int dev);
 	void (*trigger) (int dev, int bits);
@@ -195,7 +195,7 @@ struct audio_driver
 
 struct audio_operations
 {
-        char name[128];
+	char name[128];
 	int flags;
 #define NOTHING_SPECIAL 	0x00
 #define NEEDS_RESTART		0x01

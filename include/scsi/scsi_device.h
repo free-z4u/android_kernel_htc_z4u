@@ -219,7 +219,7 @@ struct scsi_dh_data {
 	dev_printk(prefix, &(sdev)->sdev_gendev, fmt, ##a)
 
 #define scmd_printk(prefix, scmd, fmt, a...)				\
-        (scmd)->request->rq_disk ?					\
+	(scmd)->request->rq_disk ?					\
 	sdev_printk(prefix, (scmd)->device, "[%s] " fmt,		\
 		    (scmd)->request->rq_disk->disk_name, ##a) :		\
 	sdev_printk(prefix, (scmd)->device, fmt, ##a)

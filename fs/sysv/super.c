@@ -237,7 +237,7 @@ static int detect_sysv(struct sysv_sb_info *sbi, struct buffer_head *bh)
 	/* On Interactive Unix (ISC) Version 4.0/3.x s_type field = 0x10,
 	   0x20 or 0x30 indicates that symbolic links and the 14-character
 	   filename limit is gone. Due to lack of information about this
-           feature read-only mode seems to be a reasonable approach... -KGB */
+	   feature read-only mode seems to be a reasonable approach... -KGB */
 
 	if (type >= 0x10) {
 		printk("SysV FS: can't handle long file names on %s, "

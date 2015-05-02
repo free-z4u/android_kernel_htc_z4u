@@ -38,8 +38,8 @@ void blackfin_invalidate_entire_icache(void)
 
 static void
 bfin_cache_init(struct cplb_entry *cplb_tbl, unsigned long cplb_addr,
-                unsigned long cplb_data, unsigned long mem_control,
-                unsigned long mem_mask)
+		unsigned long cplb_data, unsigned long mem_control,
+		unsigned long mem_mask)
 {
 	int i;
 

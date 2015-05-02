@@ -60,7 +60,7 @@ wax_init_irq(struct gsc_asic *wax)
 	gsc_readl(base+OFFSET_IRR);
 
 	/* We're not really convinced we want to reset the onboard
-         * devices. Firmware does it for us...
+	 * devices. Firmware does it for us...
 	 */
 
 	/* Resets */

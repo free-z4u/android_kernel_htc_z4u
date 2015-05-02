@@ -608,7 +608,7 @@ sisfb_verify_rate(struct sis_video_info *ivideo, struct sisfb_monitor *monitor,
 			return false;
 		if(hsync > (monitor->hmax + 1))
 			return false;
-        } else {
+	} else {
 		return false;
 	}
 	return true;
@@ -2239,7 +2239,7 @@ sisfb_sense_crt1(struct sis_video_info *ivideo)
        } while(((temp == 0) || (temp == 0xffff)) && i--);
 
        if((temp == 0) || (temp == 0xffff)) {
-          if(sisfb_test_DDC1(ivideo)) temp = 1;
+	  if(sisfb_test_DDC1(ivideo)) temp = 1;
        }
     }
 
@@ -2355,17 +2355,17 @@ SISDoSense(struct sis_video_info *ivideo, u16 type, u16 test)
     for(j = 0; j < 10; j++) {
        result = 0;
        for(i = 0; i < 3; i++) {
-          mytest = test;
+	  mytest = test;
 	   SiS_SetReg(SISPART4, 0x11, (type & 0x00ff));
-          temp = (type >> 8) | (mytest & 0x00ff);
+	  temp = (type >> 8) | (mytest & 0x00ff);
 	  SiS_SetRegANDOR(SISPART4, 0x10, 0xe0, temp);
-          SiS_DDC2Delay(&ivideo->SiS_Pr, 0x1500);
-          mytest >>= 8;
-          mytest &= 0x7f;
+	  SiS_DDC2Delay(&ivideo->SiS_Pr, 0x1500);
+	  mytest >>= 8;
+	  mytest &= 0x7f;
 	   temp = SiS_GetReg(SISPART4, 0x03);
-          temp ^= 0x0e;
-          temp &= mytest;
-          if(temp == mytest) result++;
+	  temp ^= 0x0e;
+	  temp &= mytest;
+	  if(temp == mytest) result++;
 #if 1
 	  SiS_SetReg(SISPART4, 0x11, 0x00);
 	  SiS_SetRegAND(SISPART4, 0x10, 0xe0);
@@ -2415,7 +2415,7 @@ SiS_Sense30x(struct sis_video_info *ivideo)
        if(ivideo->bios_abase[0x5d] & 0x04) biosflag |= 0x01;
     } else if(ivideo->sisvga_engine == SIS_300_VGA) {
        if(ivideo->bios_abase) {
-          biosflag = ivideo->bios_abase[0xfe] & 0x03;
+	  biosflag = ivideo->bios_abase[0xfe] & 0x03;
        }
     }
 
@@ -2455,7 +2455,7 @@ SiS_Sense30x(struct sis_video_info *ivideo)
 
     if(vga2_c || vga2) {
        if(SISDoSense(ivideo, vga2, vga2_c)) {
-          if(biosflag & 0x01) {
+	  if(biosflag & 0x01) {
 	     printk(KERN_INFO "%s %s SCART output\n", stdstr, tvstr);
 	     SiS_SetRegOR(SISCR, 0x32, 0x04);
 	  } else {
@@ -2475,7 +2475,7 @@ SiS_Sense30x(struct sis_video_info *ivideo)
        SiS_SetReg(SISPART2, 0x4d, (backupP2_4d | 0x10));
        SiS_DDC2Delay(&ivideo->SiS_Pr, 0x2000);
        if((result = SISDoSense(ivideo, svhs, 0x0604))) {
-          if((result = SISDoSense(ivideo, cvbs, 0x0804))) {
+	  if((result = SISDoSense(ivideo, cvbs, 0x0804))) {
 	     printk(KERN_INFO "%s %s YPbPr component output\n", stdstr, tvstr);
 	     SiS_SetRegOR(SISCR, 0x32, 0x80);
 	  }
@@ -2487,14 +2487,14 @@ SiS_Sense30x(struct sis_video_info *ivideo)
 
     if(!(ivideo->vbflags & TV_YPBPR)) {
        if((result = SISDoSense(ivideo, svhs, svhs_c))) {
-          printk(KERN_INFO "%s %s SVIDEO output\n", stdstr, tvstr);
+	  printk(KERN_INFO "%s %s SVIDEO output\n", stdstr, tvstr);
 	   SiS_SetRegOR(SISCR, 0x32, 0x02);
        }
        if((biosflag & 0x02) || (!result)) {
-          if(SISDoSense(ivideo, cvbs, cvbs_c)) {
+	  if(SISDoSense(ivideo, cvbs, cvbs_c)) {
 	     printk(KERN_INFO "%s %s COMPOSITE output\n", stdstr, tvstr);
 	     SiS_SetRegOR(SISCR, 0x32, 0x01);
-          }
+	  }
        }
     }
 
@@ -2507,7 +2507,7 @@ SiS_Sense30x(struct sis_video_info *ivideo)
     if(ivideo->vbflags2 & VB2_30xCLV) {
 	biosflag = SiS_GetReg(SISPART2, 0x00);
        if(biosflag & 0x20) {
-          for(myflag = 2; myflag > 0; myflag--) {
+	  for(myflag = 2; myflag > 0; myflag--) {
 	     biosflag ^= 0x20;
 	     SiS_SetReg(SISPART2, 0x00, biosflag);
 	  }
@@ -6048,7 +6048,7 @@ sisfb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	/* Find PCI systems for Chrontel/GPIO communication setup */
 	if(ivideo->chip == SIS_630) {
 		i = 0;
-        	do {
+		do {
 			if(mychswtable[i].subsysVendor == ivideo->subsysvendor &&
 			   mychswtable[i].subsysCard   == ivideo->subsysdevice) {
 				ivideo->SiS_Pr.SiS_ChSW = true;
@@ -6696,7 +6696,7 @@ static int __init sisfb_init_module(void)
 	if(useoem != -1)
 		sisfb_useoem = useoem;
 
-        if(pdc != -1)
+	if(pdc != -1)
 		sisfb_pdc  = (pdc  & 0x7f);
 
 	if(pdc1 != -1)

@@ -1420,7 +1420,7 @@ mptspi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 			ioc->name);
 		error = -1;
 		goto out_mptspi_probe;
-        }
+	}
 
 	spin_lock_irqsave(&ioc->FreeQlock, flags);
 

@@ -79,7 +79,7 @@ config MACH_DOCKSTAR
 	  Seagate FreeAgent DockStar.
 
 config MACH_OPENRD
-        bool
+	bool
 
 config MACH_OPENRD_BASE
 	bool "Marvell OpenRD Base Board"

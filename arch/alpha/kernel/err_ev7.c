@@ -257,7 +257,7 @@ ev7_process_pal_subpacket(struct el_subpacket *header)
 		       packet->by_type.logout.exc_addr,
 		       packet->by_type.logout.halt_code);
 		el_process_subpackets(header,
-                                      packet->by_type.logout.subpacket_count);
+				      packet->by_type.logout.subpacket_count);
 		break;
 	default:
 		printk("%s  ** PAL TYPE %d SUBPACKET\n",

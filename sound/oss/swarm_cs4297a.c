@@ -193,62 +193,62 @@ static const char invalid_magic[] =
 
 #define VALIDATE_STATE(s)                          \
 ({                                                 \
-        if (!(s) || (s)->magic != CS4297a_MAGIC) { \
-                printk(invalid_magic);             \
-                return -ENXIO;                     \
-        }                                          \
+	if (!(s) || (s)->magic != CS4297a_MAGIC) { \
+		printk(invalid_magic);             \
+		return -ENXIO;                     \
+	}                                          \
 })
 
 struct list_head cs4297a_devs = { &cs4297a_devs, &cs4297a_devs };
 
 typedef struct serdma_descr_s {
-        u64 descr_a;
-        u64 descr_b;
+	u64 descr_a;
+	u64 descr_b;
 } serdma_descr_t;
 
 typedef unsigned long paddr_t;
 
 typedef struct serdma_s {
-        unsigned         ringsz;
-        serdma_descr_t  *descrtab;
-        serdma_descr_t  *descrtab_end;
-        paddr_t          descrtab_phys;
+	unsigned         ringsz;
+	serdma_descr_t  *descrtab;
+	serdma_descr_t  *descrtab_end;
+	paddr_t          descrtab_phys;
 
-        serdma_descr_t  *descr_add;
-        serdma_descr_t  *descr_rem;
+	serdma_descr_t  *descr_add;
+	serdma_descr_t  *descr_rem;
 
-        u64  *dma_buf;           // buffer for DMA contents (frames)
-        paddr_t          dma_buf_phys;
-        u16  *sample_buf;		// tmp buffer for sample conversions
-        u16  *sb_swptr;
-        u16  *sb_hwptr;
-        u16  *sb_end;
+	u64  *dma_buf;           // buffer for DMA contents (frames)
+	paddr_t          dma_buf_phys;
+	u16  *sample_buf;		// tmp buffer for sample conversions
+	u16  *sb_swptr;
+	u16  *sb_hwptr;
+	u16  *sb_end;
 
-        dma_addr_t dmaaddr;
+	dma_addr_t dmaaddr;
 //        unsigned buforder;	// Log base 2 of 'dma_buf' size in bytes..
-        unsigned numfrag;	// # of 'fragments' in the buffer.
-        unsigned fragshift;	// Log base 2 of fragment size.
-        unsigned hwptr, swptr;
-        unsigned total_bytes;	// # bytes process since open.
-        unsigned blocks;	// last returned blocks value GETOPTR
-        unsigned wakeup;	// interrupt occurred on block
-        int count;
-        unsigned underrun;	// underrun flag
-        unsigned error;	// over/underrun
-        wait_queue_head_t wait;
-        wait_queue_head_t reg_wait;
-        // redundant, but makes calculations easier
-        unsigned fragsize;	// 2**fragshift..
-        unsigned sbufsz;	// 2**buforder.
-        unsigned fragsamples;
-        // OSS stuff
-        unsigned mapped:1;	// Buffer mapped in cs4297a_mmap()?
-        unsigned ready:1;	// prog_dmabuf_dac()/adc() successful?
-        unsigned endcleared:1;
-        unsigned type:1;	// adc or dac buffer (CS_TYPE_XXX)
-        unsigned ossfragshift;
-        int ossmaxfrags;
-        unsigned subdivision;
+	unsigned numfrag;	// # of 'fragments' in the buffer.
+	unsigned fragshift;	// Log base 2 of fragment size.
+	unsigned hwptr, swptr;
+	unsigned total_bytes;	// # bytes process since open.
+	unsigned blocks;	// last returned blocks value GETOPTR
+	unsigned wakeup;	// interrupt occurred on block
+	int count;
+	unsigned underrun;	// underrun flag
+	unsigned error;	// over/underrun
+	wait_queue_head_t wait;
+	wait_queue_head_t reg_wait;
+	// redundant, but makes calculations easier
+	unsigned fragsize;	// 2**fragshift..
+	unsigned sbufsz;	// 2**buforder.
+	unsigned fragsamples;
+	// OSS stuff
+	unsigned mapped:1;	// Buffer mapped in cs4297a_mmap()?
+	unsigned ready:1;	// prog_dmabuf_dac()/adc() successful?
+	unsigned endcleared:1;
+	unsigned type:1;	// adc or dac buffer (CS_TYPE_XXX)
+	unsigned ossfragshift;
+	int ossmaxfrags;
+	unsigned subdivision;
 } serdma_t;
 
 struct cs4297a_state {
@@ -264,13 +264,13 @@ struct cs4297a_state {
 	// hardware resources
 	unsigned int irq;
 
-        struct {
-                unsigned int rx_ovrrn; /* FIFO */
-                unsigned int rx_overflow; /* staging buffer */
-                unsigned int tx_underrun;
-                unsigned int rx_bad;
-                unsigned int rx_good;
-        } stats;
+	struct {
+		unsigned int rx_ovrrn; /* FIFO */
+		unsigned int rx_overflow; /* staging buffer */
+		unsigned int tx_underrun;
+		unsigned int rx_bad;
+		unsigned int rx_good;
+	} stats;
 
 	// mixer registers
 	struct {
@@ -301,11 +301,11 @@ struct cs4297a_state {
 	dma_addr_t dmaaddr_sample_buf;
 	unsigned buforder_sample_buf;	// Log base 2 of 'dma_buf' size in bytes..
 
-        serdma_t dma_dac, dma_adc;
+	serdma_t dma_dac, dma_adc;
 
-        volatile u16 read_value;
-        volatile u16 read_reg;
-        volatile u64 reg_request;
+	volatile u16 read_value;
+	volatile u16 read_reg;
+	volatile u64 reg_request;
 };
 
 #if 1
@@ -557,211 +557,211 @@ static void cs_printioctl(unsigned int x)
 
 static int ser_init(struct cs4297a_state *s)
 {
-        int i;
+	int i;
 
-        CS_DBGOUT(CS_INIT, 2,
-                  printk(KERN_INFO "cs4297a: Setting up serial parameters\n"));
+	CS_DBGOUT(CS_INIT, 2,
+		  printk(KERN_INFO "cs4297a: Setting up serial parameters\n"));
 
-        __raw_writeq(M_SYNCSER_CMD_RX_RESET | M_SYNCSER_CMD_TX_RESET, SS_CSR(R_SER_CMD));
+	__raw_writeq(M_SYNCSER_CMD_RX_RESET | M_SYNCSER_CMD_TX_RESET, SS_CSR(R_SER_CMD));
 
-        __raw_writeq(M_SYNCSER_MSB_FIRST, SS_CSR(R_SER_MODE));
-        __raw_writeq(32, SS_CSR(R_SER_MINFRM_SZ));
-        __raw_writeq(32, SS_CSR(R_SER_MAXFRM_SZ));
+	__raw_writeq(M_SYNCSER_MSB_FIRST, SS_CSR(R_SER_MODE));
+	__raw_writeq(32, SS_CSR(R_SER_MINFRM_SZ));
+	__raw_writeq(32, SS_CSR(R_SER_MAXFRM_SZ));
 
-        __raw_writeq(1, SS_CSR(R_SER_TX_RD_THRSH));
-        __raw_writeq(4, SS_CSR(R_SER_TX_WR_THRSH));
-        __raw_writeq(8, SS_CSR(R_SER_RX_RD_THRSH));
+	__raw_writeq(1, SS_CSR(R_SER_TX_RD_THRSH));
+	__raw_writeq(4, SS_CSR(R_SER_TX_WR_THRSH));
+	__raw_writeq(8, SS_CSR(R_SER_RX_RD_THRSH));
 
-        /* This looks good from experimentation */
-        __raw_writeq((M_SYNCSER_TXSYNC_INT | V_SYNCSER_TXSYNC_DLY(0) | M_SYNCSER_TXCLK_EXT |
-               M_SYNCSER_RXSYNC_INT | V_SYNCSER_RXSYNC_DLY(1) | M_SYNCSER_RXCLK_EXT | M_SYNCSER_RXSYNC_EDGE),
-              SS_CSR(R_SER_LINE_MODE));
+	/* This looks good from experimentation */
+	__raw_writeq((M_SYNCSER_TXSYNC_INT | V_SYNCSER_TXSYNC_DLY(0) | M_SYNCSER_TXCLK_EXT |
+	       M_SYNCSER_RXSYNC_INT | V_SYNCSER_RXSYNC_DLY(1) | M_SYNCSER_RXCLK_EXT | M_SYNCSER_RXSYNC_EDGE),
+	      SS_CSR(R_SER_LINE_MODE));
 
-        /* This looks good from experimentation */
-        __raw_writeq(V_SYNCSER_SEQ_COUNT(14) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_STROBE,
-              SS_TXTBL(0));
-        __raw_writeq(V_SYNCSER_SEQ_COUNT(15) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
-              SS_TXTBL(1));
-        __raw_writeq(V_SYNCSER_SEQ_COUNT(13) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
-              SS_TXTBL(2));
-        __raw_writeq(V_SYNCSER_SEQ_COUNT( 0) | M_SYNCSER_SEQ_ENABLE |
-              M_SYNCSER_SEQ_STROBE | M_SYNCSER_SEQ_LAST, SS_TXTBL(3));
+	/* This looks good from experimentation */
+	__raw_writeq(V_SYNCSER_SEQ_COUNT(14) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_STROBE,
+	      SS_TXTBL(0));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT(15) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
+	      SS_TXTBL(1));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT(13) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
+	      SS_TXTBL(2));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT( 0) | M_SYNCSER_SEQ_ENABLE |
+	      M_SYNCSER_SEQ_STROBE | M_SYNCSER_SEQ_LAST, SS_TXTBL(3));
 
-        __raw_writeq(V_SYNCSER_SEQ_COUNT(14) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_STROBE,
-              SS_RXTBL(0));
-        __raw_writeq(V_SYNCSER_SEQ_COUNT(15) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
-              SS_RXTBL(1));
-        __raw_writeq(V_SYNCSER_SEQ_COUNT(13) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
-              SS_RXTBL(2));
-        __raw_writeq(V_SYNCSER_SEQ_COUNT( 0) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_STROBE |
-              M_SYNCSER_SEQ_LAST, SS_RXTBL(3));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT(14) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_STROBE,
+	      SS_RXTBL(0));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT(15) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
+	      SS_RXTBL(1));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT(13) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_BYTE,
+	      SS_RXTBL(2));
+	__raw_writeq(V_SYNCSER_SEQ_COUNT( 0) | M_SYNCSER_SEQ_ENABLE | M_SYNCSER_SEQ_STROBE |
+	      M_SYNCSER_SEQ_LAST, SS_RXTBL(3));
 
-        for (i=4; i<16; i++) {
-                /* Just in case... */
-                __raw_writeq(M_SYNCSER_SEQ_LAST, SS_TXTBL(i));
-                __raw_writeq(M_SYNCSER_SEQ_LAST, SS_RXTBL(i));
-        }
+	for (i=4; i<16; i++) {
+		/* Just in case... */
+		__raw_writeq(M_SYNCSER_SEQ_LAST, SS_TXTBL(i));
+		__raw_writeq(M_SYNCSER_SEQ_LAST, SS_RXTBL(i));
+	}
 
-        return 0;
+	return 0;
 }
 
 static int init_serdma(serdma_t *dma)
 {
-        CS_DBGOUT(CS_INIT, 2,
-                  printk(KERN_ERR "cs4297a: desc - %d sbufsize - %d dbufsize - %d\n",
-                         DMA_DESCR, SAMPLE_BUF_SIZE, DMA_BUF_SIZE));
+	CS_DBGOUT(CS_INIT, 2,
+		  printk(KERN_ERR "cs4297a: desc - %d sbufsize - %d dbufsize - %d\n",
+			 DMA_DESCR, SAMPLE_BUF_SIZE, DMA_BUF_SIZE));
 
-        /* Descriptors */
-        dma->ringsz = DMA_DESCR;
-        dma->descrtab = kzalloc(dma->ringsz * sizeof(serdma_descr_t), GFP_KERNEL);
-        if (!dma->descrtab) {
-                printk(KERN_ERR "cs4297a: kzalloc descrtab failed\n");
-                return -1;
-        }
-        dma->descrtab_end = dma->descrtab + dma->ringsz;
+	/* Descriptors */
+	dma->ringsz = DMA_DESCR;
+	dma->descrtab = kzalloc(dma->ringsz * sizeof(serdma_descr_t), GFP_KERNEL);
+	if (!dma->descrtab) {
+		printk(KERN_ERR "cs4297a: kzalloc descrtab failed\n");
+		return -1;
+	}
+	dma->descrtab_end = dma->descrtab + dma->ringsz;
 	/* XXX bloddy mess, use proper DMA API here ...  */
 	dma->descrtab_phys = CPHYSADDR((long)dma->descrtab);
-        dma->descr_add = dma->descr_rem = dma->descrtab;
+	dma->descr_add = dma->descr_rem = dma->descrtab;
 
-        /* Frame buffer area */
-        dma->dma_buf = kzalloc(DMA_BUF_SIZE, GFP_KERNEL);
-        if (!dma->dma_buf) {
-                printk(KERN_ERR "cs4297a: kzalloc dma_buf failed\n");
-                kfree(dma->descrtab);
-                return -1;
-        }
-        dma->dma_buf_phys = CPHYSADDR((long)dma->dma_buf);
+	/* Frame buffer area */
+	dma->dma_buf = kzalloc(DMA_BUF_SIZE, GFP_KERNEL);
+	if (!dma->dma_buf) {
+		printk(KERN_ERR "cs4297a: kzalloc dma_buf failed\n");
+		kfree(dma->descrtab);
+		return -1;
+	}
+	dma->dma_buf_phys = CPHYSADDR((long)dma->dma_buf);
 
-        /* Samples buffer area */
-        dma->sbufsz = SAMPLE_BUF_SIZE;
-        dma->sample_buf = kmalloc(dma->sbufsz, GFP_KERNEL);
-        if (!dma->sample_buf) {
-                printk(KERN_ERR "cs4297a: kmalloc sample_buf failed\n");
-                kfree(dma->descrtab);
-                kfree(dma->dma_buf);
-                return -1;
-        }
-        dma->sb_swptr = dma->sb_hwptr = dma->sample_buf;
-        dma->sb_end = (u16 *)((void *)dma->sample_buf + dma->sbufsz);
-        dma->fragsize = dma->sbufsz >> 1;
+	/* Samples buffer area */
+	dma->sbufsz = SAMPLE_BUF_SIZE;
+	dma->sample_buf = kmalloc(dma->sbufsz, GFP_KERNEL);
+	if (!dma->sample_buf) {
+		printk(KERN_ERR "cs4297a: kmalloc sample_buf failed\n");
+		kfree(dma->descrtab);
+		kfree(dma->dma_buf);
+		return -1;
+	}
+	dma->sb_swptr = dma->sb_hwptr = dma->sample_buf;
+	dma->sb_end = (u16 *)((void *)dma->sample_buf + dma->sbufsz);
+	dma->fragsize = dma->sbufsz >> 1;
 
-        CS_DBGOUT(CS_INIT, 4,
-                  printk(KERN_ERR "cs4297a: descrtab - %08x dma_buf - %x sample_buf - %x\n",
-                         (int)dma->descrtab, (int)dma->dma_buf,
-                         (int)dma->sample_buf));
+	CS_DBGOUT(CS_INIT, 4,
+		  printk(KERN_ERR "cs4297a: descrtab - %08x dma_buf - %x sample_buf - %x\n",
+			 (int)dma->descrtab, (int)dma->dma_buf,
+			 (int)dma->sample_buf));
 
-        return 0;
+	return 0;
 }
 
 static int dma_init(struct cs4297a_state *s)
 {
-        int i;
+	int i;
 
-        CS_DBGOUT(CS_INIT, 2,
-                  printk(KERN_INFO "cs4297a: Setting up DMA\n"));
+	CS_DBGOUT(CS_INIT, 2,
+		  printk(KERN_INFO "cs4297a: Setting up DMA\n"));
 
-        if (init_serdma(&s->dma_adc) ||
-            init_serdma(&s->dma_dac))
-                return -1;
+	if (init_serdma(&s->dma_adc) ||
+	    init_serdma(&s->dma_dac))
+		return -1;
 
-        if (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_RX))||
-            __raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX))) {
-                panic("DMA state corrupted?!");
-        }
+	if (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_RX))||
+	    __raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX))) {
+		panic("DMA state corrupted?!");
+	}
 
-        /* Initialize now - the descr/buffer pairings will never
-           change... */
-        for (i=0; i<DMA_DESCR; i++) {
-                s->dma_dac.descrtab[i].descr_a = M_DMA_SERRX_SOP | V_DMA_DSCRA_A_SIZE(1) |
-                        (s->dma_dac.dma_buf_phys + i*FRAME_BYTES);
-                s->dma_dac.descrtab[i].descr_b = V_DMA_DSCRB_PKT_SIZE(FRAME_BYTES);
-                s->dma_adc.descrtab[i].descr_a = V_DMA_DSCRA_A_SIZE(1) |
-                        (s->dma_adc.dma_buf_phys + i*FRAME_BYTES);
-                s->dma_adc.descrtab[i].descr_b = 0;
-        }
+	/* Initialize now - the descr/buffer pairings will never
+	   change... */
+	for (i=0; i<DMA_DESCR; i++) {
+		s->dma_dac.descrtab[i].descr_a = M_DMA_SERRX_SOP | V_DMA_DSCRA_A_SIZE(1) |
+			(s->dma_dac.dma_buf_phys + i*FRAME_BYTES);
+		s->dma_dac.descrtab[i].descr_b = V_DMA_DSCRB_PKT_SIZE(FRAME_BYTES);
+		s->dma_adc.descrtab[i].descr_a = V_DMA_DSCRA_A_SIZE(1) |
+			(s->dma_adc.dma_buf_phys + i*FRAME_BYTES);
+		s->dma_adc.descrtab[i].descr_b = 0;
+	}
 
-        __raw_writeq((M_DMA_EOP_INT_EN | V_DMA_INT_PKTCNT(DMA_INT_CNT) |
-               V_DMA_RINGSZ(DMA_DESCR) | M_DMA_TDX_EN),
-              SS_CSR(R_SER_DMA_CONFIG0_RX));
-        __raw_writeq(M_DMA_L2CA, SS_CSR(R_SER_DMA_CONFIG1_RX));
-        __raw_writeq(s->dma_adc.descrtab_phys, SS_CSR(R_SER_DMA_DSCR_BASE_RX));
+	__raw_writeq((M_DMA_EOP_INT_EN | V_DMA_INT_PKTCNT(DMA_INT_CNT) |
+	       V_DMA_RINGSZ(DMA_DESCR) | M_DMA_TDX_EN),
+	      SS_CSR(R_SER_DMA_CONFIG0_RX));
+	__raw_writeq(M_DMA_L2CA, SS_CSR(R_SER_DMA_CONFIG1_RX));
+	__raw_writeq(s->dma_adc.descrtab_phys, SS_CSR(R_SER_DMA_DSCR_BASE_RX));
 
-        __raw_writeq(V_DMA_RINGSZ(DMA_DESCR), SS_CSR(R_SER_DMA_CONFIG0_TX));
-        __raw_writeq(M_DMA_L2CA | M_DMA_NO_DSCR_UPDT, SS_CSR(R_SER_DMA_CONFIG1_TX));
-        __raw_writeq(s->dma_dac.descrtab_phys, SS_CSR(R_SER_DMA_DSCR_BASE_TX));
+	__raw_writeq(V_DMA_RINGSZ(DMA_DESCR), SS_CSR(R_SER_DMA_CONFIG0_TX));
+	__raw_writeq(M_DMA_L2CA | M_DMA_NO_DSCR_UPDT, SS_CSR(R_SER_DMA_CONFIG1_TX));
+	__raw_writeq(s->dma_dac.descrtab_phys, SS_CSR(R_SER_DMA_DSCR_BASE_TX));
 
-        /* Prep the receive DMA descriptor ring */
-        __raw_writeq(DMA_DESCR, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
+	/* Prep the receive DMA descriptor ring */
+	__raw_writeq(DMA_DESCR, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
 
-        __raw_writeq(M_SYNCSER_DMA_RX_EN | M_SYNCSER_DMA_TX_EN, SS_CSR(R_SER_DMA_ENABLE));
+	__raw_writeq(M_SYNCSER_DMA_RX_EN | M_SYNCSER_DMA_TX_EN, SS_CSR(R_SER_DMA_ENABLE));
 
-        __raw_writeq((M_SYNCSER_RX_SYNC_ERR | M_SYNCSER_RX_OVERRUN | M_SYNCSER_RX_EOP_COUNT),
-              SS_CSR(R_SER_INT_MASK));
+	__raw_writeq((M_SYNCSER_RX_SYNC_ERR | M_SYNCSER_RX_OVERRUN | M_SYNCSER_RX_EOP_COUNT),
+	      SS_CSR(R_SER_INT_MASK));
 
-        /* Enable the rx/tx; let the codec warm up to the sync and
-           start sending good frames before the receive FIFO is
-           enabled */
-        __raw_writeq(M_SYNCSER_CMD_TX_EN, SS_CSR(R_SER_CMD));
-        udelay(1000);
-        __raw_writeq(M_SYNCSER_CMD_RX_EN | M_SYNCSER_CMD_TX_EN, SS_CSR(R_SER_CMD));
+	/* Enable the rx/tx; let the codec warm up to the sync and
+	   start sending good frames before the receive FIFO is
+	   enabled */
+	__raw_writeq(M_SYNCSER_CMD_TX_EN, SS_CSR(R_SER_CMD));
+	udelay(1000);
+	__raw_writeq(M_SYNCSER_CMD_RX_EN | M_SYNCSER_CMD_TX_EN, SS_CSR(R_SER_CMD));
 
-        /* XXXKW is this magic? (the "1" part) */
-        while ((__raw_readq(SS_CSR(R_SER_STATUS)) & 0xf1) != 1)
-                ;
+	/* XXXKW is this magic? (the "1" part) */
+	while ((__raw_readq(SS_CSR(R_SER_STATUS)) & 0xf1) != 1)
+		;
 
-        CS_DBGOUT(CS_INIT, 4,
-                  printk(KERN_INFO "cs4297a: status: %08x\n",
-                         (unsigned int)(__raw_readq(SS_CSR(R_SER_STATUS)) & 0xffffffff)));
+	CS_DBGOUT(CS_INIT, 4,
+		  printk(KERN_INFO "cs4297a: status: %08x\n",
+			 (unsigned int)(__raw_readq(SS_CSR(R_SER_STATUS)) & 0xffffffff)));
 
-        return 0;
+	return 0;
 }
 
 static int serdma_reg_access(struct cs4297a_state *s, u64 data)
 {
-        serdma_t *d = &s->dma_dac;
-        u64 *data_p;
-        unsigned swptr;
-        unsigned long flags;
-        serdma_descr_t *descr;
+	serdma_t *d = &s->dma_dac;
+	u64 *data_p;
+	unsigned swptr;
+	unsigned long flags;
+	serdma_descr_t *descr;
 
-        if (s->reg_request) {
-                printk(KERN_ERR "cs4297a: attempt to issue multiple reg_access\n");
-                return -1;
-        }
+	if (s->reg_request) {
+		printk(KERN_ERR "cs4297a: attempt to issue multiple reg_access\n");
+		return -1;
+	}
 
-        if (s->ena & FMODE_WRITE) {
-                /* Since a writer has the DSP open, we have to mux the
-                   request in */
-                s->reg_request = data;
-                interruptible_sleep_on(&s->dma_dac.reg_wait);
-                /* XXXKW how can I deal with the starvation case where
-                   the opener isn't writing? */
-        } else {
-                /* Be safe when changing ring pointers */
+	if (s->ena & FMODE_WRITE) {
+		/* Since a writer has the DSP open, we have to mux the
+		   request in */
+		s->reg_request = data;
+		interruptible_sleep_on(&s->dma_dac.reg_wait);
+		/* XXXKW how can I deal with the starvation case where
+		   the opener isn't writing? */
+	} else {
+		/* Be safe when changing ring pointers */
 		spin_lock_irqsave(&s->lock, flags);
-                if (d->hwptr != d->swptr) {
-                        printk(KERN_ERR "cs4297a: reg access found bookkeeping error (hw/sw = %d/%d\n",
-                               d->hwptr, d->swptr);
-                        spin_unlock_irqrestore(&s->lock, flags);
-                        return -1;
-                }
-                swptr = d->swptr;
-                d->hwptr = d->swptr = (d->swptr + 1) % d->ringsz;
+		if (d->hwptr != d->swptr) {
+			printk(KERN_ERR "cs4297a: reg access found bookkeeping error (hw/sw = %d/%d\n",
+			       d->hwptr, d->swptr);
+			spin_unlock_irqrestore(&s->lock, flags);
+			return -1;
+		}
+		swptr = d->swptr;
+		d->hwptr = d->swptr = (d->swptr + 1) % d->ringsz;
 		spin_unlock_irqrestore(&s->lock, flags);
 
-                descr = &d->descrtab[swptr];
-                data_p = &d->dma_buf[swptr * 4];
+		descr = &d->descrtab[swptr];
+		data_p = &d->dma_buf[swptr * 4];
 		*data_p = cpu_to_be64(data);
-                __raw_writeq(1, SS_CSR(R_SER_DMA_DSCR_COUNT_TX));
-                CS_DBGOUT(CS_DESCR, 4,
-                          printk(KERN_INFO "cs4297a: add_tx  %p (%x -> %x)\n",
-                                 data_p, swptr, d->hwptr));
-        }
+		__raw_writeq(1, SS_CSR(R_SER_DMA_DSCR_COUNT_TX));
+		CS_DBGOUT(CS_DESCR, 4,
+			  printk(KERN_INFO "cs4297a: add_tx  %p (%x -> %x)\n",
+				 data_p, swptr, d->hwptr));
+	}
 
-        CS_DBGOUT(CS_FUNCTION, 6,
-                  printk(KERN_INFO "cs4297a: serdma_reg_access()-\n"));
+	CS_DBGOUT(CS_FUNCTION, 6,
+		  printk(KERN_INFO "cs4297a: serdma_reg_access()-\n"));
 
-        return 0;
+	return 0;
 }
 
 //****************************************************************************
@@ -770,17 +770,17 @@ static int serdma_reg_access(struct cs4297a_state *s, u64 data)
 static int cs4297a_read_ac97(struct cs4297a_state *s, u32 offset,
 			    u32 * value)
 {
-        CS_DBGOUT(CS_AC97, 1,
-                  printk(KERN_INFO "cs4297a: read reg %2x\n", offset));
-        if (serdma_reg_access(s, (0xCLL << 60) | (1LL << 47) | ((u64)(offset & 0x7F) << 40)))
-                return -1;
+	CS_DBGOUT(CS_AC97, 1,
+		  printk(KERN_INFO "cs4297a: read reg %2x\n", offset));
+	if (serdma_reg_access(s, (0xCLL << 60) | (1LL << 47) | ((u64)(offset & 0x7F) << 40)))
+		return -1;
 
-        interruptible_sleep_on(&s->dma_adc.reg_wait);
-        *value = s->read_value;
-        CS_DBGOUT(CS_AC97, 2,
-                  printk(KERN_INFO "cs4297a: rdr reg %x -> %x\n", s->read_reg, s->read_value));
+	interruptible_sleep_on(&s->dma_adc.reg_wait);
+	*value = s->read_value;
+	CS_DBGOUT(CS_AC97, 2,
+		  printk(KERN_INFO "cs4297a: rdr reg %x -> %x\n", s->read_reg, s->read_value));
 
-        return 0;
+	return 0;
 }
 
 
@@ -790,9 +790,9 @@ static int cs4297a_read_ac97(struct cs4297a_state *s, u32 offset,
 static int cs4297a_write_ac97(struct cs4297a_state *s, u32 offset,
 			     u32 value)
 {
-        CS_DBGOUT(CS_AC97, 1,
-                  printk(KERN_INFO "cs4297a: write reg %2x -> %04x\n", offset, value));
-        return (serdma_reg_access(s, (0xELL << 60) | ((u64)(offset & 0x7F) << 40) | ((value & 0xffff) << 12)));
+	CS_DBGOUT(CS_AC97, 1,
+		  printk(KERN_INFO "cs4297a: write reg %2x -> %04x\n", offset, value));
+	return (serdma_reg_access(s, (0xELL << 60) | ((u64)(offset & 0x7F) << 40) | ((value & 0xffff) << 12)));
 }
 
 static void stop_dac(struct cs4297a_state *s)
@@ -803,11 +803,11 @@ static void stop_dac(struct cs4297a_state *s)
 	spin_lock_irqsave(&s->lock, flags);
 	s->ena &= ~FMODE_WRITE;
 #if 0
-        /* XXXKW what do I really want here?  My theory for now is
-           that I just flip the "ena" bit, and the interrupt handler
-           will stop processing the xmit channel */
-        __raw_writeq((s->ena & FMODE_READ) ? M_SYNCSER_DMA_RX_EN : 0,
-              SS_CSR(R_SER_DMA_ENABLE));
+	/* XXXKW what do I really want here?  My theory for now is
+	   that I just flip the "ena" bit, and the interrupt handler
+	   will stop processing the xmit channel */
+	__raw_writeq((s->ena & FMODE_READ) ? M_SYNCSER_DMA_RX_EN : 0,
+	      SS_CSR(R_SER_DMA_ENABLE));
 #endif
 
 	spin_unlock_irqrestore(&s->lock, flags);
@@ -824,10 +824,10 @@ static void start_dac(struct cs4297a_state *s)
 					(s->dma_dac.count > 0
 	    				&& s->dma_dac.ready))) {
 		s->ena |= FMODE_WRITE;
-                /* XXXKW what do I really want here?  My theory for
-                   now is that I just flip the "ena" bit, and the
-                   interrupt handler will start processing the xmit
-                   channel */
+		/* XXXKW what do I really want here?  My theory for
+		   now is that I just flip the "ena" bit, and the
+		   interrupt handler will start processing the xmit
+		   channel */
 
 		CS_DBGOUT(CS_WAVE_WRITE | CS_PARMS, 8, printk(KERN_INFO
 			"cs4297a: start_dac(): start dma\n"));
@@ -853,8 +853,8 @@ static void stop_adc(struct cs4297a_state *s)
 		s->conversion = 0;
 		s->prop_adc.fmt = s->prop_adc.fmt_original;
 	}
-        /* Nothing to do really, I need to keep the DMA going
-           XXXKW when do I get here, and is there more I should do? */
+	/* Nothing to do really, I need to keep the DMA going
+	   XXXKW when do I get here, and is there more I should do? */
 	spin_unlock_irqrestore(&s->lock, flags);
 	CS_DBGOUT(CS_FUNCTION, 3,
 		  printk(KERN_INFO "cs4297a: stop_adc()-\n"));
@@ -894,14 +894,14 @@ static void start_adc(struct cs4297a_state *s)
 			//
 			prog_codec(s, CS_TYPE_ADC);
 
-                        prog_dmabuf_adc(s);
+			prog_dmabuf_adc(s);
 			s->conversion = 1;
 		}
 		spin_lock_irqsave(&s->lock, flags);
 		s->ena |= FMODE_READ;
-                /* Nothing to do really, I am probably already
-                   DMAing...  XXXKW when do I get here, and is there
-                   more I should do? */
+		/* Nothing to do really, I am probably already
+		   DMAing...  XXXKW when do I get here, and is there
+		   more I should do? */
 		spin_unlock_irqrestore(&s->lock, flags);
 
 		CS_DBGOUT(CS_PARMS, 6, printk(KERN_INFO
@@ -917,143 +917,143 @@ static void start_adc(struct cs4297a_state *s)
 static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 {
 	int good_diff, diff, diff2;
-        u64 *data_p, data;
-        u32 *s_ptr;
+	u64 *data_p, data;
+	u32 *s_ptr;
 	unsigned hwptr;
-        u32 status;
-        serdma_t *d;
-        serdma_descr_t *descr;
+	u32 status;
+	serdma_t *d;
+	serdma_descr_t *descr;
 
 	// update ADC pointer
-        status = intflag ? __raw_readq(SS_CSR(R_SER_STATUS)) : 0;
+	status = intflag ? __raw_readq(SS_CSR(R_SER_STATUS)) : 0;
 
 	if ((s->ena & FMODE_READ) || (status & (M_SYNCSER_RX_EOP_COUNT))) {
-                d = &s->dma_adc;
-                hwptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_RX)) & M_DMA_CURDSCR_ADDR) -
-                                     d->descrtab_phys) / sizeof(serdma_descr_t));
+		d = &s->dma_adc;
+		hwptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_RX)) & M_DMA_CURDSCR_ADDR) -
+				     d->descrtab_phys) / sizeof(serdma_descr_t));
 
-                if (s->ena & FMODE_READ) {
-                        CS_DBGOUT(CS_FUNCTION, 2,
-                                  printk(KERN_INFO "cs4297a: upd_rcv sw->hw->hw %x/%x/%x (int-%d)n",
-                                         d->swptr, d->hwptr, hwptr, intflag));
-                        /* Number of DMA buffers available for software: */
-                        diff2 = diff = (d->ringsz + hwptr - d->hwptr) % d->ringsz;
-                        d->hwptr = hwptr;
-                        good_diff = 0;
-                        s_ptr = (u32 *)&(d->dma_buf[d->swptr*4]);
-                        descr = &d->descrtab[d->swptr];
-                        while (diff2--) {
+		if (s->ena & FMODE_READ) {
+			CS_DBGOUT(CS_FUNCTION, 2,
+				  printk(KERN_INFO "cs4297a: upd_rcv sw->hw->hw %x/%x/%x (int-%d)n",
+					 d->swptr, d->hwptr, hwptr, intflag));
+			/* Number of DMA buffers available for software: */
+			diff2 = diff = (d->ringsz + hwptr - d->hwptr) % d->ringsz;
+			d->hwptr = hwptr;
+			good_diff = 0;
+			s_ptr = (u32 *)&(d->dma_buf[d->swptr*4]);
+			descr = &d->descrtab[d->swptr];
+			while (diff2--) {
 				u64 data = be64_to_cpu(*(u64 *)s_ptr);
-                                u64 descr_a;
-                                u16 left, right;
-                                descr_a = descr->descr_a;
-                                descr->descr_a &= ~M_DMA_SERRX_SOP;
-                                if ((descr_a & M_DMA_DSCRA_A_ADDR) != CPHYSADDR((long)s_ptr)) {
-                                        printk(KERN_ERR "cs4297a: RX Bad address (read)\n");
-                                }
-                                if (((data & 0x9800000000000000) != 0x9800000000000000) ||
-                                    (!(descr_a & M_DMA_SERRX_SOP)) ||
-                                    (G_DMA_DSCRB_PKT_SIZE(descr->descr_b) != FRAME_BYTES)) {
-                                        s->stats.rx_bad++;
-                                        printk(KERN_DEBUG "cs4297a: RX Bad attributes (read)\n");
-                                        continue;
-                                }
-                                s->stats.rx_good++;
-                                if ((data >> 61) == 7) {
-                                        s->read_value = (data >> 12) & 0xffff;
-                                        s->read_reg = (data >> 40) & 0x7f;
-                                        wake_up(&d->reg_wait);
-                                }
-                                if (d->count && (d->sb_hwptr == d->sb_swptr)) {
-                                        s->stats.rx_overflow++;
-                                        printk(KERN_DEBUG "cs4297a: RX overflow\n");
-                                        continue;
-                                }
-                                good_diff++;
+				u64 descr_a;
+				u16 left, right;
+				descr_a = descr->descr_a;
+				descr->descr_a &= ~M_DMA_SERRX_SOP;
+				if ((descr_a & M_DMA_DSCRA_A_ADDR) != CPHYSADDR((long)s_ptr)) {
+					printk(KERN_ERR "cs4297a: RX Bad address (read)\n");
+				}
+				if (((data & 0x9800000000000000) != 0x9800000000000000) ||
+				    (!(descr_a & M_DMA_SERRX_SOP)) ||
+				    (G_DMA_DSCRB_PKT_SIZE(descr->descr_b) != FRAME_BYTES)) {
+					s->stats.rx_bad++;
+					printk(KERN_DEBUG "cs4297a: RX Bad attributes (read)\n");
+					continue;
+				}
+				s->stats.rx_good++;
+				if ((data >> 61) == 7) {
+					s->read_value = (data >> 12) & 0xffff;
+					s->read_reg = (data >> 40) & 0x7f;
+					wake_up(&d->reg_wait);
+				}
+				if (d->count && (d->sb_hwptr == d->sb_swptr)) {
+					s->stats.rx_overflow++;
+					printk(KERN_DEBUG "cs4297a: RX overflow\n");
+					continue;
+				}
+				good_diff++;
 				left = ((be32_to_cpu(s_ptr[1]) & 0xff) << 8) |
 				       ((be32_to_cpu(s_ptr[2]) >> 24) & 0xff);
 				right = (be32_to_cpu(s_ptr[2]) >> 4) & 0xffff;
 				*d->sb_hwptr++ = cpu_to_be16(left);
 				*d->sb_hwptr++ = cpu_to_be16(right);
-                                if (d->sb_hwptr == d->sb_end)
-                                        d->sb_hwptr = d->sample_buf;
-                                descr++;
-                                if (descr == d->descrtab_end) {
-                                        descr = d->descrtab;
-                                        s_ptr = (u32 *)s->dma_adc.dma_buf;
-                                } else {
-                                        s_ptr += 8;
-                                }
-                        }
-                        d->total_bytes += good_diff * FRAME_SAMPLE_BYTES;
-                        d->count += good_diff * FRAME_SAMPLE_BYTES;
-                        if (d->count > d->sbufsz) {
-                                printk(KERN_ERR "cs4297a: bogus receive overflow!!\n");
-                        }
-                        d->swptr = (d->swptr + diff) % d->ringsz;
-                        __raw_writeq(diff, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
-                        if (d->mapped) {
-                                if (d->count >= (signed) d->fragsize)
-                                        wake_up(&d->wait);
-                        } else {
-                                if (d->count > 0) {
-                                        CS_DBGOUT(CS_WAVE_READ, 4,
-                                                  printk(KERN_INFO
-                                                         "cs4297a: update count -> %d\n", d->count));
-                                        wake_up(&d->wait);
-                                }
-                        }
-                } else {
-                        /* Receive is going even if no one is
-                           listening (for register accesses and to
-                           avoid FIFO overrun) */
-                        diff2 = diff = (hwptr + d->ringsz - d->hwptr) % d->ringsz;
-                        if (!diff) {
-                                printk(KERN_ERR "cs4297a: RX full or empty?\n");
-                        }
+				if (d->sb_hwptr == d->sb_end)
+					d->sb_hwptr = d->sample_buf;
+				descr++;
+				if (descr == d->descrtab_end) {
+					descr = d->descrtab;
+					s_ptr = (u32 *)s->dma_adc.dma_buf;
+				} else {
+					s_ptr += 8;
+				}
+			}
+			d->total_bytes += good_diff * FRAME_SAMPLE_BYTES;
+			d->count += good_diff * FRAME_SAMPLE_BYTES;
+			if (d->count > d->sbufsz) {
+				printk(KERN_ERR "cs4297a: bogus receive overflow!!\n");
+			}
+			d->swptr = (d->swptr + diff) % d->ringsz;
+			__raw_writeq(diff, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
+			if (d->mapped) {
+				if (d->count >= (signed) d->fragsize)
+					wake_up(&d->wait);
+			} else {
+				if (d->count > 0) {
+					CS_DBGOUT(CS_WAVE_READ, 4,
+						  printk(KERN_INFO
+							 "cs4297a: update count -> %d\n", d->count));
+					wake_up(&d->wait);
+				}
+			}
+		} else {
+			/* Receive is going even if no one is
+			   listening (for register accesses and to
+			   avoid FIFO overrun) */
+			diff2 = diff = (hwptr + d->ringsz - d->hwptr) % d->ringsz;
+			if (!diff) {
+				printk(KERN_ERR "cs4297a: RX full or empty?\n");
+			}
 
-                        descr = &d->descrtab[d->swptr];
-                        data_p = &d->dma_buf[d->swptr*4];
+			descr = &d->descrtab[d->swptr];
+			data_p = &d->dma_buf[d->swptr*4];
 
-                        /* Force this to happen at least once; I got
-                           here because of an interrupt, so there must
-                           be a buffer to process. */
-                        do {
+			/* Force this to happen at least once; I got
+			   here because of an interrupt, so there must
+			   be a buffer to process. */
+			do {
 				data = be64_to_cpu(*data_p);
-                                if ((descr->descr_a & M_DMA_DSCRA_A_ADDR) != CPHYSADDR((long)data_p)) {
-                                        printk(KERN_ERR "cs4297a: RX Bad address %d (%llx %lx)\n", d->swptr,
-                                               (long long)(descr->descr_a & M_DMA_DSCRA_A_ADDR),
-                                               (long)CPHYSADDR((long)data_p));
-                                }
-                                if (!(data & (1LL << 63)) ||
-                                    !(descr->descr_a & M_DMA_SERRX_SOP) ||
-                                    (G_DMA_DSCRB_PKT_SIZE(descr->descr_b) != FRAME_BYTES)) {
-                                        s->stats.rx_bad++;
-                                        printk(KERN_DEBUG "cs4297a: RX Bad attributes\n");
-                                } else {
-                                        s->stats.rx_good++;
-                                        if ((data >> 61) == 7) {
-                                                s->read_value = (data >> 12) & 0xffff;
-                                                s->read_reg = (data >> 40) & 0x7f;
-                                                wake_up(&d->reg_wait);
-                                        }
-                                }
-                                descr->descr_a &= ~M_DMA_SERRX_SOP;
-                                descr++;
-                                d->swptr++;
-                                data_p += 4;
-                                if (descr == d->descrtab_end) {
-                                        descr = d->descrtab;
-                                        d->swptr = 0;
-                                        data_p = d->dma_buf;
-                                }
-                                __raw_writeq(1, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
-                        } while (--diff);
-                        d->hwptr = hwptr;
+				if ((descr->descr_a & M_DMA_DSCRA_A_ADDR) != CPHYSADDR((long)data_p)) {
+					printk(KERN_ERR "cs4297a: RX Bad address %d (%llx %lx)\n", d->swptr,
+					       (long long)(descr->descr_a & M_DMA_DSCRA_A_ADDR),
+					       (long)CPHYSADDR((long)data_p));
+				}
+				if (!(data & (1LL << 63)) ||
+				    !(descr->descr_a & M_DMA_SERRX_SOP) ||
+				    (G_DMA_DSCRB_PKT_SIZE(descr->descr_b) != FRAME_BYTES)) {
+					s->stats.rx_bad++;
+					printk(KERN_DEBUG "cs4297a: RX Bad attributes\n");
+				} else {
+					s->stats.rx_good++;
+					if ((data >> 61) == 7) {
+						s->read_value = (data >> 12) & 0xffff;
+						s->read_reg = (data >> 40) & 0x7f;
+						wake_up(&d->reg_wait);
+					}
+				}
+				descr->descr_a &= ~M_DMA_SERRX_SOP;
+				descr++;
+				d->swptr++;
+				data_p += 4;
+				if (descr == d->descrtab_end) {
+					descr = d->descrtab;
+					d->swptr = 0;
+					data_p = d->dma_buf;
+				}
+				__raw_writeq(1, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
+			} while (--diff);
+			d->hwptr = hwptr;
 
-                        CS_DBGOUT(CS_DESCR, 6,
-                                  printk(KERN_INFO "cs4297a: hw/sw %x/%x\n", d->hwptr, d->swptr));
-                }
+			CS_DBGOUT(CS_DESCR, 6,
+				  printk(KERN_INFO "cs4297a: hw/sw %x/%x\n", d->hwptr, d->swptr));
+		}
 
 		CS_DBGOUT(CS_PARMS, 8, printk(KERN_INFO
 			"cs4297a: cs4297a_update_ptr(): s=0x%.8x hwptr=%d total_bytes=%d count=%d \n",
@@ -1061,9 +1061,9 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 				d->total_bytes, d->count));
 	}
 
-        /* XXXKW worry about s->reg_request -- there is a starvation
-           case if s->ena has FMODE_WRITE on, but the client isn't
-           doing writes */
+	/* XXXKW worry about s->reg_request -- there is a starvation
+	   case if s->ena has FMODE_WRITE on, but the client isn't
+	   doing writes */
 
 	// update DAC pointer
 	//
@@ -1071,16 +1071,16 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 	// to allow silence to fill the fifos on the part, to keep pops down to a minimum.
 	//
 	if (s->ena & FMODE_WRITE) {
-                serdma_t *d = &s->dma_dac;
-                hwptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
-                                     d->descrtab_phys) / sizeof(serdma_descr_t));
-                diff = (d->ringsz + hwptr - d->hwptr) % d->ringsz;
-                CS_DBGOUT(CS_WAVE_WRITE, 4, printk(KERN_INFO
-                                                   "cs4297a: cs4297a_update_ptr(): hw/hw/sw %x/%x/%x diff %d count %d\n",
-                                                   d->hwptr, hwptr, d->swptr, diff, d->count));
-                d->hwptr = hwptr;
-                /* XXXKW stereo? conversion? Just assume 2 16-bit samples for now */
-                d->total_bytes += diff * FRAME_SAMPLE_BYTES;
+		serdma_t *d = &s->dma_dac;
+		hwptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
+				     d->descrtab_phys) / sizeof(serdma_descr_t));
+		diff = (d->ringsz + hwptr - d->hwptr) % d->ringsz;
+		CS_DBGOUT(CS_WAVE_WRITE, 4, printk(KERN_INFO
+						   "cs4297a: cs4297a_update_ptr(): hw/hw/sw %x/%x/%x diff %d count %d\n",
+						   d->hwptr, hwptr, d->swptr, diff, d->count));
+		d->hwptr = hwptr;
+		/* XXXKW stereo? conversion? Just assume 2 16-bit samples for now */
+		d->total_bytes += diff * FRAME_SAMPLE_BYTES;
 		if (d->mapped) {
 			d->count += diff * FRAME_SAMPLE_BYTES;
 			if (d->count >= d->fragsize) {
@@ -1105,7 +1105,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 				memset(d->dma_buf, 0, d->ringsz * FRAME_BYTES);
 				if (d->count < 0) {
 					d->underrun = 1;
-                                        s->stats.tx_underrun++;
+					s->stats.tx_underrun++;
 					d->count = 0;
 					CS_DBGOUT(CS_ERROR, 9, printk(KERN_INFO
 					 "cs4297a: cs4297a_update_ptr(): underrun\n"));
@@ -1113,7 +1113,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 			} else if (d->count <=
 				   (signed) d->fragsize
 				   && !d->endcleared) {
-                          /* XXXKW what is this for? */
+			  /* XXXKW what is this for? */
 				clear_advance(d->dma_buf,
 					      d->sbufsz,
 					      d->swptr,
@@ -1123,9 +1123,9 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 			}
 			if ( (d->count <= (signed) d->sbufsz/2) || intflag)
 			{
-                                CS_DBGOUT(CS_WAVE_WRITE, 4,
-                                          printk(KERN_INFO
-                                                 "cs4297a: update count -> %d\n", d->count));
+				CS_DBGOUT(CS_WAVE_WRITE, 4,
+					  printk(KERN_INFO
+						 "cs4297a: update count -> %d\n", d->count));
 				wake_up(&d->wait);
 			}
 		}
@@ -1217,7 +1217,7 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 #endif
 
 	if (cmd == SOUND_MIXER_PRIVATE1) {
-                return -EINVAL;
+		return -EINVAL;
 	}
 	if (cmd == SOUND_MIXER_PRIVATE2) {
 		// enable/disable/query spatializer
@@ -1271,16 +1271,16 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 		case SOUND_MIXER_DEVMASK:	// Arg contains a bit for each supported device
 			return put_user(SOUND_MASK_PCM | SOUND_MASK_LINE |
 					SOUND_MASK_VOLUME | SOUND_MASK_RECLEV,
-                                        (int *) arg);
+					(int *) arg);
 
 		case SOUND_MIXER_RECMASK:	// Arg contains a bit for each supported recording source
 			return put_user(SOUND_MASK_LINE | SOUND_MASK_VOLUME,
-                                        (int *) arg);
+					(int *) arg);
 
 		case SOUND_MIXER_STEREODEVS:	// Mixer channels supporting stereo
 			return put_user(SOUND_MASK_PCM | SOUND_MASK_LINE |
 					SOUND_MASK_VOLUME | SOUND_MASK_RECLEV,
-                                        (int *) arg);
+					(int *) arg);
 
 		case SOUND_MIXER_CAPS:
 			return put_user(SOUND_CAP_EXCL_INPUT, (int *) arg);
@@ -1599,10 +1599,10 @@ static const struct file_operations cs4297a_mixer_fops = {
 
 static int drain_adc(struct cs4297a_state *s, int nonblock)
 {
-        /* This routine serves no purpose currently - any samples
-           sitting in the receive queue will just be processed by the
-           background consumer.  This would be different if DMA
-           actually stopped when there were no clients. */
+	/* This routine serves no purpose currently - any samples
+	   sitting in the receive queue will just be processed by the
+	   background consumer.  This would be different if DMA
+	   actually stopped when there were no clients. */
 	return 0;
 }
 
@@ -1610,32 +1610,32 @@ static int drain_dac(struct cs4297a_state *s, int nonblock)
 {
 	DECLARE_WAITQUEUE(wait, current);
 	unsigned long flags;
-        unsigned hwptr;
+	unsigned hwptr;
 	unsigned tmo;
 	int count;
 
 	if (s->dma_dac.mapped)
 		return 0;
-        if (nonblock)
-                return -EBUSY;
+	if (nonblock)
+		return -EBUSY;
 	add_wait_queue(&s->dma_dac.wait, &wait);
-        while ((count = __raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX))) ||
-               (s->dma_dac.count > 0)) {
-                if (!signal_pending(current)) {
-                        set_current_state(TASK_INTERRUPTIBLE);
-                        /* XXXKW is this calculation working? */
-                        tmo = ((count * FRAME_TX_US) * HZ) / 1000000;
-                        schedule_timeout(tmo + 1);
-                } else {
-                        /* XXXKW do I care if there is a signal pending? */
-                }
-        }
-        spin_lock_irqsave(&s->lock, flags);
-        /* Reset the bookkeeping */
-        hwptr = (int)(((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
-                       s->dma_dac.descrtab_phys) / sizeof(serdma_descr_t));
-        s->dma_dac.hwptr = s->dma_dac.swptr = hwptr;
-        spin_unlock_irqrestore(&s->lock, flags);
+	while ((count = __raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX))) ||
+	       (s->dma_dac.count > 0)) {
+		if (!signal_pending(current)) {
+			set_current_state(TASK_INTERRUPTIBLE);
+			/* XXXKW is this calculation working? */
+			tmo = ((count * FRAME_TX_US) * HZ) / 1000000;
+			schedule_timeout(tmo + 1);
+		} else {
+			/* XXXKW do I care if there is a signal pending? */
+		}
+	}
+	spin_lock_irqsave(&s->lock, flags);
+	/* Reset the bookkeeping */
+	hwptr = (int)(((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
+		       s->dma_dac.descrtab_phys) / sizeof(serdma_descr_t));
+	s->dma_dac.hwptr = s->dma_dac.swptr = hwptr;
+	spin_unlock_irqrestore(&s->lock, flags);
 	remove_wait_queue(&s->dma_dac.wait, &wait);
 	current->state = TASK_RUNNING;
 	return 0;
@@ -1681,11 +1681,11 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 				s->dma_adc.swptr, s->dma_adc.hwptr));
 		spin_lock_irqsave(&s->lock, flags);
 
-                /* cnt will be the number of available samples (16-bit
-                   stereo); it starts out as the maxmimum consequetive
-                   samples */
+		/* cnt will be the number of available samples (16-bit
+		   stereo); it starts out as the maxmimum consequetive
+		   samples */
 		cnt = (s->dma_adc.sb_end - s->dma_adc.sb_swptr) / 2;
-                count_fr = s->dma_adc.count / FRAME_SAMPLE_BYTES;
+		count_fr = s->dma_adc.count / FRAME_SAMPLE_BYTES;
 
 		// dma_adc.count is the current total bytes that have not been read.
 		// if the amount of unread bytes from the current sw pointer to the
@@ -1695,7 +1695,7 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 
 		if (count_fr < cnt)
 			cnt = count_fr;
-                cnt_by = cnt * FRAME_SAMPLE_BYTES;
+		cnt_by = cnt * FRAME_SAMPLE_BYTES;
 		spin_unlock_irqrestore(&s->lock, flags);
 		//
 		// if we are converting from 8/16 then we need to copy
@@ -1704,13 +1704,13 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 		if (s->conversion) {
 			if (cnt_by > (count * 2)) {
 				cnt = (count * 2) / FRAME_SAMPLE_BYTES;
-                                cnt_by = count * 2;
-                        }
+				cnt_by = count * 2;
+			}
 		} else {
 			if (cnt_by > count) {
 				cnt = count / FRAME_SAMPLE_BYTES;
-                                cnt_by = count;
-                        }
+				cnt_by = count;
+			}
 		}
 		//
 		// "cnt" NOW is the smaller of the amount that will be read,
@@ -1745,16 +1745,16 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 
 		if (copy_to_user (buffer, ((void *)s->dma_adc.sb_swptr), cnt_by))
 			return ret ? ret : -EFAULT;
-                copied = cnt_by;
+		copied = cnt_by;
 
-                /* Return the descriptors */
+		/* Return the descriptors */
 		spin_lock_irqsave(&s->lock, flags);
-                CS_DBGOUT(CS_FUNCTION, 2,
-                          printk(KERN_INFO "cs4297a: upd_rcv sw->hw %x/%x\n", s->dma_adc.swptr, s->dma_adc.hwptr));
+		CS_DBGOUT(CS_FUNCTION, 2,
+			  printk(KERN_INFO "cs4297a: upd_rcv sw->hw %x/%x\n", s->dma_adc.swptr, s->dma_adc.hwptr));
 		s->dma_adc.count -= cnt_by;
-                s->dma_adc.sb_swptr += cnt * 2;
-                if (s->dma_adc.sb_swptr == s->dma_adc.sb_end)
-                        s->dma_adc.sb_swptr = s->dma_adc.sample_buf;
+		s->dma_adc.sb_swptr += cnt * 2;
+		if (s->dma_adc.sb_swptr == s->dma_adc.sb_end)
+			s->dma_adc.sb_swptr = s->dma_adc.sample_buf;
 		spin_unlock_irqrestore(&s->lock, flags);
 		count -= copied;
 		buffer += copied;
@@ -1790,14 +1790,14 @@ static ssize_t cs4297a_write(struct file *file, const char *buffer,
 		return -EFAULT;
 	ret = 0;
 	while (count > 0) {
-                serdma_t *d = &s->dma_dac;
-                int copy_cnt;
-                u32 *s_tmpl;
-                u32 *t_tmpl;
-                u32 left, right;
-                int swap = (s->prop_dac.fmt == AFMT_S16_LE) || (s->prop_dac.fmt == AFMT_U16_LE);
+		serdma_t *d = &s->dma_dac;
+		int copy_cnt;
+		u32 *s_tmpl;
+		u32 *t_tmpl;
+		u32 left, right;
+		int swap = (s->prop_dac.fmt == AFMT_S16_LE) || (s->prop_dac.fmt == AFMT_U16_LE);
 
-                /* XXXXXX this is broken for BLOAT_FACTOR */
+		/* XXXXXX this is broken for BLOAT_FACTOR */
 		spin_lock_irqsave(&s->lock, flags);
 		if (d->count < 0) {
 			d->count = 0;
@@ -1805,13 +1805,13 @@ static ssize_t cs4297a_write(struct file *file, const char *buffer,
 		}
 		if (d->underrun) {
 			d->underrun = 0;
-                        hwptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
-                                             d->descrtab_phys) / sizeof(serdma_descr_t));
+			hwptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
+					     d->descrtab_phys) / sizeof(serdma_descr_t));
 			d->swptr = d->hwptr = hwptr;
 		}
 		swptr = d->swptr;
 		cnt = d->sbufsz - (swptr * FRAME_SAMPLE_BYTES);
-                /* Will this write fill up the buffer? */
+		/* Will this write fill up the buffer? */
 		if (d->count + cnt > d->sbufsz)
 			cnt = d->sbufsz - d->count;
 		spin_unlock_irqrestore(&s->lock, flags);
@@ -1829,12 +1829,12 @@ static ssize_t cs4297a_write(struct file *file, const char *buffer,
 		if (copy_from_user(d->sample_buf, buffer, cnt))
 			return ret ? ret : -EFAULT;
 
-                copy_cnt = cnt;
-                s_tmpl = (u32 *)d->sample_buf;
-                t_tmpl = (u32 *)(d->dma_buf + (swptr * 4));
+		copy_cnt = cnt;
+		s_tmpl = (u32 *)d->sample_buf;
+		t_tmpl = (u32 *)(d->dma_buf + (swptr * 4));
 
-                /* XXXKW assuming 16-bit stereo! */
-                do {
+		/* XXXKW assuming 16-bit stereo! */
+		do {
 			u32 tmp;
 
 			t_tmpl[0] = cpu_to_be32(0x98000000);
@@ -1850,25 +1850,25 @@ static ssize_t cs4297a_write(struct file *file, const char *buffer,
 			t_tmpl[2] = cpu_to_be32(((left & 0xff) << 24) |
 						(right << 4));
 
-                        s_tmpl++;
-                        t_tmpl += 8;
-                        copy_cnt -= 4;
-                } while (copy_cnt);
+			s_tmpl++;
+			t_tmpl += 8;
+			copy_cnt -= 4;
+		} while (copy_cnt);
 
-                /* Mux in any pending read/write accesses */
-                if (s->reg_request) {
+		/* Mux in any pending read/write accesses */
+		if (s->reg_request) {
 			*(u64 *)(d->dma_buf + (swptr * 4)) |=
 				cpu_to_be64(s->reg_request);
-                        s->reg_request = 0;
-                        wake_up(&s->dma_dac.reg_wait);
-                }
+			s->reg_request = 0;
+			wake_up(&s->dma_dac.reg_wait);
+		}
 
-                CS_DBGOUT(CS_WAVE_WRITE, 4,
-                          printk(KERN_INFO
-                                 "cs4297a: copy in %d to swptr %x\n", cnt, swptr));
+		CS_DBGOUT(CS_WAVE_WRITE, 4,
+			  printk(KERN_INFO
+				 "cs4297a: copy in %d to swptr %x\n", cnt, swptr));
 
 		swptr = (swptr + (cnt/FRAME_SAMPLE_BYTES)) % d->ringsz;
-                __raw_writeq(cnt/FRAME_SAMPLE_BYTES, SS_CSR(R_SER_DMA_DSCR_COUNT_TX));
+		__raw_writeq(cnt/FRAME_SAMPLE_BYTES, SS_CSR(R_SER_DMA_DSCR_COUNT_TX));
 		spin_lock_irqsave(&s->lock, flags);
 		d->swptr = swptr;
 		d->count += cnt;
@@ -1947,8 +1947,8 @@ static unsigned int cs4297a_poll(struct file *file,
 
 static int cs4297a_mmap(struct file *file, struct vm_area_struct *vma)
 {
-        /* XXXKW currently no mmap support */
-        return -EINVAL;
+	/* XXXKW currently no mmap support */
+	return -EINVAL;
 	return 0;
 }
 
@@ -2002,20 +2002,20 @@ static int cs4297a_ioctl(struct file *file,
 		if (file->f_mode & FMODE_WRITE) {
 			stop_dac(s);
 			synchronize_irq(s->irq);
-                        s->dma_dac.count = s->dma_dac.total_bytes =
-                                s->dma_dac.blocks = s->dma_dac.wakeup = 0;
+			s->dma_dac.count = s->dma_dac.total_bytes =
+				s->dma_dac.blocks = s->dma_dac.wakeup = 0;
 			s->dma_dac.swptr = s->dma_dac.hwptr =
-                                (int)(((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
-                                       s->dma_dac.descrtab_phys) / sizeof(serdma_descr_t));
+				(int)(((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_TX)) & M_DMA_CURDSCR_ADDR) -
+				       s->dma_dac.descrtab_phys) / sizeof(serdma_descr_t));
 		}
 		if (file->f_mode & FMODE_READ) {
 			stop_adc(s);
 			synchronize_irq(s->irq);
-                        s->dma_adc.count = s->dma_adc.total_bytes =
-                                s->dma_adc.blocks = s->dma_dac.wakeup = 0;
+			s->dma_adc.count = s->dma_adc.total_bytes =
+				s->dma_adc.blocks = s->dma_dac.wakeup = 0;
 			s->dma_adc.swptr = s->dma_adc.hwptr =
-                                (int)(((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_RX)) & M_DMA_CURDSCR_ADDR) -
-                                       s->dma_adc.descrtab_phys) / sizeof(serdma_descr_t));
+				(int)(((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_RX)) & M_DMA_CURDSCR_ADDR) -
+				       s->dma_adc.descrtab_phys) / sizeof(serdma_descr_t));
 		}
 		return 0;
 
@@ -2024,8 +2024,8 @@ static int cs4297a_ioctl(struct file *file,
 			return -EFAULT;
 		CS_DBGOUT(CS_IOCTL | CS_PARMS, 4, printk(KERN_INFO
 			 "cs4297a: cs4297a_ioctl(): DSP_SPEED val=%d -> 48000\n", val));
-                val = 48000;
-                return put_user(val, (int *) arg);
+		val = 48000;
+		return put_user(val, (int *) arg);
 
 	case SNDCTL_DSP_STEREO:
 		if (get_user(val, (int *) arg))
@@ -2362,7 +2362,7 @@ static int cs4297a_release(struct inode *inode, struct file *file)
 	struct cs4297a_state *s =
 	    (struct cs4297a_state *) file->private_data;
 
-        CS_DBGOUT(CS_FUNCTION | CS_RELEASE, 2, printk(KERN_INFO
+	CS_DBGOUT(CS_FUNCTION | CS_RELEASE, 2, printk(KERN_INFO
 		 "cs4297a: cs4297a_release(): inode=0x%.8x file=0x%.8x f_mode=0x%x\n",
 			 (unsigned) inode, (unsigned) file, file->f_mode));
 	VALIDATE_STATE(s);
@@ -2398,7 +2398,7 @@ static int cs4297a_locked_open(struct inode *inode, struct file *file)
 		"cs4297a: cs4297a_open(): inode=0x%.8x file=0x%.8x f_mode=0x%x\n",
 			(unsigned) inode, (unsigned) file, file->f_mode));
 	CS_DBGOUT(CS_FUNCTION | CS_OPEN, 2, printk(KERN_INFO
-                "cs4297a: status = %08x\n", (int)__raw_readq(SS_CSR(R_SER_STATUS_DEBUG))));
+		"cs4297a: status = %08x\n", (int)__raw_readq(SS_CSR(R_SER_STATUS_DEBUG))));
 
 	list_for_each(entry, &cs4297a_devs)
 	{
@@ -2424,11 +2424,11 @@ static int cs4297a_locked_open(struct inode *inode, struct file *file)
 		return -ENODEV;
 	}
 	if (file->f_mode & FMODE_WRITE) {
-                if (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX)) != 0) {
-                        printk(KERN_ERR "cs4297a: TX pipe needs to drain\n");
-                        while (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX)))
-                                ;
-                }
+		if (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX)) != 0) {
+			printk(KERN_ERR "cs4297a: TX pipe needs to drain\n");
+			while (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX)))
+				;
+		}
 
 		mutex_lock(&s->open_sem_dac);
 		while (s->open_mode & FMODE_WRITE) {
@@ -2440,9 +2440,9 @@ static int cs4297a_locked_open(struct inode *inode, struct file *file)
 			interruptible_sleep_on(&s->open_wait_dac);
 
 			if (signal_pending(current)) {
-                                printk("open - sig pending\n");
+				printk("open - sig pending\n");
 				return -ERESTARTSYS;
-                        }
+			}
 			mutex_lock(&s->open_sem_dac);
 		}
 	}
@@ -2457,9 +2457,9 @@ static int cs4297a_locked_open(struct inode *inode, struct file *file)
 			interruptible_sleep_on(&s->open_wait_adc);
 
 			if (signal_pending(current)) {
-                                printk("open - sig pending\n");
+				printk("open - sig pending\n");
 				return -ERESTARTSYS;
-                        }
+			}
 			mutex_lock(&s->open_sem_adc);
 		}
 	}
@@ -2534,47 +2534,47 @@ static const struct file_operations cs4297a_audio_fops = {
 static void cs4297a_interrupt(int irq, void *dev_id)
 {
 	struct cs4297a_state *s = (struct cs4297a_state *) dev_id;
-        u32 status;
+	u32 status;
 
-        status = __raw_readq(SS_CSR(R_SER_STATUS_DEBUG));
+	status = __raw_readq(SS_CSR(R_SER_STATUS_DEBUG));
 
-        CS_DBGOUT(CS_INTERRUPT, 6, printk(KERN_INFO
-                 "cs4297a: cs4297a_interrupt() HISR=0x%.8x\n", status));
+	CS_DBGOUT(CS_INTERRUPT, 6, printk(KERN_INFO
+		 "cs4297a: cs4297a_interrupt() HISR=0x%.8x\n", status));
 
 #if 0
-        /* XXXKW what check *should* be done here? */
-        if (!(status & (M_SYNCSER_RX_EOP_COUNT | M_SYNCSER_RX_OVERRUN | M_SYNCSER_RX_SYNC_ERR))) {
-                status = __raw_readq(SS_CSR(R_SER_STATUS));
-                printk(KERN_ERR "cs4297a: unexpected interrupt (status %08x)\n", status);
-                return;
-        }
+	/* XXXKW what check *should* be done here? */
+	if (!(status & (M_SYNCSER_RX_EOP_COUNT | M_SYNCSER_RX_OVERRUN | M_SYNCSER_RX_SYNC_ERR))) {
+		status = __raw_readq(SS_CSR(R_SER_STATUS));
+		printk(KERN_ERR "cs4297a: unexpected interrupt (status %08x)\n", status);
+		return;
+	}
 #endif
 
-        if (status & M_SYNCSER_RX_SYNC_ERR) {
-                status = __raw_readq(SS_CSR(R_SER_STATUS));
-                printk(KERN_ERR "cs4297a: rx sync error (status %08x)\n", status);
-                return;
-        }
+	if (status & M_SYNCSER_RX_SYNC_ERR) {
+		status = __raw_readq(SS_CSR(R_SER_STATUS));
+		printk(KERN_ERR "cs4297a: rx sync error (status %08x)\n", status);
+		return;
+	}
 
-        if (status & M_SYNCSER_RX_OVERRUN) {
-                int newptr, i;
-                s->stats.rx_ovrrn++;
-                printk(KERN_ERR "cs4297a: receive FIFO overrun\n");
+	if (status & M_SYNCSER_RX_OVERRUN) {
+		int newptr, i;
+		s->stats.rx_ovrrn++;
+		printk(KERN_ERR "cs4297a: receive FIFO overrun\n");
 
-                /* Fix things up: get the receive descriptor pool
-                   clean and give them back to the hardware */
-                while (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_RX)))
-                        ;
-                newptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_RX)) & M_DMA_CURDSCR_ADDR) -
-                                     s->dma_adc.descrtab_phys) / sizeof(serdma_descr_t));
-                for (i=0; i<DMA_DESCR; i++) {
-                        s->dma_adc.descrtab[i].descr_a &= ~M_DMA_SERRX_SOP;
-                }
-                s->dma_adc.swptr = s->dma_adc.hwptr = newptr;
-                s->dma_adc.count = 0;
-                s->dma_adc.sb_swptr = s->dma_adc.sb_hwptr = s->dma_adc.sample_buf;
-                __raw_writeq(DMA_DESCR, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
-        }
+		/* Fix things up: get the receive descriptor pool
+		   clean and give them back to the hardware */
+		while (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_RX)))
+			;
+		newptr = (unsigned) (((__raw_readq(SS_CSR(R_SER_DMA_CUR_DSCR_ADDR_RX)) & M_DMA_CURDSCR_ADDR) -
+				     s->dma_adc.descrtab_phys) / sizeof(serdma_descr_t));
+		for (i=0; i<DMA_DESCR; i++) {
+			s->dma_adc.descrtab[i].descr_a &= ~M_DMA_SERRX_SOP;
+		}
+		s->dma_adc.swptr = s->dma_adc.hwptr = newptr;
+		s->dma_adc.count = 0;
+		s->dma_adc.sb_swptr = s->dma_adc.sb_hwptr = s->dma_adc.sample_buf;
+		__raw_writeq(DMA_DESCR, SS_CSR(R_SER_DMA_DSCR_COUNT_RX));
+	}
 
 	spin_lock(&s->lock);
 	cs4297a_update_ptr(s,CS_TRUE);
@@ -2591,8 +2591,8 @@ static struct initvol {
 } initvol[] __initdata = {
 
   	{SOUND_MIXER_WRITE_VOLUME, 0x4040},
-        {SOUND_MIXER_WRITE_PCM, 0x4040},
-        {SOUND_MIXER_WRITE_SYNTH, 0x4040},
+	{SOUND_MIXER_WRITE_PCM, 0x4040},
+	{SOUND_MIXER_WRITE_SYNTH, 0x4040},
 	{SOUND_MIXER_WRITE_CD, 0x4040},
 	{SOUND_MIXER_WRITE_LINE, 0x4040},
 	{SOUND_MIXER_WRITE_LINE1, 0x4040},
@@ -2617,31 +2617,31 @@ static int __init cs4297a_init(void)
 		"cs4297a: cs4297a_init_module()+ \n"));
 
 #ifndef CONFIG_BCM_CS4297A_CSWARM
-        mdio_val = __raw_readq(KSEG1 + A_MAC_REGISTER(2, R_MAC_MDIO)) &
-                (M_MAC_MDIO_DIR|M_MAC_MDIO_OUT);
+	mdio_val = __raw_readq(KSEG1 + A_MAC_REGISTER(2, R_MAC_MDIO)) &
+		(M_MAC_MDIO_DIR|M_MAC_MDIO_OUT);
 
-        /* Check syscfg for synchronous serial on port 1 */
-        cfg = __raw_readq(KSEG1 + A_SCD_SYSTEM_CFG);
-        if (!(cfg & M_SYS_SER1_ENABLE)) {
-                __raw_writeq(cfg | M_SYS_SER1_ENABLE, KSEG1+A_SCD_SYSTEM_CFG);
-                cfg = __raw_readq(KSEG1 + A_SCD_SYSTEM_CFG);
-                if (!(cfg & M_SYS_SER1_ENABLE)) {
-                  printk(KERN_INFO "cs4297a: serial port 1 not configured for synchronous operation\n");
-                  return -1;
-                }
+	/* Check syscfg for synchronous serial on port 1 */
+	cfg = __raw_readq(KSEG1 + A_SCD_SYSTEM_CFG);
+	if (!(cfg & M_SYS_SER1_ENABLE)) {
+		__raw_writeq(cfg | M_SYS_SER1_ENABLE, KSEG1+A_SCD_SYSTEM_CFG);
+		cfg = __raw_readq(KSEG1 + A_SCD_SYSTEM_CFG);
+		if (!(cfg & M_SYS_SER1_ENABLE)) {
+		  printk(KERN_INFO "cs4297a: serial port 1 not configured for synchronous operation\n");
+		  return -1;
+		}
 
-                printk(KERN_INFO "cs4297a: serial port 1 switching to synchronous operation\n");
+		printk(KERN_INFO "cs4297a: serial port 1 switching to synchronous operation\n");
 
-                /* Force the codec (on SWARM) to reset by clearing
-                   GENO, preserving MDIO (no effect on CSWARM) */
-                __raw_writeq(mdio_val, KSEG1+A_MAC_REGISTER(2, R_MAC_MDIO));
-                udelay(10);
-        }
+		/* Force the codec (on SWARM) to reset by clearing
+		   GENO, preserving MDIO (no effect on CSWARM) */
+		__raw_writeq(mdio_val, KSEG1+A_MAC_REGISTER(2, R_MAC_MDIO));
+		udelay(10);
+	}
 
-        /* Now set GENO */
-        __raw_writeq(mdio_val | M_MAC_GENC, KSEG1+A_MAC_REGISTER(2, R_MAC_MDIO));
-        /* Give the codec some time to finish resetting (start the bit clock) */
-        udelay(100);
+	/* Now set GENO */
+	__raw_writeq(mdio_val | M_MAC_GENC, KSEG1+A_MAC_REGISTER(2, R_MAC_MDIO));
+	/* Give the codec some time to finish resetting (start the bit clock) */
+	udelay(100);
 #endif
 
 	if (!(s = kzalloc(sizeof(struct cs4297a_state), GFP_KERNEL))) {
@@ -2649,7 +2649,7 @@ static int __init cs4297a_init(void)
 		      "cs4297a: probe() no memory for state struct.\n"));
 		return -1;
 	}
-        s->magic = CS4297a_MAGIC;
+	s->magic = CS4297a_MAGIC;
 	init_waitqueue_head(&s->dma_adc.wait);
 	init_waitqueue_head(&s->dma_dac.wait);
 	init_waitqueue_head(&s->dma_adc.reg_wait);
@@ -2661,7 +2661,7 @@ static int __init cs4297a_init(void)
 	mutex_init(&s->open_sem_dac);
 	spin_lock_init(&s->lock);
 
-        s->irq = K_INT_SER_1;
+	s->irq = K_INT_SER_1;
 
 	if (request_irq
 	    (s->irq, cs4297a_interrupt, 0, "Crystal CS4297a", s)) {
@@ -2682,52 +2682,52 @@ static int __init cs4297a_init(void)
 		goto err_dev2;
 	}
 
-        if (ser_init(s) || dma_init(s)) {
+	if (ser_init(s) || dma_init(s)) {
 		CS_DBGOUT(CS_INIT | CS_ERROR, 1, printk(KERN_ERR
 			 "cs4297a: ser_init failed.\n"));
 		goto err_dev3;
-        }
+	}
 
-        do {
-                udelay(4000);
-                rval = cs4297a_read_ac97(s, AC97_POWER_CONTROL, &pwr);
-        } while (!rval && (pwr != 0xf));
+	do {
+		udelay(4000);
+		rval = cs4297a_read_ac97(s, AC97_POWER_CONTROL, &pwr);
+	} while (!rval && (pwr != 0xf));
 
-        if (!rval) {
+	if (!rval) {
 		char *sb1250_duart_present;
 
-                fs = get_fs();
-                set_fs(KERNEL_DS);
+		fs = get_fs();
+		set_fs(KERNEL_DS);
 #if 0
-                val = SOUND_MASK_LINE;
-                mixer_ioctl(s, SOUND_MIXER_WRITE_RECSRC, (unsigned long) &val);
-                for (i = 0; i < ARRAY_SIZE(initvol); i++) {
-                        val = initvol[i].vol;
-                        mixer_ioctl(s, initvol[i].mixch, (unsigned long) &val);
-                }
+		val = SOUND_MASK_LINE;
+		mixer_ioctl(s, SOUND_MIXER_WRITE_RECSRC, (unsigned long) &val);
+		for (i = 0; i < ARRAY_SIZE(initvol); i++) {
+			val = initvol[i].vol;
+			mixer_ioctl(s, initvol[i].mixch, (unsigned long) &val);
+		}
 //                cs4297a_write_ac97(s, 0x18, 0x0808);
 #else
-                //                cs4297a_write_ac97(s, 0x5e, 0x180);
-                cs4297a_write_ac97(s, 0x02, 0x0808);
-                cs4297a_write_ac97(s, 0x18, 0x0808);
+		//                cs4297a_write_ac97(s, 0x5e, 0x180);
+		cs4297a_write_ac97(s, 0x02, 0x0808);
+		cs4297a_write_ac97(s, 0x18, 0x0808);
 #endif
-                set_fs(fs);
+		set_fs(fs);
 
-                list_add(&s->list, &cs4297a_devs);
+		list_add(&s->list, &cs4297a_devs);
 
-                cs4297a_read_ac97(s, AC97_VENDOR_ID1, &id);
+		cs4297a_read_ac97(s, AC97_VENDOR_ID1, &id);
 
 		sb1250_duart_present = symbol_get(sb1250_duart_present);
 		if (sb1250_duart_present)
 			sb1250_duart_present[1] = 0;
 
-                printk(KERN_INFO "cs4297a: initialized (vendor id = %x)\n", id);
+		printk(KERN_INFO "cs4297a: initialized (vendor id = %x)\n", id);
 
-                CS_DBGOUT(CS_INIT | CS_FUNCTION, 2,
-                          printk(KERN_INFO "cs4297a: cs4297a_init_module()-\n"));
+		CS_DBGOUT(CS_INIT | CS_FUNCTION, 2,
+			  printk(KERN_INFO "cs4297a: cs4297a_init_module()-\n"));
 
-                return 0;
-        }
+		return 0;
+	}
 
  err_dev3:
 	unregister_sound_mixer(s->dev_mixer);
@@ -2738,21 +2738,21 @@ static int __init cs4297a_init(void)
  err_irq:
 	kfree(s);
 
-        printk(KERN_INFO "cs4297a: initialization failed\n");
+	printk(KERN_INFO "cs4297a: initialization failed\n");
 
-        return -1;
+	return -1;
 }
 
 static void __exit cs4297a_cleanup(void)
 {
-        /*
-          XXXKW
-           disable_irq, free_irq
-           drain DMA queue
-           disable DMA
-           disable TX/RX
-           free memory
-        */
+	/*
+	  XXXKW
+	   disable_irq, free_irq
+	   drain DMA queue
+	   disable DMA
+	   disable TX/RX
+	   free memory
+	*/
 	CS_DBGOUT(CS_INIT | CS_FUNCTION, 2,
 		  printk(KERN_INFO "cs4297a: cleanup_cs4297a() finished\n"));
 }

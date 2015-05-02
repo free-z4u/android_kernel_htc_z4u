@@ -353,8 +353,8 @@ static ssize_t lkfirst_store(struct gfs2_sbd *sdp, const char *buf, size_t len)
 	sdp->sd_lockstruct.ls_first = first;
 	rv = 0;
 out:
-        spin_unlock(&sdp->sd_jindex_spin);
-        return rv ? rv : len;
+	spin_unlock(&sdp->sd_jindex_spin);
+	return rv ? rv : len;
 }
 
 static ssize_t first_done_show(struct gfs2_sbd *sdp, char *buf)
@@ -420,7 +420,7 @@ static ssize_t jid_show(struct gfs2_sbd *sdp, char *buf)
 
 static ssize_t jid_store(struct gfs2_sbd *sdp, const char *buf, size_t len)
 {
-        int jid;
+	int jid;
 	int rv;
 
 	rv = sscanf(buf, "%d", &jid);

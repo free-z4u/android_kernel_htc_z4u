@@ -119,7 +119,7 @@ void smt_reset_defaults(struct s_smc *smc, int level)
 	smt->rmt_t_jam = DEFAULT_T_JAM ;
 	smt->rmt_t_announce = DEFAULT_T_ANNOUNCE ;
 	smt->rmt_t_poll = DEFAULT_POLL ;
-        smt->rmt_dup_mac_behavior = FALSE ;  /* See Struct smt_config */
+	smt->rmt_dup_mac_behavior = FALSE ;  /* See Struct smt_config */
 	smt->mac_d_max = DEFAULT_D_MAX ;
 
 	smt->lct_short = DEFAULT_LCT_SHORT ;

@@ -41,7 +41,7 @@
    These may be modified when a driver module is loaded. */
 static int debug = 0;
 #define RHINE_MSG_DEFAULT \
-        (0x0000)
+	(0x0000)
 
 /* Set the copy breakpoint for the copy-only-tiny-frames scheme.
    Setting to > 1518 effectively disables this feature. */

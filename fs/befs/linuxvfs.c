@@ -275,18 +275,18 @@ befs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 static struct inode *
 befs_alloc_inode(struct super_block *sb)
 {
-        struct befs_inode_info *bi;
-        bi = (struct befs_inode_info *)kmem_cache_alloc(befs_inode_cachep,
+	struct befs_inode_info *bi;
+	bi = (struct befs_inode_info *)kmem_cache_alloc(befs_inode_cachep,
 							GFP_KERNEL);
-        if (!bi)
-                return NULL;
-        return &bi->vfs_inode;
+	if (!bi)
+		return NULL;
+	return &bi->vfs_inode;
 }
 
 static void befs_i_callback(struct rcu_head *head)
 {
 	struct inode *inode = container_of(head, struct inode, i_rcu);
-        kmem_cache_free(befs_inode_cachep, BEFS_I(inode));
+	kmem_cache_free(befs_inode_cachep, BEFS_I(inode));
 }
 
 static void befs_destroy_inode(struct inode *inode)
@@ -296,7 +296,7 @@ static void befs_destroy_inode(struct inode *inode)
 
 static void init_once(void *foo)
 {
-        struct befs_inode_info *bi = (struct befs_inode_info *) foo;
+	struct befs_inode_info *bi = (struct befs_inode_info *) foo;
 
 	inode_init_once(&bi->vfs_inode);
 }

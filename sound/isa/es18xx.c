@@ -175,27 +175,27 @@ struct snd_es18xx {
 
 static int snd_es18xx_dsp_command(struct snd_es18xx *chip, unsigned char val)
 {
-        int i;
+	int i;
 
-        for(i = MILLISECOND; i; i--)
-                if ((inb(chip->port + 0x0C) & 0x80) == 0) {
-                        outb(val, chip->port + 0x0C);
-                        return 0;
-                }
+	for(i = MILLISECOND; i; i--)
+		if ((inb(chip->port + 0x0C) & 0x80) == 0) {
+			outb(val, chip->port + 0x0C);
+			return 0;
+		}
 	snd_printk(KERN_ERR "dsp_command: timeout (0x%x)\n", val);
-        return -EINVAL;
+	return -EINVAL;
 }
 
 static int snd_es18xx_dsp_get_byte(struct snd_es18xx *chip)
 {
-        int i;
+	int i;
 
-        for(i = MILLISECOND/10; i; i--)
-                if (inb(chip->port + 0x0C) & 0x40)
-                        return inb(chip->port + 0x0A);
+	for(i = MILLISECOND/10; i; i--)
+		if (inb(chip->port + 0x0C) & 0x40)
+			return inb(chip->port + 0x0A);
 	snd_printk(KERN_ERR "dsp_get_byte failed: 0x%lx = 0x%x!!!\n",
 		   chip->port + 0x0A, inb(chip->port + 0x0A));
-        return -ENODEV;
+	return -ENODEV;
 }
 
 #undef REG_DEBUG
@@ -206,13 +206,13 @@ static int snd_es18xx_write(struct snd_es18xx *chip,
 	unsigned long flags;
 	int ret;
 
-        spin_lock_irqsave(&chip->reg_lock, flags);
+	spin_lock_irqsave(&chip->reg_lock, flags);
 	ret = snd_es18xx_dsp_command(chip, reg);
 	if (ret < 0)
 		goto end;
-        ret = snd_es18xx_dsp_command(chip, data);
+	ret = snd_es18xx_dsp_command(chip, data);
  end:
-        spin_unlock_irqrestore(&chip->reg_lock, flags);
+	spin_unlock_irqrestore(&chip->reg_lock, flags);
 #ifdef REG_DEBUG
 	snd_printk(KERN_DEBUG "Reg %02x set to %02x\n", reg, data);
 #endif
@@ -223,11 +223,11 @@ static int snd_es18xx_read(struct snd_es18xx *chip, unsigned char reg)
 {
 	unsigned long flags;
 	int ret, data;
-        spin_lock_irqsave(&chip->reg_lock, flags);
+	spin_lock_irqsave(&chip->reg_lock, flags);
 	ret = snd_es18xx_dsp_command(chip, 0xC0);
 	if (ret < 0)
 		goto end;
-        ret = snd_es18xx_dsp_command(chip, reg);
+	ret = snd_es18xx_dsp_command(chip, reg);
 	if (ret < 0)
 		goto end;
 	data = snd_es18xx_dsp_get_byte(chip);
@@ -236,7 +236,7 @@ static int snd_es18xx_read(struct snd_es18xx *chip, unsigned char reg)
 	snd_printk(KERN_DEBUG "Reg %02x now is %02x (%d)\n", reg, data, ret);
 #endif
  end:
-        spin_unlock_irqrestore(&chip->reg_lock, flags);
+	spin_unlock_irqrestore(&chip->reg_lock, flags);
 	return ret;
 }
 
@@ -244,14 +244,14 @@ static int snd_es18xx_read(struct snd_es18xx *chip, unsigned char reg)
 static int snd_es18xx_bits(struct snd_es18xx *chip, unsigned char reg,
 			   unsigned char mask, unsigned char val)
 {
-        int ret;
+	int ret;
 	unsigned char old, new, oval;
 	unsigned long flags;
-        spin_lock_irqsave(&chip->reg_lock, flags);
-        ret = snd_es18xx_dsp_command(chip, 0xC0);
+	spin_lock_irqsave(&chip->reg_lock, flags);
+	ret = snd_es18xx_dsp_command(chip, 0xC0);
 	if (ret < 0)
 		goto end;
-        ret = snd_es18xx_dsp_command(chip, reg);
+	ret = snd_es18xx_dsp_command(chip, reg);
 	if (ret < 0)
 		goto end;
 	ret = snd_es18xx_dsp_get_byte(chip);
@@ -275,7 +275,7 @@ static int snd_es18xx_bits(struct snd_es18xx *chip, unsigned char reg,
 	}
 	ret = oval;
  end:
-        spin_unlock_irqrestore(&chip->reg_lock, flags);
+	spin_unlock_irqrestore(&chip->reg_lock, flags);
 	return ret;
 }
 
@@ -283,10 +283,10 @@ static inline void snd_es18xx_mixer_write(struct snd_es18xx *chip,
 			    unsigned char reg, unsigned char data)
 {
 	unsigned long flags;
-        spin_lock_irqsave(&chip->mixer_lock, flags);
-        outb(reg, chip->port + 0x04);
-        outb(data, chip->port + 0x05);
-        spin_unlock_irqrestore(&chip->mixer_lock, flags);
+	spin_lock_irqsave(&chip->mixer_lock, flags);
+	outb(reg, chip->port + 0x04);
+	outb(data, chip->port + 0x05);
+	spin_unlock_irqrestore(&chip->mixer_lock, flags);
 #ifdef REG_DEBUG
 	snd_printk(KERN_DEBUG "Mixer reg %02x set to %02x\n", reg, data);
 #endif
@@ -296,14 +296,14 @@ static inline int snd_es18xx_mixer_read(struct snd_es18xx *chip, unsigned char r
 {
 	unsigned long flags;
 	int data;
-        spin_lock_irqsave(&chip->mixer_lock, flags);
-        outb(reg, chip->port + 0x04);
+	spin_lock_irqsave(&chip->mixer_lock, flags);
+	outb(reg, chip->port + 0x04);
 	data = inb(chip->port + 0x05);
-        spin_unlock_irqrestore(&chip->mixer_lock, flags);
+	spin_unlock_irqrestore(&chip->mixer_lock, flags);
 #ifdef REG_DEBUG
 	snd_printk(KERN_DEBUG "Mixer reg %02x now is %02x\n", reg, data);
 #endif
-        return data;
+	return data;
 }
 
 /* Return old value */
@@ -312,8 +312,8 @@ static inline int snd_es18xx_mixer_bits(struct snd_es18xx *chip, unsigned char r
 {
 	unsigned char old, new, oval;
 	unsigned long flags;
-        spin_lock_irqsave(&chip->mixer_lock, flags);
-        outb(reg, chip->port + 0x04);
+	spin_lock_irqsave(&chip->mixer_lock, flags);
+	outb(reg, chip->port + 0x04);
 	old = inb(chip->port + 0x05);
 	oval = old & mask;
 	if (val != oval) {
@@ -324,7 +324,7 @@ static inline int snd_es18xx_mixer_bits(struct snd_es18xx *chip, unsigned char r
 			   reg, old, new);
 #endif
 	}
-        spin_unlock_irqrestore(&chip->mixer_lock, flags);
+	spin_unlock_irqrestore(&chip->mixer_lock, flags);
 	return oval;
 }
 
@@ -333,13 +333,13 @@ static inline int snd_es18xx_mixer_writable(struct snd_es18xx *chip, unsigned ch
 {
 	int old, expected, new;
 	unsigned long flags;
-        spin_lock_irqsave(&chip->mixer_lock, flags);
-        outb(reg, chip->port + 0x04);
+	spin_lock_irqsave(&chip->mixer_lock, flags);
+	outb(reg, chip->port + 0x04);
 	old = inb(chip->port + 0x05);
 	expected = old ^ mask;
 	outb(expected, chip->port + 0x05);
 	new = inb(chip->port + 0x05);
-        spin_unlock_irqrestore(&chip->mixer_lock, flags);
+	spin_unlock_irqrestore(&chip->mixer_lock, flags);
 #ifdef REG_DEBUG
 	snd_printk(KERN_DEBUG "Mixer reg %02x was %02x, set to %02x, now is %02x\n",
 		   reg, old, expected, new);
@@ -351,20 +351,20 @@ static inline int snd_es18xx_mixer_writable(struct snd_es18xx *chip, unsigned ch
 static int __devinit snd_es18xx_reset(struct snd_es18xx *chip)
 {
 	int i;
-        outb(0x03, chip->port + 0x06);
-        inb(chip->port + 0x06);
-        outb(0x00, chip->port + 0x06);
-        for(i = 0; i < MILLISECOND && !(inb(chip->port + 0x0E) & 0x80); i++);
-        if (inb(chip->port + 0x0A) != 0xAA)
-                return -1;
+	outb(0x03, chip->port + 0x06);
+	inb(chip->port + 0x06);
+	outb(0x00, chip->port + 0x06);
+	for(i = 0; i < MILLISECOND && !(inb(chip->port + 0x0E) & 0x80); i++);
+	if (inb(chip->port + 0x0A) != 0xAA)
+		return -1;
 	return 0;
 }
 
 static int snd_es18xx_reset_fifo(struct snd_es18xx *chip)
 {
-        outb(0x02, chip->port + 0x06);
-        inb(chip->port + 0x06);
-        outb(0x00, chip->port + 0x06);
+	outb(0x02, chip->port + 0x06);
+	inb(chip->port + 0x06);
+	outb(0x00, chip->port + 0x06);
 	return 0;
 }
 
@@ -484,21 +484,21 @@ static int snd_es18xx_playback1_prepare(struct snd_es18xx *chip,
 	unsigned int size = snd_pcm_lib_buffer_bytes(substream);
 	unsigned int count = snd_pcm_lib_period_bytes(substream);
 
-        snd_es18xx_rate_set(chip, substream, DAC2);
+	snd_es18xx_rate_set(chip, substream, DAC2);
 
-        /* Transfer Count Reload */
-        count = 0x10000 - count;
-        snd_es18xx_mixer_write(chip, 0x74, count & 0xff);
-        snd_es18xx_mixer_write(chip, 0x76, count >> 8);
+	/* Transfer Count Reload */
+	count = 0x10000 - count;
+	snd_es18xx_mixer_write(chip, 0x74, count & 0xff);
+	snd_es18xx_mixer_write(chip, 0x76, count >> 8);
 
 	/* Set format */
-        snd_es18xx_mixer_bits(chip, 0x7A, 0x07,
+	snd_es18xx_mixer_bits(chip, 0x7A, 0x07,
 			      ((runtime->channels == 1) ? 0x00 : 0x02) |
 			      (snd_pcm_format_width(runtime->format) == 16 ? 0x01 : 0x00) |
 			      (snd_pcm_format_unsigned(runtime->format) ? 0x00 : 0x04));
 
-        /* Set DMA controller */
-        snd_dma_program(chip->dma2, runtime->dma_addr, size, DMA_MODE_WRITE | DMA_AUTOINIT);
+	/* Set DMA controller */
+	snd_dma_program(chip->dma2, runtime->dma_addr, size, DMA_MODE_WRITE | DMA_AUTOINIT);
 
 	return 0;
 }
@@ -513,14 +513,14 @@ static int snd_es18xx_playback1_trigger(struct snd_es18xx *chip,
 		if (chip->active & DAC2)
 			return 0;
 		chip->active |= DAC2;
-                /* Start DMA */
+		/* Start DMA */
 		if (chip->dma2 >= 4)
 			snd_es18xx_mixer_write(chip, 0x78, 0xb3);
 		else
 			snd_es18xx_mixer_write(chip, 0x78, 0x93);
 #ifdef AVOID_POPS
 		/* Avoid pops */
-                udelay(100000);
+		udelay(100000);
 		if (chip->caps & ES18XX_PCM2)
 			/* Restore Audio 2 volume */
 			snd_es18xx_mixer_write(chip, 0x7C, chip->audio2_vol);
@@ -534,10 +534,10 @@ static int snd_es18xx_playback1_trigger(struct snd_es18xx *chip,
 		if (!(chip->active & DAC2))
 			return 0;
 		chip->active &= ~DAC2;
-                /* Stop DMA */
-                snd_es18xx_mixer_write(chip, 0x78, 0x00);
+		/* Stop DMA */
+		snd_es18xx_mixer_write(chip, 0x78, 0x00);
 #ifdef AVOID_POPS
-                udelay(25000);
+		udelay(25000);
 		if (chip->caps & ES18XX_PCM2)
 			/* Set Audio 2 volume to 0 */
 			snd_es18xx_mixer_write(chip, 0x7C, 0);
@@ -578,19 +578,19 @@ static int snd_es18xx_capture_hw_params(struct snd_pcm_substream *substream,
 
 static int snd_es18xx_capture_prepare(struct snd_pcm_substream *substream)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	unsigned int size = snd_pcm_lib_buffer_bytes(substream);
 	unsigned int count = snd_pcm_lib_period_bytes(substream);
 
 	snd_es18xx_reset_fifo(chip);
 
-        /* Set stereo/mono */
-        snd_es18xx_bits(chip, 0xA8, 0x03, runtime->channels == 1 ? 0x02 : 0x01);
+	/* Set stereo/mono */
+	snd_es18xx_bits(chip, 0xA8, 0x03, runtime->channels == 1 ? 0x02 : 0x01);
 
-        snd_es18xx_rate_set(chip, substream, ADC1);
+	snd_es18xx_rate_set(chip, substream, ADC1);
 
-        /* Transfer Count Reload */
+	/* Transfer Count Reload */
 	count = 0x10000 - count;
 	snd_es18xx_write(chip, 0xA4, count & 0xff);
 	snd_es18xx_write(chip, 0xA5, count >> 8);
@@ -599,16 +599,16 @@ static int snd_es18xx_capture_prepare(struct snd_pcm_substream *substream)
 	udelay(100000);
 #endif
 
-        /* Set format */
-        snd_es18xx_write(chip, 0xB7,
-                         snd_pcm_format_unsigned(runtime->format) ? 0x51 : 0x71);
-        snd_es18xx_write(chip, 0xB7, 0x90 |
-                         ((runtime->channels == 1) ? 0x40 : 0x08) |
-                         (snd_pcm_format_width(runtime->format) == 16 ? 0x04 : 0x00) |
-                         (snd_pcm_format_unsigned(runtime->format) ? 0x00 : 0x20));
+	/* Set format */
+	snd_es18xx_write(chip, 0xB7,
+			 snd_pcm_format_unsigned(runtime->format) ? 0x51 : 0x71);
+	snd_es18xx_write(chip, 0xB7, 0x90 |
+			 ((runtime->channels == 1) ? 0x40 : 0x08) |
+			 (snd_pcm_format_width(runtime->format) == 16 ? 0x04 : 0x00) |
+			 (snd_pcm_format_unsigned(runtime->format) ? 0x00 : 0x20));
 
-        /* Set DMA controller */
-        snd_dma_program(chip->dma1, runtime->dma_addr, size, DMA_MODE_READ | DMA_AUTOINIT);
+	/* Set DMA controller */
+	snd_dma_program(chip->dma1, runtime->dma_addr, size, DMA_MODE_READ | DMA_AUTOINIT);
 
 	return 0;
 }
@@ -616,7 +616,7 @@ static int snd_es18xx_capture_prepare(struct snd_pcm_substream *substream)
 static int snd_es18xx_capture_trigger(struct snd_pcm_substream *substream,
 				      int cmd)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 
 	switch (cmd) {
 	case SNDRV_PCM_TRIGGER_START:
@@ -624,16 +624,16 @@ static int snd_es18xx_capture_trigger(struct snd_pcm_substream *substream,
 		if (chip->active & ADC1)
 			return 0;
 		chip->active |= ADC1;
-                /* Start DMA */
-                snd_es18xx_write(chip, 0xB8, 0x0f);
+		/* Start DMA */
+		snd_es18xx_write(chip, 0xB8, 0x0f);
 		break;
 	case SNDRV_PCM_TRIGGER_STOP:
 	case SNDRV_PCM_TRIGGER_SUSPEND:
 		if (!(chip->active & ADC1))
 			return 0;
 		chip->active &= ~ADC1;
-                /* Stop DMA */
-                snd_es18xx_write(chip, 0xB8, 0x00);
+		/* Stop DMA */
+		snd_es18xx_write(chip, 0xB8, 0x00);
 		break;
 	default:
 		return -EINVAL;
@@ -651,28 +651,28 @@ static int snd_es18xx_playback2_prepare(struct snd_es18xx *chip,
 
 	snd_es18xx_reset_fifo(chip);
 
-        /* Set stereo/mono */
-        snd_es18xx_bits(chip, 0xA8, 0x03, runtime->channels == 1 ? 0x02 : 0x01);
+	/* Set stereo/mono */
+	snd_es18xx_bits(chip, 0xA8, 0x03, runtime->channels == 1 ? 0x02 : 0x01);
 
-        snd_es18xx_rate_set(chip, substream, DAC1);
+	snd_es18xx_rate_set(chip, substream, DAC1);
 
-        /* Transfer Count Reload */
+	/* Transfer Count Reload */
 	count = 0x10000 - count;
 	snd_es18xx_write(chip, 0xA4, count & 0xff);
 	snd_es18xx_write(chip, 0xA5, count >> 8);
 
-        /* Set format */
-        snd_es18xx_write(chip, 0xB6,
-                         snd_pcm_format_unsigned(runtime->format) ? 0x80 : 0x00);
-        snd_es18xx_write(chip, 0xB7,
-                         snd_pcm_format_unsigned(runtime->format) ? 0x51 : 0x71);
-        snd_es18xx_write(chip, 0xB7, 0x90 |
-                         (runtime->channels == 1 ? 0x40 : 0x08) |
-                         (snd_pcm_format_width(runtime->format) == 16 ? 0x04 : 0x00) |
-                         (snd_pcm_format_unsigned(runtime->format) ? 0x00 : 0x20));
+	/* Set format */
+	snd_es18xx_write(chip, 0xB6,
+			 snd_pcm_format_unsigned(runtime->format) ? 0x80 : 0x00);
+	snd_es18xx_write(chip, 0xB7,
+			 snd_pcm_format_unsigned(runtime->format) ? 0x51 : 0x71);
+	snd_es18xx_write(chip, 0xB7, 0x90 |
+			 (runtime->channels == 1 ? 0x40 : 0x08) |
+			 (snd_pcm_format_width(runtime->format) == 16 ? 0x04 : 0x00) |
+			 (snd_pcm_format_unsigned(runtime->format) ? 0x00 : 0x20));
 
-        /* Set DMA controller */
-        snd_dma_program(chip->dma1, runtime->dma_addr, size, DMA_MODE_WRITE | DMA_AUTOINIT);
+	/* Set DMA controller */
+	snd_dma_program(chip->dma1, runtime->dma_addr, size, DMA_MODE_WRITE | DMA_AUTOINIT);
 
 	return 0;
 }
@@ -687,13 +687,13 @@ static int snd_es18xx_playback2_trigger(struct snd_es18xx *chip,
 		if (chip->active & DAC1)
 			return 0;
 		chip->active |= DAC1;
-                /* Start DMA */
-                snd_es18xx_write(chip, 0xB8, 0x05);
+		/* Start DMA */
+		snd_es18xx_write(chip, 0xB8, 0x05);
 #ifdef AVOID_POPS
 		/* Avoid pops */
-                udelay(100000);
-                /* Enable Audio 1 */
-                snd_es18xx_dsp_command(chip, 0xD1);
+		udelay(100000);
+		/* Enable Audio 1 */
+		snd_es18xx_dsp_command(chip, 0xD1);
 #endif
 		break;
 	case SNDRV_PCM_TRIGGER_STOP:
@@ -701,13 +701,13 @@ static int snd_es18xx_playback2_trigger(struct snd_es18xx *chip,
 		if (!(chip->active & DAC1))
 			return 0;
 		chip->active &= ~DAC1;
-                /* Stop DMA */
-                snd_es18xx_write(chip, 0xB8, 0x00);
+		/* Stop DMA */
+		snd_es18xx_write(chip, 0xB8, 0x00);
 #ifdef AVOID_POPS
 		/* Avoid pops */
-                udelay(25000);
-                /* Disable Audio 1 */
-                snd_es18xx_dsp_command(chip, 0xD3);
+		udelay(25000);
+		/* Disable Audio 1 */
+		snd_es18xx_dsp_command(chip, 0xD3);
 #endif
 		break;
 	default:
@@ -719,7 +719,7 @@ static int snd_es18xx_playback2_trigger(struct snd_es18xx *chip,
 
 static int snd_es18xx_playback_prepare(struct snd_pcm_substream *substream)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 	if (substream->number == 0 && (chip->caps & ES18XX_PCM2))
 		return snd_es18xx_playback1_prepare(chip, substream);
 	else
@@ -729,7 +729,7 @@ static int snd_es18xx_playback_prepare(struct snd_pcm_substream *substream)
 static int snd_es18xx_playback_trigger(struct snd_pcm_substream *substream,
 				       int cmd)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 	if (substream->number == 0 && (chip->caps & ES18XX_PCM2))
 		return snd_es18xx_playback1_trigger(chip, substream, cmd);
 	else
@@ -763,22 +763,22 @@ static irqreturn_t snd_es18xx_interrupt(int irq, void *dev_id)
 #endif
 
 	/* Audio 1 & Audio 2 */
-        if (status & AUDIO2_IRQ) {
-                if (chip->active & DAC2)
-                	snd_pcm_period_elapsed(chip->playback_a_substream);
+	if (status & AUDIO2_IRQ) {
+		if (chip->active & DAC2)
+			snd_pcm_period_elapsed(chip->playback_a_substream);
 		/* ack interrupt */
-                snd_es18xx_mixer_bits(chip, 0x7A, 0x80, 0x00);
-        }
-        if (status & AUDIO1_IRQ) {
-                /* ok.. capture is active */
-                if (chip->active & ADC1)
-                	snd_pcm_period_elapsed(chip->capture_a_substream);
-                /* ok.. playback2 is active */
-                else if (chip->active & DAC1)
-                	snd_pcm_period_elapsed(chip->playback_b_substream);
+		snd_es18xx_mixer_bits(chip, 0x7A, 0x80, 0x00);
+	}
+	if (status & AUDIO1_IRQ) {
+		/* ok.. capture is active */
+		if (chip->active & ADC1)
+			snd_pcm_period_elapsed(chip->capture_a_substream);
+		/* ok.. playback2 is active */
+		else if (chip->active & DAC1)
+			snd_pcm_period_elapsed(chip->playback_b_substream);
 		/* ack interrupt */
 		inb(chip->port + 0x0E);
-        }
+	}
 
 	/* MPU */
 	if ((status & MPU_IRQ) && chip->rmidi)
@@ -808,7 +808,7 @@ static irqreturn_t snd_es18xx_interrupt(int irq, void *dev_id)
 
 static snd_pcm_uframes_t snd_es18xx_playback_pointer(struct snd_pcm_substream *substream)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 	unsigned int size = snd_pcm_lib_buffer_bytes(substream);
 	int pos;
 
@@ -827,12 +827,12 @@ static snd_pcm_uframes_t snd_es18xx_playback_pointer(struct snd_pcm_substream *s
 
 static snd_pcm_uframes_t snd_es18xx_capture_pointer(struct snd_pcm_substream *substream)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 	unsigned int size = snd_pcm_lib_buffer_bytes(substream);
 	int pos;
 
-        if (!(chip->active & ADC1))
-                return 0;
+	if (!(chip->active & ADC1))
+		return 0;
 	pos = snd_dma_pointer(chip->dma1, size);
 	return pos >> chip->dma1_shift;
 }
@@ -880,7 +880,7 @@ static struct snd_pcm_hardware snd_es18xx_capture =
 static int snd_es18xx_playback_open(struct snd_pcm_substream *substream)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 
 	if (substream->number == 0 && (chip->caps & ES18XX_PCM2)) {
 		if ((chip->caps & ES18XX_DUPLEX_MONO) &&
@@ -899,30 +899,30 @@ static int snd_es18xx_playback_open(struct snd_pcm_substream *substream)
 	substream->runtime->hw = snd_es18xx_playback;
 	snd_pcm_hw_constraint_ratnums(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
 				      (chip->caps & ES18XX_NEW_RATE) ? &new_hw_constraints_clocks : &old_hw_constraints_clocks);
-        return 0;
+	return 0;
 }
 
 static int snd_es18xx_capture_open(struct snd_pcm_substream *substream)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 
-        if (chip->playback_b_substream)
-                return -EAGAIN;
+	if (chip->playback_b_substream)
+		return -EAGAIN;
 	if ((chip->caps & ES18XX_DUPLEX_MONO) &&
 	    chip->playback_a_substream &&
 	    chip->playback_a_substream->runtime->channels != 1)
 		return -EAGAIN;
-        chip->capture_a_substream = substream;
+	chip->capture_a_substream = substream;
 	substream->runtime->hw = snd_es18xx_capture;
 	snd_pcm_hw_constraint_ratnums(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
 				      (chip->caps & ES18XX_NEW_RATE) ? &new_hw_constraints_clocks : &old_hw_constraints_clocks);
-        return 0;
+	return 0;
 }
 
 static int snd_es18xx_playback_close(struct snd_pcm_substream *substream)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 
 	if (substream->number == 0 && (chip->caps & ES18XX_PCM2))
 		chip->playback_a_substream = NULL;
@@ -935,11 +935,11 @@ static int snd_es18xx_playback_close(struct snd_pcm_substream *substream)
 
 static int snd_es18xx_capture_close(struct snd_pcm_substream *substream)
 {
-        struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
+	struct snd_es18xx *chip = snd_pcm_substream_chip(substream);
 
-        chip->capture_a_substream = NULL;
+	chip->capture_a_substream = NULL;
 	snd_pcm_lib_free_pages(substream);
-        return 0;
+	return 0;
 }
 
 /*
@@ -1390,13 +1390,13 @@ static int __devinit snd_es18xx_initialize(struct snd_es18xx *chip,
 {
 	int mask = 0;
 
-        /* enable extended mode */
-        snd_es18xx_dsp_command(chip, 0xC6);
+	/* enable extended mode */
+	snd_es18xx_dsp_command(chip, 0xC6);
 	/* Reset mixer registers */
 	snd_es18xx_mixer_write(chip, 0x00, 0x00);
 
-        /* Audio 1 DMA demand mode (4 bytes/request) */
-        snd_es18xx_write(chip, 0xB9, 2);
+	/* Audio 1 DMA demand mode (4 bytes/request) */
+	snd_es18xx_write(chip, 0xB9, 2);
 	if (chip->caps & ES18XX_CONTROL) {
 		/* Hardware volume IRQ */
 		snd_es18xx_config_write(chip, 0x27, chip->irq);
@@ -1546,7 +1546,7 @@ static int __devinit snd_es18xx_initialize(struct snd_es18xx *chip,
 	snd_es18xx_dsp_command(chip, 0xD1);
 #endif
 
-        return 0;
+	return 0;
 }
 
 static int __devinit snd_es18xx_identify(struct snd_es18xx *chip)
@@ -1580,7 +1580,7 @@ static int __devinit snd_es18xx_identify(struct snd_es18xx *chip)
 		return 0;
 	}
 
-        outb(0x40, chip->port + 0x04);
+	outb(0x40, chip->port + 0x04);
 	udelay(10);
 	hi = inb(chip->port + 0x05);
 	udelay(10);
@@ -1624,7 +1624,7 @@ static int __devinit snd_es18xx_probe(struct snd_es18xx *chip,
 {
 	if (snd_es18xx_identify(chip) < 0) {
 		snd_printk(KERN_ERR PFX "[0x%lx] ESS chip not found\n", chip->port);
-                return -ENODEV;
+		return -ENODEV;
 	}
 
 	switch (chip->version) {
@@ -1646,11 +1646,11 @@ static int __devinit snd_es18xx_probe(struct snd_es18xx *chip,
 		break;
 	default:
 		snd_printk(KERN_ERR "[0x%lx] unsupported chip ES%x\n",
-                           chip->port, chip->version);
-                return -ENODEV;
-        }
+			   chip->port, chip->version);
+		return -ENODEV;
+	}
 
-        snd_printd("[0x%lx] ESS%x chip found\n", chip->port, chip->version);
+	snd_printd("[0x%lx] ESS%x chip found\n", chip->port, chip->version);
 
 	if (chip->dma1 == chip->dma2)
 		chip->caps &= ~(ES18XX_PCM2 | ES18XX_DUPLEX_SAME);
@@ -1684,7 +1684,7 @@ static int __devinit snd_es18xx_pcm(struct snd_card *card, int device,
 				    struct snd_pcm **rpcm)
 {
 	struct snd_es18xx *chip = card->private_data;
-        struct snd_pcm *pcm;
+	struct snd_pcm *pcm;
 	char str[16];
 	int err;
 
@@ -1695,29 +1695,29 @@ static int __devinit snd_es18xx_pcm(struct snd_card *card, int device,
 		err = snd_pcm_new(card, str, device, 2, 1, &pcm);
 	else
 		err = snd_pcm_new(card, str, device, 1, 1, &pcm);
-        if (err < 0)
-                return err;
+	if (err < 0)
+		return err;
 
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_es18xx_playback_ops);
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_es18xx_capture_ops);
 
 	/* global setup */
-        pcm->private_data = chip;
-        pcm->info_flags = 0;
+	pcm->private_data = chip;
+	pcm->info_flags = 0;
 	if (chip->caps & ES18XX_DUPLEX_SAME)
 		pcm->info_flags |= SNDRV_PCM_INFO_JOINT_DUPLEX;
 	if (! (chip->caps & ES18XX_PCM2))
 		pcm->info_flags |= SNDRV_PCM_INFO_HALF_DUPLEX;
 	sprintf(pcm->name, "ESS AudioDrive ES%x", chip->version);
-        chip->pcm = pcm;
+	chip->pcm = pcm;
 
 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_DEV,
 					      snd_dma_isa_data(),
 					      64*1024,
 					      chip->dma1 > 3 || chip->dma2 > 3 ? 128*1024 : 64*1024);
 
-        if (rpcm)
-        	*rpcm = pcm;
+	if (rpcm)
+		*rpcm = pcm;
 	return 0;
 }
 
@@ -1786,16 +1786,16 @@ static int __devinit snd_es18xx_new_device(struct snd_card *card,
 	struct snd_es18xx *chip = card->private_data;
 	static struct snd_device_ops ops = {
 		.dev_free =	snd_es18xx_dev_free,
-        };
+	};
 	int err;
 
 	spin_lock_init(&chip->reg_lock);
  	spin_lock_init(&chip->mixer_lock);
-        chip->port = port;
-        chip->irq = -1;
-        chip->dma1 = -1;
-        chip->dma2 = -1;
-        chip->audio2_vol = 0x00;
+	chip->port = port;
+	chip->irq = -1;
+	chip->dma1 = -1;
+	chip->dma2 = -1;
+	chip->audio2_vol = 0x00;
 	chip->active = 0;
 
 	chip->res_port = request_region(port, 16, "ES18xx");
@@ -1836,7 +1836,7 @@ static int __devinit snd_es18xx_new_device(struct snd_card *card,
 		snd_es18xx_free(card);
 		return err;
 	}
-        return 0;
+	return 0;
 }
 
 static int __devinit snd_es18xx_mixer(struct snd_card *card)

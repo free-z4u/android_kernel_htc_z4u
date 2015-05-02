@@ -156,15 +156,15 @@ static void pkt_kobj_release(struct kobject *kobj)
 
 /**********************************************************
   /sys/class/pktcdvd/pktcdvd[0-7]/
-                     stat/reset
-                     stat/packets_started
-                     stat/packets_finished
-                     stat/kb_written
-                     stat/kb_read
-                     stat/kb_read_gather
-                     write_queue/size
-                     write_queue/congestion_off
-                     write_queue/congestion_on
+		     stat/reset
+		     stat/packets_started
+		     stat/packets_finished
+		     stat/kb_written
+		     stat/kb_read
+		     stat/kb_read_gather
+		     write_queue/size
+		     write_queue/congestion_off
+		     write_queue/congestion_on
  **********************************************************/
 
 DEF_ATTR(kobj_pkt_attr_st1, "reset", 0200);
@@ -331,9 +331,9 @@ static void pkt_sysfs_dev_remove(struct pktcdvd_device *pd)
 
 /********************************************************************
   /sys/class/pktcdvd/
-                     add            map block device
-                     remove         unmap packet dev
-                     device_map     show mappings
+		     add            map block device
+		     remove         unmap packet dev
+		     device_map     show mappings
  *******************************************************************/
 
 static void class_pktcdvd_release(struct class *cls)

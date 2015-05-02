@@ -300,7 +300,7 @@ struct parport *__devinit parport_gsc_probe_port (unsigned long base,
 		}
 	}
 	if (p->dma == PARPORT_DMA_AUTO) /* To use DMA, giving the irq
-                                           is mandatory (see above) */
+					   is mandatory (see above) */
 		p->dma = PARPORT_DMA_NONE;
 
 	printk(" [");

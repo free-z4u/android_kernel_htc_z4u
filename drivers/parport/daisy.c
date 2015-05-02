@@ -155,8 +155,8 @@ again:
 
 	if (!detected && !last_try) {
 		/* No devices were detected.  Perhaps they are in some
-                   funny state; let's try to reset them and see if
-                   they wake up. */
+		   funny state; let's try to reset them and see if
+		   they wake up. */
 		parport_daisy_fini(port);
 		parport_write_control(port, PARPORT_CONTROL_SELECT);
 		udelay(50);
@@ -189,8 +189,8 @@ void parport_daisy_fini(struct parport *port)
 	}
 
 	/* Gaps in the numbering could be handled better.  How should
-           someone enumerate through all IEEE1284.3 devices in the
-           topology?. */
+	   someone enumerate through all IEEE1284.3 devices in the
+	   topology?. */
 	if (!topology) numdevs = 0;
 	spin_unlock(&topology_lock);
 	return;

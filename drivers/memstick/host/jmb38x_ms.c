@@ -797,7 +797,7 @@ static int jmb38x_ms_pmos(struct pci_dev *pdev, int flag)
 	pci_write_config_byte(pdev, PCI_CLOCK_CTL, val | 0x01);
 	dev_dbg(&pdev->dev, "Clock Control by PCI config is disabled!\n");
 
-        return 0;
+	return 0;
 }
 
 #ifdef CONFIG_PM

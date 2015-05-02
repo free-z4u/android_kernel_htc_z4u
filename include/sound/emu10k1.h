@@ -282,7 +282,7 @@
 #define A_IOCFG_GPOUT1		0x0002		/* IR? drive's internal bypass (?)		*/
 #define A_IOCFG_GPOUT2		0x0001		/* IR */
 #define A_IOCFG_MULTIPURPOSE_JACK	0x2000  /* center+lfe+rear_center (a2/a2ex)		*/
-                                                /* + digital for generic 10k2			*/
+						/* + digital for generic 10k2			*/
 #define A_IOCFG_DIGITAL_JACK    0x1000          /* digital for a2 platinum			*/
 #define A_IOCFG_FRONT_JACK      0x4000
 #define A_IOCFG_REAR_JACK       0x8000
@@ -1758,7 +1758,7 @@ struct snd_emu10k1 {
 	int p16v_device_offset;
 	u32 p16v_capture_source;
 	u32 p16v_capture_channel;
-        struct snd_emu1010 emu1010;
+	struct snd_emu1010 emu1010;
 	struct snd_emu10k1_pcm_mixer pcm_mixer[32];
 	struct snd_emu10k1_pcm_mixer efx_pcm_mixer[NUM_EFX_PLAYBACK];
 	struct snd_kcontrol *ctl_send_routing;

@@ -635,12 +635,12 @@ static void kaweth_usb_receive(struct urb *urb)
 
 	if(status && status != -EREMOTEIO && count != 1) {
 		err("%s RX status: %d count: %d packet_len: %d",
-                           net->name,
+			   net->name,
 			   status,
 			   count,
 			   (int)pkt_len);
 		kaweth_resubmit_rx_urb(kaweth, GFP_ATOMIC);
-                return;
+		return;
 	}
 
 	if(kaweth->net && (count > 2)) {
@@ -649,12 +649,12 @@ static void kaweth_usb_receive(struct urb *urb)
 			err("Packet len & 2047: %x", pkt_len & 2047);
 			err("Count 2: %x", count2);
 		        kaweth_resubmit_rx_urb(kaweth, GFP_ATOMIC);
-                        return;
-                }
+			return;
+		}
 
 		if(!(skb = dev_alloc_skb(pkt_len+2))) {
 		        kaweth_resubmit_rx_urb(kaweth, GFP_ATOMIC);
-                        return;
+			return;
 		}
 
 		skb_reserve(skb, 2);    /* Align IP on 16 byte boundaries */
@@ -863,7 +863,7 @@ static void kaweth_set_rx_mode(struct net_device *net)
 	struct kaweth_device *kaweth = netdev_priv(net);
 
 	__u16 packet_filter_bitmap = KAWETH_PACKET_FILTER_DIRECTED |
-                                     KAWETH_PACKET_FILTER_BROADCAST |
+				     KAWETH_PACKET_FILTER_BROADCAST |
 		                     KAWETH_PACKET_FILTER_MULTICAST;
 
 	dbg("Setting Rx mode to %d", packet_filter_bitmap);
@@ -1101,7 +1101,7 @@ err_fw:
 	dev_info(&intf->dev, "Read MAC address %pM\n", kaweth->configuration.hw_addr);
 
 	if(!memcmp(&kaweth->configuration.hw_addr,
-                   &bcast_addr,
+		   &bcast_addr,
 		   sizeof(bcast_addr))) {
 		err("Firmware not functioning properly, no net device created");
 		goto err_free_netdev;
@@ -1118,9 +1118,9 @@ err_fw:
 	}
 
 	result = kaweth_set_receive_filter(kaweth,
-                                           KAWETH_PACKET_FILTER_DIRECTED |
-                                           KAWETH_PACKET_FILTER_BROADCAST |
-                                           KAWETH_PACKET_FILTER_MULTICAST);
+					   KAWETH_PACKET_FILTER_DIRECTED |
+					   KAWETH_PACKET_FILTER_BROADCAST |
+					   KAWETH_PACKET_FILTER_MULTICAST);
 
 	if(result < 0) {
 		err("Error setting receive filter");
@@ -1156,7 +1156,7 @@ err_fw:
 
 	memcpy(netdev->broadcast, &bcast_addr, sizeof(bcast_addr));
 	memcpy(netdev->dev_addr, &kaweth->configuration.hw_addr,
-               sizeof(kaweth->configuration.hw_addr));
+	       sizeof(kaweth->configuration.hw_addr));
 
 	netdev->netdev_ops = &kaweth_netdev_ops;
 	netdev->watchdog_timeo = KAWETH_TX_TIMEOUT;
@@ -1246,7 +1246,7 @@ struct usb_api_data {
  *-------------------------------------------------------------------*/
 static void usb_api_blocking_completion(struct urb *urb)
 {
-        struct usb_api_data *awd = (struct usb_api_data *)urb->context;
+	struct usb_api_data *awd = (struct usb_api_data *)urb->context;
 
 	awd->done=1;
 	wake_up(&awd->wqh);
@@ -1260,35 +1260,35 @@ static void usb_api_blocking_completion(struct urb *urb)
 static int usb_start_wait_urb(struct urb *urb, int timeout, int* actual_length)
 {
 	struct usb_api_data awd;
-        int status;
+	int status;
 
-        init_waitqueue_head(&awd.wqh);
-        awd.done = 0;
+	init_waitqueue_head(&awd.wqh);
+	awd.done = 0;
 
-        urb->context = &awd;
-        status = usb_submit_urb(urb, GFP_NOIO);
-        if (status) {
-                // something went wrong
-                usb_free_urb(urb);
-                return status;
-        }
+	urb->context = &awd;
+	status = usb_submit_urb(urb, GFP_NOIO);
+	if (status) {
+		// something went wrong
+		usb_free_urb(urb);
+		return status;
+	}
 
 	if (!wait_event_timeout(awd.wqh, awd.done, timeout)) {
-                // timeout
-                dev_warn(&urb->dev->dev, "usb_control/bulk_msg: timeout\n");
-                usb_kill_urb(urb);  // remove urb safely
-                status = -ETIMEDOUT;
-        }
+		// timeout
+		dev_warn(&urb->dev->dev, "usb_control/bulk_msg: timeout\n");
+		usb_kill_urb(urb);  // remove urb safely
+		status = -ETIMEDOUT;
+	}
 	else {
-                status = urb->status;
+		status = urb->status;
 	}
 
-        if (actual_length) {
-                *actual_length = urb->actual_length;
+	if (actual_length) {
+		*actual_length = urb->actual_length;
 	}
 
-        usb_free_urb(urb);
-        return status;
+	usb_free_urb(urb);
+	return status;
 }
 
 /*-------------------------------------------------------------------*/
@@ -1298,23 +1298,23 @@ static int kaweth_internal_control_msg(struct usb_device *usb_dev,
 				       struct usb_ctrlrequest *cmd, void *data,
 				       int len, int timeout)
 {
-        struct urb *urb;
-        int retv;
-        int length = 0; /* shut up GCC */
+	struct urb *urb;
+	int retv;
+	int length = 0; /* shut up GCC */
 
-        urb = usb_alloc_urb(0, GFP_NOIO);
-        if (!urb)
-                return -ENOMEM;
+	urb = usb_alloc_urb(0, GFP_NOIO);
+	if (!urb)
+		return -ENOMEM;
 
-        usb_fill_control_urb(urb, usb_dev, pipe, (unsigned char*)cmd, data,
+	usb_fill_control_urb(urb, usb_dev, pipe, (unsigned char*)cmd, data,
 			 len, usb_api_blocking_completion, NULL);
 
-        retv = usb_start_wait_urb(urb, timeout, &length);
-        if (retv < 0) {
-                return retv;
+	retv = usb_start_wait_urb(urb, timeout, &length);
+	if (retv < 0) {
+		return retv;
 	}
-        else {
-                return length;
+	else {
+		return length;
 	}
 }
 

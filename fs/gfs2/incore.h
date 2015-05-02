@@ -188,8 +188,8 @@ struct lm_lockname {
 };
 
 #define lm_name_equal(name1, name2) \
-        (((name1)->ln_number == (name2)->ln_number) && \
-         ((name1)->ln_type == (name2)->ln_type))
+	(((name1)->ln_number == (name2)->ln_number) && \
+	 ((name1)->ln_type == (name2)->ln_type))
 
 
 struct gfs2_glock_operations {

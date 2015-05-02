@@ -67,17 +67,17 @@ void __weak panic_smp_self_stop(void)
 static void dump_mem(const char *str, const char *log_lvl,
 	     unsigned int bottom, unsigned int size)
 {
-        unsigned int p;
-        int i;
+	unsigned int p;
+	int i;
 	unsigned int top = bottom + size;
 
 	if (bottom == 0) {
 		goto out;
 	}
 
-        printk("%s%s(0x%08x to 0x%08x)\n", log_lvl, str, bottom, top);
+	printk("%s%s(0x%08x to 0x%08x)\n", log_lvl, str, bottom, top);
 
-        for (p = bottom & ~31; p < top; ) {
+	for (p = bottom & ~31; p < top; ) {
 	printk("%s%04x: ", log_lvl, p & 0xffff);
 
 	for (i = 0; i < 4; i++, p += 4) {
@@ -92,10 +92,10 @@ static void dump_mem(const char *str, const char *log_lvl,
 	        }
 	}
 	printk("\n");
-        }
+	}
 
 out:
-        return;
+	return;
 }
 
 void panic(const char *fmt, ...)

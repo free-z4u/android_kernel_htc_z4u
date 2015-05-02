@@ -178,7 +178,7 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
 			start = PCIBIOS_MIN_IO + hose->resources[0].start;
 
 		/*
-                 * Put everything into 0x00-0xff region modulo 0x400.
+		 * Put everything into 0x00-0xff region modulo 0x400.
 		 */
 		if (start & 0x300)
 			start = (start + 0x3ff) & ~0x3ff;

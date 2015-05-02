@@ -1195,7 +1195,7 @@ eepro_interrupt(int irq, void *dev_id)
 
 	lp = netdev_priv(dev);
 
-        spin_lock(&lp->lock);
+	spin_lock(&lp->lock);
 
 	if (net_debug > 5)
 		printk(KERN_DEBUG "%s: entering eepro_interrupt routine.\n", dev->name);

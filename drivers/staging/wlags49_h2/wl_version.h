@@ -162,13 +162,13 @@ err: define bus type;
 #define NEW_MULTICAST
 #define ALLOC_SKB(len)   dev_alloc_skb(len+2)
 #define GET_PACKET(dev, skb, count)\
-                        skb_reserve((skb), 2); \
-                        BLOCK_INPUT(skb_put((skb), (count)), (count)); \
-                        (skb)->protocol = eth_type_trans((skb), (dev))
+			skb_reserve((skb), 2); \
+			BLOCK_INPUT(skb_put((skb), (count)), (count)); \
+			(skb)->protocol = eth_type_trans((skb), (dev))
 #define GET_PACKET_DMA(dev, skb, count)\
-                        skb_reserve((skb), 2); \
-                        BLOCK_INPUT_DMA(skb_put((skb), (count)), (count)); \
-                        (skb)->protocol = eth_type_trans((skb), (dev))
+			skb_reserve((skb), 2); \
+			BLOCK_INPUT_DMA(skb_put((skb), (count)), (count)); \
+			(skb)->protocol = eth_type_trans((skb), (dev))
 
 
 

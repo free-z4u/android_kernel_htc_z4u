@@ -1220,7 +1220,7 @@ static void __cpuinit setup_scache(void)
 #ifdef CONFIG_R5000_CPU_SCACHE
 		r5k_sc_init();
 #endif
-                return;
+		return;
 
 	case CPU_RM7000:
 	case CPU_RM9000:

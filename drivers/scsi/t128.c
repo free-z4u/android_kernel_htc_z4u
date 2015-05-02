@@ -129,7 +129,7 @@ static struct override {
     [] __initdata = T128_OVERRIDE;
 #else
     [4] __initdata = {{0, IRQ_AUTO}, {0, IRQ_AUTO},
-        {0 ,IRQ_AUTO}, {0, IRQ_AUTO}};
+	{0 ,IRQ_AUTO}, {0, IRQ_AUTO}};
 #endif
 
 #define NO_OVERRIDES ARRAY_SIZE(overrides)
@@ -438,7 +438,7 @@ static struct scsi_host_template driver_template = {
 	.eh_bus_reset_handler    = t128_bus_reset,
 	.bios_param     = t128_biosparam,
 	.can_queue      = CAN_QUEUE,
-        .this_id        = 7,
+	.this_id        = 7,
 	.sg_tablesize   = SG_ALL,
 	.cmd_per_lun    = CMD_PER_LUN,
 	.use_clustering = DISABLE_CLUSTERING,

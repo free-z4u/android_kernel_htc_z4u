@@ -3812,7 +3812,7 @@ static ssize_t srpt_tpg_store_enable(
 {
 	struct srpt_port *sport = container_of(se_tpg, struct srpt_port, port_tpg_1);
 	unsigned long tmp;
-        int ret;
+	int ret;
 
 	ret = strict_strtoul(page, 0, &tmp);
 	if (ret < 0) {

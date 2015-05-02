@@ -207,9 +207,9 @@ static int __devinit e3d_set_fbinfo(struct e3d_info *ep)
 
 	/* Fill fix common fields */
 	strlcpy(info->fix.id, "e3d", sizeof(info->fix.id));
-        info->fix.smem_start = ep->fb_base_phys;
-        info->fix.smem_len = ep->fb_size;
-        info->fix.type = FB_TYPE_PACKED_PIXELS;
+	info->fix.smem_start = ep->fb_base_phys;
+	info->fix.smem_len = ep->fb_size;
+	info->fix.type = FB_TYPE_PACKED_PIXELS;
 	if (ep->depth == 32 || ep->depth == 24)
 		info->fix.visual = FB_VISUAL_TRUECOLOR;
 	else
@@ -235,7 +235,7 @@ static int __devinit e3d_set_fbinfo(struct e3d_info *ep)
 		return -ENOMEM;
 	}
 
-        return 0;
+	return 0;
 }
 
 static int __devinit e3d_pci_register(struct pci_dev *pdev,
@@ -379,7 +379,7 @@ err_release_pci1:
 	pci_release_region(pdev, 1);
 
 err_release_fb:
-        framebuffer_release(info);
+	framebuffer_release(info);
 
 err_disable:
 	pci_disable_device(pdev);
@@ -402,7 +402,7 @@ static void __devexit e3d_pci_unregister(struct pci_dev *pdev)
 	pci_release_region(pdev, 1);
 
 	fb_dealloc_cmap(&info->cmap);
-        framebuffer_release(info);
+	framebuffer_release(info);
 
 	pci_disable_device(pdev);
 }

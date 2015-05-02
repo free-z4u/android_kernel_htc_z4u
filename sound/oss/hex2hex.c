@@ -86,7 +86,7 @@ int main( int argc, const char * argv [] )
 	l = loadhex(stdin, buf);
 
 	printf("/*\n *\t Computer generated file. Do not edit.\n */\n");
-        printf("static int %s_len = %d;\n", varline, l);
+	printf("static int %s_len = %d;\n", varline, l);
 	printf("static unsigned char %s[] %s = {\n", varline, id?"__initdata":"");
 
 	for (i=0;i<l;i++)

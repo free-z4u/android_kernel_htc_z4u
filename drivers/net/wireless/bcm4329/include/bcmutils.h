@@ -617,7 +617,7 @@ extern void bcm_print_bytes(char *name, const uchar *cdata, int len);
 
 typedef  uint32 (*bcmutl_rdreg_rtn)(void *arg0, uint arg1, uint32 offset);
 extern uint bcmdumpfields(bcmutl_rdreg_rtn func_ptr, void *arg0, uint arg1, struct fielddesc *str,
-                          char *buf, uint32 bufsize);
+			  char *buf, uint32 bufsize);
 
 extern uint bcm_mkiovar(char *name, char *data, uint datalen, char *buf, uint len);
 extern uint bcm_bitcount(uint8 *bitmap, uint bytelength);

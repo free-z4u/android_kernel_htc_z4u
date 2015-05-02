@@ -490,8 +490,8 @@ int __init oprofile_arch_init(struct oprofile_operations *ops)
 
 	/*
 	 * -ENODEV is not reported to the caller.  The module itself
-         * will use the timer mode sampling as fallback and this is
-         * always available.
+	 * will use the timer mode sampling as fallback and this is
+	 * always available.
 	 */
 	hwsampler_available = oprofile_hwsampler_init(ops) == 0;
 

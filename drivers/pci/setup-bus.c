@@ -1212,10 +1212,10 @@ static void pci_bus_dump_res(struct pci_bus *bus)
 
 	pci_bus_for_each_resource(bus, res, i) {
 		if (!res || !res->end || !res->flags)
-                        continue;
+			continue;
 
 		dev_printk(KERN_DEBUG, &bus->dev, "resource %d %pR\n", i, res);
-        }
+	}
 }
 
 static void pci_bus_dump_resources(struct pci_bus *bus)

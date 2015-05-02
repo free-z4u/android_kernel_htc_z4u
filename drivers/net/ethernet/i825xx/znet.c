@@ -233,7 +233,7 @@ static void znet_set_multicast_list (struct net_device *dev)
 
 	memset(cfblk, 0x00, sizeof(struct i82593_conf_block));
 
-        /* The configuration block.  What an undocumented nightmare.
+	/* The configuration block.  What an undocumented nightmare.
 	   The first set of values are those suggested (without explanation)
 	   for ethernet in the Intel 82586 databook.  The rest appear to be
 	   completely undocumented, except for cryptic notes in the Crynwr

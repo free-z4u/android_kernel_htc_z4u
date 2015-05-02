@@ -782,11 +782,11 @@ EXPORT_SYMBOL(device_to_hwpath);
 #define BC_LOWER_PORT 0x8
 
 #define BUS_CONVERTER(dev) \
-        ((dev->id.hw_type == HPHW_IOA) || (dev->id.hw_type == HPHW_BCPORT))
+	((dev->id.hw_type == HPHW_IOA) || (dev->id.hw_type == HPHW_BCPORT))
 
 #define IS_LOWER_PORT(dev) \
-        ((gsc_readl(dev->hpa.start + offsetof(struct bc_module, io_status)) \
-                & BC_PORT_MASK) == BC_LOWER_PORT)
+	((gsc_readl(dev->hpa.start + offsetof(struct bc_module, io_status)) \
+		& BC_PORT_MASK) == BC_LOWER_PORT)
 
 #define MAX_NATIVE_DEVICES 64
 #define NATIVE_DEVICE_OFFSET 0x1000
@@ -798,7 +798,7 @@ EXPORT_SYMBOL(device_to_hwpath);
 #define READ_IO_IO_HIGH(dev) (unsigned long)(signed int)gsc_readl(dev->hpa.start + IO_IO_HIGH)
 
 static void walk_native_bus(unsigned long io_io_low, unsigned long io_io_high,
-                            struct device *parent);
+			    struct device *parent);
 
 void walk_lower_bus(struct parisc_device *dev)
 {
@@ -831,7 +831,7 @@ void walk_lower_bus(struct parisc_device *dev)
  * keyboard ports).  This problem is not yet solved.
  */
 static void walk_native_bus(unsigned long io_io_low, unsigned long io_io_high,
-                            struct device *parent)
+			    struct device *parent)
 {
 	int i, devices_found = 0;
 	unsigned long hpa = io_io_low;

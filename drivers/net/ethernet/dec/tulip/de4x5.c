@@ -1,5 +1,5 @@
 /*  de4x5.c: A DIGITAL DC21x4x DECchip and DE425/DE434/DE435/DE450/DE500
-             ethernet driver for Linux.
+	     ethernet driver for Linux.
 
     Copyright 1994, 1995 Digital Equipment Corporation.
 
@@ -31,7 +31,7 @@
     Originally,   this  driver  was    written  for the  Digital   Equipment
     Corporation series of EtherWORKS ethernet cards:
 
-        DE425 TP/COAX EISA
+	DE425 TP/COAX EISA
 	DE434 TP PCI
 	DE435 TP/COAX/AUI PCI
 	DE450 TP/COAX/AUI PCI
@@ -41,7 +41,7 @@
     Digital Semiconductor   SROM   Specification.    The  driver   currently
     recognises the following chips:
 
-        DC21040  (no SROM)
+	DC21040  (no SROM)
 	DC21041[A]
 	DC21140[A]
 	DC21142
@@ -49,7 +49,7 @@
 
     So far the driver is known to work with the following cards:
 
-        KINGSTON
+	KINGSTON
 	Linksys
 	ZNYX342
 	SMC8432
@@ -61,8 +61,8 @@
     DE434, DE435 and DE500 cards and benchmarked with 'ttcp': it transferred
     16M of data to a DECstation 5000/200 as follows:
 
-                TCP           UDP
-             TX     RX     TX     RX
+		TCP           UDP
+	     TX     RX     TX     RX
     DE425   1030k  997k   1170k  1128k
     DE434   1063k  995k   1170k  1125k
     DE435   1063k  995k   1170k  1125k
@@ -105,15 +105,15 @@
     line 5594 to reflect the I/O address  you're using, or assign these when
     loading by:
 
-                   insmod de4x5 io=0xghh           where g = bus number
+		   insmod de4x5 io=0xghh           where g = bus number
 		                                        hh = device number
 
        NB: autoprobing for modules is now supported by default. You may just
-           use:
+	   use:
 
-                   insmod de4x5
+		   insmod de4x5
 
-           to load all available boards. For a specific board, still use
+	   to load all available boards. For a specific board, still use
 	   the 'io=?' above.
     3) compile  de4x5.c, but include -DMODULE in  the command line to ensure
     that the correct bits are compiled (see end of source code).
@@ -203,7 +203,7 @@
     either at the end of the parameter list or with another board name.  The
     following parameters are allowed:
 
-            fdx        for full duplex
+	    fdx        for full duplex
 	    autosense  to set the media/speed; with the following
 	               sub-parameters:
 		       TP, TP_NW, BNC, AUI, BNC_AUI, 100Mb, 10Mb, AUTO
@@ -211,7 +211,7 @@
     Case sensitivity is important  for  the sub-parameters. They *must*   be
     upper case. Examples:
 
-        insmod de4x5 args='eth1:fdx autosense=BNC eth0:autosense=100Mb'.
+	insmod de4x5 args='eth1:fdx autosense=BNC eth0:autosense=100Mb'.
 
     For a compiled in driver, at or above line 548, place e.g.
 	#define DE4X5_PARM "eth0:fdx autosense=AUI eth2:autosense=TP"
@@ -247,21 +247,21 @@
       0.2     13-Jan-95   Added PCI support for DE435's.
       0.21    19-Jan-95   Added auto media detection.
       0.22    10-Feb-95   Fix interrupt handler call <chris@cosy.sbg.ac.at>.
-                          Fix recognition bug reported by <bkm@star.rl.ac.uk>.
+			  Fix recognition bug reported by <bkm@star.rl.ac.uk>.
 			  Add request/release_region code.
 			  Add loadable modules support for PCI.
 			  Clean up loadable modules support.
       0.23    28-Feb-95   Added DC21041 and DC21140 support.
-                          Fix missed frame counter value and initialisation.
+			  Fix missed frame counter value and initialisation.
 			  Fixed EISA probe.
       0.24    11-Apr-95   Change delay routine to use <linux/udelay>.
-                          Change TX_BUFFS_AVAIL macro.
+			  Change TX_BUFFS_AVAIL macro.
 			  Change media autodetection to allow manual setting.
 			  Completed DE500 (DC21140) support.
       0.241   18-Apr-95   Interim release without DE500 Autosense Algorithm.
       0.242   10-May-95   Minor changes.
       0.30    12-Jun-95   Timer fix for DC21140.
-                          Portability changes.
+			  Portability changes.
 			  Add ALPHA changes from <jestabro@ant.tay1.dec.com>.
 			  Add DE500 semi automatic autosense.
 			  Add Link Fail interrupt TP failure detection.
@@ -269,15 +269,15 @@
 			  Plugged a memory leak in de4x5_queue_pkt().
       0.31    13-Jun-95   Fixed PCI stuff for 1.3.1.
       0.32    26-Jun-95   Added verify_area() calls in de4x5_ioctl() from a
-                          suggestion by <heiko@colossus.escape.de>.
+			  suggestion by <heiko@colossus.escape.de>.
       0.33     8-Aug-95   Add shared interrupt support (not released yet).
       0.331   21-Aug-95   Fix de4x5_open() with fast CPUs.
-                          Fix de4x5_interrupt().
-                          Fix dc21140_autoconf() mess.
+			  Fix de4x5_interrupt().
+			  Fix dc21140_autoconf() mess.
 			  No shared interrupt support.
       0.332   11-Sep-95   Added MII management interface routines.
       0.40     5-Mar-96   Fix setup frame timeout <maartenb@hpkuipc.cern.ch>.
-                          Add kernel timer code (h/w is too flaky).
+			  Add kernel timer code (h/w is too flaky).
 			  Add MII based PHY autosense.
 			  Add new multicasting code.
 			  Add new autosense algorithms for media/mode
@@ -290,13 +290,13 @@
 			    checking is done now - assume BIOS is good!
 			  Added SMC9332 detection <manabe@Roy.dsl.tutics.ac.jp>
       0.41    21-Mar-96   Don't check for get_hw_addr checksum unless DEC card
-                          only <niles@axp745gsfc.nasa.gov>
+			  only <niles@axp745gsfc.nasa.gov>
 			  Fix for multiple PCI cards reported by <jos@xos.nl>
 			  Duh, put the IRQF_SHARED flag into request_interrupt().
 			  Fix SMC ethernet address in enet_det[].
 			  Print chip name instead of "UNKNOWN" during boot.
       0.42    26-Apr-96   Fix MII write TA bit error.
-                          Fix bug in dc21040 and dc21041 autosense code.
+			  Fix bug in dc21040 and dc21041 autosense code.
 			  Remove buffer copies on receive for Intels.
 			  Change sk_buff handling during media disconnects to
 			   eliminate DUP packets.
@@ -304,7 +304,7 @@
 			  Change all chips to use perfect multicast filtering.
 			  Fix alloc_device() bug <jari@markkus2.fimr.fi>
       0.43   21-Jun-96    Fix unconnected media TX retry bug.
-                          Add Accton to the list of broken cards.
+			  Add Accton to the list of broken cards.
 			  Fix TX under-run bug for non DC21140 chips.
 			  Fix boot command probe bug in alloc_device() as
 			   reported by <koen.gadeyne@barco.com> and
@@ -314,20 +314,20 @@
 			   <baba@beckman.uiuc.edu>.
 			  Upgraded alloc_device() code.
       0.431  28-Jun-96    Fix potential bug in queue_pkt() from discussion
-                          with <csd@microplex.com>
+			  with <csd@microplex.com>
       0.44   13-Aug-96    Fix RX overflow bug in 2114[023] chips.
-                          Fix EISA probe bugs reported by <os2@kpi.kharkov.ua>
+			  Fix EISA probe bugs reported by <os2@kpi.kharkov.ua>
 			  and <michael@compurex.com>.
       0.441   9-Sep-96    Change dc21041_autoconf() to probe quiet BNC media
-                           with a loopback packet.
+			   with a loopback packet.
       0.442   9-Sep-96    Include AUI in dc21041 media printout. Bug reported
-                           by <bhat@mundook.cs.mu.OZ.AU>
+			   by <bhat@mundook.cs.mu.OZ.AU>
       0.45    8-Dec-96    Include endian functions for PPC use, from work
-                           by <cort@cs.nmt.edu> and <g.thomas@opengroup.org>.
+			   by <cort@cs.nmt.edu> and <g.thomas@opengroup.org>.
       0.451  28-Dec-96    Added fix to allow autoprobe for modules after
-                           suggestion from <mjacob@feral.com>.
+			   suggestion from <mjacob@feral.com>.
       0.5    30-Jan-97    Added SROM decoding functions.
-                          Updated debug flags.
+			  Updated debug flags.
 			  Fix sleep/wakeup calls for PCI cards, bug reported
 			   by <cross@gweep.lkg.dec.com>.
 			  Added multi-MAC, one SROM feature from discussion
@@ -345,7 +345,7 @@
 			  Fix MII PHY reset problem from work done by
 			   <paubert@iram.es>.
       0.52   26-Apr-97    Some changes may not credit the right people -
-                           a disk crash meant I lost some mail.
+			   a disk crash meant I lost some mail.
 			  Change RX interrupt routine to drop rather than
 			   defer packets to avoid hang reported by
 			   <g.thomas@opengroup.org>.
@@ -356,7 +356,7 @@
 			  Added IRQF_DISABLED temporary fix from
 			   <mjacob@feral.com>.
       0.53   12-Nov-97    Fix the *_probe() to include 'eth??' name during
-                           module load: bug reported by
+			   module load: bug reported by
 			   <Piete.Brooks@cl.cam.ac.uk>
 			  Fix multi-MAC, one SROM, to work with 2114x chips:
 			   bug reported by <cmetz@inner.net>.
@@ -364,7 +364,7 @@
 			   direction.
 			  Completed DC2114[23] autosense functions.
       0.531  21-Dec-97    Fix DE500-XA 100Mb/s bug reported by
-                           <robin@intercore.com
+			   <robin@intercore.com
 			  Fix type1_infoblock() bug introduced in 0.53, from
 			   problem reports by
 			   <parmee@postecss.ncrfran.france.ncr.com> and
@@ -375,8 +375,8 @@
 			   newer PHY chips.
 			  Fix the mess in 2.1.67.
       0.532   5-Jan-98    Fix bug in mii_get_phy() reported by
-                           <redhat@cococo.net>.
-                          Fix bug in pci_probe() for 64 bit systems reported
+			   <redhat@cococo.net>.
+			  Fix bug in pci_probe() for 64 bit systems reported
 			   by <belliott@accessone.com>.
       0.533   9-Jan-98    Fix more 64 bit bugs reported by <jal@cs.brown.edu>.
       0.534  24-Jan-98    Fix last (?) endian bug from <geert@linux-m68k.org>
@@ -384,7 +384,7 @@
       0.536  21-Mar-98    Change pci_probe() to use the pci_dev structure.
 			  **Incompatible with 2.0.x from here.**
       0.540   5-Jul-98    Atomicize assertion of dev->interrupt for SMP
-                           from <lma@varesearch.com>
+			   from <lma@varesearch.com>
 			  Add TP, AUI and BNC cases to 21140m_autoconf() for
 			   case where a 21140 under SROM control uses, e.g. AUI
 			   from problem report by <delchini@lpnp09.in2p3.fr>
@@ -396,7 +396,7 @@
 			   <earl@exis.net>.
 			  Updated the PCI interface to conform with the latest
 			   version. I hope nothing is broken...
-          		  Add TX done interrupt modification from suggestion
+	  		  Add TX done interrupt modification from suggestion
 			   by <Austin.Donnelly@cl.cam.ac.uk>.
 			  Fix is_anc_capable() bug reported by
 			   <Austin.Donnelly@cl.cam.ac.uk>.
@@ -404,9 +404,9 @@
 			   lp->rst not run because lp->ibn not initialised -
 			   from report & fix by <paubert@iram.es>.
 			  Fix probe bug with EISA & PCI cards present from
-                           report by <eirik@netcom.com>.
+			   report by <eirik@netcom.com>.
       0.541  24-Aug-98    Fix compiler problems associated with i386-string
-                           ops from multiple bug reports and temporary fix
+			   ops from multiple bug reports and temporary fix
 			   from <paubert@iram.es>.
 			  Fix pci_probe() to correctly emulate the old
 			   pcibios_find_class() function.
@@ -416,29 +416,29 @@
 			   kernels and modules from bug report by
 			   <Zlatko.Calusic@CARNet.hr> et al.
       0.542  15-Sep-98    Fix dc2114x_autoconf() to stop multiple messages
-                           when media is unconnected.
+			   when media is unconnected.
 			  Change dev->interrupt to lp->interrupt to ensure
 			   alignment for Alpha's and avoid their unaligned
 			   access traps. This flag is merely for log messages:
 			   should do something more definitive though...
       0.543  30-Dec-98    Add SMP spin locking.
       0.544   8-May-99    Fix for buggy SROM in Motorola embedded boards using
-                           a 21143 by <mmporter@home.com>.
+			   a 21143 by <mmporter@home.com>.
 			  Change PCI/EISA bus probing order.
       0.545  28-Nov-99    Further Moto SROM bug fix from
-                           <mporter@eng.mcd.mot.com>
-                          Remove double checking for DEBUG_RX in de4x5_dbg_rx()
+			   <mporter@eng.mcd.mot.com>
+			  Remove double checking for DEBUG_RX in de4x5_dbg_rx()
 			   from report by <geert@linux-m68k.org>
       0.546  22-Feb-01    Fixes Alpha XP1000 oops.  The srom_search function
-                           was causing a page fault when initializing the
-                           variable 'pb', on a non de4x5 PCI device, in this
-                           case a PCI bridge (DEC chip 21152). The value of
-                           'pb' is now only initialized if a de4x5 chip is
-                           present.
-                           <france@handhelds.org>
+			   was causing a page fault when initializing the
+			   variable 'pb', on a non de4x5 PCI device, in this
+			   case a PCI bridge (DEC chip 21152). The value of
+			   'pb' is now only initialized if a de4x5 chip is
+			   present.
+			   <france@handhelds.org>
       0.547  08-Nov-01    Use library crc32 functions by <Matt_Domsch@dell.com>
       0.548  30-Aug-03    Big 2.6 cleanup. Ported to PCI/EISA probing and
-                           generic DMA APIs. Fixed DE425 support on Alpha.
+			   generic DMA APIs. Fixed DE425 support on Alpha.
 			   <maz@wild-wind.fr.eu.org>
     =========================================================================
 */
@@ -753,8 +753,8 @@ struct de4x5_srom {
 #define NUM_RX_DESC 8                   /* Number of RX descriptors   */
 #define NUM_TX_DESC 32                  /* Number of TX descriptors   */
 #define RX_BUFF_SZ  1536                /* Power of 2 for kmalloc and */
-                                        /* Multiple of 4 for DC21040  */
-                                        /* Allows 512 byte alignment  */
+					/* Multiple of 4 for DC21040  */
+					/* Allows 512 byte alignment  */
 struct de4x5_desc {
     volatile __le32 status;
     __le32 des1;
@@ -768,7 +768,7 @@ struct de4x5_desc {
 */
 #define DE4X5_PKT_STAT_SZ 16
 #define DE4X5_PKT_BIN_SZ  128            /* Should be >=100 unless you
-                                            increase DE4X5_PKT_STAT_SZ */
+					    increase DE4X5_PKT_STAT_SZ */
 
 struct pkt_stats {
 	u_int bins[DE4X5_PKT_STAT_SZ];      /* Private stats counters       */
@@ -1157,15 +1157,15 @@ de4x5_hw_init(struct net_device *dev, u_long iobase, struct device *gendev)
 	/*
 	** Choose correct autosensing in case someone messed up
 	*/
-        lp->autosense = lp->params.autosense;
-        if (lp->chipset != DC21140) {
-            if ((lp->chipset==DC21040) && (lp->params.autosense&TP_NW)) {
-                lp->params.autosense = TP;
-            }
-            if ((lp->chipset==DC21041) && (lp->params.autosense&BNC_AUI)) {
-                lp->params.autosense = BNC;
-            }
-        }
+	lp->autosense = lp->params.autosense;
+	if (lp->chipset != DC21140) {
+	    if ((lp->chipset==DC21040) && (lp->params.autosense&TP_NW)) {
+		lp->params.autosense = TP;
+	    }
+	    if ((lp->chipset==DC21041) && (lp->params.autosense&BNC_AUI)) {
+		lp->params.autosense = BNC;
+	    }
+	}
 	lp->fdx = lp->params.fdx;
 	sprintf(lp->adapter_name,"%s (%s)", name, dev_name(gendev));
 
@@ -1863,24 +1863,24 @@ de4x5_local_stats(struct net_device *dev, char *buf, int pkt_len)
     int i;
 
     for (i=1; i<DE4X5_PKT_STAT_SZ-1; i++) {
-        if (pkt_len < (i*DE4X5_PKT_BIN_SZ)) {
+	if (pkt_len < (i*DE4X5_PKT_BIN_SZ)) {
 	    lp->pktStats.bins[i]++;
 	    i = DE4X5_PKT_STAT_SZ;
 	}
     }
     if (is_multicast_ether_addr(buf)) {
-        if (is_broadcast_ether_addr(buf)) {
+	if (is_broadcast_ether_addr(buf)) {
 	    lp->pktStats.broadcast++;
 	} else {
 	    lp->pktStats.multicast++;
 	}
     } else if (compare_ether_addr(buf, dev->dev_addr) == 0) {
-        lp->pktStats.unicast++;
+	lp->pktStats.unicast++;
     }
 
     lp->pktStats.bins[0]++;       /* Duplicates stats.rx_packets */
     if (lp->pktStats.bins[0] == 0) { /* Reset counters */
-        memset((char *)&lp->pktStats, 0, sizeof(lp->pktStats));
+	memset((char *)&lp->pktStats, 0, sizeof(lp->pktStats));
     }
 }
 
@@ -2037,7 +2037,7 @@ static int __init de4x5_eisa_probe (struct device *gendev)
 	outb (ER1_IAM | 1, EISA_REG1);
 	mdelay (1);
 
-        /* EISA REG1: Deassert DecChip 21040 HW Reset */
+	/* EISA REG1: Deassert DecChip 21040 HW Reset */
 	outb (ER1_IAM, EISA_REG1);
 	mdelay (1);
 
@@ -2094,18 +2094,18 @@ static int __devexit de4x5_eisa_remove (struct device *device)
 }
 
 static struct eisa_device_id de4x5_eisa_ids[] = {
-        { "DEC4250", 0 },	/* 0 is the board name index... */
-        { "" }
+	{ "DEC4250", 0 },	/* 0 is the board name index... */
+	{ "" }
 };
 MODULE_DEVICE_TABLE(eisa, de4x5_eisa_ids);
 
 static struct eisa_driver de4x5_eisa_driver = {
-        .id_table = de4x5_eisa_ids,
-        .driver   = {
-                .name    = "de4x5",
-                .probe   = de4x5_eisa_probe,
-                .remove  = __devexit_p (de4x5_eisa_remove),
-        }
+	.id_table = de4x5_eisa_ids,
+	.driver   = {
+		.name    = "de4x5",
+		.probe   = de4x5_eisa_probe,
+		.remove  = __devexit_p (de4x5_eisa_remove),
+	}
 };
 MODULE_DEVICE_TABLE(eisa, de4x5_eisa_ids);
 #endif
@@ -2329,21 +2329,21 @@ static void __devexit de4x5_pci_remove (struct pci_dev *pdev)
 }
 
 static struct pci_device_id de4x5_pci_tbl[] = {
-        { PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP,
-          PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
-        { PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_PLUS,
-          PCI_ANY_ID, PCI_ANY_ID, 0, 0, 1 },
-        { PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_FAST,
+	{ PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP,
+	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
+	{ PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_PLUS,
+	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 1 },
+	{ PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_TULIP_FAST,
 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 2 },
-        { PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21142,
+	{ PCI_VENDOR_ID_DEC, PCI_DEVICE_ID_DEC_21142,
 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 3 },
-        { },
+	{ },
 };
 
 static struct pci_driver de4x5_pci_driver = {
-        .name           = "de4x5",
-        .id_table       = de4x5_pci_tbl,
-        .probe          = de4x5_pci_probe,
+	.name           = "de4x5",
+	.id_table       = de4x5_pci_tbl,
+	.probe          = de4x5_pci_probe,
 	.remove         = __devexit_p (de4x5_pci_remove),
 };
 
@@ -2752,7 +2752,7 @@ dc21140m_autoconf(struct net_device *dev)
 
     switch(lp->media) {
     case INIT:
-        if (lp->timeout < 0) {
+	if (lp->timeout < 0) {
 	    DISABLE_IRQs;
 	    lp->tx_enable = false;
 	    lp->linkOK = 0;
@@ -2846,12 +2846,12 @@ dc21140m_autoconf(struct net_device *dev)
 	break;
 
     case SPD_DET:                              /* Choose 10Mb/s or 100Mb/s */
-        if (lp->timeout < 0) {
+	if (lp->timeout < 0) {
 	    lp->tmp = (lp->phy[lp->active].id ? MII_SR_LKS :
 		                                  (~gep_rd(dev) & GEP_LNP));
 	    SET_100Mb_PDET;
 	}
-        if ((slnk = test_for_100Mb(dev, 6500)) < 0) {
+	if ((slnk = test_for_100Mb(dev, 6500)) < 0) {
 	    next_tick = slnk & ~TIMER_CB;
 	} else {
 	    if (is_spd_100(dev) && is_100_up(dev)) {
@@ -2866,7 +2866,7 @@ dc21140m_autoconf(struct net_device *dev)
 	break;
 
     case _100Mb:                               /* Set 100Mb/s */
-        next_tick = 3000;
+	next_tick = 3000;
 	if (!lp->tx_enable) {
 	    SET_100Mb;
 	    de4x5_init_connection(dev);
@@ -2884,7 +2884,7 @@ dc21140m_autoconf(struct net_device *dev)
     case BNC:
     case AUI:
     case _10Mb:                                /* Set 10Mb/s */
-        next_tick = 3000;
+	next_tick = 3000;
 	if (!lp->tx_enable) {
 	    SET_10Mb;
 	    de4x5_init_connection(dev);
@@ -2900,7 +2900,7 @@ dc21140m_autoconf(struct net_device *dev)
 	break;
 
     case NC:
-        if (lp->media != lp->c_media) {
+	if (lp->media != lp->c_media) {
 	    de4x5_dbg_media(dev);
 	    lp->c_media = lp->media;
 	}
@@ -2936,11 +2936,11 @@ dc2114x_autoconf(struct net_device *dev)
 
     switch (lp->media) {
     case INIT:
-        if (lp->timeout < 0) {
+	if (lp->timeout < 0) {
 	    DISABLE_IRQs;
 	    lp->tx_enable = false;
 	    lp->linkOK = 0;
-            lp->timeout = -1;
+	    lp->timeout = -1;
 	    de4x5_save_skbs(dev);            /* Save non transmitted skb's */
 	    if (lp->params.autosense & ~AUTO) {
 		srom_map_media(dev);         /* Fixed media requested      */
@@ -2977,7 +2977,7 @@ dc2114x_autoconf(struct net_device *dev)
 	    }
 	    lp->local_state = 0;
 	    next_tick = dc2114x_autoconf(dev);
-        }
+	}
 	break;
 
     case ANS:
@@ -3137,7 +3137,7 @@ dc2114x_autoconf(struct net_device *dev)
 	  break;
 
     case _10Mb:
-        next_tick = 3000;
+	next_tick = 3000;
 	if (!lp->tx_enable) {
 	    SET_10Mb;
 	    de4x5_init_connection(dev);
@@ -3153,7 +3153,7 @@ dc2114x_autoconf(struct net_device *dev)
 	break;
 
     case _100Mb:
-        next_tick = 3000;
+	next_tick = 3000;
 	if (!lp->tx_enable) {
 	    SET_100Mb;
 	    de4x5_init_connection(dev);
@@ -3222,7 +3222,7 @@ srom_map_media(struct net_device *dev)
 	break;
 
       case SROM_100BASETF:
-        if (!lp->params.fdx) return -1;
+	if (!lp->params.fdx) return -1;
 	lp->fdx = true;
       case SROM_100BASET:
 	if (lp->params.fdx && !lp->fdx) return -1;
@@ -3264,7 +3264,7 @@ de4x5_init_connection(struct net_device *dev)
     u_long flags = 0;
 
     if (lp->media != lp->c_media) {
-        de4x5_dbg_media(dev);
+	de4x5_dbg_media(dev);
 	lp->c_media = lp->media;          /* Stop scrolling media messages */
     }
 
@@ -3305,8 +3305,8 @@ de4x5_reset_phy(struct net_device *dev)
 	    }
 	    if (lp->useMII) {
 	        mii_wr(MII_CR_RST, MII_CR, lp->phy[lp->active].addr, DE4X5_MII);
-            }
-        }
+	    }
+	}
 	if (lp->useMII) {
 	    next_tick = test_mii_reg(dev, MII_CR, MII_CR_RST, false, 500);
 	}
@@ -3500,7 +3500,7 @@ is_100_up(struct net_device *dev)
 	if ((lp->ibn == 2) || !lp->asBitValid)
 	    return (lp->chipset == DC21143) ? (~inl(DE4X5_SISR)&SISR_LS100) : 0;
 
-        return (lp->asBitValid&(lp->asPolarity^(gep_rd(dev)&lp->asBit))) |
+	return (lp->asBitValid&(lp->asPolarity^(gep_rd(dev)&lp->asBit))) |
 		(lp->linkOK & ~lp->asBitValid);
     }
 }
@@ -4452,7 +4452,7 @@ dc21140_infoleaf(struct net_device *dev)
 
     if (lp->tcount == count) {
 	lp->media = NC;
-        if (lp->media != lp->c_media) {
+	if (lp->media != lp->c_media) {
 	    de4x5_dbg_media(dev);
 	    lp->c_media = lp->media;
 	}
@@ -4487,7 +4487,7 @@ dc21142_infoleaf(struct net_device *dev)
 
     if (lp->tcount == count) {
 	lp->media = NC;
-        if (lp->media != lp->c_media) {
+	if (lp->media != lp->c_media) {
 	    de4x5_dbg_media(dev);
 	    lp->c_media = lp->media;
 	}
@@ -4521,7 +4521,7 @@ dc21143_infoleaf(struct net_device *dev)
     }
     if (lp->tcount == count) {
 	lp->media = NC;
-        if (lp->media != lp->c_media) {
+	if (lp->media != lp->c_media) {
 	    de4x5_dbg_media(dev);
 	    lp->c_media = lp->media;
 	}
@@ -4553,8 +4553,8 @@ compact_infoblock(struct net_device *dev, u_char count, u_char *p)
     }
 
     if ((lp->media == INIT) && (lp->timeout < 0)) {
-        lp->ibn = COMPACT;
-        lp->active = 0;
+	lp->ibn = COMPACT;
+	lp->active = 0;
 	gep_wr(lp->cache.gepc, dev);
 	lp->infoblock_media = (*p++) & COMPACT_MC;
 	lp->cache.gep = *p++;
@@ -4593,9 +4593,9 @@ type0_infoblock(struct net_device *dev, u_char count, u_char *p)
     }
 
     if ((lp->media == INIT) && (lp->timeout < 0)) {
-        lp->ibn = 0;
-        lp->active = 0;
-        gep_wr(lp->cache.gepc, dev);
+	lp->ibn = 0;
+	lp->active = 0;
+	gep_wr(lp->cache.gepc, dev);
 	p+=2;
 	lp->infoblock_media = (*p++) & BLOCK0_MC;
 	lp->cache.gep = *p++;
@@ -4634,7 +4634,7 @@ type1_infoblock(struct net_device *dev, u_char count, u_char *p)
 
     p += 2;
     if (lp->state == INITIALISED) {
-        lp->ibn = 1;
+	lp->ibn = 1;
 	lp->active = *p++;
 	lp->phy[lp->active].gep = (*p ? p : NULL); p += (*p + 1);
 	lp->phy[lp->active].rst = (*p ? p : NULL); p += (*p + 1);
@@ -4644,8 +4644,8 @@ type1_infoblock(struct net_device *dev, u_char count, u_char *p)
 	lp->phy[lp->active].ttm = get_unaligned_le16(p);
 	return 0;
     } else if ((lp->media == INIT) && (lp->timeout < 0)) {
-        lp->ibn = 1;
-        lp->active = *p;
+	lp->ibn = 1;
+	lp->active = *p;
 	lp->infoblock_csr6 = OMR_MII_100;
 	lp->useMII = true;
 	lp->infoblock_media = ANS;
@@ -4672,12 +4672,12 @@ type2_infoblock(struct net_device *dev, u_char count, u_char *p)
     }
 
     if ((lp->media == INIT) && (lp->timeout < 0)) {
-        lp->ibn = 2;
-        lp->active = 0;
+	lp->ibn = 2;
+	lp->active = 0;
 	p += 2;
 	lp->infoblock_media = (*p) & MEDIA_CODE;
 
-        if ((*p++) & EXT_FIELD) {
+	if ((*p++) & EXT_FIELD) {
 	    lp->cache.csr13 = get_unaligned_le16(p); p += 2;
 	    lp->cache.csr14 = get_unaligned_le16(p); p += 2;
 	    lp->cache.csr15 = get_unaligned_le16(p); p += 2;
@@ -4686,8 +4686,8 @@ type2_infoblock(struct net_device *dev, u_char count, u_char *p)
 	    lp->cache.csr14 = CSR14;
 	    lp->cache.csr15 = CSR15;
 	}
-        lp->cache.gepc = ((s32)(get_unaligned_le16(p)) << 16); p += 2;
-        lp->cache.gep  = ((s32)(get_unaligned_le16(p)) << 16);
+	lp->cache.gepc = ((s32)(get_unaligned_le16(p)) << 16); p += 2;
+	lp->cache.gep  = ((s32)(get_unaligned_le16(p)) << 16);
 	lp->infoblock_csr6 = OMR_SIA;
 	lp->useMII = false;
 
@@ -4714,8 +4714,8 @@ type3_infoblock(struct net_device *dev, u_char count, u_char *p)
 
     p += 2;
     if (lp->state == INITIALISED) {
-        lp->ibn = 3;
-        lp->active = *p++;
+	lp->ibn = 3;
+	lp->active = *p++;
 	if (MOTO_SROM_BUG) lp->active = 0;
 	lp->phy[lp->active].gep = (*p ? p : NULL); p += (2 * (*p) + 1);
 	lp->phy[lp->active].rst = (*p ? p : NULL); p += (2 * (*p) + 1);
@@ -4726,7 +4726,7 @@ type3_infoblock(struct net_device *dev, u_char count, u_char *p)
 	lp->phy[lp->active].mci = *p;
 	return 0;
     } else if ((lp->media == INIT) && (lp->timeout < 0)) {
-        lp->ibn = 3;
+	lp->ibn = 3;
 	lp->active = *p;
 	if (MOTO_SROM_BUG) lp->active = 0;
 	lp->infoblock_csr6 = OMR_MII_100;
@@ -4755,15 +4755,15 @@ type4_infoblock(struct net_device *dev, u_char count, u_char *p)
     }
 
     if ((lp->media == INIT) && (lp->timeout < 0)) {
-        lp->ibn = 4;
-        lp->active = 0;
+	lp->ibn = 4;
+	lp->active = 0;
 	p+=2;
 	lp->infoblock_media = (*p++) & MEDIA_CODE;
-        lp->cache.csr13 = CSR13;              /* Hard coded defaults */
+	lp->cache.csr13 = CSR13;              /* Hard coded defaults */
 	lp->cache.csr14 = CSR14;
 	lp->cache.csr15 = CSR15;
-        lp->cache.gepc = ((s32)(get_unaligned_le16(p)) << 16); p += 2;
-        lp->cache.gep  = ((s32)(get_unaligned_le16(p)) << 16); p += 2;
+	lp->cache.gepc = ((s32)(get_unaligned_le16(p)) << 16); p += 2;
+	lp->cache.gep  = ((s32)(get_unaligned_le16(p)) << 16); p += 2;
 	csr6 = *p++;
 	flags = *p++;
 
@@ -4802,8 +4802,8 @@ type5_infoblock(struct net_device *dev, u_char count, u_char *p)
     /* Must be initializing to run this code */
     if ((lp->state == INITIALISED) || (lp->media == INIT)) {
 	p+=2;
-        lp->rst = p;
-        srom_exec(dev, lp->rst);
+	lp->rst = p;
+	srom_exec(dev, lp->rst);
     }
 
     return DE4X5_AUTOSENSE_MS;
@@ -4941,7 +4941,7 @@ mii_get_oui(u_char phyaddr, u_long ioaddr)
     /* Read r2 and r3 */
     r2 = mii_rd(MII_ID0, phyaddr, ioaddr);
     r3 = mii_rd(MII_ID1, phyaddr, ioaddr);
-                                                /* SEEQ and Cypress way * /
+						/* SEEQ and Cypress way * /
     / * Shuffle r2 and r3 * /
     a.reg=0;
     r3 = ((r3>>10)|(r2<<6))&0x0ff;
@@ -5423,7 +5423,7 @@ de4x5_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 
     case DE4X5_GET_STATS:            /* Get the driver statistics */
     {
-        struct pkt_stats statbuf;
+	struct pkt_stats statbuf;
 	ioc->len = sizeof(statbuf);
 	spin_lock_irqsave(&lp->lock, flags);
 	memcpy(&statbuf, &lp->pktStats, ioc->len);

@@ -318,7 +318,7 @@ static inline unsigned long cheetah_get_itlb_data(int entry)
 			     "ldxa	[%1] %2, %0"
 			     : "=r" (data)
 			     : "r" ((2 << 16) | (entry << 3)),
-                               "i" (ASI_ITLB_DATA_ACCESS));
+			       "i" (ASI_ITLB_DATA_ACCESS));
 
 	return data;
 }

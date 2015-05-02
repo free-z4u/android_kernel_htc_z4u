@@ -1790,7 +1790,7 @@ module_exit(cleanup_mpu401);
 #ifndef MODULE
 static int __init setup_mpu401(char *str)
 {
-        /* io, irq */
+	/* io, irq */
 	int ints[3];
 
 	str = get_options(str, ARRAY_SIZE(ints), ints);

@@ -171,7 +171,7 @@ void prepare_to_copy(struct task_struct *tsk)
 
 int copy_thread(unsigned long clone_flags, unsigned long usp,
 		unsigned long unused,
-                struct task_struct * p, struct pt_regs * regs)
+		struct task_struct * p, struct pt_regs * regs)
 {
 	struct pt_regs *childregs;
 	struct thread_info *ti;
@@ -301,13 +301,13 @@ int dump_fpu(void)
 
 asmlinkage
 long xtensa_clone(unsigned long clone_flags, unsigned long newsp,
-                  void __user *parent_tid, void *child_tls,
-                  void __user *child_tid, long a5,
-                  struct pt_regs *regs)
+		  void __user *parent_tid, void *child_tls,
+		  void __user *child_tid, long a5,
+		  struct pt_regs *regs)
 {
-        if (!newsp)
-                newsp = regs->areg[1];
-        return do_fork(clone_flags, newsp, regs, 0, parent_tid, child_tid);
+	if (!newsp)
+		newsp = regs->areg[1];
+	return do_fork(clone_flags, newsp, regs, 0, parent_tid, child_tid);
 }
 
 /*
@@ -317,9 +317,9 @@ long xtensa_clone(unsigned long clone_flags, unsigned long newsp,
 asmlinkage
 long xtensa_execve(const char __user *name,
 		   const char __user *const __user *argv,
-                   const char __user *const __user *envp,
-                   long a3, long a4, long a5,
-                   struct pt_regs *regs)
+		   const char __user *const __user *envp,
+		   long a3, long a4, long a5,
+		   struct pt_regs *regs)
 {
 	long error;
 	char * filename;

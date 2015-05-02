@@ -462,7 +462,7 @@ struct hdsp {
 	spinlock_t            lock;
 	struct snd_pcm_substream *capture_substream;
 	struct snd_pcm_substream *playback_substream;
-        struct hdsp_midi      midi[2];
+	struct hdsp_midi      midi[2];
 	struct tasklet_struct midi_tasklet;
 	int		      use_midi_tasklet;
 	int                   precise_ptr;
@@ -473,7 +473,7 @@ struct hdsp {
 	int                   clock_source_locked;
 	char                 *card_name;	 /* digiface/multiface/rpm */
 	enum HDSP_IO_Type     io_type;               /* ditto, but for code use */
-        unsigned short        firmware_rev;
+	unsigned short        firmware_rev;
 	unsigned short	      state;		     /* stores state bits */
 	u32		      firmware_cache[24413]; /* this helps recover from accidental iobox power failure */
 	size_t                period_bytes; 	     /* guess what this is */
@@ -498,13 +498,13 @@ struct hdsp {
 	int                   dev;
 	int                   irq;
 	unsigned long         port;
-        void __iomem         *iobase;
+	void __iomem         *iobase;
 	struct snd_card *card;
 	struct snd_pcm *pcm;
 	struct snd_hwdep          *hwdep;
 	struct pci_dev       *pci;
 	struct snd_kcontrol *spdif_ctl;
-        unsigned short        mixer_matrix[HDSP_MATRIX_MIXER_SIZE];
+	unsigned short        mixer_matrix[HDSP_MATRIX_MIXER_SIZE];
 	unsigned int          dds_value; /* last value written to freq register */
 };
 
@@ -4063,7 +4063,7 @@ static int snd_hdsp_set_defaults(struct hdsp *hdsp)
 	   Master clock mode
 	   maximum latency (7 => 2^7 = 8192 samples, 64Kbyte buffer,
 	                    which implies 2 4096 sample, 32Kbyte periods).
-           Enable line out.
+	   Enable line out.
 	 */
 
 	hdsp->control_register = HDSP_ClockModeMaster |
@@ -4197,7 +4197,7 @@ static char *hdsp_channel_buffer_location(struct hdsp *hdsp,
 {
 	int mapped_channel;
 
-        if (snd_BUG_ON(channel < 0 || channel >= hdsp->max_channels))
+	if (snd_BUG_ON(channel < 0 || channel >= hdsp->max_channels))
 		return NULL;
 
 	if ((mapped_channel = hdsp->channel_map[channel]) < 0)
@@ -4727,7 +4727,7 @@ static int snd_hdsp_playback_open(struct snd_pcm_substream *substream)
 
 	snd_pcm_set_sync(substream);
 
-        runtime->hw = snd_hdsp_playback_subinfo;
+	runtime->hw = snd_hdsp_playback_subinfo;
 	runtime->dma_area = hdsp->playback_buffer;
 	runtime->dma_bytes = HDSP_DMA_AREA_BYTES;
 
@@ -5197,7 +5197,7 @@ static int snd_hdsp_create_pcm(struct snd_card *card, struct hdsp *hdsp)
 
 static void snd_hdsp_9652_enable_mixer (struct hdsp *hdsp)
 {
-        hdsp->control2_register |= HDSP_9652_ENABLE_MIXER;
+	hdsp->control2_register |= HDSP_9652_ENABLE_MIXER;
 	hdsp_write (hdsp, HDSP_control2Reg, hdsp->control2_register);
 }
 

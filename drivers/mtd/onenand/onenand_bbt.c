@@ -40,7 +40,7 @@ static int check_short_pattern(uint8_t *buf, int len, int paglen, struct nand_bb
 		if (p[i] != td->pattern[i])
 			return -1;
 	}
-        return 0;
+	return 0;
 }
 
 /**
@@ -133,7 +133,7 @@ static inline int onenand_memory_bbt (struct mtd_info *mtd, struct nand_bbt_desc
 {
 	struct onenand_chip *this = mtd->priv;
 
-        bd->options &= ~NAND_BBT_SCANEMPTY;
+	bd->options &= ~NAND_BBT_SCANEMPTY;
 	return create_bbt(mtd, this->page_buf, bd, -1);
 }
 

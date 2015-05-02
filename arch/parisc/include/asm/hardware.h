@@ -39,41 +39,41 @@ extern const char * const cpu_name_version[][2]; /* mapping from enum cpu_type t
 struct parisc_driver;
 
 struct io_module {
-        volatile uint32_t nothing;		/* reg 0 */
-        volatile uint32_t io_eim;
-        volatile uint32_t io_dc_adata;
-        volatile uint32_t io_ii_cdata;
-        volatile uint32_t io_dma_link;		/* reg 4 */
-        volatile uint32_t io_dma_command;
-        volatile uint32_t io_dma_address;
-        volatile uint32_t io_dma_count;
-        volatile uint32_t io_flex;		/* reg 8 */
-        volatile uint32_t io_spa_address;
-        volatile uint32_t reserved1[2];
-        volatile uint32_t io_command;		/* reg 12 */
-        volatile uint32_t io_status;
-        volatile uint32_t io_control;
-        volatile uint32_t io_data;
-        volatile uint32_t reserved2;		/* reg 16 */
-        volatile uint32_t chain_addr;
-        volatile uint32_t sub_mask_clr;
-        volatile uint32_t reserved3[13];
-        volatile uint32_t undefined[480];
-        volatile uint32_t unpriv[512];
+	volatile uint32_t nothing;		/* reg 0 */
+	volatile uint32_t io_eim;
+	volatile uint32_t io_dc_adata;
+	volatile uint32_t io_ii_cdata;
+	volatile uint32_t io_dma_link;		/* reg 4 */
+	volatile uint32_t io_dma_command;
+	volatile uint32_t io_dma_address;
+	volatile uint32_t io_dma_count;
+	volatile uint32_t io_flex;		/* reg 8 */
+	volatile uint32_t io_spa_address;
+	volatile uint32_t reserved1[2];
+	volatile uint32_t io_command;		/* reg 12 */
+	volatile uint32_t io_status;
+	volatile uint32_t io_control;
+	volatile uint32_t io_data;
+	volatile uint32_t reserved2;		/* reg 16 */
+	volatile uint32_t chain_addr;
+	volatile uint32_t sub_mask_clr;
+	volatile uint32_t reserved3[13];
+	volatile uint32_t undefined[480];
+	volatile uint32_t unpriv[512];
 };
 
 struct bc_module {
-        volatile uint32_t unused1[12];
-        volatile uint32_t io_command;
-        volatile uint32_t io_status;
-        volatile uint32_t io_control;
-        volatile uint32_t unused2[1];
-        volatile uint32_t io_err_resp;
-        volatile uint32_t io_err_info;
-        volatile uint32_t io_err_req;
-        volatile uint32_t unused3[11];
-        volatile uint32_t io_io_low;
-        volatile uint32_t io_io_high;
+	volatile uint32_t unused1[12];
+	volatile uint32_t io_command;
+	volatile uint32_t io_status;
+	volatile uint32_t io_control;
+	volatile uint32_t unused2[1];
+	volatile uint32_t io_err_resp;
+	volatile uint32_t io_err_info;
+	volatile uint32_t io_err_req;
+	volatile uint32_t unused3[11];
+	volatile uint32_t io_io_low;
+	volatile uint32_t io_io_high;
 };
 
 #define HPHW_NPROC     0

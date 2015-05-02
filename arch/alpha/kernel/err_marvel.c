@@ -655,7 +655,7 @@ marvel_print_pox_err(u64 err_sum, struct ev7_pal_io_one_port *port)
 #define IO7__POX_ERRSUM__PT_TABORT        (1UL << 16)
 #define IO7__POX_ERRSUM__PM_TABORT        (1UL << 17)
 #define IO7__POX_ERRSUM__TABORT_MASK      (IO7__POX_ERRSUM__PT_TABORT | \
-                                           IO7__POX_ERRSUM__PM_TABORT)
+					   IO7__POX_ERRSUM__PM_TABORT)
 #define IO7__POX_ERRSUM__SERR             (1UL << 18)
 #define IO7__POX_ERRSUM__ADDRERR_STB      (1UL << 19)
 #define IO7__POX_ERRSUM__DETECTED_SERR    (1UL << 20)
@@ -1148,7 +1148,7 @@ marvel_machine_check(unsigned long vector, unsigned long la_ptr)
 
 	err_print_prefix = saved_err_prefix;
 
-        /* Release the logout frame.  */
+	/* Release the logout frame.  */
 	wrmces(0x7);
 	mb();
 }

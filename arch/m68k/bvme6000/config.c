@@ -141,17 +141,17 @@ void __init config_bvme6000(void)
 
 irqreturn_t bvme6000_abort_int (int irq, void *dev_id)
 {
-        unsigned long *new = (unsigned long *)vectors;
-        unsigned long *old = (unsigned long *)0xf8000000;
+	unsigned long *new = (unsigned long *)vectors;
+	unsigned long *old = (unsigned long *)0xf8000000;
 
-        /* Wait for button release */
-        while (*(volatile unsigned char *)BVME_LOCAL_IRQ_STAT & BVME_ABORT_STATUS)
-                ;
+	/* Wait for button release */
+	while (*(volatile unsigned char *)BVME_LOCAL_IRQ_STAT & BVME_ABORT_STATUS)
+		;
 
-        *(new+4) = *(old+4);            /* Illegal instruction */
-        *(new+9) = *(old+9);            /* Trace */
-        *(new+47) = *(old+47);          /* Trap #15 */
-        *(new+0x1f) = *(old+0x1f);      /* ABORT switch */
+	*(new+4) = *(old+4);            /* Illegal instruction */
+	*(new+9) = *(old+9);            /* Trace */
+	*(new+47) = *(old+47);          /* Trap #15 */
+	*(new+0x1f) = *(old+0x1f);      /* ABORT switch */
 	return IRQ_HANDLED;
 }
 

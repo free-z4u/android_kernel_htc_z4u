@@ -2,7 +2,7 @@
 /* adap-pcf.h i2c driver algorithms for PCF8584 adapters                     */
 /* ------------------------------------------------------------------------- */
 /*   Copyright (C) 1995-97 Simon G. Vogl
-                   1998-99 Hans Berglund
+		   1998-99 Hans Berglund
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -163,7 +163,7 @@ struct iscsi_conn {
 	/*
 	 * conn_stop() flag: stop to recover, stop to terminate
 	 */
-        int			stop_stage;
+	int			stop_stage;
 	struct timer_list	transport_timer;
 	unsigned long		last_recv;
 	unsigned long		last_ping;

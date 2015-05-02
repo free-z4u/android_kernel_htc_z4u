@@ -129,7 +129,7 @@ do {								\
 		_FP_FRAC_SET_##wc(X, _FP_MAXFRAC_##wc);		\
 	      }							\
 	    FP_SET_EXCEPTION(FP_EX_OVERFLOW);			\
-            FP_SET_EXCEPTION(FP_EX_INEXACT);			\
+	    FP_SET_EXCEPTION(FP_EX_INEXACT);			\
 	  }							\
       }								\
     else							\
@@ -614,22 +614,22 @@ do {									\
 	break;								\
     case FP_CLS_NORMAL:							\
     	R##_s = 0;							\
-        if (X##_s)							\
-          {								\
+	if (X##_s)							\
+	  {								\
 	    R##_c = FP_CLS_NAN; /* sNAN */				\
 	    R##_s = _FP_NANSIGN_##fs;					\
 	    _FP_FRAC_SET_##wc(R, _FP_NANFRAC_##fs);			\
 	    FP_SET_EXCEPTION(FP_EX_INVALID);				\
 	    break;							\
-          }								\
+	  }								\
     	R##_c = FP_CLS_NORMAL;						\
-        if (X##_e & 1)							\
-          _FP_FRAC_SLL_##wc(X, 1);					\
-        R##_e = X##_e >> 1;						\
-        _FP_FRAC_SET_##wc(S, _FP_ZEROFRAC_##wc);			\
-        _FP_FRAC_SET_##wc(R, _FP_ZEROFRAC_##wc);			\
-        q = _FP_OVERFLOW_##fs >> 1;					\
-        _FP_SQRT_MEAT_##wc(R, S, T, X, q);				\
+	if (X##_e & 1)							\
+	  _FP_FRAC_SLL_##wc(X, 1);					\
+	R##_e = X##_e >> 1;						\
+	_FP_FRAC_SET_##wc(S, _FP_ZEROFRAC_##wc);			\
+	_FP_FRAC_SET_##wc(R, _FP_ZEROFRAC_##wc);			\
+	q = _FP_OVERFLOW_##fs >> 1;					\
+	_FP_SQRT_MEAT_##wc(R, S, T, X, q);				\
     }									\
   } while (0)
 
@@ -775,7 +775,7 @@ do {									\
 	  }									\
 	break;									\
       case FP_CLS_ZERO:								\
-        break;									\
+	break;									\
       }										\
   } while (0)
 
@@ -783,7 +783,7 @@ do {									\
   do {									\
     if (r)								\
       {									\
-        unsigned rtype ur_;						\
+	unsigned rtype ur_;						\
 	X##_c = FP_CLS_NORMAL;						\
 									\
 	if ((X##_s = (r < 0)))						\

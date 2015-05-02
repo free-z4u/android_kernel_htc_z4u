@@ -128,12 +128,12 @@
 
 /* SCSI transfer count */
 #define GETSTCNT() ( (GETPORT(STCNT2)<<16) \
-                   + (GETPORT(STCNT1)<< 8) \
-                   + GETPORT(STCNT0) )
+		   + (GETPORT(STCNT1)<< 8) \
+		   + GETPORT(STCNT0) )
 
 #define SETSTCNT(X) { SETPORT(STCNT2, ((X) & 0xFF0000) >> 16); \
-                      SETPORT(STCNT1, ((X) & 0x00FF00) >>  8); \
-                      SETPORT(STCNT0, ((X) & 0x0000FF) ); }
+		      SETPORT(STCNT1, ((X) & 0x00FF00) >>  8); \
+		      SETPORT(STCNT0, ((X) & 0x0000FF) ); }
 
 /* SCSI interrupt status */
 #define TARGET       0x80
@@ -257,11 +257,11 @@ typedef union {
     unsigned tardisc:1;     /* Target disconnect: 0=disabled, 1=enabled */
     unsigned syncneg:1;     /* Initial sync neg: 0=disabled, 1=enabled */
     unsigned msgclasses:2;  /* Message classes
-                                 0=#4
-                                 1=#0, #1, #2, #3, #4
-                                 2=#0, #3, #4
-                                 3=#0, #4
-                             */
+				 0=#4
+				 1=#0, #1, #2, #3, #4
+				 2=#0, #3, #4
+				 3=#0, #4
+			     */
     unsigned boot:1;        /* boot: 0=disabled, 1=enabled */
     unsigned dma:1;         /* Transfer mode: 0=PIO; 1=DMA */
     unsigned id:3;          /* SCSI-id */

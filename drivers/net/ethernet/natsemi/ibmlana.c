@@ -5,7 +5,7 @@ This is an extension to the Linux operating system, and is covered by the
 same GNU General Public License that covers that work.
 
 Copyright 1999 by Alfred Arnold (alfred@ccac.rwth-aachen.de,
-                                 alfred.arnold@lancom.de)
+				 alfred.arnold@lancom.de)
 
 This driver is based both on the SK_MCA driver, which is itself based on the
 SK_G16 and 3C523 driver.
@@ -67,7 +67,7 @@ History:
 	add a recovery delay after releasing the chip's reset line
   May 24th, 2000
 	finally found the bug in the address filter setup - damned signed
-        chars!
+	chars!
   June 1st, 2000
 	corrected version codes, added support for the latest 2.3 changes
   Oct 28th, 2002

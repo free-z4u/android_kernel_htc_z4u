@@ -60,42 +60,42 @@ dbl_fsqrt(
 	register boolean guardbit = FALSE, even_exponent;
 
 	Dbl_copyfromptr(srcptr,srcp1,srcp2);
-        /*
-         * check source operand for NaN or infinity
-         */
-        if ((src_exponent = Dbl_exponent(srcp1)) == DBL_INFINITY_EXPONENT) {
-                /*
-                 * is signaling NaN?
-                 */
-                if (Dbl_isone_signaling(srcp1)) {
-                        /* trap if INVALIDTRAP enabled */
-                        if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                        /* make NaN quiet */
-                        Set_invalidflag();
-                        Dbl_set_quiet(srcp1);
-                }
-                /*
-                 * Return quiet NaN or positive infinity.
+	/*
+	 * check source operand for NaN or infinity
+	 */
+	if ((src_exponent = Dbl_exponent(srcp1)) == DBL_INFINITY_EXPONENT) {
+		/*
+		 * is signaling NaN?
+		 */
+		if (Dbl_isone_signaling(srcp1)) {
+			/* trap if INVALIDTRAP enabled */
+			if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+			/* make NaN quiet */
+			Set_invalidflag();
+			Dbl_set_quiet(srcp1);
+		}
+		/*
+		 * Return quiet NaN or positive infinity.
 		 *  Fall through to negative test if negative infinity.
-                 */
+		 */
 		if (Dbl_iszero_sign(srcp1) ||
 		    Dbl_isnotzero_mantissa(srcp1,srcp2)) {
-                	Dbl_copytoptr(srcp1,srcp2,dstptr);
-                	return(NOEXCEPTION);
+			Dbl_copytoptr(srcp1,srcp2,dstptr);
+			return(NOEXCEPTION);
 		}
-        }
+	}
 
-        /*
-         * check for zero source operand
-         */
+	/*
+	 * check for zero source operand
+	 */
 	if (Dbl_iszero_exponentmantissa(srcp1,srcp2)) {
 		Dbl_copytoptr(srcp1,srcp2,dstptr);
 		return(NOEXCEPTION);
 	}
 
-        /*
-         * check for negative source operand
-         */
+	/*
+	 * check for negative source operand
+	 */
 	if (Dbl_isone_sign(srcp1)) {
 		/* trap if INVALIDTRAP enabled */
 		if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);

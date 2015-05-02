@@ -108,7 +108,7 @@ struct rchan_callbacks
 	 *
 	 * Called when a relay file is successfully mmapped
 	 */
-        void (*buf_mapped)(struct rchan_buf *buf,
+	void (*buf_mapped)(struct rchan_buf *buf,
 			   struct file *filp);
 
 	/*
@@ -118,7 +118,7 @@ struct rchan_callbacks
 	 *
 	 * Called when a relay file is successfully unmapped
 	 */
-        void (*buf_unmapped)(struct rchan_buf *buf,
+	void (*buf_unmapped)(struct rchan_buf *buf,
 			     struct file *filp);
 	/*
 	 * create_buf_file - create file to represent a relay channel buffer

@@ -20,7 +20,7 @@
 #define XWIDGET_REV_NUM(widgetid) (((widgetid) & WIDGET_REV_NUM) >> WIDGET_REV_NUM_SHFT)
 #define XWIDGET_MFG_NUM(widgetid) (((widgetid) & WIDGET_MFG_NUM) >> WIDGET_MFG_NUM_SHFT)
 #define XWIDGET_PART_REV_NUM(widgetid) ((XWIDGET_PART_NUM(widgetid) << 4) | \
-                                        XWIDGET_REV_NUM(widgetid))
+					XWIDGET_REV_NUM(widgetid))
 #define XWIDGET_PART_REV_NUM_REV(partrev) (partrev & 0xf)
 
 /* widget configuration registers */

@@ -340,7 +340,7 @@ int i2400mu_bus_reset(struct i2400m *i2400m, enum i2400m_reset_type rt)
 }
 
 static void i2400mu_get_drvinfo(struct net_device *net_dev,
-                                struct ethtool_drvinfo *info)
+				struct ethtool_drvinfo *info)
 {
 	struct i2400m *i2400m = net_dev_to_i2400m(net_dev);
 	struct i2400mu *i2400mu = container_of(i2400m, struct i2400mu, i2400m);

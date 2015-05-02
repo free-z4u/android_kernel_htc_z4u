@@ -140,11 +140,11 @@ typedef struct tagSCmdZoneTypeSet {
 } SCmdZoneTypeSet, *PSCmdZoneTypeSet;
 
 typedef struct tagSWPAResult {
-         char	ifname[100];
+	 char	ifname[100];
 	u8 proto;
 	u8 key_mgmt;
 	u8 eap_type;
-         BOOL authenticated;
+	 BOOL authenticated;
 } SWPAResult, *PSWPAResult;
 
 typedef struct tagSCmdStartAP {

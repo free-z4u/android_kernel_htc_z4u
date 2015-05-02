@@ -37,7 +37,7 @@ static void kvmppc_emul_rfi(struct kvm_vcpu *vcpu)
 }
 
 int kvmppc_booke_emulate_op(struct kvm_run *run, struct kvm_vcpu *vcpu,
-                            unsigned int inst, int *advance)
+			    unsigned int inst, int *advance)
 {
 	int emulated = EMULATE_DONE;
 	int rs;

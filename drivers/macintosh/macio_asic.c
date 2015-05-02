@@ -168,7 +168,7 @@ static void macio_release_dev(struct device *dev)
 {
 	struct macio_dev *mdev;
 
-        mdev = to_macio_device(dev);
+	mdev = to_macio_device(dev);
 	kfree(mdev);
 }
 

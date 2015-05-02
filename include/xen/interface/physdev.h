@@ -239,8 +239,8 @@ struct physdev_pci_device_add {
     uint8_t devfn;
     uint32_t flags;
     struct {
-        uint8_t bus;
-        uint8_t devfn;
+	uint8_t bus;
+	uint8_t devfn;
     } physfn;
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
     uint32_t optarr[];

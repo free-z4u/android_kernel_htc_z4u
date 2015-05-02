@@ -1390,7 +1390,7 @@ next_desc:
  * e1000_consume_page - helper function
  **/
 static void e1000_consume_page(struct e1000_buffer *bi, struct sk_buff *skb,
-                               u16 length)
+			       u16 length)
 {
 	bi->page = NULL;
 	skb->len += length;
@@ -4521,7 +4521,7 @@ static void e1000_watchdog_task(struct work_struct *work)
 			tctl |= E1000_TCTL_EN;
 			ew32(TCTL, tctl);
 
-                        /*
+			/*
 			 * Perform any post-link-up configuration before
 			 * reporting link up.
 			 */
@@ -5179,7 +5179,7 @@ static void e1000_reset_task(struct work_struct *work)
  * Returns the address of the device statistics structure.
  **/
 struct rtnl_link_stats64 *e1000e_get_stats64(struct net_device *netdev,
-                                             struct rtnl_link_stats64 *stats)
+					     struct rtnl_link_stats64 *stats)
 {
 	struct e1000_adapter *adapter = netdev_priv(netdev);
 
@@ -5552,7 +5552,7 @@ static void e1000_power_off(struct pci_dev *pdev, bool sleep, bool wake)
 }
 
 static void e1000_complete_shutdown(struct pci_dev *pdev, bool sleep,
-                                    bool wake)
+				    bool wake)
 {
 	struct net_device *netdev = pci_get_drvdata(pdev);
 	struct e1000_adapter *adapter = netdev_priv(netdev);

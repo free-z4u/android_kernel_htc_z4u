@@ -57,10 +57,10 @@
     int port, ctrl
 
 #define NCR5380_local_declare() \
-        struct Scsi_Host *_instance
+	struct Scsi_Host *_instance
 
 #define NCR5380_setup(instance) \
-        _instance = instance
+	_instance = instance
 
 #define NCR5380_read(reg) macscsi_read(_instance, reg)
 #define NCR5380_write(reg, value) macscsi_write(_instance, reg, value)

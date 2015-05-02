@@ -1,6 +1,6 @@
 /*
    md.h : kernel internal structure of the Linux MD driver
-          Copyright (C) 1996-98 Ingo Molnar, Gadi Oxman
+	  Copyright (C) 1996-98 Ingo Molnar, Gadi Oxman
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -429,7 +429,7 @@ static inline void rdev_dec_pending(struct md_rdev *rdev, struct mddev *mddev)
 
 static inline void md_sync_acct(struct block_device *bdev, unsigned long nr_sectors)
 {
-        atomic_add(nr_sectors, &bdev->bd_contains->bd_disk->sync_io);
+	atomic_add(nr_sectors, &bdev->bd_contains->bd_disk->sync_io);
 }
 
 struct md_personality

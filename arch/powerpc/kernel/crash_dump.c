@@ -80,7 +80,7 @@ __setup("savemaxmem=", parse_savemaxmem);
 
 
 static size_t copy_oldmem_vaddr(void *vaddr, char *buf, size_t csize,
-                               unsigned long offset, int userbuf)
+			       unsigned long offset, int userbuf)
 {
 	if (userbuf) {
 		if (copy_to_user((char __user *)buf, (vaddr + offset), csize))

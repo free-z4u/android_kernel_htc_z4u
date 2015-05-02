@@ -967,7 +967,7 @@ static int ablk_rfc3686_crypt(struct ablkcipher_request *req)
 	int ret;
 
 	/* set up counter block */
-        memcpy(iv, ctx->nonce, CTR_RFC3686_NONCE_SIZE);
+	memcpy(iv, ctx->nonce, CTR_RFC3686_NONCE_SIZE);
 	memcpy(iv + CTR_RFC3686_NONCE_SIZE, info, CTR_RFC3686_IV_SIZE);
 
 	/* initialize counter portion of counter block */

@@ -115,7 +115,7 @@ bcmsdh_detach(osl_t *osh, void *sdh)
 
 int
 bcmsdh_iovar_op(void *sdh, const char *name,
-                void *params, int plen, void *arg, int len, bool set)
+		void *params, int plen, void *arg, int len, bool set)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)sdh;
 	return sdioh_iovar_op(bcmsdh->sdioh, name, params, plen, arg, len, set);
@@ -466,8 +466,8 @@ bcmsdh_regfail(void *sdh)
 
 int
 bcmsdh_recv_buf(void *sdh, uint32 addr, uint fn, uint flags,
-                uint8 *buf, uint nbytes, void *pkt,
-                bcmsdh_cmplt_fn_t complete, void *handle)
+		uint8 *buf, uint nbytes, void *pkt,
+		bcmsdh_cmplt_fn_t complete, void *handle)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)sdh;
 	SDIOH_API_RC status;
@@ -509,8 +509,8 @@ bcmsdh_recv_buf(void *sdh, uint32 addr, uint fn, uint flags,
 
 int
 bcmsdh_send_buf(void *sdh, uint32 addr, uint fn, uint flags,
-                uint8 *buf, uint nbytes, void *pkt,
-                bcmsdh_cmplt_fn_t complete, void *handle)
+		uint8 *buf, uint nbytes, void *pkt,
+		bcmsdh_cmplt_fn_t complete, void *handle)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)sdh;
 	SDIOH_API_RC status;

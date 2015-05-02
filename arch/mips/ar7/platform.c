@@ -489,11 +489,11 @@ static struct gpio_led gt701_leds[] = {
 		.active_low		= 1,
 		.default_trigger	= "default-on",
 	},
-        {
-                .name                   = "ethernet",
-                .gpio                   = 10,
-                .active_low             = 1,
-        },
+	{
+		.name                   = "ethernet",
+		.gpio                   = 10,
+		.active_low             = 1,
+	},
 };
 
 static struct gpio_led_platform_data ar7_led_data;

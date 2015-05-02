@@ -36,7 +36,7 @@
 #define DZ_BREAK       0x0800                 /* BREAK event software flag */
 
 #define LINE(x) ((x & DZ_LINE_MASK) >> 8)     /* Get the line number
-                                                 from the input buffer */
+						 from the input buffer */
 #define UCHAR(x) ((unsigned char)(x & DZ_RBUF_MASK))
 
 /*

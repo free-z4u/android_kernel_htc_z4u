@@ -22,11 +22,11 @@
 				   which falls to zero up to 0.4 sec
 				   before speech stops */
 #define TTS_WRITABLE     0x10	/* mask for RDY bit, which when set to
-             			   1, indicates the TTS port is ready
-             			   to accept a byte of data.  The RDY
-             			   bit goes zero 2-3 usec after
-             			   writing, and goes 1 again 180-190
-             			   usec later. */
+	     			   1, indicates the TTS port is ready
+	     			   to accept a byte of data.  The RDY
+	     			   bit goes zero 2-3 usec after
+	     			   writing, and goes 1 again 180-190
+	     			   usec later. */
 #define TTS_ALMOST_FULL  0x08	/* mask for AF bit: When set to 1,
 				   indicates that less than 300 free
 				   bytes are available in the TTS
@@ -46,7 +46,7 @@
 #define LPC_D6_FAST 0x24	/* D6 format decoding table, fast rate */
 
 	/* LPC Port Status Flags (valid only after one of the LPC
-           speak commands) */
+	   speak commands) */
 #define LPC_SPEAKING     0x80	/* mask for TS bit: When set to 1,
 				   indicates the LPC synthesizer is
 				   producing speech.*/
@@ -76,10 +76,10 @@ struct dtlk_settings
   unsigned char ext_dict_loaded; /* 1=exception dictionary loaded */
   unsigned char ext_dict_status; /* 1=exception dictionary enabled */
   unsigned char free_ram;	/* # pages (truncated) remaining for
-                                   text buffer */
+				   text buffer */
   unsigned char articulation;	/* nA; 0-9 */
   unsigned char reverb;		/* nR; 0-9 */
   unsigned char eob;		/* 7Fh value indicating end of
-                                   parameter block */
+				   parameter block */
   unsigned char has_indexing;	/* nonzero if indexing is implemented */
 };

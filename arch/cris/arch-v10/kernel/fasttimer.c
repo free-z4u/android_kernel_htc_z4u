@@ -177,7 +177,7 @@ inline void start_timer1(unsigned long delay_us)
   timer_delay_settings[fast_timers_started % NUM_TIMER_STATS] = delay_us;
 
 	D1(printk(KERN_DEBUG "start_timer1 : %d us freq: %i div: %i\n",
-            delay_us, freq_index, div));
+	    delay_us, freq_index, div));
   /* Clear timer1 irq */
   *R_IRQ_MASK0_CLR = IO_STATE(R_IRQ_MASK0_CLR, timer1, clr);
 
@@ -208,10 +208,10 @@ inline void start_timer1(unsigned long delay_us)
 
 /* In version 1.4 this function takes 27 - 50 us */
 void start_one_shot_timer(struct fast_timer *t,
-                          fast_timer_function_type *function,
-                          unsigned long data,
-                          unsigned long delay_us,
-                          const char *name)
+			  fast_timer_function_type *function,
+			  unsigned long data,
+			  unsigned long delay_us,
+			  const char *name)
 {
   unsigned long flags;
   struct fast_timer *tmp;
@@ -384,15 +384,15 @@ timer1_handler(int irq, void *dev_id)
       /* Remove this timer before call, since it may reuse the timer */
       if (t->prev)
       {
-        t->prev->next = t->next;
+	t->prev->next = t->next;
       }
       else
       {
-        fast_timer_list = t->next;
+	fast_timer_list = t->next;
       }
       if (t->next)
       {
-        t->next->prev = t->prev;
+	t->next->prev = t->prev;
       }
       t->prev = NULL;
       t->next = NULL;
@@ -412,7 +412,7 @@ timer1_handler(int irq, void *dev_id)
 				f(d);
 				local_irq_save(flags);
 			} else
-        DEBUG_LOG("!timer1 %i function==NULL!\n", fast_timer_ints);
+	DEBUG_LOG("!timer1 %i function==NULL!\n", fast_timer_ints);
     }
     else
     {
@@ -436,21 +436,21 @@ timer1_handler(int irq, void *dev_id)
 
       if (us > 0)
       {
-        if (!fast_timer_running)
-        {
+	if (!fast_timer_running)
+	{
 #ifdef FAST_TIMER_LOG
-          timer_started_log[fast_timers_started % NUM_TIMER_STATS] = *t;
+	  timer_started_log[fast_timers_started % NUM_TIMER_STATS] = *t;
 #endif
-          start_timer1(us);
-        }
-        break;
+	  start_timer1(us);
+	}
+	break;
       }
       else
       {
-        /* Timer already expired, let's handle it better late than never.
-         * The normal loop handles it
-         */
-        D1(printk("e! %d\n", us));
+	/* Timer already expired, let's handle it better late than never.
+	 * The normal loop handles it
+	 */
+	D1(printk("e! %d\n", us));
       }
     }
   }
@@ -482,7 +482,7 @@ void schedule_usleep(unsigned long us)
 
   D1(printk("schedule_usleep(%d)\n", us));
   start_one_shot_timer(&t, wake_up_func, (unsigned long)&sleep_wait, us,
-                       "usleep");
+		       "usleep");
 	/* Uninterruptible sleep on the fast timer. (The condition is somewhat
 	 * redundant since the timer is what wakes us up.) */
 	wait_event(sleep_wait, !fast_timer_pending(&t));
@@ -492,7 +492,7 @@ void schedule_usleep(unsigned long us)
 
 #ifdef CONFIG_PROC_FS
 static int proc_fasttimer_read(char *buf, char **start, off_t offset, int len
-                       ,int *eof, void *data_unused);
+		       ,int *eof, void *data_unused);
 static struct proc_dir_entry *fasttimer_proc_entry;
 #endif /* CONFIG_PROC_FS */
 
@@ -502,7 +502,7 @@ static struct proc_dir_entry *fasttimer_proc_entry;
 #define BIG_BUF_SIZE (500 + NUM_TIMER_STATS * 300)
 
 static int proc_fasttimer_read(char *buf, char **start, off_t offset, int len
-                       ,int *eof, void *data_unused)
+		       ,int *eof, void *data_unused)
 {
   unsigned long flags;
   int i = 0;
@@ -526,23 +526,23 @@ static int proc_fasttimer_read(char *buf, char **start, off_t offset, int len
 
     used = 0;
     used += sprintf(bigbuf + used, "Fast timers added:     %i\n",
-                    fast_timers_added);
+		    fast_timers_added);
     used += sprintf(bigbuf + used, "Fast timers started:   %i\n",
-                    fast_timers_started);
+		    fast_timers_started);
     used += sprintf(bigbuf + used, "Fast timer interrupts: %i\n",
-                    fast_timer_ints);
+		    fast_timer_ints);
     used += sprintf(bigbuf + used, "Fast timers expired:   %i\n",
-                    fast_timers_expired);
+		    fast_timers_expired);
     used += sprintf(bigbuf + used, "Fast timers deleted:   %i\n",
-                    fast_timers_deleted);
+		    fast_timers_deleted);
     used += sprintf(bigbuf + used, "Fast timer running:    %s\n",
-                    fast_timer_running ? "yes" : "no");
+		    fast_timer_running ? "yes" : "no");
     used += sprintf(bigbuf + used, "Current time:          %lu.%06lu\n",
 			(unsigned long)tv.tv_jiff,
-                    (unsigned long)tv.tv_usec);
+		    (unsigned long)tv.tv_usec);
 #ifdef FAST_TIMER_SANITY_CHECKS
     used += sprintf(bigbuf + used, "Sanity failed:         %i\n",
-                    sanity_failed);
+		    sanity_failed);
 #endif
     used += sprintf(bigbuf + used, "\n");
 
@@ -553,22 +553,22 @@ static int proc_fasttimer_read(char *buf, char **start, off_t offset, int len
 
       if (debug_log_cnt_wrapped)
       {
-        i = debug_log_cnt;
+	i = debug_log_cnt;
       }
 
       while ((i != end_i || (debug_log_cnt_wrapped && !used)) &&
-             used+100 < BIG_BUF_SIZE)
+	     used+100 < BIG_BUF_SIZE)
       {
-        used += sprintf(bigbuf + used, debug_log_string[i],
-                        debug_log_value[i]);
-        i = (i+1) % DEBUG_LOG_MAX;
+	used += sprintf(bigbuf + used, debug_log_string[i],
+			debug_log_value[i]);
+	i = (i+1) % DEBUG_LOG_MAX;
       }
     }
     used += sprintf(bigbuf + used, "\n");
 #endif
 
     num_to_show = (fast_timers_started < NUM_TIMER_STATS ? fast_timers_started:
-                   NUM_TIMER_STATS);
+		   NUM_TIMER_STATS);
     used += sprintf(bigbuf + used, "Timers started: %i\n", fast_timers_started);
     for (i = 0; i < num_to_show && (used+100 < BIG_BUF_SIZE) ; i++)
     {
@@ -576,67 +576,67 @@ static int proc_fasttimer_read(char *buf, char **start, off_t offset, int len
 
 #if 1 //ndef FAST_TIMER_LOG
       used += sprintf(bigbuf + used, "div: %i freq: %i delay: %i"
-                      "\n",
-                      timer_div_settings[cur],
-                      timer_freq_settings[cur],
-                      timer_delay_settings[cur]
-                      );
+		      "\n",
+		      timer_div_settings[cur],
+		      timer_freq_settings[cur],
+		      timer_delay_settings[cur]
+		      );
 #endif
 #ifdef FAST_TIMER_LOG
       t = &timer_started_log[cur];
       used += sprintf(bigbuf + used, "%-14s s: %6lu.%06lu e: %6lu.%06lu "
-                      "d: %6li us data: 0x%08lX"
-                      "\n",
-                      t->name,
+		      "d: %6li us data: 0x%08lX"
+		      "\n",
+		      t->name,
 			(unsigned long)t->tv_set.tv_jiff,
-                      (unsigned long)t->tv_set.tv_usec,
+		      (unsigned long)t->tv_set.tv_usec,
 			(unsigned long)t->tv_expires.tv_jiff,
-                      (unsigned long)t->tv_expires.tv_usec,
-                      t->delay_us,
-                      t->data
-                      );
+		      (unsigned long)t->tv_expires.tv_usec,
+		      t->delay_us,
+		      t->data
+		      );
 #endif
     }
     used += sprintf(bigbuf + used, "\n");
 
 #ifdef FAST_TIMER_LOG
     num_to_show = (fast_timers_added < NUM_TIMER_STATS ? fast_timers_added:
-                   NUM_TIMER_STATS);
+		   NUM_TIMER_STATS);
     used += sprintf(bigbuf + used, "Timers added: %i\n", fast_timers_added);
     for (i = 0; i < num_to_show && (used+100 < BIG_BUF_SIZE); i++)
     {
       t = &timer_added_log[(fast_timers_added - i - 1) % NUM_TIMER_STATS];
       used += sprintf(bigbuf + used, "%-14s s: %6lu.%06lu e: %6lu.%06lu "
-                      "d: %6li us data: 0x%08lX"
-                      "\n",
-                      t->name,
+		      "d: %6li us data: 0x%08lX"
+		      "\n",
+		      t->name,
 			(unsigned long)t->tv_set.tv_jiff,
-                      (unsigned long)t->tv_set.tv_usec,
+		      (unsigned long)t->tv_set.tv_usec,
 			(unsigned long)t->tv_expires.tv_jiff,
-                      (unsigned long)t->tv_expires.tv_usec,
-                      t->delay_us,
-                      t->data
-                      );
+		      (unsigned long)t->tv_expires.tv_usec,
+		      t->delay_us,
+		      t->data
+		      );
     }
     used += sprintf(bigbuf + used, "\n");
 
     num_to_show = (fast_timers_expired < NUM_TIMER_STATS ? fast_timers_expired:
-                   NUM_TIMER_STATS);
+		   NUM_TIMER_STATS);
     used += sprintf(bigbuf + used, "Timers expired: %i\n", fast_timers_expired);
     for (i = 0; i < num_to_show && (used+100 < BIG_BUF_SIZE); i++)
     {
       t = &timer_expired_log[(fast_timers_expired - i - 1) % NUM_TIMER_STATS];
       used += sprintf(bigbuf + used, "%-14s s: %6lu.%06lu e: %6lu.%06lu "
-                      "d: %6li us data: 0x%08lX"
-                      "\n",
-                      t->name,
+		      "d: %6li us data: 0x%08lX"
+		      "\n",
+		      t->name,
 			(unsigned long)t->tv_set.tv_jiff,
-                      (unsigned long)t->tv_set.tv_usec,
+		      (unsigned long)t->tv_set.tv_usec,
 			(unsigned long)t->tv_expires.tv_jiff,
-                      (unsigned long)t->tv_expires.tv_usec,
-                      t->delay_us,
-                      t->data
-                      );
+		      (unsigned long)t->tv_expires.tv_usec,
+		      t->delay_us,
+		      t->data
+		      );
     }
     used += sprintf(bigbuf + used, "\n");
 #endif
@@ -649,22 +649,22 @@ static int proc_fasttimer_read(char *buf, char **start, off_t offset, int len
       nextt = t->next;
       local_irq_restore(flags);
       used += sprintf(bigbuf + used, "%-14s s: %6lu.%06lu e: %6lu.%06lu "
-                      "d: %6li us data: 0x%08lX"
+		      "d: %6li us data: 0x%08lX"
 /*                      " func: 0x%08lX" */
-                      "\n",
-                      t->name,
+		      "\n",
+		      t->name,
 			(unsigned long)t->tv_set.tv_jiff,
-                      (unsigned long)t->tv_set.tv_usec,
+		      (unsigned long)t->tv_set.tv_usec,
 			(unsigned long)t->tv_expires.tv_jiff,
-                      (unsigned long)t->tv_expires.tv_usec,
-                      t->delay_us,
-                      t->data
+		      (unsigned long)t->tv_expires.tv_usec,
+		      t->delay_us,
+		      t->data
 /*                      , t->function */
-                      );
+		      );
 	local_irq_save(flags);
       if (t->next != nextt)
       {
-        printk(KERN_WARNING "timer removed!\n");
+	printk(KERN_WARNING "timer removed!\n");
       }
       t = nextt;
     }
@@ -813,21 +813,21 @@ static void fast_timer_test(void)
   {
     struct fast_timer *t = &tr[j];
     printk("%-10s set: %6is %06ius exp: %6is %06ius "
-           "data: 0x%08X func: 0x%08X\n",
-           t->name,
+	   "data: 0x%08X func: 0x%08X\n",
+	   t->name,
 			t->tv_set.tv_jiff,
-           t->tv_set.tv_usec,
+	   t->tv_set.tv_usec,
 			t->tv_expires.tv_jiff,
-           t->tv_expires.tv_usec,
-           t->data,
-           t->function
-           );
+	   t->tv_expires.tv_usec,
+	   t->data,
+	   t->function
+	   );
 
     printk("           del: %6ius     did exp: %6is %06ius as #%i error: %6li\n",
-           t->delay_us,
+	   t->delay_us,
 			tv_exp[j].tv_jiff,
-           tv_exp[j].tv_usec,
-           exp_num[j],
+	   tv_exp[j].tv_usec,
+	   exp_num[j],
 			(tv_exp[j].tv_jiff - t->tv_expires.tv_jiff) *
 				1000000 + tv_exp[j].tv_usec -
 				t->tv_expires.tv_usec);
@@ -863,7 +863,7 @@ int fast_timer_init(void)
      fasttimer_proc_entry->read_proc = proc_fasttimer_read;
 #endif /* PROC_FS */
     if(request_irq(TIMER1_IRQ_NBR, timer1_handler, 0,
-                   "fast timer int", NULL))
+		   "fast timer int", NULL))
     {
       printk("err: timer1 irq\n");
     }

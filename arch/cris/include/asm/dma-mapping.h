@@ -24,17 +24,17 @@ void dma_free_coherent(struct device *dev, size_t size,
 #else
 static inline void *
 dma_alloc_coherent(struct device *dev, size_t size, dma_addr_t *dma_handle,
-                   gfp_t flag)
+		   gfp_t flag)
 {
-        BUG();
-        return NULL;
+	BUG();
+	return NULL;
 }
 
 static inline void
 dma_free_coherent(struct device *dev, size_t size, void *cpu_addr,
-                    dma_addr_t dma_handle)
+		    dma_addr_t dma_handle)
 {
-        BUG();
+	BUG();
 }
 #endif
 static inline dma_addr_t
@@ -130,13 +130,13 @@ dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
 static inline int
 dma_supported(struct device *dev, u64 mask)
 {
-        /*
-         * we fall back to GFP_DMA when the mask isn't all 1s,
-         * so we can't guarantee allocations that must be
-         * within a tighter range than GFP_DMA..
-         */
-        if(mask < 0x00ffffff)
-                return 0;
+	/*
+	 * we fall back to GFP_DMA when the mask isn't all 1s,
+	 * so we can't guarantee allocations that must be
+	 * within a tighter range than GFP_DMA..
+	 */
+	if(mask < 0x00ffffff)
+		return 0;
 
 	return 1;
 }

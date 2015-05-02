@@ -1,16 +1,16 @@
 /*
-        fit3.c        (c) 1998  Grant R. Guenther <grant@torque.net>
-                          Under the terms of the GNU General Public License.
+	fit3.c        (c) 1998  Grant R. Guenther <grant@torque.net>
+			  Under the terms of the GNU General Public License.
 
 	fit3.c is a low-level protocol driver for newer models
-        of the Fidelity International Technology parallel port adapter.
+	of the Fidelity International Technology parallel port adapter.
 	This adapter is used in their TransDisk 3000 portable
 	hard-drives, as well as CD-ROM, PD-CD and other devices.
 
 	The TD-2000 and certain older devices use a different protocol.
 	Try the fit2 protocol module with them.
 
-        NB:  The FIT adapters do not appear to support the control
+	NB:  The FIT adapters do not appear to support the control
 	registers.  So, we map ALT_STATUS to STATUS and NO-OP writes
 	to the device control register - this means that IDE reset
 	will not work on these devices.
@@ -115,17 +115,17 @@ static void fit3_read_block( PIA *pi, char * buf, int count )
 		for (k=0;k<count/2;k++) {
 		    w2(0xef); a = r0();
 		    w2(0xee); b = r0();
-                    buf[2*k  ] = a;
-                    buf[2*k+1] = b;
+		    buf[2*k  ] = a;
+		    buf[2*k+1] = b;
 		}
 		w2(0xec);
 		w2(0xc);
 		break;
 
 	case 2: w2(0xc); w0(0x90); w2(0x8); w2(0xc);
-                w2(0xec);
+		w2(0xec);
 		for (k=0;k<count;k++) buf[k] = r4();
-                w2(0xc);
+		w2(0xc);
 		break;
 
 	}
@@ -135,19 +135,19 @@ static void fit3_write_block( PIA *pi, char * buf, int count )
 
 {	int k;
 
-        switch (pi->mode) {
+	switch (pi->mode) {
 
 	case 0:
-        case 1: w2(0xc); w0(0); w2(0x8); w2(0xc);
-                for (k=0;k<count/2;k++) {
+	case 1: w2(0xc); w0(0); w2(0x8); w2(0xc);
+		for (k=0;k<count/2;k++) {
  		    w0(buf[2*k  ]); w2(0xd);
  		    w0(buf[2*k+1]); w2(0xc);
 		}
 		break;
 
-        case 2: w2(0xc); w0(0); w2(0x8); w2(0xc);
-                for (k=0;k<count;k++) w4(buf[k]);
-                w2(0xc);
+	case 2: w2(0xc); w0(0); w2(0x8); w2(0xc);
+		for (k=0;k<count;k++) w4(buf[k]);
+		w2(0xc);
 		break;
 	}
 }
@@ -155,7 +155,7 @@ static void fit3_write_block( PIA *pi, char * buf, int count )
 static void fit3_connect ( PIA *pi  )
 
 {       pi->saved_r0 = r0();
-        pi->saved_r2 = r2();
+	pi->saved_r2 = r2();
 	w2(0xc); w0(0); w2(0xa);
 	if (pi->mode == 2) {
 		w2(0xc); w0(0x9); w2(0x8); w2(0xc);
@@ -166,7 +166,7 @@ static void fit3_disconnect ( PIA *pi )
 
 {       w2(0xc); w0(0xa); w2(0x8); w2(0xc);
 	w0(pi->saved_r0);
-        w2(pi->saved_r2);
+	w2(pi->saved_r2);
 }
 
 static void fit3_log_adapter( PIA *pi, char * scratch, int verbose )
@@ -175,7 +175,7 @@ static void fit3_log_adapter( PIA *pi, char * scratch, int verbose )
 
 	printk("%s: fit3 %s, FIT 3000 adapter at 0x%x, "
 	       "mode %d (%s), delay %d\n",
-                pi->device,FIT3_VERSION,pi->port,
+		pi->device,FIT3_VERSION,pi->port,
 		pi->mode,mode_string[pi->mode],pi->delay);
 
 }

@@ -150,7 +150,7 @@ static int __init conmode_setup(char *str)
 {
 #if defined(CONFIG_SCLP_CONSOLE) || defined(CONFIG_SCLP_VT220_CONSOLE)
 	if (strncmp(str, "hwc", 4) == 0 || strncmp(str, "sclp", 5) == 0)
-                SET_CONSOLE_SCLP;
+		SET_CONSOLE_SCLP;
 #endif
 #if defined(CONFIG_TN3215_CONSOLE)
 	if (strncmp(str, "3215", 5) == 0)
@@ -161,7 +161,7 @@ static int __init conmode_setup(char *str)
 		SET_CONSOLE_3270;
 #endif
 	set_preferred_console();
-        return 1;
+	return 1;
 }
 
 __setup("conmode=", conmode_setup);
@@ -171,7 +171,7 @@ static void __init conmode_default(void)
 	char query_buffer[1024];
 	char *ptr;
 
-        if (MACHINE_IS_VM) {
+	if (MACHINE_IS_VM) {
 		cpcmd("QUERY CONSOLE", query_buffer, 1024, NULL);
 		console_devno = simple_strtoul(query_buffer + 5, NULL, 16);
 		ptr = strstr(query_buffer, "SUBCHANNEL =");
@@ -785,7 +785,7 @@ static void __init reserve_crashkernel(void)
 
 static void __init setup_memory(void)
 {
-        unsigned long bootmap_size;
+	unsigned long bootmap_size;
 	unsigned long start_pfn, end_pfn;
 	int i;
 
@@ -1016,9 +1016,9 @@ static void __init setup_hwcaps(void)
 
 void __init setup_arch(char **cmdline_p)
 {
-        /*
-         * print what head.S has found out about the machine
-         */
+	/*
+	 * print what head.S has found out about the machine
+	 */
 #ifndef CONFIG_64BIT
 	if (MACHINE_IS_VM)
 		pr_info("Linux is running as a z/VM "
@@ -1045,7 +1045,7 @@ void __init setup_arch(char **cmdline_p)
 	/* boot_command_line has been already set up in early.c */
 	*cmdline_p = boot_command_line;
 
-        ROOT_DEV = Root_RAM0;
+	ROOT_DEV = Root_RAM0;
 
 	init_mm.start_code = PAGE_OFFSET;
 	init_mm.end_code = (unsigned long) &_etext;
@@ -1070,7 +1070,7 @@ void __init setup_arch(char **cmdline_p)
 	setup_vmcoreinfo();
 	setup_lowcore();
 
-        cpu_init();
+	cpu_init();
 	s390_init_cpu_topology();
 
 	/*
@@ -1081,9 +1081,9 @@ void __init setup_arch(char **cmdline_p)
 	/*
 	 * Create kernel page tables and switch to virtual addressing.
 	 */
-        paging_init();
+	paging_init();
 
-        /* Setup default console */
+	/* Setup default console */
 	conmode_default();
 	set_preferred_console();
 

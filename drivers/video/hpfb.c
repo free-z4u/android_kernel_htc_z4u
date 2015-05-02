@@ -322,7 +322,7 @@ static int __devinit hpfb_dio_probe(struct dio_dev * d, const struct dio_device_
 
 	paddr = d->resource.start;
 	if (!request_mem_region(d->resource.start, resource_size(&d->resource), d->name))
-                return -EBUSY;
+		return -EBUSY;
 
 	if (d->scode >= DIOII_SCBASE) {
 		vaddr = (unsigned long)ioremap(paddr, resource_size(&d->resource));

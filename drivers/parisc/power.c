@@ -68,7 +68,7 @@
 #define MFCPU_T(dr, gr)		MFCPU_X(dr,  0, gr, 0xa0)	/* all dr except dr0 and dr8 */
 
 #define __getDIAG(dr) ( { 			\
-        register unsigned long __res asm("r28");\
+	register unsigned long __res asm("r28");\
 	 __asm__ __volatile__ (			\
 		".word %1" : "=&r" (__res) : "i" (MFCPU_T(dr,28) ) \
 	);					\

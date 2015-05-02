@@ -9,94 +9,94 @@
 	This software may be used and distributed according to the terms
 	of the GNU General Public License, incorporated herein by reference.
 
-        The author may be reached at nelson@crynwr.com, Crynwr
-        Software, 521 Pleasant Valley Rd., Potsdam, NY 13676
+	The author may be reached at nelson@crynwr.com, Crynwr
+	Software, 521 Pleasant Valley Rd., Potsdam, NY 13676
 
   Changelog:
 
   Mike Cruse        : mcruse@cti-ltd.com
-                    : Changes for Linux 2.0 compatibility.
-                    : Added dev_id parameter in net_interrupt(),
-                    : request_irq() and free_irq(). Just NULL for now.
+		    : Changes for Linux 2.0 compatibility.
+		    : Added dev_id parameter in net_interrupt(),
+		    : request_irq() and free_irq(). Just NULL for now.
 
   Mike Cruse        : Added MOD_INC_USE_COUNT and MOD_DEC_USE_COUNT macros
-                    : in net_open() and net_close() so kerneld would know
-                    : that the module is in use and wouldn't eject the
-                    : driver prematurely.
+		    : in net_open() and net_close() so kerneld would know
+		    : that the module is in use and wouldn't eject the
+		    : driver prematurely.
 
   Mike Cruse        : Rewrote init_module() and cleanup_module using 8390.c
-                    : as an example. Disabled autoprobing in init_module(),
-                    : not a good thing to do to other devices while Linux
-                    : is running from all accounts.
+		    : as an example. Disabled autoprobing in init_module(),
+		    : not a good thing to do to other devices while Linux
+		    : is running from all accounts.
 
   Russ Nelson       : Jul 13 1998.  Added RxOnly DMA support.
 
   Melody Lee        : Aug 10 1999.  Changes for Linux 2.2.5 compatibility.
-                    : email: ethernet@crystal.cirrus.com
+		    : email: ethernet@crystal.cirrus.com
 
   Alan Cox          : Removed 1.2 support, added 2.1 extra counters.
 
   Andrew Morton     : Kernel 2.3.48
-                    : Handle kmalloc() failures
-                    : Other resource allocation fixes
-                    : Add SMP locks
-                    : Integrate Russ Nelson's ALLOW_DMA functionality back in.
-                    : If ALLOW_DMA is true, make DMA runtime selectable
-                    : Folded in changes from Cirrus (Melody Lee
-                    : <klee@crystal.cirrus.com>)
-                    : Don't call netif_wake_queue() in net_send_packet()
-                    : Fixed an out-of-mem bug in dma_rx()
-                    : Updated Documentation/networking/cs89x0.txt
+		    : Handle kmalloc() failures
+		    : Other resource allocation fixes
+		    : Add SMP locks
+		    : Integrate Russ Nelson's ALLOW_DMA functionality back in.
+		    : If ALLOW_DMA is true, make DMA runtime selectable
+		    : Folded in changes from Cirrus (Melody Lee
+		    : <klee@crystal.cirrus.com>)
+		    : Don't call netif_wake_queue() in net_send_packet()
+		    : Fixed an out-of-mem bug in dma_rx()
+		    : Updated Documentation/networking/cs89x0.txt
 
   Andrew Morton     : Kernel 2.3.99-pre1
-                    : Use skb_reserve to longword align IP header (two places)
-                    : Remove a delay loop from dma_rx()
-                    : Replace '100' with HZ
-                    : Clean up a couple of skb API abuses
-                    : Added 'cs89x0_dma=N' kernel boot option
-                    : Correctly initialise lp->lock in non-module compile
+		    : Use skb_reserve to longword align IP header (two places)
+		    : Remove a delay loop from dma_rx()
+		    : Replace '100' with HZ
+		    : Clean up a couple of skb API abuses
+		    : Added 'cs89x0_dma=N' kernel boot option
+		    : Correctly initialise lp->lock in non-module compile
 
   Andrew Morton     : Kernel 2.3.99-pre4-1
-                    : MOD_INC/DEC race fix (see
-                    : http://www.uwsg.indiana.edu/hypermail/linux/kernel/0003.3/1532.html)
+		    : MOD_INC/DEC race fix (see
+		    : http://www.uwsg.indiana.edu/hypermail/linux/kernel/0003.3/1532.html)
 
   Andrew Morton     : Kernel 2.4.0-test7-pre2
-                    : Enhanced EEPROM support to cover more devices,
-                    :   abstracted IRQ mapping to support CONFIG_ARCH_CLPS7500 arch
-                    :   (Jason Gunthorpe <jgg@ualberta.ca>)
+		    : Enhanced EEPROM support to cover more devices,
+		    :   abstracted IRQ mapping to support CONFIG_ARCH_CLPS7500 arch
+		    :   (Jason Gunthorpe <jgg@ualberta.ca>)
 
   Andrew Morton     : Kernel 2.4.0-test11-pre4
-                    : Use dev->name in request_*() (Andrey Panin)
-                    : Fix an error-path memleak in init_module()
-                    : Preserve return value from request_irq()
-                    : Fix type of `media' module parm (Keith Owens)
-                    : Use SET_MODULE_OWNER()
-                    : Tidied up strange request_irq() abuse in net_open().
+		    : Use dev->name in request_*() (Andrey Panin)
+		    : Fix an error-path memleak in init_module()
+		    : Preserve return value from request_irq()
+		    : Fix type of `media' module parm (Keith Owens)
+		    : Use SET_MODULE_OWNER()
+		    : Tidied up strange request_irq() abuse in net_open().
 
   Andrew Morton     : Kernel 2.4.3-pre1
-                    : Request correct number of pages for DMA (Hugh Dickens)
-                    : Select PP_ChipID _after_ unregister_netdev in cleanup_module()
-                    :  because unregister_netdev() calls get_stats.
-                    : Make `version[]' __initdata
-                    : Uninlined the read/write reg/word functions.
+		    : Request correct number of pages for DMA (Hugh Dickens)
+		    : Select PP_ChipID _after_ unregister_netdev in cleanup_module()
+		    :  because unregister_netdev() calls get_stats.
+		    : Make `version[]' __initdata
+		    : Uninlined the read/write reg/word functions.
 
   Oskar Schirmer    : oskar@scara.com
-                    : HiCO.SH4 (superh) support added (irq#1, cs89x0_media=)
+		    : HiCO.SH4 (superh) support added (irq#1, cs89x0_media=)
 
   Deepak Saxena     : dsaxena@plexity.net
-                    : Intel IXDP2x01 (XScale ixp2x00 NPU) platform support
+		    : Intel IXDP2x01 (XScale ixp2x00 NPU) platform support
 
   Dmitry Pervushin  : dpervushin@ru.mvista.com
-                    : PNX010X platform support
+		    : PNX010X platform support
 
   Deepak Saxena     : dsaxena@plexity.net
-                    : Intel IXDP2351 platform support
+		    : Intel IXDP2351 platform support
 
   Dmitry Pervushin  : dpervushin@ru.mvista.com
-                    : PNX010X platform support
+		    : PNX010X platform support
 
   Domenico Andreoli : cavokz@gmail.com
-                    : QQ2440 platform support
+		    : QQ2440 platform support
 
 */
 
@@ -165,7 +165,7 @@ static char version[] __initdata =
 /* First, a few definitions that the brave might change.
    A zero-terminated list of I/O addresses to be probed. Some special flags..
       Addr & 1 = Read back the address port, look for signature and reset
-                 the page window before probing
+		 the page window before probing
       Addr & 3 = Reset the page window and probe
    The CLPS eval board has the Cirrus chip at 0x80090300, in ARM IO space,
    but it is possible that a Cirrus board could be plugged into the ISA
@@ -453,7 +453,7 @@ get_eeprom_data(struct net_device *dev, int off, int len, int *buffer)
 		if (net_debug > 3) printk("%04x ", buffer[i]);
 	}
 	if (net_debug > 3) printk("\n");
-        return 0;
+	return 0;
 }
 
 static int  __init
@@ -530,7 +530,7 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 		lp->force = g_cs89x0_media__force;
 #endif
 
-        }
+	}
 
 	/* Grab the region so we can find another board if autoIRQ fails. */
 	/* WTF is going on here? */
@@ -542,8 +542,8 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 	}
 
 	/* if they give us an odd I/O address, then do ONE write to
-           the address port, to get it back to address zero, where we
-           expect to find the EISA signature word. An IO with a base of 0x3
+	   the address port, to get it back to address zero, where we
+	   expect to find the EISA signature word. An IO with a base of 0x3
 	   will skip the test for the ADD_PORT. */
 	if (ioaddr & 1) {
 		if (net_debug > 1)
@@ -599,7 +599,7 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 
 	reset_chip(dev);
 
-        /* Here we read the current configuration of the chip. If there
+	/* Here we read the current configuration of the chip. If there
 	   is no Extended EEPROM then the idea is to not disturb the chip
 	   configuration, it should have been correctly setup by automatic
 	   EEPROM read on reset. So, if the chip says it read the EEPROM
@@ -607,7 +607,7 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 	   adapter_cnf is 0. */
 
 
-        if ((readreg(dev, PP_SelfST) & (EEPROM_OK | EEPROM_PRESENT)) ==
+	if ((readreg(dev, PP_SelfST) & (EEPROM_OK | EEPROM_PRESENT)) ==
 	      (EEPROM_OK|EEPROM_PRESENT)) {
 	        /* Load the MAC. */
 		for (i=0; i < ETH_ALEN/2; i++) {
@@ -657,7 +657,7 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 		printk( "[Cirrus EEPROM] ");
 	}
 
-        printk("\n");
+	printk("\n");
 
 	/* First check to see if an EEPROM is attached. */
 
@@ -665,38 +665,38 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 		printk(KERN_WARNING "cs89x0: No EEPROM, relying on command line....\n");
 	else if (get_eeprom_data(dev, START_EEPROM_DATA,CHKSUM_LEN,eeprom_buff) < 0) {
 		printk(KERN_WARNING "\ncs89x0: EEPROM read failed, relying on command line.\n");
-        } else if (get_eeprom_cksum(START_EEPROM_DATA,CHKSUM_LEN,eeprom_buff) < 0) {
+	} else if (get_eeprom_cksum(START_EEPROM_DATA,CHKSUM_LEN,eeprom_buff) < 0) {
 		/* Check if the chip was able to read its own configuration starting
 		   at 0 in the EEPROM*/
 		if ((readreg(dev, PP_SelfST) & (EEPROM_OK | EEPROM_PRESENT)) !=
 		    (EEPROM_OK|EEPROM_PRESENT))
-                	printk(KERN_WARNING "cs89x0: Extended EEPROM checksum bad and no Cirrus EEPROM, relying on command line\n");
+			printk(KERN_WARNING "cs89x0: Extended EEPROM checksum bad and no Cirrus EEPROM, relying on command line\n");
 
-        } else {
+	} else {
 		/* This reads an extended EEPROM that is not documented
 		   in the CS8900 datasheet. */
 
-                /* get transmission control word  but keep the autonegotiation bits */
-                if (!lp->auto_neg_cnf) lp->auto_neg_cnf = eeprom_buff[AUTO_NEG_CNF_OFFSET/2];
-                /* Store adapter configuration */
-                if (!lp->adapter_cnf) lp->adapter_cnf = eeprom_buff[ADAPTER_CNF_OFFSET/2];
-                /* Store ISA configuration */
-                lp->isa_config = eeprom_buff[ISA_CNF_OFFSET/2];
-                dev->mem_start = eeprom_buff[PACKET_PAGE_OFFSET/2] << 8;
+		/* get transmission control word  but keep the autonegotiation bits */
+		if (!lp->auto_neg_cnf) lp->auto_neg_cnf = eeprom_buff[AUTO_NEG_CNF_OFFSET/2];
+		/* Store adapter configuration */
+		if (!lp->adapter_cnf) lp->adapter_cnf = eeprom_buff[ADAPTER_CNF_OFFSET/2];
+		/* Store ISA configuration */
+		lp->isa_config = eeprom_buff[ISA_CNF_OFFSET/2];
+		dev->mem_start = eeprom_buff[PACKET_PAGE_OFFSET/2] << 8;
 
-                /* eeprom_buff has 32-bit ints, so we can't just memcpy it */
-                /* store the initial memory base address */
-                for (i = 0; i < ETH_ALEN/2; i++) {
-                        dev->dev_addr[i*2] = eeprom_buff[i];
-                        dev->dev_addr[i*2+1] = eeprom_buff[i] >> 8;
-                }
+		/* eeprom_buff has 32-bit ints, so we can't just memcpy it */
+		/* store the initial memory base address */
+		for (i = 0; i < ETH_ALEN/2; i++) {
+			dev->dev_addr[i*2] = eeprom_buff[i];
+			dev->dev_addr[i*2+1] = eeprom_buff[i] >> 8;
+		}
 		if (net_debug > 1)
 			printk(KERN_DEBUG "%s: new adapter_cnf: 0x%x\n",
 				dev->name, lp->adapter_cnf);
-        }
+	}
 
-        /* allow them to force multiple transceivers.  If they force multiple, autosense */
-        {
+	/* allow them to force multiple transceivers.  If they force multiple, autosense */
+	{
 		int count = 0;
 		if (lp->force & FORCE_RJ45)	{lp->adapter_cnf |= A_CNF_10B_T; count++; }
 		if (lp->force & FORCE_AUI) 	{lp->adapter_cnf |= A_CNF_AUI; count++; }
@@ -705,18 +705,18 @@ cs89x0_probe1(struct net_device *dev, unsigned long ioaddr, int modular)
 		else if (lp->force & FORCE_RJ45){lp->adapter_cnf |= A_CNF_MEDIA_10B_T; }
 		else if (lp->force & FORCE_AUI)	{lp->adapter_cnf |= A_CNF_MEDIA_AUI; }
 		else if (lp->force & FORCE_BNC)	{lp->adapter_cnf |= A_CNF_MEDIA_10B_2; }
-        }
+	}
 
 	if (net_debug > 1)
 		printk(KERN_DEBUG "%s: after force 0x%x, adapter_cnf=0x%x\n",
 			dev->name, lp->force, lp->adapter_cnf);
 
-        /* FIXME: We don't let you set dc-dc polarity or low RX squelch from the command line: add it here */
+	/* FIXME: We don't let you set dc-dc polarity or low RX squelch from the command line: add it here */
 
-        /* FIXME: We don't let you set the IMM bit from the command line: add it to lp->auto_neg_cnf here */
+	/* FIXME: We don't let you set the IMM bit from the command line: add it to lp->auto_neg_cnf here */
 
-        /* FIXME: we don't set the Ethernet address on the command line.  Use
-           ifconfig IFACE hw ether AABBCCDDEEFF */
+	/* FIXME: we don't set the Ethernet address on the command line.  Use
+	   ifconfig IFACE hw ether AABBCCDDEEFF */
 
 	printk(KERN_INFO "cs89x0 media %s%s%s",
 	       (lp->adapter_cnf & A_CNF_10B_T)?"RJ-45,":"",
@@ -943,7 +943,7 @@ skip_this_frame:
 			dev->name, length,
 			(skb->data[ETH_ALEN+ETH_ALEN] << 8) | skb->data[ETH_ALEN+ETH_ALEN+1]);
 	}
-        skb->protocol=eth_type_trans(skb,dev);
+	skb->protocol=eth_type_trans(skb,dev);
 	netif_rx(skb);
 	dev->stats.rx_packets++;
 	dev->stats.rx_bytes += length;
@@ -1023,38 +1023,38 @@ detect_tp(struct net_device *dev)
 
 	if (net_debug > 1) printk("%s: Attempting TP\n", dev->name);
 
-        /* If connected to another full duplex capable 10-Base-T card the link pulses
-           seem to be lost when the auto detect bit in the LineCTL is set.
-           To overcome this the auto detect bit will be cleared whilst testing the
-           10-Base-T interface.  This would not be necessary for the sparrow chip but
-           is simpler to do it anyway. */
+	/* If connected to another full duplex capable 10-Base-T card the link pulses
+	   seem to be lost when the auto detect bit in the LineCTL is set.
+	   To overcome this the auto detect bit will be cleared whilst testing the
+	   10-Base-T interface.  This would not be necessary for the sparrow chip but
+	   is simpler to do it anyway. */
 	writereg(dev, PP_LineCTL, lp->linectl &~ AUI_ONLY);
 	control_dc_dc(dev, 0);
 
-        /* Delay for the hardware to work out if the TP cable is present - 150ms */
+	/* Delay for the hardware to work out if the TP cable is present - 150ms */
 	for (timenow = jiffies; jiffies - timenow < 15; )
-                ;
+		;
 	if ((readreg(dev, PP_LineST) & LINK_OK) == 0)
 		return DETECTED_NONE;
 
 	if (lp->chip_type == CS8900) {
-                switch (lp->force & 0xf0) {
+		switch (lp->force & 0xf0) {
 #if 0
-                case FORCE_AUTO:
+		case FORCE_AUTO:
 			printk("%s: cs8900 doesn't autonegotiate\n",dev->name);
-                        return DETECTED_NONE;
+			return DETECTED_NONE;
 #endif
 		/* CS8900 doesn't support AUTO, change to HALF*/
-                case FORCE_AUTO:
+		case FORCE_AUTO:
 			lp->force &= ~FORCE_AUTO;
-                        lp->force |= FORCE_HALF;
+			lp->force |= FORCE_HALF;
 			break;
 		case FORCE_HALF:
 			break;
-                case FORCE_FULL:
+		case FORCE_FULL:
 			writereg(dev, PP_TestCTL, readreg(dev, PP_TestCTL) | FDX_8900);
 			break;
-                }
+		}
 		fdx = readreg(dev, PP_TestCTL) & FDX_8900;
 	} else {
 		switch (lp->force & 0xf0) {
@@ -1067,7 +1067,7 @@ detect_tp(struct net_device *dev)
 		case FORCE_FULL:
 			lp->auto_neg_cnf = RE_NEG_NOW | ALLOW_FDX;
 			break;
-                }
+		}
 
 		writereg(dev, PP_AutoNegCTL, lp->auto_neg_cnf & AUTO_NEG_MASK);
 
@@ -1103,8 +1103,8 @@ send_test_pkt(struct net_device *dev)
 	memcpy(test_packet,          dev->dev_addr, ETH_ALEN);
 	memcpy(test_packet+ETH_ALEN, dev->dev_addr, ETH_ALEN);
 
-        writeword(dev->base_addr, TX_CMD_PORT, TX_AFTER_ALL);
-        writeword(dev->base_addr, TX_LEN_PORT, ETH_ZLEN);
+	writeword(dev->base_addr, TX_CMD_PORT, TX_AFTER_ALL);
+	writeword(dev->base_addr, TX_LEN_PORT, ETH_ZLEN);
 
 	/* Test to see if the chip has allocated memory for the packet */
 	while (jiffies - timenow < 5)
@@ -1119,11 +1119,11 @@ send_test_pkt(struct net_device *dev)
 	if (net_debug > 1) printk("Sending test packet ");
 	/* wait a couple of jiffies for packet to be received */
 	for (timenow = jiffies; jiffies - timenow < 3; )
-                ;
-        if ((readreg(dev, PP_TxEvent) & TX_SEND_OK_BITS) == TX_OK) {
-                if (net_debug > 1) printk("succeeded\n");
-                return 1;
-        }
+		;
+	if ((readreg(dev, PP_TxEvent) & TX_SEND_OK_BITS) == TX_OK) {
+		if (net_debug > 1) printk("succeeded\n");
+		return 1;
+	}
 	if (net_debug > 1) printk("failed\n");
 	return 0;
 }
@@ -1236,7 +1236,7 @@ net_open(struct net_device *dev)
 #if !defined(CS89x0_NONISA_IRQ) && !defined(CONFIG_CS89x0_PLATFORM)
 		if (((1 << dev->irq) & lp->irq_map) == 0) {
 			printk(KERN_ERR "%s: IRQ %d is not in our map of allowable IRQs, which is %x\n",
-                               dev->name, dev->irq, lp->irq_map);
+			       dev->name, dev->irq, lp->irq_map);
 			ret = -EAGAIN;
 			goto bad_out;
 		}
@@ -1306,56 +1306,56 @@ net_open(struct net_device *dev)
 
 	/* Set the LineCTL quintuplet based on adapter configuration read from EEPROM */
 	if ((lp->adapter_cnf & A_CNF_EXTND_10B_2) && (lp->adapter_cnf & A_CNF_LOW_RX_SQUELCH))
-                lp->linectl = LOW_RX_SQUELCH;
+		lp->linectl = LOW_RX_SQUELCH;
 	else
-                lp->linectl = 0;
+		lp->linectl = 0;
 
-        /* check to make sure that they have the "right" hardware available */
+	/* check to make sure that they have the "right" hardware available */
 	switch(lp->adapter_cnf & A_CNF_MEDIA_TYPE) {
 	case A_CNF_MEDIA_10B_T: result = lp->adapter_cnf & A_CNF_10B_T; break;
 	case A_CNF_MEDIA_AUI:   result = lp->adapter_cnf & A_CNF_AUI; break;
 	case A_CNF_MEDIA_10B_2: result = lp->adapter_cnf & A_CNF_10B_2; break;
-        default: result = lp->adapter_cnf & (A_CNF_10B_T | A_CNF_AUI | A_CNF_10B_2);
-        }
-        if (!result) {
-                printk(KERN_ERR "%s: EEPROM is configured for unavailable media\n", dev->name);
+	default: result = lp->adapter_cnf & (A_CNF_10B_T | A_CNF_AUI | A_CNF_10B_2);
+	}
+	if (!result) {
+		printk(KERN_ERR "%s: EEPROM is configured for unavailable media\n", dev->name);
 release_dma:
 #if ALLOW_DMA
 		free_dma(dev->dma);
 release_irq:
 		release_dma_buff(lp);
 #endif
-                writereg(dev, PP_LineCTL, readreg(dev, PP_LineCTL) & ~(SERIAL_TX_ON | SERIAL_RX_ON));
-                free_irq(dev->irq, dev);
+		writereg(dev, PP_LineCTL, readreg(dev, PP_LineCTL) & ~(SERIAL_TX_ON | SERIAL_RX_ON));
+		free_irq(dev->irq, dev);
 		ret = -EAGAIN;
 		goto bad_out;
 	}
 
-        /* set the hardware to the configured choice */
+	/* set the hardware to the configured choice */
 	switch(lp->adapter_cnf & A_CNF_MEDIA_TYPE) {
 	case A_CNF_MEDIA_10B_T:
-                result = detect_tp(dev);
-                if (result==DETECTED_NONE) {
-                        printk(KERN_WARNING "%s: 10Base-T (RJ-45) has no cable\n", dev->name);
-                        if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
-                                result = DETECTED_RJ45H; /* Yes! I don't care if I see a link pulse */
-                }
+		result = detect_tp(dev);
+		if (result==DETECTED_NONE) {
+			printk(KERN_WARNING "%s: 10Base-T (RJ-45) has no cable\n", dev->name);
+			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
+				result = DETECTED_RJ45H; /* Yes! I don't care if I see a link pulse */
+		}
 		break;
 	case A_CNF_MEDIA_AUI:
-                result = detect_aui(dev);
-                if (result==DETECTED_NONE) {
-                        printk(KERN_WARNING "%s: 10Base-5 (AUI) has no cable\n", dev->name);
-                        if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
-                                result = DETECTED_AUI; /* Yes! I don't care if I see a carrrier */
-                }
+		result = detect_aui(dev);
+		if (result==DETECTED_NONE) {
+			printk(KERN_WARNING "%s: 10Base-5 (AUI) has no cable\n", dev->name);
+			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
+				result = DETECTED_AUI; /* Yes! I don't care if I see a carrrier */
+		}
 		break;
 	case A_CNF_MEDIA_10B_2:
-                result = detect_bnc(dev);
-                if (result==DETECTED_NONE) {
-                        printk(KERN_WARNING "%s: 10Base-2 (BNC) has no cable\n", dev->name);
-                        if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
-                                result = DETECTED_BNC; /* Yes! I don't care if I can xmit a packet */
-                }
+		result = detect_bnc(dev);
+		if (result==DETECTED_NONE) {
+			printk(KERN_WARNING "%s: 10Base-2 (BNC) has no cable\n", dev->name);
+			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
+				result = DETECTED_BNC; /* Yes! I don't care if I can xmit a packet */
+		}
 		break;
 	case A_CNF_MEDIA_AUTO:
 		writereg(dev, PP_LineCTL, lp->linectl | AUTO_AUI_10BASET);
@@ -1420,8 +1420,8 @@ release_irq:
 #if ALLOW_DMA
 		 | dma_busctl(dev)
 #endif
-                 );
-        netif_start_queue(dev);
+		 );
+	netif_start_queue(dev);
 	if (net_debug > 1)
 		printk("cs89x0: net_open() succeeded\n");
 	return 0;
@@ -1451,8 +1451,8 @@ static netdev_tx_t net_send_packet(struct sk_buff *skb,struct net_device *dev)
 	}
 
 	/* keep the upload from being interrupted, since we
-                  ask the chip to start transmitting before the
-                  whole packet has been completely uploaded. */
+		  ask the chip to start transmitting before the
+		  whole packet has been completely uploaded. */
 
 	spin_lock_irqsave(&lp->lock, flags);
 	netif_stop_queue(dev);
@@ -1506,12 +1506,12 @@ static irqreturn_t net_interrupt(int irq, void *dev_id)
 	lp = netdev_priv(dev);
 
 	/* we MUST read all the events out of the ISQ, otherwise we'll never
-           get interrupted again.  As a consequence, we can't have any limit
-           on the number of times we loop in the interrupt handler.  The
-           hardware guarantees that eventually we'll run out of events.  Of
-           course, if you're on a slow machine, and packets are arriving
-           faster than you can read them off, you're screwed.  Hasta la
-           vista, baby!  */
+	   get interrupted again.  As a consequence, we can't have any limit
+	   on the number of times we loop in the interrupt handler.  The
+	   hardware guarantees that eventually we'll run out of events.  Of
+	   course, if you're on a slow machine, and packets are arriving
+	   faster than you can read them off, you're screwed.  Hasta la
+	   vista, baby!  */
 	while ((status = readword(dev->base_addr, ISQ_PORT))) {
 		if (net_debug > 4)printk("%s: event=%04x\n", dev->name, status);
 		handled = 1;
@@ -1543,24 +1543,24 @@ static irqreturn_t net_interrupt(int irq, void *dev_id)
 		case ISQ_BUFFER_EVENT:
 			if (status & READY_FOR_TX) {
 				/* we tried to transmit a packet earlier,
-                                   but inexplicably ran out of buffers.
-                                   That shouldn't happen since we only ever
-                                   load one packet.  Shrug.  Do the right
-                                   thing anyway. */
+				   but inexplicably ran out of buffers.
+				   That shouldn't happen since we only ever
+				   load one packet.  Shrug.  Do the right
+				   thing anyway. */
 				netif_wake_queue(dev);	/* Inform upper layers. */
 			}
 			if (status & TX_UNDERRUN) {
 				if (net_debug > 0) printk("%s: transmit underrun\n", dev->name);
-                                lp->send_underrun++;
-                                if (lp->send_underrun == 3) lp->send_cmd = TX_AFTER_381;
-                                else if (lp->send_underrun == 6) lp->send_cmd = TX_AFTER_ALL;
+				lp->send_underrun++;
+				if (lp->send_underrun == 3) lp->send_cmd = TX_AFTER_381;
+				else if (lp->send_underrun == 6) lp->send_cmd = TX_AFTER_ALL;
 				/* transmit cycle is done, although
 				   frame wasn't transmitted - this
 				   avoids having to wait for the upper
 				   layers to timeout on us, in the
 				   event of a tx underrun */
 				netif_wake_queue(dev);	/* Inform upper layers. */
-                        }
+			}
 #if ALLOW_DMA
 			if (lp->use_dma && (status & RX_DMA)) {
 				int count = readreg(dev, PP_DmaFrameCnt);
@@ -1641,7 +1641,7 @@ net_rx(struct net_device *dev)
 			(skb->data[ETH_ALEN+ETH_ALEN] << 8) | skb->data[ETH_ALEN+ETH_ALEN+1]);
 	}
 
-        skb->protocol=eth_type_trans(skb,dev);
+	skb->protocol=eth_type_trans(skb,dev);
 	netif_rx(skb);
 	dev->stats.rx_packets++;
 	dev->stats.rx_bytes += length;
@@ -1856,8 +1856,8 @@ int __init init_module(void)
 
 	spin_lock_init(&lp->lock);
 
-        /* boy, they'd better get these right */
-        if (!strcmp(media, "rj45"))
+	/* boy, they'd better get these right */
+	if (!strcmp(media, "rj45"))
 		lp->adapter_cnf = A_CNF_MEDIA_10B_T | A_CNF_10B_T;
 	else if (!strcmp(media, "aui"))
 		lp->adapter_cnf = A_CNF_MEDIA_AUI   | A_CNF_AUI;
@@ -1866,15 +1866,15 @@ int __init init_module(void)
 	else
 		lp->adapter_cnf = A_CNF_MEDIA_10B_T | A_CNF_10B_T;
 
-        if (duplex==-1)
+	if (duplex==-1)
 		lp->auto_neg_cnf = AUTO_NEG_ENABLE;
 
-        if (io == 0) {
-                printk(KERN_ERR "cs89x0.c: Module autoprobing not allowed.\n");
-                printk(KERN_ERR "cs89x0.c: Append io=0xNNN\n");
-                ret = -EPERM;
+	if (io == 0) {
+		printk(KERN_ERR "cs89x0.c: Module autoprobing not allowed.\n");
+		printk(KERN_ERR "cs89x0.c: Append io=0xNNN\n");
+		ret = -EPERM;
 		goto out;
-        } else if (io <= 0x1ff) {
+	} else if (io <= 0x1ff) {
 		ret = -ENXIO;
 		goto out;
 	}

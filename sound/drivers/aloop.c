@@ -360,7 +360,7 @@ static int loopback_prepare(struct snd_pcm_substream *substream)
 
 	mutex_lock(&dpcm->loopback->cable_lock);
 	if (!(cable->valid & ~(1 << substream->stream)) ||
-            (get_setup(dpcm)->notify &&
+	    (get_setup(dpcm)->notify &&
 	     substream->stream == SNDRV_PCM_STREAM_PLAYBACK))
 		params_change(substream);
 	cable->valid |= 1 << substream->stream;
@@ -620,10 +620,10 @@ static int rule_rate(struct snd_pcm_hw_params *params,
 	struct snd_pcm_hardware *hw = rule->private;
 	struct snd_interval t;
 
-        t.min = hw->rate_min;
-        t.max = hw->rate_max;
-        t.openmin = t.openmax = 0;
-        t.integer = 0;
+	t.min = hw->rate_min;
+	t.max = hw->rate_max;
+	t.openmin = t.openmax = 0;
+	t.integer = 0;
 	return snd_interval_refine(hw_param_interval(params, rule->var), &t);
 }
 
@@ -633,10 +633,10 @@ static int rule_channels(struct snd_pcm_hw_params *params,
 	struct snd_pcm_hardware *hw = rule->private;
 	struct snd_interval t;
 
-        t.min = hw->channels_min;
-        t.max = hw->channels_max;
-        t.openmin = t.openmax = 0;
-        t.integer = 0;
+	t.min = hw->channels_min;
+	t.max = hw->channels_max;
+	t.openmin = t.openmax = 0;
+	t.integer = 0;
 	return snd_interval_refine(hw_param_interval(params, rule->var), &t);
 }
 

@@ -966,7 +966,7 @@ static void mmc_sd_detect(struct mmc_host *host)
 {
 	int err = 0;
 #ifdef CONFIG_MMC_PARANOID_SD_INIT
-        int retries = 5;
+	int retries = 5;
 #endif
 
 	BUG_ON(!host);

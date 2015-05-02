@@ -649,16 +649,16 @@ static const struct ethtool_ops ethtool_ops;
 
 #define NATSEMI_ATTR(_name) \
 static ssize_t natsemi_show_##_name(struct device *dev, \
-         struct device_attribute *attr, char *buf); \
+	 struct device_attribute *attr, char *buf); \
 	 static ssize_t natsemi_set_##_name(struct device *dev, \
 		struct device_attribute *attr, \
 	        const char *buf, size_t count); \
 	 static DEVICE_ATTR(_name, 0644, natsemi_show_##_name, natsemi_set_##_name)
 
 #define NATSEMI_CREATE_FILE(_dev, _name) \
-         device_create_file(&_dev->dev, &dev_attr_##_name)
+	 device_create_file(&_dev->dev, &dev_attr_##_name)
 #define NATSEMI_REMOVE_FILE(_dev, _name) \
-         device_remove_file(&_dev->dev, &dev_attr_##_name)
+	 device_remove_file(&_dev->dev, &dev_attr_##_name)
 
 NATSEMI_ATTR(dspcfg_workaround);
 
@@ -679,14 +679,14 @@ static ssize_t natsemi_set_dspcfg_workaround(struct device *dev,
 	int new_setting;
 	unsigned long flags;
 
-        /* Find out the new setting */
-        if (!strncmp("on", buf, count - 1) || !strncmp("1", buf, count - 1))
-                new_setting = 1;
-        else if (!strncmp("off", buf, count - 1) ||
-                 !strncmp("0", buf, count - 1))
+	/* Find out the new setting */
+	if (!strncmp("on", buf, count - 1) || !strncmp("1", buf, count - 1))
+		new_setting = 1;
+	else if (!strncmp("off", buf, count - 1) ||
+		 !strncmp("0", buf, count - 1))
 		new_setting = 0;
 	else
-                 return count;
+		 return count;
 
 	spin_lock_irqsave(&np->lock, flags);
 

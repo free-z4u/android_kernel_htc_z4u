@@ -571,11 +571,11 @@ static irqreturn_t snd_es1968_interrupt(int irq, void *dev_id);
 
 static DEFINE_PCI_DEVICE_TABLE(snd_es1968_ids) = {
 	/* Maestro 1 */
-        { 0x1285, 0x0100, PCI_ANY_ID, PCI_ANY_ID, PCI_CLASS_MULTIMEDIA_AUDIO << 8, 0xffff00, TYPE_MAESTRO },
+	{ 0x1285, 0x0100, PCI_ANY_ID, PCI_ANY_ID, PCI_CLASS_MULTIMEDIA_AUDIO << 8, 0xffff00, TYPE_MAESTRO },
 	/* Maestro 2 */
 	{ 0x125d, 0x1968, PCI_ANY_ID, PCI_ANY_ID, PCI_CLASS_MULTIMEDIA_AUDIO << 8, 0xffff00, TYPE_MAESTRO2 },
 	/* Maestro 2E */
-        { 0x125d, 0x1978, PCI_ANY_ID, PCI_ANY_ID, PCI_CLASS_MULTIMEDIA_AUDIO << 8, 0xffff00, TYPE_MAESTRO2E },
+	{ 0x125d, 0x1978, PCI_ANY_ID, PCI_ANY_ID, PCI_CLASS_MULTIMEDIA_AUDIO << 8, 0xffff00, TYPE_MAESTRO2E },
 	{ 0, }
 };
 
@@ -1291,7 +1291,7 @@ static snd_pcm_uframes_t snd_es1968_pcm_pointer(struct snd_pcm_substream *substr
 
 static struct snd_pcm_hardware snd_es1968_playback = {
 	.info =			(SNDRV_PCM_INFO_MMAP |
-               		         SNDRV_PCM_INFO_MMAP_VALID |
+	       		         SNDRV_PCM_INFO_MMAP_VALID |
 				 SNDRV_PCM_INFO_INTERLEAVED |
 				 SNDRV_PCM_INFO_BLOCK_TRANSFER |
 				 /*SNDRV_PCM_INFO_PAUSE |*/
@@ -1623,8 +1623,8 @@ static int snd_es1968_capture_open(struct snd_pcm_substream *substream)
 		snd_es1968_free_apu_pair(chip, apu1);
 		snd_es1968_free_apu_pair(chip, apu2);
 		kfree(es);
-                return -ENOMEM;
-        }
+		return -ENOMEM;
+	}
 	memset(es->mixbuf->buf.area, 0, ESM_MIXBUF_SIZE);
 
 	runtime->private_data = es;

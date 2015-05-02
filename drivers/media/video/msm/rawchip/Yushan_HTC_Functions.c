@@ -449,17 +449,17 @@ int Yushan_sensor_open_init(struct rawchip_sensor_init_data data)
 		p_yushan_regs->dppclib_first_addr = yushan_regs_clib_ov5693.dppclib_first_addr;
 		p_yushan_regs->dopclib_first_addr = yushan_regs_clib_ov5693.dopclib_first_addr;
 	}
-        else if (strcmp(data.sensor_name, "s5k6a2ya") == 0) {
-                p_yushan_regs->pdpclib = yushan_regs_clib_s5k6a2ya.pdpclib;
-                p_yushan_regs->dppclib = yushan_regs_clib_s5k6a2ya.dppclib;
-                p_yushan_regs->dopclib = yushan_regs_clib_s5k6a2ya.dopclib;
-                p_yushan_regs->pdpclib_size = yushan_regs_clib_s5k6a2ya.pdpclib_size;
-                p_yushan_regs->dppclib_size = yushan_regs_clib_s5k6a2ya.dppclib_size;
-                p_yushan_regs->dopclib_size = yushan_regs_clib_s5k6a2ya.dopclib_size;
-                p_yushan_regs->pdpclib_first_addr = yushan_regs_clib_s5k6a2ya.pdpclib_first_addr;
-                p_yushan_regs->dppclib_first_addr = yushan_regs_clib_s5k6a2ya.dppclib_first_addr;
-                p_yushan_regs->dopclib_first_addr = yushan_regs_clib_s5k6a2ya.dopclib_first_addr;
-        }
+	else if (strcmp(data.sensor_name, "s5k6a2ya") == 0) {
+		p_yushan_regs->pdpclib = yushan_regs_clib_s5k6a2ya.pdpclib;
+		p_yushan_regs->dppclib = yushan_regs_clib_s5k6a2ya.dppclib;
+		p_yushan_regs->dopclib = yushan_regs_clib_s5k6a2ya.dopclib;
+		p_yushan_regs->pdpclib_size = yushan_regs_clib_s5k6a2ya.pdpclib_size;
+		p_yushan_regs->dppclib_size = yushan_regs_clib_s5k6a2ya.dppclib_size;
+		p_yushan_regs->dopclib_size = yushan_regs_clib_s5k6a2ya.dopclib_size;
+		p_yushan_regs->pdpclib_first_addr = yushan_regs_clib_s5k6a2ya.pdpclib_first_addr;
+		p_yushan_regs->dppclib_first_addr = yushan_regs_clib_s5k6a2ya.dppclib_first_addr;
+		p_yushan_regs->dopclib_first_addr = yushan_regs_clib_s5k6a2ya.dopclib_first_addr;
+	}
 
 	sDxoStruct.pDxoPdpRamImage[0] = (uint8_t *)p_yushan_regs->pdpcode;
 	sDxoStruct.pDxoDppRamImage[0] = (uint8_t *)p_yushan_regs->dppcode;

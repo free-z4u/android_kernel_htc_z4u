@@ -15,12 +15,12 @@ InterfaceWRM(PS_INTERFACE_ADAPTER psIntfAdapter,
 
 
 int InterfaceFileDownload( PVOID psIntfAdapter,
-                        struct file *flp,
-                        unsigned int on_chip_loc);
+			struct file *flp,
+			unsigned int on_chip_loc);
 
 int InterfaceFileReadbackFromChip( PVOID psIntfAdapter,
-                        struct file *flp,
-                        unsigned int on_chip_loc);
+			struct file *flp,
+			unsigned int on_chip_loc);
 
 
 int BcmRDM(PVOID arg,

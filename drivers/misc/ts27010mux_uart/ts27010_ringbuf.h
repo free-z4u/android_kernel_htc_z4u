@@ -201,7 +201,7 @@ static inline int ts27010_mux_log_ringbuf_read(
 	for (i = 0; i < len; i++)
 		buf[i] = ts27010_ringbuf_peek(rbuf, i + idx);
 
-        rbuf->tail = (rbuf->tail + len) % rbuf->len;
+	rbuf->tail = (rbuf->tail + len) % rbuf->len;
 	FUNC_EXIT();
 	return len;
 }

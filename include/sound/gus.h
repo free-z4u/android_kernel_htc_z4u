@@ -390,7 +390,7 @@ struct snd_gf1 {
 	/* pcm */
 	int pcm_channels;
 	int pcm_alloc_voices;
-        unsigned short pcm_volume_level_left;
+	unsigned short pcm_volume_level_left;
 	unsigned short pcm_volume_level_right;
 	unsigned short pcm_volume_level_left1;
 	unsigned short pcm_volume_level_right1;

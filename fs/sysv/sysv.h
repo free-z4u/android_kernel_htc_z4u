@@ -42,7 +42,7 @@ struct sysv_sb_info {
 	char *         s_sbd1;		/* entire superblock data, for part 1 */
 	char *         s_sbd2;		/* entire superblock data, for part 2 */
 	__fs16         *s_sb_fic_count;	/* pointer to s_sbd->s_ninode */
-        sysv_ino_t     *s_sb_fic_inodes; /* pointer to s_sbd->s_inode */
+	sysv_ino_t     *s_sb_fic_inodes; /* pointer to s_sbd->s_inode */
 	__fs16         *s_sb_total_free_inodes; /* pointer to s_sbd->s_tinode */
 	__fs16         *s_bcache_count;	/* pointer to s_sbd->s_nfree */
 	sysv_zone_t    *s_bcache;	/* pointer to s_sbd->s_free */

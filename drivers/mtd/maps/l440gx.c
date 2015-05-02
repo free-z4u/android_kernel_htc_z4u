@@ -124,7 +124,7 @@ static int __init init_l440gx(void)
 	/* Set XBCS# */
 	pci_read_config_word(dev, 0x4e, &word);
 	word |= 0x4;
-        pci_write_config_word(dev, 0x4e, word);
+	pci_write_config_word(dev, 0x4e, word);
 
 	/* Supply write voltage to the chip */
 	l440gx_set_vpp(&l440gx_map, 1);

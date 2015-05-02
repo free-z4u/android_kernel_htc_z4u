@@ -1125,11 +1125,11 @@ static int do_test(int m)
 		ret += tcrypt_test("cts(cbc(aes))");
 		break;
 
-        case 39:
+	case 39:
 		ret += tcrypt_test("rmd128");
 		break;
 
-        case 40:
+	case 40:
 		ret += tcrypt_test("rmd160");
 		break;
 

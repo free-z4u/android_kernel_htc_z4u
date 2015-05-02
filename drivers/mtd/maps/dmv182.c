@@ -55,7 +55,7 @@ static struct map_info svme182_map = {
 #define NEW_BOOTLOADER_PART_SIZE (1024 * 1024)
 // Use the remaining 9MiB at the end of flash for the RFS
 #define NEW_RFS_PART_SIZE        (0x01000000 - NEW_BOOTLOADER_PART_SIZE - \
-                                  NEW_BOOTIMAGE_PART_SIZE)
+				  NEW_BOOTIMAGE_PART_SIZE)
 
 static struct mtd_partition svme182_partitions[] = {
 	// The Lower PABS is only 128KiB, but the partition code doesn't

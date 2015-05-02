@@ -1221,7 +1221,7 @@ static int serial_hsu_suspend(struct pci_dev *pdev, pm_message_t state)
 
 	pci_save_state(pdev);
 	pci_set_power_state(pdev, pci_choose_state(pdev, state));
-        return 0;
+	return 0;
 }
 
 static int serial_hsu_resume(struct pci_dev *pdev)

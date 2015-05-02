@@ -19,17 +19,17 @@ typedef struct _snd_wavefront snd_wavefront_t;
 typedef enum { internal_mpu = 0, external_mpu = 1 } snd_wavefront_mpu_id;
 
 struct _snd_wavefront_midi {
-        unsigned long            base;        /* I/O port address */
+	unsigned long            base;        /* I/O port address */
 	char                     isvirtual;   /* doing virtual MIDI stuff ? */
 	char			 istimer;     /* timer is used */
-        snd_wavefront_mpu_id     output_mpu;  /* most-recently-used */
-        snd_wavefront_mpu_id     input_mpu;   /* most-recently-used */
-        unsigned int             mode[2];     /* MPU401_MODE_XXX */
+	snd_wavefront_mpu_id     output_mpu;  /* most-recently-used */
+	snd_wavefront_mpu_id     input_mpu;   /* most-recently-used */
+	unsigned int             mode[2];     /* MPU401_MODE_XXX */
 	struct snd_rawmidi_substream	 *substream_output[2];
 	struct snd_rawmidi_substream	 *substream_input[2];
 	struct timer_list	 timer;
-        spinlock_t               open;
-        spinlock_t               virtual;     /* protects isvirtual */
+	spinlock_t               open;
+	spinlock_t               virtual;     /* protects isvirtual */
 };
 
 #define	OUTPUT_READY	0x40
@@ -76,7 +76,7 @@ struct _snd_wavefront {
 #define fx_mod_data     base + 0xf
 
 	volatile int irq_ok;               /* set by interrupt handler */
-        volatile int irq_cnt;              /* ditto */
+	volatile int irq_cnt;              /* ditto */
 	char debug;                        /* debugging flags */
 	int freemem;                       /* installed RAM, in bytes */
 

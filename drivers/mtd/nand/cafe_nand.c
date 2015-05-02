@@ -857,7 +857,7 @@ static int cafe_nand_resume(struct pci_dev *pdev)
 	cafe_writel(cafe, timing[1], NAND_TIMING2);
 	cafe_writel(cafe, timing[2], NAND_TIMING3);
 
-        /* Disable master reset, enable NAND clock */
+	/* Disable master reset, enable NAND clock */
 	ctrl = cafe_readl(cafe, GLOBAL_CTRL);
 	ctrl &= 0xffffeff0;
 	ctrl |= 0x00007000;

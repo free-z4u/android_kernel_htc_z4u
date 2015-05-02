@@ -2575,7 +2575,7 @@ static int vwsnd_audio_do_ioctl(struct file *file,
 		return put_user(ival, (int *) arg);
 
 	case SNDCTL_DSP_SUBDIVIDE:	/* _SIOWR('P', 9, int) */
-                if (get_user(ival, (int *) arg))
+		if (get_user(ival, (int *) arg))
 			return -EFAULT;
 		DBGX("SNDCTL_DSP_SUBDIVIDE %d\n", ival);
 		if (aport->swstate != SW_INITIAL)

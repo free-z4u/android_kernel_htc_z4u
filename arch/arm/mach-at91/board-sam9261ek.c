@@ -367,7 +367,7 @@ static struct at91_mmc_data __initdata ek_mmc_data = {
 
 /* STN */
 static struct fb_videomode at91_stn_modes[] = {
-        {
+	{
 		.name           = "SP06Q002 @ 75",
 		.refresh        = 75,
 		.xres           = 320,          .yres           = 240,
@@ -379,19 +379,19 @@ static struct fb_videomode at91_stn_modes[] = {
 
 		.sync		= FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
 		.vmode          = FB_VMODE_NONINTERLACED,
-        },
+	},
 };
 
 static struct fb_monspecs at91fb_default_stn_monspecs = {
-        .manufacturer   = "HIT",
-        .monitor        = "SP06Q002",
+	.manufacturer   = "HIT",
+	.monitor        = "SP06Q002",
 
-        .modedb         = at91_stn_modes,
-        .modedb_len     = ARRAY_SIZE(at91_stn_modes),
-        .hfmin          = 15000,
-        .hfmax          = 64000,
-        .vfmin          = 50,
-        .vfmax          = 150,
+	.modedb         = at91_stn_modes,
+	.modedb_len     = ARRAY_SIZE(at91_stn_modes),
+	.hfmin          = 15000,
+	.hfmax          = 64000,
+	.vfmin          = 50,
+	.vfmax          = 150,
 };
 
 #define AT91SAM9261_DEFAULT_STN_LCDCON2	(ATMEL_LCDC_MEMOR_LITTLE \

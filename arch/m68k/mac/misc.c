@@ -583,7 +583,7 @@ void mac_reset(void)
 				     : : "m" (addr));
 		/* Now jump to physical address so we can disable MMU */
 		__asm__ __volatile__(
-                    ".chip 68030\n\t"
+		    ".chip 68030\n\t"
 		    "lea %/pc@(1f),%/a0\n\t"
 		    "addl %0,%/a0\n\t"/* fixup target address and stack ptr */
 		    "addl %0,%/sp\n\t"
@@ -630,7 +630,7 @@ static void unmktime(unsigned long time, long offset,
 		     int *yearp, int *monp, int *dayp,
 		     int *hourp, int *minp, int *secp)
 {
-        /* How many days come before each month (0-12).  */
+	/* How many days come before each month (0-12).  */
 	static const unsigned short int __mon_yday[2][13] =
 	{
 		/* Normal years.  */

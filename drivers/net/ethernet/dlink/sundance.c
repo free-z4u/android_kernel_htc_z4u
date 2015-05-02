@@ -216,7 +216,7 @@ enum {
 };
 
 struct pci_id_info {
-        const char *name;
+	const char *name;
 };
 static const struct pci_id_info pci_id_tbl[] __devinitdata = {
 	{"D-Link DFE-550TX FAST Ethernet Adapter"},
@@ -363,8 +363,8 @@ struct netdev_private {
 	struct netdev_desc *tx_ring;
 	struct sk_buff* rx_skbuff[RX_RING_SIZE];
 	struct sk_buff* tx_skbuff[TX_RING_SIZE];
-        dma_addr_t tx_ring_dma;
-        dma_addr_t rx_ring_dma;
+	dma_addr_t tx_ring_dma;
+	dma_addr_t rx_ring_dma;
 	struct timer_list timer;		/* Media monitoring timer. */
 	/* ethtool extra stats */
 	struct {

@@ -572,29 +572,29 @@ static void snd_ymfpci_pcm_init_voice(struct snd_ymfpci_pcm *ypcm, unsigned int 
 		}
 		if (ypcm->output_rear) {
 		        if (!ypcm->swap_rear) {
-        			if (use_left) {
-        				bank->eff2_gain =
-        				bank->eff2_gain_end = vol_left;
-        			}
-        			if (use_right) {
-        				bank->eff3_gain =
-        				bank->eff3_gain_end = vol_right;
-        			}
+				if (use_left) {
+					bank->eff2_gain =
+					bank->eff2_gain_end = vol_left;
+				}
+				if (use_right) {
+					bank->eff3_gain =
+					bank->eff3_gain_end = vol_right;
+				}
 		        } else {
-        			/* The SPDIF out channels seem to be swapped, so we have
-        			 * to swap them here, too.  The rear analog out channels
-        			 * will be wrong, but otherwise AC3 would not work.
-        			 */
-        			if (use_left) {
-        				bank->eff3_gain =
-        				bank->eff3_gain_end = vol_left;
-        			}
-        			if (use_right) {
-        				bank->eff2_gain =
-        				bank->eff2_gain_end = vol_right;
-        			}
-        		}
-                }
+				/* The SPDIF out channels seem to be swapped, so we have
+				 * to swap them here, too.  The rear analog out channels
+				 * will be wrong, but otherwise AC3 would not work.
+				 */
+				if (use_left) {
+					bank->eff3_gain =
+					bank->eff3_gain_end = vol_left;
+				}
+				if (use_right) {
+					bank->eff2_gain =
+					bank->eff2_gain_end = vol_right;
+				}
+			}
+		}
 	}
 }
 

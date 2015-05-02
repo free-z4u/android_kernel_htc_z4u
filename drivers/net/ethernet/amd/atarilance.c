@@ -21,7 +21,7 @@
 		  following AMD, CSR0_STRT should be set only after IDON is detected
 		  use memcpy() for data transfers, that also employs long word moves
 		  better probe procedure for 24-bit systems
-          non-VME-RieblCards need extra delays in memcpy
+	  non-VME-RieblCards need extra delays in memcpy
 		  must also do write test, since 0xfxe00000 may hit ROM
 		  use 8/32 tx/rx buffers, which should give better NFS performance;
 		    this is made possible by shifting the last packet buffer after the
@@ -336,7 +336,7 @@ static struct lance_addr {
 /***************************** Prototypes *****************************/
 
 static unsigned long lance_probe1( struct net_device *dev, struct lance_addr
-                                   *init_rec );
+				   *init_rec );
 static int lance_open( struct net_device *dev );
 static void lance_init_ring( struct net_device *dev );
 static int lance_start_xmit( struct sk_buff *skb, struct net_device *dev );

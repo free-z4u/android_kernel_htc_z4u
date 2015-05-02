@@ -43,7 +43,7 @@ config GENERIC_CALIBRATE_DELAY
 	def_bool y
 
 config GENERIC_CMOS_UPDATE
-        def_bool n
+	def_bool n
 
 config GENERIC_HWEIGHT
 	def_bool y
@@ -156,7 +156,7 @@ config INTERRUPT_VECTOR_BASE
 	default "0x90000000"
 	help
 	  The base address of the vector table will be programmed into
-          the TBR register. It must be on 16MiB address boundary.
+	  the TBR register. It must be on 16MiB address boundary.
 
 config KERNEL_TEXT_ADDRESS
 	hex "Base address of kernel"

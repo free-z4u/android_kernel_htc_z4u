@@ -497,7 +497,7 @@ int pfault_init(void)
 		.refselmk = 1ULL << 48,
 		.refcmpmk = 1ULL << 48,
 		.reserved = __PF_RES_FIELD };
-        int rc;
+	int rc;
 
 	if (pfault_disable)
 		return -1;
@@ -508,7 +508,7 @@ int pfault_init(void)
 		"2:\n"
 		EX_TABLE(0b,1b)
 		: "=d" (rc) : "a" (&refbk), "m" (refbk) : "cc");
-        return rc;
+	return rc;
 }
 
 void pfault_fini(void)
@@ -543,7 +543,7 @@ static void pfault_interrupt(struct ext_code ext_code,
 	 * Get the external interruption subcode & pfault
 	 * initial/completion signal bit. VM stores this
 	 * in the 'cpu address' field associated with the
-         * external interrupt.
+	 * external interrupt.
 	 */
 	subcode = ext_code.subcode;
 	if ((subcode & 0xff00) != __SUBCODE_MASK)

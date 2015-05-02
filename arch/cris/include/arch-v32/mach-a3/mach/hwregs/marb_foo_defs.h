@@ -14,26 +14,26 @@
 #ifndef REG_RD
 #define REG_RD( scope, inst, reg ) \
   REG_READ( reg_##scope##_##reg, \
-            (inst) + REG_RD_ADDR_##scope##_##reg )
+	    (inst) + REG_RD_ADDR_##scope##_##reg )
 #endif
 
 #ifndef REG_WR
 #define REG_WR( scope, inst, reg, val ) \
   REG_WRITE( reg_##scope##_##reg, \
-             (inst) + REG_WR_ADDR_##scope##_##reg, (val) )
+	     (inst) + REG_WR_ADDR_##scope##_##reg, (val) )
 #endif
 
 #ifndef REG_RD_VECT
 #define REG_RD_VECT( scope, inst, reg, index ) \
   REG_READ( reg_##scope##_##reg, \
-            (inst) + REG_RD_ADDR_##scope##_##reg + \
+	    (inst) + REG_RD_ADDR_##scope##_##reg + \
 	    (index) * STRIDE_##scope##_##reg )
 #endif
 
 #ifndef REG_WR_VECT
 #define REG_WR_VECT( scope, inst, reg, index, val ) \
   REG_WRITE( reg_##scope##_##reg, \
-             (inst) + REG_WR_ADDR_##scope##_##reg + \
+	     (inst) + REG_WR_ADDR_##scope##_##reg + \
 	     (index) * STRIDE_##scope##_##reg, (val) )
 #endif
 
@@ -424,26 +424,26 @@ enum {
 #ifndef REG_RD
 #define REG_RD( scope, inst, reg ) \
   REG_READ( reg_##scope##_##reg, \
-            (inst) + REG_RD_ADDR_##scope##_##reg )
+	    (inst) + REG_RD_ADDR_##scope##_##reg )
 #endif
 
 #ifndef REG_WR
 #define REG_WR( scope, inst, reg, val ) \
   REG_WRITE( reg_##scope##_##reg, \
-             (inst) + REG_WR_ADDR_##scope##_##reg, (val) )
+	     (inst) + REG_WR_ADDR_##scope##_##reg, (val) )
 #endif
 
 #ifndef REG_RD_VECT
 #define REG_RD_VECT( scope, inst, reg, index ) \
   REG_READ( reg_##scope##_##reg, \
-            (inst) + REG_RD_ADDR_##scope##_##reg + \
+	    (inst) + REG_RD_ADDR_##scope##_##reg + \
 	    (index) * STRIDE_##scope##_##reg )
 #endif
 
 #ifndef REG_WR_VECT
 #define REG_WR_VECT( scope, inst, reg, index, val ) \
   REG_WRITE( reg_##scope##_##reg, \
-             (inst) + REG_WR_ADDR_##scope##_##reg + \
+	     (inst) + REG_WR_ADDR_##scope##_##reg + \
 	     (index) * STRIDE_##scope##_##reg, (val) )
 #endif
 

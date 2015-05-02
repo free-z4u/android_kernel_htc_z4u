@@ -109,11 +109,11 @@ typedef unsigned int OM_uint32;
  * Calling errors:
  */
 #define GSS_S_CALL_INACCESSIBLE_READ \
-                             (((OM_uint32) 1ul) << GSS_C_CALLING_ERROR_OFFSET)
+			     (((OM_uint32) 1ul) << GSS_C_CALLING_ERROR_OFFSET)
 #define GSS_S_CALL_INACCESSIBLE_WRITE \
-                             (((OM_uint32) 2ul) << GSS_C_CALLING_ERROR_OFFSET)
+			     (((OM_uint32) 2ul) << GSS_C_CALLING_ERROR_OFFSET)
 #define GSS_S_CALL_BAD_STRUCTURE \
-                             (((OM_uint32) 3ul) << GSS_C_CALLING_ERROR_OFFSET)
+			     (((OM_uint32) 3ul) << GSS_C_CALLING_ERROR_OFFSET)
 
 /*
  * Routine errors:

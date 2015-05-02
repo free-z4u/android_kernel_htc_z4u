@@ -149,11 +149,11 @@ typedef struct tagSCmdZoneTypeSet {
 
 #ifdef WPA_SM_Transtatus
 typedef struct tagSWPAResult {
-         char	ifname[100];
-         u8 proto;
-         u8 key_mgmt;
-         u8 eap_type;
-         bool authenticated;
+	 char	ifname[100];
+	 u8 proto;
+	 u8 key_mgmt;
+	 u8 eap_type;
+	 bool authenticated;
 } SWPAResult, *PSWPAResult;
 #endif
 
@@ -307,7 +307,7 @@ typedef struct tagSStatMIBCount {
 	u32   dwTsrOnceRetry[2];         // this packet only occur one collision
 	u32   dwTsrMoreThanOnceRetry[2]; // this packet occur more than one collision
 	u32   dwTsrRetry[2];             // this packet has ever occur collision,
-                                       // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
+				       // that is (dwTsrOnceCollision0 + dwTsrMoreThanOnceCollision0)
 	u32   dwTsrACKData[2];
 	u32   dwTsrErr[2];
 	u32   dwAllTsrOK[2];

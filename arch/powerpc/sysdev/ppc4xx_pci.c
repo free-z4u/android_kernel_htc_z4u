@@ -48,10 +48,10 @@ static int dma_offset_set;
 static inline int ppc440spe_revA(void)
 {
 	/* Catch both 440SPe variants, with and without RAID6 support */
-        if ((mfspr(SPRN_PVR) & 0xffefffff) == 0x53421890)
-                return 1;
-        else
-                return 0;
+	if ((mfspr(SPRN_PVR) & 0xffefffff) == 0x53421890)
+		return 1;
+	else
+		return 0;
 }
 
 static void fixup_ppc4xx_pci_bridge(struct pci_dev *dev)

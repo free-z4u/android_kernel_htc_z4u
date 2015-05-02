@@ -2,7 +2,7 @@
 
      Driver for Atmel at76c502 at76c504 and at76c506 wireless cards.
 
-         Copyright 2005 Dan Williams and Red Hat, Inc.
+	 Copyright 2005 Dan Williams and Red Hat, Inc.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

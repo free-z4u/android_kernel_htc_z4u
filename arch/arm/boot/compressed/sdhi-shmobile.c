@@ -28,7 +28,7 @@
 
 static inline u16 sd_ctrl_read16(void __iomem *base, int addr)
 {
-        return __raw_readw(base + addr);
+	return __raw_readw(base + addr);
 }
 
 static inline u32 sd_ctrl_read32(void __iomem *base, int addr)

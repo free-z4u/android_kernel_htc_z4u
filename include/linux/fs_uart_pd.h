@@ -45,7 +45,7 @@ static inline int fs_uart_id_fsid2smc(int id)
 }
 
 struct fs_uart_platform_info {
-        void(*init_ioports)(struct fs_uart_platform_info *);
+	void(*init_ioports)(struct fs_uart_platform_info *);
 	/* device specific information */
 	int fs_no;		/* controller index */
 	char fs_type[4];        /* controller type  */
@@ -61,11 +61,11 @@ struct fs_uart_platform_info {
 
 static inline int fs_uart_get_id(struct fs_uart_platform_info *fpi)
 {
-        if(strstr(fpi->fs_type, "SMC"))
-                return fs_uart_id_smc2fsid(fpi->fs_no);
-        if(strstr(fpi->fs_type, "SCC"))
-                return fs_uart_id_scc2fsid(fpi->fs_no);
-        return fpi->fs_no;
+	if(strstr(fpi->fs_type, "SMC"))
+		return fs_uart_id_smc2fsid(fpi->fs_no);
+	if(strstr(fpi->fs_type, "SCC"))
+		return fs_uart_id_scc2fsid(fpi->fs_no);
+	return fpi->fs_no;
 }
 
 #endif

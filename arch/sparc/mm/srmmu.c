@@ -1298,7 +1298,7 @@ void __init srmmu_paging_init(void)
 
 	srmmu_nocache_calcsize();
 	srmmu_nocache_init();
-        srmmu_inherit_prom_mappings(0xfe400000,(LINUX_OPPROM_ENDVM-PAGE_SIZE));
+	srmmu_inherit_prom_mappings(0xfe400000,(LINUX_OPPROM_ENDVM-PAGE_SIZE));
 	map_kernel();
 
 	/* ctx table has to be physically aligned to its size */

@@ -1277,8 +1277,8 @@ static int snd_ctl_subscribe_events(struct snd_ctl_file *file, int __user *ptr)
 }
 
 static int snd_ctl_tlv_ioctl(struct snd_ctl_file *file,
-                             struct snd_ctl_tlv __user *_tlv,
-                             int op_flag)
+			     struct snd_ctl_tlv __user *_tlv,
+			     int op_flag)
 {
 	struct snd_card *card = file->card;
 	struct snd_ctl_tlv tlv;

@@ -38,12 +38,12 @@ static int reiserfs_file_release(struct inode *inode, struct file *filp)
 
 	BUG_ON(!S_ISREG(inode->i_mode));
 
-        if (atomic_add_unless(&REISERFS_I(inode)->openers, -1, 1))
+	if (atomic_add_unless(&REISERFS_I(inode)->openers, -1, 1))
 		return 0;
 
 	mutex_lock(&(REISERFS_I(inode)->tailpack));
 
-        if (!atomic_dec_and_test(&REISERFS_I(inode)->openers)) {
+	if (!atomic_dec_and_test(&REISERFS_I(inode)->openers)) {
 		mutex_unlock(&(REISERFS_I(inode)->tailpack));
 		return 0;
 	}
@@ -117,7 +117,7 @@ static int reiserfs_file_release(struct inode *inode, struct file *filp)
 static int reiserfs_file_open(struct inode *inode, struct file *file)
 {
 	int err = dquot_file_open(inode, file);
-        if (!atomic_inc_not_zero(&REISERFS_I(inode)->openers)) {
+	if (!atomic_inc_not_zero(&REISERFS_I(inode)->openers)) {
 		/* somebody might be tailpacking on final close; wait for it */
 		mutex_lock(&(REISERFS_I(inode)->tailpack));
 		atomic_inc(&REISERFS_I(inode)->openers);

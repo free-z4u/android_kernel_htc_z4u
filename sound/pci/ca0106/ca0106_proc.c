@@ -277,7 +277,7 @@ static void snd_ca0106_proc_iec958(struct snd_info_entry *entry,
 	struct snd_ca0106 *emu = entry->private_data;
 	u32 value;
 
-        value = snd_ca0106_ptr_read(emu, SAMPLE_RATE_TRACKER_STATUS, 0);
+	value = snd_ca0106_ptr_read(emu, SAMPLE_RATE_TRACKER_STATUS, 0);
 	snd_iprintf(buffer, "Status: %s, %s, %s\n",
 		  (value & 0x100000) ? "Rate Locked" : "Not Rate Locked",
 		  (value & 0x200000) ? "SPDIF Locked" : "No SPDIF Lock",
@@ -286,7 +286,7 @@ static void snd_ca0106_proc_iec958(struct snd_info_entry *entry,
 		  ((value & 0xfffff) * 48000) / 0x8000 );
 	if (value & 0x200000) {
 		snd_iprintf(buffer, "IEC958/SPDIF input status:\n");
-        	value = snd_ca0106_ptr_read(emu, SPDIF_INPUT_STATUS, 0);
+		value = snd_ca0106_ptr_read(emu, SPDIF_INPUT_STATUS, 0);
 		snd_ca0106_proc_dump_iec958(buffer, value);
 	}
 
@@ -298,17 +298,17 @@ static void snd_ca0106_proc_reg_write32(struct snd_info_entry *entry,
 {
 	struct snd_ca0106 *emu = entry->private_data;
 	unsigned long flags;
-        char line[64];
-        u32 reg, val;
-        while (!snd_info_get_line(buffer, line, sizeof(line))) {
-                if (sscanf(line, "%x %x", &reg, &val) != 2)
-                        continue;
+	char line[64];
+	u32 reg, val;
+	while (!snd_info_get_line(buffer, line, sizeof(line))) {
+		if (sscanf(line, "%x %x", &reg, &val) != 2)
+			continue;
 		if (reg < 0x40 && val <= 0xffffffff) {
 			spin_lock_irqsave(&emu->emu_lock, flags);
 			outl(val, emu->port + (reg & 0xfffffffc));
 			spin_unlock_irqrestore(&emu->emu_lock, flags);
 		}
-        }
+	}
 }
 
 static void snd_ca0106_proc_reg_read32(struct snd_info_entry *entry,
@@ -331,7 +331,7 @@ static void snd_ca0106_proc_reg_read16(struct snd_info_entry *entry,
 				       struct snd_info_buffer *buffer)
 {
 	struct snd_ca0106 *emu = entry->private_data;
-        unsigned int value;
+	unsigned int value;
 	unsigned long flags;
 	int i;
 	snd_iprintf(buffer, "Registers:\n\n");
@@ -370,9 +370,9 @@ static void snd_ca0106_proc_reg_read1(struct snd_info_entry *entry,
 	for(i = 0; i < 0x40; i++) {
 		snd_iprintf(buffer, "%02X: ",i);
 		for (j = 0; j < 4; j++) {
-                  value = snd_ca0106_ptr_read(emu, i, j);
+		  value = snd_ca0106_ptr_read(emu, i, j);
 		  snd_iprintf(buffer, "%08lX ", value);
-                }
+		}
 	        snd_iprintf(buffer, "\n");
 	}
 }
@@ -388,9 +388,9 @@ static void snd_ca0106_proc_reg_read2(struct snd_info_entry *entry,
 	for(i = 0x40; i < 0x80; i++) {
 		snd_iprintf(buffer, "%02X: ",i);
 		for (j = 0; j < 4; j++) {
-                  value = snd_ca0106_ptr_read(emu, i, j);
+		  value = snd_ca0106_ptr_read(emu, i, j);
 		  snd_iprintf(buffer, "%08lX ", value);
-                }
+		}
 	        snd_iprintf(buffer, "\n");
 	}
 }
@@ -399,29 +399,29 @@ static void snd_ca0106_proc_reg_write(struct snd_info_entry *entry,
 				       struct snd_info_buffer *buffer)
 {
 	struct snd_ca0106 *emu = entry->private_data;
-        char line[64];
-        unsigned int reg, channel_id , val;
-        while (!snd_info_get_line(buffer, line, sizeof(line))) {
-                if (sscanf(line, "%x %x %x", &reg, &channel_id, &val) != 3)
-                        continue;
+	char line[64];
+	unsigned int reg, channel_id , val;
+	while (!snd_info_get_line(buffer, line, sizeof(line))) {
+		if (sscanf(line, "%x %x %x", &reg, &channel_id, &val) != 3)
+			continue;
 		if (reg < 0x80 && val <= 0xffffffff && channel_id <= 3)
-                        snd_ca0106_ptr_write(emu, reg, channel_id, val);
-        }
+			snd_ca0106_ptr_write(emu, reg, channel_id, val);
+	}
 }
 
 static void snd_ca0106_proc_i2c_write(struct snd_info_entry *entry,
 				       struct snd_info_buffer *buffer)
 {
 	struct snd_ca0106 *emu = entry->private_data;
-        char line[64];
-        unsigned int reg, val;
-        while (!snd_info_get_line(buffer, line, sizeof(line))) {
-                if (sscanf(line, "%x %x", &reg, &val) != 2)
-                        continue;
-                if ((reg <= 0x7f) || (val <= 0x1ff)) {
-                        snd_ca0106_i2c_write(emu, reg, val);
+	char line[64];
+	unsigned int reg, val;
+	while (!snd_info_get_line(buffer, line, sizeof(line))) {
+		if (sscanf(line, "%x %x", &reg, &val) != 2)
+			continue;
+		if ((reg <= 0x7f) || (val <= 0x1ff)) {
+			snd_ca0106_i2c_write(emu, reg, val);
 		}
-        }
+	}
 }
 
 int __devinit snd_ca0106_proc_init(struct snd_ca0106 * emu)

@@ -316,13 +316,13 @@ typedef int sgl_integer;
  * +-------+-------+-------+-------+-------+-------+-------+-------+
  */
 struct dint {
-        int  wd0;
-        unsigned int wd1;
+	int  wd0;
+	unsigned int wd1;
 };
 
 struct dblwd {
-        unsigned int wd0;
-        unsigned int wd1;
+	unsigned int wd0;
+	unsigned int wd1;
 };
 
 /*
@@ -345,10 +345,10 @@ struct dblwd {
  */
 
 struct quadwd {
-        int  wd0;
-        unsigned int wd1;
-        unsigned int wd2;
-        unsigned int wd3;
+	int  wd0;
+	unsigned int wd1;
+	unsigned int wd2;
+	unsigned int wd3;
 };
 
 typedef struct quadwd quad_integer;
@@ -528,7 +528,7 @@ typedef int VOID;
 #define Is_cbit_set() Cbit(Fpustatus_register)
 
 #define Set_status_cbit(value)  \
-        Bitfield_deposit(value,5,1,Fpustatus_register)
+	Bitfield_deposit(value,5,1,Fpustatus_register)
 
 /*******************************
  * Condition field referencing *

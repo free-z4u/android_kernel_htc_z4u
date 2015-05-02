@@ -120,7 +120,7 @@ static inline u16 pi_swab16( char *b, int k)
 { 	union { u16 u; char t[2]; } r;
 
 	r.t[0]=b[2*k+1]; r.t[1]=b[2*k];
-        return r.u;
+	return r.u;
 }
 
 static inline u32 pi_swab32( char *b, int k)
@@ -129,7 +129,7 @@ static inline u32 pi_swab32( char *b, int k)
 
 	r.f[0]=b[4*k+1]; r.f[1]=b[4*k];
 	r.f[2]=b[4*k+3]; r.f[3]=b[4*k+2];
-        return r.u;
+	return r.u;
 }
 
 struct pi_protocol {

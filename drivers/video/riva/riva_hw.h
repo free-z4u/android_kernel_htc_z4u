@@ -222,26 +222,26 @@ typedef volatile struct
     U032 Color1A;
     struct
     {
-        U032 TopLeft;
-        U032 WidthHeight;
+	U032 TopLeft;
+	U032 WidthHeight;
     } UnclippedRectangle[64];
     U032 reserved04[(0x080)-3];
     struct
     {
-        U032 TopLeft;
-        U032 BottomRight;
+	U032 TopLeft;
+	U032 BottomRight;
     } ClipB;
     U032 Color1B;
     struct
     {
-        U032 TopLeft;
-        U032 BottomRight;
+	U032 TopLeft;
+	U032 BottomRight;
     } ClippedRectangle[64];
     U032 reserved05[(0x080)-5];
     struct
     {
-        U032 TopLeft;
-        U032 BottomRight;
+	U032 TopLeft;
+	U032 BottomRight;
     } ClipC;
     U032 Color1C;
     U032 WidthHeightC;
@@ -250,8 +250,8 @@ typedef volatile struct
     U032 reserved06[(0x080)+121];
     struct
     {
-        U032 TopLeft;
-        U032 BottomRight;
+	U032 TopLeft;
+	U032 BottomRight;
     } ClipD;
     U032 Color1D;
     U032 WidthHeightInD;
@@ -261,8 +261,8 @@ typedef volatile struct
     U032 reserved07[(0x080)+120];
     struct
     {
-        U032 TopLeft;
-        U032 BottomRight;
+	U032 TopLeft;
+	U032 BottomRight;
     } ClipE;
     U032 Color0E;
     U032 Color1E;
@@ -328,14 +328,14 @@ typedef volatile struct
     U032 reserved02[0x39];
     struct
     {
-        float ScreenX;
-        float ScreenY;
-        float ScreenZ;
-        float EyeM;
-        U032 Color;
-        U032 Specular;
-        float TextureS;
-        float TextureT;
+	float ScreenX;
+	float ScreenY;
+	float ScreenZ;
+	float EyeM;
+	U032 Color;
+	U032 Specular;
+	float TextureS;
+	float TextureT;
     } Vertex[16];
     U032 DrawTriangle3D;
 } RivaTexturedTriangle05;
@@ -355,23 +355,23 @@ typedef volatile struct
     U032 Color;             /* source color               0304-0307*/
     U032 Reserved02[0x03e];
     struct {                /* start aliased methods in array   0400-    */
-        U032 point0;        /* y_x S16_S16 in pixels            0-   3*/
-        U032 point1;        /* y_x S16_S16 in pixels            4-   7*/
+	U032 point0;        /* y_x S16_S16 in pixels            0-   3*/
+	U032 point1;        /* y_x S16_S16 in pixels            4-   7*/
     } Lin[16];              /* end of aliased methods in array      -047f*/
     struct {                /* start aliased methods in array   0480-    */
-        U032 point0X;       /* in pixels, 0 at left                0-   3*/
-        U032 point0Y;       /* in pixels, 0 at top                 4-   7*/
-        U032 point1X;       /* in pixels, 0 at left                8-   b*/
-        U032 point1Y;       /* in pixels, 0 at top                 c-   f*/
+	U032 point0X;       /* in pixels, 0 at left                0-   3*/
+	U032 point0Y;       /* in pixels, 0 at top                 4-   7*/
+	U032 point1X;       /* in pixels, 0 at left                8-   b*/
+	U032 point1Y;       /* in pixels, 0 at top                 c-   f*/
     } Lin32[8];             /* end of aliased methods in array      -04ff*/
     U032 PolyLin[32];       /* y_x S16_S16 in pixels         0500-057f*/
     struct {                /* start aliased methods in array   0580-    */
-        U032 x;             /* in pixels, 0 at left                0-   3*/
-        U032 y;             /* in pixels, 0 at top                 4-   7*/
+	U032 x;             /* in pixels, 0 at left                0-   3*/
+	U032 y;             /* in pixels, 0 at top                 4-   7*/
     } PolyLin32[16];        /* end of aliased methods in array      -05ff*/
     struct {                /* start aliased methods in array   0600-    */
-        U032 color;         /* source color                     0-   3*/
-        U032 point;         /* y_x S16_S16 in pixels            4-   7*/
+	U032 color;         /* source color                     0-   3*/
+	U032 point;         /* y_x S16_S16 in pixels            4-   7*/
     } ColorPolyLin[16];     /* end of aliased methods in array      -067f*/
 } RivaLine;
 /*
@@ -555,7 +555,7 @@ int RivaGetConfig(RIVA_HW_INST *, unsigned int);
 {                                                                   \
     while ((hwinst).FifoFreeCount < (cnt)) {                        \
 	mb();mb();						    \
-        (hwinst).FifoFreeCount = NV_RD32(&(hwinst).hwptr->FifoFree, 0) >> 2;     \
+	(hwinst).FifoFreeCount = NV_RD32(&(hwinst).hwptr->FifoFree, 0) >> 2;     \
     }								    \
     (hwinst).FifoFreeCount -= (cnt);                                \
 }

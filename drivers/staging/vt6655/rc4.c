@@ -44,17 +44,17 @@ void rc4_init(PRC4Ext pRC4, unsigned char *pbyKey, unsigned int cbKey_len)
     pRC4->ux = 0;
     pRC4->uy = 0;
     for (idx = 0; idx < 256; idx++)
-        pbyst[idx] = (unsigned char)idx;
+	pbyst[idx] = (unsigned char)idx;
     keyindex = 0;
     stateindex = 0;
     for (idx = 0; idx < 256; idx++) {
-        ust1 = pbyst[idx];
-        stateindex = (stateindex + pbyKey[keyindex] + ust1) & 0xff;
-        ust2 = pbyst[stateindex];
-        pbyst[stateindex] = (unsigned char)ust1;
-        pbyst[idx] = (unsigned char)ust2;
-        if (++keyindex >= cbKey_len)
-            keyindex = 0;
+	ust1 = pbyst[idx];
+	stateindex = (stateindex + pbyKey[keyindex] + ust1) & 0xff;
+	ust2 = pbyst[stateindex];
+	pbyst[stateindex] = (unsigned char)ust1;
+	pbyst[idx] = (unsigned char)ust2;
+	if (++keyindex >= cbKey_len)
+	    keyindex = 0;
     }
 }
 
@@ -79,9 +79,9 @@ unsigned int rc4_byte(PRC4Ext pRC4)
 }
 
 void rc4_encrypt(PRC4Ext pRC4, unsigned char *pbyDest,
-                     unsigned char *pbySrc, unsigned int cbData_len)
+		     unsigned char *pbySrc, unsigned int cbData_len)
 {
     unsigned int ii;
     for (ii = 0; ii < cbData_len; ii++)
-        pbyDest[ii] = (unsigned char)(pbySrc[ii] ^ rc4_byte(pRC4));
+	pbyDest[ii] = (unsigned char)(pbySrc[ii] ^ rc4_byte(pRC4));
 }

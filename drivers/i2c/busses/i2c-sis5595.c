@@ -25,8 +25,8 @@
 	5595		0008
 
    Note: these chips contain a 0008 device which is incompatible with the
-         5595. We recognize these by the presence of the listed
-         "blacklist" PCI ID and refuse to load.
+	 5595. We recognize these by the presence of the listed
+	 "blacklist" PCI ID and refuse to load.
 
    NOT SUPPORTED	PCI ID		BLACKLIST PCI ID
 	 540		0008		0540

@@ -22,7 +22,7 @@
 #include <linux/kernel.h>
 
 static inline void buffer_info_init_left(struct tree_balance *tb,
-                                         struct buffer_info *bi)
+					 struct buffer_info *bi)
 {
 	bi->tb          = tb;
 	bi->bi_bh       = tb->L[0];
@@ -31,7 +31,7 @@ static inline void buffer_info_init_left(struct tree_balance *tb,
 }
 
 static inline void buffer_info_init_right(struct tree_balance *tb,
-                                          struct buffer_info *bi)
+					  struct buffer_info *bi)
 {
 	bi->tb          = tb;
 	bi->bi_bh       = tb->R[0];
@@ -40,7 +40,7 @@ static inline void buffer_info_init_right(struct tree_balance *tb,
 }
 
 static inline void buffer_info_init_tbS0(struct tree_balance *tb,
-                                         struct buffer_info *bi)
+					 struct buffer_info *bi)
 {
 	bi->tb          = tb;
 	bi->bi_bh        = PATH_PLAST_BUFFER(tb->tb_path);
@@ -49,8 +49,8 @@ static inline void buffer_info_init_tbS0(struct tree_balance *tb,
 }
 
 static inline void buffer_info_init_bh(struct tree_balance *tb,
-                                       struct buffer_info *bi,
-                                       struct buffer_head *bh)
+				       struct buffer_info *bi,
+				       struct buffer_head *bh)
 {
 	bi->tb          = tb;
 	bi->bi_bh       = bh;

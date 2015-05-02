@@ -119,10 +119,10 @@ static void snd_ac97_proc_read_main(struct snd_ac97 *ac97, struct snd_info_buffe
 	if ((ac97->scaps & AC97_SCAP_AUDIO) == 0)
 		goto __modem;
 
-        snd_iprintf(buffer, "PCI Subsys Vendor: 0x%04x\n",
+	snd_iprintf(buffer, "PCI Subsys Vendor: 0x%04x\n",
 	            ac97->subsystem_vendor);
-        snd_iprintf(buffer, "PCI Subsys Device: 0x%04x\n\n",
-                    ac97->subsystem_device);
+	snd_iprintf(buffer, "PCI Subsys Device: 0x%04x\n\n",
+		    ac97->subsystem_device);
 
 	snd_iprintf(buffer, "Flags: %x\n", ac97->flags);
 

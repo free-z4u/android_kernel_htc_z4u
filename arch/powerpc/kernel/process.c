@@ -1292,7 +1292,7 @@ unsigned long arch_align_stack(unsigned long sp)
 
 static inline unsigned long brk_rnd(void)
 {
-        unsigned long rnd = 0;
+	unsigned long rnd = 0;
 
 	/* 8MB for 32bit, 1GB for 64bit */
 	if (is_32bit_task())

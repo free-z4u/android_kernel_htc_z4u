@@ -152,7 +152,7 @@ static u64 tb_period;
 
 static void arm_tb(void)
 {
-        u64 scdperfcnt;
+	u64 scdperfcnt;
 	u64 next = (1ULL << 40) - tb_period;
 	u64 tb_options = M_SCD_TRACE_CFG_FREEZE_FULL;
 
@@ -288,8 +288,8 @@ static int sbprof_zbprof_start(struct file *filp)
 
 	/*
 	 * We grab this interrupt to prevent others from trying to use
-         * it, even though we don't want to service the interrupts
-         * (they only feed into the trace-on-interrupt mechanism)
+	 * it, even though we don't want to service the interrupts
+	 * (they only feed into the trace-on-interrupt mechanism)
 	 */
 	if (request_irq(K_INT_PERF_CNT, sbprof_pc_intr, 0, DEVNAME " scd perfcnt", &sbp)) {
 		free_irq(K_INT_TRACE_FREEZE, &sbp);

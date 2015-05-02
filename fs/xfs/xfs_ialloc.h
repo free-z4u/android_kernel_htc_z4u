@@ -147,7 +147,7 @@ int
 xfs_ialloc_pagi_init(
 	struct xfs_mount *mp,		/* file system mount structure */
 	struct xfs_trans *tp,		/* transaction pointer */
-        xfs_agnumber_t  agno);		/* allocation group number */
+	xfs_agnumber_t  agno);		/* allocation group number */
 
 /*
  * Lookup a record by ino in the btree given by cur.

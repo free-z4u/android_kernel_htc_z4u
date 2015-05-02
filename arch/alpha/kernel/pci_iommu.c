@@ -416,9 +416,9 @@ static void alpha_pci_unmap_page(struct device *dev, dma_addr_t dma_addr,
 
 	iommu_arena_free(arena, dma_ofs, npages);
 
-        /* If we're freeing ptes above the `next_entry' pointer (they
-           may have snuck back into the TLB since the last wrap flush),
-           we need to flush the TLB before reallocating the latter.  */
+	/* If we're freeing ptes above the `next_entry' pointer (they
+	   may have snuck back into the TLB since the last wrap flush),
+	   we need to flush the TLB before reallocating the latter.  */
 	if (dma_ofs >= arena->next_entry)
 		alpha_mv.mv_pci_tbi(hose, dma_addr, dma_addr + size - 1);
 
@@ -796,9 +796,9 @@ static void alpha_pci_unmap_sg(struct device *dev, struct scatterlist *sg,
 		if (fend < tend) fend = tend;
 	}
 
-        /* If we're freeing ptes above the `next_entry' pointer (they
-           may have snuck back into the TLB since the last wrap flush),
-           we need to flush the TLB before reallocating the latter.  */
+	/* If we're freeing ptes above the `next_entry' pointer (they
+	   may have snuck back into the TLB since the last wrap flush),
+	   we need to flush the TLB before reallocating the latter.  */
 	if ((fend - arena->dma_base) >> PAGE_SHIFT >= arena->next_entry)
 		alpha_mv.mv_pci_tbi(hose, fbeg, fend);
 

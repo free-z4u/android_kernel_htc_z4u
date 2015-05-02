@@ -583,7 +583,7 @@ err_put_dev:
  **/
 int
 request_firmware(const struct firmware **firmware_p, const char *name,
-                 struct device *device)
+		 struct device *device)
 {
 	struct firmware_priv *fw_priv;
 	int ret;

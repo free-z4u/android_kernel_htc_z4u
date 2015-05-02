@@ -194,7 +194,7 @@ intel_emit_post_sync_nonzero_flush(struct intel_ring_buffer *ring)
 
 static int
 gen6_render_ring_flush(struct intel_ring_buffer *ring,
-                         u32 invalidate_domains, u32 flush_domains)
+			 u32 invalidate_domains, u32 flush_domains)
 {
 	u32 flags = 0;
 	struct pipe_control *pc = ring->private;

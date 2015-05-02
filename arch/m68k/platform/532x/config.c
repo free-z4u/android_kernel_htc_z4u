@@ -254,7 +254,7 @@ void sdramc_init(void)
 	/*
 	 * Precharge and enable write to SDMR
 	 */
-        MCF_SDRAMC_SDCR = (0
+	MCF_SDRAMC_SDCR = (0
 		| MCF_SDRAMC_SDCR_MODE_EN
 		| MCF_SDRAMC_SDCR_CKE
 		| MCF_SDRAMC_SDCR_DDR

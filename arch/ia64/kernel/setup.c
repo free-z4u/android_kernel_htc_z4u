@@ -858,17 +858,17 @@ get_cache_info(void)
 	pal_cache_config_info_t cci;
 	long status;
 
-        status = ia64_pal_cache_summary(&levels, &unique_caches);
-        if (status != 0) {
-                printk(KERN_ERR "%s: ia64_pal_cache_summary() failed (status=%ld)\n",
-                       __func__, status);
-                max = SMP_CACHE_BYTES;
+	status = ia64_pal_cache_summary(&levels, &unique_caches);
+	if (status != 0) {
+		printk(KERN_ERR "%s: ia64_pal_cache_summary() failed (status=%ld)\n",
+		       __func__, status);
+		max = SMP_CACHE_BYTES;
 		/* Safest setup for "flush_icache_range()" */
 		ia64_i_cache_stride_shift = I_CACHE_STRIDE_SHIFT;
 		/* Safest setup for "clflush_cache_range()" */
 		ia64_cache_stride_shift = CACHE_STRIDE_SHIFT;
 		goto out;
-        }
+	}
 
 	for (l = 0; l < levels; ++l) {
 		/* cache_type (data_or_unified)=2 */

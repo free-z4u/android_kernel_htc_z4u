@@ -60,8 +60,8 @@ static unsigned int last_brightness = DEFAULT_BRIGHTNESS_DCG;
 
 static unsigned char led_pwm1[] = {0x51, 0xFF};
 static struct dsi_cmd_desc backlight_cmds[] = {
-        {DTYPE_DCS_LWRITE, 1, 0, 0, 0,
-                sizeof(led_pwm1), led_pwm1},
+	{DTYPE_DCS_LWRITE, 1, 0, 0, 0,
+		sizeof(led_pwm1), led_pwm1},
 };
 static char sleep_out[] = {0x11, 0x00};
 static char display_on[] = {0x29, 0x00};
@@ -69,15 +69,15 @@ static char display_off[] = {0x28, 0x00};
 static char sleep_in[] = {0x10, 0x00};
 
 static char MAUCCTR0[] = {
-        0xF0, 0x55, 0xAA, 0x52,
-        0x08, 0x00};
+	0xF0, 0x55, 0xAA, 0x52,
+	0x08, 0x00};
 static char DOPCTR[] = {0xB1, 0x68, 0x00, 0x01};
 static char VIVIDCTR[] = {
-        0xB4, 0x10, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x00};
+	0xB4, 0x10, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00,
+	0x00};
 static char cmd_d6[] = {
 	0xD6, 0x00, 0x05, 0x10,
 	0x17, 0x22, 0x26, 0x29,
@@ -97,21 +97,21 @@ static char cmd_d8[] = {
 static char SDHDTCTR[] = {0xB6, 0x07};
 static char GSEQCTR[] = {0xB7, 0x33, 0x03};
 static char SDEQCTR[] = {
-        0xB8, 0x00, 0x00, 0x02,
-        0x00};
+	0xB8, 0x00, 0x00, 0x02,
+	0x00};
 static char SDVPCTR[] = {0xBA, 0x01};
 static char SGOPCTR[] = {0xBB, 0x44, 0x40};
 static char DPTMCTR10_1[] = {0xC1, 0x01};
 static char DPTMCTR10_2[] = {
-        0xC2, 0x00, 0x00, 0x55,
-        0x55, 0x55, 0x00, 0x55,
-        0x55};
+	0xC2, 0x00, 0x00, 0x55,
+	0x55, 0x55, 0x00, 0x55,
+	0x55};
 static char PDOTCTR[] = {0xC7, 0x00};
 static char DPTMCTR10_3[] = {
-        0xCA, 0x05, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
-        0x01, 0x00};
+	0xCA, 0x05, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00,
+	0x01, 0x00};
 static char PWMFRCTR[] = {0xE0, 0x00, 0x01};
 static char FCBRTCB[] = {0xE1, 0x00, 0xFF};
 static char cmd_e3[] = {
@@ -131,8 +131,8 @@ static char cmd_ff_00[] = {
 	0xFF, 0xAA, 0x55, 0xA5,
 	0x00};
 static char MAUCCTR1[] = {
-        0xF0, 0x55, 0xAA, 0x52,
-        0x08, 0x01};
+	0xF0, 0x55, 0xAA, 0x52,
+	0x08, 0x01};
 static char SETAVDD[] = {0xB0, 0x0A};
 static char SETAVEE[] = {0xB1, 0x0A};
 static char SETVCL[] = {0xB2, 0x00};
@@ -150,23 +150,23 @@ static char peripheral_on[] = {0x00, 0x00};
 static char peripheral_off[] = {0x00, 0x00};
 
 static struct dsi_cmd_desc jdi_nt_on_cmds[] = {
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(MAUCCTR0), MAUCCTR0},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(DOPCTR), DOPCTR},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(VIVIDCTR), VIVIDCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(MAUCCTR0), MAUCCTR0},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(DOPCTR), DOPCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(VIVIDCTR), VIVIDCTR},
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(cmd_d6), cmd_d6},
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(cmd_d7), cmd_d7},
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(cmd_d8), cmd_d8},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SDHDTCTR), SDHDTCTR},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(GSEQCTR), GSEQCTR},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(SDEQCTR), SDEQCTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SDVPCTR), SDVPCTR},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(SGOPCTR), SGOPCTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(DPTMCTR10_1), DPTMCTR10_1},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(DPTMCTR10_2), DPTMCTR10_2},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(PDOTCTR), PDOTCTR},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(DPTMCTR10_3), DPTMCTR10_3},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(PWMFRCTR), PWMFRCTR},
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(FCBRTCB), FCBRTCB},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SDHDTCTR), SDHDTCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(GSEQCTR), GSEQCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(SDEQCTR), SDEQCTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SDVPCTR), SDVPCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(SGOPCTR), SGOPCTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(DPTMCTR10_1), DPTMCTR10_1},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(DPTMCTR10_2), DPTMCTR10_2},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(PDOTCTR), PDOTCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(DPTMCTR10_3), DPTMCTR10_3},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(PWMFRCTR), PWMFRCTR},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(FCBRTCB), FCBRTCB},
 
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(cmd_e3), cmd_e3},
 	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(cmd_5e), cmd_5e},
@@ -175,20 +175,20 @@ static struct dsi_cmd_desc jdi_nt_on_cmds[] = {
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(cmd_f5), cmd_f5},
 	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(cmd_ff_00), cmd_ff_00},
 
-        {DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(MAUCCTR1), MAUCCTR1},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETAVDD), SETAVDD},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETAVEE), SETAVEE},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVCL), SETVCL},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVGH), SETVGH},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVRGH), SETVRGH},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVGL_REG), SETVGL_REG},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT1CTR), BT1CTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT2CTR), BT2CTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT3CTR), BT3CTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT4CTR), BT4CTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT5CTR), BT5CTR},
-        {DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(STBCTR), STBCTR},
-        {DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(write_ctrl_display), write_ctrl_display},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, 1, sizeof(MAUCCTR1), MAUCCTR1},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETAVDD), SETAVDD},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETAVEE), SETAVEE},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVCL), SETVCL},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVGH), SETVGH},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVRGH), SETVRGH},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(SETVGL_REG), SETVGL_REG},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT1CTR), BT1CTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT2CTR), BT2CTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT3CTR), BT3CTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT4CTR), BT4CTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(BT5CTR), BT5CTR},
+	{DTYPE_GEN_WRITE2, 1, 0, 0, 1, sizeof(STBCTR), STBCTR},
+	{DTYPE_DCS_WRITE1, 1, 0, 0, 1, sizeof(write_ctrl_display), write_ctrl_display},
 	{DTYPE_PERIPHERAL_ON, 1, 0, 1, 120, sizeof(peripheral_on), peripheral_on},
 };
 
@@ -559,35 +559,35 @@ static int z4_lcd_off(struct platform_device *pdev)
 static char dim_on[] = {0x53, 0x2C};
 static char dim_off[] = {0x53, 0x24};
 static struct dsi_cmd_desc dim_on_cmd[] = {
-        {DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(dim_on), dim_on},
+	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(dim_on), dim_on},
 };
 static struct dsi_cmd_desc dim_off_cmd[] = {
-        {DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(dim_off), dim_off},
+	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(dim_off), dim_off},
 };
 
 static void z4_dim_on(struct msm_fb_data_type *mfd)
 {
-        mipi_dsi_cmds_tx(&z4_panel_tx_buf, dim_on_cmd, 1);
-        PR_DISP_INFO("%s\n", __func__);
+	mipi_dsi_cmds_tx(&z4_panel_tx_buf, dim_on_cmd, 1);
+	PR_DISP_INFO("%s\n", __func__);
 }
 static void z4_dim_off(struct msm_fb_data_type *mfd)
 {
-        mipi_dsi_cmds_tx(&z4_panel_tx_buf, dim_off_cmd, 1);
-        PR_DISP_INFO("%s\n", __func__);
+	mipi_dsi_cmds_tx(&z4_panel_tx_buf, dim_off_cmd, 1);
+	PR_DISP_INFO("%s\n", __func__);
 }
 
 #ifdef CONFIG_FB_MSM_CABC_LEVEL_CONTROL
 static char cabc_movie[] = {
-        0xE3, 0xFF, 0xF1, 0xE3,
-        0xD4, 0xC6, 0xB8, 0xAA,
-        0x9B, 0x8D, 0x7F
+	0xE3, 0xFF, 0xF1, 0xE3,
+	0xD4, 0xC6, 0xB8, 0xAA,
+	0x9B, 0x8D, 0x7F
 };
 static struct dsi_cmd_desc cabc_still_cmds[] = {
-        {DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(cmd_e3), cmd_e3},
+	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(cmd_e3), cmd_e3},
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(cmd_55), cmd_55},
 };
 static struct dsi_cmd_desc cabc_movie_cmds[] = {
-        {DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(cabc_movie), cabc_movie},
+	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(cabc_movie), cabc_movie},
 	{DTYPE_DCS_LWRITE, 1, 0, 0, 0, sizeof(cmd_55), cmd_55},
 };
 static void z4_set_cabc_lvl(struct msm_fb_data_type *mfd, int mode)
@@ -837,11 +837,11 @@ static int __init mipi_jdi_nt_init(void)
 
 	if(panel_type == PANEL_ID_LUPUS_AUO_NT_C2) {
 		power_on_cmd = auo_nt_on_cmds_c2;
-                power_on_cmd_count = ARRAY_SIZE(auo_nt_on_cmds_c2);
-                display_off_cmd = auo_nt_off_cmds;
-                display_off_cmd_count = ARRAY_SIZE(auo_nt_off_cmds);
-                strcat(ptype, "PANEL_ID_LUPUS_AUO_NT_C2");
-                PR_DISP_INFO("%s: assign initial setting for AUO, %s\n", __func__, ptype);
+		power_on_cmd_count = ARRAY_SIZE(auo_nt_on_cmds_c2);
+		display_off_cmd = auo_nt_off_cmds;
+		display_off_cmd_count = ARRAY_SIZE(auo_nt_off_cmds);
+		strcat(ptype, "PANEL_ID_LUPUS_AUO_NT_C2");
+		PR_DISP_INFO("%s: assign initial setting for AUO, %s\n", __func__, ptype);
 	} else if(panel_type == PANEL_ID_LUPUS_AUO_NT) {
 		power_on_cmd = auo_nt_on_cmds;
 		power_on_cmd_count = ARRAY_SIZE(auo_nt_on_cmds);

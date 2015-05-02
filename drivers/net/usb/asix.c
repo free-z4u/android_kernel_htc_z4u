@@ -447,7 +447,7 @@ static int asix_sw_reset(struct usbnet *dev, u8 flags)
 {
 	int ret;
 
-        ret = asix_write_cmd(dev, AX_CMD_SW_RESET, flags, 0, 0, NULL);
+	ret = asix_write_cmd(dev, AX_CMD_SW_RESET, flags, 0, 0, NULL);
 	if (ret < 0)
 		netdev_err(dev->net, "Failed to send software reset: %02x\n", ret);
 

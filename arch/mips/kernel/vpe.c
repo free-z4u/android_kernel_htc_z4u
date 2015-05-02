@@ -711,7 +711,7 @@ static int vpe_run(struct vpe * v)
 
 			printk(KERN_WARNING
 			       "VPE loader: TC %d is already in use.\n",
-                               t->index);
+			       t->index);
 			return -ENOEXEC;
 		}
 	} else {

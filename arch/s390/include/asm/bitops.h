@@ -114,7 +114,7 @@ extern const char _sb_findmap[];
  */
 static inline void set_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 {
-        unsigned long addr, old, new, mask;
+	unsigned long addr, old, new, mask;
 
 	addr = (unsigned long) ptr;
 	/* calculate address for CS */
@@ -130,7 +130,7 @@ static inline void set_bit_cs(unsigned long nr, volatile unsigned long *ptr)
  */
 static inline void clear_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 {
-        unsigned long addr, old, new, mask;
+	unsigned long addr, old, new, mask;
 
 	addr = (unsigned long) ptr;
 	/* calculate address for CS */
@@ -146,7 +146,7 @@ static inline void clear_bit_cs(unsigned long nr, volatile unsigned long *ptr)
  */
 static inline void change_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 {
-        unsigned long addr, old, new, mask;
+	unsigned long addr, old, new, mask;
 
 	addr = (unsigned long) ptr;
 	/* calculate address for CS */
@@ -163,7 +163,7 @@ static inline void change_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 static inline int
 test_and_set_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 {
-        unsigned long addr, old, new, mask;
+	unsigned long addr, old, new, mask;
 
 	addr = (unsigned long) ptr;
 	/* calculate address for CS */
@@ -182,7 +182,7 @@ test_and_set_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 static inline int
 test_and_clear_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 {
-        unsigned long addr, old, new, mask;
+	unsigned long addr, old, new, mask;
 
 	addr = (unsigned long) ptr;
 	/* calculate address for CS */
@@ -201,7 +201,7 @@ test_and_clear_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 static inline int
 test_and_change_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 {
-        unsigned long addr, old, new, mask;
+	unsigned long addr, old, new, mask;
 
 	addr = (unsigned long) ptr;
 	/* calculate address for CS */
@@ -615,8 +615,8 @@ static inline unsigned long find_first_zero_bit(const unsigned long *addr,
 {
 	unsigned long bytes, bits;
 
-        if (!size)
-                return 0;
+	if (!size)
+		return 0;
 	bytes = __ffz_word_loop(addr, size);
 	bits = __ffz_word(bytes*8, __load_ulong_be(addr, bytes));
 	return (bits < size) ? bits : size;
@@ -636,8 +636,8 @@ static inline unsigned long find_first_bit(const unsigned long * addr,
 {
 	unsigned long bytes, bits;
 
-        if (!size)
-                return 0;
+	if (!size)
+		return 0;
 	bytes = __ffs_word_loop(addr, size);
 	bits = __ffs_word(bytes*8, __load_ulong_be(addr, bytes));
 	return (bits < size) ? bits : size;
@@ -654,7 +654,7 @@ static inline int find_next_zero_bit (const unsigned long * addr,
 				      unsigned long size,
 				      unsigned long offset)
 {
-        const unsigned long *p;
+	const unsigned long *p;
 	unsigned long bit, set;
 
 	if (offset >= size)
@@ -691,7 +691,7 @@ static inline int find_next_bit (const unsigned long * addr,
 				 unsigned long size,
 				 unsigned long offset)
 {
-        const unsigned long *p;
+	const unsigned long *p;
 	unsigned long bit, set;
 
 	if (offset >= size)
@@ -750,8 +750,8 @@ static inline int find_first_zero_bit_le(void *vaddr, unsigned int size)
 {
 	unsigned long bytes, bits;
 
-        if (!size)
-                return 0;
+	if (!size)
+		return 0;
 	bytes = __ffz_word_loop(vaddr, size);
 	bits = __ffz_word(bytes*8, __load_ulong_le(vaddr, bytes));
 	return (bits < size) ? bits : size;
@@ -761,16 +761,16 @@ static inline int find_first_zero_bit_le(void *vaddr, unsigned int size)
 static inline int find_next_zero_bit_le(void *vaddr, unsigned long size,
 					  unsigned long offset)
 {
-        unsigned long *addr = vaddr, *p;
+	unsigned long *addr = vaddr, *p;
 	unsigned long bit, set;
 
-        if (offset >= size)
-                return size;
+	if (offset >= size)
+		return size;
 	bit = offset & (__BITOPS_WORDSIZE - 1);
 	offset -= bit;
 	size -= offset;
 	p = addr + offset / __BITOPS_WORDSIZE;
-        if (bit) {
+	if (bit) {
 		/*
 		 * s390 version of ffz returns __BITOPS_WORDSIZE
 		 * if no zero bit is present in the word.
@@ -783,7 +783,7 @@ static inline int find_next_zero_bit_le(void *vaddr, unsigned long size,
 		offset += __BITOPS_WORDSIZE;
 		size -= __BITOPS_WORDSIZE;
 		p++;
-        }
+	}
 	return offset + find_first_zero_bit_le(p, size);
 }
 #define find_next_zero_bit_le find_next_zero_bit_le

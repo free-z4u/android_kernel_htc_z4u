@@ -55,9 +55,9 @@ static int bpck_read_regr( PIA *pi, int cont, int regr )
 
 	case 0: w0(r & 0xf); w0(r); t2(2); t2(4);
 	        l = r1();
-        	t2(4);
-        	h = r1();
-        	return j44(l,h);
+		t2(4);
+		h = r1();
+		return j44(l,h);
 
 	case 1: w0(r & 0xf); w0(r); t2(2);
 	        e2(); t2(0x20);
@@ -80,7 +80,7 @@ static void bpck_write_regr( PIA *pi, int cont, int regr, int val )
 
 {	int	r;
 
-        r = regr + cont_map[cont];
+	r = regr + cont_map[cont];
 
 	switch (pi->mode) {
 
@@ -118,9 +118,9 @@ static void bpck_write_block( PIA *pi, char * buf, int count )
 		break;
 
 	case 1: WR(4,0x50);
-                w0(0x40); t2(2); t2(1);
-                for (i=0;i<count;i++) { w0(buf[i]); t2(4); }
-                WR(4,0x10);
+		w0(0x40); t2(2); t2(1);
+		for (i=0;i<count;i++) { w0(buf[i]); t2(4); }
+		WR(4,0x10);
 		break;
 
 	case 2: WR(4,0x48);
@@ -130,19 +130,19 @@ static void bpck_write_block( PIA *pi, char * buf, int count )
 		WR(4,8);
 		break;
 
-        case 3: WR(4,0x48);
-                w0(0x40); w2(9); w2(0); w2(1);
-                for (i=0;i<count/2;i++) w4w(((u16 *)buf)[i]);
-                w2(0);
-                WR(4,8);
-                break;
+	case 3: WR(4,0x48);
+		w0(0x40); w2(9); w2(0); w2(1);
+		for (i=0;i<count/2;i++) w4w(((u16 *)buf)[i]);
+		w2(0);
+		WR(4,8);
+		break;
 
-        case 4: WR(4,0x48);
-                w0(0x40); w2(9); w2(0); w2(1);
-                for (i=0;i<count/4;i++) w4l(((u32 *)buf)[i]);
-                w2(0);
-                WR(4,8);
-                break;
+	case 4: WR(4,0x48);
+		w0(0x40); w2(9); w2(0); w2(1);
+		for (i=0;i<count/4;i++) w4l(((u32 *)buf)[i]);
+		w2(0);
+		WR(4,8);
+		break;
  	}
 }
 
@@ -176,19 +176,19 @@ static void bpck_read_block( PIA *pi, char * buf, int count )
 		WR(4,8);
 		break;
 
-        case 3: WR(4,0x48);
-                w0(0x40); w2(9); w2(0); w2(0x20);
-                for (i=0;i<count/2;i++) ((u16 *)buf)[i] = r4w();
-                w2(0);
-                WR(4,8);
-                break;
+	case 3: WR(4,0x48);
+		w0(0x40); w2(9); w2(0); w2(0x20);
+		for (i=0;i<count/2;i++) ((u16 *)buf)[i] = r4w();
+		w2(0);
+		WR(4,8);
+		break;
 
-        case 4: WR(4,0x48);
-                w0(0x40); w2(9); w2(0); w2(0x20);
-                for (i=0;i<count/4;i++) ((u32 *)buf)[i] = r4l();
-                w2(0);
-                WR(4,8);
-                break;
+	case 4: WR(4,0x48);
+		w0(0x40); w2(9); w2(0); w2(0x20);
+		for (i=0;i<count/4;i++) ((u32 *)buf)[i] = r4l();
+		w2(0);
+		WR(4,8);
+		break;
 
 	}
 }
@@ -232,7 +232,7 @@ static void bpck_connect ( PIA *pi  )
 		break;
 
 	case 2:
-        case 3:
+	case 3:
 	case 4: w2(0); WR(4,8);
 		break;
 
@@ -262,15 +262,15 @@ static void bpck_force_spp ( PIA *pi )
 /* This fakes the EPP protocol to turn off EPP ... */
 
 {       pi->saved_r0 = r0();
-        w0(0xff-pi->unit); w2(4); w0(pi->unit);
-        t2(8); t2(8); t2(8);
-        t2(2); t2(2);
+	w0(0xff-pi->unit); w2(4); w0(pi->unit);
+	t2(8); t2(8); t2(8);
+	t2(2); t2(2);
 
-        w2(0);
-        w0(4); w2(9); w2(0);
-        w0(0); w2(1); w2(3); w2(0);
-        w0(0); w2(9); w2(0);
-        w2(0x4c); w0(pi->saved_r0);
+	w2(0);
+	w0(4); w2(9); w2(0);
+	w0(0); w2(1); w2(3); w2(0);
+	w0(0); w2(9); w2(0);
+	w2(0x4c); w0(pi->saved_r0);
 }
 
 #define TEST_LEN  16
@@ -288,18 +288,18 @@ static int bpck_test_proto( PIA *pi, char * scratch, int verbose )
 		WR(0x13,0x7f);
 		w0(0x13); t2(2);
 		for(i=0;i<TEST_LEN;i++) {
-                    t2(4); l = r1();
-                    t2(4); h = r1();
-                    buf[i] = j44(l,h);
+		    t2(4); l = r1();
+		    t2(4); h = r1();
+		    buf[i] = j44(l,h);
 		}
 		bpck_disconnect(pi);
 		break;
 
-        case 1: bpck_connect(pi);
+	case 1: bpck_connect(pi);
 		WR(0x13,0x7f);
-                w0(0x13); t2(2); t2(0x20);
-                for(i=0;i<TEST_LEN;i++) { t2(4); buf[i] = r0(); }
-                t2(1); t2(0x20);
+		w0(0x13); t2(2); t2(0x20);
+		for(i=0;i<TEST_LEN;i++) { t2(4); buf[i] = r0(); }
+		t2(1); t2(0x20);
 		bpck_disconnect(pi);
 		break;
 
@@ -320,9 +320,9 @@ static int bpck_test_proto( PIA *pi, char * scratch, int verbose )
 		  case 2: for (i=0;i<TEST_LEN;i++) buf[i] = r4();
 			  break;
 		  case 3: for (i=0;i<TEST_LEN/2;i++) ((u16 *)buf)[i] = r4w();
-                          break;
+			  break;
 		  case 4: for (i=0;i<TEST_LEN/4;i++) ((u32 *)buf)[i] = r4l();
-                          break;
+			  break;
 		}
 
 		w2(0);
@@ -387,12 +387,12 @@ static void bpck_read_eeprom ( PIA *pi, char * buf )
 
 	bpck_disconnect(pi);
 
-        if (om >= 2) {
-                bpck_connect(pi);
-                WR(7,3);
-                WR(4,8);
-                bpck_disconnect(pi);
-        }
+	if (om >= 2) {
+		bpck_connect(pi);
+		WR(7,3);
+		WR(4,8);
+		bpck_disconnect(pi);
+	}
 
 	pi->mode = om; pi->delay = od;
 }

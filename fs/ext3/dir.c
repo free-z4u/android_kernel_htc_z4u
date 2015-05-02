@@ -189,7 +189,7 @@ revalidate:
 			if (!ext3_check_dir_entry ("ext3_readdir", inode, de,
 						   bh, offset)) {
 				/* On error, skip the f_pos to the
-                                   next block. */
+				   next block. */
 				filp->f_pos = (filp->f_pos |
 						(sb->s_blocksize - 1)) + 1;
 				brelse (bh);

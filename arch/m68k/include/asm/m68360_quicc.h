@@ -242,83 +242,83 @@ typedef struct quicc {
     volatile unsigned char      RESERVED39[0x14];       /* Reserved area    */
     /* BRG */
     union {
-        volatile unsigned long l;
-        struct {
-            volatile unsigned short BRGC_RESERV:14;
-            volatile unsigned short rst:1;
-            volatile unsigned short en:1;
-            volatile unsigned short extc:2;
-            volatile unsigned short atb:1;
-            volatile unsigned short cd:12;
-            volatile unsigned short div16:1;
-        } b;
+	volatile unsigned long l;
+	struct {
+	    volatile unsigned short BRGC_RESERV:14;
+	    volatile unsigned short rst:1;
+	    volatile unsigned short en:1;
+	    volatile unsigned short extc:2;
+	    volatile unsigned short atb:1;
+	    volatile unsigned short cd:12;
+	    volatile unsigned short div16:1;
+	} b;
     } brgc[4];                                  /* BRG1-BRG4 configuration regs*/
     /* SCC registers */
     struct scc_regs {
-        union {
-            struct {
-                /* Low word. */
-                volatile unsigned short GSMR_RESERV2:1;
-                volatile unsigned short edge:2;
-                volatile unsigned short tci:1;
-                volatile unsigned short tsnc:2;
-                volatile unsigned short rinv:1;
-                volatile unsigned short tinv:1;
-                volatile unsigned short tpl:3;
-                volatile unsigned short tpp:2;
-                volatile unsigned short tend:1;
-                volatile unsigned short tdcr:2;
-                volatile unsigned short rdcr:2;
-                volatile unsigned short renc:3;
-                volatile unsigned short tenc:3;
-                volatile unsigned short diag:2;
-                volatile unsigned short enr:1;
-                volatile unsigned short ent:1;
-                volatile unsigned short mode:4;
-                /* High word. */
-                volatile unsigned short GSMR_RESERV1:14;
-                volatile unsigned short pri:1;
-                volatile unsigned short gde:1;
-                volatile unsigned short tcrc:2;
-                volatile unsigned short revd:1;
-                volatile unsigned short trx:1;
-                volatile unsigned short ttx:1;
-                volatile unsigned short cdp:1;
-                volatile unsigned short ctsp:1;
-                volatile unsigned short cds:1;
-                volatile unsigned short ctss:1;
-                volatile unsigned short tfl:1;
-                volatile unsigned short rfw:1;
-                volatile unsigned short txsy:1;
-                volatile unsigned short synl:2;
-                volatile unsigned short rtsm:1;
-                volatile unsigned short rsyn:1;
-            } b;
-            struct {
-                volatile unsigned long low;
-                volatile unsigned long high;
-            } w;
-        } scc_gsmr;                         /* SCC general mode reg         */
-        volatile unsigned short scc_psmr;   /* protocol specific mode reg   */
-        volatile unsigned char  RESERVED42[0x2]; /* Reserved area           */
-        volatile unsigned short scc_todr; /* SCC transmit on demand         */
-        volatile unsigned short scc_dsr;        /* SCC data sync reg        */
-        volatile unsigned short scc_scce;       /* SCC event reg            */
-        volatile unsigned char  RESERVED43[0x2];/* Reserved area            */
-        volatile unsigned short scc_sccm;       /* SCC mask reg             */
-        volatile unsigned char  RESERVED44[0x1];/* Reserved area            */
-        volatile unsigned char  scc_sccs;       /* SCC status reg           */
-        volatile unsigned char  RESERVED45[0x8]; /* Reserved area           */
+	union {
+	    struct {
+		/* Low word. */
+		volatile unsigned short GSMR_RESERV2:1;
+		volatile unsigned short edge:2;
+		volatile unsigned short tci:1;
+		volatile unsigned short tsnc:2;
+		volatile unsigned short rinv:1;
+		volatile unsigned short tinv:1;
+		volatile unsigned short tpl:3;
+		volatile unsigned short tpp:2;
+		volatile unsigned short tend:1;
+		volatile unsigned short tdcr:2;
+		volatile unsigned short rdcr:2;
+		volatile unsigned short renc:3;
+		volatile unsigned short tenc:3;
+		volatile unsigned short diag:2;
+		volatile unsigned short enr:1;
+		volatile unsigned short ent:1;
+		volatile unsigned short mode:4;
+		/* High word. */
+		volatile unsigned short GSMR_RESERV1:14;
+		volatile unsigned short pri:1;
+		volatile unsigned short gde:1;
+		volatile unsigned short tcrc:2;
+		volatile unsigned short revd:1;
+		volatile unsigned short trx:1;
+		volatile unsigned short ttx:1;
+		volatile unsigned short cdp:1;
+		volatile unsigned short ctsp:1;
+		volatile unsigned short cds:1;
+		volatile unsigned short ctss:1;
+		volatile unsigned short tfl:1;
+		volatile unsigned short rfw:1;
+		volatile unsigned short txsy:1;
+		volatile unsigned short synl:2;
+		volatile unsigned short rtsm:1;
+		volatile unsigned short rsyn:1;
+	    } b;
+	    struct {
+		volatile unsigned long low;
+		volatile unsigned long high;
+	    } w;
+	} scc_gsmr;                         /* SCC general mode reg         */
+	volatile unsigned short scc_psmr;   /* protocol specific mode reg   */
+	volatile unsigned char  RESERVED42[0x2]; /* Reserved area           */
+	volatile unsigned short scc_todr; /* SCC transmit on demand         */
+	volatile unsigned short scc_dsr;        /* SCC data sync reg        */
+	volatile unsigned short scc_scce;       /* SCC event reg            */
+	volatile unsigned char  RESERVED43[0x2];/* Reserved area            */
+	volatile unsigned short scc_sccm;       /* SCC mask reg             */
+	volatile unsigned char  RESERVED44[0x1];/* Reserved area            */
+	volatile unsigned char  scc_sccs;       /* SCC status reg           */
+	volatile unsigned char  RESERVED45[0x8]; /* Reserved area           */
     } scc_regs[4];
     /* SMC */
     struct smc_regs {
-        volatile unsigned char  RESERVED46[0x2]; /* Reserved area           */
-        volatile unsigned short smc_smcmr;       /* SMC mode reg            */
-        volatile unsigned char  RESERVED60[0x2]; /* Reserved area           */
-        volatile unsigned char  smc_smce;        /* SMC event reg           */
-        volatile unsigned char  RESERVED47[0x3]; /* Reserved area           */
-        volatile unsigned char  smc_smcm;        /* SMC mask reg            */
-        volatile unsigned char  RESERVED48[0x5]; /* Reserved area           */
+	volatile unsigned char  RESERVED46[0x2]; /* Reserved area           */
+	volatile unsigned short smc_smcmr;       /* SMC mode reg            */
+	volatile unsigned char  RESERVED60[0x2]; /* Reserved area           */
+	volatile unsigned char  smc_smce;        /* SMC event reg           */
+	volatile unsigned char  RESERVED47[0x3]; /* Reserved area           */
+	volatile unsigned char  smc_smcm;        /* SMC mask reg            */
+	volatile unsigned char  RESERVED48[0x5]; /* Reserved area           */
     } smc_regs[2];
     /* SPI */
     volatile unsigned short     spi_spmode;     /* SPI mode reg             */

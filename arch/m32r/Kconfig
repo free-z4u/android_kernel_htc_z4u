@@ -142,7 +142,7 @@ config TLB_ENTRIES
 
 
 config ISA_M32R
-        bool
+	bool
 	depends on CHIP_M32102 || CHIP_M32104
 	default y
 
@@ -189,7 +189,7 @@ config TIMER_DIVIDE
 	default "128"
 
 config CPU_LITTLE_ENDIAN
-        bool "Generate little endian code"
+	bool "Generate little endian code"
 	default n
 
 config MEMORY_START
@@ -266,8 +266,8 @@ config GENERIC_CALIBRATE_DELAY
 	default y
 
 config SCHED_OMIT_FRAME_POINTER
-        bool
-        default y
+	bool
+	default y
 
 source "kernel/Kconfig.preempt"
 

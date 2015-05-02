@@ -666,11 +666,11 @@ struct SENSE_DATA
 #define     ARCMSR_MU_OUTBOUND_MESSAGE1_INT                         0x02
 #define     ARCMSR_MU_OUTBOUND_MESSAGE0_INT                         0x01
 #define     ARCMSR_MU_OUTBOUND_HANDLE_INT                 \
-                    (ARCMSR_MU_OUTBOUND_MESSAGE0_INT      \
-                     |ARCMSR_MU_OUTBOUND_MESSAGE1_INT     \
-                     |ARCMSR_MU_OUTBOUND_DOORBELL_INT     \
-                     |ARCMSR_MU_OUTBOUND_POSTQUEUE_INT    \
-                     |ARCMSR_MU_OUTBOUND_PCI_INT)
+		    (ARCMSR_MU_OUTBOUND_MESSAGE0_INT      \
+		     |ARCMSR_MU_OUTBOUND_MESSAGE1_INT     \
+		     |ARCMSR_MU_OUTBOUND_DOORBELL_INT     \
+		     |ARCMSR_MU_OUTBOUND_POSTQUEUE_INT    \
+		     |ARCMSR_MU_OUTBOUND_PCI_INT)
 /*
 *******************************************************************************
 **  Outbound Interrupt Mask Register - OIMR

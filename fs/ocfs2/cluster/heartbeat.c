@@ -1897,7 +1897,7 @@ out:
 }
 
 static ssize_t o2hb_region_pid_read(struct o2hb_region *reg,
-                                      char *page)
+				      char *page)
 {
 	pid_t pid = 0;
 
@@ -1952,8 +1952,8 @@ static struct o2hb_region_attribute o2hb_region_attr_dev = {
 
 static struct o2hb_region_attribute o2hb_region_attr_pid = {
        .attr   = { .ca_owner = THIS_MODULE,
-                   .ca_name = "pid",
-                   .ca_mode = S_IRUGO | S_IRUSR },
+		   .ca_name = "pid",
+		   .ca_mode = S_IRUGO | S_IRUSR },
        .show   = o2hb_region_pid_read,
 };
 
@@ -2241,7 +2241,7 @@ static ssize_t o2hb_heartbeat_group_threshold_store(struct o2hb_heartbeat_group 
 
 	tmp = simple_strtoul(p, &p, 10);
 	if (!p || (*p && (*p != '\n')))
-                return -EINVAL;
+		return -EINVAL;
 
 	/* this will validate ranges for us. */
 	o2hb_dead_threshold_set((unsigned int) tmp);

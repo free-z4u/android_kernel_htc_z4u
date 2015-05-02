@@ -317,12 +317,12 @@ void default_machine_kexec(struct kimage *image)
 	/* prepare control code if any */
 
 	/*
-        * If the kexec boot is the normal one, need to shutdown other cpus
-        * into our wait loop and quiesce interrupts.
-        * Otherwise, in the case of crashed mode (crashing_cpu >= 0),
-        * stopping other CPUs and collecting their pt_regs is done before
-        * using debugger IPI.
-        */
+	* If the kexec boot is the normal one, need to shutdown other cpus
+	* into our wait loop and quiesce interrupts.
+	* Otherwise, in the case of crashed mode (crashing_cpu >= 0),
+	* stopping other CPUs and collecting their pt_regs is done before
+	* using debugger IPI.
+	*/
 
 	if (crashing_cpu == -1)
 		kexec_prepare_cpus();

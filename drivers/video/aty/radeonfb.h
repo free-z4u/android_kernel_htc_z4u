@@ -72,8 +72,8 @@ enum radeon_family {
 				((rinfo)->family == CHIP_FAMILY_R350)  || \
 				((rinfo)->family == CHIP_FAMILY_RV380) || \
 				((rinfo)->family == CHIP_FAMILY_R420)  || \
-                               ((rinfo)->family == CHIP_FAMILY_RC410) || \
-                               ((rinfo)->family == CHIP_FAMILY_RS480))
+			       ((rinfo)->family == CHIP_FAMILY_RC410) || \
+			       ((rinfo)->family == CHIP_FAMILY_RS480))
 
 /*
  * Chip flags
@@ -503,7 +503,7 @@ static inline void __OUTPLLP(struct radeonfb_info *rinfo, unsigned int index,
  */
 static inline int round_div(int num, int den)
 {
-        return (num + (den / 2)) / den;
+	return (num + (den / 2)) / den;
 }
 
 static inline int var_to_depth(const struct fb_var_screeninfo *var)

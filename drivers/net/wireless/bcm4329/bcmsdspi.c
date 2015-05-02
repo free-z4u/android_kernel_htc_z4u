@@ -67,15 +67,15 @@ static int sdspi_set_highspeed_mode(sdioh_info_t *sd, bool HSMode);
 static int sdspi_card_enablefuncs(sdioh_info_t *sd);
 static void sdspi_cmd_getrsp(sdioh_info_t *sd, uint32 *rsp_buffer, int count);
 static int sdspi_cmd_issue(sdioh_info_t *sd, bool use_dma, uint32 cmd, uint32 arg,
-                           uint32 *data, uint32 datalen);
+			   uint32 *data, uint32 datalen);
 static int sdspi_card_regread(sdioh_info_t *sd, int func, uint32 regaddr,
-                              int regsize, uint32 *data);
+			      int regsize, uint32 *data);
 static int sdspi_card_regwrite(sdioh_info_t *sd, int func, uint32 regaddr,
-                               int regsize, uint32 data);
+			       int regsize, uint32 data);
 static int sdspi_driver_init(sdioh_info_t *sd);
 static bool sdspi_reset(sdioh_info_t *sd, bool host_reset, bool client_reset);
 static int sdspi_card_buf(sdioh_info_t *sd, int rw, int func, bool fifo,
-                          uint32 addr, int nbytes, uint32 *data);
+			  uint32 addr, int nbytes, uint32 *data);
 static int sdspi_abort(sdioh_info_t *sd, uint func);
 
 static int set_client_block_size(sdioh_info_t *sd, int func, int blocksize);
@@ -259,7 +259,7 @@ const bcm_iovar_t sdioh_iovars[] = {
 
 int
 sdioh_iovar_op(sdioh_info_t *si, const char *name,
-               void *params, int plen, void *arg, int len, bool set)
+	       void *params, int plen, void *arg, int len, bool set)
 {
 	const bcm_iovar_t *vi = NULL;
 	int bcmerror = 0;
@@ -604,7 +604,7 @@ sdioh_request_byte(sdioh_info_t *sd, uint rw, uint func, uint regaddr, uint8 *by
 
 extern SDIOH_API_RC
 sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint addr,
-                   uint32 *word, uint nbytes)
+		   uint32 *word, uint nbytes)
 {
 	int status;
 
@@ -621,7 +621,7 @@ sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint add
 
 extern SDIOH_API_RC
 sdioh_request_buffer(sdioh_info_t *sd, uint pio_dma, uint fix_inc, uint rw, uint func,
-                     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
+		     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
 {
 	int len;
 	int buflen = (int)buflen_u;
@@ -1199,7 +1199,7 @@ uint8	spi_rspbuf[SPI_MAX_PKT_LEN];
 /* datalen is used for CMD53 length only (0 for sd->data_xfer_count) */
 static int
 sdspi_cmd_issue(sdioh_info_t *sd, bool use_dma, uint32 cmd, uint32 arg,
-                uint32 *data, uint32 datalen)
+		uint32 *data, uint32 datalen)
 {
 	uint32 cmd_reg;
 	uint32 cmd_arg = arg;

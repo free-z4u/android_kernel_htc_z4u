@@ -878,14 +878,14 @@ int vt_ioctl(struct tty_struct *tty,
 	}
 
 	case PIO_CMAP:
-                if (!perm)
+		if (!perm)
 			ret = -EPERM;
 		else
 	                ret = con_set_cmap(up);
 		break;
 
 	case GIO_CMAP:
-                ret = con_get_cmap(up);
+		ret = con_get_cmap(up);
 		break;
 
 	case PIO_FONTX:

@@ -91,9 +91,9 @@ size_t parport_ieee1284_write_compat (struct parport *port,
 				break;
 
 			/* Yield the port for a while.  If this is the
-                           first time around the loop, don't let go of
-                           the port.  This way, we find out if we have
-                           our interrupt handler called. */
+			   first time around the loop, don't let go of
+			   the port.  This way, we find out if we have
+			   our interrupt handler called. */
 			if (count && no_irq) {
 				parport_release (dev);
 				schedule_timeout_interruptible(wait);
@@ -133,7 +133,7 @@ size_t parport_ieee1284_write_compat (struct parport *port,
 		/* Assume the peripheral received it. */
 		count++;
 
-                /* Let another process run if it needs to. */
+		/* Let another process run if it needs to. */
 		if (time_before (jiffies, expire))
 			if (!parport_yield_blocking (dev)
 			    && need_resched())
@@ -520,7 +520,7 @@ size_t parport_ieee1284_ecp_read_data (struct parport *port,
 		int command;
 
 		/* Event 43: Peripheral sets nAck low. It can take as
-                   long as it wants. */
+		   long as it wants. */
 		while (parport_wait_peripheral (port, PARPORT_STATUS_ACK, 0)) {
 			/* The peripheral hasn't given us data in
 			   35ms.  If we have data to give back to the
@@ -551,7 +551,7 @@ size_t parport_ieee1284_ecp_read_data (struct parport *port,
 		/* Is this a command? */
 		if (rle)
 			/* The last byte was a run-length count, so
-                           this can't be as well. */
+			   this can't be as well. */
 			command = 0;
 		else
 			command = (parport_read_status (port) &
@@ -561,7 +561,7 @@ size_t parport_ieee1284_ecp_read_data (struct parport *port,
 		byte = parport_read_data (port);
 
 		/* If this is a channel command, rather than an RLE
-                   command or a normal data byte, don't accept it. */
+		   command or a normal data byte, don't accept it. */
 		if (command) {
 			if (byte & 0x80) {
 				DPRINTK (KERN_DEBUG "%s: stopping short at "
@@ -594,7 +594,7 @@ size_t parport_ieee1284_ecp_read_data (struct parport *port,
 		if (parport_wait_peripheral (port, PARPORT_STATUS_ACK,
 					     PARPORT_STATUS_ACK)) {
 			/* It's gone wrong.  Return what data we have
-                           to the caller. */
+			   to the caller. */
 			DPRINTK (KERN_DEBUG "ECP read timed out at 45\n");
 
 			if (command)

@@ -38,27 +38,27 @@ int snd_pcm_hw_param_value(const struct snd_pcm_hw_params *params,
 
 static inline unsigned int ld2(u_int32_t v)
 {
-        unsigned r = 0;
+	unsigned r = 0;
 
-        if (v >= 0x10000) {
-                v >>= 16;
-                r += 16;
-        }
-        if (v >= 0x100) {
-                v >>= 8;
-                r += 8;
-        }
-        if (v >= 0x10) {
-                v >>= 4;
-                r += 4;
-        }
-        if (v >= 4) {
-                v >>= 2;
-                r += 2;
-        }
-        if (v >= 2)
-                r++;
-        return r;
+	if (v >= 0x10000) {
+		v >>= 16;
+		r += 16;
+	}
+	if (v >= 0x100) {
+		v >>= 8;
+		r += 8;
+	}
+	if (v >= 0x10) {
+		v >>= 4;
+		r += 4;
+	}
+	if (v >= 4) {
+		v >>= 2;
+		r += 2;
+	}
+	if (v >= 2)
+		r++;
+	return r;
 }
 
 static inline size_t snd_mask_sizeof(void)

@@ -1391,7 +1391,7 @@ static void ath_tx_status(void *priv, struct ieee80211_supported_band *sband,
 }
 
 static void ath_rate_init(void *priv, struct ieee80211_supported_band *sband,
-                          struct ieee80211_sta *sta, void *priv_sta)
+			  struct ieee80211_sta *sta, void *priv_sta)
 {
 	struct ath_softc *sc = priv;
 	struct ath_rate_priv *ath_rc_priv = priv_sta;

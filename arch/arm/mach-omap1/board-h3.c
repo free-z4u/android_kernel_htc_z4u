@@ -344,7 +344,7 @@ static struct spi_board_info h3_spi_board_info[] __initdata = {
 static struct platform_device *devices[] __initdata = {
 	&nor_device,
 	&nand_device,
-        &smc91x_device,
+	&smc91x_device,
 	&intlat_device,
 	&h3_kp_device,
 	&h3_lcd_device,

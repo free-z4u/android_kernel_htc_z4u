@@ -156,7 +156,7 @@ static struct platform_device *amlm5900_devices[] __initdata = {
 	&s3c_device_ohci,
  	&s3c_device_rtc,
 	&s3c_device_usbgadget,
-        &s3c_device_sdi,
+	&s3c_device_sdi,
 	&amlm5900_device_nor,
 };
 

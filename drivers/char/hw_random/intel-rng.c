@@ -149,8 +149,8 @@ MODULE_DEVICE_TABLE(pci, pci_tbl);
 static __initdata int no_fwh_detect;
 module_param(no_fwh_detect, int, 0);
 MODULE_PARM_DESC(no_fwh_detect, "Skip FWH detection:\n"
-                                " positive value - skip if FWH space locked read-only\n"
-                                " negative value - skip always");
+				" positive value - skip if FWH space locked read-only\n"
+				" negative value - skip always");
 
 static inline u8 hwstatus_get(void __iomem *mem)
 {

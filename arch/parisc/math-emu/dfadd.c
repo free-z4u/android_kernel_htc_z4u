@@ -83,8 +83,8 @@ dbl_fadd(
 		     * invalid since operands are opposite signed infinity's
 		     */
 		    if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-                    Set_invalidflag();
-                    Dbl_makequietnan(resultp1,resultp2);
+		    Set_invalidflag();
+		    Dbl_makequietnan(resultp1,resultp2);
 		    Dbl_copytoptr(resultp1,resultp2,dstptr);
 		    return(NOEXCEPTION);
 		    }
@@ -97,24 +97,24 @@ dbl_fadd(
 	    }
 	else
 	    {
-            /*
-             * is NaN; signaling or quiet?
-             */
-            if (Dbl_isone_signaling(leftp1))
+	    /*
+	     * is NaN; signaling or quiet?
+	     */
+	    if (Dbl_isone_signaling(leftp1))
 		{
-               	/* trap if INVALIDTRAP enabled */
+	       	/* trap if INVALIDTRAP enabled */
 		if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
-        	/* make NaN quiet */
-        	Set_invalidflag();
-        	Dbl_set_quiet(leftp1);
-        	}
+		/* make NaN quiet */
+		Set_invalidflag();
+		Dbl_set_quiet(leftp1);
+		}
 	    /*
 	     * is second operand a signaling NaN?
 	     */
 	    else if (Dbl_is_signalingnan(rightp1))
 		{
-        	/* trap if INVALIDTRAP enabled */
-               	if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
+		/* trap if INVALIDTRAP enabled */
+	       	if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
 		/* make NaN quiet */
 		Set_invalidflag();
 		Dbl_set_quiet(rightp1);
@@ -139,12 +139,12 @@ dbl_fadd(
 	    Dbl_copytoptr(rightp1,rightp2,dstptr);
 	    return(NOEXCEPTION);
 	    }
-        /*
-         * is NaN; signaling or quiet?
-         */
-        if (Dbl_isone_signaling(rightp1))
+	/*
+	 * is NaN; signaling or quiet?
+	 */
+	if (Dbl_isone_signaling(rightp1))
 	    {
-            /* trap if INVALIDTRAP enabled */
+	    /* trap if INVALIDTRAP enabled */
 	    if (Is_invalidtrap_enabled()) return(INVALIDEXCEPTION);
 	    /* make NaN quiet */
 	    Set_invalidflag();
@@ -176,7 +176,7 @@ dbl_fadd(
     /* Invariant:  left is not smaller than right. */
 
     if((right_exponent = Dbl_exponent(rightp1)) == 0)
-        {
+	{
 	/* Denormalized operands.  First look for zeroes */
 	if(Dbl_iszero_mantissa(rightp1,rightp2))
 	    {
@@ -205,7 +205,7 @@ dbl_fadd(
 		    Dbl_leftshiftby1(leftp1,leftp2);
 		    Dbl_normalize(leftp1,leftp2,result_exponent);
 		    Dbl_set_sign(leftp1,/*using*/sign_save);
-                    Dbl_setwrapped_exponent(leftp1,result_exponent,unfl);
+		    Dbl_setwrapped_exponent(leftp1,result_exponent,unfl);
 		    Dbl_copytoptr(leftp1,leftp2,dstptr);
 		    /* inexact = FALSE */
 		    return(UNDERFLOWEXCEPTION);
@@ -257,7 +257,7 @@ dbl_fadd(
 		Dbl_leftshiftby1(resultp1,resultp2);
 		Dbl_normalize(resultp1,resultp2,result_exponent);
 		Dbl_set_sign(resultp1,/*using*/sign_save);
-                Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
+		Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
 	        Dbl_copytoptr(resultp1,resultp2,dstptr);
 		/* inexact = FALSE */
 	        return(UNDERFLOWEXCEPTION);
@@ -313,9 +313,9 @@ dbl_fadd(
 	     * shift is needed, then all bits to the right of the guard
 	     * bit are zeros, and the guard bit may or may not be zero. */
 	    sign_save = Dbl_signextendedsign(resultp1);
-            Dbl_leftshiftby1_withextent(resultp1,resultp2,extent,resultp1,resultp2);
+	    Dbl_leftshiftby1_withextent(resultp1,resultp2,extent,resultp1,resultp2);
 
-            /* Need to check for a zero result.  The sign and exponent
+	    /* Need to check for a zero result.  The sign and exponent
 	     * fields have already been zeroed.  The more efficient test
 	     * of the full object can be used.
 	     */
@@ -421,7 +421,7 @@ dbl_fadd(
 	    if(Is_underflowtrap_enabled())
 		{
 		Dbl_set_sign(resultp1,sign_save);
-                Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
+		Dbl_setwrapped_exponent(resultp1,result_exponent,unfl);
 		Dbl_copytoptr(resultp1,resultp2,dstptr);
 		/* inexact = FALSE */
 		return(UNDERFLOWEXCEPTION);
@@ -495,9 +495,9 @@ dbl_fadd(
 	if(Dbl_isone_hiddenoverflow(resultp1)) result_exponent++;
 	}
     if(result_exponent == DBL_INFINITY_EXPONENT)
-        {
-        /* Overflow */
-        if(Is_overflowtrap_enabled())
+	{
+	/* Overflow */
+	if(Is_overflowtrap_enabled())
 	    {
 	    Dbl_setwrapped_exponent(resultp1,result_exponent,ovfl);
 	    Dbl_copytoptr(resultp1,resultp2,dstptr);
@@ -507,7 +507,7 @@ dbl_fadd(
 		else Set_inexactflag();
 	    return(OVERFLOWEXCEPTION);
 	    }
-        else
+	else
 	    {
 	    inexact = TRUE;
 	    Set_overflowflag();

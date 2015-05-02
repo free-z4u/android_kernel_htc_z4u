@@ -151,10 +151,10 @@ typedef struct {
 } CallerLocation;
 
 extern void backtrace_init(BacktraceIterator *state,
-                          BacktraceMemoryReader read_memory_func,
-                          void *read_memory_func_extra,
-                          unsigned long pc, unsigned long lr,
-                          unsigned long sp, unsigned long r52);
+			  BacktraceMemoryReader read_memory_func,
+			  void *read_memory_func_extra,
+			  unsigned long pc, unsigned long lr,
+			  unsigned long sp, unsigned long r52);
 
 
 extern bool backtrace_next(BacktraceIterator *state);

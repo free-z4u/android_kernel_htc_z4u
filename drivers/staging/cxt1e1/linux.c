@@ -157,9 +157,9 @@ static      status_t
 mkret (int bsd)
 {
     if (bsd > 0)
-        return -bsd;
+	return -bsd;
     else
-        return bsd;
+	return bsd;
 }
 
 /***************************************************************************/
@@ -191,7 +191,7 @@ c4_wk_chan_restart (mch_t * ch)
 
 #ifdef RLD_RESTART_DEBUG
     pr_info(">> %s: queueing Port %d Chan %d, mch_t @ %p\n",
-            __func__, pi->portnum, ch->channum, ch);
+	    __func__, pi->portnum, ch->channum, ch);
 #endif
 
     /* create new entry w/in workqueue for this channel and let'er rip */
@@ -222,10 +222,10 @@ c4_wq_port_init (mpi_t * pi)
 {
 
     char        name[16], *np;  /* NOTE: name of the queue limited by system
-                                 * to 10 characters */
+				 * to 10 characters */
 
     if (pi->wq_port)
-        return 0;                   /* already initialized */
+	return 0;                   /* already initialized */
 
     np = name;
     memset (name, 0, 16);
@@ -233,10 +233,10 @@ c4_wq_port_init (mpi_t * pi)
 
 #ifdef RLD_RESTART_DEBUG
     pr_info(">> %s: creating workqueue <%s> for Port %d.\n",
-            __func__, name, pi->portnum); /* RLD DEBUG */
+	    __func__, name, pi->portnum); /* RLD DEBUG */
 #endif
     if (!(pi->wq_port = create_singlethread_workqueue (name)))
-        return ENOMEM;
+	return ENOMEM;
     return 0;                       /* success */
 }
 
@@ -249,9 +249,9 @@ c4_wq_port_cleanup (mpi_t * pi)
      */
     if (pi->wq_port)
     {
-        destroy_workqueue (pi->wq_port);        /* this also calls
-                                                 * flush_workqueue() */
-        pi->wq_port = 0;
+	destroy_workqueue (pi->wq_port);        /* this also calls
+						 * flush_workqueue() */
+	pi->wq_port = 0;
     }
 }
 
@@ -294,11 +294,11 @@ chan_open (struct net_device * ndev)
 
     if ((ret = hdlc_open (ndev)))
     {
-        pr_info("hdlc_open failure, err %d.\n", ret);
-        return ret;
+	pr_info("hdlc_open failure, err %d.\n", ret);
+	return ret;
     }
     if ((ret = c4_chan_up (priv->ci, priv->channum)))
-        return -ret;
+	return -ret;
     try_module_get (THIS_MODULE);
     netif_start_queue (ndev);
     return 0;                       /* no error = success */
@@ -330,7 +330,7 @@ STATIC int
 chan_attach_noop (struct net_device * ndev, unsigned short foo_1, unsigned short foo_2)
 {
     return 0;                   /* our driver has nothing to do here, show's
-                                 * over, go home */
+				 * over, go home */
 }
 
 
@@ -343,15 +343,15 @@ chan_get_stats (struct net_device * ndev)
     int         channum;
 
     {
-        struct c4_priv *priv;
+	struct c4_priv *priv;
 
-        priv = (struct c4_priv *) dev_to_hdlc (ndev)->priv;
-        channum = priv->channum;
+	priv = (struct c4_priv *) dev_to_hdlc (ndev)->priv;
+	channum = priv->channum;
     }
 
     ch = c4_find_chan (channum);
     if (ch == NULL)
-        return NULL;
+	return NULL;
 
     nstats = &ndev->stats;
     stats = &ch->s;
@@ -362,14 +362,14 @@ chan_get_stats (struct net_device * ndev)
     nstats->rx_bytes = stats->rx_bytes;
     nstats->tx_bytes = stats->tx_bytes;
     nstats->rx_errors = stats->rx_length_errors +
-        stats->rx_over_errors +
-        stats->rx_crc_errors +
-        stats->rx_frame_errors +
-        stats->rx_fifo_errors +
-        stats->rx_missed_errors;
+	stats->rx_over_errors +
+	stats->rx_crc_errors +
+	stats->rx_frame_errors +
+	stats->rx_fifo_errors +
+	stats->rx_missed_errors;
     nstats->tx_errors = stats->tx_dropped +
-        stats->tx_aborted_errors +
-        stats->tx_fifo_errors;
+	stats->tx_aborted_errors +
+	stats->tx_fifo_errors;
     nstats->rx_dropped = stats->rx_dropped;
     nstats->tx_dropped = stats->tx_dropped;
 
@@ -418,7 +418,7 @@ static const struct net_device_ops chan_ops = {
 
 STATIC struct net_device *
 create_chan (struct net_device * ndev, ci_t * ci,
-             struct sbecom_chan_param * cp)
+	     struct sbecom_chan_param * cp)
 {
     hdlc_device *hdlc;
     struct net_device *dev;
@@ -426,27 +426,27 @@ create_chan (struct net_device * ndev, ci_t * ci,
     int         ret;
 
     if (c4_find_chan (cp->channum))
-        return 0;                   /* channel already exists */
+	return 0;                   /* channel already exists */
 
     {
-        struct c4_priv *priv;
+	struct c4_priv *priv;
 
-        /* allocate then fill in private data structure */
-        priv = OS_kmalloc (sizeof (struct c4_priv));
-        if (!priv)
-        {
-            pr_warning("%s: no memory for net_device !\n", ci->devname);
-            return 0;
-        }
-        dev = alloc_hdlcdev (priv);
-        if (!dev)
-        {
-            pr_warning("%s: no memory for hdlc_device !\n", ci->devname);
-            OS_kfree (priv);
-            return 0;
-        }
-        priv->ci = ci;
-        priv->channum = cp->channum;
+	/* allocate then fill in private data structure */
+	priv = OS_kmalloc (sizeof (struct c4_priv));
+	if (!priv)
+	{
+	    pr_warning("%s: no memory for net_device !\n", ci->devname);
+	    return 0;
+	}
+	dev = alloc_hdlcdev (priv);
+	if (!dev)
+	{
+	    pr_warning("%s: no memory for hdlc_device !\n", ci->devname);
+	    OS_kfree (priv);
+	    return 0;
+	}
+	priv->ci = ci;
+	priv->channum = cp->channum;
     }
 
     hdlc = dev_to_hdlc (dev);
@@ -459,21 +459,21 @@ create_chan (struct net_device * ndev, ci_t * ci,
     hi = (hdw_info_t *) ci->hdw_info;
     if (hi->mfg_info_sts == EEPROM_OK)
     {
-        switch (hi->promfmt)
-        {
-        case PROM_FORMAT_TYPE1:
-            memcpy (dev->dev_addr, (FLD_TYPE1 *) (hi->mfg_info.pft1.Serial), 6);
-            break;
-        case PROM_FORMAT_TYPE2:
-            memcpy (dev->dev_addr, (FLD_TYPE2 *) (hi->mfg_info.pft2.Serial), 6);
-            break;
-        default:
-            memset (dev->dev_addr, 0, 6);
-            break;
-        }
+	switch (hi->promfmt)
+	{
+	case PROM_FORMAT_TYPE1:
+	    memcpy (dev->dev_addr, (FLD_TYPE1 *) (hi->mfg_info.pft1.Serial), 6);
+	    break;
+	case PROM_FORMAT_TYPE2:
+	    memcpy (dev->dev_addr, (FLD_TYPE2 *) (hi->mfg_info.pft2.Serial), 6);
+	    break;
+	default:
+	    memset (dev->dev_addr, 0, 6);
+	    break;
+	}
     } else
     {
-        memset (dev->dev_addr, 0, 6);
+	memset (dev->dev_addr, 0, 6);
     }
 
     hdlc->xmit = c4_linux_xmit;
@@ -498,11 +498,11 @@ create_chan (struct net_device * ndev, ci_t * ci,
     rtnl_lock ();                   /* needed due to Ioctl calling sequence */
     if (ret)
     {
-        if (cxt1e1_log_level >= LOG_WARN)
-            pr_info("%s: create_chan[%d] registration error = %d.\n",
-                    ci->devname, cp->channum, ret);
-        free_netdev (dev);          /* cleanup */
-        return 0;                   /* failed to register */
+	if (cxt1e1_log_level >= LOG_WARN)
+	    pr_info("%s: create_chan[%d] registration error = %d.\n",
+		    ci->devname, cp->channum, ret);
+	free_netdev (dev);          /* cleanup */
+	return 0;                   /* failed to register */
     }
     return dev;
 }
@@ -517,19 +517,19 @@ do_get_port (struct net_device * ndev, void *data)
     struct sbecom_port_param pp;/* copy data to kernel land */
 
     if (copy_from_user (&pp, data, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     if (pp.portnum >= MUSYCC_NPORTS)
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;             /* get card info */
+	return -EINVAL;             /* get card info */
 
     ret = mkret (c4_get_port (ci, pp.portnum));
     if (ret)
-        return ret;
+	return ret;
     if (copy_to_user (data, &ci->port[pp.portnum].p,
-                      sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+		      sizeof (struct sbecom_port_param)))
+	return -EFAULT;
     return 0;
 }
 
@@ -541,15 +541,15 @@ do_set_port (struct net_device * ndev, void *data)
     struct sbecom_port_param pp;/* copy data to kernel land */
 
     if (copy_from_user (&pp, data, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     if (pp.portnum >= MUSYCC_NPORTS)
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;             /* get card info */
+	return -EINVAL;             /* get card info */
 
     if (pp.portnum >= ci->max_port) /* sanity check */
-        return -ENXIO;
+	return -ENXIO;
 
     memcpy (&ci->port[pp.portnum].p, &pp, sizeof (struct sbecom_port_param));
     return mkret (c4_set_port (ci, pp.portnum));
@@ -563,10 +563,10 @@ do_port_loop (struct net_device * ndev, void *data)
     ci_t       *ci;
 
     if (copy_from_user (&pp, data, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;
+	return -EINVAL;
     return mkret (c4_loop_port (ci, pp.portnum, pp.port_mode));
 }
 
@@ -579,15 +579,15 @@ do_framer_rw (struct net_device * ndev, void *data)
     int         ret;
 
     if (copy_from_user (&pp, data, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;
+	return -EINVAL;
     ret = mkret (c4_frame_rw (ci, &pp));
     if (ret)
-        return ret;
+	return ret;
     if (copy_to_user (data, &pp, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     return 0;
 }
 
@@ -600,15 +600,15 @@ do_pld_rw (struct net_device * ndev, void *data)
     int         ret;
 
     if (copy_from_user (&pp, data, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;
+	return -EINVAL;
     ret = mkret (c4_pld_rw (ci, &pp));
     if (ret)
-        return ret;
+	return ret;
     if (copy_to_user (data, &pp, sizeof (struct sbecom_port_param)))
-        return -EFAULT;
+	return -EFAULT;
     return 0;
 }
 
@@ -621,15 +621,15 @@ do_musycc_rw (struct net_device * ndev, void *data)
     int         ret;
 
     if (copy_from_user (&mp, data, sizeof (struct c4_musycc_param)))
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;
+	return -EINVAL;
     ret = mkret (c4_musycc_rw (ci, &mp));
     if (ret)
-        return ret;
+	return ret;
     if (copy_to_user (data, &mp, sizeof (struct c4_musycc_param)))
-        return -EFAULT;
+	return -EFAULT;
     return 0;
 }
 
@@ -640,14 +640,14 @@ do_get_chan (struct net_device * ndev, void *data)
     int         ret;
 
     if (copy_from_user (&cp, data,
-                        sizeof (struct sbecom_chan_param)))
-        return -EFAULT;
+			sizeof (struct sbecom_chan_param)))
+	return -EFAULT;
 
     if ((ret = mkret (c4_get_chan (cp.channum, &cp))))
-        return ret;
+	return ret;
 
     if (copy_to_user (data, &cp, sizeof (struct sbecom_chan_param)))
-        return -EFAULT;
+	return -EFAULT;
     return 0;
 }
 
@@ -659,16 +659,16 @@ do_set_chan (struct net_device * ndev, void *data)
     ci_t       *ci;
 
     if (copy_from_user (&cp, data, sizeof (struct sbecom_chan_param)))
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;
+	return -EINVAL;
     switch (ret = mkret (c4_set_chan (cp.channum, &cp)))
     {
     case 0:
-        return 0;
+	return 0;
     default:
-        return ret;
+	return ret;
     }
 }
 
@@ -681,20 +681,20 @@ do_create_chan (struct net_device * ndev, void *data)
     int         ret;
 
     if (copy_from_user (&cp, data, sizeof (struct sbecom_chan_param)))
-        return -EFAULT;
+	return -EFAULT;
     ci = get_ci_by_dev (ndev);
     if (!ci)
-        return -EINVAL;
+	return -EINVAL;
     dev = create_chan (ndev, ci, &cp);
     if (!dev)
-        return -EBUSY;
+	return -EBUSY;
     ret = mkret (c4_new_chan (ci, cp.port, cp.channum, dev));
     if (ret)
     {
-        rtnl_unlock ();             /* needed due to Ioctl calling sequence */
-        unregister_hdlc_device (dev);
-        rtnl_lock ();               /* needed due to Ioctl calling sequence */
-        free_netdev (dev);
+	rtnl_unlock ();             /* needed due to Ioctl calling sequence */
+	unregister_hdlc_device (dev);
+	rtnl_lock ();               /* needed due to Ioctl calling sequence */
+	free_netdev (dev);
     }
     return ret;
 }
@@ -706,18 +706,18 @@ do_get_chan_stats (struct net_device * ndev, void *data)
     int         ret;
 
     if (copy_from_user (&ccs, data,
-                        sizeof (struct c4_chan_stats_wrap)))
-        return -EFAULT;
+			sizeof (struct c4_chan_stats_wrap)))
+	return -EFAULT;
     switch (ret = mkret (c4_get_chan_stats (ccs.channum, &ccs.stats)))
     {
     case 0:
-        break;
+	break;
     default:
-        return ret;
+	return ret;
     }
     if (copy_to_user (data, &ccs,
-                      sizeof (struct c4_chan_stats_wrap)))
-        return -EFAULT;
+		      sizeof (struct c4_chan_stats_wrap)))
+	return -EFAULT;
     return 0;
 }
 STATIC      status_t
@@ -726,7 +726,7 @@ do_set_loglevel (struct net_device * ndev, void *data)
     unsigned int cxt1e1_log_level;
 
     if (copy_from_user (&cxt1e1_log_level, data, sizeof (int)))
-        return -EFAULT;
+	return -EFAULT;
     sbecom_set_loglevel (cxt1e1_log_level);
     return 0;
 }
@@ -735,29 +735,29 @@ STATIC      status_t
 do_deluser (struct net_device * ndev, int lockit)
 {
     if (ndev->flags & IFF_UP)
-        return -EBUSY;
+	return -EBUSY;
 
     {
-        ci_t       *ci;
-        mch_t      *ch;
-        const struct c4_priv *priv;
-        int         channum;
+	ci_t       *ci;
+	mch_t      *ch;
+	const struct c4_priv *priv;
+	int         channum;
 
-        priv = (struct c4_priv *) dev_to_hdlc (ndev)->priv;
-        ci = priv->ci;
-        channum = priv->channum;
+	priv = (struct c4_priv *) dev_to_hdlc (ndev)->priv;
+	ci = priv->ci;
+	channum = priv->channum;
 
-        ch = c4_find_chan (channum);
-        if (ch == NULL)
-            return -ENOENT;
-        ch->user = 0;               /* will be freed, below */
+	ch = c4_find_chan (channum);
+	if (ch == NULL)
+	    return -ENOENT;
+	ch->user = 0;               /* will be freed, below */
     }
 
     if (lockit)
-        rtnl_unlock ();             /* needed if Ioctl calling sequence */
+	rtnl_unlock ();             /* needed if Ioctl calling sequence */
     unregister_hdlc_device (ndev);
     if (lockit)
-        rtnl_lock ();               /* needed if Ioctl calling sequence */
+	rtnl_lock ();               /* needed if Ioctl calling sequence */
     free_netdev (ndev);
     return 0;
 }
@@ -771,15 +771,15 @@ do_del_chan (struct net_device * musycc_dev, void *data)
     int         ret;
 
     if (copy_from_user (&cp, data,
-                        sizeof (struct sbecom_chan_param)))
-        return -EFAULT;
+			sizeof (struct sbecom_chan_param)))
+	return -EFAULT;
     sprintf (buf, CHANNAME "%d", cp.channum);
     if (!(dev = dev_get_by_name (&init_net, buf)))
-        return -ENOENT;
+	return -ENOENT;
     dev_put (dev);
     ret = do_deluser (dev, 1);
     if (ret)
-        return ret;
+	return ret;
     return c4_del_chan (cp.channum);
 }
 int         c4_reset_board (void *);
@@ -792,23 +792,23 @@ do_reset (struct net_device * musycc_dev, void *data)
 
     for (i = 0; i < 128; i++)
     {
-        struct net_device *ndev;
-        char        buf[sizeof (CHANNAME) + 3];
+	struct net_device *ndev;
+	char        buf[sizeof (CHANNAME) + 3];
 
-        sprintf (buf, CHANNAME "%d", i);
-        if (!(ndev = dev_get_by_name(&init_net, buf)))
-            continue;
-        priv = dev_to_hdlc (ndev)->priv;
+	sprintf (buf, CHANNAME "%d", i);
+	if (!(ndev = dev_get_by_name(&init_net, buf)))
+	    continue;
+	priv = dev_to_hdlc (ndev)->priv;
 
-        if ((unsigned long) (priv->ci) ==
-            (unsigned long) (netdev_priv(musycc_dev)))
-        {
-            ndev->flags &= ~IFF_UP;
-            dev_put (ndev);
-            netif_stop_queue (ndev);
-            do_deluser (ndev, 1);
-        } else
-            dev_put (ndev);
+	if ((unsigned long) (priv->ci) ==
+	    (unsigned long) (netdev_priv(musycc_dev)))
+	{
+	    ndev->flags &= ~IFF_UP;
+	    dev_put (ndev);
+	    netif_stop_queue (ndev);
+	    do_deluser (ndev, 1);
+	} else
+	    dev_put (ndev);
     }
     return 0;
 }
@@ -819,8 +819,8 @@ do_reset_chan_stats (struct net_device * musycc_dev, void *data)
     struct sbecom_chan_param cp;
 
     if (copy_from_user (&cp, data,
-                        sizeof (struct sbecom_chan_param)))
-        return -EFAULT;
+			sizeof (struct sbecom_chan_param)))
+	return -EFAULT;
     return mkret (c4_del_chan_stats (cp.channum));
 }
 
@@ -833,108 +833,108 @@ c4_ioctl (struct net_device * ndev, struct ifreq * ifr, int cmd)
     status_t    ret;
     static struct data
     {
-        union
-        {
-            u_int8_t c;
-            u_int32_t i;
-            struct sbe_brd_info bip;
-            struct sbe_drv_info dip;
-            struct sbe_iid_info iip;
-            struct sbe_brd_addr bap;
-            struct sbecom_chan_stats stats;
-            struct sbecom_chan_param param;
-            struct temux_card_stats cards;
-            struct sbecom_card_param cardp;
-            struct sbecom_framer_param frp;
-        }           u;
+	union
+	{
+	    u_int8_t c;
+	    u_int32_t i;
+	    struct sbe_brd_info bip;
+	    struct sbe_drv_info dip;
+	    struct sbe_iid_info iip;
+	    struct sbe_brd_addr bap;
+	    struct sbecom_chan_stats stats;
+	    struct sbecom_chan_param param;
+	    struct temux_card_stats cards;
+	    struct sbecom_card_param cardp;
+	    struct sbecom_framer_param frp;
+	}           u;
     }           arg;
 
 
     if (!capable (CAP_SYS_ADMIN))
-        return -EPERM;
+	return -EPERM;
     if (cmd != SIOCDEVPRIVATE + 15)
-        return -EINVAL;
+	return -EINVAL;
     if (!(ci = get_ci_by_dev (ndev)))
-        return -EINVAL;
+	return -EINVAL;
     if (ci->state != C_RUNNING)
-        return -ENODEV;
+	return -ENODEV;
     if (copy_from_user (&iocmd, ifr->ifr_data, sizeof (iocmd)))
-        return -EFAULT;
+	return -EFAULT;
 #if 0
     if (copy_from_user (&len, ifr->ifr_data + sizeof (iocmd), sizeof (len)))
-        return -EFAULT;
+	return -EFAULT;
 #endif
 
 #if 0
     pr_info("c4_ioctl: iocmd %x, dir %x type %x nr %x iolen %d.\n", iocmd,
-            _IOC_DIR (iocmd), _IOC_TYPE (iocmd), _IOC_NR (iocmd),
-            _IOC_SIZE (iocmd));
+	    _IOC_DIR (iocmd), _IOC_TYPE (iocmd), _IOC_NR (iocmd),
+	    _IOC_SIZE (iocmd));
 #endif
     iolen = _IOC_SIZE (iocmd);
     data = ifr->ifr_data + sizeof (iocmd);
     if (copy_from_user (&arg, data, iolen))
-        return -EFAULT;
+	return -EFAULT;
 
     ret = 0;
     switch (iocmd)
     {
     case SBE_IOC_PORT_GET:
-        //pr_info(">> SBE_IOC_PORT_GET Ioctl...\n");
-        ret = do_get_port (ndev, data);
-        break;
+	//pr_info(">> SBE_IOC_PORT_GET Ioctl...\n");
+	ret = do_get_port (ndev, data);
+	break;
     case SBE_IOC_PORT_SET:
-        //pr_info(">> SBE_IOC_PORT_SET Ioctl...\n");
-        ret = do_set_port (ndev, data);
-        break;
+	//pr_info(">> SBE_IOC_PORT_SET Ioctl...\n");
+	ret = do_set_port (ndev, data);
+	break;
     case SBE_IOC_CHAN_GET:
-        //pr_info(">> SBE_IOC_CHAN_GET Ioctl...\n");
-        ret = do_get_chan (ndev, data);
-        break;
+	//pr_info(">> SBE_IOC_CHAN_GET Ioctl...\n");
+	ret = do_get_chan (ndev, data);
+	break;
     case SBE_IOC_CHAN_SET:
-        //pr_info(">> SBE_IOC_CHAN_SET Ioctl...\n");
-        ret = do_set_chan (ndev, data);
-        break;
+	//pr_info(">> SBE_IOC_CHAN_SET Ioctl...\n");
+	ret = do_set_chan (ndev, data);
+	break;
     case C4_DEL_CHAN:
-        //pr_info(">> C4_DEL_CHAN Ioctl...\n");
-        ret = do_del_chan (ndev, data);
-        break;
+	//pr_info(">> C4_DEL_CHAN Ioctl...\n");
+	ret = do_del_chan (ndev, data);
+	break;
     case SBE_IOC_CHAN_NEW:
-        ret = do_create_chan (ndev, data);
-        break;
+	ret = do_create_chan (ndev, data);
+	break;
     case SBE_IOC_CHAN_GET_STAT:
-        ret = do_get_chan_stats (ndev, data);
-        break;
+	ret = do_get_chan_stats (ndev, data);
+	break;
     case SBE_IOC_LOGLEVEL:
-        ret = do_set_loglevel (ndev, data);
-        break;
+	ret = do_set_loglevel (ndev, data);
+	break;
     case SBE_IOC_RESET_DEV:
-        ret = do_reset (ndev, data);
-        break;
+	ret = do_reset (ndev, data);
+	break;
     case SBE_IOC_CHAN_DEL_STAT:
-        ret = do_reset_chan_stats (ndev, data);
-        break;
+	ret = do_reset_chan_stats (ndev, data);
+	break;
     case C4_LOOP_PORT:
-        ret = do_port_loop (ndev, data);
-        break;
+	ret = do_port_loop (ndev, data);
+	break;
     case C4_RW_FRMR:
-        ret = do_framer_rw (ndev, data);
-        break;
+	ret = do_framer_rw (ndev, data);
+	break;
     case C4_RW_MSYC:
-        ret = do_musycc_rw (ndev, data);
-        break;
+	ret = do_musycc_rw (ndev, data);
+	break;
     case C4_RW_PLD:
-        ret = do_pld_rw (ndev, data);
-        break;
+	ret = do_pld_rw (ndev, data);
+	break;
     case SBE_IOC_IID_GET:
-        ret = (iolen == sizeof (struct sbe_iid_info)) ? c4_get_iidinfo (ci, &arg.u.iip) : -EFAULT;
-        if (ret == 0)               /* no error, copy data */
-            if (copy_to_user (data, &arg, iolen))
-                return -EFAULT;
-        break;
+	ret = (iolen == sizeof (struct sbe_iid_info)) ? c4_get_iidinfo (ci, &arg.u.iip) : -EFAULT;
+	if (ret == 0)               /* no error, copy data */
+	    if (copy_to_user (data, &arg, iolen))
+		return -EFAULT;
+	break;
     default:
-        //pr_info(">> c4_ioctl: EINVAL - unknown iocmd <%x>\n", iocmd);
-        ret = -EINVAL;
-        break;
+	//pr_info(">> c4_ioctl: EINVAL - unknown iocmd <%x>\n", iocmd);
+	ret = -EINVAL;
+	break;
     }
     return mkret (ret);
 }
@@ -953,7 +953,7 @@ static void c4_setup(struct net_device *dev)
 
 struct net_device *__init
 c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
-            int irq0, int irq1)
+	    int irq0, int irq1)
 {
     struct net_device *ndev;
     ci_t       *ci;
@@ -961,9 +961,9 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
     ndev = alloc_netdev(sizeof(ci_t), SBE_IFACETMPL, c4_setup);
     if (!ndev)
     {
-        pr_warning("%s: no memory for struct net_device !\n", hi->devname);
-        error_flag = ENOMEM;
-        return 0;
+	pr_warning("%s: no memory for struct net_device !\n", hi->devname);
+	error_flag = ENOMEM;
+	return 0;
     }
     ci = (ci_t *)(netdev_priv(ndev));
     ndev->irq = irq0;
@@ -975,7 +975,7 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
     ci->brdno = ci->next ? ci->next->brdno + 1 : 0;
 
     if (CI == 0)
-        CI = ci;                    /* DEBUG, only board 0 usage */
+	CI = ci;                    /* DEBUG, only board 0 usage */
 
     strcpy (ci->devname, hi->devname);
     ci->release = &pmcc4_OSSI_release[0];
@@ -983,11 +983,11 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
     /* tasklet */
 #if defined(SBE_ISR_TASKLET)
     tasklet_init (&ci->ci_musycc_isr_tasklet,
-                  (void (*) (unsigned long)) musycc_intr_bh_tasklet,
-                  (unsigned long) ci);
+		  (void (*) (unsigned long)) musycc_intr_bh_tasklet,
+		  (unsigned long) ci);
 
     if (atomic_read (&ci->ci_musycc_isr_tasklet.count) == 0)
-        tasklet_disable_nosync (&ci->ci_musycc_isr_tasklet);
+	tasklet_disable_nosync (&ci->ci_musycc_isr_tasklet);
 #elif defined(SBE_ISR_IMMEDIATE)
     ci->ci_musycc_isr_tq.routine = (void *) (unsigned long) musycc_intr_bh_tasklet;
     ci->ci_musycc_isr_tq.data = ci;
@@ -995,12 +995,12 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
 
 
     if (register_netdev (ndev) ||
-        (c4_init (ci, (u_char *) f0, (u_char *) f1) != SBE_DRVR_SUCCESS))
+	(c4_init (ci, (u_char *) f0, (u_char *) f1) != SBE_DRVR_SUCCESS))
     {
-        OS_kfree (netdev_priv(ndev));
-        OS_kfree (ndev);
-        error_flag = ENODEV;
-        return 0;
+	OS_kfree (netdev_priv(ndev));
+	OS_kfree (ndev);
+	error_flag = ENODEV;
+	return 0;
     }
     /*************************************************************
      *  int request_irq(unsigned int irq,
@@ -1018,61 +1018,61 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
      **************************************************************/
 
     if (request_irq (irq0, &c4_linux_interrupt,
-                     IRQF_SHARED,
-                     ndev->name, ndev))
+		     IRQF_SHARED,
+		     ndev->name, ndev))
     {
-        pr_warning("%s: MUSYCC could not get irq: %d\n", ndev->name, irq0);
-        unregister_netdev (ndev);
-        OS_kfree (netdev_priv(ndev));
-        OS_kfree (ndev);
-        error_flag = EIO;
-        return 0;
+	pr_warning("%s: MUSYCC could not get irq: %d\n", ndev->name, irq0);
+	unregister_netdev (ndev);
+	OS_kfree (netdev_priv(ndev));
+	OS_kfree (ndev);
+	error_flag = EIO;
+	return 0;
     }
 #ifdef CONFIG_SBE_PMCC4_NCOMM
     if (request_irq (irq1, &c4_ebus_interrupt, IRQF_SHARED, ndev->name, ndev))
     {
-        pr_warning("%s: EBUS could not get irq: %d\n", hi->devname, irq1);
-        unregister_netdev (ndev);
-        free_irq (irq0, ndev);
-        OS_kfree (netdev_priv(ndev));
-        OS_kfree (ndev);
-        error_flag = EIO;
-        return 0;
+	pr_warning("%s: EBUS could not get irq: %d\n", hi->devname, irq1);
+	unregister_netdev (ndev);
+	free_irq (irq0, ndev);
+	OS_kfree (netdev_priv(ndev));
+	OS_kfree (ndev);
+	error_flag = EIO;
+	return 0;
     }
 #endif
 
     /* setup board identification information */
 
     {
-        u_int32_t   tmp;
+	u_int32_t   tmp;
 
-        hdw_sn_get (hi, brdno);     /* also sets PROM format type (promfmt)
-                                     * for later usage */
+	hdw_sn_get (hi, brdno);     /* also sets PROM format type (promfmt)
+				     * for later usage */
 
-        switch (hi->promfmt)
-        {
-        case PROM_FORMAT_TYPE1:
-            memcpy (ndev->dev_addr, (FLD_TYPE1 *) (hi->mfg_info.pft1.Serial), 6);
-            memcpy (&tmp, (FLD_TYPE1 *) (hi->mfg_info.pft1.Id), 4);     /* unaligned data
-                                                                         * acquisition */
-            ci->brd_id = cpu_to_be32 (tmp);
-            break;
-        case PROM_FORMAT_TYPE2:
-            memcpy (ndev->dev_addr, (FLD_TYPE2 *) (hi->mfg_info.pft2.Serial), 6);
-            memcpy (&tmp, (FLD_TYPE2 *) (hi->mfg_info.pft2.Id), 4);     /* unaligned data
-                                                                         * acquisition */
-            ci->brd_id = cpu_to_be32 (tmp);
-            break;
-        default:
-            ci->brd_id = 0;
-            memset (ndev->dev_addr, 0, 6);
-            break;
-        }
+	switch (hi->promfmt)
+	{
+	case PROM_FORMAT_TYPE1:
+	    memcpy (ndev->dev_addr, (FLD_TYPE1 *) (hi->mfg_info.pft1.Serial), 6);
+	    memcpy (&tmp, (FLD_TYPE1 *) (hi->mfg_info.pft1.Id), 4);     /* unaligned data
+									 * acquisition */
+	    ci->brd_id = cpu_to_be32 (tmp);
+	    break;
+	case PROM_FORMAT_TYPE2:
+	    memcpy (ndev->dev_addr, (FLD_TYPE2 *) (hi->mfg_info.pft2.Serial), 6);
+	    memcpy (&tmp, (FLD_TYPE2 *) (hi->mfg_info.pft2.Id), 4);     /* unaligned data
+									 * acquisition */
+	    ci->brd_id = cpu_to_be32 (tmp);
+	    break;
+	default:
+	    ci->brd_id = 0;
+	    memset (ndev->dev_addr, 0, 6);
+	    break;
+	}
 
 #if 1
-        sbeid_set_hdwbid (ci);      /* requires bid to be preset */
+	sbeid_set_hdwbid (ci);      /* requires bid to be preset */
 #else
-        sbeid_set_bdtype (ci);      /* requires hdw_bid to be preset */
+	sbeid_set_bdtype (ci);      /* requires hdw_bid to be preset */
 #endif
 
     }
@@ -1088,14 +1088,14 @@ c4_add_dev (hdw_info_t * hi, int brdno, unsigned long f0, unsigned long f1,
     if ((error_flag = c4_init2 (ci)) != SBE_DRVR_SUCCESS)
     {
 #ifdef CONFIG_PROC_FS
-        sbecom_proc_brd_cleanup (ci);
+	sbecom_proc_brd_cleanup (ci);
 #endif
-        unregister_netdev (ndev);
-        free_irq (irq1, ndev);
-        free_irq (irq0, ndev);
-        OS_kfree (netdev_priv(ndev));
-        OS_kfree (ndev);
-        return 0;                   /* failure, error_flag is set */
+	unregister_netdev (ndev);
+	free_irq (irq1, ndev);
+	free_irq (irq0, ndev);
+	OS_kfree (netdev_priv(ndev));
+	OS_kfree (ndev);
+	return 0;                   /* failure, error_flag is set */
     }
     return ndev;
 }
@@ -1107,31 +1107,31 @@ c4_mod_init (void)
 
     pr_warning("%s\n", pmcc4_OSSI_release);
     if ((rtn = c4hw_attach_all ()))
-        return -rtn;                /* installation failure - see system log */
+	return -rtn;                /* installation failure - see system log */
 
     /* housekeeping notifications */
     if (cxt1e1_log_level != log_level_default)
-        pr_info("NOTE: driver parameter <cxt1e1_log_level> changed from default %d to %d.\n",
-                log_level_default, cxt1e1_log_level);
+	pr_info("NOTE: driver parameter <cxt1e1_log_level> changed from default %d to %d.\n",
+		log_level_default, cxt1e1_log_level);
        if (cxt1e1_max_mru != max_mru_default)
-               pr_info("NOTE: driver parameter <cxt1e1_max_mru> changed from default %d to %d.\n",
-                               max_mru_default, cxt1e1_max_mru);
+	       pr_info("NOTE: driver parameter <cxt1e1_max_mru> changed from default %d to %d.\n",
+			       max_mru_default, cxt1e1_max_mru);
        if (cxt1e1_max_mtu != max_mtu_default)
-               pr_info("NOTE: driver parameter <cxt1e1_max_mtu> changed from default %d to %d.\n",
-                               max_mtu_default, cxt1e1_max_mtu);
+	       pr_info("NOTE: driver parameter <cxt1e1_max_mtu> changed from default %d to %d.\n",
+			       max_mtu_default, cxt1e1_max_mtu);
     if (max_rxdesc_used != max_rxdesc_default)
     {
-        if (max_rxdesc_used > 2000)
-            max_rxdesc_used = 2000; /* out-of-bounds reset */
-        pr_info("NOTE: driver parameter <max_rxdesc_used> changed from default %d to %d.\n",
-                max_rxdesc_default, max_rxdesc_used);
+	if (max_rxdesc_used > 2000)
+	    max_rxdesc_used = 2000; /* out-of-bounds reset */
+	pr_info("NOTE: driver parameter <max_rxdesc_used> changed from default %d to %d.\n",
+		max_rxdesc_default, max_rxdesc_used);
     }
     if (max_txdesc_used != max_txdesc_default)
     {
-        if (max_txdesc_used > 1000)
-            max_txdesc_used = 1000; /* out-of-bounds reset */
-        pr_info("NOTE: driver parameter <max_txdesc_used> changed from default %d to %d.\n",
-                max_txdesc_default, max_txdesc_used);
+	if (max_txdesc_used > 1000)
+	    max_txdesc_used = 1000; /* out-of-bounds reset */
+	pr_info("NOTE: driver parameter <max_txdesc_used> changed from default %d to %d.\n",
+		max_txdesc_default, max_txdesc_used);
     }
     return 0;                       /* installation success */
 }
@@ -1152,16 +1152,16 @@ cleanup_hdlc (void)
 
     for (i = 0, hi = hdw_info; i < MAX_BOARDS; i++, hi++)
     {
-        if (hi->ndev)               /* a board has been attached */
-        {
-            ci = (ci_t *)(netdev_priv(hi->ndev));
-            for (j = 0; j < ci->max_port; j++)
-                for (k = 0; k < MUSYCC_NCHANS; k++)
-                    if ((ndev = ci->port[j].chan[k]->user))
-                    {
-                        do_deluser (ndev, 0);
-                    }
-        }
+	if (hi->ndev)               /* a board has been attached */
+	{
+	    ci = (ci_t *)(netdev_priv(hi->ndev));
+	    for (j = 0; j < ci->max_port; j++)
+		for (k = 0; k < MUSYCC_NCHANS; k++)
+		    if ((ndev = ci->port[j].chan[k]->user))
+		    {
+			do_deluser (ndev, 0);
+		    }
+	}
     }
 }
 

@@ -52,7 +52,7 @@
  *   - (NOM % DEN) fits in (32 - LSH) bits.
  */
 #define SH_DIV(NOM,DEN,LSH) (   (((NOM) / (DEN)) << (LSH))              \
-                             + ((((NOM) % (DEN)) << (LSH)) + (DEN) / 2) / (DEN))
+			     + ((((NOM) % (DEN)) << (LSH)) + (DEN) / 2) / (DEN))
 
 /* HZ is the requested value. ACTHZ is actual HZ ("<< 8" is for accuracy) */
 #define ACTHZ (SH_DIV (CLOCK_TICK_RATE, LATCH, 8))
@@ -261,13 +261,13 @@ extern unsigned long preset_lpj;
 #define NSEC_JIFFIE_SC (SEC_JIFFIE_SC + 29)
 #define USEC_JIFFIE_SC (SEC_JIFFIE_SC + 19)
 #define SEC_CONVERSION ((unsigned long)((((u64)NSEC_PER_SEC << SEC_JIFFIE_SC) +\
-                                TICK_NSEC -1) / (u64)TICK_NSEC))
+				TICK_NSEC -1) / (u64)TICK_NSEC))
 
 #define NSEC_CONVERSION ((unsigned long)((((u64)1 << NSEC_JIFFIE_SC) +\
-                                        TICK_NSEC -1) / (u64)TICK_NSEC))
+					TICK_NSEC -1) / (u64)TICK_NSEC))
 #define USEC_CONVERSION  \
-                    ((unsigned long)((((u64)NSEC_PER_USEC << USEC_JIFFIE_SC) +\
-                                        TICK_NSEC -1) / (u64)TICK_NSEC))
+		    ((unsigned long)((((u64)NSEC_PER_USEC << USEC_JIFFIE_SC) +\
+					TICK_NSEC -1) / (u64)TICK_NSEC))
 /*
  * USEC_ROUND is used in the timeval to jiffie conversion.  See there
  * for more details.  It is the scaled resolution rounding value.  Note

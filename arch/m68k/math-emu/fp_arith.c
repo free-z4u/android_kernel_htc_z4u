@@ -564,9 +564,9 @@ static void fp_roundint(struct fp_ext *dest, int mode)
 		if (dest->mant.m32[1] += mask)
 			break;
 		if (dest->mant.m32[0] += 1)
-                        break;
+			break;
 		dest->mant.m32[0] = 0x80000000;
-                dest->exp++;
+		dest->exp++;
 		break;
 	}
 }

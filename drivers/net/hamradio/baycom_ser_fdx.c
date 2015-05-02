@@ -182,47 +182,47 @@ static inline void baycom_int_freq(struct baycom_state *bc)
 /* --------------------------------------------------------------------- */
 
 static inline void ser12_set_divisor(struct net_device *dev,
-                                     unsigned int divisor)
+				     unsigned int divisor)
 {
-        outb(0x81, LCR(dev->base_addr));        /* DLAB = 1 */
-        outb(divisor, DLL(dev->base_addr));
-        outb(divisor >> 8, DLM(dev->base_addr));
-        outb(0x01, LCR(dev->base_addr));        /* word length = 6 */
-        /*
-         * make sure the next interrupt is generated;
-         * 0 must be used to power the modem; the modem draws its
-         * power from the TxD line
-         */
-        outb(0x00, THR(dev->base_addr));
-        /*
-         * it is important not to set the divider while transmitting;
-         * this reportedly makes some UARTs generating interrupts
-         * in the hundredthousands per second region
-         * Reported by: Ignacio.Arenaza@studi.epfl.ch (Ignacio Arenaza Nuno)
-         */
+	outb(0x81, LCR(dev->base_addr));        /* DLAB = 1 */
+	outb(divisor, DLL(dev->base_addr));
+	outb(divisor >> 8, DLM(dev->base_addr));
+	outb(0x01, LCR(dev->base_addr));        /* word length = 6 */
+	/*
+	 * make sure the next interrupt is generated;
+	 * 0 must be used to power the modem; the modem draws its
+	 * power from the TxD line
+	 */
+	outb(0x00, THR(dev->base_addr));
+	/*
+	 * it is important not to set the divider while transmitting;
+	 * this reportedly makes some UARTs generating interrupts
+	 * in the hundredthousands per second region
+	 * Reported by: Ignacio.Arenaza@studi.epfl.ch (Ignacio Arenaza Nuno)
+	 */
 }
 
 /* --------------------------------------------------------------------- */
 
 #if 0
 static inline unsigned int hweight16(unsigned int w)
-        __attribute__ ((unused));
+	__attribute__ ((unused));
 static inline unsigned int hweight8(unsigned int w)
-        __attribute__ ((unused));
+	__attribute__ ((unused));
 
 static inline unsigned int hweight16(unsigned int w)
 {
-        unsigned short res = (w & 0x5555) + ((w >> 1) & 0x5555);
-        res = (res & 0x3333) + ((res >> 2) & 0x3333);
-        res = (res & 0x0F0F) + ((res >> 4) & 0x0F0F);
-        return (res & 0x00FF) + ((res >> 8) & 0x00FF);
+	unsigned short res = (w & 0x5555) + ((w >> 1) & 0x5555);
+	res = (res & 0x3333) + ((res >> 2) & 0x3333);
+	res = (res & 0x0F0F) + ((res >> 4) & 0x0F0F);
+	return (res & 0x00FF) + ((res >> 8) & 0x00FF);
 }
 
 static inline unsigned int hweight8(unsigned int w)
 {
-        unsigned short res = (w & 0x55) + ((w >> 1) & 0x55);
-        res = (res & 0x33) + ((res >> 2) & 0x33);
-        return (res & 0x0F) + ((res >> 4) & 0x0F);
+	unsigned short res = (w & 0x55) + ((w >> 1) & 0x55);
+	res = (res & 0x33) + ((res >> 2) & 0x33);
+	return (res & 0x0F) + ((res >> 4) & 0x0F);
 }
 #endif
 
@@ -693,17 +693,17 @@ module_exit(cleanup_baycomserfdx);
 
 static int __init baycom_ser_fdx_setup(char *str)
 {
-        static unsigned nr_dev;
-        int ints[4];
+	static unsigned nr_dev;
+	int ints[4];
 
-        if (nr_dev >= NR_PORTS)
-                return 0;
-        str = get_options(str, 4, ints);
-        if (ints[0] < 2)
-                return 0;
-        mode[nr_dev] = str;
-        iobase[nr_dev] = ints[1];
-        irq[nr_dev] = ints[2];
+	if (nr_dev >= NR_PORTS)
+		return 0;
+	str = get_options(str, 4, ints);
+	if (ints[0] < 2)
+		return 0;
+	mode[nr_dev] = str;
+	iobase[nr_dev] = ints[1];
+	irq[nr_dev] = ints[2];
 	if (ints[0] >= 3)
 		baud[nr_dev] = ints[3];
 	nr_dev++;

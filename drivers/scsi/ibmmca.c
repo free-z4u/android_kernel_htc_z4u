@@ -1488,18 +1488,18 @@ static int ibmmca_getinfo(char *buf, int slot, void *dev_id)
 #endif
 
 static struct scsi_host_template ibmmca_driver_template = {
-          .proc_name      = "ibmmca",
+	  .proc_name      = "ibmmca",
 	  .proc_info	  = ibmmca_proc_info,
-          .name           = "IBM SCSI-Subsystem",
-          .queuecommand   = ibmmca_queuecommand,
+	  .name           = "IBM SCSI-Subsystem",
+	  .queuecommand   = ibmmca_queuecommand,
 	  .eh_abort_handler = ibmmca_abort,
 	  .eh_host_reset_handler = ibmmca_host_reset,
-          .bios_param     = ibmmca_biosparam,
-          .can_queue      = 16,
-          .this_id        = 7,
-          .sg_tablesize   = 16,
-          .cmd_per_lun    = 1,
-          .use_clustering = ENABLE_CLUSTERING,
+	  .bios_param     = ibmmca_biosparam,
+	  .can_queue      = 16,
+	  .this_id        = 7,
+	  .sg_tablesize   = 16,
+	  .cmd_per_lun    = 1,
+	  .use_clustering = ENABLE_CLUSTERING,
 };
 
 static int ibmmca_probe(struct device *dev)

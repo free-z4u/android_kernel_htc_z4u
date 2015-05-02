@@ -731,7 +731,7 @@ extern void update_mmu_cache(struct vm_area_struct *, unsigned long, pte_t *);
 	( (swp_entry_t) \
 	  { \
 		(((long)(type) << PAGE_SHIFT) | \
-                 ((long)(offset) << (PAGE_SHIFT + 8UL))) \
+		 ((long)(offset) << (PAGE_SHIFT + 8UL))) \
 	  } )
 #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) })
 #define __swp_entry_to_pte(x)		((pte_t) { (x).val })

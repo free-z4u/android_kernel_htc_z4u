@@ -27,7 +27,7 @@ typedef unsigned short unicode;
 static void usage(char *argv0)
 {
   fprintf(stderr, "Usage: \n"
-         "        %s chartable [hashsize] [hashstep] [maxhashlevel]\n", argv0);
+	 "        %s chartable [hashsize] [hashstep] [maxhashlevel]\n", argv0);
   exit(EX_USAGE);
 }
 
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
 	{
 	  fprintf(stderr, "Bad input line: %s\n", buffer);
 	  exit(EX_DATAERR);
-        }
+	}
       p = p1;
 
       while (*p == ' ' || *p == '\t')
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 	      exit(EX_DATAERR);
 	    }
 	  p = p1;
-        }
+	}
       else
 	fp1 = 0;
 
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
 	      for(i=fp0; i<=fp1; i++)
 		addpair(i,un0-fp0+i);
 	    }
-        }
+	}
       else
 	{
 	    /* no range; expect a list of unicode values for a single font position */
@@ -262,11 +262,11 @@ u8 dfont_unicount[%d] = \n\
     {
       printf("%3d", unicount[i]);
       if ( i == fontlen-1 )
-        printf("\n};\n");
+	printf("\n};\n");
       else if ( i % 8 == 7 )
-        printf(",\n\t");
+	printf(",\n\t");
       else
-        printf(", ");
+	printf(", ");
     }
 
   printf("\nu16 dfont_unitable[%d] = \n{\n\t", nuni);
@@ -282,11 +282,11 @@ u8 dfont_unicount[%d] = \n\
 	}
       printf("0x%04x", unitable[fp0][nent++]);
       if ( i == nuni-1 )
-         printf("\n};\n");
+	 printf("\n};\n");
        else if ( i % 8 == 7 )
-         printf(",\n\t");
+	 printf(",\n\t");
        else
-         printf(", ");
+	 printf(", ");
     }
 
   exit(EX_OK);

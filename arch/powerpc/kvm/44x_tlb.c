@@ -77,7 +77,7 @@ static inline void kvmppc_44x_tlbie(unsigned int index)
 }
 
 static inline void kvmppc_44x_tlbre(unsigned int index,
-                                    struct kvmppc_44x_tlbe *tlbe)
+				    struct kvmppc_44x_tlbe *tlbe)
 {
 	asm volatile(
 		"tlbre %[word0], %[index], 0\n"
@@ -96,7 +96,7 @@ static inline void kvmppc_44x_tlbre(unsigned int index,
 }
 
 static inline void kvmppc_44x_tlbwe(unsigned int index,
-                                    struct kvmppc_44x_tlbe *stlbe)
+				    struct kvmppc_44x_tlbe *stlbe)
 {
 	unsigned long tmp;
 
@@ -153,7 +153,7 @@ void kvmppc_44x_tlb_load(struct kvm_vcpu *vcpu)
 }
 
 static void kvmppc_44x_tlbe_set_modified(struct kvmppc_vcpu_44x *vcpu_44x,
-                                         unsigned int i)
+					 unsigned int i)
 {
 	vcpu_44x->shadow_tlb_mod[i] = 1;
 }
@@ -178,7 +178,7 @@ void kvmppc_44x_tlb_put(struct kvm_vcpu *vcpu)
 
 /* Search the guest TLB for a matching entry. */
 int kvmppc_44x_tlb_index(struct kvm_vcpu *vcpu, gva_t eaddr, unsigned int pid,
-                         unsigned int as)
+			 unsigned int as)
 {
 	struct kvmppc_vcpu_44x *vcpu_44x = to_44x(vcpu);
 	int i;
@@ -211,7 +211,7 @@ int kvmppc_44x_tlb_index(struct kvm_vcpu *vcpu, gva_t eaddr, unsigned int pid,
 }
 
 gpa_t kvmppc_mmu_xlate(struct kvm_vcpu *vcpu, unsigned int gtlb_index,
-                       gva_t eaddr)
+		       gva_t eaddr)
 {
 	struct kvmppc_vcpu_44x *vcpu_44x = to_44x(vcpu);
 	struct kvmppc_44x_tlbe *gtlbe = &vcpu_44x->guest_tlb[gtlb_index];
@@ -243,7 +243,7 @@ void kvmppc_mmu_dtlb_miss(struct kvm_vcpu *vcpu)
 }
 
 static void kvmppc_44x_shadow_release(struct kvmppc_vcpu_44x *vcpu_44x,
-                                      unsigned int stlb_index)
+				      unsigned int stlb_index)
 {
 	struct kvmppc_44x_shadow_ref *ref = &vcpu_44x->shadow_refs[stlb_index];
 
@@ -290,7 +290,7 @@ void kvmppc_mmu_destroy(struct kvm_vcpu *vcpu)
  * the shadow TLB.
  */
 void kvmppc_mmu_map(struct kvm_vcpu *vcpu, u64 gvaddr, gpa_t gpaddr,
-                    unsigned int gtlb_index)
+		    unsigned int gtlb_index)
 {
 	struct kvmppc_44x_tlbe stlbe;
 	struct kvmppc_vcpu_44x *vcpu_44x = to_44x(vcpu);
@@ -375,7 +375,7 @@ void kvmppc_mmu_map(struct kvm_vcpu *vcpu, u64 gvaddr, gpa_t gpaddr,
 /* For a particular guest TLB entry, invalidate the corresponding host TLB
  * mappings and release the host pages. */
 static void kvmppc_44x_invalidate(struct kvm_vcpu *vcpu,
-                                  unsigned int gtlb_index)
+				  unsigned int gtlb_index)
 {
 	struct kvmppc_vcpu_44x *vcpu_44x = to_44x(vcpu);
 	int i;
@@ -417,7 +417,7 @@ void kvmppc_set_pid(struct kvm_vcpu *vcpu, u32 new_pid)
 }
 
 static int tlbe_is_host_safe(const struct kvm_vcpu *vcpu,
-                             const struct kvmppc_44x_tlbe *tlbe)
+			     const struct kvmppc_44x_tlbe *tlbe)
 {
 	gpa_t gpa;
 

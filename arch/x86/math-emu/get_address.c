@@ -191,17 +191,17 @@ static long pm_address(u_char FPU_modrm, u_char segment,
 
 /*
        MOD R/M byte:  MOD == 3 has a special use for the FPU
-                      SIB byte used iff R/M = 100b
+		      SIB byte used iff R/M = 100b
 
        7   6   5   4   3   2   1   0
        .....   .........   .........
-        MOD    OPCODE(2)     R/M
+	MOD    OPCODE(2)     R/M
 
        SIB byte
 
        7   6   5   4   3   2   1   0
        .....   .........   .........
-        SS      INDEX        BASE
+	SS      INDEX        BASE
 
 */
 

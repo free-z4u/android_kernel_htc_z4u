@@ -43,7 +43,7 @@
 				 * on IIfx, "0 means an active request"
 				 */
 #define VIA1A_vRev8	0x40	/* Revision 8 board ???
-                                 * [CHRP] En WaitReqB: Lets the WaitReq_L
+				 * [CHRP] En WaitReqB: Lets the WaitReq_L
 				 * signal from port B of the SCC appear on
 				 * the PA7 input pin. Output.
 				 * [Macintosh Family] On the SE/30, this
@@ -72,7 +72,7 @@
 				 *  (with 0x20 being 'disk head select')
 				 */
 #define VIA1A_vSync	0x08    /* [CHRP] Sync Modem: modem clock select:
-                                 * 1: select the external serial clock to
+				 * 1: select the external serial clock to
 				 *    drive the SCC's /RTxCA pin.
 				 * 0: Select the 3.6864MHz clock to drive
 				 *    the SCC cell.
@@ -206,7 +206,7 @@
 #define vSR	0x1400  /* [VIA only] Shift register. */
 #define vACR	0x1600  /* [VIA only] Auxiliary control register. */
 #define vPCR	0x1800  /* [VIA only] Peripheral control register. */
-                        /*            CHRP sez never ever to *write* this.
+			/*            CHRP sez never ever to *write* this.
 			 *            Mac family says never to *change* this.
 			 * In fact we need to initialize it once at start. */
 #define vIFR	0x1a00  /* [VIA/RBV]  Interrupt flag register. */

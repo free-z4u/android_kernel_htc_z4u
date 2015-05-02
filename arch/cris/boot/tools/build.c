@@ -77,10 +77,10 @@ int intel_int(int i)
 	conv t;
 
 	t.b[0] = i & 0xff; i >>= 8;
-        t.b[1] = i & 0xff; i >>= 8;
-        t.b[2] = i & 0xff; i >>= 8;
-        t.b[3] = i & 0xff; i >>= 8;
-        return t.i;
+	t.b[1] = i & 0xff; i >>= 8;
+	t.b[2] = i & 0xff; i >>= 8;
+	t.b[3] = i & 0xff; i >>= 8;
+	return t.i;
 }
 
 short intel_short(short l)

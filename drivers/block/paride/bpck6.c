@@ -127,7 +127,7 @@ static int bpck6_test_port ( PIA *pi )   /* check for 8-bit port */
 	if(verbose)
 	{
 		printk(KERN_DEBUG "PARPORT indicates modes=%x for lp=0x%lx\n",
-               		((struct pardevice*)(pi->pardev))->port->modes,
+	       		((struct pardevice*)(pi->pardev))->port->modes,
 			((struct pardevice *)(pi->pardev))->port->base);
 	}
 
@@ -138,13 +138,13 @@ static int bpck6_test_port ( PIA *pi )   /* check for 8-bit port */
 	/* look at the parport device to see if what modes we can use */
 	if(((struct pardevice *)(pi->pardev))->port->modes &
 		(PARPORT_MODE_EPP)
-          )
+	  )
 	{
 		return 5; /* Can do EPP*/
 	}
 	else if(((struct pardevice *)(pi->pardev))->port->modes &
 			(PARPORT_MODE_TRISTATE)
-               )
+	       )
 	{
 		return 2;
 	}
@@ -183,7 +183,7 @@ static int bpck6_probe_unit ( PIA *pi )
 		{
 			printk(KERN_DEBUG "leaving probe\n");
 		}
-               return(1);
+	       return(1);
 	}
   	else
   	{

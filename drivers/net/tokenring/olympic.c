@@ -328,7 +328,7 @@ static int olympic_init(struct net_device *dev)
 #endif
 	/* Aaaahhh, You have got to be real careful setting GPR, the card
 	   holds the previous values from flash memory, including autosense
-           and ring speed */
+	   and ring speed */
 
 	writel(readl(olympic_mmio+BCTL)|BCTL_MIMREB,olympic_mmio+BCTL);
 
@@ -510,15 +510,15 @@ static int olympic_open(struct net_device *dev)
 
  		while(olympic_priv->srb_queued) {
 			schedule() ;
-        		if(signal_pending(current))	{
+			if(signal_pending(current))	{
 				printk(KERN_WARNING "%s: Signal received in open.\n",
-                			dev->name);
-            			printk(KERN_WARNING "SISR=%x LISR=%x\n",
-                			readl(olympic_mmio+SISR),
-                			readl(olympic_mmio+LISR));
-            			olympic_priv->srb_queued=0;
-            			break;
-        		}
+					dev->name);
+	    			printk(KERN_WARNING "SISR=%x LISR=%x\n",
+					readl(olympic_mmio+SISR),
+					readl(olympic_mmio+LISR));
+	    			olympic_priv->srb_queued=0;
+	    			break;
+			}
 			if (time_after(jiffies, t + 10*HZ)) {
 				printk(KERN_WARNING "%s: SRB timed out.\n",dev->name);
 				olympic_priv->srb_queued=0;
@@ -537,7 +537,7 @@ static int olympic_open(struct net_device *dev)
 #endif
 
 		/* If we get the same return response as we set, the interrupt wasn't raised and the open
-                 * timed out.
+		 * timed out.
 		 */
 
 		switch (resp = readb(init_srb+2)) {
@@ -754,7 +754,7 @@ static void olympic_rx(struct net_device *dev)
 	rx_status=&(olympic_priv->olympic_rx_status_ring[(olympic_priv->rx_status_last_received + 1) & (OLYMPIC_RX_RING_SIZE - 1)]) ;
 
 	while (rx_status->status_buffercnt) {
-                u32 l_status_buffercnt;
+		u32 l_status_buffercnt;
 
 		olympic_priv->rx_status_last_received++ ;
 		olympic_priv->rx_status_last_received &= (OLYMPIC_RX_RING_SIZE -1);
@@ -769,7 +769,7 @@ static void olympic_rx(struct net_device *dev)
 #if OLYMPIC_DEBUG
 		printk("length: %x, frag_len: %x, buffer_cnt: %x\n", length, frag_len, buffer_cnt);
 #endif
-                l_status_buffercnt = le32_to_cpu(rx_status->status_buffercnt);
+		l_status_buffercnt = le32_to_cpu(rx_status->status_buffercnt);
 		if(l_status_buffercnt & 0xC0000000) {
 			if (l_status_buffercnt & 0x3B000000) {
 				if (olympic_priv->olympic_message_level) {
@@ -806,7 +806,7 @@ static void olympic_rx(struct net_device *dev)
 			   	   	   If only one buffer is used we can simply swap the buffers around.
 			   	   	   If more than one then we must use the new buffer and copy the information
 			   	   	   first. Ideally all frames would be in a single buffer, this can be tuned by
-                               	   	   altering the buffer size. If the length of the packet is less than
+			       	   	   altering the buffer size. If the length of the packet is less than
 					   1500 bytes we're going to copy it over anyway to stop packets getting
 					   dropped from sockets with buffers smaller than our pkt_buf_sz. */
 
@@ -1019,7 +1019,7 @@ static irqreturn_t olympic_interrupt(int irq, void *dev_id)
 
 		if (sisr & SISR_RX_NOBUF) {
 			/* According to the documentation, we don't have to do anything, but trapping it keeps it out of
-                  	   	   /var/log/messages.  */
+		  	   	   /var/log/messages.  */
 		} /* SISR_RX_NOBUF */
 	} else {
 		printk(KERN_WARNING "%s: Unexpected interrupt: %x\n",dev->name, sisr);
@@ -1049,8 +1049,8 @@ static netdev_tx_t olympic_xmit(struct sk_buff *skb,
 		olympic_priv->tx_ring_skb[olympic_priv->tx_ring_free]=skb;
 		olympic_priv->free_tx_ring_entries--;
 
-        	olympic_priv->tx_ring_free++;
-        	olympic_priv->tx_ring_free &= (OLYMPIC_TX_RING_SIZE-1);
+		olympic_priv->tx_ring_free++;
+		olympic_priv->tx_ring_free &= (OLYMPIC_TX_RING_SIZE-1);
 		writew((((readw(olympic_mmio+TXENQ_1)) & 0x8000) ^ 0x8000) | 1,olympic_mmio+TXENQ_1);
 		netif_wake_queue(dev);
 		spin_unlock_irqrestore(&olympic_priv->olympic_lock,flags);
@@ -1093,12 +1093,12 @@ static int olympic_close(struct net_device *dev)
 
 		t = schedule_timeout_interruptible(60*HZ);
 
-        	if(signal_pending(current))	{
+		if(signal_pending(current))	{
 			printk(KERN_WARNING "%s: SRB timed out.\n",dev->name);
-            		printk(KERN_WARNING "SISR=%x MISR=%x\n",readl(olympic_mmio+SISR),readl(olympic_mmio+LISR));
-            		olympic_priv->srb_queued=0;
-            		break;
-        	}
+	    		printk(KERN_WARNING "SISR=%x MISR=%x\n",readl(olympic_mmio+SISR),readl(olympic_mmio+LISR));
+	    		olympic_priv->srb_queued=0;
+	    		break;
+		}
 
 		if (t == 0) {
 			printk(KERN_WARNING "%s: SRB timed out. May not be fatal.\n",dev->name);
@@ -1212,8 +1212,8 @@ static void olympic_srb_bh(struct net_device *dev)
 	switch (readb(srb)) {
 
 		/* SRB_MODIFY_RECEIVE_OPTIONS i.e. set_multicast_list options (promiscuous)
-                 * At some point we should do something if we get an error, such as
-                 * resetting the IFF_PROMISC flag in dev
+		 * At some point we should do something if we get an error, such as
+		 * resetting the IFF_PROMISC flag in dev
 		 */
 
 		case SRB_MODIFY_RECEIVE_OPTIONS:
@@ -1232,7 +1232,7 @@ static void olympic_srb_bh(struct net_device *dev)
 			break ;
 
 		/* SRB_SET_GROUP_ADDRESS - Multicast group setting
-                 */
+		 */
 
 		case SRB_SET_GROUP_ADDRESS:
 			switch (readb(srb+2)) {

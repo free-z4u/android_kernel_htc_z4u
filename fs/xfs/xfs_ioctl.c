@@ -284,7 +284,7 @@ do_readlink(
 	int			buflen,
 	const char		*link)
 {
-        int len;
+	int len;
 
 	len = PTR_ERR(link);
 	if (IS_ERR(link))

@@ -283,7 +283,7 @@ dhd_wl_ioctl(dhd_pub_t *dhd_pub, int ifindex, wl_ioctl_t *ioc, void *buf, int le
 
 static int
 dhd_doiovar(dhd_pub_t *dhd_pub, const bcm_iovar_t *vi, uint32 actionid, const char *name,
-            void *params, int plen, void *arg, int len, int val_size)
+	    void *params, int plen, void *arg, int len, int val_size)
 {
 	int bcmerror = 0;
 	int32 int_val = 0;
@@ -963,7 +963,7 @@ wl_show_host_event(wl_event_msg_t *event, void *event_data)
 
 int
 wl_host_event(dhd_pub_t *dhd_pub, int *ifidx, void *pktdata,
-              wl_event_msg_t *event, void **data_ptr)
+	      wl_event_msg_t *event, void **data_ptr)
 {
 	/* check whether packet is a BRCM event pkt */
 	bcm_event_t *pvt_data = (bcm_event_t *)pktdata;
@@ -2094,7 +2094,7 @@ int dhd_keep_alive_onoff(dhd_pub_t *dhd)
 */
 int
 wl_iw_parse_data_tlv(char** list_str, void *dst, int dst_size, const char token,
-                     int input_size, int *bytes_left)
+		     int input_size, int *bytes_left)
 {
 	char* str = *list_str;
 	uint16 short_temp;
@@ -2143,7 +2143,7 @@ wl_iw_parse_data_tlv(char** list_str, void *dst, int dst_size, const char token,
 */
 int
 wl_iw_parse_channel_list_tlv(char** list_str, uint16* channel_list,
-                             int channel_num, int *bytes_left)
+			     int channel_num, int *bytes_left)
 {
 	char* str = *list_str;
 	int idx = 0;

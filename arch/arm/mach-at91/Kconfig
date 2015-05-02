@@ -417,11 +417,11 @@ if (ARCH_AT91SAM9260 || ARCH_AT91SAM9G20)
 comment "AT91SAM9260/AT91SAM9G20 boards"
 
 config MACH_SNAPPER_9260
-        bool "Bluewater Systems Snapper 9260/9G20 module"
-        help
-          Select this if you are using the Bluewater Systems Snapper 9260 or
-          Snapper 9G20 modules.
-          <http://www.bluewatersys.com/>
+	bool "Bluewater Systems Snapper 9260/9G20 module"
+	help
+	  Select this if you are using the Bluewater Systems Snapper 9260 or
+	  Snapper 9G20 modules.
+	  <http://www.bluewatersys.com/>
 endif
 
 # ----------------------------------------------------------

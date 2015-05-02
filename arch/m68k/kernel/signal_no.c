@@ -576,7 +576,7 @@ adjust_stack:
 		printk(KERN_DEBUG "Performing stackadjust=%04x\n", regs->stkadj);
 #endif
 		/* This must be copied with decreasing addresses to
-                   handle overlaps.  */
+		   handle overlaps.  */
 		tregs->vector = 0;
 		tregs->format = 0;
 		tregs->pc = regs->pc;
@@ -640,7 +640,7 @@ adjust_stack:
 		printk(KERN_DEBUG "Performing stackadjust=%04x\n", regs->stkadj);
 #endif
 		/* This must be copied with decreasing addresses to
-                   handle overlaps.  */
+		   handle overlaps.  */
 		tregs->vector = 0;
 		tregs->format = 0;
 		tregs->pc = regs->pc;

@@ -44,9 +44,9 @@ struct ccsr_guts {
 	__be32	gpindr;		/* 0x.0050 - General-Purpose Input Data Register */
 	u8	res054[0x60 - 0x54];
 	__be32	pmuxcr;		/* 0x.0060 - Alternate Function Signal Multiplex Control */
-        __be32  pmuxcr2;	/* 0x.0064 - Alternate function signal multiplex control 2 */
-        __be32  dmuxcr;		/* 0x.0068 - DMA Mux Control Register */
-        u8	res06c[0x70 - 0x6c];
+	__be32  pmuxcr2;	/* 0x.0064 - Alternate function signal multiplex control 2 */
+	__be32  dmuxcr;		/* 0x.0068 - DMA Mux Control Register */
+	u8	res06c[0x70 - 0x6c];
 	__be32	devdisr;	/* 0x.0070 - Device Disable Control */
 	__be32	devdisr2;	/* 0x.0074 - Device Disable Control 2 */
 	u8	res078[0x7c - 0x78];

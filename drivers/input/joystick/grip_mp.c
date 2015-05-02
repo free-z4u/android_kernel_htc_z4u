@@ -254,7 +254,7 @@ static int mp_io(struct gameport* gameport, int sendflags, int sendcode, u32 *pa
 	if (!poll_until(0, 0x20, 77, gameport, &raw_data))
 		return IO_RESET;
 
-        /* Return if we just wanted the packet or multiport wants to send more */
+	/* Return if we just wanted the packet or multiport wants to send more */
 
 	*packet = pkt;
 	if ((sendflags == 0) || ((sendflags & IO_RETRY) && !(pkt & PACKET_MP_DONE)))

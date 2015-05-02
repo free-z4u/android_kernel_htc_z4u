@@ -2781,7 +2781,7 @@ static void ext4_end_io_dio(struct kiocb *iocb, loff_t offset,
 			    bool is_async)
 {
 	struct inode *inode = iocb->ki_filp->f_path.dentry->d_inode;
-        ext4_io_end_t *io_end = iocb->private;
+	ext4_io_end_t *io_end = iocb->private;
 	struct workqueue_struct *wq;
 	unsigned long flags;
 	struct ext4_inode_info *ei;

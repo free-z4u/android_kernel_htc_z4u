@@ -1198,7 +1198,7 @@ struct drm_device {
 	struct drm_minor *control;		/**< Control node for card */
 	struct drm_minor *primary;		/**< render type primary screen head */
 
-        struct drm_mode_config mode_config;	/**< Current mode config */
+	struct drm_mode_config mode_config;	/**< Current mode config */
 
 	/** \name GEM information */
 	/*@{ */
@@ -1532,7 +1532,7 @@ extern int drm_debugfs_init(struct drm_minor *minor, int minor_id,
 extern int drm_debugfs_create_files(struct drm_info_list *files, int count,
 				    struct dentry *root, struct drm_minor *minor);
 extern int drm_debugfs_remove_files(struct drm_info_list *files, int count,
-                                    struct drm_minor *minor);
+				    struct drm_minor *minor);
 extern int drm_debugfs_cleanup(struct drm_minor *minor);
 #endif
 

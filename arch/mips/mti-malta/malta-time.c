@@ -146,15 +146,15 @@ void __init plat_time_init(void)
 {
 	unsigned int est_freq;
 
-        /* Set Data mode - binary. */
-        CMOS_WRITE(CMOS_READ(RTC_CONTROL) | RTC_DM_BINARY, RTC_CONTROL);
+	/* Set Data mode - binary. */
+	CMOS_WRITE(CMOS_READ(RTC_CONTROL) | RTC_DM_BINARY, RTC_CONTROL);
 
 	est_freq = estimate_cpu_frequency();
 
 	printk("CPU frequency %d.%02d MHz\n", est_freq/1000000,
 	       (est_freq%1000000)*100/1000000);
 
-        cpu_khz = est_freq / 1000;
+	cpu_khz = est_freq / 1000;
 
 	mips_scroll_message();
 #ifdef CONFIG_I8253		/* Only Malta has a PIT */

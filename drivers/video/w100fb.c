@@ -349,7 +349,7 @@ static void w100_init_graphic_engine(struct w100fb_par *par)
 
 
 static void w100fb_fillrect(struct fb_info *info,
-                            const struct fb_fillrect *rect)
+			    const struct fb_fillrect *rect)
 {
 	union dp_gui_master_cntl_u gmc;
 
@@ -375,7 +375,7 @@ static void w100fb_fillrect(struct fb_info *info,
 
 
 static void w100fb_copyarea(struct fb_info *info,
-                            const struct fb_copyarea *area)
+			    const struct fb_copyarea *area)
 {
 	u32 dx = area->dx, dy = area->dy, sx = area->sx, sy = area->sy;
 	u32 h = area->height, w = area->width;

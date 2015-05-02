@@ -62,13 +62,13 @@ static struct class *coda_psdev_class;
 
 static unsigned int coda_psdev_poll(struct file *file, poll_table * wait)
 {
-        struct venus_comm *vcp = (struct venus_comm *) file->private_data;
+	struct venus_comm *vcp = (struct venus_comm *) file->private_data;
 	unsigned int mask = POLLOUT | POLLWRNORM;
 
 	poll_wait(file, &vcp->vc_waitq, wait);
 	mutex_lock(&vcp->vc_mutex);
 	if (!list_empty(&vcp->vc_pending))
-                mask |= POLLIN | POLLRDNORM;
+		mask |= POLLIN | POLLRDNORM;
 	mutex_unlock(&vcp->vc_mutex);
 
 	return mask;
@@ -96,19 +96,19 @@ static long coda_psdev_ioctl(struct file * filp, unsigned int cmd, unsigned long
 static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 				size_t nbytes, loff_t *off)
 {
-        struct venus_comm *vcp = (struct venus_comm *) file->private_data;
-        struct upc_req *req = NULL;
-        struct upc_req *tmp;
+	struct venus_comm *vcp = (struct venus_comm *) file->private_data;
+	struct upc_req *req = NULL;
+	struct upc_req *tmp;
 	struct list_head *lh;
 	struct coda_in_hdr hdr;
 	ssize_t retval = 0, count = 0;
 	int error;
 
-        /* Peek at the opcode, uniquefier */
+	/* Peek at the opcode, uniquefier */
 	if (copy_from_user(&hdr, buf, 2 * sizeof(u_long)))
 	        return -EFAULT;
 
-        if (DOWNCALL(hdr.opcode)) {
+	if (DOWNCALL(hdr.opcode)) {
 		union outputArgs *dcbuf;
 		int size = sizeof(*dcbuf);
 
@@ -162,13 +162,13 @@ static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 		goto out;
 	}
 
-        /* move data into response buffer. */
+	/* move data into response buffer. */
 	if (req->uc_outSize < nbytes) {
-                printk("psdev_write: too much cnt: %d, cnt: %ld, opc: %d, uniq: %d.\n",
+		printk("psdev_write: too much cnt: %d, cnt: %ld, opc: %d, uniq: %d.\n",
 		       req->uc_outSize, (long)nbytes, hdr.opcode, hdr.unique);
 		nbytes = req->uc_outSize; /* don't have more space! */
 	}
-        if (copy_from_user(req->uc_data, buf, nbytes)) {
+	if (copy_from_user(req->uc_data, buf, nbytes)) {
 		req->uc_flags |= CODA_REQ_ABORT;
 		wake_up(&req->uc_sleep);
 		retval = -EFAULT;
@@ -188,9 +188,9 @@ static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 			outp->fh = fget(outp->fd);
 	}
 
-        wake_up(&req->uc_sleep);
+	wake_up(&req->uc_sleep);
 out:
-        return(count ? count : retval);
+	return(count ? count : retval);
 }
 
 /*
@@ -201,8 +201,8 @@ static ssize_t coda_psdev_read(struct file * file, char __user * buf,
 			       size_t nbytes, loff_t *off)
 {
 	DECLARE_WAITQUEUE(wait, current);
-        struct venus_comm *vcp = (struct venus_comm *) file->private_data;
-        struct upc_req *req;
+	struct venus_comm *vcp = (struct venus_comm *) file->private_data;
+	struct upc_req *req;
 	ssize_t retval = 0, count = 0;
 
 	if (nbytes == 0)
@@ -239,10 +239,10 @@ static ssize_t coda_psdev_read(struct file * file, char __user * buf,
 	/* Move the input args into userspace */
 	count = req->uc_inSize;
 	if (nbytes < req->uc_inSize) {
-                printk ("psdev_read: Venus read %ld bytes of %d in message\n",
+		printk ("psdev_read: Venus read %ld bytes of %d in message\n",
 			(long)nbytes, req->uc_inSize);
 		count = nbytes;
-        }
+	}
 
 	if (copy_to_user(buf, req->uc_data, count))
 	        retval = -EFAULT;
@@ -347,9 +347,9 @@ static int init_coda_psdev(void)
 {
 	int i, err = 0;
 	if (register_chrdev(CODA_PSDEV_MAJOR, "coda", &coda_psdev_fops)) {
-              printk(KERN_ERR "coda_psdev: unable to get major %d\n",
+	      printk(KERN_ERR "coda_psdev: unable to get major %d\n",
 		     CODA_PSDEV_MAJOR);
-              return -EIO;
+	      return -EIO;
 	}
 	coda_psdev_class = class_create(THIS_MODULE, "coda");
 	if (IS_ERR(coda_psdev_class)) {
@@ -410,12 +410,12 @@ out2:
 
 static void __exit exit_coda(void)
 {
-        int err, i;
+	int err, i;
 
 	err = unregister_filesystem(&coda_fs_type);
-        if ( err != 0 ) {
-                printk("coda: failed to unregister filesystem\n");
-        }
+	if ( err != 0 ) {
+		printk("coda: failed to unregister filesystem\n");
+	}
 	for (i = 0; i < MAX_CODADEVS; i++)
 		device_destroy(coda_psdev_class, MKDEV(CODA_PSDEV_MAJOR, i));
 	class_destroy(coda_psdev_class);

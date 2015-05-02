@@ -12,7 +12,7 @@ static inline int rtnh_ok(const struct rtnexthop *rtnh, int remaining)
 }
 
 static inline struct rtnexthop *rtnh_next(const struct rtnexthop *rtnh,
-                                         int *remaining)
+					 int *remaining)
 {
 	int totlen = NLA_ALIGN(rtnh->rtnh_len);
 

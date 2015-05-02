@@ -487,31 +487,31 @@ sn_receive_chars(struct sn_cons_port *port, unsigned long flags)
 			break;
 		}
 #ifdef CONFIG_MAGIC_SYSRQ
-                if (sysrq_requested) {
-                        unsigned long sysrq_timeout = sysrq_requested + HZ*5;
+		if (sysrq_requested) {
+			unsigned long sysrq_timeout = sysrq_requested + HZ*5;
 
-                        sysrq_requested = 0;
-                        if (ch && time_before(jiffies, sysrq_timeout)) {
-                                spin_unlock_irqrestore(&port->sc_port.lock, flags);
-                                handle_sysrq(ch);
-                                spin_lock_irqsave(&port->sc_port.lock, flags);
-                                /* ignore actual sysrq command char */
-                                continue;
-                        }
-                }
-                if (ch == *sysrq_serial_ptr) {
-                        if (!(*++sysrq_serial_ptr)) {
-                                sysrq_requested = jiffies;
-                                sysrq_serial_ptr = sysrq_serial_str;
-                        }
+			sysrq_requested = 0;
+			if (ch && time_before(jiffies, sysrq_timeout)) {
+				spin_unlock_irqrestore(&port->sc_port.lock, flags);
+				handle_sysrq(ch);
+				spin_lock_irqsave(&port->sc_port.lock, flags);
+				/* ignore actual sysrq command char */
+				continue;
+			}
+		}
+		if (ch == *sysrq_serial_ptr) {
+			if (!(*++sysrq_serial_ptr)) {
+				sysrq_requested = jiffies;
+				sysrq_serial_ptr = sysrq_serial_str;
+			}
 			/*
 			 * ignore the whole sysrq string except for the
 			 * leading escape
 			 */
 			if (ch != '\e')
 				continue;
-                }
-                else
+		}
+		else
 			sysrq_serial_ptr = sysrq_serial_str;
 #endif /* CONFIG_MAGIC_SYSRQ */
 

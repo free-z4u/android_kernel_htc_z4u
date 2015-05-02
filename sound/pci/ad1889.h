@@ -119,8 +119,8 @@
 
 /* interrupt mask */
 #define  AD_INTR_MASK     (AD_DMA_DISR_RESI|AD_DMA_DISR_ADCI| \
-                           AD_DMA_DISR_WAVI|AD_DMA_DISR_SYNI| \
-                           AD_DMA_DISR_PMAI|AD_DMA_DISR_PTAI)
+			   AD_DMA_DISR_WAVI|AD_DMA_DISR_SYNI| \
+			   AD_DMA_DISR_PMAI|AD_DMA_DISR_PTAI)
 
 #define AD_DMA_CHSS	0xc4 /* dma channel stop status */
 #define  AD_DMA_CHSS_RESS 0x000001 /* resampler channel stopped */

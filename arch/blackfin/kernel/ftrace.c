@@ -20,7 +20,7 @@ static const unsigned char mnop[] = {
 };
 
 static void bfin_make_pcrel24(unsigned char *insn, unsigned long src,
-                              unsigned long dst)
+			      unsigned long dst)
 {
 	uint32_t pcrel = (dst - src) >> 1;
 	insn[0] = pcrel >> 16;
@@ -31,7 +31,7 @@ static void bfin_make_pcrel24(unsigned char *insn, unsigned long src,
 #define bfin_make_pcrel24(insn, src, dst) bfin_make_pcrel24(insn, src, (unsigned long)(dst))
 
 static int ftrace_modify_code(unsigned long ip, const unsigned char *code,
-                              unsigned long len)
+			      unsigned long len)
 {
 	int ret = probe_kernel_write((void *)ip, (void *)code, len);
 	flush_icache_range(ip, ip + len);
@@ -39,7 +39,7 @@ static int ftrace_modify_code(unsigned long ip, const unsigned char *code,
 }
 
 int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
-                    unsigned long addr)
+		    unsigned long addr)
 {
 	/* Turn the mcount call site into two MNOPs as those are 32bit insns */
 	return ftrace_modify_code(rec->ip, mnop, sizeof(mnop));
@@ -101,7 +101,7 @@ int ftrace_disable_ftrace_graph_caller(void)
  * in current thread info.
  */
 void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
-                           unsigned long frame_pointer)
+			   unsigned long frame_pointer)
 {
 	struct ftrace_graph_ent trace;
 	unsigned long return_hooker = (unsigned long)&return_to_handler;

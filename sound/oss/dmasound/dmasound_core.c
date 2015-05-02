@@ -1218,38 +1218,38 @@ static struct {
 
 static char *get_afmt_string(int afmt)
 {
-        switch(afmt) {
-            case AFMT_MU_LAW:
-                return "mu-law";
-                break;
-            case AFMT_A_LAW:
-                return "A-law";
-                break;
-            case AFMT_U8:
-                return "unsigned 8 bit";
-                break;
-            case AFMT_S8:
-                return "signed 8 bit";
-                break;
-            case AFMT_S16_BE:
-                return "signed 16 bit BE";
-                break;
-            case AFMT_U16_BE:
-                return "unsigned 16 bit BE";
-                break;
-            case AFMT_S16_LE:
-                return "signed 16 bit LE";
-                break;
-            case AFMT_U16_LE:
-                return "unsigned 16 bit LE";
-                break;
+	switch(afmt) {
+	    case AFMT_MU_LAW:
+		return "mu-law";
+		break;
+	    case AFMT_A_LAW:
+		return "A-law";
+		break;
+	    case AFMT_U8:
+		return "unsigned 8 bit";
+		break;
+	    case AFMT_S8:
+		return "signed 8 bit";
+		break;
+	    case AFMT_S16_BE:
+		return "signed 16 bit BE";
+		break;
+	    case AFMT_U16_BE:
+		return "unsigned 16 bit BE";
+		break;
+	    case AFMT_S16_LE:
+		return "signed 16 bit LE";
+		break;
+	    case AFMT_U16_LE:
+		return "unsigned 16 bit LE";
+		break;
 	    case 0:
 		return "format not set" ;
 		break ;
-            default:
-                break ;
-        }
-        return "ERROR: Unsupported AFMT_XXXX code" ;
+	    default:
+		break ;
+	}
+	return "ERROR: Unsupported AFMT_XXXX code" ;
 }
 
 static int state_open(struct inode *inode, struct file *file)
@@ -1475,10 +1475,10 @@ static int dmasound_setup(char *str)
 	case 1:
 		if ((size = ints[2]) < 256) /* check for small buffer specs */
 			size <<= 10 ;
-                if (size < MIN_BUFSIZE || size > MAX_BUFSIZE)
-                        printk("dmasound_setup: invalid write buffer size, using default = %d\n", writeBufSize);
-                else
-                        writeBufSize = size;
+		if (size < MIN_BUFSIZE || size > MAX_BUFSIZE)
+			printk("dmasound_setup: invalid write buffer size, using default = %d\n", writeBufSize);
+		else
+			writeBufSize = size;
 	case 0:
 		break;
 	default:

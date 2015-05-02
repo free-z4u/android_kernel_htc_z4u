@@ -124,8 +124,8 @@ static void q40_heartbeat(int on)
 
 static void q40_reset(void)
 {
-        halted = 1;
-        printk("\n\n*******************************************\n"
+	halted = 1;
+	printk("\n\n*******************************************\n"
 		"Called q40_reset : press the RESET button!!\n"
 		"*******************************************\n");
 	Q40_LED_ON();
@@ -135,8 +135,8 @@ static void q40_reset(void)
 
 static void q40_halt(void)
 {
-        halted = 1;
-        printk("\n\n*******************\n"
+	halted = 1;
+	printk("\n\n*******************\n"
 		   "  Called q40_halt\n"
 		   "*******************\n");
 	Q40_LED_ON();

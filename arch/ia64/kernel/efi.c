@@ -395,10 +395,10 @@ efi_get_pal_addr (void)
 		mask  = ~((1 << IA64_GRANULE_SHIFT) - 1);
 
 		printk(KERN_INFO "CPU %d: mapping PAL code "
-                       "[0x%lx-0x%lx) into [0x%lx-0x%lx)\n",
-                       smp_processor_id(), md->phys_addr,
-                       md->phys_addr + efi_md_size(md),
-                       vaddr & mask, (vaddr & mask) + IA64_GRANULE_SIZE);
+		       "[0x%lx-0x%lx) into [0x%lx-0x%lx)\n",
+		       smp_processor_id(), md->phys_addr,
+		       md->phys_addr + efi_md_size(md),
+		       vaddr & mask, (vaddr & mask) + IA64_GRANULE_SIZE);
 #endif
 		return __va(md->phys_addr);
 	}
@@ -1284,8 +1284,8 @@ efi_initialize_iomem_resources(struct resource *code_resource,
 			insert_resource(res, data_resource);
 			insert_resource(res, bss_resource);
 #ifdef CONFIG_KEXEC
-                        insert_resource(res, &efi_memmap_res);
-                        insert_resource(res, &boot_param_res);
+			insert_resource(res, &efi_memmap_res);
+			insert_resource(res, &boot_param_res);
 			if (crashk_res.end > crashk_res.start)
 				insert_resource(res, &crashk_res);
 #endif

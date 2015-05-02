@@ -196,7 +196,7 @@ ch_do_scsi(scsi_changer *ch, unsigned char *cmd,
 		__scsi_print_command(cmd);
 	}
 
-        result = scsi_execute_req(ch->device, cmd, direction, buffer,
+	result = scsi_execute_req(ch->device, cmd, direction, buffer,
 				  buflength, &sshdr, timeout * HZ,
 				  MAX_RETRIES, NULL);
 
@@ -989,11 +989,11 @@ static int __init init_ch_module(void)
 	int rc;
 
 	printk(KERN_INFO "SCSI Media Changer driver v" VERSION " \n");
-        ch_sysfs_class = class_create(THIS_MODULE, "scsi_changer");
-        if (IS_ERR(ch_sysfs_class)) {
+	ch_sysfs_class = class_create(THIS_MODULE, "scsi_changer");
+	if (IS_ERR(ch_sysfs_class)) {
 		rc = PTR_ERR(ch_sysfs_class);
 		return rc;
-        }
+	}
 	rc = register_chrdev(SCSI_CHANGER_MAJOR,"ch",&changer_fops);
 	if (rc < 0) {
 		printk("Unable to get major %d for SCSI-Changer\n",

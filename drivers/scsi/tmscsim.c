@@ -537,7 +537,7 @@ dc390_StartSCSI( struct dc390_acb* pACB, struct dc390_dcb* pDCB, struct dc390_sr
     DC390_write8 (CtrlReg4, pDCB->CtrlR4);
     DC390_write8 (ScsiCmd, CLEAR_FIFO_CMD);		/* Flush FIFO */
     DEBUG1(printk (KERN_INFO "DC390: Start SCSI command: %02x (Sync:%02x)\n",\
-            scmd->cmnd[0], pDCB->SyncMode));
+	    scmd->cmnd[0], pDCB->SyncMode));
 
     /* Don't disconnect on AUTO_REQSENSE, cause it might be an
      * Contingent Allegiance Condition (6.6), where no tags should be used.
@@ -578,7 +578,7 @@ dc390_StartSCSI( struct dc390_acb* pACB, struct dc390_dcb* pDCB, struct dc390_sr
     if (try_sync_nego)
       {
 	u8 Sync_Off = pDCB->SyncOffset;
-        DEBUG0(printk (KERN_INFO "DC390: NEW Sync Nego code triggered (%i %i)\n", pDCB->TargetID, pDCB->TargetLUN));
+	DEBUG0(printk (KERN_INFO "DC390: NEW Sync Nego code triggered (%i %i)\n", pDCB->TargetID, pDCB->TargetLUN));
 	pSRB->MsgOutBuf[0] = EXTENDED_MESSAGE;
 	pSRB->MsgOutBuf[1] = 3;
 	pSRB->MsgOutBuf[2] = EXTENDED_SDTR;
@@ -1446,7 +1446,7 @@ dc390_MsgOutPhase( struct dc390_acb* pACB, struct dc390_srb* pSRB, u8 *psstatus)
     else
     {
 mop1:
-        printk (KERN_ERR "DC390: OLD Sync Nego code triggered! (%i %i)\n", pDCB->TargetID, pDCB->TargetLUN);
+	printk (KERN_ERR "DC390: OLD Sync Nego code triggered! (%i %i)\n", pDCB->TargetID, pDCB->TargetLUN);
 	DC390_write8 (ScsiFifo, EXTENDED_MESSAGE);
 	DC390_write8 (ScsiFifo, 3);	/*    ;length of extended msg */
 	DC390_write8 (ScsiFifo, EXTENDED_SDTR);	/*    ; sync nego */

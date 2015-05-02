@@ -1666,7 +1666,7 @@ static int yaffs_bg_thread_fn(void *data)
 				 * to cut down on wake ups
 				 */
 				next_gc = next_dir_update;
-                        }
+			}
 		}
 		yaffs_gross_unlock(dev);
 		expires = next_dir_update;
@@ -2541,7 +2541,7 @@ static int yaffs_proc_read(char *page,
 				buf = yaffs_dump_dev_part0(buf, dev);
 			} else {
 				buf = yaffs_dump_dev_part1(buf, dev);
-                        }
+			}
 
 			break;
 		}
@@ -2733,7 +2733,7 @@ static int __init init_yaffs_fs(void)
 		my_proc_entry->data = NULL;
 	} else {
 		return -ENOMEM;
-        }
+	}
 
 
 	/* Now add the file system entries */

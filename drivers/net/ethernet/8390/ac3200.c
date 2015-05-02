@@ -55,7 +55,7 @@ static const char version[] =
 #define AC_CONFIG	0xC90	/* The configuration port. */
 
 #define AC_IO_EXTENT 0x20
-                                /* Actually accessed is:
+				/* Actually accessed is:
 								 * AC_NIC_BASE (0-15)
 								 * AC_SA_PROM (0-5)
 								 * AC_ID_PORT (0-3)

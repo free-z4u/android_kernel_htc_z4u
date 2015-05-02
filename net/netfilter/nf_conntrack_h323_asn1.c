@@ -265,7 +265,7 @@ static unsigned int get_uint(bitstr_t *bs, int b)
 
 /****************************************************************************/
 static int decode_nul(bitstr_t *bs, const struct field_t *f,
-                      char *base, int level)
+		      char *base, int level)
 {
 	PRINT("%*.s%s\n", level * TAB_SIZE, " ", f->name);
 
@@ -274,7 +274,7 @@ static int decode_nul(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_bool(bitstr_t *bs, const struct field_t *f,
-                       char *base, int level)
+		       char *base, int level)
 {
 	PRINT("%*.s%s\n", level * TAB_SIZE, " ", f->name);
 
@@ -286,7 +286,7 @@ static int decode_bool(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_oid(bitstr_t *bs, const struct field_t *f,
-                      char *base, int level)
+		      char *base, int level)
 {
 	int len;
 
@@ -303,7 +303,7 @@ static int decode_oid(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_int(bitstr_t *bs, const struct field_t *f,
-                      char *base, int level)
+		      char *base, int level)
 {
 	unsigned int len;
 
@@ -347,7 +347,7 @@ static int decode_int(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_enum(bitstr_t *bs, const struct field_t *f,
-                       char *base, int level)
+		       char *base, int level)
 {
 	PRINT("%*.s%s\n", level * TAB_SIZE, " ", f->name);
 
@@ -363,7 +363,7 @@ static int decode_enum(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_bitstr(bitstr_t *bs, const struct field_t *f,
-                         char *base, int level)
+			 char *base, int level)
 {
 	unsigned int len;
 
@@ -397,7 +397,7 @@ static int decode_bitstr(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_numstr(bitstr_t *bs, const struct field_t *f,
-                         char *base, int level)
+			 char *base, int level)
 {
 	unsigned int len;
 
@@ -415,7 +415,7 @@ static int decode_numstr(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_octstr(bitstr_t *bs, const struct field_t *f,
-                         char *base, int level)
+			 char *base, int level)
 {
 	unsigned int len;
 
@@ -464,7 +464,7 @@ static int decode_octstr(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_bmpstr(bitstr_t *bs, const struct field_t *f,
-                         char *base, int level)
+			 char *base, int level)
 {
 	unsigned int len;
 
@@ -490,7 +490,7 @@ static int decode_bmpstr(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_seq(bitstr_t *bs, const struct field_t *f,
-                      char *base, int level)
+		      char *base, int level)
 {
 	unsigned int ext, bmp, i, opt, len = 0, bmp2, bmp2_len;
 	int err;
@@ -607,7 +607,7 @@ static int decode_seq(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_seqof(bitstr_t *bs, const struct field_t *f,
-                        char *base, int level)
+			char *base, int level)
 {
 	unsigned int count, effective_count = 0, i, len = 0;
 	int err;
@@ -697,7 +697,7 @@ static int decode_seqof(bitstr_t *bs, const struct field_t *f,
 
 /****************************************************************************/
 static int decode_choice(bitstr_t *bs, const struct field_t *f,
-                         char *base, int level)
+			 char *base, int level)
 {
 	unsigned int type, ext, len = 0;
 	int err;

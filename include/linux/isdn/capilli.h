@@ -72,7 +72,7 @@ struct capi_ctr {
 	wait_queue_head_t state_wait_queue;
 
 	struct proc_dir_entry *procent;
-        char procfn[128];
+	char procfn[128];
 };
 
 int attach_capi_ctr(struct capi_ctr *);

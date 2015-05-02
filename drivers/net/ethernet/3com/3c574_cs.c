@@ -1067,7 +1067,7 @@ static int el3_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 	case SIOCSMIIREG:		/* Write the specified MII register */
 		{
 			int saved_window;
-                       unsigned long flags;
+		       unsigned long flags;
 
 			spin_lock_irqsave(&lp->window_lock, flags);
 			saved_window = inw(ioaddr + EL3_CMD) >> 13;

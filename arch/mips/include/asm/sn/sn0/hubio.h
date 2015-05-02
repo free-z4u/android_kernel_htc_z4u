@@ -179,7 +179,7 @@ typedef union hubii_wid_u {
 			wid_part_num:	16,	/* the widget type: hub=c101 */
 			wid_mfg_num:	11,	/* Manufacturer id (IBM) */
 			wid_rsvd1:	 1;	/* Reserved */
-        } wid_fields_s;
+	} wid_fields_s;
 } hubii_wid_t;
 
 
@@ -194,7 +194,7 @@ typedef union hubii_wcr_u {
 			wcr_rsvd1:	 8,	/* Reserved */
 			wcr_tag_mode:    1,	/* Tag mode */
 			wcr_widget_id:	 4;	/* LLP crossbar credit */
-        } wcr_fields_s;
+	} wcr_fields_s;
 } hubii_wcr_t;
 
 #define	iwcr_dir_con	wcr_fields_s.wcr_dir_con
@@ -221,18 +221,18 @@ typedef union hubii_ilcsr_u {
 	struct {
 		u64 	icsr_rsvd: 	22,	/* unused */
 			icsr_max_burst:	10,	/* max burst */
-                        icsr_rsvd4:	 6,	/* reserved */
+			icsr_rsvd4:	 6,	/* reserved */
 			icsr_max_retry:	10,	/* max retry */
-                        icsr_rsvd3:	 2,	/* reserved */
-                        icsr_lnk_stat:	 2,	/* link status */
-                        icsr_bm8:	 1,	/* Bit mode 8 */
-                        icsr_llp_en:	 1,	/* LLP enable bit */
+			icsr_rsvd3:	 2,	/* reserved */
+			icsr_lnk_stat:	 2,	/* link status */
+			icsr_bm8:	 1,	/* Bit mode 8 */
+			icsr_llp_en:	 1,	/* LLP enable bit */
 			icsr_rsvd2:	 1,     /* reserver */
-                        icsr_wrm_reset:	 1,	/* Warm reset bit */
+			icsr_wrm_reset:	 1,	/* Warm reset bit */
 			icsr_rsvd1:	 2,	/* Data ready offset */
-                        icsr_null_to:	 6;	/* Null timeout   */
+			icsr_null_to:	 6;	/* Null timeout   */
 
-        } icsr_fields_s;
+	} icsr_fields_s;
 } hubii_ilcsr_t;
 
 
@@ -243,7 +243,7 @@ typedef union hubii_iowa_u {
 			iowa_wxoac:	 8,	/* xtalk widget access bits */
 			iowa_rsvd1:	 7,	/* xtalk widget access bits */
 			iowa_w0oac:	 1;	/* xtalk widget access bits */
-        } iowa_fields_s;
+	} iowa_fields_s;
 } hubii_iowa_t;
 
 typedef union hubii_iiwa_u {
@@ -253,7 +253,7 @@ typedef union hubii_iiwa_u {
 			iiwa_wxiac:	 8,	/* hub wid access bits */
 			iiwa_rsvd1:	 7,	/* reserved */
 			iiwa_w0iac:	 1;	/* hub wid0 access */
-        } iiwa_fields_s;
+	} iiwa_fields_s;
 } hubii_iiwa_t;
 
 typedef union	hubii_illr_u {
@@ -262,7 +262,7 @@ typedef union	hubii_illr_u {
 		u64 	illr_rsvd: 	32,	/* unused */
 			illr_cb_cnt:	16,	/* checkbit error count */
 			illr_sn_cnt:	16;	/* sequence number count */
-        } illr_fields_s;
+	} illr_fields_s;
 } hubii_illr_t;
 
 /* The structures below are defined to extract and modify the ii

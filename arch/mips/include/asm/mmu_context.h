@@ -146,7 +146,7 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
 }
 
 static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
-                             struct task_struct *tsk)
+			     struct task_struct *tsk)
 {
 	unsigned int cpu = smp_processor_id();
 	unsigned long flags;

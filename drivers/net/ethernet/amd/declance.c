@@ -1343,17 +1343,17 @@ static struct tc_driver dec_lance_tc_driver = {
 
 static int __devinit dec_lance_tc_probe(struct device *dev)
 {
-        int status = dec_lance_probe(dev, PMAD_LANCE);
-        if (!status)
-                get_device(dev);
-        return status;
+	int status = dec_lance_probe(dev, PMAD_LANCE);
+	if (!status)
+		get_device(dev);
+	return status;
 }
 
 static int __exit dec_lance_tc_remove(struct device *dev)
 {
-        put_device(dev);
-        dec_lance_remove(dev);
-        return 0;
+	put_device(dev);
+	dec_lance_remove(dev);
+	return 0;
 }
 #endif
 

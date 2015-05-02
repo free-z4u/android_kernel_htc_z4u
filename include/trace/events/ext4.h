@@ -367,7 +367,7 @@ TRACE_EVENT(ext4_da_write_pages,
 		  __entry->b_state, __entry->first_page,
 		  __entry->io_done, __entry->pages_written,
 		  __entry->sync_mode
-                  )
+		  )
 );
 
 TRACE_EVENT(ext4_da_writepages_result,

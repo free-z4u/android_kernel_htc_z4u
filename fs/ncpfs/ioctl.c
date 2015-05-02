@@ -477,7 +477,7 @@ static long __ncp_ioctl(struct inode *inode, unsigned int cmd, unsigned long arg
 			return 0;
 		}
 
-        case NCP_IOC_SIGN_WANTED:
+	case NCP_IOC_SIGN_WANTED:
 		{
 			int state;
 

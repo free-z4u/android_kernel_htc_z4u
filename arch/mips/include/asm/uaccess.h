@@ -543,7 +543,7 @@ do {									\
  */
 #define __get_user_unaligned_asm_ll32(val, addr)			\
 {									\
-        unsigned long long __gu_tmp;					\
+	unsigned long long __gu_tmp;					\
 									\
 	__asm__ __volatile__(						\
 	"1:	ulw	%1, (%3)				\n"	\

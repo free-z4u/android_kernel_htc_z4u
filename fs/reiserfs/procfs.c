@@ -57,7 +57,7 @@ static int show_version(struct seq_file *m, struct super_block *sb)
 #define DFL( x ) D4C( rs -> s_v1.x )
 
 #define objectid_map( s, rs ) (old_format_only (s) ?				\
-                         (__le32 *)((struct reiserfs_super_block_v1 *)rs + 1) :	\
+			 (__le32 *)((struct reiserfs_super_block_v1 *)rs + 1) :	\
 			 (__le32 *)(rs + 1))
 #define MAP( i ) D4C( objectid_map( sb, rs )[ i ] )
 

@@ -362,7 +362,7 @@ struct happy_meal_txd {
 #define PREV_TX(num)       (((num) - 1) & (TX_RING_SIZE - 1))
 
 #define TX_BUFFS_AVAIL(hp)                                    \
-        (((hp)->tx_old <= (hp)->tx_new) ?                     \
+	(((hp)->tx_old <= (hp)->tx_new) ?                     \
 	  (hp)->tx_old + (TX_RING_SIZE - 1) - (hp)->tx_new :  \
 			    (hp)->tx_old - (hp)->tx_new - 1)
 
@@ -445,7 +445,7 @@ struct happy_meal {
 	unsigned short            sw_expansion;   /* SW copy of EXPANSION              */
 	unsigned short            sw_csconfig;    /* SW copy of CSCONFIG               */
 	unsigned int              auto_speed;     /* Auto-nego link speed              */
-        unsigned int              forced_speed;   /* Force mode link speed             */
+	unsigned int              forced_speed;   /* Force mode link speed             */
 	unsigned int              poll_data;      /* MIF poll data                     */
 	unsigned int              poll_flag;      /* MIF poll flag                     */
 	unsigned int              linkcheck;      /* Have we checked the link yet?     */
@@ -497,7 +497,7 @@ struct quattro {
 
 /* We use this to acquire receive skb's that we can DMA directly into. */
 #define ALIGNED_RX_SKB_ADDR(addr) \
-        ((((unsigned long)(addr) + (64UL - 1UL)) & ~(64UL - 1UL)) - (unsigned long)(addr))
+	((((unsigned long)(addr) + (64UL - 1UL)) & ~(64UL - 1UL)) - (unsigned long)(addr))
 #define happy_meal_alloc_skb(__length, __gfp_flags) \
 ({	struct sk_buff *__skb; \
 	__skb = alloc_skb((__length) + 64, (__gfp_flags)); \

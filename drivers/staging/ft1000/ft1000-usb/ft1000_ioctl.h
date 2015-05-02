@@ -39,27 +39,27 @@ typedef struct _IOCTL_GET_DSP_STAT
     unsigned char Sku[SKUSZ];              // SKU
     unsigned char eui64[EUISZ];            // EUI64
     unsigned short ConStat;                // Connection Status
-                                //    Bits 0-3 = Connection Status Field
-                                //               0000=Idle (Disconnect)
-                                //               0001=Searching
-                                //               0010=Active (Connected)
-                                //               0011=Waiting for L2 down
-                                //               0100=Sleep
+				//    Bits 0-3 = Connection Status Field
+				//               0000=Idle (Disconnect)
+				//               0001=Searching
+				//               0010=Active (Connected)
+				//               0011=Waiting for L2 down
+				//               0100=Sleep
     unsigned short LedStat;                // Led Status
-                                //    Bits 0-3   = Signal Strength Field
-                                //                 0000 = -105dBm to -92dBm
-                                //                 0001 = -92dBm to -85dBm
-                                //                 0011 = -85dBm to -75dBm
-                                //                 0111 = -75dBm to -50dBm
-                                //                 1111 = -50dBm to 0dBm
-                                //    Bits 4-7   = Reserved
-                                //    Bits 8-11  = SNR Field
-                                //                 0000 = <2dB
-                                //                 0001 = 2dB to 8dB
-                                //                 0011 = 8dB to 15dB
-                                //                 0111 = 15dB to 22dB
-                                //                 1111 = >22dB
-                                //    Bits 12-15 = Reserved
+				//    Bits 0-3   = Signal Strength Field
+				//                 0000 = -105dBm to -92dBm
+				//                 0001 = -92dBm to -85dBm
+				//                 0011 = -85dBm to -75dBm
+				//                 0111 = -75dBm to -50dBm
+				//                 1111 = -50dBm to 0dBm
+				//    Bits 4-7   = Reserved
+				//    Bits 8-11  = SNR Field
+				//                 0000 = <2dB
+				//                 0001 = 2dB to 8dB
+				//                 0011 = 8dB to 15dB
+				//                 0111 = 15dB to 22dB
+				//                 1111 = >22dB
+				//    Bits 12-15 = Reserved
     unsigned long nTxPkts;                // Number of packets transmitted from host to dsp
     unsigned long nRxPkts;                // Number of packets received from dsp to host
     unsigned long nTxBytes;               // Number of bytes transmitted from host to dsp

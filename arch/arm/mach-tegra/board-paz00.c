@@ -114,7 +114,7 @@ static struct platform_device leds_gpio = {
 	.id	= -1,
 	.dev	= {
 		.platform_data = &gpio_led_info,
-        },
+	},
 };
 
 static struct gpio_keys_button paz00_gpio_keys_buttons[] = {

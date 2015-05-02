@@ -63,7 +63,7 @@ static int wacom_penpartner_irq(struct wacom_wac *wacom)
 	default:
 		printk(KERN_INFO "wacom_penpartner_irq: received unknown report #%d\n", data[0]);
 		return 0;
-        }
+	}
 
 	return 1;
 }
@@ -485,7 +485,7 @@ static int wacom_intuos_irq(struct wacom_wac *wacom)
 	if (data[0] != WACOM_REPORT_PENABLED && data[0] != WACOM_REPORT_INTUOSREAD
 		&& data[0] != WACOM_REPORT_INTUOSWRITE && data[0] != WACOM_REPORT_INTUOSPAD) {
 		dbg("wacom_intuos_irq: received unknown report #%d", data[0]);
-                return 0;
+		return 0;
 	}
 
 	/* tool number */
@@ -615,13 +615,13 @@ static int wacom_intuos_irq(struct wacom_wac *wacom)
 			}
 		}
 		input_event(input, EV_MSC, MSC_SERIAL, 0xffffffff);
-                return 1;
+		return 1;
 	}
 
 	/* process in/out prox events */
 	result = wacom_intuos_inout(wacom);
 	if (result)
-                return result - 1;
+		return result - 1;
 
 	/* don't proceed if we don't know the ID */
 	if (!wacom->id[idx])
@@ -639,7 +639,7 @@ static int wacom_intuos_irq(struct wacom_wac *wacom)
 
 	/* Cintiq doesn't send data when RDY bit isn't set */
 	if (features->type == CINTIQ && !(data[1] & 0x40))
-                 return 0;
+		 return 0;
 
 	if (features->type >= INTUOS3S) {
 		input_report_abs(input, ABS_X, (data[2] << 9) | (data[3] << 1) | ((data[9] >> 1) & 1));
@@ -1720,14 +1720,14 @@ static struct wacom_features wacom_features_0xDB =
 	{ "Wacom Bamboo 2FG 6x8 SE", WACOM_PKGLEN_BBFUN,  21648, 13700, 1023,
 	  31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
 static const struct wacom_features wacom_features_0xDD =
-        { "Wacom Bamboo Connect", WACOM_PKGLEN_BBPEN,     14720,  9200, 1023,
-          31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
+	{ "Wacom Bamboo Connect", WACOM_PKGLEN_BBPEN,     14720,  9200, 1023,
+	  31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
 static const struct wacom_features wacom_features_0xDE =
-        { "Wacom Bamboo 16FG 4x5", WACOM_PKGLEN_BBPEN,    14720,  9200, 1023,
-          31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
+	{ "Wacom Bamboo 16FG 4x5", WACOM_PKGLEN_BBPEN,    14720,  9200, 1023,
+	  31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
 static const struct wacom_features wacom_features_0xDF =
-        { "Wacom Bamboo 16FG 6x8", WACOM_PKGLEN_BBPEN,    21648, 13700, 1023,
-          31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
+	{ "Wacom Bamboo 16FG 6x8", WACOM_PKGLEN_BBPEN,    21648, 13700, 1023,
+	  31, BAMBOO_PT, WACOM_INTUOS_RES, WACOM_INTUOS_RES };
 static const struct wacom_features wacom_features_0x6004 =
 	{ "ISD-V4",               WACOM_PKGLEN_GRAPHIRE,  12800,  8000,  255,
 	  0, TABLETPC, WACOM_INTUOS_RES, WACOM_INTUOS_RES };

@@ -176,7 +176,7 @@ static int sn_set_msi_irq_affinity(struct irq_data *data,
 	 */
 
 	get_cached_msi_msg(irq, &msg);
-        sn_pdev = (struct pcidev_info *)sn_irq_info->irq_pciioinfo;
+	sn_pdev = (struct pcidev_info *)sn_irq_info->irq_pciioinfo;
 	pdev = sn_pdev->pdi_linux_pcidev;
 	provider = SN_PCIDEV_BUSPROVIDER(pdev);
 

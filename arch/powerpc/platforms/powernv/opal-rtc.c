@@ -29,7 +29,7 @@ static void opal_to_tm(u32 y_m_d, u64 h_m_s_ms, struct rtc_time *tm)
 	tm->tm_min	= bcd2bin((h_m_s_ms >> 48) & 0xff);
 	tm->tm_sec	= bcd2bin((h_m_s_ms >> 40) & 0xff);
 
-        GregorianDay(tm);
+	GregorianDay(tm);
 }
 
 unsigned long __init opal_get_boot_time(void)

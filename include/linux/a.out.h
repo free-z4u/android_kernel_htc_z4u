@@ -256,10 +256,10 @@ struct relocation_info
      Thus, a value of 2 indicates 1<<2 bytes.  */
   unsigned int r_length:2;
   /* 1 => relocate with value of symbol.
-          r_symbolnum is the index of the symbol
+	  r_symbolnum is the index of the symbol
 	  in file's the symbol table.
      0 => relocate with the address of a segment.
-          r_symbolnum is N_TEXT, N_DATA, N_BSS or N_ABS
+	  r_symbolnum is N_TEXT, N_DATA, N_BSS or N_ABS
 	  (the N_EXT bit may be set also, but signifies nothing).  */
   unsigned int r_extern:1;
   /* Four bits that aren't used, but when writing an object file

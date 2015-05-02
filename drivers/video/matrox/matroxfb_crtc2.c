@@ -411,11 +411,11 @@ static int matroxfb_dh_get_vblank(const struct matroxfb_dh_fb_info* m2info, stru
 	if (vblank->vcount >= m2info->fbcon.var.yres)
 		vblank->flags |= FB_VBLANK_VBLANKING;
 	if (test_bit(0, &minfo->irq_flags)) {
-                vblank->flags |= FB_VBLANK_HAVE_COUNT;
-                /* Only one writer, aligned int value...
-                   it should work without lock and without atomic_t */
+		vblank->flags |= FB_VBLANK_HAVE_COUNT;
+		/* Only one writer, aligned int value...
+		   it should work without lock and without atomic_t */
 		vblank->count = minfo->crtc2.vsync.cnt;
-        }
+	}
 	return 0;
 }
 

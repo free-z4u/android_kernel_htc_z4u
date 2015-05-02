@@ -785,7 +785,7 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 	boguscount = 5;
 	do {
 		status = ASTATUS();
-                diagstatus = (status >> 8) & 0xFF;
+		diagstatus = (status >> 8) & 0xFF;
 
 		BUGMSG(D_DEBUG, "%s: %d: %s: status=%x\n",
 			__FILE__,__LINE__,__func__,status);
@@ -833,13 +833,13 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 			BUGMSG(D_DURING, "EXCNAK IRQ (diagstat=%Xh)\n",
 			       diagstatus);
 
-                        ACOMMAND(NOTXcmd);      /* disable transmit */
-                        lp->excnak_pending = 1;
+			ACOMMAND(NOTXcmd);      /* disable transmit */
+			lp->excnak_pending = 1;
 
-                        ACOMMAND(EXCNAKclear);
+			ACOMMAND(EXCNAKclear);
 			lp->intmask &= ~(EXCNAKflag);
-                        didsomething++;
-                }
+			didsomething++;
+		}
 
 
 		/* a transmit finished, and we're interested in it. */
@@ -869,14 +869,14 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 				    lp->outgoing.proto->ack_tx) {
 				  int ackstatus;
 				  if(status & TXACKflag)
-                                    ackstatus=2;
-                                  else if(lp->excnak_pending)
-                                    ackstatus=1;
-                                  else
-                                    ackstatus=0;
+				    ackstatus=2;
+				  else if(lp->excnak_pending)
+				    ackstatus=1;
+				  else
+				    ackstatus=0;
 
-                                  lp->outgoing.proto
-                                    ->ack_tx(dev, ackstatus);
+				  lp->outgoing.proto
+				    ->ack_tx(dev, ackstatus);
 				}
 			}
 			if (lp->cur_tx != -1)

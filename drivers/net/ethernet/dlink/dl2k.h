@@ -417,11 +417,11 @@ struct netdev_private {
 
 /* The station address location in the EEPROM. */
 /* The struct pci_device_id consist of:
-        vendor, device          Vendor and device ID to match (or PCI_ANY_ID)
-        subvendor, subdevice    Subsystem vendor and device ID to match (or PCI_ANY_ID)
-        class                   Device class to match. The class_mask tells which bits
-        class_mask              of the class are honored during the comparison.
-        driver_data             Data private to the driver.
+	vendor, device          Vendor and device ID to match (or PCI_ANY_ID)
+	subvendor, subdevice    Subsystem vendor and device ID to match (or PCI_ANY_ID)
+	class                   Device class to match. The class_mask tells which bits
+	class_mask              of the class are honored during the comparison.
+	driver_data             Data private to the driver.
 */
 
 static DEFINE_PCI_DEVICE_TABLE(rio_pci_tbl) = {

@@ -1075,7 +1075,7 @@ static ssize_t show_pcm_class(struct device *dev,
 		str = "none";
 	else
 		str = strs[pcm->dev_class];
-        return snprintf(buf, PAGE_SIZE, "%s\n", str);
+	return snprintf(buf, PAGE_SIZE, "%s\n", str);
 }
 
 static struct device_attribute pcm_attrs =

@@ -13,8 +13,8 @@
 
 /* Now 32bit compatibility types */
 struct ipc_kludge_32 {
-        __u32   msgp;                           /* pointer              */
-        __s32   msgtyp;
+	__u32   msgp;                           /* pointer              */
+	__s32   msgtyp;
 };
 
 struct old_sigaction32 {
@@ -107,8 +107,8 @@ typedef struct
 
 typedef struct
 {
-        __u32   mask;
-        __u32	addr;
+	__u32   mask;
+	__u32	addr;
 } _psw_t32 __attribute__ ((aligned(8)));
 
 typedef struct
@@ -139,7 +139,7 @@ struct sigcontext32
 struct sigaction32 {
 	__u32		sa_handler;		/* pointer */
 	__u32		sa_flags;
-        __u32		sa_restorer;		/* pointer */
+	__u32		sa_restorer;		/* pointer */
 	compat_sigset_t	sa_mask;        /* mask last for extensibility */
 };
 

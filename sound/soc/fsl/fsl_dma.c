@@ -944,7 +944,7 @@ static int __devinit fsl_soc_dma_probe(struct platform_device *pdev)
 	if (iprop)
 		dma->ssi_fifo_depth = be32_to_cpup(iprop);
 	else
-                /* Older 8610 DTs didn't have the fifo-depth property */
+		/* Older 8610 DTs didn't have the fifo-depth property */
 		dma->ssi_fifo_depth = 8;
 
 	of_node_put(ssi_np);

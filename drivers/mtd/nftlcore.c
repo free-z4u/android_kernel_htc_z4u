@@ -68,11 +68,11 @@ static void nftl_add_mtd(struct mtd_blktrans_ops *tr, struct mtd_info *mtd)
 
 	nftl->mbd.tr = tr;
 
-        if (NFTL_mount(nftl) < 0) {
+	if (NFTL_mount(nftl) < 0) {
 		printk(KERN_WARNING "NFTL: could not mount device\n");
 		kfree(nftl);
 		return;
-        }
+	}
 
 	/* OK, it's a new one. Set up all the data structures. */
 
@@ -387,9 +387,9 @@ static u16 NFTL_foldchain (struct NFTLrecord *nftl, unsigned thisVUC, unsigned p
 		}
 	} else {
 		/* We put a fold mark in the chain we are folding only if we
-               fold in place to help the mount check code. If we do not fold in
-               place, it is possible to find the valid chain by selecting the
-               longer one */
+	       fold in place to help the mount check code. If we do not fold in
+	       place, it is possible to find the valid chain by selecting the
+	       longer one */
 		oob.u.c.FoldMark = oob.u.c.FoldMark1 = cpu_to_le16(FOLD_MARK_IN_PROGRESS);
 		oob.u.c.unused = 0xffffffff;
 		nftl_write_oob(mtd, (nftl->EraseSize * targetEUN) + 2 * 512 + 8,
@@ -412,7 +412,7 @@ static u16 NFTL_foldchain (struct NFTLrecord *nftl, unsigned thisVUC, unsigned p
 		}
 
 		/* copy only in non free block (free blocks can only
-                   happen in case of media errors or deleted blocks) */
+		   happen in case of media errors or deleted blocks) */
 		if (BlockMap[block] == BLOCK_NIL)
 			continue;
 
@@ -530,7 +530,7 @@ static u16 NFTL_makefreeblock( struct NFTLrecord *nftl , unsigned pendingblock)
 }
 
 /* NFTL_findwriteunit: Return the unit number into which we can write
-                       for this block. Make it available if it isn't already
+		       for this block. Make it available if it isn't already
 */
 static inline u16 NFTL_findwriteunit(struct NFTLrecord *nftl, unsigned block)
 {
@@ -659,8 +659,8 @@ static inline u16 NFTL_findwriteunit(struct NFTLrecord *nftl, unsigned block)
 			       &retlen, (char *)&oob.u);
 
 		/* we link the new block to the chain only after the
-                   block is ready. It avoids the case where the chain
-                   could point to a free block */
+		   block is ready. It avoids the case where the chain
+		   could point to a free block */
 		if (lastEUN != BLOCK_NIL) {
 			/* Both in our cache... */
 			nftl->ReplUnitTable[lastEUN] = writeEUN;

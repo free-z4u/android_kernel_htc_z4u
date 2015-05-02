@@ -313,28 +313,28 @@ do {									\
 
 #if defined(__LITTLE_ENDIAN__)
 #define __put_user_u64(x, addr, err)					\
-        __asm__ __volatile__(						\
-                "       .fillinsn\n"					\
-                "1:     st %L1,@%2\n"					\
-                "       .fillinsn\n"					\
-                "2:     st %H1,@(4,%2)\n"				\
-                "       .fillinsn\n"					\
-                "3:\n"							\
-                ".section .fixup,\"ax\"\n"				\
-                "       .balign 4\n"					\
-                "4:     ldi %0,%3\n"					\
-                "       seth r14,#high(3b)\n"				\
-                "       or3 r14,r14,#low(3b)\n"				\
-                "       jmp r14\n"					\
-                ".previous\n"						\
-                ".section __ex_table,\"a\"\n"				\
-                "       .balign 4\n"					\
-                "       .long 1b,4b\n"					\
-                "       .long 2b,4b\n"					\
-                ".previous"						\
-                : "=&r" (err)						\
-                : "r" (x), "r" (addr), "i" (-EFAULT), "0" (err)		\
-                : "r14", "memory")
+	__asm__ __volatile__(						\
+		"       .fillinsn\n"					\
+		"1:     st %L1,@%2\n"					\
+		"       .fillinsn\n"					\
+		"2:     st %H1,@(4,%2)\n"				\
+		"       .fillinsn\n"					\
+		"3:\n"							\
+		".section .fixup,\"ax\"\n"				\
+		"       .balign 4\n"					\
+		"4:     ldi %0,%3\n"					\
+		"       seth r14,#high(3b)\n"				\
+		"       or3 r14,r14,#low(3b)\n"				\
+		"       jmp r14\n"					\
+		".previous\n"						\
+		".section __ex_table,\"a\"\n"				\
+		"       .balign 4\n"					\
+		"       .long 1b,4b\n"					\
+		"       .long 2b,4b\n"					\
+		".previous"						\
+		: "=&r" (err)						\
+		: "r" (x), "r" (addr), "i" (-EFAULT), "0" (err)		\
+		: "r14", "memory")
 
 #elif defined(__BIG_ENDIAN__)
 #define __put_user_u64(x, addr, err)					\

@@ -1063,7 +1063,7 @@ static int sd_getgeo(struct block_device *bdev, struct hd_geometry *geo)
 	int diskinfo[4];
 
 	/* default to most commonly used values */
-        diskinfo[0] = 0x40;	/* 1 << 6 */
+	diskinfo[0] = 0x40;	/* 1 << 6 */
        	diskinfo[1] = 0x20;	/* 1 << 5 */
        	diskinfo[2] = sdkp->capacity >> 11;
 

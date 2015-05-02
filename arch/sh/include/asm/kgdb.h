@@ -6,14 +6,14 @@
 
 /* Same as pt_regs but has vbr in place of syscall_nr */
 struct kgdb_regs {
-        unsigned long regs[16];
-        unsigned long pc;
-        unsigned long pr;
-        unsigned long sr;
-        unsigned long gbr;
-        unsigned long mach;
-        unsigned long macl;
-        unsigned long vbr;
+	unsigned long regs[16];
+	unsigned long pc;
+	unsigned long pr;
+	unsigned long sr;
+	unsigned long gbr;
+	unsigned long mach;
+	unsigned long macl;
+	unsigned long vbr;
 };
 
 enum regnames {

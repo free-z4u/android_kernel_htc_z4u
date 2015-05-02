@@ -197,10 +197,10 @@
 
 #define Sgl_setlargestpositive(sgl_value) 				\
     Sall(sgl_value) = ((SGL_EMAX+SGL_BIAS) << (32-(1+SGL_EXP_LENGTH)))	\
-                      | ((1<<(32-(1+SGL_EXP_LENGTH))) - 1 )
+		      | ((1<<(32-(1+SGL_EXP_LENGTH))) - 1 )
 #define Sgl_setlargestnegative(sgl_value)				\
     Sall(sgl_value) = ((SGL_EMAX+SGL_BIAS) << (32-(1+SGL_EXP_LENGTH)))	\
-                      | ((1<<(32-(1+SGL_EXP_LENGTH))) - 1 )		\
+		      | ((1<<(32-(1+SGL_EXP_LENGTH))) - 1 )		\
 		      | ((unsigned int)1<<31)
 
 #define Sgl_setnegativeinfinity(sgl_value)	\
@@ -208,11 +208,11 @@
     ((1<<SGL_EXP_LENGTH) | SGL_INFINITY_EXPONENT) << (32-(1+SGL_EXP_LENGTH))
 #define Sgl_setlargest(sgl_value,sign) 					\
     Sall(sgl_value) = (unsigned int)sign << 31 |			\
-        (((SGL_EMAX+SGL_BIAS) << (32-(1+SGL_EXP_LENGTH)))		\
+	(((SGL_EMAX+SGL_BIAS) << (32-(1+SGL_EXP_LENGTH)))		\
 	  | ((1 << (32-(1+SGL_EXP_LENGTH))) - 1 ))
 #define Sgl_setlargest_exponentmantissa(sgl_value)			\
     Sall(sgl_value) = Sall(sgl_value) & ((unsigned int)1<<31) |		\
-        (((SGL_EMAX+SGL_BIAS) << (32-(1+SGL_EXP_LENGTH)))		\
+	(((SGL_EMAX+SGL_BIAS) << (32-(1+SGL_EXP_LENGTH)))		\
 	  | ((1 << (32-(1+SGL_EXP_LENGTH))) - 1 ))
 
 /* The high bit is always zero so arithmetic or logical shifts will work. */
@@ -254,10 +254,10 @@
 /* Need to Initialize */
 #define Sgl_makequietnan(dest)						\
     Sall(dest) = ((SGL_EMAX+SGL_BIAS)+1)<< (32-(1+SGL_EXP_LENGTH))	\
-                 | (1<<(32-(1+SGL_EXP_LENGTH+2)))
+		 | (1<<(32-(1+SGL_EXP_LENGTH+2)))
 #define Sgl_makesignalingnan(dest)					\
     Sall(dest) = ((SGL_EMAX+SGL_BIAS)+1)<< (32-(1+SGL_EXP_LENGTH))	\
-                 | (1<<(32-(1+SGL_EXP_LENGTH+1)))
+		 | (1<<(32-(1+SGL_EXP_LENGTH+1)))
 
 #define Sgl_normalize(sgl_opnd,exponent)			\
 	while(Sgl_iszero_hiddenhigh7mantissa(sgl_opnd)) {	\
@@ -352,7 +352,7 @@
     switch (shift/32) {							\
      case 0: if (shiftamt > 0) {					\
 	        sticky = Sextallp2(srcdstB) << 32 - (shiftamt);		\
-                Variable_shift_double(Sextallp1(srcdstA),		\
+		Variable_shift_double(Sextallp1(srcdstA),		\
 		 Sextallp2(srcdstB),shiftamt,Sextallp2(srcdstB));	\
 	        Sextallp1(srcdstA) >>= shiftamt;			\
 	     }								\
@@ -381,7 +381,7 @@
     /* If the sum of the low words is less than either source, then \
      * an overflow into the next word occurred. */ \
     if ((Sextallp2(resultb) = Sextallp2(leftb)+Sextallp2(rightb)) < \
-        Sextallp2(rightb)) \
+	Sextallp2(rightb)) \
 	    Sextallp1(resulta) = Sextallp1(lefta)+Sextallp1(righta)+1; \
     else Sextallp1(resulta) = Sextallp1(lefta)+Sextallp1(righta)
 

@@ -71,10 +71,10 @@ desc | ^-ver-^  |  ^type-^  |  ^-----subtype-----^  | to  |from |more |retry| pw
      |          |           | x=0 data,x=1 data+ack | DS  | DS  |frag |     | mgm |data |      |
      '-----------------------------------------------------------------------------------------'
 		                                    /\
-                                                    |
+						    |
 802.11 Data Frame                                   |
-           ,--------- 'ctrl' expands to >-----------'
-          |
+	   ,--------- 'ctrl' expands to >-----------'
+	  |
       ,--'---,-------------------------------------------------------------.
 Bytes |  2   |  2   |    6    |    6    |    6    |  2   | 0..2312 |   4  |
       |------|------|---------|---------|---------|------|---------|------|
@@ -82,7 +82,7 @@ Desc. | ctrl | dura |  DA/RA  |   TA    |    SA   | Sequ |  Frame  |  fcs |
       |      | tion | (BSSID) |         |         | ence |  data   |      |
       `--------------------------------------------------|         |------'
 Total: 28 non-data bytes                                 `----.----'
-                                                              |
+							      |
        .- 'Frame data' expands to <---------------------------'
        |
        V
@@ -94,7 +94,7 @@ Desc. | SNAP | SNAP | Control |Eth Tunnel| Type | IP      |
       | 0xAA | 0xAA |0x03 (UI)|0x00-00-F8|      |         |
       `-----------------------------------------|         |
 Total: 8 non-data bytes                         `----.----'
-                                                     |
+						     |
        .- 'IP Packet' expands, if WEP enabled, to <--'
        |
        V
@@ -656,17 +656,17 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
 		memcpy(&dest, skb->data, ETH_ALEN);
 		memcpy(&src, skb->data+ETH_ALEN, ETH_ALEN);
 
-                /* Advance the SKB to the start of the payload */
-                skb_pull(skb, sizeof(struct ethhdr));
+		/* Advance the SKB to the start of the payload */
+		skb_pull(skb, sizeof(struct ethhdr));
 
-                /* Determine total amount of storage required for TXB packets */
-                bytes = skb->len + SNAP_SIZE + sizeof(u16);
+		/* Determine total amount of storage required for TXB packets */
+		bytes = skb->len + SNAP_SIZE + sizeof(u16);
 
 		if (encrypt)
 			fc = IEEE80211_FTYPE_DATA | IEEE80211_FCTL_WEP;
 		else
 
-                        fc = IEEE80211_FTYPE_DATA;
+			fc = IEEE80211_FTYPE_DATA;
 
 		//if(ieee->current_network.QoS_Enable)
 		if(qos_actived)
@@ -689,7 +689,7 @@ int ieee80211_xmit(struct sk_buff *skb, struct net_device *dev)
 			memcpy(&header.addr3, ieee->current_network.bssid, ETH_ALEN);
 		}
 
-                header.frame_ctl = cpu_to_le16(fc);
+		header.frame_ctl = cpu_to_le16(fc);
 
 		/* Determine fragmentation size based on destination (multicast
 		* and broadcast are not fragmented) */

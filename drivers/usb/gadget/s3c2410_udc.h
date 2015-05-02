@@ -59,19 +59,19 @@ struct s3c2410_request {
 };
 
 enum ep0_state {
-        EP0_IDLE,
-        EP0_IN_DATA_PHASE,
-        EP0_OUT_DATA_PHASE,
-        EP0_END_XFER,
-        EP0_STALL,
+	EP0_IDLE,
+	EP0_IN_DATA_PHASE,
+	EP0_OUT_DATA_PHASE,
+	EP0_END_XFER,
+	EP0_STALL,
 };
 
 static const char *ep0states[]= {
-        "EP0_IDLE",
-        "EP0_IN_DATA_PHASE",
-        "EP0_OUT_DATA_PHASE",
-        "EP0_END_XFER",
-        "EP0_STALL",
+	"EP0_IDLE",
+	"EP0_IN_DATA_PHASE",
+	"EP0_OUT_DATA_PHASE",
+	"EP0_END_XFER",
+	"EP0_STALL",
 };
 
 struct s3c2410_udc {

@@ -127,8 +127,8 @@ static inline int bad_user_access_length(void)
 }
 
 #define __put_user_bad() (printk(KERN_INFO "put_user_bad %s:%d %s\n",\
-                           __FILE__, __LINE__, __func__),\
-                           bad_user_access_length(), (-EFAULT))
+			   __FILE__, __LINE__, __func__),\
+			   bad_user_access_length(), (-EFAULT))
 
 /*
  * Tell gcc we read from memory instead of writing: this is because
@@ -189,7 +189,7 @@ static inline int bad_user_access_length(void)
 				                 return retval; })
 
 #define copy_from_user_ret(to,from,n,retval) ({ if (copy_from_user(to,from,n))\
-                                                   return retval; })
+						   return retval; })
 
 static inline unsigned long __must_check
 copy_from_user(void *to, const void __user *from, unsigned long n)

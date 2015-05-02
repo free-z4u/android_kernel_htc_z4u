@@ -1274,17 +1274,17 @@ ep0_poll (struct file *fd, poll_table *wait)
 
        /* report fd mode change before acting on it */
        if (dev->setup_abort) {
-               dev->setup_abort = 0;
-               mask = POLLHUP;
-               goto out;
+	       dev->setup_abort = 0;
+	       mask = POLLHUP;
+	       goto out;
        }
 
        if (dev->state == STATE_DEV_SETUP) {
-               if (dev->setup_in || dev->setup_can_stall)
-                       mask = POLLOUT;
+	       if (dev->setup_in || dev->setup_can_stall)
+		       mask = POLLOUT;
        } else {
-               if (dev->ev_next != 0)
-                       mask = POLLIN;
+	       if (dev->ev_next != 0)
+		       mask = POLLIN;
        }
 out:
        spin_unlock_irq(&dev->lock);

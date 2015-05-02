@@ -148,32 +148,32 @@ static void __init register_i2c_devices(void)
 #if defined(CONFIG_INPUT_CAPELLA_CM3629)
 #define PROTOU_GPIO_PROXIMITY_INT 36
 static struct cm3629_platform_data cm36282_pdata = {
-        .model = CAPELLA_CM36282,
-        .ps_select = CM3629_PS1_ONLY,
-        .intr = PROTOU_GPIO_PROXIMITY_INT,
-        .levels = {5, 36, 71, 237, 1603, 2137, 2493, 2849, 3205, 65535},
-        .golden_adc = 0x410,
-        .power = NULL,
-        .cm3629_slave_address = 0xC0>>1,
-        .ps_calibration_rule = 5,
-        .ps1_thd_set = 0x08,
-        .ps1_thh_diff = 2,
-        .ps1_thd_no_cal = 0xF1,
-        .ps1_thd_with_cal = 0x08,
-        .ps_conf1_val = CM3629_PS_DR_1_80 | CM3629_PS_IT_1_6T |
-                        CM3629_PS1_PERS_1,
-        .ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
-                        CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
-        .ps_conf3_val = CM3629_PS2_PROL_32,
+	.model = CAPELLA_CM36282,
+	.ps_select = CM3629_PS1_ONLY,
+	.intr = PROTOU_GPIO_PROXIMITY_INT,
+	.levels = {5, 36, 71, 237, 1603, 2137, 2493, 2849, 3205, 65535},
+	.golden_adc = 0x410,
+	.power = NULL,
+	.cm3629_slave_address = 0xC0>>1,
+	.ps_calibration_rule = 5,
+	.ps1_thd_set = 0x08,
+	.ps1_thh_diff = 2,
+	.ps1_thd_no_cal = 0xF1,
+	.ps1_thd_with_cal = 0x08,
+	.ps_conf1_val = CM3629_PS_DR_1_80 | CM3629_PS_IT_1_6T |
+			CM3629_PS1_PERS_1,
+	.ps_conf2_val = CM3629_PS_ITB_1 | CM3629_PS_ITR_1 |
+			CM3629_PS2_INT_DIS | CM3629_PS1_INT_DIS,
+	.ps_conf3_val = CM3629_PS2_PROL_32,
 
 };
 
 static struct i2c_board_info i2c_cm36282_devices[] = {
-        {
-                I2C_BOARD_INFO(CM3629_I2C_NAME,0xC0 >> 1),
-        .platform_data = &cm36282_pdata,
-        .irq = MSM_GPIO_TO_INT(PROTOU_GPIO_PROXIMITY_INT),
-        },
+	{
+		I2C_BOARD_INFO(CM3629_I2C_NAME,0xC0 >> 1),
+	.platform_data = &cm36282_pdata,
+	.irq = MSM_GPIO_TO_INT(PROTOU_GPIO_PROXIMITY_INT),
+	},
 };
 #endif
 
@@ -366,21 +366,21 @@ static int msm_hsusb_pmic_notif_init(void (*callback)(int online), int init)
 static int phy_init_settings[] =
 {	0x0c, 0x31,
 	0x28, 0x31,
-        -1
+	-1
 };
 
 static struct msm_otg_platform_data msm_otg_pdata = {
-        .vbus_power              = msm_hsusb_vbus_power,
-        .rpc_connect             = hsusb_rpc_connect,
-        .pemp_level              = PRE_EMPHASIS_WITH_20_PERCENT,
-        .cdr_autoreset           = CDR_AUTO_RESET_DISABLE,
-        .drv_ampl                = HS_DRV_AMPLITUDE_DEFAULT,
-        .se1_gating              = SE1_GATING_DISABLE,
-        .ldo_init                = msm_hsusb_ldo_init,
-        .ldo_enable              = msm_hsusb_ldo_enable,
-        .chg_init                = hsusb_chg_init,
-        .chg_connected           = hsusb_chg_connected,
-        .chg_vbus_draw           = hsusb_chg_vbus_draw,
+	.vbus_power              = msm_hsusb_vbus_power,
+	.rpc_connect             = hsusb_rpc_connect,
+	.pemp_level              = PRE_EMPHASIS_WITH_20_PERCENT,
+	.cdr_autoreset           = CDR_AUTO_RESET_DISABLE,
+	.drv_ampl                = HS_DRV_AMPLITUDE_DEFAULT,
+	.se1_gating              = SE1_GATING_DISABLE,
+	.ldo_init                = msm_hsusb_ldo_init,
+	.ldo_enable              = msm_hsusb_ldo_enable,
+	.chg_init                = hsusb_chg_init,
+	.chg_connected           = hsusb_chg_connected,
+	.chg_vbus_draw           = hsusb_chg_vbus_draw,
 };
 
 void protou_add_usb_devices(void)
@@ -741,12 +741,12 @@ static struct i2c_board_info i2c_tps65200_devices[] = {
 #ifdef CONFIG_SUPPORT_DQ_BATTERY
 static int __init check_dq_setup(char *str)
 {
-        if (!strcmp(str, "PASS"))
-                tps65200_data.dq_result = 1;
-        else
-                tps65200_data.dq_result = 0;
+	if (!strcmp(str, "PASS"))
+		tps65200_data.dq_result = 1;
+	else
+		tps65200_data.dq_result = 0;
 
-        return 1;
+	return 1;
 }
 __setup("androidboot.dq=", check_dq_setup);
 #endif
@@ -1224,55 +1224,55 @@ static struct platform_device ram_console_device = {
 	.resource       = ram_console_resources,
 };
 static struct gpio_led gpio_exp_leds_config[] = {
-        {
-                .name = "button-backlight",
-                .gpio = 124,
-                .active_low = 0,
-                .retain_state_suspended = 0,
-                .default_state = LEDS_GPIO_DEFSTATE_OFF,
-        },
+	{
+		.name = "button-backlight",
+		.gpio = 124,
+		.active_low = 0,
+		.retain_state_suspended = 0,
+		.default_state = LEDS_GPIO_DEFSTATE_OFF,
+	},
 };
 
 static struct gpio_led_platform_data gpio_leds_pdata = {
-        .num_leds = ARRAY_SIZE(gpio_exp_leds_config),
-        .leds = gpio_exp_leds_config,
+	.num_leds = ARRAY_SIZE(gpio_exp_leds_config),
+	.leds = gpio_exp_leds_config,
 };
 
 static struct platform_device gpio_leds = {
-        .name             = "leds-gpio",
-        .id                     = -1,
-        .dev               = {
-                .platform_data = &gpio_leds_pdata,
-        },
+	.name             = "leds-gpio",
+	.id                     = -1,
+	.dev               = {
+		.platform_data = &gpio_leds_pdata,
+	},
 };
 
 static struct pm8029_led_config pm_led_config[] = {
-        {
-                .name = "green",
-                .bank = 0,
-                .init_pwm_brightness = 200,
-                .flag = FIX_BRIGHTNESS,
-        },
-        {
-                .name = "amber",
-                .bank = 4,
-                .init_pwm_brightness = 200,
-                .flag = FIX_BRIGHTNESS,
-        },
+	{
+		.name = "green",
+		.bank = 0,
+		.init_pwm_brightness = 200,
+		.flag = FIX_BRIGHTNESS,
+	},
+	{
+		.name = "amber",
+		.bank = 4,
+		.init_pwm_brightness = 200,
+		.flag = FIX_BRIGHTNESS,
+	},
 
 };
 
 static struct pm8029_led_platform_data pm8029_leds_data = {
-        .led_config = pm_led_config,
-        .num_leds = ARRAY_SIZE(pm_led_config),
+	.led_config = pm_led_config,
+	.num_leds = ARRAY_SIZE(pm_led_config),
 };
 
 static struct platform_device pm8029_leds = {
-        .name   = "leds-pm8029",
-        .id     = -1,
-        .dev    = {
-                .platform_data  = &pm8029_leds_data,
-        },
+	.name   = "leds-pm8029",
+	.id     = -1,
+	.dev    = {
+		.platform_data  = &pm8029_leds_data,
+	},
 };
 
 /* HTC_HEADSET_GPIO Driver */
@@ -1324,7 +1324,7 @@ static struct platform_device htc_headset_one_wire = {
        .name   = "HTC_HEADSET_1WIRE",
        .id     = -1,
        .dev    = {
-               .platform_data  = &htc_headset_1wire_data,
+	       .platform_data  = &htc_headset_1wire_data,
        },
 };
 
@@ -2426,7 +2426,7 @@ static void __init msm7x2x_init(void)
 
 	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
 			i2c_tps65200_devices, ARRAY_SIZE(i2c_tps65200_devices));
-        msm_init_pmic_vibrator(3000);
+	msm_init_pmic_vibrator(3000);
 	msm8625_init_keypad();
 	bcm4330_wifi_init();
 

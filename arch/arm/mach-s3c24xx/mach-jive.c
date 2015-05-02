@@ -110,25 +110,25 @@ static struct mtd_partition __initdata jive_imageA_nand_part[] = {
 	},
 
 	/* spare */
-        {
-                .name           = "spare",
-                .offset         = (176 * SZ_1K),
-                .size           = (16 * SZ_1K),
-        },
+	{
+		.name           = "spare",
+		.offset         = (176 * SZ_1K),
+		.size           = (16 * SZ_1K),
+	},
 #endif
 
 	/* booted images */
-        {
+	{
 		.name		= "kernel (ro)",
 		.offset		= (192 * SZ_1K),
 		.size		= (SZ_2M) - (192 * SZ_1K),
 		.mask_flags	= MTD_WRITEABLE, /* force read-only */
-        }, {
-                .name           = "root (ro)",
-                .offset         = (SZ_2M),
-                .size           = (20 * SZ_1M),
+	}, {
+		.name           = "root (ro)",
+		.offset         = (SZ_2M),
+		.size           = (20 * SZ_1M),
 		.mask_flags	= MTD_WRITEABLE, /* force read-only */
-        },
+	},
 
 	/* yaffs */
 	{
@@ -139,21 +139,21 @@ static struct mtd_partition __initdata jive_imageA_nand_part[] = {
 
 	/* bootloader environment */
 	{
-                .name		= "env",
+		.name		= "env",
 		.offset		= (160 * SZ_1K),
 		.size		= (16 * SZ_1K),
 	},
 
 	/* upgrade images */
-        {
+	{
 		.name		= "zimage",
 		.offset		= (22 * SZ_1M),
 		.size		= (2 * SZ_1M) - (192 * SZ_1K),
-        }, {
+	}, {
 		.name		= "cramfs",
 		.offset		= (24 * SZ_1M) - (192*SZ_1K),
 		.size		= (20 * SZ_1M),
-        },
+	},
 };
 
 static struct mtd_partition __initdata jive_imageB_nand_part[] = {
@@ -168,24 +168,24 @@ static struct mtd_partition __initdata jive_imageB_nand_part[] = {
 	},
 
 	/* spare */
-        {
-                .name           = "spare",
-                .offset         = (176 * SZ_1K),
-                .size           = (16 * SZ_1K),
-        },
+	{
+		.name           = "spare",
+		.offset         = (176 * SZ_1K),
+		.size           = (16 * SZ_1K),
+	},
 #endif
 
 	/* booted images */
-        {
+	{
 		.name           = "kernel (ro)",
 		.offset         = (22 * SZ_1M),
 		.size           = (2 * SZ_1M) - (192 * SZ_1K),
 		.mask_flags	= MTD_WRITEABLE, /* force read-only */
-        },
+	},
 	{
 		.name		= "root (ro)",
 		.offset		= (24 * SZ_1M) - (192 * SZ_1K),
-                .size		= (20 * SZ_1M),
+		.size		= (20 * SZ_1M),
 		.mask_flags	= MTD_WRITEABLE, /* force read-only */
 	},
 
@@ -194,7 +194,7 @@ static struct mtd_partition __initdata jive_imageB_nand_part[] = {
 		.name		= "yaffs",
 		.offset		= (44 * SZ_1M),
 		.size		= (20 * SZ_1M),
-        },
+	},
 
 	/* bootloader environment */
 	{
@@ -208,11 +208,11 @@ static struct mtd_partition __initdata jive_imageB_nand_part[] = {
 		.name		= "zimage",
 		.offset		= (192 * SZ_1K),
 		.size		= (2 * SZ_1M) - (192 * SZ_1K),
-        }, {
+	}, {
 		.name		= "cramfs",
 		.offset		= (2 * SZ_1M),
 		.size		= (20 * SZ_1M),
-        },
+	},
 };
 
 static struct s3c2410_nand_set __initdata jive_nand_sets[] = {

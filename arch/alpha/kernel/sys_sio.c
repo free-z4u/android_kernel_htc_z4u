@@ -267,7 +267,7 @@ alphabook1_init_pci(void)
 				       " burst disable\n");
 				outb(ctest4 | 0x80, io_port+0x21);
 			}
-                }
+		}
 	}
 
 	/* Do not set *ANY* level triggers for AlphaBook1. */

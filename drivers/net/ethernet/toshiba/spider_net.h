@@ -221,8 +221,8 @@ extern char spider_net_driver_name[];
 #define SPIDER_NET_GDTBSTA             0x00000300
 #define SPIDER_NET_GDTDCEIDIS          0x00000002
 #define SPIDER_NET_DMA_TX_VALUE        SPIDER_NET_TX_DMA_EN | \
-                                       SPIDER_NET_GDTDCEIDIS | \
-                                       SPIDER_NET_GDTBSTA
+				       SPIDER_NET_GDTDCEIDIS | \
+				       SPIDER_NET_GDTBSTA
 
 #define SPIDER_NET_DMA_TX_FEND_VALUE	0x00030003
 
@@ -376,11 +376,11 @@ enum spider_net_int2_status {
 #define SPIDER_NET_DESCR_TXDESFLG		0x00800000
 
 #define SPIDER_NET_DESCR_BAD_STATUS   (SPIDER_NET_DESCR_RXDEN0IS | \
-                                       SPIDER_NET_DESCR_RXRERRIS | \
-                                       SPIDER_NET_DESCR_RXDEN0IMS | \
-                                       SPIDER_NET_DESCR_RXINVDIMS | \
-                                       SPIDER_NET_DESCR_RXRERRMIS | \
-                                       SPIDER_NET_DESCR_UNUSED)
+				       SPIDER_NET_DESCR_RXRERRIS | \
+				       SPIDER_NET_DESCR_RXDEN0IMS | \
+				       SPIDER_NET_DESCR_RXINVDIMS | \
+				       SPIDER_NET_DESCR_RXRERRMIS | \
+				       SPIDER_NET_DESCR_UNUSED)
 
 /* Descriptor, as defined by the hardware */
 struct spider_net_hw_descr {

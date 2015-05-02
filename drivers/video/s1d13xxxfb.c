@@ -120,13 +120,13 @@ s1d13xxxfb_runinit(struct s1d13xxxfb_par *par,
 	int i;
 
 	for (i = 0; i < size; i++) {
-        	if ((initregs[i].addr == S1DREG_DELAYOFF) ||
+		if ((initregs[i].addr == S1DREG_DELAYOFF) ||
 				(initregs[i].addr == S1DREG_DELAYON))
 			mdelay((int)initregs[i].value);
-        	else {
+		else {
 			s1d13xxxfb_writereg(par, initregs[i].addr, initregs[i].value);
 		}
-        }
+	}
 
 	/* make sure the hardware can cope with us */
 	mdelay(1);

@@ -394,7 +394,7 @@ nfsd4_open(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 				goto out;
 			break;
 		case NFS4_OPEN_CLAIM_DELEG_PREV_FH:
-             	case NFS4_OPEN_CLAIM_DELEGATE_PREV:
+	     	case NFS4_OPEN_CLAIM_DELEGATE_PREV:
 			open->op_openowner->oo_flags |= NFS4_OO_CONFIRMED;
 			dprintk("NFSD: unsupported OPEN claim type %d\n",
 				open->op_claim_type);
@@ -785,8 +785,8 @@ nfsd4_rename(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 	if (status == nfserr_isdir)
 		status = nfserr_exist;
 	else if ((status == nfserr_notdir) &&
-                  (S_ISDIR(cstate->save_fh.fh_dentry->d_inode->i_mode) &&
-                   S_ISDIR(cstate->current_fh.fh_dentry->d_inode->i_mode)))
+		  (S_ISDIR(cstate->save_fh.fh_dentry->d_inode->i_mode) &&
+		   S_ISDIR(cstate->current_fh.fh_dentry->d_inode->i_mode)))
 		status = nfserr_exist;
 
 	if (!status) {

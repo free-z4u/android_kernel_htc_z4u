@@ -673,9 +673,9 @@ static struct platform_driver au1100fb_driver = {
 		.owner          = THIS_MODULE,
 	},
 	.probe		= au1100fb_drv_probe,
-        .remove		= au1100fb_drv_remove,
+	.remove		= au1100fb_drv_remove,
 	.suspend	= au1100fb_drv_suspend,
-        .resume		= au1100fb_drv_resume,
+	.resume		= au1100fb_drv_resume,
 };
 
 static int __init au1100fb_load(void)

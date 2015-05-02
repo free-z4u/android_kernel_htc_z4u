@@ -226,7 +226,7 @@ static int aha1740_test_port(unsigned int base)
 static irqreturn_t aha1740_intr_handle(int irq, void *dev_id)
 {
 	struct Scsi_Host *host = (struct Scsi_Host *) dev_id;
-        void (*my_done)(Scsi_Cmnd *);
+	void (*my_done)(Scsi_Cmnd *);
 	int errstatus, adapstat;
 	int number_serviced;
 	struct ecb *ecbptr;
@@ -458,16 +458,16 @@ static int aha1740_queuecommand_lck(Scsi_Cmnd * SCpnt, void (*done)(Scsi_Cmnd *)
 #endif
 	if (done) {
 	/* The Adaptec Spec says the card is so fast that the loops
-           will only be executed once in the code below. Even if this
-           was true with the fastest processors when the spec was
-           written, it doesn't seem to be true with today's fast
-           processors. We print a warning if the code is executed more
-           often than LOOPCNT_WARN. If this happens, it should be
-           investigated. If the count reaches LOOPCNT_MAX, we assume
-           something is broken; since there is no way to return an
-           error (the return value is ignored by the mid-level scsi
-           layer) we have to panic (and maybe that's the best thing we
-           can do then anyhow). */
+	   will only be executed once in the code below. Even if this
+	   was true with the fastest processors when the spec was
+	   written, it doesn't seem to be true with today's fast
+	   processors. We print a warning if the code is executed more
+	   often than LOOPCNT_WARN. If this happens, it should be
+	   investigated. If the count reaches LOOPCNT_MAX, we assume
+	   something is broken; since there is no way to return an
+	   error (the return value is ignored by the mid-level scsi
+	   layer) we have to panic (and maybe that's the best thing we
+	   can do then anyhow). */
 
 #define LOOPCNT_WARN 10		/* excessive mbxout wait -> syslog-msg */
 #define LOOPCNT_MAX 1000000	/* mbxout deadlock -> panic() after ~ 2 sec. */

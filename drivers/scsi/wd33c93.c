@@ -333,7 +333,7 @@ round_period(unsigned int period, const struct sx_period *sx_table)
  */
 static uchar
 calc_sync_xfer(unsigned int period, unsigned int offset, unsigned int fast,
-               const struct sx_period *sx_table)
+	       const struct sx_period *sx_table)
 {
 	/* When doing Fast SCSI synchronous data transfers, the corresponding
 	 * value in 'sx_table' is two times the actually used transfer period.
@@ -358,7 +358,7 @@ calc_sync_xfer(unsigned int period, unsigned int offset, unsigned int fast,
  */
 static inline void
 calc_sync_msg(unsigned int period, unsigned int offset, unsigned int fast,
-                uchar  msg[2])
+		uchar  msg[2])
 {
 	/* 'period' is a "normal"-mode value, like the ones in 'sx_table'. The
 	 * actually used transfer period for Fast SCSI synchronous data

@@ -522,49 +522,49 @@ static void krait_pmu_reset(void *info)
 
 static void enable_irq_callback(void *info)
 {
-        int irq = *(unsigned int *)info;
+	int irq = *(unsigned int *)info;
 
-        enable_percpu_irq(irq, IRQ_TYPE_EDGE_RISING);
+	enable_percpu_irq(irq, IRQ_TYPE_EDGE_RISING);
 }
 
 static void disable_irq_callback(void *info)
 {
-        int irq = *(unsigned int *)info;
+	int irq = *(unsigned int *)info;
 
-        disable_percpu_irq(irq);
+	disable_percpu_irq(irq);
 }
 
 static int
 msm_request_irq(int irq, irq_handler_t *handle_irq)
 {
-        int err = 0;
-        int cpu;
+	int err = 0;
+	int cpu;
 
-        err = request_percpu_irq(irq, *handle_irq, "krait-l1-armpmu",
-                        &cpu_hw_events);
+	err = request_percpu_irq(irq, *handle_irq, "krait-l1-armpmu",
+			&cpu_hw_events);
 
-        if (!err) {
-                for_each_cpu(cpu, cpu_online_mask) {
-                        smp_call_function_single(cpu,
-                                        enable_irq_callback, &irq, 1);
-                }
-        }
+	if (!err) {
+		for_each_cpu(cpu, cpu_online_mask) {
+			smp_call_function_single(cpu,
+					enable_irq_callback, &irq, 1);
+		}
+	}
 
-        return err;
+	return err;
 }
 
 static void
 msm_free_irq(int irq)
 {
-        int cpu;
+	int cpu;
 
-        if (irq >= 0) {
-                for_each_cpu(cpu, cpu_online_mask) {
-                        smp_call_function_single(cpu,
-                                        disable_irq_callback, &irq, 1);
-                }
-                free_percpu_irq(irq, &cpu_hw_events);
-        }
+	if (irq >= 0) {
+		for_each_cpu(cpu, cpu_online_mask) {
+			smp_call_function_single(cpu,
+					disable_irq_callback, &irq, 1);
+		}
+		free_percpu_irq(irq, &cpu_hw_events);
+	}
 }
 
 /*

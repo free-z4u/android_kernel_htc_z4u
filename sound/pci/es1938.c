@@ -69,8 +69,8 @@ MODULE_AUTHOR("Jaromir Koutek <miri@punknet.cz>");
 MODULE_DESCRIPTION("ESS Solo-1");
 MODULE_LICENSE("GPL");
 MODULE_SUPPORTED_DEVICE("{{ESS,ES1938},"
-                "{ESS,ES1946},"
-                "{ESS,ES1969},"
+		"{ESS,ES1946},"
+		"{ESS,ES1969},"
 		"{TerraTec,128i PCI}}");
 
 #if defined(CONFIG_GAMEPORT) || (defined(MODULE) && defined(CONFIG_GAMEPORT_MODULE))
@@ -231,7 +231,7 @@ struct es1938 {
 
 	spinlock_t reg_lock;
 	spinlock_t mixer_lock;
-        struct snd_info_entry *proc_entry;
+	struct snd_info_entry *proc_entry;
 
 #ifdef SUPPORT_JOYSTICK
 	struct gameport *gameport;
@@ -572,12 +572,12 @@ static int snd_es1938_playback1_trigger(struct snd_pcm_substream *substream,
 	case SNDRV_PCM_TRIGGER_RESUME:
 		/* According to the documentation this should be:
 		   0x13 but that value may randomly swap stereo channels */
-                snd_es1938_mixer_write(chip, ESSSB_IREG_AUDIO2CONTROL1, 0x92);
-                udelay(10);
+		snd_es1938_mixer_write(chip, ESSSB_IREG_AUDIO2CONTROL1, 0x92);
+		udelay(10);
 		snd_es1938_mixer_write(chip, ESSSB_IREG_AUDIO2CONTROL1, 0x93);
-                /* This two stage init gives the FIFO -> DAC connection time to
-                 * settle before first data from DMA flows in.  This should ensure
-                 * no swapping of stereo channels.  Report a bug if otherwise :-) */
+		/* This two stage init gives the FIFO -> DAC connection time to
+		 * settle before first data from DMA flows in.  This should ensure
+		 * no swapping of stereo channels.  Report a bug if otherwise :-) */
 		outb(0x0a, SLIO_REG(chip, AUDIO2MODE));
 		chip->active |= DAC2;
 		break;
@@ -655,7 +655,7 @@ static int snd_es1938_capture_prepare(struct snd_pcm_substream *substream)
 	snd_es1938_bits(chip, ESS_CMD_ANALOGCONTROL, 0x03, (mono ? 2 : 1));
 
 	/* set clock and counters */
-        snd_es1938_rate_set(chip, substream, ADC1);
+	snd_es1938_rate_set(chip, substream, ADC1);
 
 	count = 0x10000 - count;
 	snd_es1938_write(chip, ESS_CMD_DMACNTRELOADL, count & 0xff);
@@ -697,10 +697,10 @@ static int snd_es1938_playback1_prepare(struct snd_pcm_substream *substream)
 
 	chip->dma2_shift = 2 - mono - is8;
 
-        snd_es1938_reset_fifo(chip);
+	snd_es1938_reset_fifo(chip);
 
 	/* set clock and counters */
-        snd_es1938_rate_set(chip, substream, DAC2);
+	snd_es1938_rate_set(chip, substream, DAC2);
 
 	count >>= 1;
 	count = 0x10000 - count;
@@ -742,14 +742,14 @@ static int snd_es1938_playback2_prepare(struct snd_pcm_substream *substream)
 	snd_es1938_bits(chip, ESS_CMD_ANALOGCONTROL, 0x03, (mono ? 2 : 1));
 
 	/* set clock and counters */
-        snd_es1938_rate_set(chip, substream, DAC1);
+	snd_es1938_rate_set(chip, substream, DAC1);
 	snd_es1938_write(chip, ESS_CMD_DMACNTRELOADL, count & 0xff);
 	snd_es1938_write(chip, ESS_CMD_DMACNTRELOADH, count >> 8);
 
 	/* initialized and configure DAC */
-        snd_es1938_write(chip, ESS_CMD_SETFORMAT, u ? 0x80 : 0x00);
-        snd_es1938_write(chip, ESS_CMD_SETFORMAT, u ? 0x51 : 0x71);
-        snd_es1938_write(chip, ESS_CMD_SETFORMAT2,
+	snd_es1938_write(chip, ESS_CMD_SETFORMAT, u ? 0x80 : 0x00);
+	snd_es1938_write(chip, ESS_CMD_SETFORMAT, u ? 0x51 : 0x71);
+	snd_es1938_write(chip, ESS_CMD_SETFORMAT2,
 			 0x90 | (mono ? 0x40 : 0x08) |
 			 (is8 ? 0x00 : 0x04) | (u ? 0x00 : 0x20));
 
@@ -907,7 +907,7 @@ static struct snd_pcm_hardware snd_es1938_capture =
 	.rate_max =		48000,
 	.channels_min =		1,
 	.channels_max =		2,
-        .buffer_bytes_max =	0x8000,       /* DMA controller screws on higher values */
+	.buffer_bytes_max =	0x8000,       /* DMA controller screws on higher values */
 	.period_bytes_min =	64,
 	.period_bytes_max =	0x8000,
 	.periods_min =		1,
@@ -930,7 +930,7 @@ static struct snd_pcm_hardware snd_es1938_playback =
 	.rate_max =		48000,
 	.channels_min =		1,
 	.channels_max =		2,
-        .buffer_bytes_max =	0x8000,       /* DMA controller screws on higher values */
+	.buffer_bytes_max =	0x8000,       /* DMA controller screws on higher values */
 	.period_bytes_min =	64,
 	.period_bytes_max =	0x8000,
 	.periods_min =		1,
@@ -1607,13 +1607,13 @@ static int __devinit snd_es1938_create(struct snd_card *card,
 	/* enable PCI device */
 	if ((err = pci_enable_device(pci)) < 0)
 		return err;
-        /* check, if we can restrict PCI DMA transfers to 24 bits */
+	/* check, if we can restrict PCI DMA transfers to 24 bits */
 	if (pci_set_dma_mask(pci, DMA_BIT_MASK(24)) < 0 ||
 	    pci_set_consistent_dma_mask(pci, DMA_BIT_MASK(24)) < 0) {
 		snd_printk(KERN_ERR "architecture does not support 24bit PCI busmaster DMA\n");
 		pci_disable_device(pci);
-                return -ENXIO;
-        }
+		return -ENXIO;
+	}
 
 	chip = kzalloc(sizeof(*chip), GFP_KERNEL);
 	if (chip == NULL) {
@@ -1679,7 +1679,7 @@ static irqreturn_t snd_es1938_interrupt(int irq, void *dev_id)
 	/* AUDIO 1 */
 	if (status & 0x10) {
 #if 0
-                printk(KERN_DEBUG
+		printk(KERN_DEBUG
 		       "Es1938debug - AUDIO channel 1 interrupt\n");
 		printk(KERN_DEBUG
 		       "Es1938debug - AUDIO channel 1 DMAC DMA count: %u\n",
@@ -1703,7 +1703,7 @@ static irqreturn_t snd_es1938_interrupt(int irq, void *dev_id)
 	/* AUDIO 2 */
 	if (status & 0x20) {
 #if 0
-                printk(KERN_DEBUG
+		printk(KERN_DEBUG
 		       "Es1938debug - AUDIO channel 2 interrupt\n");
 		printk(KERN_DEBUG
 		       "Es1938debug - AUDIO channel 2 DMAC DMA count: %u\n",

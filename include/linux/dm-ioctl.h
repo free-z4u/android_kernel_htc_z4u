@@ -198,10 +198,10 @@ struct dm_name_list {
  * Used to retrieve the target versions
  */
 struct dm_target_versions {
-        __u32 next;
-        __u32 version[3];
+	__u32 next;
+	__u32 version[3];
 
-        char name[0];
+	char name[0];
 };
 
 /*

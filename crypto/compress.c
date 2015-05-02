@@ -18,16 +18,16 @@
 #include "internal.h"
 
 static int crypto_compress(struct crypto_tfm *tfm,
-                            const u8 *src, unsigned int slen,
-                            u8 *dst, unsigned int *dlen)
+			    const u8 *src, unsigned int slen,
+			    u8 *dst, unsigned int *dlen)
 {
 	return tfm->__crt_alg->cra_compress.coa_compress(tfm, src, slen, dst,
 	                                                 dlen);
 }
 
 static int crypto_decompress(struct crypto_tfm *tfm,
-                             const u8 *src, unsigned int slen,
-                             u8 *dst, unsigned int *dlen)
+			     const u8 *src, unsigned int slen,
+			     u8 *dst, unsigned int *dlen)
 {
 	return tfm->__crt_alg->cra_compress.coa_decompress(tfm, src, slen, dst,
 	                                                   dlen);

@@ -163,7 +163,7 @@ static const char *r128_family[] __devinitdata = {
  * PCI driver prototypes
  */
 static int aty128_probe(struct pci_dev *pdev,
-                               const struct pci_device_id *ent);
+			       const struct pci_device_id *ent);
 static void aty128_remove(struct pci_dev *pdev);
 static int aty128_pci_suspend(struct pci_dev *pdev, pm_message_t state);
 static int aty128_pci_resume(struct pci_dev *pdev);
@@ -444,9 +444,9 @@ static int aty128fb_sync(struct fb_info *info);
      */
 
 static int aty128_encode_var(struct fb_var_screeninfo *var,
-                             const struct aty128fb_par *par);
+			     const struct aty128fb_par *par);
 static int aty128_decode_var(struct fb_var_screeninfo *var,
-                             struct aty128fb_par *par);
+			     struct aty128fb_par *par);
 #if 0
 static void __devinit aty128_get_pllinfo(struct aty128fb_par *par,
 				      void __iomem *bios);
@@ -892,18 +892,18 @@ static void __iomem *  __devinit aty128_find_mem_vbios(struct aty128fb_par *par)
 	 * for signatures at all... Something better will have to be done
 	 * if we end up having conflicts
 	 */
-        u32  segstart;
-        unsigned char __iomem *rom_base = NULL;
+	u32  segstart;
+	unsigned char __iomem *rom_base = NULL;
 
-        for (segstart=0x000c0000; segstart<0x000f0000; segstart+=0x00001000) {
-                rom_base = ioremap(segstart, 0x10000);
+	for (segstart=0x000c0000; segstart<0x000f0000; segstart+=0x00001000) {
+		rom_base = ioremap(segstart, 0x10000);
 		if (rom_base == NULL)
 			return NULL;
 		if (readb(rom_base) == 0x55 && readb(rom_base + 1) == 0xaa)
 	                break;
-                iounmap(rom_base);
+		iounmap(rom_base);
 		rom_base = NULL;
-        }
+	}
 	return rom_base;
 }
 #endif
@@ -1103,7 +1103,7 @@ static int aty128_var_to_crtc(const struct fb_var_screeninfo *var,
 	crtc->h_sync_strt_wid = h_sync_strt | (h_sync_wid << 16) |
 	        (h_sync_pol << 23);
 	crtc->v_sync_strt_wid = v_sync_strt | (v_sync_wid << 16) |
-                (v_sync_pol << 23);
+		(v_sync_pol << 23);
 
 	crtc->pitch = vxres >> 3;
 
@@ -1286,7 +1286,7 @@ static void aty128_set_pll(struct aty128_pll *pll, const struct aty128fb_par *pa
 	u32 div3;
 
 	unsigned char post_conv[] =	/* register values for post dividers */
-        { 2, 0, 1, 4, 2, 2, 6, 2, 3, 2, 2, 2, 7 };
+	{ 2, 0, 1, 4, 2, 2, 6, 2, 3, 2, 2, 2, 7 };
 
 	/* select PPLL_DIV_3 */
 	aty_st_le32(CLOCK_CNTL_INDEX, aty_ld_le32(CLOCK_CNTL_INDEX) | (3 << 8));
@@ -1859,7 +1859,7 @@ static void aty128_bl_exit(struct backlight_device *bd)
 #ifdef CONFIG_PPC_PMAC__disabled
 static void aty128_early_resume(void *data)
 {
-        struct aty128fb_par *par = data;
+	struct aty128fb_par *par = data;
 
 	if (!console_trylock())
 		return;
@@ -2321,16 +2321,16 @@ static inline void aty128_rectcopy(int srcx, int srcy, int dstx, int dsty,
     u32 save_dp_datatype, save_dp_cntl, dstval;
 
     if (!width || !height)
-        return;
+	return;
 
     dstval = depth_to_dst(par->current_par.crtc.depth);
     if (dstval == DST_24BPP) {
-        srcx *= 3;
-        dstx *= 3;
-        width *= 3;
+	srcx *= 3;
+	dstx *= 3;
+	width *= 3;
     } else if (dstval == -EINVAL) {
-        printk("aty128fb: invalid depth or RGBA\n");
-        return;
+	printk("aty128fb: invalid depth or RGBA\n");
+	return;
     }
 
     wait_for_fifo(2, par);

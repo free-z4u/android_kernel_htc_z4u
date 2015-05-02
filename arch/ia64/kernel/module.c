@@ -336,7 +336,7 @@ count_gots (const Elf64_Rela *rela, unsigned int num)
 	unsigned int i, ret = 0;
 
 	/* Sure, this is order(n^2), but it's usually short, and not
-           time critical */
+	   time critical */
 	for (i = 0; i < num; i++) {
 		switch (ELF64_R_TYPE(rela[i].r_info)) {
 		      case R_IA64_LTOFF22:
@@ -363,7 +363,7 @@ count_plts (const Elf64_Rela *rela, unsigned int num)
 	unsigned int i, ret = 0;
 
 	/* Sure, this is order(n^2), but it's usually short, and not
-           time critical */
+	   time critical */
 	for (i = 0; i < num; i++) {
 		switch (ELF64_R_TYPE(rela[i].r_info)) {
 		      case R_IA64_PCREL21B:
@@ -917,28 +917,28 @@ module_finalize (const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs, struct module *mo
 	if (mod->arch.unwind)
 		register_unwind_table(mod);
 #ifdef CONFIG_PARAVIRT
-        if (mod->arch.paravirt_bundles) {
-                struct paravirt_patch_site_bundle *start =
-                        (struct paravirt_patch_site_bundle *)
-                        mod->arch.paravirt_bundles->sh_addr;
-                struct paravirt_patch_site_bundle *end =
-                        (struct paravirt_patch_site_bundle *)
-                        (mod->arch.paravirt_bundles->sh_addr +
-                         mod->arch.paravirt_bundles->sh_size);
+	if (mod->arch.paravirt_bundles) {
+		struct paravirt_patch_site_bundle *start =
+			(struct paravirt_patch_site_bundle *)
+			mod->arch.paravirt_bundles->sh_addr;
+		struct paravirt_patch_site_bundle *end =
+			(struct paravirt_patch_site_bundle *)
+			(mod->arch.paravirt_bundles->sh_addr +
+			 mod->arch.paravirt_bundles->sh_size);
 
-                paravirt_patch_apply_bundle(start, end);
-        }
-        if (mod->arch.paravirt_insts) {
-                struct paravirt_patch_site_inst *start =
-                        (struct paravirt_patch_site_inst *)
-                        mod->arch.paravirt_insts->sh_addr;
-                struct paravirt_patch_site_inst *end =
-                        (struct paravirt_patch_site_inst *)
-                        (mod->arch.paravirt_insts->sh_addr +
-                         mod->arch.paravirt_insts->sh_size);
+		paravirt_patch_apply_bundle(start, end);
+	}
+	if (mod->arch.paravirt_insts) {
+		struct paravirt_patch_site_inst *start =
+			(struct paravirt_patch_site_inst *)
+			mod->arch.paravirt_insts->sh_addr;
+		struct paravirt_patch_site_inst *end =
+			(struct paravirt_patch_site_inst *)
+			(mod->arch.paravirt_insts->sh_addr +
+			 mod->arch.paravirt_insts->sh_size);
 
-                paravirt_patch_apply_inst(start, end);
-        }
+		paravirt_patch_apply_inst(start, end);
+	}
 #endif
 	return 0;
 }

@@ -24,7 +24,7 @@
 #ifndef CONFIG_MIPS_MT_SMTC
 
 static int mips_next_event(unsigned long delta,
-                           struct clock_event_device *evt)
+			   struct clock_event_device *evt)
 {
 	unsigned int cnt;
 	int res;

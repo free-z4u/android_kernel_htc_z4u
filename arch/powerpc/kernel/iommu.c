@@ -60,10 +60,10 @@ __setup("iommu=", setup_iommu);
 
 static unsigned long iommu_range_alloc(struct device *dev,
 				       struct iommu_table *tbl,
-                                       unsigned long npages,
-                                       unsigned long *handle,
-                                       unsigned long mask,
-                                       unsigned int align_order)
+				       unsigned long npages,
+				       unsigned long *handle,
+				       unsigned long mask,
+				       unsigned int align_order)
 {
 	unsigned long n, end, start;
 	unsigned long limit;

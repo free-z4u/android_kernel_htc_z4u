@@ -147,8 +147,8 @@ static ssize_t cluster_cluster_name_write(struct dlm_cluster *cl,
 
 static struct cluster_attribute cluster_attr_cluster_name = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "cluster_name",
-                    .ca_mode = S_IRUGO | S_IWUSR },
+		    .ca_name = "cluster_name",
+		    .ca_mode = S_IRUGO | S_IWUSR },
 	.show   = cluster_cluster_name_read,
 	.store  = cluster_cluster_name_write,
 };
@@ -233,31 +233,31 @@ struct comm_attribute {
 
 static struct comm_attribute comm_attr_nodeid = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "nodeid",
-                    .ca_mode = S_IRUGO | S_IWUSR },
+		    .ca_name = "nodeid",
+		    .ca_mode = S_IRUGO | S_IWUSR },
 	.show   = comm_nodeid_read,
 	.store  = comm_nodeid_write,
 };
 
 static struct comm_attribute comm_attr_local = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "local",
-                    .ca_mode = S_IRUGO | S_IWUSR },
+		    .ca_name = "local",
+		    .ca_mode = S_IRUGO | S_IWUSR },
 	.show   = comm_local_read,
 	.store  = comm_local_write,
 };
 
 static struct comm_attribute comm_attr_addr = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "addr",
-                    .ca_mode = S_IWUSR },
+		    .ca_name = "addr",
+		    .ca_mode = S_IWUSR },
 	.store  = comm_addr_write,
 };
 
 static struct comm_attribute comm_attr_addr_list = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "addr_list",
-                    .ca_mode = S_IRUGO },
+		    .ca_name = "addr_list",
+		    .ca_mode = S_IRUGO },
 	.show   = comm_addr_list_read,
 };
 
@@ -282,16 +282,16 @@ struct node_attribute {
 
 static struct node_attribute node_attr_nodeid = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "nodeid",
-                    .ca_mode = S_IRUGO | S_IWUSR },
+		    .ca_name = "nodeid",
+		    .ca_mode = S_IRUGO | S_IWUSR },
 	.show   = node_nodeid_read,
 	.store  = node_nodeid_write,
 };
 
 static struct node_attribute node_attr_weight = {
 	.attr   = { .ca_owner = THIS_MODULE,
-                    .ca_name = "weight",
-                    .ca_mode = S_IRUGO | S_IWUSR },
+		    .ca_name = "weight",
+		    .ca_mode = S_IRUGO | S_IWUSR },
 	.show   = node_weight_read,
 	.store  = node_weight_write,
 };

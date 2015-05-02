@@ -1252,7 +1252,7 @@ static int __devinit zatm_init(struct atm_dev *dev)
 	printk(KERN_NOTICE DEV_LABEL "(itf %d): uPD98401 %d.%d at %d.%03d "
 	    "MHz\n",dev->number,
 	    (zin(VER) & uPD98401_MAJOR) >> uPD98401_MAJOR_SHIFT,
-            zin(VER) & uPD98401_MINOR,zatm_dev->khz/1000,zatm_dev->khz % 1000);
+	    zin(VER) & uPD98401_MINOR,zatm_dev->khz/1000,zatm_dev->khz % 1000);
 	return uPD98402_init(dev);
 }
 
@@ -1366,15 +1366,15 @@ out:
 
 static void zatm_close(struct atm_vcc *vcc)
 {
-        DPRINTK(">zatm_close\n");
-        if (!ZATM_VCC(vcc)) return;
+	DPRINTK(">zatm_close\n");
+	if (!ZATM_VCC(vcc)) return;
 	clear_bit(ATM_VF_READY,&vcc->flags);
-        close_rx(vcc);
+	close_rx(vcc);
 	EVENT("close_tx\n",0,0);
-        close_tx(vcc);
-        DPRINTK("zatm_close: done waiting\n");
-        /* deallocate memory */
-        kfree(ZATM_VCC(vcc));
+	close_tx(vcc);
+	DPRINTK("zatm_close: done waiting\n");
+	/* deallocate memory */
+	kfree(ZATM_VCC(vcc));
 	vcc->dev_data = NULL;
 	clear_bit(ATM_VF_ADDR,&vcc->flags);
 }
@@ -1418,13 +1418,13 @@ static int zatm_open(struct atm_vcc *vcc)
 	if ((error = open_rx_second(vcc))) {
 		zatm_close(vcc);
 		return error;
-        }
+	}
 	if ((error = open_tx_second(vcc))) {
 		zatm_close(vcc);
 		return error;
-        }
+	}
 	set_bit(ATM_VF_READY,&vcc->flags);
-        return 0;
+	return 0;
 }
 
 
@@ -1504,7 +1504,7 @@ static int zatm_ioctl(struct atm_dev *dev,unsigned int cmd,void __user *arg)
 				return 0;
 			}
 		default:
-        		if (!dev->phy->ioctl) return -ENOIOCTLCMD;
+			if (!dev->phy->ioctl) return -ENOIOCTLCMD;
 		        return dev->phy->ioctl(dev,cmd,arg);
 	}
 }

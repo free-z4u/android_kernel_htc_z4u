@@ -74,8 +74,8 @@ typedef struct _CMD_BUFFER_DESCRIPTOR
     U16                     Reserved;                   /* 02h */
     union                                               /* 04h */
     {
-        U32                 PhysicalAddress32;
-        U64                 PhysicalAddress64;
+	U32                 PhysicalAddress32;
+	U64                 PhysicalAddress64;
     } u;
 } CMD_BUFFER_DESCRIPTOR, MPI_POINTER PTR_CMD_BUFFER_DESCRIPTOR,
   CmdBufferDescriptor_t, MPI_POINTER pCmdBufferDescriptor_t;
@@ -581,34 +581,34 @@ typedef struct _MSG_TARGET_MODE_ABORT_REPLY
 
 
 #define GET_IO_INDEX(x)     (((x) & TARGET_MODE_REPLY_IO_INDEX_MASK)           \
-                                    >> TARGET_MODE_REPLY_IO_INDEX_SHIFT)
+				    >> TARGET_MODE_REPLY_IO_INDEX_SHIFT)
 
 #define SET_IO_INDEX(t, i)                                                     \
-            ((t) = ((t) & ~TARGET_MODE_REPLY_IO_INDEX_MASK) |                  \
-                              (((i) << TARGET_MODE_REPLY_IO_INDEX_SHIFT) &     \
-                                             TARGET_MODE_REPLY_IO_INDEX_MASK))
+	    ((t) = ((t) & ~TARGET_MODE_REPLY_IO_INDEX_MASK) |                  \
+			      (((i) << TARGET_MODE_REPLY_IO_INDEX_SHIFT) &     \
+					     TARGET_MODE_REPLY_IO_INDEX_MASK))
 
 #define GET_INITIATOR_INDEX(x) (((x) & TARGET_MODE_REPLY_INITIATOR_INDEX_MASK) \
-                                   >> TARGET_MODE_REPLY_INITIATOR_INDEX_SHIFT)
+				   >> TARGET_MODE_REPLY_INITIATOR_INDEX_SHIFT)
 
 #define SET_INITIATOR_INDEX(t, ii)                                             \
-        ((t) = ((t) & ~TARGET_MODE_REPLY_INITIATOR_INDEX_MASK) |               \
-                        (((ii) << TARGET_MODE_REPLY_INITIATOR_INDEX_SHIFT) &   \
-                                      TARGET_MODE_REPLY_INITIATOR_INDEX_MASK))
+	((t) = ((t) & ~TARGET_MODE_REPLY_INITIATOR_INDEX_MASK) |               \
+			(((ii) << TARGET_MODE_REPLY_INITIATOR_INDEX_SHIFT) &   \
+				      TARGET_MODE_REPLY_INITIATOR_INDEX_MASK))
 
 #define GET_ALIAS(x) (((x) & TARGET_MODE_REPLY_ALIAS_MASK)                     \
-                                               >> TARGET_MODE_REPLY_ALIAS_SHIFT)
+					       >> TARGET_MODE_REPLY_ALIAS_SHIFT)
 
 #define SET_ALIAS(t, a)  ((t) = ((t) & ~TARGET_MODE_REPLY_ALIAS_MASK) |        \
-                                    (((a) << TARGET_MODE_REPLY_ALIAS_SHIFT) &  \
-                                                 TARGET_MODE_REPLY_ALIAS_MASK))
+				    (((a) << TARGET_MODE_REPLY_ALIAS_SHIFT) &  \
+						 TARGET_MODE_REPLY_ALIAS_MASK))
 
 #define GET_PORT(x) (((x) & TARGET_MODE_REPLY_PORT_MASK)                       \
-                                               >> TARGET_MODE_REPLY_PORT_SHIFT)
+					       >> TARGET_MODE_REPLY_PORT_SHIFT)
 
 #define SET_PORT(t, p)  ((t) = ((t) & ~TARGET_MODE_REPLY_PORT_MASK) |          \
-                                    (((p) << TARGET_MODE_REPLY_PORT_SHIFT) &   \
-                                                  TARGET_MODE_REPLY_PORT_MASK))
+				    (((p) << TARGET_MODE_REPLY_PORT_SHIFT) &   \
+						  TARGET_MODE_REPLY_PORT_MASK))
 
 /* the following obsolete values are for MPI v1.0 support */
 #define TARGET_MODE_REPLY_0100_MASK_HOST_INDEX       (0x000003FF)
@@ -621,29 +621,29 @@ typedef struct _MSG_TARGET_MODE_ABORT_REPLY
 #define TARGET_MODE_REPLY_0100_SHIFT_INITIATOR_INDEX (23)
 
 #define GET_HOST_INDEX_0100(x) (((x) & TARGET_MODE_REPLY_0100_MASK_HOST_INDEX) \
-                                  >> TARGET_MODE_REPLY_0100_SHIFT_HOST_INDEX)
+				  >> TARGET_MODE_REPLY_0100_SHIFT_HOST_INDEX)
 
 #define SET_HOST_INDEX_0100(t, hi)                                             \
-            ((t) = ((t) & ~TARGET_MODE_REPLY_0100_MASK_HOST_INDEX) |           \
-                         (((hi) << TARGET_MODE_REPLY_0100_SHIFT_HOST_INDEX) &  \
-                                      TARGET_MODE_REPLY_0100_MASK_HOST_INDEX))
+	    ((t) = ((t) & ~TARGET_MODE_REPLY_0100_MASK_HOST_INDEX) |           \
+			 (((hi) << TARGET_MODE_REPLY_0100_SHIFT_HOST_INDEX) &  \
+				      TARGET_MODE_REPLY_0100_MASK_HOST_INDEX))
 
 #define GET_IOC_INDEX_0100(x)   (((x) & TARGET_MODE_REPLY_0100_MASK_IOC_INDEX) \
-                                  >> TARGET_MODE_REPLY_0100_SHIFT_IOC_INDEX)
+				  >> TARGET_MODE_REPLY_0100_SHIFT_IOC_INDEX)
 
 #define SET_IOC_INDEX_0100(t, ii)                                              \
-            ((t) = ((t) & ~TARGET_MODE_REPLY_0100_MASK_IOC_INDEX) |            \
-                        (((ii) << TARGET_MODE_REPLY_0100_SHIFT_IOC_INDEX) &    \
-                                     TARGET_MODE_REPLY_0100_MASK_IOC_INDEX))
+	    ((t) = ((t) & ~TARGET_MODE_REPLY_0100_MASK_IOC_INDEX) |            \
+			(((ii) << TARGET_MODE_REPLY_0100_SHIFT_IOC_INDEX) &    \
+				     TARGET_MODE_REPLY_0100_MASK_IOC_INDEX))
 
 #define GET_INITIATOR_INDEX_0100(x)                                            \
-            (((x) & TARGET_MODE_REPLY_0100_MASK_INITIATOR_INDEX)               \
-                              >> TARGET_MODE_REPLY_0100_SHIFT_INITIATOR_INDEX)
+	    (((x) & TARGET_MODE_REPLY_0100_MASK_INITIATOR_INDEX)               \
+			      >> TARGET_MODE_REPLY_0100_SHIFT_INITIATOR_INDEX)
 
 #define SET_INITIATOR_INDEX_0100(t, ii)                                        \
-        ((t) = ((t) & ~TARGET_MODE_REPLY_0100_MASK_INITIATOR_INDEX) |          \
-                   (((ii) << TARGET_MODE_REPLY_0100_SHIFT_INITIATOR_INDEX) &   \
-                                TARGET_MODE_REPLY_0100_MASK_INITIATOR_INDEX))
+	((t) = ((t) & ~TARGET_MODE_REPLY_0100_MASK_INITIATOR_INDEX) |          \
+		   (((ii) << TARGET_MODE_REPLY_0100_SHIFT_INITIATOR_INDEX) &   \
+				TARGET_MODE_REPLY_0100_MASK_INITIATOR_INDEX))
 
 
 #endif

@@ -211,9 +211,9 @@ module_param(ips, charp, 0);
 #endif
 
 #define IPS_DMA_DIR(scb) ((!scb->scsi_cmd || ips_is_passthru(scb->scsi_cmd) || \
-                         DMA_NONE == scb->scsi_cmd->sc_data_direction) ? \
-                         PCI_DMA_BIDIRECTIONAL : \
-                         scb->scsi_cmd->sc_data_direction)
+			 DMA_NONE == scb->scsi_cmd->sc_data_direction) ? \
+			 PCI_DMA_BIDIRECTIONAL : \
+			 scb->scsi_cmd->sc_data_direction)
 
 #ifdef IPS_DEBUG
 #define METHOD_TRACE(s, i)    if (ips_debug >= (i+10)) printk(KERN_NOTICE s "\n");
@@ -1505,21 +1505,21 @@ static int ips_is_passthru(struct scsi_cmnd *SC)
 	    (SC->device->channel == 0) &&
 	    (SC->device->id == IPS_ADAPTER_ID) &&
 	    (SC->device->lun == 0) && scsi_sglist(SC)) {
-                struct scatterlist *sg = scsi_sglist(SC);
-                char  *buffer;
+		struct scatterlist *sg = scsi_sglist(SC);
+		char  *buffer;
 
-                /* kmap_atomic() ensures addressability of the user buffer.*/
-                /* local_irq_save() protects the KM_IRQ0 address slot.     */
-                local_irq_save(flags);
-                buffer = kmap_atomic(sg_page(sg)) + sg->offset;
-                if (buffer && buffer[0] == 'C' && buffer[1] == 'O' &&
-                    buffer[2] == 'P' && buffer[3] == 'P') {
-                        kunmap_atomic(buffer - sg->offset);
-                        local_irq_restore(flags);
-                        return 1;
-                }
-                kunmap_atomic(buffer - sg->offset);
-                local_irq_restore(flags);
+		/* kmap_atomic() ensures addressability of the user buffer.*/
+		/* local_irq_save() protects the KM_IRQ0 address slot.     */
+		local_irq_save(flags);
+		buffer = kmap_atomic(sg_page(sg)) + sg->offset;
+		if (buffer && buffer[0] == 'C' && buffer[1] == 'O' &&
+		    buffer[2] == 'P' && buffer[3] == 'P') {
+			kunmap_atomic(buffer - sg->offset);
+			local_irq_restore(flags);
+			return 1;
+		}
+		kunmap_atomic(buffer - sg->offset);
+		local_irq_restore(flags);
 	}
 	return 0;
 }
@@ -1571,11 +1571,11 @@ ips_make_passthru(ips_ha_t *ha, struct scsi_cmnd *SC, ips_scb_t *scb, int intr)
 	ips_passthru_t *pt;
 	int length = 0;
 	int i, ret;
-        struct scatterlist *sg = scsi_sglist(SC);
+	struct scatterlist *sg = scsi_sglist(SC);
 
 	METHOD_TRACE("ips_make_passthru", 1);
 
-        scsi_for_each_sg(SC, sg, scsi_sg_count(SC), i)
+	scsi_for_each_sg(SC, sg, scsi_sg_count(SC), i)
 		length += sg->length;
 
 	if (length < sizeof (ips_passthru_t)) {
@@ -2078,33 +2078,33 @@ ips_host_info(ips_ha_t * ha, char *ptr, off_t offset, int len)
 
 	if (le32_to_cpu(ha->nvram->signature) == IPS_NVRAM_P5_SIG) {
 	if (ha->nvram->bios_low[3] == 0) {
-            copy_info(&info,
+	    copy_info(&info,
 			          "\tBIOS Version                      : %c%c%c%c%c%c%c\n",
 			          ha->nvram->bios_high[0], ha->nvram->bios_high[1],
 			          ha->nvram->bios_high[2], ha->nvram->bios_high[3],
 			          ha->nvram->bios_low[0], ha->nvram->bios_low[1],
 			          ha->nvram->bios_low[2]);
 
-        } else {
+	} else {
 		    copy_info(&info,
 			          "\tBIOS Version                      : %c%c%c%c%c%c%c%c\n",
 			          ha->nvram->bios_high[0], ha->nvram->bios_high[1],
 			          ha->nvram->bios_high[2], ha->nvram->bios_high[3],
 			          ha->nvram->bios_low[0], ha->nvram->bios_low[1],
 			          ha->nvram->bios_low[2], ha->nvram->bios_low[3]);
-        }
+	}
 
     }
 
     if (ha->enq->CodeBlkVersion[7] == 0) {
-        copy_info(&info,
+	copy_info(&info,
 		          "\tFirmware Version                  : %c%c%c%c%c%c%c\n",
 		          ha->enq->CodeBlkVersion[0], ha->enq->CodeBlkVersion[1],
 		          ha->enq->CodeBlkVersion[2], ha->enq->CodeBlkVersion[3],
 		          ha->enq->CodeBlkVersion[4], ha->enq->CodeBlkVersion[5],
 		          ha->enq->CodeBlkVersion[6]);
     } else {
-        copy_info(&info,
+	copy_info(&info,
 		          "\tFirmware Version                  : %c%c%c%c%c%c%c%c\n",
 		          ha->enq->CodeBlkVersion[0], ha->enq->CodeBlkVersion[1],
 		          ha->enq->CodeBlkVersion[2], ha->enq->CodeBlkVersion[3],
@@ -2113,14 +2113,14 @@ ips_host_info(ips_ha_t * ha, char *ptr, off_t offset, int len)
     }
 
     if (ha->enq->BootBlkVersion[7] == 0) {
-        copy_info(&info,
+	copy_info(&info,
 		          "\tBoot Block Version                : %c%c%c%c%c%c%c\n",
 		          ha->enq->BootBlkVersion[0], ha->enq->BootBlkVersion[1],
 		          ha->enq->BootBlkVersion[2], ha->enq->BootBlkVersion[3],
 		          ha->enq->BootBlkVersion[4], ha->enq->BootBlkVersion[5],
 		          ha->enq->BootBlkVersion[6]);
     } else {
-        copy_info(&info,
+	copy_info(&info,
 		          "\tBoot Block Version                : %c%c%c%c%c%c%c%c\n",
 		          ha->enq->BootBlkVersion[0], ha->enq->BootBlkVersion[1],
 		          ha->enq->BootBlkVersion[2], ha->enq->BootBlkVersion[3],
@@ -2749,15 +2749,15 @@ ips_next(ips_ha_t * ha, int intr)
 		/* copy in the CDB */
 		memcpy(scb->cdb, SC->cmnd, SC->cmd_len);
 
-                scb->sg_count = scsi_dma_map(SC);
-                BUG_ON(scb->sg_count < 0);
+		scb->sg_count = scsi_dma_map(SC);
+		BUG_ON(scb->sg_count < 0);
 		if (scb->sg_count) {
 			struct scatterlist *sg;
 			int i;
 
 			scb->flags |= IPS_SCB_MAP_SG;
 
-                        scsi_for_each_sg(SC, sg, scb->sg_count, i) {
+			scsi_for_each_sg(SC, sg, scb->sg_count, i) {
 				if (ips_fill_scb_sg_single
 				    (ha, sg_dma_address(sg), scb, i,
 				     sg_dma_len(sg)) < 0)
@@ -2765,10 +2765,10 @@ ips_next(ips_ha_t * ha, int intr)
 			}
 			scb->dcdb.transfer_length = scb->data_len;
 		} else {
-                        scb->data_busaddr = 0L;
-                        scb->sg_len = 0;
-                        scb->data_len = 0;
-                        scb->dcdb.transfer_length = 0;
+			scb->data_busaddr = 0L;
+			scb->sg_len = 0;
+			scb->data_len = 0;
+			scb->dcdb.transfer_length = 0;
 		}
 
 		scb->dcdb.cmd_attribute =
@@ -3246,34 +3246,34 @@ ips_done(ips_ha_t * ha, ips_scb_t * scb)
 		 * the rest of the data and continue.
 		 */
 		if ((scb->breakup) || (scb->sg_break)) {
-                        struct scatterlist *sg;
-                        int i, sg_dma_index, ips_sg_index = 0;
+			struct scatterlist *sg;
+			int i, sg_dma_index, ips_sg_index = 0;
 
 			/* we had a data breakup */
 			scb->data_len = 0;
 
-                        sg = scsi_sglist(scb->scsi_cmd);
+			sg = scsi_sglist(scb->scsi_cmd);
 
-                        /* Spin forward to last dma chunk */
-                        sg_dma_index = scb->breakup;
-                        for (i = 0; i < scb->breakup; i++)
-                                sg = sg_next(sg);
+			/* Spin forward to last dma chunk */
+			sg_dma_index = scb->breakup;
+			for (i = 0; i < scb->breakup; i++)
+				sg = sg_next(sg);
 
 			/* Take care of possible partial on last chunk */
-                        ips_fill_scb_sg_single(ha,
-                                               sg_dma_address(sg),
-                                               scb, ips_sg_index++,
-                                               sg_dma_len(sg));
+			ips_fill_scb_sg_single(ha,
+					       sg_dma_address(sg),
+					       scb, ips_sg_index++,
+					       sg_dma_len(sg));
 
-                        for (; sg_dma_index < scsi_sg_count(scb->scsi_cmd);
-                             sg_dma_index++, sg = sg_next(sg)) {
-                                if (ips_fill_scb_sg_single
-                                    (ha,
-                                     sg_dma_address(sg),
-                                     scb, ips_sg_index++,
-                                     sg_dma_len(sg)) < 0)
-                                        break;
-                        }
+			for (; sg_dma_index < scsi_sg_count(scb->scsi_cmd);
+			     sg_dma_index++, sg = sg_next(sg)) {
+				if (ips_fill_scb_sg_single
+				    (ha,
+				     sg_dma_address(sg),
+				     scb, ips_sg_index++,
+				     sg_dma_len(sg)) < 0)
+					break;
+			}
 
 			scb->dcdb.transfer_length = scb->data_len;
 			scb->dcdb.cmd_attribute |=
@@ -3400,7 +3400,7 @@ ips_map_status(ips_ha_t * ha, ips_scb_t * scb, ips_stat_t * sp)
 				/* Restrict access to physical DASD */
 				if (scb->scsi_cmd->cmnd[0] == INQUIRY) {
 				    ips_scmd_buf_read(scb->scsi_cmd,
-                                      &inquiryData, sizeof (inquiryData));
+				      &inquiryData, sizeof (inquiryData));
  				    if ((inquiryData.DeviceType & 0x1f) == TYPE_DISK) {
 				        errcode = DID_TIME_OUT;
 				        break;
@@ -4048,7 +4048,7 @@ ips_chkstatus(ips_ha_t * ha, IPS_STATUS * pstatus)
 			/* restrict access to physical drives */
 			if (scb->scsi_cmd->cmnd[0] == INQUIRY) {
 			    ips_scmd_buf_read(scb->scsi_cmd,
-                                  &inquiryData, sizeof (inquiryData));
+				  &inquiryData, sizeof (inquiryData));
 			    if ((inquiryData.DeviceType & 0x1f) == TYPE_DISK)
 			        scb->scsi_cmd->result = DID_TIME_OUT << 16;
 			}
@@ -4535,7 +4535,7 @@ ips_freescb(ips_ha_t * ha, ips_scb_t * scb)
 
 	METHOD_TRACE("ips_freescb", 1);
 	if (scb->flags & IPS_SCB_MAP_SG)
-                scsi_dma_unmap(scb->scsi_cmd);
+		scsi_dma_unmap(scb->scsi_cmd);
 	else if (scb->flags & IPS_SCB_MAP_SINGLE)
 		pci_unmap_single(ha->pcidev, scb->data_busaddr, scb->data_len,
 				 IPS_DMA_DIR(scb));
@@ -4679,7 +4679,7 @@ ips_flush_and_reset(ips_ha_t *ha)
 	           udelay(1000);
 	           time--;
 	        }
-        }
+	}
 	}
 
 	/* Now RESET and INIT the adapter */

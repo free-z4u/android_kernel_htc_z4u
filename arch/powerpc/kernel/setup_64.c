@@ -677,7 +677,7 @@ void __init setup_per_cpu_areas(void)
 
 	delta = (unsigned long)pcpu_base_addr - (unsigned long)__per_cpu_start;
 	for_each_possible_cpu(cpu) {
-                __per_cpu_offset[cpu] = delta + pcpu_unit_offsets[cpu];
+		__per_cpu_offset[cpu] = delta + pcpu_unit_offsets[cpu];
 		paca[cpu].data_offset = __per_cpu_offset[cpu];
 	}
 }

@@ -84,14 +84,14 @@ __tagtable(ATAG_HWID, parse_tag_hwid);
 static unsigned g_htc_skuid;
 unsigned htc_get_skuid(void)
 {
-        return g_htc_skuid;
+	return g_htc_skuid;
 }
 EXPORT_SYMBOL(htc_get_skuid);
 
 static unsigned g_htc_pcbid;
 unsigned htc_get_pcbid(void)
 {
-        return g_htc_pcbid;
+	return g_htc_pcbid;
 }
 EXPORT_SYMBOL(htc_get_pcbid);
 
@@ -121,23 +121,23 @@ __tagtable(ATAG_SKUID, parse_tag_skuid);
 #define ATAG_HTC_PCBID 0x54410008
 int __init parse_tag_pcbid(const struct tag *tags)
 {
-        int pcbid= 0, find = 0;
-        struct tag *t = (struct tag *)tags;
+	int pcbid= 0, find = 0;
+	struct tag *t = (struct tag *)tags;
 
-        for (; t->hdr.size; t = tag_next(t)) {
-                if (t->hdr.tag == ATAG_HTC_PCBID) {
-                        printk(KERN_DEBUG "find the pcbid tag\n");
-                        find = 1;
-                        break;
-                }
-        }
+	for (; t->hdr.size; t = tag_next(t)) {
+		if (t->hdr.tag == ATAG_HTC_PCBID) {
+			printk(KERN_DEBUG "find the pcbid tag\n");
+			find = 1;
+			break;
+		}
+	}
 
-        if (find) {
+	if (find) {
 		pcbid = t->u.revision.rev;
 		g_htc_pcbid = (pcbid & (0xFF000000)) >> 24;
-        }
-        printk(KERN_INFO "[K] parse_tag_pcbid: pcbid = 0x%x\n", pcbid);
-        return pcbid;
+	}
+	printk(KERN_INFO "[K] parse_tag_pcbid: pcbid = 0x%x\n", pcbid);
+	return pcbid;
 }
 __tagtable(ATAG_HTC_PCBID, parse_tag_pcbid);
 
@@ -151,19 +151,19 @@ int htc_get_board_revision(void)
 
 
     if (htc_skuid == 0) {
-        return BOARD_EVM;
+	return BOARD_EVM;
     }
     else {
-        if ((htc_pcbid >= HTC_PCBID_EVT_MIN) && (htc_pcbid <= HTC_PCBID_EVT_MAX)) {
-            return (htc_pcbid + 1);
-        }
-        else if ((htc_pcbid >= HTC_PCBID_PVT_MIN) && (htc_pcbid <= HTC_PCBID_PVT_MAX)) {
-            return htc_pcbid;
-        }
-        else {
-            printk(KERN_ERR "%s(%d): Unknown board revision!! skuid=[0x%08X], pcbid=[0x%02X].\n", __func__, __LINE__, htc_skuid, htc_pcbid);
-            return BOARD_UNKNOWN;
-        }
+	if ((htc_pcbid >= HTC_PCBID_EVT_MIN) && (htc_pcbid <= HTC_PCBID_EVT_MAX)) {
+	    return (htc_pcbid + 1);
+	}
+	else if ((htc_pcbid >= HTC_PCBID_PVT_MIN) && (htc_pcbid <= HTC_PCBID_PVT_MAX)) {
+	    return htc_pcbid;
+	}
+	else {
+	    printk(KERN_ERR "%s(%d): Unknown board revision!! skuid=[0x%08X], pcbid=[0x%02X].\n", __func__, __LINE__, htc_skuid, htc_pcbid);
+	    return BOARD_UNKNOWN;
+	}
     }
 }
 

@@ -820,8 +820,8 @@ static int iscsit_alloc_buffs(struct iscsi_cmd *cmd)
 	 * Allocate iovecs for SCSI payload after transport_generic_map_mem_to_cmd
 	 * so that cmd->se_cmd.t_tasks_se_num has been set.
 	 */
-        ret = iscsit_allocate_iovecs(cmd);
-        if (ret < 0)
+	ret = iscsit_allocate_iovecs(cmd);
+	if (ret < 0)
 		return -ENOMEM;
 
 	return 0;

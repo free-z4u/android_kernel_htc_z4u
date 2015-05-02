@@ -102,7 +102,7 @@
 #define NT_ASSERT               0x0000      //, NEVER_TESTED
 #define NEVER_TESTED            MERGE_2( 0xEFFE, 0xFEEF )
 #define SE_ASSERT               0x5EFF      /* Side Effect, HCFASSERT invokation which are only called for the
-                                             * side effect and which should never trigger */
+					     * side effect and which should never trigger */
 #define DHF_FILE_NAME_OFFSET    10000       //to distinguish DHF from HCF asserts by means of line number
 #define MMD_FILE_NAME_OFFSET    20000       //to distinguish MMD from HCF asserts by means of line number
 
@@ -129,9 +129,9 @@
 // #define HCF_TRACE_           0x000F  // 0x8000
 //  ============================================ HCF_TRACE_... codes below 0x0010 are asserted on re-entry
 #define HCF_TRACE_ACTION_KLUDGE 0x0010  /* once you start introducing kludges there is no end to it
-                                         * this is an escape to do not assert on re-entrancy problem caused
-                                         * by HCF_ACT_INT_FORCE_ON used to get Microsofts NDIS drivers going
-                                         */
+					 * this is an escape to do not assert on re-entrancy problem caused
+					 * by HCF_ACT_INT_FORCE_ON used to get Microsofts NDIS drivers going
+					 */
 #define HCF_TRACE_STRIO         0x0020
 #define HCF_TRACE_ALLOC         0X0021
 #define HCF_TRACE_DL            0X0023
@@ -324,10 +324,10 @@ err: these values should match;
 
 //configuration DWORD to configure DMA for mode2 operation, using BAP0 as the DMA BAP.
 #define DMA_CTRLSTAT_GO (HREG_DMA_CTRL_RXHWEN | HREG_DMA_CTRL_RX_MODE_MULTI_PACKET | \
-                         HREG_DMA_CTRL_RXAUTOACK_DMAEN | HREG_DMA_CTRL_RXAUTOACK_RX | \
-                         HREG_DMA_CTRL_TXHWEN | /*;?HREG_DMA_CTRL_TX_TBUFCONT_PLAIN |*/ \
-                         HREG_DMA_CTRL_TX_MODE_MULTI_PACKET | HREG_DMA_CTRL_TXAUTOACK_DMAEN | \
-                         HREG_DMA_CTRL_TXAUTOACK_DMAALLOC)
+			 HREG_DMA_CTRL_RXAUTOACK_DMAEN | HREG_DMA_CTRL_RXAUTOACK_RX | \
+			 HREG_DMA_CTRL_TXHWEN | /*;?HREG_DMA_CTRL_TX_TBUFCONT_PLAIN |*/ \
+			 HREG_DMA_CTRL_TX_MODE_MULTI_PACKET | HREG_DMA_CTRL_TXAUTOACK_DMAEN | \
+			 HREG_DMA_CTRL_TXAUTOACK_DMAALLOC)
 
 //configuration DWORD to reset both the Tx and Rx DMA engines
 #define DMA_CTRLSTAT_RESET (HREG_DMA_CTRL_RXHWEN | HREG_DMA_CTRL_RXRESET | HREG_DMA_CTRL_TXHWEN | HREG_DMA_CTRL_TXRESET)

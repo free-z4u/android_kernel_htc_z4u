@@ -23,13 +23,13 @@ extern const char bad_pmd_string[];
 
 static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
 {
-        free_page((unsigned long) pte);
+	free_page((unsigned long) pte);
 }
 
 static inline void pte_free(struct mm_struct *mm, pgtable_t page)
 {
 	pgtable_page_dtor(page);
-        __free_page(page);
+	__free_page(page);
 }
 
 #define __pte_free_tlb(tlb,pte,addr)			\
@@ -53,7 +53,7 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm,
 static inline pgtable_t pte_alloc_one(struct mm_struct *mm,
 					unsigned long address)
 {
-        struct page *page = alloc_pages(GFP_KERNEL|__GFP_REPEAT, 0);
+	struct page *page = alloc_pages(GFP_KERNEL|__GFP_REPEAT, 0);
 
 	if (page == NULL)
 		return NULL;
@@ -84,7 +84,7 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd, pgtable_t page
 
 static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
 {
-        free_page((unsigned long) pgd);
+	free_page((unsigned long) pgd);
 }
 
 static inline pgd_t * pgd_alloc(struct mm_struct *mm)

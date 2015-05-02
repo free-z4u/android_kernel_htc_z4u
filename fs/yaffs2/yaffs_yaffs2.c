@@ -533,7 +533,7 @@ static int yaffs2_rd_checkpt_tnodes(struct yaffs_obj *obj)
 			      dev->tnode_size);
 		} else {
 			ok = 0;
-                }
+		}
 
 		if (tn && ok)
 			ok = yaffs_add_find_tnode_0(dev,
@@ -646,7 +646,7 @@ static int yaffs2_rd_checkpt_objs(struct yaffs_dev *dev)
 				}
 			} else {
 				ok = 0;
-                        }
+			}
 		}
 	}
 
@@ -915,7 +915,7 @@ int yaffs2_handle_hole(struct yaffs_obj *obj, loff_t new_size)
 				increase -= this_write;
 			} else {
 				small_increase_ok = 0;
-                        }
+			}
 		}
 
 		yaffs_release_temp_buffer(dev, local_buffer, __LINE__);
@@ -1394,7 +1394,7 @@ int yaffs2_scan_backwards(struct yaffs_dev *dev)
 						in->lazy_loaded = 0;
 					} else {
 						in->lazy_loaded = 1;
-                                        }
+					}
 					in->hdr_chunk = chunk;
 
 				} else if (!in->valid) {

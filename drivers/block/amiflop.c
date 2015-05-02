@@ -542,16 +542,16 @@ static unsigned long fd_get_drive_id(int drive)
 
 	rel_fdc();
 
-        /*
-         * RB: At least A500/A2000's df0: don't identify themselves.
-         * As every (real) Amiga has at least a 3.5" DD drive as df0:
-         * we default to that if df0: doesn't identify as a certain
-         * type.
-         */
-        if(drive == 0 && id == FD_NODRIVE)
+	/*
+	 * RB: At least A500/A2000's df0: don't identify themselves.
+	 * As every (real) Amiga has at least a 3.5" DD drive as df0:
+	 * we default to that if df0: doesn't identify as a certain
+	 * type.
+	 */
+	if(drive == 0 && id == FD_NODRIVE)
 	{
-                id = fd_def_df0;
-                printk(KERN_NOTICE "fd: drive 0 didn't identify, setting default %08lx\n", (ulong)fd_def_df0);
+		id = fd_def_df0;
+		printk(KERN_NOTICE "fd: drive 0 didn't identify, setting default %08lx\n", (ulong)fd_def_df0);
 	}
 	/* return the ID value */
 	return (id);

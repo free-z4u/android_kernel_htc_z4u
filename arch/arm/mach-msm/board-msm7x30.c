@@ -3345,8 +3345,8 @@ static void __init msm_qsd_spi_init(void)
 #ifdef CONFIG_USB_EHCI_MSM_72K
 static void msm_hsusb_vbus_power(unsigned phy_info, int on)
 {
-        int rc;
-        static int vbus_is_on;
+	int rc;
+	static int vbus_is_on;
 	struct pm8xxx_gpio_init_info usb_vbus = {
 		PM8058_GPIO_PM_TO_SYS(36),
 		{
@@ -3361,27 +3361,27 @@ static void msm_hsusb_vbus_power(unsigned phy_info, int on)
 		},
 	};
 
-        /* If VBUS is already on (or off), do nothing. */
-        if (unlikely(on == vbus_is_on))
-                return;
+	/* If VBUS is already on (or off), do nothing. */
+	if (unlikely(on == vbus_is_on))
+		return;
 
-        if (on) {
+	if (on) {
 		rc = pm8xxx_gpio_config(usb_vbus.gpio, &usb_vbus.config);
 		if (rc) {
-                        pr_err("%s PMIC GPIO 36 write failed\n", __func__);
-                        return;
-                }
+			pr_err("%s PMIC GPIO 36 write failed\n", __func__);
+			return;
+		}
 	} else {
 		gpio_set_value_cansleep(PM8058_GPIO_PM_TO_SYS(36), 0);
 	}
 
-        vbus_is_on = on;
+	vbus_is_on = on;
 }
 
 static struct msm_usb_host_platform_data msm_usb_host_pdata = {
-        .phy_info   = (USB_PHY_INTEGRATED | USB_PHY_MODEL_45NM),
-        .vbus_power = msm_hsusb_vbus_power,
-        .power_budget   = 180,
+	.phy_info   = (USB_PHY_INTEGRATED | USB_PHY_MODEL_45NM),
+	.vbus_power = msm_hsusb_vbus_power,
+	.power_budget   = 180,
 };
 #endif
 

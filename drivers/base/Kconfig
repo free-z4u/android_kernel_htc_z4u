@@ -229,8 +229,8 @@ config SW_SYNC_USER
        default n
        depends on SW_SYNC
        help
-         Provides a user space API to the sw sync object.
-         *WARNING* improper use of this can result in deadlocking kernel
+	 Provides a user space API to the sw sync object.
+	 *WARNING* improper use of this can result in deadlocking kernel
 	 drivers from userspace.
 
 config CMA

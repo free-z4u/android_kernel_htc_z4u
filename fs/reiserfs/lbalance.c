@@ -1022,12 +1022,12 @@ static int leaf_cut_entries(struct buffer_head *bh,
 }
 
 /*  when cut item is part of regular file
-        pos_in_item - first byte that must be cut
-        cut_size - number of bytes to be cut beginning from pos_in_item
+	pos_in_item - first byte that must be cut
+	cut_size - number of bytes to be cut beginning from pos_in_item
 
    when cut item is part of directory
-        pos_in_item - number of first deleted entry
-        cut_size - count of deleted entries
+	pos_in_item - number of first deleted entry
+	cut_size - count of deleted entries
     */
 void leaf_cut_from_buffer(struct buffer_info *bi, int cut_item_num,
 			  int pos_in_item, int cut_size)

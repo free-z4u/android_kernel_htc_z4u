@@ -54,6 +54,6 @@ typedef enum {
 } codetype;
 
 extern int zlib_inflate_table (codetype type, unsigned short *lens,
-                             unsigned codes, code **table,
-                             unsigned *bits, unsigned short *work);
+			     unsigned codes, code **table,
+			     unsigned *bits, unsigned short *work);
 #endif

@@ -75,9 +75,9 @@ static void __init eisa_name_device(struct eisa_device *edev)
 
 static char __init *decode_eisa_sig(unsigned long addr)
 {
-        static char sig_str[EISA_SIG_LEN];
+	static char sig_str[EISA_SIG_LEN];
 	u8 sig[4];
-        u16 rev;
+	u16 rev;
 	int i;
 
 	for (i = 0; i < 4; i++) {
@@ -97,13 +97,13 @@ static char __init *decode_eisa_sig(unsigned long addr)
 			return NULL;
 	}
 
-        sig_str[0] = ((sig[0] >> 2) & 0x1f) + ('A' - 1);
-        sig_str[1] = (((sig[0] & 3) << 3) | (sig[1] >> 5)) + ('A' - 1);
-        sig_str[2] = (sig[1] & 0x1f) + ('A' - 1);
-        rev = (sig[2] << 8) | sig[3];
-        sprintf(sig_str + 3, "%04X", rev);
+	sig_str[0] = ((sig[0] >> 2) & 0x1f) + ('A' - 1);
+	sig_str[1] = (((sig[0] & 3) << 3) | (sig[1] >> 5)) + ('A' - 1);
+	sig_str[2] = (sig[1] & 0x1f) + ('A' - 1);
+	rev = (sig[2] << 8) | sig[3];
+	sprintf(sig_str + 3, "%04X", rev);
 
-        return sig_str;
+	return sig_str;
 }
 
 static int eisa_bus_match(struct device *dev, struct device_driver *drv)
@@ -312,7 +312,7 @@ static void __init eisa_release_resources(struct eisa_device *edev)
 
 static int __init eisa_probe(struct eisa_root_device *root)
 {
-        int i, c;
+	int i, c;
 	struct eisa_device *edev;
 
 	printk(KERN_INFO "EISA: Probing bus %d at %s\n",
@@ -355,7 +355,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 
  force_probe:
 
-        for (c = 0, i = 1; i <= root->slots; i++) {
+	for (c = 0, i = 1; i <= root->slots; i++) {
 		edev = kzalloc(sizeof(*edev), GFP_KERNEL);
 		if (!edev) {
 			printk(KERN_ERR "EISA: Out of memory for slot %d\n", i);
@@ -403,7 +403,7 @@ static int __init eisa_probe(struct eisa_root_device *root)
 			eisa_release_resources(edev);
 			kfree(edev);
 		}
-        }
+	}
 
 	printk(KERN_INFO "EISA: Detected %d card%s.\n", c, c == 1 ? "" : "s");
 

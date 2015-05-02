@@ -91,21 +91,21 @@ dasd_default_erp_action(struct dasd_ccw_req *cqr)
 
 	device = cqr->startdev;
 
-        /* just retry - there is nothing to save ... I got no sense data.... */
-        if (cqr->retries > 0) {
+	/* just retry - there is nothing to save ... I got no sense data.... */
+	if (cqr->retries > 0) {
 		DBF_DEV_EVENT(DBF_DEBUG, device,
-                             "default ERP called (%i retries left)",
-                             cqr->retries);
+			     "default ERP called (%i retries left)",
+			     cqr->retries);
 		if (!test_bit(DASD_CQR_VERIFY_PATH, &cqr->flags))
 			cqr->lpm = device->path_data.opm;
 		cqr->status = DASD_CQR_FILLED;
-        } else {
+	} else {
 		pr_err("%s: default ERP has run out of retries and failed\n",
 		       dev_name(&device->cdev->dev));
 		cqr->status = DASD_CQR_FAILED;
 		cqr->stopclk = get_clock();
-        }
-        return cqr;
+	}
+	return cqr;
 }				/* end dasd_default_erp_action */
 
 /*

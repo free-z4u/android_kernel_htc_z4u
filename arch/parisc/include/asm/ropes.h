@@ -48,7 +48,7 @@ struct ioc {
 	struct sba_dma_pair {
 			dma_addr_t	iova;
 			size_t		size;
-        } saved[DELAYED_RESOURCE_CNT];
+	} saved[DELAYED_RESOURCE_CNT];
 #endif
 
 #ifdef SBA_COLLECT_STATS
@@ -65,7 +65,7 @@ struct ioc {
 	unsigned long	usg_calls;
 	unsigned long	usg_pages;
 #endif
-        /* STUFF We don't need in performance path */
+	/* STUFF We don't need in performance path */
 	unsigned int	pdir_size;	/* in bytes, determined by IOV Space size */
 };
 

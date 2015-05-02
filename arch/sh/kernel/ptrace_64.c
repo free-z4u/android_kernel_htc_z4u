@@ -418,10 +418,10 @@ long arch_ptrace(struct task_struct *child, long request,
 	}
 
 	case PTRACE_POKEUSR:
-                /* write the word at location addr in the USER area. We must
-                   disallow any changes to certain SR bits or u_fpvalid, since
-                   this could crash the kernel or result in a security
-                   loophole. */
+		/* write the word at location addr in the USER area. We must
+		   disallow any changes to certain SR bits or u_fpvalid, since
+		   this could crash the kernel or result in a security
+		   loophole. */
 		ret = -EIO;
 		if ((addr & 3) || addr < 0)
 			break;

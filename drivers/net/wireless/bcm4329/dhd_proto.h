@@ -74,7 +74,7 @@ extern int dhd_prot_ioctl(dhd_pub_t *dhd, int ifidx, wl_ioctl_t * ioc, void * bu
 
 /* Check for and handle local prot-specific iovar commands */
 extern int dhd_prot_iovar_op(dhd_pub_t *dhdp, const char *name,
-                             void *params, int plen, void *arg, int len, bool set);
+			     void *params, int plen, void *arg, int len, bool set);
 
 /* Add prot dump output to a buffer */
 extern void dhd_prot_dump(dhd_pub_t *dhdp, struct bcmstrbuf *strbuf);

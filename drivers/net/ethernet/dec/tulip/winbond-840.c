@@ -232,8 +232,8 @@ enum {
 };
 
 struct pci_id_info {
-        const char *name;
-        int drv_flags;		/* Driver use, intended as capability flags. */
+	const char *name;
+	int drv_flags;		/* Driver use, intended as capability flags. */
 };
 
 static const struct pci_id_info pci_id_tbl[] __devinitdata = {

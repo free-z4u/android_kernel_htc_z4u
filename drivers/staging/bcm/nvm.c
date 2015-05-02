@@ -572,7 +572,7 @@ static UINT BcmGetEEPROMSize(PMINI_ADAPTER Adapter)
 // EEPROM may not be present or not programmed
 //
 
-        uiData = 0xBABEFACE;
+	uiData = 0xBABEFACE;
 		if(0 == BeceemEEPROMBulkWrite(Adapter,(PUCHAR)&uiData,0,4,TRUE))
 		{
 			uiData = 0;

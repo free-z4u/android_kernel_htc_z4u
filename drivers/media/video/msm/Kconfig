@@ -1,13 +1,13 @@
 config MSM_CAMERA_V4L2
-        bool "MSM Camera V4L2 Interface"
-        depends on MSM_CAMERA
-        default n
-        ---help---
-          This flag enables V4L2 interface of MSM
-          camera driver. If enabled, application interacts
-          with /dev/video0 through V4L2 APIs. Otherwise,
-          native APIs are used through /dev/config0, /dev/frame0,
-          and /dev/control0.
+	bool "MSM Camera V4L2 Interface"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  This flag enables V4L2 interface of MSM
+	  camera driver. If enabled, application interacts
+	  with /dev/video0 through V4L2 APIs. Otherwise,
+	  native APIs are used through /dev/config0, /dev/frame0,
+	  and /dev/control0.
 
 comment "Camera Sensor Selection"
 config MT9T013
@@ -62,10 +62,10 @@ config WEBCAM_OV7692_QRD
 	---help---
 	  Omni Vision VGA YUV Sensor for QRD Devices
 config MT9M114
-        bool "Sensor MT9M114 (YUV 1.26M)"
-        depends on MSM_CAMERA
-        ---help---
-        APTINA 1.26 MP yuv Sensor
+	bool "Sensor MT9M114 (YUV 1.26M)"
+	depends on MSM_CAMERA
+	---help---
+	APTINA 1.26 MP yuv Sensor
 config WEBCAM_OV7692
 	bool "Sensor OV7692 (VGA YUV)"
 	depends on MSM_CAMERA && ARCH_MSM8X60 && !MSM_CAMERA_V4L2
@@ -161,17 +161,17 @@ config S5K4E1
 	  Say Y here if this is msm7x2xA variant platform.
 
 config S5K4E5YX
-        bool "Sensor s5k4e5yx (Samsung 5M)"
-        depends on MSM_CAMERA
-        default n
-        ---help---
-          Samsung 5M with Autofocus
+	bool "Sensor s5k4e5yx (Samsung 5M)"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  Samsung 5M with Autofocus
 
 config S5K4E5YX_ACT
-        bool "Lens actuator s5k4e5yx"
-        depends on MSM_CAMERA && S5K4E5YX
-        ---help---
-          s5k4e5yx lens actuator driver for S5K4E5YX.
+	bool "Lens actuator s5k4e5yx"
+	depends on MSM_CAMERA && S5K4E5YX
+	---help---
+	  s5k4e5yx lens actuator driver for S5K4E5YX.
 
 config OV5693
 	bool "Sensor ov5693 (BAYER 5M)"
@@ -188,31 +188,31 @@ config OV5693_ACT
 	  Autofocus of ov5693 actuator
 
 config S5K3H2YX
-        bool "Sensor s5k3h2yx (Samsung 8M)"
-        depends on MSM_CAMERA
-        default n
-        ---help---
-          Samsung 8M with Autofocus
+	bool "Sensor s5k3h2yx (Samsung 8M)"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  Samsung 8M with Autofocus
 
 config S5K3H2YX_ACT
-        bool "Lens actuator s5k4e5yx"
-        depends on MSM_CAMERA && S5K3H2YX
-        ---help---
-          s5k3h2yx lens actuator driver for S5K3H2YX.
+	bool "Lens actuator s5k4e5yx"
+	depends on MSM_CAMERA && S5K3H2YX
+	---help---
+	  s5k3h2yx lens actuator driver for S5K3H2YX.
 
 config IMX175
-        bool "Sensor imx175 (Sony 8M)"
-        depends on MSM_CAMERA
-        default n
-        ---help---
-          Sony 8M with Autofocus
+	bool "Sensor imx175 (Sony 8M)"
+	depends on MSM_CAMERA
+	default n
+	---help---
+	  Sony 8M with Autofocus
 
 config TI201_ACT
-        bool "Actuator TI201"
-        depends on MSM_CAMERA && IMX175
-          default n
-          ---help---
-            TI Actuator for IMX175
+	bool "Actuator TI201"
+	depends on MSM_CAMERA && IMX175
+	  default n
+	  ---help---
+	    TI Actuator for IMX175
 
 config S5K6A2YA
 	bool "Sensor s5k6a2ya (Samsung 1.6M)"
@@ -345,8 +345,8 @@ config S5K3L1YX
 		hfr video at 60, 90 and 120 fps.
 
 config IMX091
-        bool "Sensor imx091 (Sony 13MP)"
-        depends on MSM_CAMERA
+	bool "Sensor imx091 (Sony 13MP)"
+	depends on MSM_CAMERA
 	---help---
 	  Sony 13MP sensor back camera that uses 4 mipi lanes,
 	  runs at 30 fps preview and 14 fps snapshot

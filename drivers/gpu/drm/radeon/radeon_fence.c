@@ -146,7 +146,7 @@ static bool radeon_fence_poll_locked(struct radeon_device *rdev, int ring)
 static void radeon_fence_destroy(struct kref *kref)
 {
 	unsigned long irq_flags;
-        struct radeon_fence *fence;
+	struct radeon_fence *fence;
 
 	fence = container_of(kref, struct radeon_fence, kref);
 	write_lock_irqsave(&fence->rdev->fence_lock, irq_flags);

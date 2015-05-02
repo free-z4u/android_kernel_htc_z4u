@@ -75,7 +75,7 @@ static int bfs_get_block(struct inode *inode, sector_t block,
 	if (!create) {
 		if (phys <= bi->i_eblock) {
 			dprintf("c=%d, b=%08lx, phys=%09lx (granted)\n",
-                                create, (unsigned long)block, phys);
+				create, (unsigned long)block, phys);
 			map_bh(bh_result, sb, phys);
 		}
 		return 0;
@@ -134,7 +134,7 @@ static int bfs_get_block(struct inode *inode, sector_t block,
 		err = 0;
 
 	dprintf("c=%d, b=%08lx, phys=%08lx (moved)\n",
-                create, (unsigned long)block, phys);
+		create, (unsigned long)block, phys);
 	bi->i_sblock = phys;
 	phys += block;
 	info->si_lf_eblk = bi->i_eblock = phys;

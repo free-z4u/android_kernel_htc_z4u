@@ -73,7 +73,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         negative errno for failure
+	 negative errno for failure
 ===========================================================================*/
 int QCSuspend(
    struct usb_interface *     pIntf,
@@ -115,7 +115,7 @@ int QCSuspend(
 #endif
    {
       DBG( "device suspended to power level %d\n",
-           powerEvent.event );
+	   powerEvent.event );
       QSetDownReason( pQCDev, DRIVER_SUSPENDED );
    }
    else
@@ -154,7 +154,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         negative errno for failure
+	 negative errno for failure
 ===========================================================================*/
 int QCResume( struct usb_interface * pIntf )
 {
@@ -199,16 +199,16 @@ int QCResume( struct usb_interface * pIntf )
       nRet = usbnet_resume( pIntf );
       if (nRet != 0)
       {
-         DBG( "usbnet_resume error %d\n", nRet );
-         return nRet;
+	 DBG( "usbnet_resume error %d\n", nRet );
+	 return nRet;
       }
 
       // Restart QMI read callbacks
       nRet = StartRead( pQCDev );
       if (nRet != 0)
       {
-         DBG( "StartRead error %d\n", nRet );
-         return nRet;
+	 DBG( "StartRead error %d\n", nRet );
+	 return nRet;
       }
 
       // Kick Auto PM thread to process any queued URBs
@@ -236,7 +236,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 static int QCNetDriverBind(
    struct usbnet *         pDev,
@@ -259,7 +259,7 @@ static int QCNetDriverBind(
    if (pIntf->cur_altsetting->desc.bInterfaceNumber != 0)
    {
       DBG( "invalid interface %d\n",
-           pIntf->cur_altsetting->desc.bInterfaceNumber );
+	   pIntf->cur_altsetting->desc.bInterfaceNumber );
       return -EINVAL;
    }
 
@@ -270,18 +270,18 @@ static int QCNetDriverBind(
       pEndpoint = pIntf->cur_altsetting->endpoint + endpointIndex;
       if (pEndpoint == NULL)
       {
-         DBG( "invalid endpoint %u\n", endpointIndex );
-         return -EINVAL;
+	 DBG( "invalid endpoint %u\n", endpointIndex );
+	 return -EINVAL;
       }
 
       if (usb_endpoint_dir_in( &pEndpoint->desc ) == true
       &&  usb_endpoint_xfer_int( &pEndpoint->desc ) == false)
       {
-         pIn = pEndpoint;
+	 pIn = pEndpoint;
       }
       else if (usb_endpoint_dir_out( &pEndpoint->desc ) == true)
       {
-         pOut = pEndpoint;
+	 pOut = pEndpoint;
       }
    }
 
@@ -292,21 +292,21 @@ static int QCNetDriverBind(
    }
 
    if (usb_set_interface( pDev->udev,
-                          pIntf->cur_altsetting->desc.bInterfaceNumber,
-                          0 ) != 0)
+			  pIntf->cur_altsetting->desc.bInterfaceNumber,
+			  0 ) != 0)
    {
       DBG( "unable to set interface\n" );
       return -EINVAL;
    }
 
    pDev->in = usb_rcvbulkpipe( pDev->udev,
-                   pIn->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
+		   pIn->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
    pDev->out = usb_sndbulkpipe( pDev->udev,
-                   pOut->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
+		   pOut->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK );
 
    DBG( "in %x, out %x\n",
-        pIn->desc.bEndpointAddress,
-        pOut->desc.bEndpointAddress );
+	pIn->desc.bEndpointAddress,
+	pOut->desc.bEndpointAddress );
 
    // In later versions of the kernel, usbnet helps with this
 #if (LINUX_VERSION_CODE <= KERNEL_VERSION( 2,6,23 ))
@@ -476,7 +476,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 static int QCUSBNetAutoPMThread( void * pData )
 {
@@ -503,32 +503,32 @@ static int QCUSBNetAutoPMThread( void * pData )
       // Time to exit?
       if (pAutoPM->mbExit == true)
       {
-         // Stop activeURB
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+	 // Stop activeURB
+	 spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         if (pAutoPM->mpActiveURB != NULL)
-         {
-            usb_kill_urb( pAutoPM->mpActiveURB );
-         }
-         // Will be freed in callback function
+	 if (pAutoPM->mpActiveURB != NULL)
+	 {
+	    usb_kill_urb( pAutoPM->mpActiveURB );
+	 }
+	 // Will be freed in callback function
 
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+	 spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         // Cleanup URB List
-         spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+	 // Cleanup URB List
+	 spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
 
-         pURBListEntry = pAutoPM->mpURBList;
-         while (pURBListEntry != NULL)
-         {
-            pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
-            usb_free_urb( pURBListEntry->mpURB );
-            kfree( pURBListEntry );
-            pURBListEntry = pAutoPM->mpURBList;
-         }
+	 pURBListEntry = pAutoPM->mpURBList;
+	 while (pURBListEntry != NULL)
+	 {
+	    pAutoPM->mpURBList = pAutoPM->mpURBList->mpNext;
+	    usb_free_urb( pURBListEntry->mpURB );
+	    kfree( pURBListEntry );
+	    pURBListEntry = pAutoPM->mpURBList;
+	 }
 
-         spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+	 spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
 
-         break;
+	 break;
       }
 
       // Is our URB active?
@@ -538,33 +538,33 @@ static int QCUSBNetAutoPMThread( void * pData )
       if (IS_ERR( pAutoPM->mpActiveURB )
       &&  PTR_ERR( pAutoPM->mpActiveURB ) == -EAGAIN )
       {
-         pAutoPM->mpActiveURB = NULL;
+	 pAutoPM->mpActiveURB = NULL;
 
-         // Restore IRQs so task can sleep
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+	 // Restore IRQs so task can sleep
+	 spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         // URB is done, decrement the Auto PM usage count
-         usb_autopm_put_interface( pAutoPM->mpIntf );
+	 // URB is done, decrement the Auto PM usage count
+	 usb_autopm_put_interface( pAutoPM->mpIntf );
 
-         // Lock ActiveURB again
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+	 // Lock ActiveURB again
+	 spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
       }
 
       if (pAutoPM->mpActiveURB != NULL)
       {
-         // There is already a URB active, go back to sleep
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         continue;
+	 // There is already a URB active, go back to sleep
+	 spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+	 continue;
       }
 
       // Is there a URB waiting to be submitted?
       spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
       if (pAutoPM->mpURBList == NULL)
       {
-         // No more URBs to submit, go back to sleep
-         spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         continue;
+	 // No more URBs to submit, go back to sleep
+	 spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+	 spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+	 continue;
       }
 
       // Pop an element
@@ -580,45 +580,45 @@ static int QCUSBNetAutoPMThread( void * pData )
       status = usb_autopm_get_interface( pAutoPM->mpIntf );
       if (status < 0)
       {
-         DBG( "unable to autoresume interface: %d\n", status );
+	 DBG( "unable to autoresume interface: %d\n", status );
 
-         // likely caused by device going from autosuspend -> full suspend
-         if (status == -EPERM)
-         {
+	 // likely caused by device going from autosuspend -> full suspend
+	 if (status == -EPERM)
+	 {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,33 ))
-            pUdev->auto_pm = 0;
+	    pUdev->auto_pm = 0;
 #endif
-            QCSuspend( pAutoPM->mpIntf, PMSG_SUSPEND );
-         }
+	    QCSuspend( pAutoPM->mpIntf, PMSG_SUSPEND );
+	 }
 
-         // Add pURBListEntry back onto pAutoPM->mpURBList
-         spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
-         pURBListEntry->mpNext = pAutoPM->mpURBList;
-         pAutoPM->mpURBList = pURBListEntry;
-         spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
+	 // Add pURBListEntry back onto pAutoPM->mpURBList
+	 spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
+	 pURBListEntry->mpNext = pAutoPM->mpURBList;
+	 pAutoPM->mpURBList = pURBListEntry;
+	 spin_unlock_irqrestore( &pAutoPM->mURBListLock, URBListFlags );
 
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
-         pAutoPM->mpActiveURB = NULL;
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+	 spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+	 pAutoPM->mpActiveURB = NULL;
+	 spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
 
-         // Go back to sleep
-         continue;
+	 // Go back to sleep
+	 continue;
       }
 
       // Submit URB
       status = usb_submit_urb( pAutoPM->mpActiveURB, GFP_KERNEL );
       if (status < 0)
       {
-         // Could happen for a number of reasons
-         DBG( "Failed to submit URB: %d.  Packet dropped\n", status );
-         spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
-         usb_free_urb( pAutoPM->mpActiveURB );
-         pAutoPM->mpActiveURB = NULL;
-         spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
-         usb_autopm_put_interface( pAutoPM->mpIntf );
+	 // Could happen for a number of reasons
+	 DBG( "Failed to submit URB: %d.  Packet dropped\n", status );
+	 spin_lock_irqsave( &pAutoPM->mActiveURBLock, activeURBflags );
+	 usb_free_urb( pAutoPM->mpActiveURB );
+	 pAutoPM->mpActiveURB = NULL;
+	 spin_unlock_irqrestore( &pAutoPM->mActiveURBLock, activeURBflags );
+	 usb_autopm_put_interface( pAutoPM->mpIntf );
 
-         // Loop again
-         up( &pAutoPM->mThreadDoWork );
+	 // Loop again
+	 up( &pAutoPM->mThreadDoWork );
       }
 
       kfree( pURBListEntry );
@@ -708,12 +708,12 @@ int QCUSBNetStartXmit(
    memcpy( pURBData, pSKB->data, pSKB->len );
 
    usb_fill_bulk_urb( pURBListEntry->mpURB,
-                      pQCDev->mpNetDev->udev,
-                      pQCDev->mpNetDev->out,
-                      pURBData,
-                      pSKB->len,
-                      QCUSBNetURBCallback,
-                      pAutoPM );
+		      pQCDev->mpNetDev->udev,
+		      pQCDev->mpNetDev->out,
+		      pURBData,
+		      pSKB->len,
+		      QCUSBNetURBCallback,
+		      pAutoPM );
 
    // Aquire lock on URBList
    spin_lock_irqsave( &pAutoPM->mURBListLock, URBListFlags );
@@ -751,7 +751,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QCUSBNetOpen( struct net_device * pNet )
 {
@@ -784,8 +784,8 @@ int QCUSBNetOpen( struct net_device * pNet )
    sema_init( &pQCDev->mAutoPM.mThreadDoWork, 0 );
 
    pQCDev->mAutoPM.mpThread = kthread_run( QCUSBNetAutoPMThread,
-                              &pQCDev->mAutoPM,
-                              "QCUSBNetAutoPMThread" );
+			      &pQCDev->mAutoPM,
+			      "QCUSBNetAutoPMThread" );
    if (IS_ERR( pQCDev->mAutoPM.mpThread ))
    {
       DBG( "AutoPM thread creation error\n" );
@@ -804,9 +804,9 @@ int QCUSBNetOpen( struct net_device * pNet )
       if (status == 0)
       {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION( 2,6,33 ))
-         usb_autopm_enable( pQCDev->mpIntf );
+	 usb_autopm_enable( pQCDev->mpIntf );
 #else
-         usb_autopm_put_interface( pQCDev->mpIntf );
+	 usb_autopm_put_interface( pQCDev->mpIntf );
 #endif
       }
    }
@@ -831,7 +831,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QCUSBNetStop( struct net_device * pNet )
 {
@@ -1044,7 +1044,7 @@ PARAMETERS
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 int QCUSBNetProbe(
    struct usb_interface *        pIntf,
@@ -1176,7 +1176,7 @@ DESCRIPTION:
 
 RETURN VALUE:
    int - 0 for success
-         Negative errno for error
+	 Negative errno for error
 ===========================================================================*/
 static int __init QCUSBNetModInit( void )
 {
@@ -1184,7 +1184,7 @@ static int __init QCUSBNetModInit( void )
    if (IS_ERR( gpClass ) == true)
    {
       DBG( "error at class_create %ld\n",
-           PTR_ERR( gpClass ) );
+	   PTR_ERR( gpClass ) );
       return -ENOMEM;
    }
 

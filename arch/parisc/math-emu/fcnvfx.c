@@ -75,13 +75,13 @@ sgl_to_sgl_fcnvfx(
 		/* check for MININT */
 		if ((src_exponent > SGL_FX_MAX_EXP + 1) ||
 		Sgl_isnotzero_mantissa(src) || Sgl_iszero_sign(src)) {
-                        if (Sgl_iszero_sign(src)) result = 0x7fffffff;
-                        else result = 0x80000000;
+			if (Sgl_iszero_sign(src)) result = 0x7fffffff;
+			else result = 0x80000000;
 
 	                if (Is_invalidtrap_enabled()) {
-                            return(INVALIDEXCEPTION);
-                        }
-                        Set_invalidflag();
+			    return(INVALIDEXCEPTION);
+			}
+			Set_invalidflag();
 			*dstptr = result;
 			return(NOEXCEPTION);
        		}
@@ -172,18 +172,18 @@ sgl_to_dbl_fcnvfx(
 		/* check for MININT */
 		if ((src_exponent > DBL_FX_MAX_EXP + 1) ||
 		Sgl_isnotzero_mantissa(src) || Sgl_iszero_sign(src)) {
-                        if (Sgl_iszero_sign(src)) {
-                              resultp1 = 0x7fffffff;
+			if (Sgl_iszero_sign(src)) {
+			      resultp1 = 0x7fffffff;
 			      resultp2 = 0xffffffff;
 			}
-                        else {
+			else {
 			    resultp1 = 0x80000000;
 			    resultp2 = 0;
 			}
 	                if (Is_invalidtrap_enabled()) {
-                            return(INVALIDEXCEPTION);
-                        }
-                        Set_invalidflag();
+			    return(INVALIDEXCEPTION);
+			}
+			Set_invalidflag();
     		        Dint_copytoptr(resultp1,resultp2,dstptr);
 			return(NOEXCEPTION);
 		}
@@ -205,56 +205,56 @@ sgl_to_dbl_fcnvfx(
 		/* check for inexact */
 		if (Sgl_isinexact_to_fix(src,src_exponent)) {
 			inexact = TRUE;
-                        /*  round result  */
-                        switch (Rounding_mode()) {
-                        case ROUNDPLUS:
-                             if (Sgl_iszero_sign(src)) {
+			/*  round result  */
+			switch (Rounding_mode()) {
+			case ROUNDPLUS:
+			     if (Sgl_iszero_sign(src)) {
 				Dint_increment(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDMINUS:
-                             if (Sgl_isone_sign(src)) {
+			     break;
+			case ROUNDMINUS:
+			     if (Sgl_isone_sign(src)) {
 				Dint_decrement(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDNEAREST:
-                             if (Sgl_isone_roundbit(src,src_exponent))
-                                if (Sgl_isone_stickybit(src,src_exponent) ||
+			     break;
+			case ROUNDNEAREST:
+			     if (Sgl_isone_roundbit(src,src_exponent))
+				if (Sgl_isone_stickybit(src,src_exponent) ||
 				(Dint_isone_lowp2(resultp2)))
 				   if (Sgl_iszero_sign(src)) {
 				      Dint_increment(resultp1,resultp2);
 				   }
-                                   else {
+				   else {
 				      Dint_decrement(resultp1,resultp2);
 				   }
-                        }
-                }
-        }
+			}
+		}
+	}
 	else {
 		Dint_setzero(resultp1,resultp2);
 
 		/* check for inexact */
 		if (Sgl_isnotzero_exponentmantissa(src)) {
 			inexact = TRUE;
-                        /*  round result  */
-                        switch (Rounding_mode()) {
-                        case ROUNDPLUS:
-                             if (Sgl_iszero_sign(src)) {
+			/*  round result  */
+			switch (Rounding_mode()) {
+			case ROUNDPLUS:
+			     if (Sgl_iszero_sign(src)) {
 				Dint_increment(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDMINUS:
-                             if (Sgl_isone_sign(src)) {
+			     break;
+			case ROUNDMINUS:
+			     if (Sgl_isone_sign(src)) {
 				Dint_decrement(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDNEAREST:
-                             if (src_exponent == -1)
-                                if (Sgl_isnotzero_mantissa(src))
-                                   if (Sgl_iszero_sign(src)) {
+			     break;
+			case ROUNDNEAREST:
+			     if (src_exponent == -1)
+				if (Sgl_isnotzero_mantissa(src))
+				   if (Sgl_iszero_sign(src)) {
 				      Dint_increment(resultp1,resultp2);
 				   }
-                                   else {
+				   else {
 				      Dint_decrement(resultp1,resultp2);
 				   }
 			}
@@ -292,13 +292,13 @@ dbl_to_sgl_fcnvfx(
 	if (src_exponent > SGL_FX_MAX_EXP) {
 		/* check for MININT */
 		if (Dbl_isoverflow_to_int(src_exponent,srcp1,srcp2)) {
-                        if (Dbl_iszero_sign(srcp1)) result = 0x7fffffff;
-                        else result = 0x80000000;
+			if (Dbl_iszero_sign(srcp1)) result = 0x7fffffff;
+			else result = 0x80000000;
 
 	                if (Is_invalidtrap_enabled()) {
-                            return(INVALIDEXCEPTION);
-                        }
-                        Set_invalidflag();
+			    return(INVALIDEXCEPTION);
+			}
+			Set_invalidflag();
 			*dstptr = result;
 			return(NOEXCEPTION);
 		}
@@ -317,65 +317,65 @@ dbl_to_sgl_fcnvfx(
 
 		/* check for inexact */
 		if (Dbl_isinexact_to_fix(srcp1,srcp2,src_exponent)) {
-                        inexact = TRUE;
-                        /*  round result  */
-                        switch (Rounding_mode()) {
-                        case ROUNDPLUS:
-                             if (Dbl_iszero_sign(srcp1)) result++;
-                             break;
-                        case ROUNDMINUS:
-                             if (Dbl_isone_sign(srcp1)) result--;
-                             break;
-                        case ROUNDNEAREST:
-                             if (Dbl_isone_roundbit(srcp1,srcp2,src_exponent))
-                                if (Dbl_isone_stickybit(srcp1,srcp2,src_exponent) ||
+			inexact = TRUE;
+			/*  round result  */
+			switch (Rounding_mode()) {
+			case ROUNDPLUS:
+			     if (Dbl_iszero_sign(srcp1)) result++;
+			     break;
+			case ROUNDMINUS:
+			     if (Dbl_isone_sign(srcp1)) result--;
+			     break;
+			case ROUNDNEAREST:
+			     if (Dbl_isone_roundbit(srcp1,srcp2,src_exponent))
+				if (Dbl_isone_stickybit(srcp1,srcp2,src_exponent) ||
 				(Dbl_isone_lowmantissap1(tempp1)))
-                                   if (Dbl_iszero_sign(srcp1)) result++;
-                                   else result--;
-                        }
+				   if (Dbl_iszero_sign(srcp1)) result++;
+				   else result--;
+			}
 			/* check for overflow */
 			if ((Dbl_iszero_sign(srcp1) && result < 0) ||
 			    (Dbl_isone_sign(srcp1) && result > 0)) {
 
-                          if (Dbl_iszero_sign(srcp1)) result = 0x7fffffff;
-                          else result = 0x80000000;
+			  if (Dbl_iszero_sign(srcp1)) result = 0x7fffffff;
+			  else result = 0x80000000;
 
 	                  if (Is_invalidtrap_enabled()) {
-                            return(INVALIDEXCEPTION);
-                          }
-                          Set_invalidflag();
+			    return(INVALIDEXCEPTION);
+			  }
+			  Set_invalidflag();
 			  *dstptr = result;
 			  return(NOEXCEPTION);
 			}
-                }
+		}
 	}
 	else {
 		result = 0;
 
 		/* check for inexact */
 		if (Dbl_isnotzero_exponentmantissa(srcp1,srcp2)) {
-                        inexact = TRUE;
-                        /*  round result  */
-                        switch (Rounding_mode()) {
-                        case ROUNDPLUS:
-                             if (Dbl_iszero_sign(srcp1)) result++;
-                             break;
-                        case ROUNDMINUS:
-                             if (Dbl_isone_sign(srcp1)) result--;
-                             break;
-                        case ROUNDNEAREST:
-                             if (src_exponent == -1)
-                                if (Dbl_isnotzero_mantissa(srcp1,srcp2))
-                                   if (Dbl_iszero_sign(srcp1)) result++;
-                                   else result--;
+			inexact = TRUE;
+			/*  round result  */
+			switch (Rounding_mode()) {
+			case ROUNDPLUS:
+			     if (Dbl_iszero_sign(srcp1)) result++;
+			     break;
+			case ROUNDMINUS:
+			     if (Dbl_isone_sign(srcp1)) result--;
+			     break;
+			case ROUNDNEAREST:
+			     if (src_exponent == -1)
+				if (Dbl_isnotzero_mantissa(srcp1,srcp2))
+				   if (Dbl_iszero_sign(srcp1)) result++;
+				   else result--;
 			}
-                }
+		}
 	}
 	*dstptr = result;
-        if (inexact) {
-                if (Is_inexacttrap_enabled()) return(INEXACTEXCEPTION);
+	if (inexact) {
+		if (Is_inexacttrap_enabled()) return(INEXACTEXCEPTION);
 		else Set_inexactflag();
-        }
+	}
 	return(NOEXCEPTION);
 }
 
@@ -404,18 +404,18 @@ dbl_to_dbl_fcnvfx(
 		/* check for MININT */
 		if ((src_exponent > DBL_FX_MAX_EXP + 1) ||
 		Dbl_isnotzero_mantissa(srcp1,srcp2) || Dbl_iszero_sign(srcp1)) {
-                        if (Dbl_iszero_sign(srcp1)) {
-                              resultp1 = 0x7fffffff;
+			if (Dbl_iszero_sign(srcp1)) {
+			      resultp1 = 0x7fffffff;
 			      resultp2 = 0xffffffff;
 			}
-                        else {
+			else {
 			    resultp1 = 0x80000000;
 			    resultp2 = 0;
 			}
 	                if (Is_invalidtrap_enabled()) {
-                            return(INVALIDEXCEPTION);
-                        }
-                        Set_invalidflag();
+			    return(INVALIDEXCEPTION);
+			}
+			Set_invalidflag();
     		        Dint_copytoptr(resultp1,resultp2,dstptr);
 			return(NOEXCEPTION);
 		}
@@ -436,66 +436,66 @@ dbl_to_dbl_fcnvfx(
 
 		/* check for inexact */
 		if (Dbl_isinexact_to_fix(srcp1,srcp2,src_exponent)) {
-                        inexact = TRUE;
-                        /*  round result  */
-                        switch (Rounding_mode()) {
-                        case ROUNDPLUS:
-                             if (Dbl_iszero_sign(srcp1)) {
+			inexact = TRUE;
+			/*  round result  */
+			switch (Rounding_mode()) {
+			case ROUNDPLUS:
+			     if (Dbl_iszero_sign(srcp1)) {
 				Dint_increment(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDMINUS:
-                             if (Dbl_isone_sign(srcp1)) {
+			     break;
+			case ROUNDMINUS:
+			     if (Dbl_isone_sign(srcp1)) {
 				Dint_decrement(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDNEAREST:
-                             if (Dbl_isone_roundbit(srcp1,srcp2,src_exponent))
-                                if (Dbl_isone_stickybit(srcp1,srcp2,src_exponent) ||
+			     break;
+			case ROUNDNEAREST:
+			     if (Dbl_isone_roundbit(srcp1,srcp2,src_exponent))
+				if (Dbl_isone_stickybit(srcp1,srcp2,src_exponent) ||
 				(Dint_isone_lowp2(resultp2)))
-                                   if (Dbl_iszero_sign(srcp1)) {
+				   if (Dbl_iszero_sign(srcp1)) {
 				      Dint_increment(resultp1,resultp2);
 				   }
-                                   else {
+				   else {
 				      Dint_decrement(resultp1,resultp2);
 				   }
-                        }
-                }
+			}
+		}
 	}
 	else {
 		Dint_setzero(resultp1,resultp2);
 
 		/* check for inexact */
 		if (Dbl_isnotzero_exponentmantissa(srcp1,srcp2)) {
-                        inexact = TRUE;
-                        /*  round result  */
-                        switch (Rounding_mode()) {
-                        case ROUNDPLUS:
-                             if (Dbl_iszero_sign(srcp1)) {
+			inexact = TRUE;
+			/*  round result  */
+			switch (Rounding_mode()) {
+			case ROUNDPLUS:
+			     if (Dbl_iszero_sign(srcp1)) {
 				Dint_increment(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDMINUS:
-                             if (Dbl_isone_sign(srcp1)) {
+			     break;
+			case ROUNDMINUS:
+			     if (Dbl_isone_sign(srcp1)) {
 				Dint_decrement(resultp1,resultp2);
 			     }
-                             break;
-                        case ROUNDNEAREST:
-                             if (src_exponent == -1)
-                                if (Dbl_isnotzero_mantissa(srcp1,srcp2))
-                                   if (Dbl_iszero_sign(srcp1)) {
+			     break;
+			case ROUNDNEAREST:
+			     if (src_exponent == -1)
+				if (Dbl_isnotzero_mantissa(srcp1,srcp2))
+				   if (Dbl_iszero_sign(srcp1)) {
 				      Dint_increment(resultp1,resultp2);
 				   }
-                                   else {
+				   else {
 				      Dint_decrement(resultp1,resultp2);
 				   }
 			}
-                }
+		}
 	}
 	Dint_copytoptr(resultp1,resultp2,dstptr);
-        if (inexact) {
-                if (Is_inexacttrap_enabled()) return(INEXACTEXCEPTION);
-        	else Set_inexactflag();
-        }
+	if (inexact) {
+		if (Is_inexacttrap_enabled()) return(INEXACTEXCEPTION);
+		else Set_inexactflag();
+	}
 	return(NOEXCEPTION);
 }

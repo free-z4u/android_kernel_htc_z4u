@@ -111,7 +111,7 @@ static void ixgb_netpoll(struct net_device *dev);
 #endif
 
 static pci_ers_result_t ixgb_io_error_detected (struct pci_dev *pdev,
-                             enum pci_channel_state state);
+			     enum pci_channel_state state);
 static pci_ers_result_t ixgb_io_slot_reset (struct pci_dev *pdev);
 static void ixgb_io_resume (struct pci_dev *pdev);
 
@@ -939,7 +939,7 @@ ixgb_free_tx_resources(struct ixgb_adapter *adapter)
 
 static void
 ixgb_unmap_and_free_tx_resource(struct ixgb_adapter *adapter,
-                                struct ixgb_buffer *buffer_info)
+				struct ixgb_buffer *buffer_info)
 {
 	if (buffer_info->dma) {
 		if (buffer_info->mapped_as_page)
@@ -1511,7 +1511,7 @@ static int __ixgb_maybe_stop_tx(struct net_device *netdev, int size)
 }
 
 static int ixgb_maybe_stop_tx(struct net_device *netdev,
-                              struct ixgb_desc_ring *tx_ring, int size)
+			      struct ixgb_desc_ring *tx_ring, int size)
 {
 	if (likely(IXGB_DESC_UNUSED(tx_ring) >= size))
 		return 0;
@@ -1547,7 +1547,7 @@ ixgb_xmit_frame(struct sk_buff *skb, struct net_device *netdev)
 	}
 
 	if (unlikely(ixgb_maybe_stop_tx(netdev, &adapter->tx_ring,
-                     DESC_NEEDED)))
+		     DESC_NEEDED)))
 		return NETDEV_TX_BUSY;
 
 	if (vlan_tx_tag_present(skb)) {
@@ -1952,8 +1952,8 @@ ixgb_clean_tx_irq(struct ixgb_adapter *adapter)
 
 static void
 ixgb_rx_checksum(struct ixgb_adapter *adapter,
-                 struct ixgb_rx_desc *rx_desc,
-                 struct sk_buff *skb)
+		 struct ixgb_rx_desc *rx_desc,
+		 struct sk_buff *skb)
 {
 	/* Ignore Checksum bit is set OR
 	 * TCP Checksum has not been calculated
@@ -2284,7 +2284,7 @@ static void ixgb_netpoll(struct net_device *dev)
  * a PCI bus error is detected.
  */
 static pci_ers_result_t ixgb_io_error_detected(struct pci_dev *pdev,
-                                               enum pci_channel_state state)
+					       enum pci_channel_state state)
 {
 	struct net_device *netdev = pci_get_drvdata(pdev);
 	struct ixgb_adapter *adapter = netdev_priv(netdev);

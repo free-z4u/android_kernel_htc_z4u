@@ -1400,8 +1400,8 @@ static int resp_mode_sense(struct scsi_cmnd * scp, int target,
 	} else if (16 == bd_len) {
 		unsigned long long capac = sdebug_capacity;
 
-        	for (k = 0; k < 8; ++k, capac >>= 8)
-                	ap[7 - k] = capac & 0xff;
+		for (k = 0; k < 8; ++k, capac >>= 8)
+			ap[7 - k] = capac & 0xff;
 		ap[12] = (scsi_debug_sector_size >> 24) & 0xff;
 		ap[13] = (scsi_debug_sector_size >> 16) & 0xff;
 		ap[14] = (scsi_debug_sector_size >> 8) & 0xff;
@@ -1425,10 +1425,10 @@ static int resp_mode_sense(struct scsi_cmnd * scp, int target,
 		len = resp_disconnect_pg(ap, pcontrol, target);
 		offset += len;
 		break;
-        case 0x3:       /* Format device page, direct access */
-                len = resp_format_pg(ap, pcontrol, target);
-                offset += len;
-                break;
+	case 0x3:       /* Format device page, direct access */
+		len = resp_format_pg(ap, pcontrol, target);
+		offset += len;
+		break;
 	case 0x8:	/* Caching page, direct access */
 		len = resp_caching_pg(ap, pcontrol, target);
 		offset += len;
@@ -1475,7 +1475,7 @@ static int resp_mode_sense(struct scsi_cmnd * scp, int target,
 			mk_sense_buffer(devip, ILLEGAL_REQUEST,
 					INVALID_FIELD_IN_CDB, 0);
 			return check_condition_result;
-                }
+		}
 		offset += len;
 		break;
 	default:
@@ -1513,13 +1513,13 @@ static int resp_mode_select(struct scsi_cmnd * scp, int mselect6,
 				INVALID_FIELD_IN_CDB, 0);
 		return check_condition_result;
 	}
-        res = fetch_to_dev_buffer(scp, arr, param_len);
-        if (-1 == res)
-                return (DID_ERROR << 16);
-        else if ((res < param_len) &&
-                 (SCSI_DEBUG_OPT_NOISE & scsi_debug_opts))
-                printk(KERN_INFO "scsi_debug: mode_select: cdb indicated=%d, "
-                       " IO sent=%d bytes\n", param_len, res);
+	res = fetch_to_dev_buffer(scp, arr, param_len);
+	if (-1 == res)
+		return (DID_ERROR << 16);
+	else if ((res < param_len) &&
+		 (SCSI_DEBUG_OPT_NOISE & scsi_debug_opts))
+		printk(KERN_INFO "scsi_debug: mode_select: cdb indicated=%d, "
+		       " IO sent=%d bytes\n", param_len, res);
 	md_len = mselect6 ? (arr[0] + 1) : ((arr[0] << 8) + arr[1] + 2);
 	bd_len = mselect6 ? arr[3] : ((arr[6] << 8) + arr[7]);
 	if (md_len > 2) {
@@ -1573,8 +1573,8 @@ static int resp_temp_l_pg(unsigned char * arr)
 				     0x0, 0x1, 0x3, 0x2, 0x0, 65,
 		};
 
-        memcpy(arr, temp_l_pg, sizeof(temp_l_pg));
-        return sizeof(temp_l_pg);
+	memcpy(arr, temp_l_pg, sizeof(temp_l_pg));
+	return sizeof(temp_l_pg);
 }
 
 static int resp_ie_l_pg(unsigned char * arr)
@@ -1582,18 +1582,18 @@ static int resp_ie_l_pg(unsigned char * arr)
 	unsigned char ie_l_pg[] = {0x0, 0x0, 0x3, 0x3, 0x0, 0x0, 38,
 		};
 
-        memcpy(arr, ie_l_pg, sizeof(ie_l_pg));
+	memcpy(arr, ie_l_pg, sizeof(ie_l_pg));
 	if (iec_m_pg[2] & 0x4) {	/* TEST bit set */
 		arr[4] = THRESHOLD_EXCEEDED;
 		arr[5] = 0xff;
 	}
-        return sizeof(ie_l_pg);
+	return sizeof(ie_l_pg);
 }
 
 #define SDEBUG_MAX_LSENSE_SZ 512
 
 static int resp_log_sense(struct scsi_cmnd * scp,
-                          struct sdebug_dev_info * devip)
+			  struct sdebug_dev_info * devip)
 {
 	int ppc, sp, pcontrol, pcode, subpcode, alloc_len, errsts, len, n;
 	unsigned char arr[SDEBUG_MAX_LSENSE_SZ];
@@ -2279,7 +2279,7 @@ static int resp_report_luns(struct scsi_cmnd * scp,
 	one_lun = (struct scsi_lun *) &arr[8];
 	max_addr = arr + SDEBUG_RLUN_ARR_SZ;
 	for (i = 0, lun = (scsi_debug_no_lun_0 ? 1 : 0);
-             ((i < lun_cnt) && ((unsigned char *)(one_lun + i) < max_addr));
+	     ((i < lun_cnt) && ((unsigned char *)(one_lun + i) < max_addr));
 	     i++, lun++) {
 		upper = (lun >> 8) & 0x3f;
 		if (upper)
@@ -2385,14 +2385,14 @@ static struct sdebug_dev_info * devInfoReg(struct scsi_device * sdev)
 		return devip;
 	sdbg_host = *(struct sdebug_host_info **)shost_priv(sdev->host);
 	if (!sdbg_host) {
-                printk(KERN_ERR "Host info NULL\n");
+		printk(KERN_ERR "Host info NULL\n");
 		return NULL;
-        }
+	}
 	list_for_each_entry(devip, &sdbg_host->dev_info_list, dev_list) {
 		if ((devip->used) && (devip->channel == sdev->channel) &&
-                    (devip->target == sdev->id) &&
-                    (devip->lun == sdev->lun))
-                        return devip;
+		    (devip->target == sdev->id) &&
+		    (devip->lun == sdev->lun))
+			return devip;
 		else {
 			if ((!devip->used) && (!open_devip))
 				open_devip = devip;
@@ -2561,9 +2561,9 @@ static int scsi_debug_device_reset(struct scsi_cmnd * SCpnt)
 static int scsi_debug_bus_reset(struct scsi_cmnd * SCpnt)
 {
 	struct sdebug_host_info *sdbg_host;
-        struct sdebug_dev_info * dev_info;
-        struct scsi_device * sdp;
-        struct Scsi_Host * hp;
+	struct sdebug_dev_info * dev_info;
+	struct scsi_device * sdp;
+	struct Scsi_Host * hp;
 
 	if (SCSI_DEBUG_OPT_NOISE & scsi_debug_opts)
 		printk(KERN_INFO "scsi_debug: bus_reset\n");
@@ -2572,8 +2572,8 @@ static int scsi_debug_bus_reset(struct scsi_cmnd * SCpnt)
 		sdbg_host = *(struct sdebug_host_info **)shost_priv(hp);
 		if (sdbg_host) {
 			list_for_each_entry(dev_info,
-                                            &sdbg_host->dev_info_list,
-                                            dev_list)
+					    &sdbg_host->dev_info_list,
+					    dev_list)
 				dev_info->reset = 1;
 		}
 	}
@@ -2583,18 +2583,18 @@ static int scsi_debug_bus_reset(struct scsi_cmnd * SCpnt)
 static int scsi_debug_host_reset(struct scsi_cmnd * SCpnt)
 {
 	struct sdebug_host_info * sdbg_host;
-        struct sdebug_dev_info * dev_info;
+	struct sdebug_dev_info * dev_info;
 
 	if (SCSI_DEBUG_OPT_NOISE & scsi_debug_opts)
 		printk(KERN_INFO "scsi_debug: host_reset\n");
 	++num_host_resets;
-        spin_lock(&sdebug_host_list_lock);
-        list_for_each_entry(sdbg_host, &sdebug_host_list, host_list) {
-                list_for_each_entry(dev_info, &sdbg_host->dev_info_list,
-                                    dev_list)
-                        dev_info->reset = 1;
-        }
-        spin_unlock(&sdebug_host_list_lock);
+	spin_lock(&sdebug_host_list_lock);
+	list_for_each_entry(sdbg_host, &sdebug_host_list, host_list) {
+		list_for_each_entry(dev_info, &sdbg_host->dev_info_list,
+				    dev_list)
+			dev_info->reset = 1;
+	}
+	spin_unlock(&sdebug_host_list_lock);
 	stop_all_queued();
 	return SUCCESS;
 }
@@ -2636,7 +2636,7 @@ static void __init sdebug_build_parts(unsigned char *ramp,
 	sectors_per_part = (num_sectors - sdebug_sectors_per)
 			   / scsi_debug_num_parts;
 	heads_by_sects = sdebug_heads * sdebug_sectors_per;
-        starts[0] = sdebug_sectors_per;
+	starts[0] = sdebug_sectors_per;
 	for (k = 1; k < scsi_debug_num_parts; ++k)
 		starts[k] = ((k * sectors_per_part) / heads_by_sects)
 			    * heads_by_sects;
@@ -2840,7 +2840,7 @@ static int scsi_debug_proc_info(struct Scsi_Host *host, char *buffer, char **sta
 			return -EINVAL;
 		scsi_debug_opts = pos;
 		if (scsi_debug_every_nth != 0)
-                        scsi_debug_cmnd_count = 0;
+			scsi_debug_cmnd_count = 0;
 		return length;
 	}
 	begin = 0;
@@ -2872,16 +2872,16 @@ static int scsi_debug_proc_info(struct Scsi_Host *host, char *buffer, char **sta
 
 static ssize_t sdebug_delay_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_delay);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_delay);
 }
 
 static ssize_t sdebug_delay_store(struct device_driver * ddp,
 				  const char * buf, size_t count)
 {
-        int delay;
+	int delay;
 	char work[20];
 
-        if (1 == sscanf(buf, "%10s", work)) {
+	if (1 == sscanf(buf, "%10s", work)) {
 		if ((1 == sscanf(work, "%d", &delay)) && (delay >= 0)) {
 			scsi_debug_delay = delay;
 			return count;
@@ -2894,16 +2894,16 @@ DRIVER_ATTR(delay, S_IRUGO | S_IWUSR, sdebug_delay_show,
 
 static ssize_t sdebug_opts_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "0x%x\n", scsi_debug_opts);
+	return scnprintf(buf, PAGE_SIZE, "0x%x\n", scsi_debug_opts);
 }
 
 static ssize_t sdebug_opts_store(struct device_driver * ddp,
 				 const char * buf, size_t count)
 {
-        int opts;
+	int opts;
 	char work[20];
 
-        if (1 == sscanf(buf, "%10s", work)) {
+	if (1 == sscanf(buf, "%10s", work)) {
 		if (0 == strnicmp(work,"0x", 2)) {
 			if (1 == sscanf(&work[2], "%x", &opts))
 				goto opts_done;
@@ -2923,12 +2923,12 @@ DRIVER_ATTR(opts, S_IRUGO | S_IWUSR, sdebug_opts_show,
 
 static ssize_t sdebug_ptype_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_ptype);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_ptype);
 }
 static ssize_t sdebug_ptype_store(struct device_driver * ddp,
 				  const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_ptype = n;
@@ -2940,12 +2940,12 @@ DRIVER_ATTR(ptype, S_IRUGO | S_IWUSR, sdebug_ptype_show, sdebug_ptype_store);
 
 static ssize_t sdebug_dsense_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_dsense);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_dsense);
 }
 static ssize_t sdebug_dsense_store(struct device_driver * ddp,
 				  const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_dsense = n;
@@ -2958,12 +2958,12 @@ DRIVER_ATTR(dsense, S_IRUGO | S_IWUSR, sdebug_dsense_show,
 
 static ssize_t sdebug_fake_rw_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_fake_rw);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_fake_rw);
 }
 static ssize_t sdebug_fake_rw_store(struct device_driver * ddp,
 				    const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_fake_rw = n;
@@ -2976,12 +2976,12 @@ DRIVER_ATTR(fake_rw, S_IRUGO | S_IWUSR, sdebug_fake_rw_show,
 
 static ssize_t sdebug_no_lun_0_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_no_lun_0);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_no_lun_0);
 }
 static ssize_t sdebug_no_lun_0_store(struct device_driver * ddp,
 				     const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_no_lun_0 = n;
@@ -2994,12 +2994,12 @@ DRIVER_ATTR(no_lun_0, S_IRUGO | S_IWUSR, sdebug_no_lun_0_show,
 
 static ssize_t sdebug_num_tgts_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_num_tgts);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_num_tgts);
 }
 static ssize_t sdebug_num_tgts_store(struct device_driver * ddp,
 				     const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_num_tgts = n;
@@ -3013,24 +3013,24 @@ DRIVER_ATTR(num_tgts, S_IRUGO | S_IWUSR, sdebug_num_tgts_show,
 
 static ssize_t sdebug_dev_size_mb_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_dev_size_mb);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_dev_size_mb);
 }
 DRIVER_ATTR(dev_size_mb, S_IRUGO, sdebug_dev_size_mb_show, NULL);
 
 static ssize_t sdebug_num_parts_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_num_parts);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_num_parts);
 }
 DRIVER_ATTR(num_parts, S_IRUGO, sdebug_num_parts_show, NULL);
 
 static ssize_t sdebug_every_nth_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_every_nth);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_every_nth);
 }
 static ssize_t sdebug_every_nth_store(struct device_driver * ddp,
 				      const char * buf, size_t count)
 {
-        int nth;
+	int nth;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &nth))) {
 		scsi_debug_every_nth = nth;
@@ -3044,12 +3044,12 @@ DRIVER_ATTR(every_nth, S_IRUGO | S_IWUSR, sdebug_every_nth_show,
 
 static ssize_t sdebug_max_luns_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_max_luns);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_max_luns);
 }
 static ssize_t sdebug_max_luns_store(struct device_driver * ddp,
 				     const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_max_luns = n;
@@ -3063,12 +3063,12 @@ DRIVER_ATTR(max_luns, S_IRUGO | S_IWUSR, sdebug_max_luns_show,
 
 static ssize_t sdebug_max_queue_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_max_queue);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_max_queue);
 }
 static ssize_t sdebug_max_queue_store(struct device_driver * ddp,
 				      const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n > 0) &&
 	    (n <= SCSI_DEBUG_CANQUEUE)) {
@@ -3082,24 +3082,24 @@ DRIVER_ATTR(max_queue, S_IRUGO | S_IWUSR, sdebug_max_queue_show,
 
 static ssize_t sdebug_no_uld_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_no_uld);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_no_uld);
 }
 DRIVER_ATTR(no_uld, S_IRUGO, sdebug_no_uld_show, NULL);
 
 static ssize_t sdebug_scsi_level_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_scsi_level);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_scsi_level);
 }
 DRIVER_ATTR(scsi_level, S_IRUGO, sdebug_scsi_level_show, NULL);
 
 static ssize_t sdebug_virtual_gb_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_virtual_gb);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_virtual_gb);
 }
 static ssize_t sdebug_virtual_gb_store(struct device_driver * ddp,
 				       const char * buf, size_t count)
 {
-        int n;
+	int n;
 
 	if ((count > 0) && (1 == sscanf(buf, "%d", &n)) && (n >= 0)) {
 		scsi_debug_virtual_gb = n;
@@ -3115,7 +3115,7 @@ DRIVER_ATTR(virtual_gb, S_IRUGO | S_IWUSR, sdebug_virtual_gb_show,
 
 static ssize_t sdebug_add_host_show(struct device_driver * ddp, char * buf)
 {
-        return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_add_host);
+	return scnprintf(buf, PAGE_SIZE, "%d\n", scsi_debug_add_host);
 }
 
 static ssize_t sdebug_add_host_store(struct device_driver * ddp,
@@ -3444,15 +3444,15 @@ static int __init scsi_debug_init(void)
 	init_all_queued();
 
 	host_to_add = scsi_debug_add_host;
-        scsi_debug_add_host = 0;
+	scsi_debug_add_host = 0;
 
-        for (k = 0; k < host_to_add; k++) {
-                if (sdebug_add_adapter()) {
-                        printk(KERN_ERR "scsi_debug_init: "
-                               "sdebug_add_adapter failed k=%d\n", k);
-                        break;
-                }
-        }
+	for (k = 0; k < host_to_add; k++) {
+		if (sdebug_add_adapter()) {
+			printk(KERN_ERR "scsi_debug_init: "
+			       "sdebug_add_adapter failed k=%d\n", k);
+			break;
+		}
+	}
 
 	if (SCSI_DEBUG_OPT_NOISE & scsi_debug_opts) {
 		printk(KERN_INFO "scsi_debug_init: built %d host(s)\n",
@@ -3500,55 +3500,55 @@ module_exit(scsi_debug_exit);
 
 static void sdebug_release_adapter(struct device * dev)
 {
-        struct sdebug_host_info *sdbg_host;
+	struct sdebug_host_info *sdbg_host;
 
 	sdbg_host = to_sdebug_host(dev);
-        kfree(sdbg_host);
+	kfree(sdbg_host);
 }
 
 static int sdebug_add_adapter(void)
 {
 	int k, devs_per_host;
-        int error = 0;
-        struct sdebug_host_info *sdbg_host;
+	int error = 0;
+	struct sdebug_host_info *sdbg_host;
 	struct sdebug_dev_info *sdbg_devinfo, *tmp;
 
-        sdbg_host = kzalloc(sizeof(*sdbg_host),GFP_KERNEL);
-        if (NULL == sdbg_host) {
-                printk(KERN_ERR "%s: out of memory at line %d\n",
-                       __func__, __LINE__);
-                return -ENOMEM;
-        }
+	sdbg_host = kzalloc(sizeof(*sdbg_host),GFP_KERNEL);
+	if (NULL == sdbg_host) {
+		printk(KERN_ERR "%s: out of memory at line %d\n",
+		       __func__, __LINE__);
+		return -ENOMEM;
+	}
 
-        INIT_LIST_HEAD(&sdbg_host->dev_info_list);
+	INIT_LIST_HEAD(&sdbg_host->dev_info_list);
 
 	devs_per_host = scsi_debug_num_tgts * scsi_debug_max_luns;
-        for (k = 0; k < devs_per_host; k++) {
+	for (k = 0; k < devs_per_host; k++) {
 		sdbg_devinfo = sdebug_device_create(sdbg_host, GFP_KERNEL);
 		if (!sdbg_devinfo) {
-                        printk(KERN_ERR "%s: out of memory at line %d\n",
-                               __func__, __LINE__);
-                        error = -ENOMEM;
+			printk(KERN_ERR "%s: out of memory at line %d\n",
+			       __func__, __LINE__);
+			error = -ENOMEM;
 			goto clean;
-                }
-        }
+		}
+	}
 
-        spin_lock(&sdebug_host_list_lock);
-        list_add_tail(&sdbg_host->host_list, &sdebug_host_list);
-        spin_unlock(&sdebug_host_list_lock);
+	spin_lock(&sdebug_host_list_lock);
+	list_add_tail(&sdbg_host->host_list, &sdebug_host_list);
+	spin_unlock(&sdebug_host_list_lock);
 
-        sdbg_host->dev.bus = &pseudo_lld_bus;
-        sdbg_host->dev.parent = pseudo_primary;
-        sdbg_host->dev.release = &sdebug_release_adapter;
-        dev_set_name(&sdbg_host->dev, "adapter%d", scsi_debug_add_host);
+	sdbg_host->dev.bus = &pseudo_lld_bus;
+	sdbg_host->dev.parent = pseudo_primary;
+	sdbg_host->dev.release = &sdebug_release_adapter;
+	dev_set_name(&sdbg_host->dev, "adapter%d", scsi_debug_add_host);
 
-        error = device_register(&sdbg_host->dev);
+	error = device_register(&sdbg_host->dev);
 
-        if (error)
+	if (error)
 		goto clean;
 
 	++scsi_debug_add_host;
-        return error;
+	return error;
 
 clean:
 	list_for_each_entry_safe(sdbg_devinfo, tmp, &sdbg_host->dev_info_list,
@@ -3558,26 +3558,26 @@ clean:
 	}
 
 	kfree(sdbg_host);
-        return error;
+	return error;
 }
 
 static void sdebug_remove_adapter(void)
 {
-        struct sdebug_host_info * sdbg_host = NULL;
+	struct sdebug_host_info * sdbg_host = NULL;
 
-        spin_lock(&sdebug_host_list_lock);
-        if (!list_empty(&sdebug_host_list)) {
-                sdbg_host = list_entry(sdebug_host_list.prev,
-                                       struct sdebug_host_info, host_list);
+	spin_lock(&sdebug_host_list_lock);
+	if (!list_empty(&sdebug_host_list)) {
+		sdbg_host = list_entry(sdebug_host_list.prev,
+				       struct sdebug_host_info, host_list);
 		list_del(&sdbg_host->host_list);
 	}
-        spin_unlock(&sdebug_host_list_lock);
+	spin_unlock(&sdebug_host_list_lock);
 
 	if (!sdbg_host)
 		return;
 
-        device_unregister(&sdbg_host->dev);
-        --scsi_debug_add_host;
+	device_unregister(&sdbg_host->dev);
+	--scsi_debug_add_host;
 }
 
 static
@@ -3958,9 +3958,9 @@ static struct scsi_host_template sdebug_driver_template = {
 
 static int sdebug_driver_probe(struct device * dev)
 {
-        int error = 0;
-        struct sdebug_host_info *sdbg_host;
-        struct Scsi_Host *hpnt;
+	int error = 0;
+	struct sdebug_host_info *sdbg_host;
+	struct Scsi_Host *hpnt;
 	int host_prot;
 
 	sdbg_host = to_sdebug_host(dev);
@@ -3973,7 +3973,7 @@ static int sdebug_driver_probe(struct device * dev)
 		return error;
 	}
 
-        sdbg_host->shost = hpnt;
+	sdbg_host->shost = hpnt;
 	*((struct sdebug_host_info **)hpnt->hostdata) = sdbg_host;
 	if ((hpnt->this_id >= 0) && (scsi_debug_num_tgts > hpnt->this_id))
 		hpnt->max_id = scsi_debug_num_tgts + 1;
@@ -4025,21 +4025,21 @@ static int sdebug_driver_probe(struct device * dev)
 	else
 		scsi_host_set_guard(hpnt, SHOST_DIX_GUARD_CRC);
 
-        error = scsi_add_host(hpnt, &sdbg_host->dev);
-        if (error) {
-                printk(KERN_ERR "%s: scsi_add_host failed\n", __func__);
-                error = -ENODEV;
+	error = scsi_add_host(hpnt, &sdbg_host->dev);
+	if (error) {
+		printk(KERN_ERR "%s: scsi_add_host failed\n", __func__);
+		error = -ENODEV;
 		scsi_host_put(hpnt);
-        } else
+	} else
 		scsi_scan_host(hpnt);
 
 
-        return error;
+	return error;
 }
 
 static int sdebug_driver_remove(struct device * dev)
 {
-        struct sdebug_host_info *sdbg_host;
+	struct sdebug_host_info *sdbg_host;
 	struct sdebug_dev_info *sdbg_devinfo, *tmp;
 
 	sdbg_host = to_sdebug_host(dev);
@@ -4050,16 +4050,16 @@ static int sdebug_driver_remove(struct device * dev)
 		return -ENODEV;
 	}
 
-        scsi_remove_host(sdbg_host->shost);
+	scsi_remove_host(sdbg_host->shost);
 
 	list_for_each_entry_safe(sdbg_devinfo, tmp, &sdbg_host->dev_info_list,
 				 dev_list) {
-                list_del(&sdbg_devinfo->dev_list);
-                kfree(sdbg_devinfo);
-        }
+		list_del(&sdbg_devinfo->dev_list);
+		kfree(sdbg_devinfo);
+	}
 
-        scsi_host_put(sdbg_host->shost);
-        return 0;
+	scsi_host_put(sdbg_host->shost);
+	return 0;
 }
 
 static int pseudo_lld_bus_match(struct device *dev,

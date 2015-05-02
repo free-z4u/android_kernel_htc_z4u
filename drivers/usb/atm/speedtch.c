@@ -907,7 +907,7 @@ static int speedtch_bind(struct usbatm_data *usbatm,
 			goto fail_free;
 		}
 
-        usbatm->driver_data = instance;
+	usbatm->driver_data = instance;
 
 	return 0;
 

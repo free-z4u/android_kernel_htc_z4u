@@ -23,7 +23,7 @@ struct page;
 
 struct pci_controller {
 	struct pci_controller *next;
-        struct pci_bus *bus;
+	struct pci_bus *bus;
 	struct resource *io_space;
 	struct resource *mem_space;
 

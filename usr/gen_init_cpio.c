@@ -387,16 +387,16 @@ static char *cpio_replace_env(char *new_location)
        char *end;
 
        for (start = NULL; (start = strstr(new_location, "${")); ) {
-               end = strchr(start, '}');
-               if (start < end) {
-                       *env_var = *expanded = '\0';
-                       strncat(env_var, start + 2, end - start - 2);
-                       strncat(expanded, new_location, start - new_location);
-                       strncat(expanded, getenv(env_var), PATH_MAX);
-                       strncat(expanded, end + 1, PATH_MAX);
-                       strncpy(new_location, expanded, PATH_MAX);
-               } else
-                       break;
+	       end = strchr(start, '}');
+	       if (start < end) {
+		       *env_var = *expanded = '\0';
+		       strncat(env_var, start + 2, end - start - 2);
+		       strncat(expanded, new_location, start - new_location);
+		       strncat(expanded, getenv(env_var), PATH_MAX);
+		       strncat(expanded, end + 1, PATH_MAX);
+		       strncpy(new_location, expanded, PATH_MAX);
+	       } else
+		       break;
        }
 
        return new_location;

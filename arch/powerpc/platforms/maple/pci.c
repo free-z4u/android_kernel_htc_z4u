@@ -347,92 +347,92 @@ static unsigned int u4_pcie_cfa0(unsigned int devfn, unsigned int off)
 static unsigned int u4_pcie_cfa1(unsigned int bus, unsigned int devfn,
 				 unsigned int off)
 {
-        return (bus << 16)		|
+	return (bus << 16)		|
 	       (devfn << 8)		|
 	       ((off >> 8) << 28)	|
 	       (off & 0xfcu)		| 1u;
 }
 
 static volatile void __iomem *u4_pcie_cfg_access(struct pci_controller* hose,
-                                        u8 bus, u8 dev_fn, int offset)
+					u8 bus, u8 dev_fn, int offset)
 {
-        unsigned int caddr;
+	unsigned int caddr;
 
-        if (bus == hose->first_busno)
-                caddr = u4_pcie_cfa0(dev_fn, offset);
-        else
-                caddr = u4_pcie_cfa1(bus, dev_fn, offset);
+	if (bus == hose->first_busno)
+		caddr = u4_pcie_cfa0(dev_fn, offset);
+	else
+		caddr = u4_pcie_cfa1(bus, dev_fn, offset);
 
-        /* Uninorth will return garbage if we don't read back the value ! */
-        do {
-                out_le32(hose->cfg_addr, caddr);
-        } while (in_le32(hose->cfg_addr) != caddr);
+	/* Uninorth will return garbage if we don't read back the value ! */
+	do {
+		out_le32(hose->cfg_addr, caddr);
+	} while (in_le32(hose->cfg_addr) != caddr);
 
-        offset &= 0x03;
-        return hose->cfg_data + offset;
+	offset &= 0x03;
+	return hose->cfg_data + offset;
 }
 
 static int u4_pcie_read_config(struct pci_bus *bus, unsigned int devfn,
-                               int offset, int len, u32 *val)
+			       int offset, int len, u32 *val)
 {
-        struct pci_controller *hose;
-        volatile void __iomem *addr;
+	struct pci_controller *hose;
+	volatile void __iomem *addr;
 
-        hose = pci_bus_to_host(bus);
-        if (hose == NULL)
-                return PCIBIOS_DEVICE_NOT_FOUND;
-        if (offset >= 0x1000)
-                return  PCIBIOS_BAD_REGISTER_NUMBER;
-        addr = u4_pcie_cfg_access(hose, bus->number, devfn, offset);
-        if (!addr)
-                return PCIBIOS_DEVICE_NOT_FOUND;
-        /*
-         * Note: the caller has already checked that offset is
-         * suitably aligned and that len is 1, 2 or 4.
-         */
-        switch (len) {
-        case 1:
-                *val = in_8(addr);
-                break;
-        case 2:
-                *val = in_le16(addr);
-                break;
-        default:
-                *val = in_le32(addr);
-                break;
-        }
-        return PCIBIOS_SUCCESSFUL;
+	hose = pci_bus_to_host(bus);
+	if (hose == NULL)
+		return PCIBIOS_DEVICE_NOT_FOUND;
+	if (offset >= 0x1000)
+		return  PCIBIOS_BAD_REGISTER_NUMBER;
+	addr = u4_pcie_cfg_access(hose, bus->number, devfn, offset);
+	if (!addr)
+		return PCIBIOS_DEVICE_NOT_FOUND;
+	/*
+	 * Note: the caller has already checked that offset is
+	 * suitably aligned and that len is 1, 2 or 4.
+	 */
+	switch (len) {
+	case 1:
+		*val = in_8(addr);
+		break;
+	case 2:
+		*val = in_le16(addr);
+		break;
+	default:
+		*val = in_le32(addr);
+		break;
+	}
+	return PCIBIOS_SUCCESSFUL;
 }
 static int u4_pcie_write_config(struct pci_bus *bus, unsigned int devfn,
-                                int offset, int len, u32 val)
+				int offset, int len, u32 val)
 {
-        struct pci_controller *hose;
-        volatile void __iomem *addr;
+	struct pci_controller *hose;
+	volatile void __iomem *addr;
 
-        hose = pci_bus_to_host(bus);
-        if (hose == NULL)
-                return PCIBIOS_DEVICE_NOT_FOUND;
-        if (offset >= 0x1000)
-                return  PCIBIOS_BAD_REGISTER_NUMBER;
-        addr = u4_pcie_cfg_access(hose, bus->number, devfn, offset);
-        if (!addr)
-                return PCIBIOS_DEVICE_NOT_FOUND;
-        /*
-         * Note: the caller has already checked that offset is
-         * suitably aligned and that len is 1, 2 or 4.
-         */
-        switch (len) {
-        case 1:
-                out_8(addr, val);
-                break;
-        case 2:
-                out_le16(addr, val);
-                break;
-        default:
-                out_le32(addr, val);
-                break;
-        }
-        return PCIBIOS_SUCCESSFUL;
+	hose = pci_bus_to_host(bus);
+	if (hose == NULL)
+		return PCIBIOS_DEVICE_NOT_FOUND;
+	if (offset >= 0x1000)
+		return  PCIBIOS_BAD_REGISTER_NUMBER;
+	addr = u4_pcie_cfg_access(hose, bus->number, devfn, offset);
+	if (!addr)
+		return PCIBIOS_DEVICE_NOT_FOUND;
+	/*
+	 * Note: the caller has already checked that offset is
+	 * suitably aligned and that len is 1, 2 or 4.
+	 */
+	switch (len) {
+	case 1:
+		out_8(addr, val);
+		break;
+	case 2:
+		out_le16(addr, val);
+		break;
+	default:
+		out_le32(addr, val);
+		break;
+	}
+	return PCIBIOS_SUCCESSFUL;
 }
 
 static struct pci_ops u4_pcie_pci_ops =
@@ -463,14 +463,14 @@ static void __init setup_u3_agp(struct pci_controller* hose)
 
 static void __init setup_u4_pcie(struct pci_controller* hose)
 {
-        /* We currently only implement the "non-atomic" config space, to
-         * be optimised later.
-         */
-        hose->ops = &u4_pcie_pci_ops;
-        hose->cfg_addr = ioremap(0xf0000000 + 0x800000, 0x1000);
-        hose->cfg_data = ioremap(0xf0000000 + 0xc00000, 0x1000);
+	/* We currently only implement the "non-atomic" config space, to
+	 * be optimised later.
+	 */
+	hose->ops = &u4_pcie_pci_ops;
+	hose->cfg_addr = ioremap(0xf0000000 + 0x800000, 0x1000);
+	hose->cfg_data = ioremap(0xf0000000 + 0xc00000, 0x1000);
 
-        u4_pcie = hose;
+	u4_pcie = hose;
 }
 
 static void __init setup_u3_ht(struct pci_controller* hose)
@@ -521,10 +521,10 @@ static int __init maple_add_bridge(struct device_node *dev)
 		setup_u3_ht(hose);
 		disp_name = "U3-HT";
 		primary = 1;
-        } else if (of_device_is_compatible(dev, "u4-pcie")) {
-                setup_u4_pcie(hose);
-                disp_name = "U4-PCIE";
-                primary = 0;
+	} else if (of_device_is_compatible(dev, "u4-pcie")) {
+		setup_u4_pcie(hose);
+		disp_name = "U4-PCIE";
+		primary = 0;
 	}
 	printk(KERN_INFO "Found %s PCI host bridge. Firmware bus number: %d->%d\n",
 		disp_name, hose->first_busno, hose->last_busno);

@@ -62,7 +62,7 @@ config AGP_AMD64
 	  This option gives you AGP support for the GLX component of
 	  X using the on-CPU northbridge of the AMD Athlon64/Opteron CPUs.
 	  You still need an external AGP bridge like the AMD 8151, VIA
-          K8T400M, SiS755. It may also support other AGP bridges when loaded
+	  K8T400M, SiS755. It may also support other AGP bridges when loaded
 	  with agp_try_unsupported=1.
 
 config AGP_INTEL
@@ -149,9 +149,9 @@ config AGP_EFFICEON
 	  series processors with integrated northbridges.
 
 config AGP_SGI_TIOCA
-        tristate "SGI TIO chipset AGP support"
-        depends on AGP && (IA64_SGI_SN2 || IA64_GENERIC)
-        help
-          This option gives you AGP GART support for the SGI TIO chipset
-          for IA64 processors.
+	tristate "SGI TIO chipset AGP support"
+	depends on AGP && (IA64_SGI_SN2 || IA64_GENERIC)
+	help
+	  This option gives you AGP GART support for the SGI TIO chipset
+	  for IA64 processors.
 

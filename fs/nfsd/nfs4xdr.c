@@ -2389,7 +2389,7 @@ out_acl:
 	}
 	if (bmval1 & FATTR4_WORD1_MOUNTED_ON_FILEID) {
 		if ((buflen -= 8) < 0)
-                	goto out_resource;
+			goto out_resource;
 		/*
 		 * Get parent's attributes if not ignoring crossmount
 		 * and this is the root of a cross-mounted filesystem.
@@ -3594,7 +3594,7 @@ nfsd4_encode_replay(struct nfsd4_compoundres *resp, struct nfsd4_op *op)
 int
 nfs4svc_encode_voidres(struct svc_rqst *rqstp, __be32 *p, void *dummy)
 {
-        return xdr_ressize_check(rqstp, p);
+	return xdr_ressize_check(rqstp, p);
 }
 
 int nfsd4_release_compoundargs(void *rq, __be32 *p, void *resp)

@@ -35,7 +35,7 @@ Devices: [JR3] PCI force sensor board (jr3_pci)
 
   Configuration options:
   [0] - PCI bus number - if bus number and slot number are 0,
-                         then driver search for first unused card
+			 then driver search for first unused card
   [1] - PCI slot number
 
 */

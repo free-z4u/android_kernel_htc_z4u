@@ -330,7 +330,7 @@ dasd_3990_erp_action_4(struct dasd_ccw_req * erp, char *sense)
 				    "busy - redriving request later, "
 				    "%d retries left",
 				    erp->retries);
-                        dasd_3990_erp_block_queue(erp, HZ);
+			dasd_3990_erp_block_queue(erp, HZ);
 		} else {
 			/* no state change pending - retry */
 			DBF_DEV_EVENT(DBF_INFO, device,
@@ -2185,7 +2185,7 @@ dasd_3990_erp_inspect_32(struct dasd_ccw_req * erp, char *sense)
 			DBF_DEV_EVENT(DBF_WARNING, device, "%s",
 				    "Busy condition exists "
 				    "for the subsystem or device");
-                        erp = dasd_3990_erp_action_4(erp, sense);
+			erp = dasd_3990_erp_action_4(erp, sense);
 			break;
 
 		default:	/* all others errors - default erp  */
@@ -2319,18 +2319,18 @@ static struct dasd_ccw_req *dasd_3990_erp_add_erp(struct dasd_ccw_req *cqr)
 	erp = dasd_alloc_erp_request((char *) &cqr->magic,
 				     cplength, datasize, device);
 	if (IS_ERR(erp)) {
-                if (cqr->retries <= 0) {
+		if (cqr->retries <= 0) {
 			DBF_DEV_EVENT(DBF_ERR, device, "%s",
 				    "Unable to allocate ERP request");
 			cqr->status = DASD_CQR_FAILED;
-                        cqr->stopclk = get_clock ();
+			cqr->stopclk = get_clock ();
 		} else {
 			DBF_DEV_EVENT(DBF_ERR, device,
-                                     "Unable to allocate ERP request "
+				     "Unable to allocate ERP request "
 				     "(%i retries left)",
-                                     cqr->retries);
+				     cqr->retries);
 			dasd_block_set_timer(device->block, (HZ << 3));
-                }
+		}
 		return erp;
 	}
 

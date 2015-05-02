@@ -32,7 +32,7 @@
  * in flags for the GPIO.
  */
 int of_get_named_gpio_flags(struct device_node *np, const char *propname,
-                           int index, enum of_gpio_flags *flags)
+			   int index, enum of_gpio_flags *flags)
 {
 	int ret;
 	struct gpio_chip *gc;

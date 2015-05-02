@@ -86,7 +86,7 @@ static struct dmi_system_id dsdt_dmi_table[] __initdata = {
 #endif
 
 /* --------------------------------------------------------------------------
-                                Device Management
+				Device Management
    -------------------------------------------------------------------------- */
 
 int acpi_bus_get_device(acpi_handle handle, struct acpi_device **device)
@@ -179,7 +179,7 @@ int acpi_bus_get_private_data(acpi_handle handle, void **data)
 EXPORT_SYMBOL(acpi_bus_get_private_data);
 
 /* --------------------------------------------------------------------------
-                                 Power Management
+				 Power Management
    -------------------------------------------------------------------------- */
 
 static int __acpi_bus_get_power(struct acpi_device *device, int *state)
@@ -563,7 +563,7 @@ static void acpi_bus_osc_support(void)
 }
 
 /* --------------------------------------------------------------------------
-                                Event Management
+				Event Management
    -------------------------------------------------------------------------- */
 
 #ifdef CONFIG_ACPI_PROC_EVENT
@@ -661,7 +661,7 @@ int acpi_bus_receive_event(struct acpi_bus_event *event)
 #endif	/* CONFIG_ACPI_PROC_EVENT */
 
 /* --------------------------------------------------------------------------
-                             Notification Handling
+			     Notification Handling
    -------------------------------------------------------------------------- */
 
 static void acpi_bus_check_device(acpi_handle handle)
@@ -804,7 +804,7 @@ static void acpi_bus_notify(acpi_handle handle, u32 type, void *data)
 }
 
 /* --------------------------------------------------------------------------
-                             Initialization/Cleanup
+			     Initialization/Cleanup
    -------------------------------------------------------------------------- */
 
 static int __init acpi_bus_init_irq(void)

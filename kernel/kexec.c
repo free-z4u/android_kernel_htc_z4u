@@ -117,7 +117,7 @@ static struct page *kimage_alloc_page(struct kimage *image,
 
 static int do_kimage_alloc(struct kimage **rimage, unsigned long entry,
 	                    unsigned long nr_segments,
-                            struct kexec_segment __user *segments)
+			    struct kexec_segment __user *segments)
 {
 	size_t segment_bytes;
 	struct kimage *image;

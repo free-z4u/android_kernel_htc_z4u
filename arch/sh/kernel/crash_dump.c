@@ -23,7 +23,7 @@
  * in the current kernel. We stitch up a pte, similar to kmap_atomic.
  */
 ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
-                               size_t csize, unsigned long offset, int userbuf)
+			       size_t csize, unsigned long offset, int userbuf)
 {
 	void  *vaddr;
 

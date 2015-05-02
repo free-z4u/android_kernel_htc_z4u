@@ -1367,7 +1367,7 @@ static unsigned long segment_base(u16 selector)
 	v = get_desc_base(d);
 #ifdef CONFIG_X86_64
        if (d->s == 0 && (d->type == 2 || d->type == 9 || d->type == 11))
-               v |= ((unsigned long)((struct ldttss_desc64 *)d)->base3) << 32;
+	       v |= ((unsigned long)((struct ldttss_desc64 *)d)->base3) << 32;
 #endif
 	return v;
 }

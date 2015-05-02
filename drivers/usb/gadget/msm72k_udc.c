@@ -2453,12 +2453,12 @@ static int msm72k_gadget_stop(struct usb_gadget_driver *driver);
 
 static int  msm_hsusb_request_reset(struct usb_gadget *_gadget)
 {
-        struct usb_info *ui = the_usb_info;
-        unsigned long flags;
-        if (!ui)
-                return 0;
-        spin_lock_irqsave(&ui->lock, flags);
-        ui->flags |= USB_FLAG_RESET;
+	struct usb_info *ui = the_usb_info;
+	unsigned long flags;
+	if (!ui)
+		return 0;
+	spin_lock_irqsave(&ui->lock, flags);
+	ui->flags |= USB_FLAG_RESET;
 		spin_unlock_irqrestore(&ui->lock, flags);
 		usb_do_work(&ui->work);
 

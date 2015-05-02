@@ -166,7 +166,7 @@ sparc_breakpoint (struct pt_regs *regs)
 	siginfo_t info;
 
 #ifdef DEBUG_SPARC_BREAKPOINT
-        printk ("TRAP: Entering kernel PC=%x, nPC=%x\n", regs->pc, regs->npc);
+	printk ("TRAP: Entering kernel PC=%x, nPC=%x\n", regs->pc, regs->npc);
 #endif
 	info.si_signo = SIGTRAP;
 	info.si_errno = 0;

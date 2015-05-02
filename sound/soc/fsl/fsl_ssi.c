@@ -689,7 +689,7 @@ static int __devinit fsl_ssi_probe(struct platform_device *pdev)
 	if (iprop)
 		ssi_private->fifo_depth = be32_to_cpup(iprop);
 	else
-                /* Older 8610 DTs didn't have the fifo-depth property */
+		/* Older 8610 DTs didn't have the fifo-depth property */
 		ssi_private->fifo_depth = 8;
 
 	/* Initialize the the device_attribute structure */

@@ -797,7 +797,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
 	/* Doing init or already dying? */
 	if (mod->state != MODULE_STATE_LIVE) {
 		/* FIXME: if (force), slam module count and wake up
-                   waiter --RR */
+		   waiter --RR */
 		pr_debug("%s already dying\n", mod->name);
 		ret = -EBUSY;
 		goto out;
@@ -851,7 +851,7 @@ static inline void print_unload_info(struct seq_file *m, struct module *mod)
 	seq_printf(m, " %lu ", module_refcount(mod));
 
 	/* Always include a trailing , so userspace can differentiate
-           between this and the old multi-field proc format. */
+	   between this and the old multi-field proc format. */
 	list_for_each_entry(use, &mod->source_list, source_list) {
 		printed_something = 1;
 		seq_printf(m, "%s,", use->source->name);
@@ -2230,7 +2230,7 @@ static char elf_type(const Elf_Sym *sym, const struct load_info *info)
 }
 
 static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
-                           unsigned int shnum)
+			   unsigned int shnum)
 {
 	const Elf_Shdr *sec;
 
@@ -3042,7 +3042,7 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
 		ret = do_one_initcall(mod->init);
 	if (ret < 0) {
 		/* Init routine failed: abort.  Try to protect us from
-                   buggy refcounters. */
+		   buggy refcounters. */
 		mod->state = MODULE_STATE_GOING;
 		synchronize_sched();
 		module_put(mod);

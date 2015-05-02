@@ -80,20 +80,20 @@ static int hppb_probe(struct parisc_device *dev)
 			(unsigned long long) card->mmio_region.end);
 	}
 
-        return 0;
+	return 0;
 }
 
 static struct parisc_device_id hppb_tbl[] = {
-        { HPHW_BCPORT, HVERSION_REV_ANY_ID, 0x500, 0xc }, /* E25 and K */
-        { HPHW_BCPORT, 0x0, 0x501, 0xc }, /* E35 */
-        { HPHW_BCPORT, 0x0, 0x502, 0xc }, /* E45 */
-        { HPHW_BCPORT, 0x0, 0x503, 0xc }, /* E55 */
-        { 0, }
+	{ HPHW_BCPORT, HVERSION_REV_ANY_ID, 0x500, 0xc }, /* E25 and K */
+	{ HPHW_BCPORT, 0x0, 0x501, 0xc }, /* E35 */
+	{ HPHW_BCPORT, 0x0, 0x502, 0xc }, /* E45 */
+	{ HPHW_BCPORT, 0x0, 0x503, 0xc }, /* E55 */
+	{ 0, }
 };
 
 static struct parisc_driver hppb_driver = {
-        .name =         "gecko_boa",
-        .id_table =     hppb_tbl,
+	.name =         "gecko_boa",
+	.id_table =     hppb_tbl,
 	.probe =        hppb_probe,
 };
 
@@ -104,5 +104,5 @@ static struct parisc_driver hppb_driver = {
  */
 void __init hppb_init(void)
 {
-        register_parisc_driver(&hppb_driver);
+	register_parisc_driver(&hppb_driver);
 }

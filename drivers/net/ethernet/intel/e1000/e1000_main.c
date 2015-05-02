@@ -99,13 +99,13 @@ int e1000_setup_all_rx_resources(struct e1000_adapter *adapter);
 void e1000_free_all_tx_resources(struct e1000_adapter *adapter);
 void e1000_free_all_rx_resources(struct e1000_adapter *adapter);
 static int e1000_setup_tx_resources(struct e1000_adapter *adapter,
-                             struct e1000_tx_ring *txdr);
+			     struct e1000_tx_ring *txdr);
 static int e1000_setup_rx_resources(struct e1000_adapter *adapter,
-                             struct e1000_rx_ring *rxdr);
+			     struct e1000_rx_ring *rxdr);
 static void e1000_free_tx_resources(struct e1000_adapter *adapter,
-                             struct e1000_tx_ring *tx_ring);
+			     struct e1000_tx_ring *tx_ring);
 static void e1000_free_rx_resources(struct e1000_adapter *adapter,
-                             struct e1000_rx_ring *rx_ring);
+			     struct e1000_rx_ring *rx_ring);
 void e1000_update_stats(struct e1000_adapter *adapter);
 
 static int e1000_init_module(void);
@@ -122,9 +122,9 @@ static void e1000_setup_rctl(struct e1000_adapter *adapter);
 static void e1000_clean_all_tx_rings(struct e1000_adapter *adapter);
 static void e1000_clean_all_rx_rings(struct e1000_adapter *adapter);
 static void e1000_clean_tx_ring(struct e1000_adapter *adapter,
-                                struct e1000_tx_ring *tx_ring);
+				struct e1000_tx_ring *tx_ring);
 static void e1000_clean_rx_ring(struct e1000_adapter *adapter,
-                                struct e1000_rx_ring *rx_ring);
+				struct e1000_rx_ring *rx_ring);
 static void e1000_set_rx_mode(struct net_device *netdev);
 static void e1000_update_phy_info_task(struct work_struct *work);
 static void e1000_watchdog(struct work_struct *work);
@@ -159,7 +159,7 @@ static void e1000_tx_timeout(struct net_device *dev);
 static void e1000_reset_task(struct work_struct *work);
 static void e1000_smartspeed(struct e1000_adapter *adapter);
 static int e1000_82547_fifo_workaround(struct e1000_adapter *adapter,
-                                       struct sk_buff *skb);
+				       struct sk_buff *skb);
 
 static bool e1000_vlan_used(struct e1000_adapter *adapter);
 static void e1000_vlan_mode(struct net_device *netdev,
@@ -188,7 +188,7 @@ MODULE_PARM_DESC(copybreak,
 	"Maximum size of packet that is copied to a new buffer on receive");
 
 static pci_ers_result_t e1000_io_error_detected(struct pci_dev *pdev,
-                     pci_channel_state_t state);
+		     pci_channel_state_t state);
 static pci_ers_result_t e1000_io_slot_reset(struct pci_dev *pdev);
 static void e1000_io_resume(struct pci_dev *pdev);
 
@@ -3099,7 +3099,7 @@ static int __e1000_maybe_stop_tx(struct net_device *netdev, int size)
 }
 
 static int e1000_maybe_stop_tx(struct net_device *netdev,
-                               struct e1000_tx_ring *tx_ring, int size)
+			       struct e1000_tx_ring *tx_ring, int size)
 {
 	if (likely(E1000_DESC_UNUSED(tx_ring) >= size))
 		return 0;
@@ -3962,7 +3962,7 @@ static void e1000_rx_checksum(struct e1000_adapter *adapter, u32 status_err,
  * e1000_consume_page - helper function
  **/
 static void e1000_consume_page(struct e1000_buffer *bi, struct sk_buff *skb,
-                               u16 length)
+			       u16 length)
 {
 	bi->page = NULL;
 	skb->len += length;
@@ -4342,7 +4342,7 @@ next_desc:
 
 static void
 e1000_alloc_jumbo_rx_buffers(struct e1000_adapter *adapter,
-                             struct e1000_rx_ring *rx_ring, int cleaned_count)
+			     struct e1000_rx_ring *rx_ring, int cleaned_count)
 {
 	struct net_device *netdev = adapter->netdev;
 	struct pci_dev *pdev = adapter->pdev;

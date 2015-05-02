@@ -121,25 +121,25 @@ void dn_serial_console_write (struct console *co, const char *str,unsigned int c
 	if (*str == '\n') {
 	sio01.rhrb_thrb = (unsigned char)'\r';
 	while (!(sio01.srb_csrb & 0x4))
-                ;
+		;
 	}
     sio01.rhrb_thrb = (unsigned char)*str++;
     while (!(sio01.srb_csrb & 0x4))
-            ;
+	    ;
   }
 }
 
 void dn_serial_print (const char *str)
 {
     while (*str) {
-        if (*str == '\n') {
-            sio01.rhrb_thrb = (unsigned char)'\r';
-            while (!(sio01.srb_csrb & 0x4))
-                ;
-        }
-        sio01.rhrb_thrb = (unsigned char)*str++;
-        while (!(sio01.srb_csrb & 0x4))
-            ;
+	if (*str == '\n') {
+	    sio01.rhrb_thrb = (unsigned char)'\r';
+	    while (!(sio01.srb_csrb & 0x4))
+		;
+	}
+	sio01.rhrb_thrb = (unsigned char)*str++;
+	while (!(sio01.srb_csrb & 0x4))
+	    ;
     }
 }
 
@@ -261,7 +261,7 @@ static void dn_get_model(char *model)
 {
     strcpy(model, "Apollo ");
     if (apollo_model >= APOLLO_DN3000 && apollo_model <= APOLLO_DN4500)
-        strcat(model, apollo_models[apollo_model - APOLLO_DN3000]);
+	strcat(model, apollo_models[apollo_model - APOLLO_DN3000]);
 }
 
 #ifdef CONFIG_HEARTBEAT

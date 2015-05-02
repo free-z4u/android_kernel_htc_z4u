@@ -213,10 +213,10 @@ static void kernel_mna_trap_fault(struct pt_regs *regs, unsigned int insn)
 
 	if (!fixup) {
 		unsigned long address = compute_effective_address(regs, insn);
-        	if(address < PAGE_SIZE) {
-                	printk(KERN_ALERT "Unable to handle kernel NULL pointer dereference in mna handler");
-        	} else
-                	printk(KERN_ALERT "Unable to handle kernel paging request in mna handler");
+		if(address < PAGE_SIZE) {
+			printk(KERN_ALERT "Unable to handle kernel NULL pointer dereference in mna handler");
+		} else
+			printk(KERN_ALERT "Unable to handle kernel paging request in mna handler");
 	        printk(KERN_ALERT " at virtual address %08lx\n",address);
 		printk(KERN_ALERT "current->{mm,active_mm}->context = %08lx\n",
 			(current->mm ? current->mm->context :

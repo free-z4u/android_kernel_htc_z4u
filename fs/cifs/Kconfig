@@ -29,10 +29,10 @@ config CIFS
 	  If you need to mount to Samba or Windows from this machine, say Y.
 
 config CIFS_STATS
-        bool "CIFS statistics"
-        depends on CIFS
-        help
-          Enabling this option will cause statistics for each server share
+	bool "CIFS statistics"
+	depends on CIFS
+	help
+	  Enabling this option will cause statistics for each server share
 	  mounted by the cifs client to be displayed in /proc/fs/cifs/Stats
 
 config CIFS_STATS2
@@ -87,26 +87,26 @@ config CIFS_UPCALL
 	  secure Kerberos authentication is required). If unsure, say N.
 
 config CIFS_XATTR
-        bool "CIFS extended attributes"
-        depends on CIFS
-        help
-          Extended attributes are name:value pairs associated with inodes by
-          the kernel or by users (see the attr(5) manual page, or visit
-          <http://acl.bestbits.at/> for details).  CIFS maps the name of
-          extended attributes beginning with the user namespace prefix
-          to SMB/CIFS EAs. EAs are stored on Windows servers without the
-          user namespace prefix, but their names are seen by Linux cifs clients
-          prefaced by the user namespace prefix. The system namespace
-          (used by some filesystems to store ACLs) is not supported at
-          this time.
+	bool "CIFS extended attributes"
+	depends on CIFS
+	help
+	  Extended attributes are name:value pairs associated with inodes by
+	  the kernel or by users (see the attr(5) manual page, or visit
+	  <http://acl.bestbits.at/> for details).  CIFS maps the name of
+	  extended attributes beginning with the user namespace prefix
+	  to SMB/CIFS EAs. EAs are stored on Windows servers without the
+	  user namespace prefix, but their names are seen by Linux cifs clients
+	  prefaced by the user namespace prefix. The system namespace
+	  (used by some filesystems to store ACLs) is not supported at
+	  this time.
 
-          If unsure, say N.
+	  If unsure, say N.
 
 config CIFS_POSIX
-        bool "CIFS POSIX Extensions"
-        depends on CIFS_XATTR
-        help
-          Enabling this option will cause the cifs client to attempt to
+	bool "CIFS POSIX Extensions"
+	depends on CIFS_XATTR
+	help
+	  Enabling this option will cause the cifs client to attempt to
 	  negotiate a newer dialect with servers, such as Samba 3.0.5
 	  or later, that optionally can handle more POSIX like (rather
 	  than Windows like) file behavior.  It also enables

@@ -144,10 +144,10 @@ static int __init set_ftrace_dump_on_oops(char *str)
 
 	if (!strcmp("orig_cpu", str)) {
 		ftrace_dump_on_oops = DUMP_ORIG;
-                return 1;
-        }
+		return 1;
+	}
 
-        return 0;
+	return 0;
 }
 __setup("ftrace_dump_on_oops", set_ftrace_dump_on_oops);
 

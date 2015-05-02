@@ -3,7 +3,7 @@
 
 
 enum fwh_lock_state {
-        FWH_UNLOCKED   = 0,
+	FWH_UNLOCKED   = 0,
 	FWH_DENY_WRITE = 1,
 	FWH_IMMUTABLE  = 2,
 	FWH_DENY_READ  = 4,

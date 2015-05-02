@@ -627,7 +627,7 @@ int __jbd2_journal_remove_checkpoint(struct journal_head *jh)
 	jbd2_journal_free_transaction(transaction);
 
 	/* Just in case anybody was waiting for more transactions to be
-           checkpointed... */
+	   checkpointed... */
 	wake_up(&journal->j_wait_logspace);
 	ret = 1;
 out:

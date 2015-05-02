@@ -1741,7 +1741,7 @@ xfs_ifree(
 	if (error)
 		return error;
 
-        /*
+	/*
 	* Clear the on-disk di_mode. This is to prevent xfs_bulkstat
 	* from picking up this inode when it is reclaimed (its incore state
 	* initialzed but not flushed to disk yet). The in-core di_mode is

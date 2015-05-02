@@ -922,7 +922,7 @@ static int __init i8042_platform_init(void)
 		return retval;
 
 #if defined(__ia64__)
-        i8042_reset = true;
+	i8042_reset = true;
 #endif
 
 #ifdef CONFIG_X86

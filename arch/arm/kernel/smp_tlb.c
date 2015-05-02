@@ -103,7 +103,7 @@ void flush_tlb_kernel_page(unsigned long kaddr)
 }
 
 void flush_tlb_range(struct vm_area_struct *vma,
-                     unsigned long start, unsigned long end)
+		     unsigned long start, unsigned long end)
 {
 	if (tlb_ops_need_broadcast()) {
 		struct tlb_args ta;

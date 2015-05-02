@@ -1262,8 +1262,8 @@ static void tps_int_notifier_func(int int_reg, int value)
 #if (defined(CONFIG_BATTERY_DS2746) || defined(CONFIG_BATTERY_MAX17050))
 		htc_batt_info.rep.over_vchg = (unsigned int)value;
 #elif defined(CONFIG_HTC_BATTCHG_SMEM)
-               if (smem_batt_info)
-                        smem_batt_info->over_vchg = (unsigned int)value;
+	       if (smem_batt_info)
+			smem_batt_info->over_vchg = (unsigned int)value;
 #else
 		htc_batt_info.rep.over_vchg = (unsigned int)value;
 #endif
@@ -1954,10 +1954,10 @@ static ssize_t htc_battery_show_property(struct device *dev,
 	mutex_lock(&htc_batt_info.rpc_lock);
 
 	if (htc_batt_info.update_time &&
-            time_before(jiffies, htc_batt_info.update_time +
+	    time_before(jiffies, htc_batt_info.update_time +
 			msecs_to_jiffies(cache_time))) {
 		BATT_LOG("%s: use cached values", __func__);
-                goto dont_need_update;
+		goto dont_need_update;
 	}
 
 	if (!update_batt_info())
@@ -2497,7 +2497,7 @@ static int htc_battery_core_probe(struct platform_device *pdev)
 	}
 	if (i >= 10) {
 		BATT_ERR("%s: init rpc failed! rc = %ld, retry:%d",
-                               __func__, PTR_ERR(endpoint), i+1);
+			       __func__, PTR_ERR(endpoint), i+1);
 		return -EINVAL;
 	}
 
@@ -2585,18 +2585,18 @@ static int htc_battery_probe(struct platform_device *pdev)
 		htc_batt_info.mbat_in_keep_charging = pdata->mbat_in_keep_charging;
 		htc_batt_info.mbat_in_unreg_rmt = pdata->mbat_in_unreg_rmt;
 		INIT_DELAYED_WORK(&mbat_in_work, mbat_in_func);
-                if (pdata->gpio_mbat_in_trigger_level == MBAT_IN_HIGH_TRIGGER)
-                        rc = request_irq(htc_batt_info.irq_mbat_in,
-                                        mbat_int_handler, IRQF_TRIGGER_HIGH,
-                                        "mbat_in", NULL);
-                else if (pdata->gpio_mbat_in_trigger_level == MBAT_IN_LOW_TRIGGER)
-                        rc = request_irq(htc_batt_info.irq_mbat_in,
-                                        mbat_int_handler, IRQF_TRIGGER_LOW,
-                                        "mbat_in", NULL);
-                if (rc)
-                        BATT_ERR("request mbat_in irq failed!");
-                else
-                        irq_set_irq_wake(htc_batt_info.irq_mbat_in, 1);
+		if (pdata->gpio_mbat_in_trigger_level == MBAT_IN_HIGH_TRIGGER)
+			rc = request_irq(htc_batt_info.irq_mbat_in,
+					mbat_int_handler, IRQF_TRIGGER_HIGH,
+					"mbat_in", NULL);
+		else if (pdata->gpio_mbat_in_trigger_level == MBAT_IN_LOW_TRIGGER)
+			rc = request_irq(htc_batt_info.irq_mbat_in,
+					mbat_int_handler, IRQF_TRIGGER_LOW,
+					"mbat_in", NULL);
+		if (rc)
+			BATT_ERR("request mbat_in irq failed!");
+		else
+			irq_set_irq_wake(htc_batt_info.irq_mbat_in, 1);
 	} else
 		htc_batt_info.has_mbat_in_irq = 0;
 

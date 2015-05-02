@@ -291,8 +291,8 @@ int send_ipi(int vector, int wait, cpumask_t cpu_mask)
 	/* Wait for IPI to finish on other CPUS */
 	if (wait) {
 		for_each_cpu(i, &cpu_mask) {
-                        int j;
-                        for (j = 0 ; j < 1000; j++) {
+			int j;
+			for (j = 0 ; j < 1000; j++) {
 				ipi = REG_RD(intr_vect, irq_regs[i], rw_ipi);
 				if (!ipi.vector)
 					break;

@@ -35,7 +35,7 @@
 #define GetBF(var,mask) (((unsigned)((var) & MASKEXPAND(mask))) >> (0?mask) )
 
 #define MaskAndSetBF(var,mask,value) (var)=(((var)&(~MASKEXPAND(mask)) \
-                                             | SetBF(mask,value)))
+					     | SetBF(mask,value)))
 
 #define DEVICE_BASE(device) (0?NV##_##device)
 #define DEVICE_SIZE(device) ((1?NV##_##device) - DEVICE_BASE(device)+1)

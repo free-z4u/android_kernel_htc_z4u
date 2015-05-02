@@ -9,7 +9,7 @@
 #define _ZCONF_H
 
 /* The memory requirements for deflate are (in bytes):
-            (1 << (windowBits+2)) +  (1 << (memLevel+9))
+	    (1 << (windowBits+2)) +  (1 << (memLevel+9))
  that is: 128K for windowBits=15  +  128K for memLevel = 8  (default values)
  plus a few kilobytes for small objects. For example, if you want to reduce
  the default memory requirements from 256K to 128K, compile with
@@ -47,7 +47,7 @@
 #  define DEF_MEM_LEVEL  MAX_MEM_LEVEL
 #endif
 
-                        /* Type declarations */
+			/* Type declarations */
 
 typedef unsigned char  Byte;  /* 8 bits */
 typedef unsigned int   uInt;  /* 16 bits or more */

@@ -371,51 +371,51 @@
 									    \
     for (_i = 3; ; _i--)						    \
       {									    \
-        if (X##_f[3] == Y##_f[3])					    \
-          {								    \
-            /* This is a special case, not an optimization		    \
-               (X##_f[3]/Y##_f[3] would not fit into UWtype).		    \
-               As X## is guaranteed to be < Y,  R##_f[_i] can be either	    \
-               (UWtype)-1 or (UWtype)-2.  */				    \
-            R##_f[_i] = -1;						    \
-            if (!_i)							    \
+	if (X##_f[3] == Y##_f[3])					    \
+	  {								    \
+	    /* This is a special case, not an optimization		    \
+	       (X##_f[3]/Y##_f[3] would not fit into UWtype).		    \
+	       As X## is guaranteed to be < Y,  R##_f[_i] can be either	    \
+	       (UWtype)-1 or (UWtype)-2.  */				    \
+	    R##_f[_i] = -1;						    \
+	    if (!_i)							    \
 	      break;							    \
-            __FP_FRAC_SUB_4(X##_f[3], X##_f[2], X##_f[1], X##_f[0],	    \
+	    __FP_FRAC_SUB_4(X##_f[3], X##_f[2], X##_f[1], X##_f[0],	    \
 			    Y##_f[2], Y##_f[1], Y##_f[0], 0,		    \
 			    X##_f[2], X##_f[1], X##_f[0], _n_f[_i]);	    \
-            _FP_FRAC_SUB_4(X, Y, X);					    \
-            if (X##_f[3] > Y##_f[3])					    \
-              {								    \
-                R##_f[_i] = -2;						    \
-                _FP_FRAC_ADD_4(X, Y, X);				    \
-              }								    \
-          }								    \
-        else								    \
-          {								    \
-            udiv_qrnnd(R##_f[_i], X##_f[3], X##_f[3], X##_f[2], Y##_f[3]);  \
-            umul_ppppmnnn(_m_f[3], _m_f[2], _m_f[1], _m_f[0],		    \
+	    _FP_FRAC_SUB_4(X, Y, X);					    \
+	    if (X##_f[3] > Y##_f[3])					    \
+	      {								    \
+		R##_f[_i] = -2;						    \
+		_FP_FRAC_ADD_4(X, Y, X);				    \
+	      }								    \
+	  }								    \
+	else								    \
+	  {								    \
+	    udiv_qrnnd(R##_f[_i], X##_f[3], X##_f[3], X##_f[2], Y##_f[3]);  \
+	    umul_ppppmnnn(_m_f[3], _m_f[2], _m_f[1], _m_f[0],		    \
 			  R##_f[_i], Y##_f[2], Y##_f[1], Y##_f[0]);	    \
-            X##_f[2] = X##_f[1];					    \
-            X##_f[1] = X##_f[0];					    \
-            X##_f[0] = _n_f[_i];					    \
-            if (_FP_FRAC_GT_4(_m, X))					    \
-              {								    \
-                R##_f[_i]--;						    \
-                _FP_FRAC_ADD_4(X, Y, X);				    \
-                if (_FP_FRAC_GE_4(X, Y) && _FP_FRAC_GT_4(_m, X))	    \
-                  {							    \
+	    X##_f[2] = X##_f[1];					    \
+	    X##_f[1] = X##_f[0];					    \
+	    X##_f[0] = _n_f[_i];					    \
+	    if (_FP_FRAC_GT_4(_m, X))					    \
+	      {								    \
+		R##_f[_i]--;						    \
+		_FP_FRAC_ADD_4(X, Y, X);				    \
+		if (_FP_FRAC_GE_4(X, Y) && _FP_FRAC_GT_4(_m, X))	    \
+		  {							    \
 		    R##_f[_i]--;					    \
 		    _FP_FRAC_ADD_4(X, Y, X);				    \
-                  }							    \
-              }								    \
-            _FP_FRAC_DEC_4(X, _m);					    \
-            if (!_i)							    \
+		  }							    \
+	      }								    \
+	    _FP_FRAC_DEC_4(X, _m);					    \
+	    if (!_i)							    \
 	      {								    \
 		if (!_FP_FRAC_EQ_4(X, _m))				    \
 		  R##_f[0] |= _FP_WORK_STICKY;				    \
 		break;							    \
 	      }								    \
-          }								    \
+	  }								    \
       }									    \
   } while (0)
 

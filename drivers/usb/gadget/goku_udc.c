@@ -1562,7 +1562,7 @@ static irqreturn_t goku_irq(int irq, void *_dev)
 
 rescan:
 	stat = readl(&regs->int_status) & dev->int_enable;
-        if (!stat)
+	if (!stat)
 		goto done;
 	dev->irqs++;
 
@@ -1647,7 +1647,7 @@ pm_next:
 		dev->ep[0].irqs++;
 		ep0_setup(dev);
 	}
-        if (stat & INT_STATUSNAK) {
+	if (stat & INT_STATUSNAK) {
 		ACK(INT_STATUSNAK|INT_ENDPOINT0);
 		if (dev->ep0state == EP0_IN) {
 			ep = &dev->ep[0];
@@ -1657,33 +1657,33 @@ pm_next:
 			dev->ep0state = EP0_STATUS;
 		}
 	}
-        if (stat & INT_ENDPOINT0) {
+	if (stat & INT_ENDPOINT0) {
 		ACK(INT_ENDPOINT0);
 		ep = &dev->ep[0];
 		ep->irqs++;
 		pio_advance(ep);
-        }
+	}
 
 	/* dma completion */
-        if (stat & INT_MSTRDEND) {	/* IN */
+	if (stat & INT_MSTRDEND) {	/* IN */
 		ACK(INT_MSTRDEND);
 		ep = &dev->ep[UDC_MSTRD_ENDPOINT];
 		ep->irqs++;
 		dma_advance(dev, ep);
-        }
-        if (stat & INT_MSTWREND) {	/* OUT */
+	}
+	if (stat & INT_MSTWREND) {	/* OUT */
 		ACK(INT_MSTWREND);
 		ep = &dev->ep[UDC_MSTWR_ENDPOINT];
 		ep->irqs++;
 		dma_advance(dev, ep);
-        }
-        if (stat & INT_MSTWRTMOUT) {	/* OUT */
+	}
+	if (stat & INT_MSTWRTMOUT) {	/* OUT */
 		ACK(INT_MSTWRTMOUT);
 		ep = &dev->ep[UDC_MSTWR_ENDPOINT];
 		ep->irqs++;
 		ERROR(dev, "%s write timeout ?\n", ep->ep.name);
 		// reset dma? then dma_advance()
-        }
+	}
 
 	/* pio */
 	for (i = 1; i < 4; i++) {

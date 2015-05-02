@@ -45,7 +45,7 @@
 #define c4_LOG_ERROR     LOG_ERROR
 #define c4_LOG_WARN      LOG_WARN
 #define c4_LOG_sTrace    LOG_MONITOR    /* do some trace logging into
-                                         * functions */
+					 * functions */
 #define c4_LOG_DEBUG     LOG_DEBUG
 #define c4_LOG_MAX       LOG_DEBUG
 
@@ -60,8 +60,8 @@
 #define REL_STRLEN   80
     struct sbe_drv_info
     {
-        int         rel_strlen;
-        char        release[REL_STRLEN];
+	int         rel_strlen;
+	char        release[REL_STRLEN];
     };
 
 
@@ -74,20 +74,20 @@
 #define CHNM_STRLEN   16
     struct sbe_brd_info
     {
-        u_int32_t brd_id;       /* SBE's unique PCI VENDOR/DEVID */
-        u_int32_t   brd_sn;
-        int         brd_chan_cnt;       /* number of channels being used */
-        int         brd_port_cnt;       /* number of ports being used */
-        unsigned char brdno;    /* our board number */
-        unsigned char brd_pci_speed;    /* PCI speed, 33/66Mhz */
-                    u_int8_t brd_mac_addr[6];
-        char        first_iname[CHNM_STRLEN];   /* first assigned channel's
-                                                 * interface name */
-        char        last_iname[CHNM_STRLEN];    /* last assigned channel's
-                                                 * interface name */
-        u_int8_t    brd_hdw_id; /* on/board unique hdw ID */
-        u_int8_t    reserved8[3];       /* alignment preservation */
-        u_int32_t   reserved32[3];      /* size preservation */
+	u_int32_t brd_id;       /* SBE's unique PCI VENDOR/DEVID */
+	u_int32_t   brd_sn;
+	int         brd_chan_cnt;       /* number of channels being used */
+	int         brd_port_cnt;       /* number of ports being used */
+	unsigned char brdno;    /* our board number */
+	unsigned char brd_pci_speed;    /* PCI speed, 33/66Mhz */
+		    u_int8_t brd_mac_addr[6];
+	char        first_iname[CHNM_STRLEN];   /* first assigned channel's
+						 * interface name */
+	char        last_iname[CHNM_STRLEN];    /* last assigned channel's
+						 * interface name */
+	u_int8_t    brd_hdw_id; /* on/board unique hdw ID */
+	u_int8_t    reserved8[3];       /* alignment preservation */
+	u_int32_t   reserved32[3];      /* size preservation */
     };
 
 /* These IDs are sometimes available thru pci_ids.h, but not currently. */
@@ -106,11 +106,11 @@
 #define PCI_DEVICE_ID_WANPTMC_256T3_E1 0x070B   /* BID 0x46 (E1 Version) */
 #define PCI_DEVICE_ID_WANPTMC_C24TE1   0x070C   /* BID 0x47 */
 #define PCI_DEVICE_ID_WANPMC_C4T1E1_L  0x070D   /* BID 0x2X, BTYPE 0x0X w/FP
-                                                 * LEDs */
+						 * LEDs */
 #define PCI_DEVICE_ID_WANPMC_C2T1E1_L  0x070E   /* BID 0x2X, BTYPE 0x2X w/FP
-                                                 * LEDs */
+						 * LEDs */
 #define PCI_DEVICE_ID_WANPMC_C1T1E1_L  0x070F   /* BID 0x2X, BTYPE 0x1X w/FP
-                                                 * LEDs */
+						 * LEDs */
 #define PCI_DEVICE_ID_WANPMC_2SSI      0x0801
 #define PCI_DEVICE_ID_WANPCI_4SSI      0x0802
 #define PCI_DEVICE_ID_WANPMC_2T3E3     0x0900   /* BID 0x43 */
@@ -128,8 +128,8 @@
 
     struct sbe_iid_info
     {
-        u_int32_t   channum;    /* channel requested */
-        char        iname[CHNM_STRLEN]; /* channel's interface name */
+	u_int32_t   channum;    /* channel requested */
+	char        iname[CHNM_STRLEN]; /* channel's interface name */
     };
 
 /**************************************/
@@ -140,25 +140,25 @@
 
     struct sbe_brd_addr
     {
-        unsigned char func;     /* select PCI address space function */
-        unsigned char brdno;    /* returns brdno requested */
-        unsigned char irq;
-        unsigned char size;     /* returns size of address */
+	unsigned char func;     /* select PCI address space function */
+	unsigned char brdno;    /* returns brdno requested */
+	unsigned char irq;
+	unsigned char size;     /* returns size of address */
 #define BRDADDR_SIZE_64  1
 #define BRDADDR_SIZE_32  2
-        int         reserved1;  /* mod64 align, reserved for future use */
+	int         reserved1;  /* mod64 align, reserved for future use */
 
-        union
-        {
-            unsigned long virt64;       /* virtual/mapped address */
-            u_int32_t   virt32[2];
-        }           v;
-        union
-        {
-            unsigned long phys64;       /* physical bus address */
-            u_int32_t   phys32[2];
-        }           p;
-        int         reserved2[4];       /* reserved for future use */
+	union
+	{
+	    unsigned long virt64;       /* virtual/mapped address */
+	    u_int32_t   virt32[2];
+	}           v;
+	union
+	{
+	    unsigned long phys64;       /* physical bus address */
+	    u_int32_t   phys32[2];
+	}           p;
+	int         reserved2[4];       /* reserved for future use */
     };
 
 /**********************************/
@@ -170,8 +170,8 @@
 
     struct sbecom_wrt_vec
     {
-        u_int32_t   reg;
-        u_int32_t   data;
+	u_int32_t   reg;
+	u_int32_t   data;
     };
 
 #define C1T3_CHIP_MSCC_32        0x01000000
@@ -202,8 +202,8 @@ struct sbecom_port_param
     u_int8_t    port_mode;           /* variations of T1 or E1 mode */
     u_int8_t    portStatus;
     u_int8_t    portP;          /* more port parameters (clock source - 0x80;
-                                 * and LBO - 0xf; */
-                                /* bits 0x70 are reserved for future use ) */
+				 * and LBO - 0xf; */
+				/* bits 0x70 are reserved for future use ) */
 #ifdef SBE_PMCC4_ENABLE
 	u_int32_t   hypersize;  /* RLD DEBUG - add this in until I learn how to make this entry obsolete */
 #endif
@@ -242,24 +242,24 @@ struct sbecom_port_param
 
     struct sbecom_chan_param
     {
-        u_int32_t   channum;    /* 0: */
+	u_int32_t   channum;    /* 0: */
 #ifdef SBE_PMCC4_ENABLE
 	u_int32_t   card;  /* RLD DEBUG - add this in until I learn how to make this entry obsolete */
 	u_int32_t   port;  /* RLD DEBUG - add this in until I learn how to make this entry obsolete */
 	u_int8_t bitmask[32];
 #endif
-        u_int32_t   intr_mask;  /* 4: interrupt mask, specify ored
-                                 * (SS7_)INTR_* to disable */
-        u_int8_t    status;     /* 8: channel transceiver status (TX_ENABLED,
-                                 * RX_ENABLED) */
-        u_int8_t    chan_mode;  /* 9: protocol mode */
-        u_int8_t    idlecode;   /* A: idle code, in (FLAG_7E, FLAG_FF,
-                                 * FLAG_00) */
-        u_int8_t    pad_fill_count;     /* B: pad fill count (1-127), 0 - pad
-                                         * fill disabled */
-        u_int8_t    data_inv;   /* C: channel data inversion selection */
-        u_int8_t    mode_56k;   /* D: 56kbps mode */
-        u_int8_t    reserved[2 + 8];    /* E: */
+	u_int32_t   intr_mask;  /* 4: interrupt mask, specify ored
+				 * (SS7_)INTR_* to disable */
+	u_int8_t    status;     /* 8: channel transceiver status (TX_ENABLED,
+				 * RX_ENABLED) */
+	u_int8_t    chan_mode;  /* 9: protocol mode */
+	u_int8_t    idlecode;   /* A: idle code, in (FLAG_7E, FLAG_FF,
+				 * FLAG_00) */
+	u_int8_t    pad_fill_count;     /* B: pad fill count (1-127), 0 - pad
+					 * fill disabled */
+	u_int8_t    data_inv;   /* C: channel data inversion selection */
+	u_int8_t    mode_56k;   /* D: 56kbps mode */
+	u_int8_t    reserved[2 + 8];    /* E: */
     };
 
 /* SS7 interrupt signals <intr_mask> */
@@ -311,27 +311,27 @@ struct sbecom_port_param
 
     struct sbecom_chan_stats
     {
-        unsigned long rx_packets;       /* total packets received       */
-        unsigned long tx_packets;       /* total packets transmitted    */
-        unsigned long rx_bytes; /* total bytes received         */
-        unsigned long tx_bytes; /* total bytes transmitted      */
-        unsigned long rx_errors;/* bad packets received         */
-        unsigned long tx_errors;/* packet transmit problems     */
-        unsigned long rx_dropped;       /* no space in linux buffers    */
-        unsigned long tx_dropped;       /* no space available in linux  */
+	unsigned long rx_packets;       /* total packets received       */
+	unsigned long tx_packets;       /* total packets transmitted    */
+	unsigned long rx_bytes; /* total bytes received         */
+	unsigned long tx_bytes; /* total bytes transmitted      */
+	unsigned long rx_errors;/* bad packets received         */
+	unsigned long tx_errors;/* packet transmit problems     */
+	unsigned long rx_dropped;       /* no space in linux buffers    */
+	unsigned long tx_dropped;       /* no space available in linux  */
 
-        /* detailed rx_errors: */
-        unsigned long rx_length_errors;
-        unsigned long rx_over_errors;   /* receiver ring buff overflow  */
-        unsigned long rx_crc_errors;    /* recved pkt with crc error    */
-        unsigned long rx_frame_errors;  /* recv'd frame alignment error */
-        unsigned long rx_fifo_errors;   /* recv'r fifo overrun          */
-        unsigned long rx_missed_errors; /* receiver missed packet       */
+	/* detailed rx_errors: */
+	unsigned long rx_length_errors;
+	unsigned long rx_over_errors;   /* receiver ring buff overflow  */
+	unsigned long rx_crc_errors;    /* recved pkt with crc error    */
+	unsigned long rx_frame_errors;  /* recv'd frame alignment error */
+	unsigned long rx_fifo_errors;   /* recv'r fifo overrun          */
+	unsigned long rx_missed_errors; /* receiver missed packet       */
 
-        /* detailed tx_errors */
-        unsigned long tx_aborted_errors;
-        unsigned long tx_fifo_errors;
-        unsigned long tx_pending;
+	/* detailed tx_errors */
+	unsigned long tx_aborted_errors;
+	unsigned long tx_fifo_errors;
+	unsigned long tx_pending;
     };
 
 
@@ -343,26 +343,26 @@ struct sbecom_port_param
 
     struct sbecom_card_param
     {
-        u_int8_t    framing_type;       /* 0: CBP or M13 */
-        u_int8_t    loopback;   /* 1: one of LOOPBACK_* */
-        u_int8_t    line_build_out;     /* 2: boolean */
-        u_int8_t    receive_eq; /* 3: boolean */
-        u_int8_t    transmit_ones;      /* 4: boolean */
-        u_int8_t    clock;      /* 5: 0 - internal, i>0 - external (recovered
-                                 * from framer i) */
-        u_int8_t    h110enable; /* 6: */
-        u_int8_t    disable_leds;       /* 7: */
-        u_int8_t    reserved1;  /* 8: available - old 256t3 hypersized, but
-                                 * never used */
-        u_int8_t    rear_io;    /* 9: rear I/O off/on */
-        u_int8_t    disable_tx; /* A: disable TX off/on */
-        u_int8_t    mute_los;   /* B: mute LOS off/on */
-        u_int8_t    los_threshold;      /* C: LOS threshold norm/low
-                                         * (default: norm) */
-        u_int8_t    ds1_mode;   /* D: DS1 mode T1/E1 (default: T1) */
-        u_int8_t    ds3_unchan; /* E: DS3 unchannelized mode off/on */
-        u_int8_t    reserved[1 + 16];   /* reserved for expansion - must be
-                                         * ZERO filled */
+	u_int8_t    framing_type;       /* 0: CBP or M13 */
+	u_int8_t    loopback;   /* 1: one of LOOPBACK_* */
+	u_int8_t    line_build_out;     /* 2: boolean */
+	u_int8_t    receive_eq; /* 3: boolean */
+	u_int8_t    transmit_ones;      /* 4: boolean */
+	u_int8_t    clock;      /* 5: 0 - internal, i>0 - external (recovered
+				 * from framer i) */
+	u_int8_t    h110enable; /* 6: */
+	u_int8_t    disable_leds;       /* 7: */
+	u_int8_t    reserved1;  /* 8: available - old 256t3 hypersized, but
+				 * never used */
+	u_int8_t    rear_io;    /* 9: rear I/O off/on */
+	u_int8_t    disable_tx; /* A: disable TX off/on */
+	u_int8_t    mute_los;   /* B: mute LOS off/on */
+	u_int8_t    los_threshold;      /* C: LOS threshold norm/low
+					 * (default: norm) */
+	u_int8_t    ds1_mode;   /* D: DS1 mode T1/E1 (default: T1) */
+	u_int8_t    ds3_unchan; /* E: DS3 unchannelized mode off/on */
+	u_int8_t    reserved[1 + 16];   /* reserved for expansion - must be
+					 * ZERO filled */
     };
 
 /* framing types <framing_type> */
@@ -414,12 +414,12 @@ struct sbecom_port_param
 
     struct sbecom_framer_param
     {
-        u_int8_t    framer_num;
-        u_int8_t    frame_type; /* SF, ESF, E1PLAIN, E1CAS, E1CRC, E1CRC+CAS */
-        u_int8_t    loopback_type;      /* DIGITAL, LINE, PAYLOAD */
-        u_int8_t    auto_alarms;/* auto alarms */
-        u_int8_t    reserved[12];       /* reserved for expansion - must be
-                                         * ZERO filled */
+	u_int8_t    framer_num;
+	u_int8_t    frame_type; /* SF, ESF, E1PLAIN, E1CAS, E1CRC, E1CRC+CAS */
+	u_int8_t    loopback_type;      /* DIGITAL, LINE, PAYLOAD */
+	u_int8_t    auto_alarms;/* auto alarms */
+	u_int8_t    reserved[12];       /* reserved for expansion - must be
+					 * ZERO filled */
     };
 
 /* frame types <frame_type> */
@@ -438,33 +438,33 @@ struct sbecom_port_param
 #define CFG_FRAME_E1CRC_CAS_AMI   12    /* E1 AMI */
 
 #define IS_FRAME_ANY_T1(field) \
-                    (((field) == CFG_FRAME_NONE) || \
-                     ((field) == CFG_FRAME_SF)   || \
-                     ((field) == CFG_FRAME_ESF)  || \
-                     ((field) == CFG_FRAME_SF_AMI) || \
-                     ((field) == CFG_FRAME_ESF_AMI))
+		    (((field) == CFG_FRAME_NONE) || \
+		     ((field) == CFG_FRAME_SF)   || \
+		     ((field) == CFG_FRAME_ESF)  || \
+		     ((field) == CFG_FRAME_SF_AMI) || \
+		     ((field) == CFG_FRAME_ESF_AMI))
 
 #define IS_FRAME_ANY_T1ESF(field) \
-                    (((field) == CFG_FRAME_ESF) || \
-                     ((field) == CFG_FRAME_ESF_AMI))
+		    (((field) == CFG_FRAME_ESF) || \
+		     ((field) == CFG_FRAME_ESF_AMI))
 
 #define IS_FRAME_ANY_E1(field) \
-                    (((field) == CFG_FRAME_E1PLAIN) || \
-                     ((field) == CFG_FRAME_E1CAS)   || \
-                     ((field) == CFG_FRAME_E1CRC)   || \
-                     ((field) == CFG_FRAME_E1CRC_CAS) || \
-                     ((field) == CFG_FRAME_E1PLAIN_AMI) || \
-                     ((field) == CFG_FRAME_E1CAS_AMI) || \
-                     ((field) == CFG_FRAME_E1CRC_AMI) || \
-                     ((field) == CFG_FRAME_E1CRC_CAS_AMI))
+		    (((field) == CFG_FRAME_E1PLAIN) || \
+		     ((field) == CFG_FRAME_E1CAS)   || \
+		     ((field) == CFG_FRAME_E1CRC)   || \
+		     ((field) == CFG_FRAME_E1CRC_CAS) || \
+		     ((field) == CFG_FRAME_E1PLAIN_AMI) || \
+		     ((field) == CFG_FRAME_E1CAS_AMI) || \
+		     ((field) == CFG_FRAME_E1CRC_AMI) || \
+		     ((field) == CFG_FRAME_E1CRC_CAS_AMI))
 
 #define IS_FRAME_ANY_AMI(field) \
-                    (((field) == CFG_FRAME_SF_AMI) || \
-                     ((field) == CFG_FRAME_ESF_AMI) || \
-                     ((field) == CFG_FRAME_E1PLAIN_AMI) || \
-                     ((field) == CFG_FRAME_E1CAS_AMI) || \
-                     ((field) == CFG_FRAME_E1CRC_AMI) || \
-                     ((field) == CFG_FRAME_E1CRC_CAS_AMI))
+		    (((field) == CFG_FRAME_SF_AMI) || \
+		     ((field) == CFG_FRAME_ESF_AMI) || \
+		     ((field) == CFG_FRAME_E1PLAIN_AMI) || \
+		     ((field) == CFG_FRAME_E1CAS_AMI) || \
+		     ((field) == CFG_FRAME_E1CRC_AMI) || \
+		     ((field) == CFG_FRAME_E1CRC_CAS_AMI))
 
 /* frame level loopback options <loopback_type> */
 #define CFG_FRMR_LOOPBACK_NONE     0
@@ -482,35 +482,35 @@ struct sbecom_port_param
 
     struct temux_card_stats
     {
-        struct temux_stats
-        {
-            /* TEMUX DS3 PMON counters */
-            u_int32_t   lcv;
-            u_int32_t   err_framing;
-            u_int32_t   febe;
-            u_int32_t   err_cpbit;
-            u_int32_t   err_parity;
-            /* TEMUX DS3 FRMR status */
-            u_int8_t    los;
-            u_int8_t    oof;
-            u_int8_t    red;
-            u_int8_t    yellow;
-            u_int8_t    idle;
-            u_int8_t    ais;
-            u_int8_t    cbit;
-            /* TEMUX DS3 FEAC receiver */
-            u_int8_t    feac;
-            u_int8_t    feac_last;
-        }           t;
-        u_int32_t   tx_pending; /* total */
+	struct temux_stats
+	{
+	    /* TEMUX DS3 PMON counters */
+	    u_int32_t   lcv;
+	    u_int32_t   err_framing;
+	    u_int32_t   febe;
+	    u_int32_t   err_cpbit;
+	    u_int32_t   err_parity;
+	    /* TEMUX DS3 FRMR status */
+	    u_int8_t    los;
+	    u_int8_t    oof;
+	    u_int8_t    red;
+	    u_int8_t    yellow;
+	    u_int8_t    idle;
+	    u_int8_t    ais;
+	    u_int8_t    cbit;
+	    /* TEMUX DS3 FEAC receiver */
+	    u_int8_t    feac;
+	    u_int8_t    feac_last;
+	}           t;
+	u_int32_t   tx_pending; /* total */
     };
 
 /**************************************************************/
 
     struct wancfg
     {
-        int         cs, ds;
-        char       *p;
+	int         cs, ds;
+	char       *p;
     };
     typedef struct wancfg wcfg_t;
 

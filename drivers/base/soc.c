@@ -43,8 +43,8 @@ struct device *soc_device_to_device(struct soc_device *soc_dev)
 }
 
 static mode_t soc_attribute_mode(struct kobject *kobj,
-                                 struct attribute *attr,
-                                 int index)
+				 struct attribute *attr,
+				 int index)
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct soc_device *soc_dev = container_of(dev, struct soc_device, dev);

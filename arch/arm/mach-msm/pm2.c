@@ -93,9 +93,9 @@ static int offalarm_snooze_size = 10;
 static unsigned int offalarm[10];
 static unsigned int offalarm_snooze[10];
 module_param_array_named(offalarm, offalarm, uint, &offalarm_size,
-                        S_IRUGO | S_IWUSR);
+			S_IRUGO | S_IWUSR);
 module_param_array_named(offalarm_snooze, offalarm_snooze, uint, &offalarm_snooze_size,
-                        S_IRUGO | S_IWUSR);
+			S_IRUGO | S_IWUSR);
 #endif
 
 static int msm_pm_debug_mask;
@@ -996,11 +996,11 @@ static int msm_pm_power_collapse
 
 
 
-        if (cpu_is_msm8625q()) {
-               writel_relaxed(msm8x25q_ahb.sel, A11S_CLK_SEL_ADDR);
-               writel_relaxed(msm8x25q_ahb.cntl, A11S_CLK_CNTL_ADDR);
-               mb();
-        }
+	if (cpu_is_msm8625q()) {
+	       writel_relaxed(msm8x25q_ahb.sel, A11S_CLK_SEL_ADDR);
+	       writel_relaxed(msm8x25q_ahb.cntl, A11S_CLK_CNTL_ADDR);
+	       mb();
+	}
 
 	*(uint32_t *)(virt_start_ptr + 0x30) = 0x11;
 
@@ -1713,37 +1713,37 @@ static int msm_wakeup_after;
 
 static int set_offmode_alarm(void)
 {
-        struct timespec rtc_now;
-        int next_alarm_interval;
-        int i;
+	struct timespec rtc_now;
+	int next_alarm_interval;
+	int i;
 
-        getnstimeofday(&rtc_now);
+	getnstimeofday(&rtc_now);
 
-        for (i = 0; i < offalarm_size; i++) {
-                if (offalarm[i] > rtc_now.tv_sec) {
-                        next_alarm_interval = offalarm[i] - rtc_now.tv_sec;
-                        if (next_alarm_interval > 604800)
-                                continue;
-                        next_alarm_interval = next_alarm_interval * 1000;
-                        if (msm_wakeup_after == 0)
-                                msm_wakeup_after = next_alarm_interval;
-                        else if (next_alarm_interval < msm_wakeup_after)
-                                msm_wakeup_after = next_alarm_interval;
-                }
-        }
+	for (i = 0; i < offalarm_size; i++) {
+		if (offalarm[i] > rtc_now.tv_sec) {
+			next_alarm_interval = offalarm[i] - rtc_now.tv_sec;
+			if (next_alarm_interval > 604800)
+				continue;
+			next_alarm_interval = next_alarm_interval * 1000;
+			if (msm_wakeup_after == 0)
+				msm_wakeup_after = next_alarm_interval;
+			else if (next_alarm_interval < msm_wakeup_after)
+				msm_wakeup_after = next_alarm_interval;
+		}
+	}
 		for (i = 0; i < offalarm_snooze_size; i++) {
-                if (offalarm_snooze[i] > rtc_now.tv_sec) {
-                        next_alarm_interval = offalarm_snooze[i] - rtc_now.tv_sec;
-                        if (next_alarm_interval > 604800)
-                                continue;
-                        next_alarm_interval = next_alarm_interval * 1000;
-                        if (msm_wakeup_after == 0)
-                                msm_wakeup_after = next_alarm_interval;
-                        else if (next_alarm_interval < msm_wakeup_after)
-                                msm_wakeup_after = next_alarm_interval;
-                }
-        }
-        return 0;
+		if (offalarm_snooze[i] > rtc_now.tv_sec) {
+			next_alarm_interval = offalarm_snooze[i] - rtc_now.tv_sec;
+			if (next_alarm_interval > 604800)
+				continue;
+			next_alarm_interval = next_alarm_interval * 1000;
+			if (msm_wakeup_after == 0)
+				msm_wakeup_after = next_alarm_interval;
+			else if (next_alarm_interval < msm_wakeup_after)
+				msm_wakeup_after = next_alarm_interval;
+		}
+	}
+	return 0;
 }
 #endif
 
@@ -1757,10 +1757,10 @@ static void msm_pm_power_off(void)
 	local_irq_disable();
 
 #ifdef CONFIG_HTC_OFFMODE_ALARM
-        set_offmode_alarm();
-        printk(KERN_INFO "[K] msm_pm_power_off:wakeup after %d\r\n", msm_wakeup_after);
-        if (msm_wakeup_after)
-                msm_proc_comm(PCOM_SET_RTC_ALARM, &msm_wakeup_after, 0);
+	set_offmode_alarm();
+	printk(KERN_INFO "[K] msm_pm_power_off:wakeup after %d\r\n", msm_wakeup_after);
+	if (msm_wakeup_after)
+		msm_proc_comm(PCOM_SET_RTC_ALARM, &msm_wakeup_after, 0);
 #endif
 
 	msm_proc_comm(PCOM_POWER_DOWN, 0, 0);
@@ -1801,7 +1801,7 @@ static void msm_pm_restart(char str, const char *cmd)
 
 	local_irq_disable();
 
-        setup_mm_for_reboot();
+	setup_mm_for_reboot();
 
 __retry_msm_proc_comm__:
 	pr_info("[K] %s: restart_reason 0x%x, cmd %s\n", __func__, restart_reason, (cmd) ? cmd : "NULL");
@@ -1827,9 +1827,9 @@ __retry_msm_proc_comm__:
 
 #if 0
 	printk(KERN_INFO "[K] @@@@@@@@@@@ ncp6335d_restart_config ...\r\n");
-        rc = ncp6335d_restart_config();
-        if (rc) {
-               pr_err("Unable to configure NCP6335D for restart\n");
+	rc = ncp6335d_restart_config();
+	if (rc) {
+	       pr_err("Unable to configure NCP6335D for restart\n");
 	}
 #endif
 

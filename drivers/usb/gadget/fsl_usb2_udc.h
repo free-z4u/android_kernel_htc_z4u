@@ -417,8 +417,8 @@ struct ep_td_struct {
 #define  DTD_PACKET_SIZE                      0x7FFF0000
 #define  DTD_LENGTH_BIT_POS                   16
 #define  DTD_ERROR_MASK                       (DTD_STATUS_HALTED | \
-                                               DTD_STATUS_DATA_BUFF_ERR | \
-                                               DTD_STATUS_TRANSACTION_ERR)
+					       DTD_STATUS_DATA_BUFF_ERR | \
+					       DTD_STATUS_TRANSACTION_ERR)
 /* Alignment requirements; must be a power of two */
 #define DTD_ALIGNMENT				0x20
 #define QH_ALIGNMENT				2048

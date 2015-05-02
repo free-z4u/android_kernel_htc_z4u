@@ -249,7 +249,7 @@ static void rs_start(struct tty_struct *tty)
 
 static void receive_chars(struct serial_state *info)
 {
-        int status;
+	int status;
 	int serdatr;
 	struct tty_struct *tty = info->tport.tty;
 	unsigned char ch, flag;
@@ -455,7 +455,7 @@ static void check_modem_status(struct serial_state *info)
 
 static irqreturn_t ser_vbl_int( int irq, void *data)
 {
-        /* vbl is just a periodic interrupt we tie into to update modem status */
+	/* vbl is just a periodic interrupt we tie into to update modem status */
 	struct serial_state *info = data;
 	/*
 	 * TBD - is it better to unregister from this interrupt or to
@@ -935,7 +935,7 @@ static void rs_flush_buffer(struct tty_struct *tty)
 static void rs_send_xchar(struct tty_struct *tty, char ch)
 {
 	struct serial_state *info = tty->driver_data;
-        unsigned long flags;
+	unsigned long flags;
 
 	if (serial_paranoia_check(info, tty->name, "rs_send_char"))
 		return;

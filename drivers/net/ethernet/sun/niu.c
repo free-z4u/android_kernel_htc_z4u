@@ -1951,7 +1951,7 @@ static int link_status_10g_mrvl(struct niu *np, int *link_up_p)
 
 	pma_status = ((err & MRVL88X2011_LNK_STATUS_OK) ? 1 : 0);
 
-        /* Check PMC Register : 3.0001.2 == 1: read twice */
+	/* Check PMC Register : 3.0001.2 == 1: read twice */
 	err = mdio_read(np, np->phy_addr, MRVL88X2011_USER_DEV3_ADDR,
 			MRVL88X2011_PMA_PMD_STATUS_1);
 	if (err < 0)
@@ -1964,7 +1964,7 @@ static int link_status_10g_mrvl(struct niu *np, int *link_up_p)
 
 	pcs_status = ((err & MRVL88X2011_LNK_STATUS_OK) ? 1 : 0);
 
-        /* Check XGXS Register : 4.0018.[0-3,12] */
+	/* Check XGXS Register : 4.0018.[0-3,12] */
 	err = mdio_read(np, np->phy_addr, MRVL88X2011_USER_DEV4_ADDR,
 			MRVL88X2011_10G_XGXS_LANE_STAT);
 	if (err < 0)

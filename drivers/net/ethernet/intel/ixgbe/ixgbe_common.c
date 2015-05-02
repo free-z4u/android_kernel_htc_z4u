@@ -40,7 +40,7 @@ static void ixgbe_release_eeprom_semaphore(struct ixgbe_hw *hw);
 static s32 ixgbe_ready_eeprom(struct ixgbe_hw *hw);
 static void ixgbe_standby_eeprom(struct ixgbe_hw *hw);
 static void ixgbe_shift_out_eeprom_bits(struct ixgbe_hw *hw, u16 data,
-                                        u16 count);
+					u16 count);
 static u16 ixgbe_shift_in_eeprom_bits(struct ixgbe_hw *hw, u16 count);
 static void ixgbe_raise_eeprom_clk(struct ixgbe_hw *hw, u32 *eec);
 static void ixgbe_lower_eeprom_clk(struct ixgbe_hw *hw, u32 *eec);
@@ -284,7 +284,7 @@ s32 ixgbe_clear_hw_cntrs_generic(struct ixgbe_hw *hw)
  *  Reads the part number string from the EEPROM.
  **/
 s32 ixgbe_read_pba_string_generic(struct ixgbe_hw *hw, u8 *pba_num,
-                                  u32 pba_num_size)
+				  u32 pba_num_size)
 {
 	s32 ret_val;
 	u16 data;
@@ -1335,7 +1335,7 @@ static void ixgbe_standby_eeprom(struct ixgbe_hw *hw)
  *  @count: number of bits to shift out
  **/
 static void ixgbe_shift_out_eeprom_bits(struct ixgbe_hw *hw, u16 data,
-                                        u16 count)
+					u16 count)
 {
 	u32 eec;
 	u32 mask;
@@ -1539,7 +1539,7 @@ u16 ixgbe_calc_eeprom_checksum_generic(struct ixgbe_hw *hw)
  *  caller does not need checksum_val, the value can be NULL.
  **/
 s32 ixgbe_validate_eeprom_checksum_generic(struct ixgbe_hw *hw,
-                                           u16 *checksum_val)
+					   u16 *checksum_val)
 {
 	s32 status;
 	u16 checksum;
@@ -1636,7 +1636,7 @@ s32 ixgbe_validate_mac_addr(u8 *mac_addr)
  *  Puts an ethernet address into a receive address register.
  **/
 s32 ixgbe_set_rar_generic(struct ixgbe_hw *hw, u32 index, u8 *addr, u32 vmdq,
-                          u32 enable_addr)
+			  u32 enable_addr)
 {
 	u32 rar_low, rar_high;
 	u32 rar_entries = hw->mac.num_rar_entries;
@@ -2717,7 +2717,7 @@ s32 ixgbe_blink_led_stop_generic(struct ixgbe_hw *hw, u32 index)
  *  get and set mac_addr routines.
  **/
 static s32 ixgbe_get_san_mac_addr_offset(struct ixgbe_hw *hw,
-                                        u16 *san_mac_offset)
+					u16 *san_mac_offset)
 {
 	/*
 	 * First read the EEPROM pointer to see if the MAC addresses are
@@ -2944,7 +2944,7 @@ static s32 ixgbe_find_vlvf_slot(struct ixgbe_hw *hw, u32 vlan)
  *  Turn on/off specified VLAN in the VLAN filter table.
  **/
 s32 ixgbe_set_vfta_generic(struct ixgbe_hw *hw, u32 vlan, u32 vind,
-                           bool vlan_on)
+			   bool vlan_on)
 {
 	s32 regindex;
 	u32 bitindex;
@@ -3168,7 +3168,7 @@ s32 ixgbe_check_mac_link_generic(struct ixgbe_hw *hw, ixgbe_link_speed *speed,
  *  block to check the support for the alternative WWNN/WWPN prefix support.
  **/
 s32 ixgbe_get_wwn_prefix_generic(struct ixgbe_hw *hw, u16 *wwnn_prefix,
-                                        u16 *wwpn_prefix)
+					u16 *wwpn_prefix)
 {
 	u16 offset, caps;
 	u16 alt_san_mac_blk_offset;

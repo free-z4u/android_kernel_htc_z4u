@@ -398,7 +398,7 @@ etrap_spill_fixup_64bit:				\
 	stwa	%i6, [%g1 + %g0] ASI;			\
 	stwa	%i7, [%g1 + %g3] ASI;			\
 	saved;						\
-        retry; nop; nop;				\
+	retry; nop; nop;				\
 	b,a,pt	%xcc, spill_fixup_dax;			\
 	b,a,pt	%xcc, spill_fixup_mna;			\
 	b,a,pt	%xcc, spill_fixup;

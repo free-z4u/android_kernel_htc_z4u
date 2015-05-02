@@ -44,8 +44,8 @@
 
   The layout of the bits is as below:
 
-                   [ MTU_SHIFT ][      FRAC_BITS    ]
-                   [ MAX_INDEX    ][ MIN_SLOT_SHIFT ]
+		   [ MTU_SHIFT ][      FRAC_BITS    ]
+		   [ MAX_INDEX    ][ MIN_SLOT_SHIFT ]
 				 ^.__grp->index = 0
 				 *.__grp->slot_shift
 

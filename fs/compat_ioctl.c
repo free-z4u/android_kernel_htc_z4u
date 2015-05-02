@@ -166,8 +166,8 @@ static int do_video_get_event(unsigned int fd, unsigned int cmd,
 }
 
 struct compat_video_still_picture {
-        compat_uptr_t iFrame;
-        int32_t size;
+	compat_uptr_t iFrame;
+	int32_t size;
 };
 
 static int do_video_stillpicture(unsigned int fd, unsigned int cmd,
@@ -582,58 +582,58 @@ static int mt_ioctl_trans(unsigned int fd, unsigned int cmd, void __user *argp)
 
 
 struct serial_struct32 {
-        compat_int_t    type;
-        compat_int_t    line;
-        compat_uint_t   port;
-        compat_int_t    irq;
-        compat_int_t    flags;
-        compat_int_t    xmit_fifo_size;
-        compat_int_t    custom_divisor;
-        compat_int_t    baud_base;
-        unsigned short  close_delay;
-        char    io_type;
-        char    reserved_char[1];
-        compat_int_t    hub6;
-        unsigned short  closing_wait; /* time to wait before closing */
-        unsigned short  closing_wait2; /* no longer used... */
-        compat_uint_t   iomem_base;
-        unsigned short  iomem_reg_shift;
-        unsigned int    port_high;
+	compat_int_t    type;
+	compat_int_t    line;
+	compat_uint_t   port;
+	compat_int_t    irq;
+	compat_int_t    flags;
+	compat_int_t    xmit_fifo_size;
+	compat_int_t    custom_divisor;
+	compat_int_t    baud_base;
+	unsigned short  close_delay;
+	char    io_type;
+	char    reserved_char[1];
+	compat_int_t    hub6;
+	unsigned short  closing_wait; /* time to wait before closing */
+	unsigned short  closing_wait2; /* no longer used... */
+	compat_uint_t   iomem_base;
+	unsigned short  iomem_reg_shift;
+	unsigned int    port_high;
      /* compat_ulong_t  iomap_base FIXME */
-        compat_int_t    reserved[1];
+	compat_int_t    reserved[1];
 };
 
 static int serial_struct_ioctl(unsigned fd, unsigned cmd,
 			struct serial_struct32 __user *ss32)
 {
-        typedef struct serial_struct SS;
-        typedef struct serial_struct32 SS32;
-        int err;
-        struct serial_struct ss;
-        mm_segment_t oldseg = get_fs();
-        __u32 udata;
+	typedef struct serial_struct SS;
+	typedef struct serial_struct32 SS32;
+	int err;
+	struct serial_struct ss;
+	mm_segment_t oldseg = get_fs();
+	__u32 udata;
 	unsigned int base;
 
-        if (cmd == TIOCSSERIAL) {
-                if (!access_ok(VERIFY_READ, ss32, sizeof(SS32)))
-                        return -EFAULT;
-                if (__copy_from_user(&ss, ss32, offsetof(SS32, iomem_base)))
+	if (cmd == TIOCSSERIAL) {
+		if (!access_ok(VERIFY_READ, ss32, sizeof(SS32)))
 			return -EFAULT;
-                if (__get_user(udata, &ss32->iomem_base))
+		if (__copy_from_user(&ss, ss32, offsetof(SS32, iomem_base)))
 			return -EFAULT;
-                ss.iomem_base = compat_ptr(udata);
-                if (__get_user(ss.iomem_reg_shift, &ss32->iomem_reg_shift) ||
+		if (__get_user(udata, &ss32->iomem_base))
+			return -EFAULT;
+		ss.iomem_base = compat_ptr(udata);
+		if (__get_user(ss.iomem_reg_shift, &ss32->iomem_reg_shift) ||
 		    __get_user(ss.port_high, &ss32->port_high))
 			return -EFAULT;
-                ss.iomap_base = 0UL;
-        }
-        set_fs(KERNEL_DS);
-                err = sys_ioctl(fd,cmd,(unsigned long)(&ss));
-        set_fs(oldseg);
-        if (cmd == TIOCGSERIAL && err >= 0) {
-                if (!access_ok(VERIFY_WRITE, ss32, sizeof(SS32)))
-                        return -EFAULT;
-                if (__copy_to_user(ss32,&ss,offsetof(SS32,iomem_base)))
+		ss.iomap_base = 0UL;
+	}
+	set_fs(KERNEL_DS);
+		err = sys_ioctl(fd,cmd,(unsigned long)(&ss));
+	set_fs(oldseg);
+	if (cmd == TIOCGSERIAL && err >= 0) {
+		if (!access_ok(VERIFY_WRITE, ss32, sizeof(SS32)))
+			return -EFAULT;
+		if (__copy_to_user(ss32,&ss,offsetof(SS32,iomem_base)))
 			return -EFAULT;
 		base = (unsigned long)ss.iomem_base  >> 32 ?
 			0xffffffff : (unsigned)(unsigned long)ss.iomem_base;
@@ -641,8 +641,8 @@ static int serial_struct_ioctl(unsigned fd, unsigned cmd,
 		    __put_user(ss.iomem_reg_shift, &ss32->iomem_reg_shift) ||
 		    __put_user(ss.port_high, &ss32->port_high))
 			return -EFAULT;
-        }
-        return err;
+	}
+	return err;
 }
 
 /*

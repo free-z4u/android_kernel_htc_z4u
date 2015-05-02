@@ -53,7 +53,7 @@ static inline int adfs_checkbblk(unsigned char *ptr)
 
 	do {
 	        result = (result & 0xff) + (result >> 8);
-        	result = result + *--p;
+		result = result + *--p;
 	} while (p != ptr);
 
 	return (result & 0xff) != ptr[511];

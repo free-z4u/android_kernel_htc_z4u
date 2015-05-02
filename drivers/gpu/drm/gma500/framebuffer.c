@@ -108,7 +108,7 @@ static int psbfb_pan(struct fb_var_screeninfo *var, struct fb_info *info)
 		int pages = info->fix.line_length >> 12;
 		psb_gtt_roll(dev, psbfb->gtt, var->yoffset * pages);
 	}
-        return 0;
+	return 0;
 }
 
 static int psbfb_vm_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
@@ -369,10 +369,10 @@ static int psbfb_create(struct psb_fbdev *fbdev,
 		 * power of two aligned. Preferably page but less
 		 * is ok with some fonts
 		 */
-        	mode_cmd.pitches[0] =  ALIGN(mode_cmd.width * ((bpp + 7) / 8), 4096 >> pitch_lines);
+		mode_cmd.pitches[0] =  ALIGN(mode_cmd.width * ((bpp + 7) / 8), 4096 >> pitch_lines);
 
-        	size = mode_cmd.pitches[0] * mode_cmd.height;
-        	size = ALIGN(size, PAGE_SIZE);
+		size = mode_cmd.pitches[0] * mode_cmd.height;
+		size = ALIGN(size, PAGE_SIZE);
 
 		/* Allocate the fb in the GTT with stolen page backing */
 		backing = psbfb_alloc(dev, size);

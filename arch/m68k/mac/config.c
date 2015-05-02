@@ -74,7 +74,7 @@ static void mac_report_hardware(void);
 asmlinkage void __init mac_early_print(const char *s, unsigned n);
 
 static void __init mac_early_cons_write(struct console *con,
-                                 const char *s, unsigned n)
+				 const char *s, unsigned n)
 {
 	mac_early_print(s, n);
 }

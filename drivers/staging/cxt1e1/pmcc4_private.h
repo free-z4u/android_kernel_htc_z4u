@@ -89,9 +89,9 @@ struct c4_chan_info
 
     enum
     {
-        UNASSIGNED,             /* AVAILABLE, NOTINUSE */
-        DOWN,                   /* ASSIGNED, NOTINUSE */
-        UP                      /* ASSIGNED and INUSE */
+	UNASSIGNED,             /* AVAILABLE, NOTINUSE */
+	DOWN,                   /* ASSIGNED, NOTINUSE */
+	UP                      /* ASSIGNED and INUSE */
     }           state;
 
     struct c4_port_info *up;
@@ -131,8 +131,8 @@ struct c4_port_info
     struct musycc_globalr *reg;
     struct musycc_groupr *regram;
     void       *regram_saved;   /* Original malloc value may have non-2KB
-                                 * boundary.  Need to save for use when
-                                 * freeing. */
+				 * boundary.  Need to save for use when
+				 * freeing. */
     comet_t    *cometbase;
     struct sbe_card_info *up;
 
@@ -143,14 +143,14 @@ struct c4_port_info
 
     struct workqueue_struct *wq_port;   /* chan restart work queue */
     struct semaphore sr_sem_busy;       /* service request exclusion
-                                         * semaphore */
+					 * semaphore */
     struct semaphore sr_sem_wait;       /* service request handshake
-                                         * semaphore */
+					 * semaphore */
     u_int32_t   sr_last;
     short       openchans;
     char        portnum;
     char        group_is_set;   /* GROUP_INIT command issued to MUSYCC,
-                                 * otherwise SET_CHAN Ioctl fails */
+				 * otherwise SET_CHAN Ioctl fails */
 
     mch_t      *chan[MUSYCC_NCHANS];
     struct sbecom_port_param p;
@@ -181,10 +181,10 @@ struct sbe_card_info
     struct musycc_globalr *reg;
     struct musycc_groupr *regram;
     u_int32_t  *iqd_p;          /* pointer to dword aligned interrupt queue
-                                 * descriptors */
+				 * descriptors */
     void       *iqd_p_saved;    /* Original malloc value may have non-dword
-                                 * aligned boundary.  Need to save for use
-                                 * when freeing. */
+				 * aligned boundary.  Need to save for use
+				 * when freeing. */
     unsigned int iqp_headx, iqp_tailx;
 
     struct semaphore sem_wdbusy;/* watchdog exclusion semaphore */
@@ -201,13 +201,13 @@ struct sbe_card_info
 #define WD_NOTIFY_ONR       4
     enum                        /* state as regards interrupt processing */
     {
-        C_INIT,                 /* of-board-address not configured or are in
-                                 * process of being removed, don't access
-                                 * hardware */
-        C_IDLE,                 /* off-board-addresses are configured, but
-                                 * don't service interrupts, just clear them
-                                 * from hardware */
-        C_RUNNING               /* life is good, service away */
+	C_INIT,                 /* of-board-address not configured or are in
+				 * process of being removed, don't access
+				 * hardware */
+	C_IDLE,                 /* off-board-addresses are configured, but
+				 * don't service interrupts, just clear them
+				 * from hardware */
+	C_RUNNING               /* life is good, service away */
     }           state;
 
     struct sbe_card_info *next;
@@ -226,11 +226,11 @@ struct sbe_card_info
 
     struct intlog
     {
-        u_int32_t   this_status_new;
-        u_int32_t   last_status_new;
-        u_int32_t   drvr_intr_thcount;
-        u_int32_t   drvr_intr_bhcount;
-        u_int32_t   drvr_int_failure;
+	u_int32_t   this_status_new;
+	u_int32_t   last_status_new;
+	u_int32_t   drvr_intr_thcount;
+	u_int32_t   drvr_intr_bhcount;
+	u_int32_t   drvr_int_failure;
     }           intlog;
 
     mpi_t       port[MUSYCC_NPORTS];
@@ -268,9 +268,9 @@ struct s_hdw_info
 
     union
     {
-        char        data[128];
-        FLD_TYPE1   pft1;       /* prom field, type #1 */
-        FLD_TYPE2   pft2;       /* prom field, type #2 */
+	char        data[128];
+	FLD_TYPE1   pft1;       /* prom field, type #1 */
+	FLD_TYPE2   pft2;       /* prom field, type #2 */
     }           mfg_info;
 };
 typedef struct s_hdw_info hdw_info_t;

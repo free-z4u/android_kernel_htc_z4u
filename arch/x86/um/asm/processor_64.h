@@ -8,10 +8,10 @@
 #define __UM_PROCESSOR_X86_64_H
 
 struct arch_thread {
-        unsigned long debugregs[8];
-        int debugregs_seq;
-        unsigned long fs;
-        struct faultinfo faultinfo;
+	unsigned long debugregs[8];
+	int debugregs_seq;
+	unsigned long fs;
+	struct faultinfo faultinfo;
 };
 
 #define INIT_ARCH_THREAD { .debugregs  		= { [ 0 ... 7 ] = 0 }, \
@@ -24,7 +24,7 @@ static inline void arch_flush_thread(struct arch_thread *thread)
 }
 
 static inline void arch_copy_thread(struct arch_thread *from,
-                                    struct arch_thread *to)
+				    struct arch_thread *to)
 {
 	to->fs = from->fs;
 }

@@ -125,7 +125,7 @@ enum hil_control_bitpos {
 
 /* Bits 30,31 are unused, we use them to control write behavior. */
 #define HIL_DO_ALTER_CTRL  0x40000000 /* Write MSW of packet to control
-                                          before writing LSW to loop */
+					  before writing LSW to loop */
 #define HIL_CTRL_ONLY      0xc0000000 /* *Only* alter the control registers */
 
 /* This gives us a 32-bit "packet"

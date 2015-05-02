@@ -49,14 +49,14 @@ struct nfattr {
 	__start;  })
 #define NFA_NEST_END(skb, start) \
 ({      (start)->nfa_len = skb_tail_pointer(skb) - (unsigned char *)(start); \
-        (skb)->len; })
+	(skb)->len; })
 #define NFA_NEST_CANCEL(skb, start) \
 ({      if (start) \
-                skb_trim(skb, (unsigned char *) (start) - (skb)->data); \
-        -1; })
+		skb_trim(skb, (unsigned char *) (start) - (skb)->data); \
+	-1; })
 
 #define NFM_NFA(n)      ((struct nfattr *)(((char *)(n)) \
-        + NLMSG_ALIGN(sizeof(struct nfgenmsg))))
+	+ NLMSG_ALIGN(sizeof(struct nfgenmsg))))
 #define NFM_PAYLOAD(n)  NLMSG_PAYLOAD(n, sizeof(struct nfgenmsg))
 
 #endif /* ! __KERNEL__ */

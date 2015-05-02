@@ -168,7 +168,7 @@ static int aha152x_config_cs(struct pcmcia_device *link)
     s.synchronous = synchronous;
     s.delay       = reset_delay;
     if (ext_trans)
-        s.ext_trans = ext_trans;
+	s.ext_trans = ext_trans;
 
     host = aha152x_probe_one(&s);
     if (host == NULL) {

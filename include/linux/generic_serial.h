@@ -75,7 +75,7 @@ struct gs_port {
 #ifdef __KERNEL__
 int gs_put_char(struct tty_struct *tty, unsigned char ch);
 int  gs_write(struct tty_struct *tty,
-             const unsigned char *buf, int count);
+	     const unsigned char *buf, int count);
 int  gs_write_room(struct tty_struct *tty);
 int  gs_chars_in_buffer(struct tty_struct *tty);
 void gs_flush_buffer(struct tty_struct *tty);
@@ -86,7 +86,7 @@ void gs_hangup(struct tty_struct *tty);
 int  gs_block_til_ready(void *port, struct file *filp);
 void gs_close(struct tty_struct *tty, struct file *filp);
 void gs_set_termios (struct tty_struct * tty,
-                     struct ktermios * old_termios);
+		     struct ktermios * old_termios);
 int  gs_init_port(struct gs_port *port);
 int  gs_setserial(struct gs_port *port, struct serial_struct __user *sp);
 int  gs_getserial(struct gs_port *port, struct serial_struct __user *sp);

@@ -243,8 +243,8 @@
  * check if mixer number exceeds maximum allowed size which is as mentioned
  * above SOUND_MIXER_NRDEVICES */
 #define supported_mixer(CODEC,FOO) ((FOO >= 0) && \
-                                    (FOO < SOUND_MIXER_NRDEVICES) && \
-                                    (CODEC)->supported_mixers & (1<<FOO) )
+				    (FOO < SOUND_MIXER_NRDEVICES) && \
+				    (CODEC)->supported_mixers & (1<<FOO) )
 
 struct ac97_codec {
 	/* Linked list of codecs */

@@ -514,9 +514,9 @@ static int i2sbus_pcm_prepare(struct i2sbus_dev *i2sdev, int in)
 	out_le32(&i2sdev->intfregs->serial_format, sfr);
 	out_le32(&i2sdev->intfregs->data_word_sizes, dws);
 
-        i2sbus_control_enable(i2sdev->control, i2sdev);
-        i2sbus_control_cell(i2sdev->control, i2sdev, 1);
-        i2sbus_control_clock(i2sdev->control, i2sdev, 1);
+	i2sbus_control_enable(i2sdev->control, i2sdev);
+	i2sbus_control_cell(i2sdev->control, i2sdev, 1);
+	i2sbus_control_clock(i2sdev->control, i2sdev, 1);
 	msleep(1);
 
 	list_for_each_entry(cii, &i2sdev->sound.codec_list, list)

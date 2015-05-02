@@ -1345,7 +1345,7 @@ static int intelfb_check_var(struct fb_var_screeninfo *var,
 	v.red.msb_right = v.green.msb_right = v.blue.msb_right =
 			  v.transp.msb_right = 0;
 
-        *var = v;
+	*var = v;
 
 	return 0;
 }
@@ -1353,7 +1353,7 @@ static int intelfb_check_var(struct fb_var_screeninfo *var,
 static int intelfb_set_par(struct fb_info *info)
 {
 	struct intelfb_hwstate *hw;
-        struct intelfb_info *dinfo = GET_DINFO(info);
+	struct intelfb_info *dinfo = GET_DINFO(info);
 
 	if (FIXED_MODE(dinfo)) {
 		ERR_MSG("Changing the video mode is not supported.\n");
@@ -1494,7 +1494,7 @@ static int intelfb_ioctl(struct fb_info *info, unsigned int cmd,
 static void intelfb_fillrect (struct fb_info *info,
 			      const struct fb_fillrect *rect)
 {
-        struct intelfb_info *dinfo = GET_DINFO(info);
+	struct intelfb_info *dinfo = GET_DINFO(info);
 	u32 rop, color;
 
 #if VERBOSE > 0
@@ -1525,7 +1525,7 @@ static void intelfb_fillrect (struct fb_info *info,
 static void intelfb_copyarea(struct fb_info *info,
 			     const struct fb_copyarea *region)
 {
-        struct intelfb_info *dinfo = GET_DINFO(info);
+	struct intelfb_info *dinfo = GET_DINFO(info);
 
 #if VERBOSE > 0
 	DBG_MSG("intelfb_copyarea\n");
@@ -1544,7 +1544,7 @@ static void intelfb_copyarea(struct fb_info *info,
 static void intelfb_imageblit(struct fb_info *info,
 			      const struct fb_image *image)
 {
-        struct intelfb_info *dinfo = GET_DINFO(info);
+	struct intelfb_info *dinfo = GET_DINFO(info);
 	u32 fgcolor, bgcolor;
 
 #if VERBOSE > 0
@@ -1576,7 +1576,7 @@ static void intelfb_imageblit(struct fb_info *info,
 
 static int intelfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
 {
-        struct intelfb_info *dinfo = GET_DINFO(info);
+	struct intelfb_info *dinfo = GET_DINFO(info);
 	u32 physical;
 #if VERBOSE > 0
 	DBG_MSG("intelfb_cursor\n");
@@ -1690,7 +1690,7 @@ static int intelfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
 
 static int intelfb_sync(struct fb_info *info)
 {
-        struct intelfb_info *dinfo = GET_DINFO(info);
+	struct intelfb_info *dinfo = GET_DINFO(info);
 
 #if VERBOSE > 0
 	DBG_MSG("intelfb_sync\n");

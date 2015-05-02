@@ -237,7 +237,7 @@
    [5]   CRT1 monitor is connected
    [6]   VB connected with Hi-Vision TV
    [7]   <= 330: VB connected with DVI combo connector
-         >= 661: VB connected to YPbPr
+	 >= 661: VB connected to YPbPr
 */
 
 /* CR35 (300 series only) */
@@ -260,7 +260,7 @@
 /* CR37
    [0]   Set 24/18 bit (0/1) RGB to LVDS/TMDS transmitter (set by BIOS)
    [3:1] External chip
-         300 series:
+	 300 series:
 	    001   SiS301 (never seen)
 	    010   LVDS
 	    011   LVDS + Tumpion Zurac
@@ -275,15 +275,15 @@
 	  All other combinations reserved
    [3]    661 only: Pass 1:1 data
    [4]    LVDS: 0: Panel Link expands / 1: Panel Link does not expand
-          30x:  0: Bridge scales      / 1: Bridge does not scale = Panel scales (if possible)
+	  30x:  0: Bridge scales      / 1: Bridge does not scale = Panel scales (if possible)
    [5]    LCD polarity select
-          0: VESA DMT Standard
+	  0: VESA DMT Standard
 	  1: EDID 2.x defined
    [6]    LCD horizontal polarity select
-          0: High active
+	  0: High active
 	  1: Low active
    [7]    LCD vertical polarity select
-          0: High active
+	  0: High active
 	  1: Low active
 */
 
@@ -316,7 +316,7 @@
 
 /* CR38 (661 and later)
   D[7:5]  000 No VB
-          001 301 series VB
+	  001 301 series VB
 	  010 LVDS
 	  011 Chrontel 7019
 	  100 Conexant
@@ -333,7 +333,7 @@
 /* CR39 (661 and later)
    D[7]   LVDS (SiS or third party)
    D[1:0] YPbPr Aspect Ratio
-          00 4:3 letterbox
+	  00 4:3 letterbox
 	  01 4:3
 	  10 16:9
 	  11 4:3
@@ -341,12 +341,12 @@
 
 /* CR3B (651+301C)
    D[1:0] YPbPr Aspect Ratio
-          ?
+	  ?
 */
 
 /* CR79 (315/330 series only; not 661 and later)
    [3-0] Notify driver
-         0001 Mode Switch event (set by BIOS)
+	 0001 Mode Switch event (set by BIOS)
 	 0010 Epansion On/Off event
 	 0011 TV UnderScan/OverScan event
 	 0100 Set Brightness event
@@ -354,7 +354,7 @@
 	 0110 Set Mute event
 	 0111 Set Volume Up/Down event
    [4]   Enable Backlight Control by BIOS/driver
-         (set by driver; set means that the BIOS should
+	 (set by driver; set means that the BIOS should
 	 not touch the backlight registers because eg.
 	 the driver already switched off the backlight)
    [5]   PAL/NTSC (set by BIOS)

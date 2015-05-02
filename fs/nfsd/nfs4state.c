@@ -3289,15 +3289,15 @@ access_permit_write(unsigned long access_bmap)
 static
 __be32 nfs4_check_openmode(struct nfs4_ol_stateid *stp, int flags)
 {
-        __be32 status = nfserr_openmode;
+	__be32 status = nfserr_openmode;
 
 	/* For lock stateid's, we test the parent open, not the lock: */
 	if (stp->st_openstp)
 		stp = stp->st_openstp;
 	if ((flags & WR_STATE) && (!access_permit_write(stp->st_access_bmap)))
-                goto out;
+		goto out;
 	if ((flags & RD_STATE) && (!access_permit_read(stp->st_access_bmap)))
-                goto out;
+		goto out;
 	status = nfs_ok;
 out:
 	return status;

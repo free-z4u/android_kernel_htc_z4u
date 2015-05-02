@@ -284,7 +284,7 @@ SYSCALL_DEFINE4(32_sendfile, long, out_fd, long, in_fd,
 }
 
 asmlinkage ssize_t sys32_readahead(int fd, u32 pad0, u64 a2, u64 a3,
-                                   size_t count)
+				   size_t count)
 {
 	return sys_readahead(fd, merge_64(a2, a3), count);
 }

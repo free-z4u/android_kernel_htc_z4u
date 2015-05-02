@@ -346,8 +346,8 @@ static int __devinit gx1fb_probe(struct pci_dev *pdev, const struct pci_device_i
 		goto err;
 	}
 
-        /* Clear the frame buffer of garbage. */
-        memset_io(info->screen_base, 0, info->fix.smem_len);
+	/* Clear the frame buffer of garbage. */
+	memset_io(info->screen_base, 0, info->fix.smem_len);
 
 	gx1fb_check_var(&info->var, info);
 	gx1fb_set_par(info);

@@ -40,11 +40,11 @@
 #define IXGBE_82598_RX_PB_SIZE	 512
 
 static s32 ixgbe_setup_copper_link_82598(struct ixgbe_hw *hw,
-                                         ixgbe_link_speed speed,
-                                         bool autoneg,
-                                         bool autoneg_wait_to_complete);
+					 ixgbe_link_speed speed,
+					 bool autoneg,
+					 bool autoneg_wait_to_complete);
 static s32 ixgbe_read_i2c_eeprom_82598(struct ixgbe_hw *hw, u8 byte_offset,
-                                       u8 *eeprom_data);
+				       u8 *eeprom_data);
 
 /**
  *  ixgbe_set_pcie_completion_timeout - set pci-e completion timeout
@@ -243,8 +243,8 @@ static s32 ixgbe_start_hw_82598(struct ixgbe_hw *hw)
  *  Determines the link capabilities by reading the AUTOC register.
  **/
 static s32 ixgbe_get_link_capabilities_82598(struct ixgbe_hw *hw,
-                                             ixgbe_link_speed *speed,
-                                             bool *autoneg)
+					     ixgbe_link_speed *speed,
+					     bool *autoneg)
 {
 	s32 status = 0;
 	u32 autoc = 0;
@@ -493,7 +493,7 @@ out:
  *  Restarts the link.  Performs autonegotiation if needed.
  **/
 static s32 ixgbe_start_mac_link_82598(struct ixgbe_hw *hw,
-                                      bool autoneg_wait_to_complete)
+				      bool autoneg_wait_to_complete)
 {
 	u32 autoc_reg;
 	u32 links_reg;
@@ -575,8 +575,8 @@ static s32 ixgbe_validate_link_ready(struct ixgbe_hw *hw)
  *  Reads the links register to determine if link is up and the current speed
  **/
 static s32 ixgbe_check_mac_link_82598(struct ixgbe_hw *hw,
-                                      ixgbe_link_speed *speed, bool *link_up,
-                                      bool link_up_wait_to_complete)
+				      ixgbe_link_speed *speed, bool *link_up,
+				      bool link_up_wait_to_complete)
 {
 	u32 links_reg;
 	u32 i;
@@ -663,8 +663,8 @@ out:
  *  Set the link speed in the AUTOC register and restarts link.
  **/
 static s32 ixgbe_setup_mac_link_82598(struct ixgbe_hw *hw,
-                                           ixgbe_link_speed speed, bool autoneg,
-                                           bool autoneg_wait_to_complete)
+					   ixgbe_link_speed speed, bool autoneg,
+					   bool autoneg_wait_to_complete)
 {
 	s32              status            = 0;
 	ixgbe_link_speed link_capabilities = IXGBE_LINK_SPEED_UNKNOWN;
@@ -715,9 +715,9 @@ static s32 ixgbe_setup_mac_link_82598(struct ixgbe_hw *hw,
  *  Sets the link speed in the AUTOC register in the MAC and restarts link.
  **/
 static s32 ixgbe_setup_copper_link_82598(struct ixgbe_hw *hw,
-                                               ixgbe_link_speed speed,
-                                               bool autoneg,
-                                               bool autoneg_wait_to_complete)
+					       ixgbe_link_speed speed,
+					       bool autoneg,
+					       bool autoneg_wait_to_complete)
 {
 	s32 status;
 

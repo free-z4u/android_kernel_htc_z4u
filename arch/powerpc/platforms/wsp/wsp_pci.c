@@ -782,7 +782,7 @@ static const struct {
 #define DREG(x) { PCIE_REG_##x, #x }
 #define DUTL(x) { PCIE_UTL_##x, "UTL_" #x }
 	/* Architected registers except CONFIG_ and IODA
-         * to avoid side effects
+	 * to avoid side effects
 	 */
 	DREG(DMA_CHAN_STATUS),
 	DREG(CPU_LOADSTORE_STATUS),
