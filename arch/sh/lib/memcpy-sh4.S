@@ -241,7 +241,7 @@ ENTRY(memcpy)
 	! r5 = normal value -1
 
 6:	tst	#3, r0		!  87 MT
-        mov	#3, r3		!   6 EX
+	mov	#3, r3		!   6 EX
 
 	bt/s	2f		! 111 BR
 	 and	r0,r3		!  78 EX

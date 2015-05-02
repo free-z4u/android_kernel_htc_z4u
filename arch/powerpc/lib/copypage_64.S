@@ -11,10 +11,10 @@
 #include <asm/ppc_asm.h>
 #include <asm/asm-offsets.h>
 
-        .section        ".toc","aw"
+	.section        ".toc","aw"
 PPC64_CACHES:
-        .tc             ppc64_caches[TC],ppc64_caches
-        .section        ".text"
+	.tc             ppc64_caches[TC],ppc64_caches
+	.section        ".text"
 
 _GLOBAL(copy_page)
 	lis	r5,PAGE_SIZE@h

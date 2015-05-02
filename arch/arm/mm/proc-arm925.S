@@ -440,12 +440,12 @@ ENTRY(cpu_arm925_set_pte_ext)
 __arm925_setup:
 	mov	r0, #0
 #if defined(CONFIG_CPU_ICACHE_STREAMING_DISABLE)
-        orr     r0,r0,#1 << 7
+	orr     r0,r0,#1 << 7
 #endif
 
 	/* Transparent on, D-cache clean & flush mode. See  NOTE2 above */
-        orr     r0,r0,#1 << 1			@ transparent mode on
-        mcr     p15, 0, r0, c15, c1, 0          @ write TI config register
+	orr     r0,r0,#1 << 1			@ transparent mode on
+	mcr     p15, 0, r0, c15, c1, 0          @ write TI config register
 
 	mov	r0, #0
 	mcr	p15, 0, r0, c7, c7		@ invalidate I,D caches on v4
@@ -474,7 +474,7 @@ __arm925_setup:
 	 *  R
 	 * .RVI ZFRS BLDP WCAM
 	 * .011 0001 ..11 1101
-	 * 
+	 *
 	 */
 	.type	arm925_crval, #object
 arm925_crval:

@@ -9,13 +9,13 @@
  * ISO C memset - set a memory block to a byte value. This function uses fast
  * string to get better performance than the original function. The code is
  * simpler and shorter than the orignal function as well.
- *	
+ *
  * rdi   destination
- * rsi   value (char) 
- * rdx   count (bytes) 
- * 
+ * rsi   value (char)
+ * rdx   count (bytes)
+ *
  * rax   original destination
- */	
+ */
 	.section .altinstr_replacement, "ax", @progbits
 .Lmemset_c:
 	movq %rdi,%r9
@@ -144,7 +144,7 @@ ENDPROC(__memset)
 	 * Otherwise, use original memset function.
 	 *
 	 * In .altinstructions section, ERMS feature is placed after REG_GOOD
-         * feature to implement the right patch order.
+	 * feature to implement the right patch order.
 	 */
 	.section .altinstructions,"a"
 	altinstruction_entry memset,.Lmemset_c,X86_FEATURE_REP_GOOD,\

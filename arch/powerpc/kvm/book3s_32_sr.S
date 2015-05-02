@@ -61,12 +61,12 @@
 	/* Clear BATs. */
 
 #define KVM_KILL_BAT(n, reg)		\
-        mtspr   SPRN_IBAT##n##U,reg;	\
-        mtspr   SPRN_IBAT##n##L,reg;	\
-        mtspr   SPRN_DBAT##n##U,reg;	\
-        mtspr   SPRN_DBAT##n##L,reg;	\
+	mtspr   SPRN_IBAT##n##U,reg;	\
+	mtspr   SPRN_IBAT##n##L,reg;	\
+	mtspr   SPRN_DBAT##n##U,reg;	\
+	mtspr   SPRN_DBAT##n##L,reg;	\
 
-        li	r9, 0
+	li	r9, 0
 	KVM_KILL_BAT(0, r9)
 	KVM_KILL_BAT(1, r9)
 	KVM_KILL_BAT(2, r9)
@@ -122,14 +122,14 @@
 
 	/* 0xc - 0xf */
 
-        li      r0, 4
-        mtctr   r0
+	li      r0, 4
+	mtctr   r0
 	LOAD_REG_IMMEDIATE(r3, 0x20000000 | (0x111 * 0xc))
-        lis     r4, 0xc000
+	lis     r4, 0xc000
 3:      mtsrin  r3, r4
-        addi    r3, r3, 0x111     /* increment VSID */
-        addis   r4, r4, 0x1000    /* address of next segment */
-        bdnz    3b
+	addi    r3, r3, 0x111     /* increment VSID */
+	addis   r4, r4, 0x1000    /* address of next segment */
+	bdnz    3b
 
 	/* 0x0 - 0xb */
 

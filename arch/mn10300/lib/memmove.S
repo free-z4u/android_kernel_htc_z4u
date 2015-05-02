@@ -11,8 +11,8 @@
  */
 #include <asm/cache.h>
 
-        .section .text
-        .balign	L1_CACHE_BYTES
+	.section .text
+	.balign	L1_CACHE_BYTES
 
 ###############################################################################
 #
@@ -20,7 +20,7 @@
 #
 ###############################################################################
 	.globl	memmove
-        .type	memmove,@function
+	.type	memmove,@function
 memmove:
 	# fall back to memcpy if dst < src to work bottom up
 	cmp	d1,d0

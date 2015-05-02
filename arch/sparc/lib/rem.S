@@ -202,13 +202,13 @@ Ldivloop:
 
 	b	9f
 	 add	%o2, (7*2+1), %o2
-	
+
 L.4.23:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 	b	9f
 	 add	%o2, (7*2-1), %o2
-	
+
 L.3.19:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
@@ -219,13 +219,13 @@ L.3.19:
 	subcc	%o3,%o5,%o3
 	b	9f
 	 add	%o2, (5*2+1), %o2
-	
+
 L.4.21:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 	b	9f
 	 add	%o2, (5*2-1), %o2
-	
+
 L.2.17:
 	! remainder is negative
 	addcc	%o3,%o5,%o3

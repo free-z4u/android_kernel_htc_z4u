@@ -428,11 +428,11 @@ frame_40:
 	bne	notidle
 idle40:
 	clrl	(%sp)		| get rid of old fsave frame
-        movel  %d1,USER_D1(%a6)  | save d1
+	movel  %d1,USER_D1(%a6)  | save d1
 	movew	#8,%d1		| place unimp frame instead
 loop40:	clrl	-(%sp)
 	dbra	%d1,loop40
-        movel  USER_D1(%a6),%d1  | restore d1
+	movel  USER_D1(%a6),%d1  | restore d1
 	movel	#0x40280000,-(%sp)
 	frestore (%sp)+
 	unlk	%a5
@@ -443,11 +443,11 @@ frame_41:
 	bne	notidle
 idle41:
 	clrl	(%sp)		| get rid of old fsave frame
-        movel  %d1,USER_D1(%a6)  | save d1
+	movel  %d1,USER_D1(%a6)  | save d1
 	movew	#10,%d1		| place unimp frame instead
 loop41:	clrl	-(%sp)
 	dbra	%d1,loop41
-        movel  USER_D1(%a6),%d1  | restore d1
+	movel  USER_D1(%a6),%d1  | restore d1
 	movel	#0x41300000,-(%sp)
 	frestore (%sp)+
 	unlk	%a5

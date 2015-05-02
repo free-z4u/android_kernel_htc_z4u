@@ -411,7 +411,7 @@ nmi_interrupt:
 	bpl     1f
 	nop
 	jsr	handle_watchdog_bite	; In time.c.
-        move.d	$sp, $r10		; Pointer to registers
+	move.d	$sp, $r10		; Pointer to registers
 1:	btstq	REG_BIT(intr_vect, r_nmi, ext), $r0
 	bpl     1f
 	nop
@@ -882,12 +882,12 @@ sys_call_table:
 	.long sys_pwritev
 	.long sys_setns			/* 335 */
 
-        /*
-         * NOTE!! This doesn't have to be exact - we just have
-         * to make sure we have _enough_ of the "sys_ni_syscall"
-         * entries. Don't panic if you notice that this hasn't
-         * been shrunk every time we add a new system call.
-         */
+	/*
+	 * NOTE!! This doesn't have to be exact - we just have
+	 * to make sure we have _enough_ of the "sys_ni_syscall"
+	 * entries. Don't panic if you notice that this hasn't
+	 * been shrunk every time we add a new system call.
+	 */
 
 	.rept NR_syscalls - (.-sys_call_table) / 4
 		.long sys_ni_syscall

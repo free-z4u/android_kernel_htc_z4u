@@ -159,7 +159,7 @@ enc:        .octa 0x2
 	pxor	  \TMP3, \GH
 	pxor	  \TMP2, \TMP1          # TMP2:GH holds the result of GH*HK
 
-        # first phase of the reduction
+	# first phase of the reduction
 
 	movdqa    \GH, \TMP2
 	movdqa    \GH, \TMP3
@@ -176,7 +176,7 @@ enc:        .octa 0x2
 	pslldq    $12, \TMP2            # left shift TMP2 3 DWs
 	pxor      \TMP2, \GH
 
-        # second phase of the reduction
+	# second phase of the reduction
 
 	movdqa    \GH,\TMP2             # copy GH into TMP2,TMP3 and TMP4
 					# in in order to perform
@@ -228,23 +228,23 @@ _get_AAD_loop2\num_initial_blocks\operation:
 	cmp	   %r11, %r12
 	jne	   _get_AAD_loop2\num_initial_blocks\operation
 _get_AAD_loop2_done\num_initial_blocks\operation:
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM   %xmm14, %xmm\i # byte-reflect the AAD data
 
 	xor	   %r11, %r11 # initialise the data pointer offset as zero
 
-        # start AES for num_initial_blocks blocks
+	# start AES for num_initial_blocks blocks
 
 	mov	   %arg5, %rax                      # %rax = *Y0
 	movdqu	   (%rax), \XMM0                    # XMM0 = Y0
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM   %xmm14, \XMM0
 
 .if (\i == 5) || (\i == 6) || (\i == 7)
 .irpc index, \i_seq
 	paddd	   ONE(%rip), \XMM0                 # INCR Y0
 	movdqa	   \XMM0, %xmm\index
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM   %xmm14, %xmm\index      # perform a 16 byte swap
 
 .endr
@@ -299,29 +299,29 @@ _get_AAD_loop2_done\num_initial_blocks\operation:
 	add	   $16, %r11
 
 	movdqa     \TMP1, %xmm\index
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM	   %xmm14, %xmm\index
 
 		# prepare plaintext/ciphertext for GHASH computation
 .endr
 .endif
 	GHASH_MUL  %xmm\i, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        # apply GHASH on num_initial_blocks blocks
+	# apply GHASH on num_initial_blocks blocks
 
 .if \i == 5
-        pxor       %xmm5, %xmm6
+	pxor       %xmm5, %xmm6
 	GHASH_MUL  %xmm6, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        pxor       %xmm6, %xmm7
+	pxor       %xmm6, %xmm7
 	GHASH_MUL  %xmm7, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        pxor       %xmm7, %xmm8
+	pxor       %xmm7, %xmm8
 	GHASH_MUL  %xmm8, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
 .elseif \i == 6
-        pxor       %xmm6, %xmm7
+	pxor       %xmm6, %xmm7
 	GHASH_MUL  %xmm7, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        pxor       %xmm7, %xmm8
+	pxor       %xmm7, %xmm8
 	GHASH_MUL  %xmm8, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
 .elseif \i == 7
-        pxor       %xmm7, %xmm8
+	pxor       %xmm7, %xmm8
 	GHASH_MUL  %xmm8, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
 .endif
 	cmp	   $64, %r13
@@ -334,22 +334,22 @@ _get_AAD_loop2_done\num_initial_blocks\operation:
 */
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM1
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM  %xmm14, \XMM1        # perform a 16 byte swap
 
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM2
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM  %xmm14, \XMM2        # perform a 16 byte swap
 
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM3
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM3        # perform a 16 byte swap
 
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM4
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM4        # perform a 16 byte swap
 
 	pxor	   16*0(%arg1), \XMM1
@@ -415,15 +415,15 @@ _get_AAD_loop2_done\num_initial_blocks\operation:
 	movdqu	   \XMM4, 16*3(%arg2 , %r11 , 1)
 	movdqa     \TMP1, \XMM4
 	add	   $64, %r11
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM1 # perform a 16 byte swap
 	pxor	   \XMMDst, \XMM1
 # combine GHASHed value with the corresponding ciphertext
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM2 # perform a 16 byte swap
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM3 # perform a 16 byte swap
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM4 # perform a 16 byte swap
 
 _initial_blocks_done\num_initial_blocks\operation:
@@ -466,23 +466,23 @@ _get_AAD_loop2\num_initial_blocks\operation:
 	cmp	   %r11, %r12
 	jne	   _get_AAD_loop2\num_initial_blocks\operation
 _get_AAD_loop2_done\num_initial_blocks\operation:
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM   %xmm14, %xmm\i # byte-reflect the AAD data
 
 	xor	   %r11, %r11 # initialise the data pointer offset as zero
 
-        # start AES for num_initial_blocks blocks
+	# start AES for num_initial_blocks blocks
 
 	mov	   %arg5, %rax                      # %rax = *Y0
 	movdqu	   (%rax), \XMM0                    # XMM0 = Y0
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM   %xmm14, \XMM0
 
 .if (\i == 5) || (\i == 6) || (\i == 7)
 .irpc index, \i_seq
 	paddd	   ONE(%rip), \XMM0                 # INCR Y0
 	movdqa	   \XMM0, %xmm\index
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM   %xmm14, %xmm\index      # perform a 16 byte swap
 
 .endr
@@ -536,29 +536,29 @@ _get_AAD_loop2_done\num_initial_blocks\operation:
 	# write back plaintext/ciphertext for num_initial_blocks
 	add	   $16, %r11
 
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM	   %xmm14, %xmm\index
 
 		# prepare plaintext/ciphertext for GHASH computation
 .endr
 .endif
 	GHASH_MUL  %xmm\i, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        # apply GHASH on num_initial_blocks blocks
+	# apply GHASH on num_initial_blocks blocks
 
 .if \i == 5
-        pxor       %xmm5, %xmm6
+	pxor       %xmm5, %xmm6
 	GHASH_MUL  %xmm6, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        pxor       %xmm6, %xmm7
+	pxor       %xmm6, %xmm7
 	GHASH_MUL  %xmm7, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        pxor       %xmm7, %xmm8
+	pxor       %xmm7, %xmm8
 	GHASH_MUL  %xmm8, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
 .elseif \i == 6
-        pxor       %xmm6, %xmm7
+	pxor       %xmm6, %xmm7
 	GHASH_MUL  %xmm7, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
-        pxor       %xmm7, %xmm8
+	pxor       %xmm7, %xmm8
 	GHASH_MUL  %xmm8, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
 .elseif \i == 7
-        pxor       %xmm7, %xmm8
+	pxor       %xmm7, %xmm8
 	GHASH_MUL  %xmm8, \TMP3, \TMP1, \TMP2, \TMP4, \TMP5, \XMM1
 .endif
 	cmp	   $64, %r13
@@ -571,22 +571,22 @@ _get_AAD_loop2_done\num_initial_blocks\operation:
 */
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM1
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM  %xmm14, \XMM1        # perform a 16 byte swap
 
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM2
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM  %xmm14, \XMM2        # perform a 16 byte swap
 
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM3
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM3        # perform a 16 byte swap
 
 	paddd	   ONE(%rip), \XMM0              # INCR Y0
 	movdqa	   \XMM0, \XMM4
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM4        # perform a 16 byte swap
 
 	pxor	   16*0(%arg1), \XMM1
@@ -649,15 +649,15 @@ _get_AAD_loop2_done\num_initial_blocks\operation:
 	movdqu     \XMM4, 16*3(%arg2 , %r11 , 1)
 
 	add	   $64, %r11
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM1 # perform a 16 byte swap
 	pxor	   \XMMDst, \XMM1
 # combine GHASHed value with the corresponding ciphertext
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM2 # perform a 16 byte swap
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM3 # perform a 16 byte swap
-        movdqa     SHUF_MASK(%rip), %xmm14
+	movdqa     SHUF_MASK(%rip), %xmm14
 	PSHUFB_XMM %xmm14, \XMM4 # perform a 16 byte swap
 
 _initial_blocks_done\num_initial_blocks\operation:
@@ -678,8 +678,8 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	movdqa	  \XMM3, \XMM7
 	movdqa	  \XMM4, \XMM8
 
-        movdqa    SHUF_MASK(%rip), %xmm15
-        # multiply TMP5 * HashKey using karatsuba
+	movdqa    SHUF_MASK(%rip), %xmm15
+	# multiply TMP5 * HashKey using karatsuba
 
 	movdqa	  \XMM5, \TMP4
 	pshufd	  $78, \XMM5, \TMP6
@@ -748,7 +748,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \XMM7, \TMP2
 	movdqa	  HashKey_2(%rsp ), \TMP5
 
-        # Multiply TMP5 * HashKey using karatsuba
+	# Multiply TMP5 * HashKey using karatsuba
 
 	PCLMULQDQ 0x11, \TMP5, \TMP1           # TMP1 = a1*b1
 	movaps 0x60(%arg1), \TMP3
@@ -774,8 +774,8 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \XMM7, \XMM5
 	pxor	  \TMP2, \TMP6
 
-        # Multiply XMM8 * HashKey
-        # XMM8 and TMP5 hold the values for the two operands
+	# Multiply XMM8 * HashKey
+	# XMM8 and TMP5 hold the values for the two operands
 
 	movdqa	  \XMM8, \TMP1
 	pshufd	  $78, \XMM8, \TMP2
@@ -803,10 +803,10 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \TMP3, \XMM3                 # Ciphertext/Plaintext XOR EK
 	movdqu	  48(%arg3,%r11,1), \TMP3
 	pxor	  \TMP3, \XMM4                 # Ciphertext/Plaintext XOR EK
-        movdqu    \XMM1, (%arg2,%r11,1)        # Write to the ciphertext buffer
-        movdqu    \XMM2, 16(%arg2,%r11,1)      # Write to the ciphertext buffer
-        movdqu    \XMM3, 32(%arg2,%r11,1)      # Write to the ciphertext buffer
-        movdqu    \XMM4, 48(%arg2,%r11,1)      # Write to the ciphertext buffer
+	movdqu    \XMM1, (%arg2,%r11,1)        # Write to the ciphertext buffer
+	movdqu    \XMM2, 16(%arg2,%r11,1)      # Write to the ciphertext buffer
+	movdqu    \XMM3, 32(%arg2,%r11,1)      # Write to the ciphertext buffer
+	movdqu    \XMM4, 48(%arg2,%r11,1)      # Write to the ciphertext buffer
 	PSHUFB_XMM %xmm15, \XMM1        # perform a 16 byte swap
 	PSHUFB_XMM %xmm15, \XMM2	# perform a 16 byte swap
 	PSHUFB_XMM %xmm15, \XMM3	# perform a 16 byte swap
@@ -823,7 +823,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \TMP3, \XMM5
 	pxor	  \TMP2, \TMP1	  # accumulate the results in TMP1:XMM5
 
-        # first phase of reduction
+	# first phase of reduction
 
 	movdqa    \XMM5, \TMP2
 	movdqa    \XMM5, \TMP3
@@ -839,7 +839,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pslldq    $12, \TMP2                   # left shift T2 3 DWs
 	pxor      \TMP2, \XMM5
 
-        # second phase of reduction
+	# second phase of reduction
 
 	movdqa    \XMM5,\TMP2 # make 3 copies of XMM5 into TMP2, TMP3, TMP4
 	movdqa    \XMM5,\TMP3
@@ -870,8 +870,8 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	movdqa	  \XMM3, \XMM7
 	movdqa	  \XMM4, \XMM8
 
-        movdqa    SHUF_MASK(%rip), %xmm15
-        # multiply TMP5 * HashKey using karatsuba
+	movdqa    SHUF_MASK(%rip), %xmm15
+	# multiply TMP5 * HashKey using karatsuba
 
 	movdqa	  \XMM5, \TMP4
 	pshufd	  $78, \XMM5, \TMP6
@@ -940,7 +940,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \XMM7, \TMP2
 	movdqa	  HashKey_2(%rsp ), \TMP5
 
-        # Multiply TMP5 * HashKey using karatsuba
+	# Multiply TMP5 * HashKey using karatsuba
 
 	PCLMULQDQ 0x11, \TMP5, \TMP1           # TMP1 = a1*b1
 	movaps 0x60(%arg1), \TMP3
@@ -966,8 +966,8 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \XMM7, \XMM5
 	pxor	  \TMP2, \TMP6
 
-        # Multiply XMM8 * HashKey
-        # XMM8 and TMP5 hold the values for the two operands
+	# Multiply XMM8 * HashKey
+	# XMM8 and TMP5 hold the values for the two operands
 
 	movdqa	  \XMM8, \TMP1
 	pshufd	  $78, \XMM8, \TMP2
@@ -1019,7 +1019,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pxor	  \TMP3, \XMM5
 	pxor	  \TMP2, \TMP1	  # accumulate the results in TMP1:XMM5
 
-        # first phase of reduction
+	# first phase of reduction
 
 	movdqa    \XMM5, \TMP2
 	movdqa    \XMM5, \TMP3
@@ -1035,7 +1035,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 	pslldq    $12, \TMP2                   # left shift T2 3 DWs
 	pxor      \TMP2, \XMM5
 
-        # second phase of reduction
+	# second phase of reduction
 
 	movdqa    \XMM5,\TMP2 # make 3 copies of XMM5 into TMP2, TMP3, TMP4
 	movdqa    \XMM5,\TMP3
@@ -1056,7 +1056,7 @@ TMP6 XMM0 XMM1 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 operation
 .macro	GHASH_LAST_4 TMP1 TMP2 TMP3 TMP4 TMP5 TMP6 \
 TMP7 XMM1 XMM2 XMM3 XMM4 XMMDst
 
-        # Multiply TMP6 * HashKey (using Karatsuba)
+	# Multiply TMP6 * HashKey (using Karatsuba)
 
 	movdqa	  \XMM1, \TMP6
 	pshufd	  $78, \XMM1, \TMP2
@@ -1069,7 +1069,7 @@ TMP7 XMM1 XMM2 XMM3 XMM4 XMMDst
 	movdqa	  \XMM1, \XMMDst
 	movdqa	  \TMP2, \XMM1              # result in TMP6, XMMDst, XMM1
 
-        # Multiply TMP1 * HashKey (using Karatsuba)
+	# Multiply TMP1 * HashKey (using Karatsuba)
 
 	movdqa	  \XMM2, \TMP1
 	pshufd	  $78, \XMM2, \TMP2
@@ -1084,7 +1084,7 @@ TMP7 XMM1 XMM2 XMM3 XMM4 XMMDst
 	pxor	  \TMP2, \XMM1
 # results accumulated in TMP6, XMMDst, XMM1
 
-        # Multiply TMP1 * HashKey (using Karatsuba)
+	# Multiply TMP1 * HashKey (using Karatsuba)
 
 	movdqa	  \XMM3, \TMP1
 	pshufd	  $78, \XMM3, \TMP2
@@ -1098,7 +1098,7 @@ TMP7 XMM1 XMM2 XMM3 XMM4 XMMDst
 	pxor	  \XMM3, \XMMDst
 	pxor	  \TMP2, \XMM1   # results accumulated in TMP6, XMMDst, XMM1
 
-        # Multiply TMP1 * HashKey (using Karatsuba)
+	# Multiply TMP1 * HashKey (using Karatsuba)
 	movdqa	  \XMM4, \TMP1
 	pshufd	  $78, \XMM4, \TMP2
 	pxor	  \XMM4, \TMP2
@@ -1134,7 +1134,7 @@ TMP7 XMM1 XMM2 XMM3 XMM4 XMMDst
 	pslldq    $12, \TMP2                # left shift TMP2 3 DWs
 	pxor      \TMP2, \XMMDst
 
-        # second phase of the reduction
+	# second phase of the reduction
 	movdqa    \XMMDst, \TMP2
 	# make 3 copies of XMMDst for doing 3 shift operations
 	movdqa    \XMMDst, \TMP3
@@ -1153,25 +1153,25 @@ TMP7 XMM1 XMM2 XMM3 XMM4 XMMDst
 .macro ENCRYPT_SINGLE_BLOCK XMM0 TMP1
 
 	pxor	(%arg1), \XMM0
-        movaps 16(%arg1), \TMP1
+	movaps 16(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 32(%arg1), \TMP1
+	movaps 32(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 48(%arg1), \TMP1
+	movaps 48(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 64(%arg1), \TMP1
+	movaps 64(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 80(%arg1), \TMP1
+	movaps 80(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 96(%arg1), \TMP1
+	movaps 96(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 112(%arg1), \TMP1
+	movaps 112(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 128(%arg1), \TMP1
+	movaps 128(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 144(%arg1), \TMP1
+	movaps 144(%arg1), \TMP1
 	AESENC	\TMP1, \XMM0
-        movaps 160(%arg1), \TMP1
+	movaps 160(%arg1), \TMP1
 	AESENCLAST	\TMP1, \XMM0
 .endm
 
@@ -1276,7 +1276,7 @@ ENTRY(aesni_gcm_dec)
 	and	$~63, %rsp                        # align rsp to 64 bytes
 	mov	%arg6, %r12
 	movdqu	(%r12), %xmm13			  # %xmm13 = HashKey
-        movdqa  SHUF_MASK(%rip), %xmm2
+	movdqa  SHUF_MASK(%rip), %xmm2
 	PSHUFB_XMM %xmm2, %xmm13
 
 
@@ -1290,7 +1290,7 @@ ENTRY(aesni_gcm_dec)
 	psrldq	$8, %xmm1
 	por	%xmm2, %xmm13
 
-        # Reduction
+	# Reduction
 
 	pshufd	$0x24, %xmm1, %xmm2
 	pcmpeqd TWOONE(%rip), %xmm2
@@ -1298,7 +1298,7 @@ ENTRY(aesni_gcm_dec)
 	pxor	%xmm2, %xmm13     # %xmm13 holds the HashKey<<1 (mod poly)
 
 
-        # Decrypt first few blocks
+	# Decrypt first few blocks
 
 	movdqa %xmm13, HashKey(%rsp)           # store HashKey<<1 (mod poly)
 	mov %arg4, %r13    # save the number of bytes of plaintext/ciphertext
@@ -1346,10 +1346,10 @@ _zero_cipher_left_decrypt:
 	and	$15, %r13				# %r13 = arg4 (mod 16)
 	je	_multiple_of_16_bytes_decrypt
 
-        # Handle the last <16 byte block separately
+	# Handle the last <16 byte block separately
 
 	paddd ONE(%rip), %xmm0         # increment CNT to get Yn
-        movdqa SHUF_MASK(%rip), %xmm10
+	movdqa SHUF_MASK(%rip), %xmm10
 	PSHUFB_XMM %xmm10, %xmm0
 
 	ENCRYPT_SINGLE_BLOCK  %xmm0, %xmm1    # E(K, Yn)
@@ -1369,7 +1369,7 @@ _zero_cipher_left_decrypt:
 	# get the appropriate mask to mask out top 16-%r13 bytes of %xmm0
 	pand %xmm1, %xmm0            # mask out top 16-%r13 bytes of %xmm0
 	pand    %xmm1, %xmm2
-        movdqa SHUF_MASK(%rip), %xmm10
+	movdqa SHUF_MASK(%rip), %xmm10
 	PSHUFB_XMM %xmm10 ,%xmm2
 
 	pxor %xmm2, %xmm8
@@ -1378,7 +1378,7 @@ _zero_cipher_left_decrypt:
 	sub %r13, %r11
 	add $16, %r11
 
-        # output %r13 bytes
+	# output %r13 bytes
 	MOVQ_R64_XMM	%xmm0, %rax
 	cmp	$8, %r13
 	jle	_less_than_8_bytes_left_decrypt
@@ -1404,7 +1404,7 @@ _multiple_of_16_bytes_decrypt:
 	pxor	%xmm15, %xmm8
 	GHASH_MUL	%xmm8, %xmm13, %xmm9, %xmm10, %xmm11, %xmm5, %xmm6
 	         # final GHASH computation
-        movdqa SHUF_MASK(%rip), %xmm10
+	movdqa SHUF_MASK(%rip), %xmm10
 	PSHUFB_XMM %xmm10, %xmm8
 
 	mov	%arg5, %rax		  # %rax = *Y0
@@ -1535,7 +1535,7 @@ ENTRY(aesni_gcm_enc)
 	and	$~63, %rsp
 	mov	%arg6, %r12
 	movdqu	(%r12), %xmm13
-        movdqa  SHUF_MASK(%rip), %xmm2
+	movdqa  SHUF_MASK(%rip), %xmm2
 	PSHUFB_XMM %xmm2, %xmm13
 
 
@@ -1549,7 +1549,7 @@ ENTRY(aesni_gcm_enc)
 	psrldq	$8, %xmm1
 	por	%xmm2, %xmm13
 
-        # reduce HashKey<<1
+	# reduce HashKey<<1
 
 	pshufd	$0x24, %xmm1, %xmm2
 	pcmpeqd TWOONE(%rip), %xmm2
@@ -1560,7 +1560,7 @@ ENTRY(aesni_gcm_enc)
 	and	$-16, %r13
 	mov	%r13, %r12
 
-        # Encrypt first few blocks
+	# Encrypt first few blocks
 
 	and	$(3<<4), %r12
 	jz	_initial_num_blocks_is_0_encrypt
@@ -1587,7 +1587,7 @@ _initial_num_blocks_is_0_encrypt:
 %xmm1, %xmm2, %xmm3, %xmm4, %xmm8, %xmm5, %xmm6, 8, 0, enc
 _initial_blocks_encrypted:
 
-        # Main loop - Encrypt remaining blocks
+	# Main loop - Encrypt remaining blocks
 
 	cmp	$0, %r13
 	je	_zero_cipher_left_encrypt
@@ -1607,9 +1607,9 @@ _zero_cipher_left_encrypt:
 	and	$15, %r13			# %r13 = arg4 (mod 16)
 	je	_multiple_of_16_bytes_encrypt
 
-         # Handle the last <16 Byte block separately
+	 # Handle the last <16 Byte block separately
 	paddd ONE(%rip), %xmm0                # INCR CNT to get Yn
-        movdqa SHUF_MASK(%rip), %xmm10
+	movdqa SHUF_MASK(%rip), %xmm10
 	PSHUFB_XMM %xmm10, %xmm0
 
 
@@ -1627,7 +1627,7 @@ _zero_cipher_left_encrypt:
 	movdqu	ALL_F-SHIFT_MASK(%r12), %xmm1
 	# get the appropriate mask to mask out top 16-r13 bytes of xmm0
 	pand	%xmm1, %xmm0            # mask out top 16-r13 bytes of xmm0
-        movdqa SHUF_MASK(%rip), %xmm10
+	movdqa SHUF_MASK(%rip), %xmm10
 	PSHUFB_XMM %xmm10,%xmm0
 
 	pxor	%xmm0, %xmm8
@@ -1641,7 +1641,7 @@ _zero_cipher_left_encrypt:
 
 	# shuffle xmm0 back to output as ciphertext
 
-        # Output %r13 bytes
+	# Output %r13 bytes
 	MOVQ_R64_XMM %xmm0, %rax
 	cmp $8, %r13
 	jle _less_than_8_bytes_left_encrypt
@@ -1667,7 +1667,7 @@ _multiple_of_16_bytes_encrypt:
 	pxor	%xmm15, %xmm8
 	GHASH_MUL	%xmm8, %xmm13, %xmm9, %xmm10, %xmm11, %xmm5, %xmm6
 	# final GHASH computation
-        movdqa SHUF_MASK(%rip), %xmm10
+	movdqa SHUF_MASK(%rip), %xmm10
 	PSHUFB_XMM %xmm10, %xmm8         # perform a 16 byte swap
 
 	mov	%arg5, %rax		       # %rax  = *Y0

@@ -55,7 +55,7 @@ mn10300_dcache_inv_range2	= mn10300_local_dcache_inv_range2
 ###############################################################################
 	ALIGN
 	.globl	mn10300_local_icache_inv
-        .type	mn10300_local_icache_inv,@function
+	.type	mn10300_local_icache_inv,@function
 mn10300_local_icache_inv:
 	mov	CHCTR,a0
 
@@ -86,7 +86,7 @@ mn10300_local_dcache_inv:
 	beq	mn10300_local_dcache_inv_end
 
 	invalidate_dcache 1
-	
+
 mn10300_local_dcache_inv_end:
 	ret	[],0
 	.size	mn10300_local_dcache_inv,.-mn10300_local_dcache_inv

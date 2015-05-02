@@ -542,7 +542,7 @@ return:
    move    [$acr], $usp    ; Restore USP
    addq    4,      $acr
    move    [$acr], $spc    ; Restore SPC
-                           ; No restoration of pseudo-PC of course.
+			   ; No restoration of pseudo-PC of course.
 
    move.d  reg,    $acr    ; Reset ACR to point at the beginning of the register image
    add.d   15*4,   $acr

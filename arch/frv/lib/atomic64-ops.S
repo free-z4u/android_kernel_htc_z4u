@@ -24,7 +24,7 @@
 #
 ###############################################################################
 	.globl		atomic64_inc_return
-        .type		atomic64_inc_return,@function
+	.type		atomic64_inc_return,@function
 atomic64_inc_return:
 	or.p		gr8,gr8,gr10
 0:
@@ -47,7 +47,7 @@ atomic64_inc_return:
 #
 ###############################################################################
 	.globl		atomic64_dec_return
-        .type		atomic64_dec_return,@function
+	.type		atomic64_dec_return,@function
 atomic64_dec_return:
 	or.p		gr8,gr8,gr10
 0:
@@ -70,7 +70,7 @@ atomic64_dec_return:
 #
 ###############################################################################
 	.globl		atomic64_add_return
-        .type		atomic64_add_return,@function
+	.type		atomic64_add_return,@function
 atomic64_add_return:
 	or.p		gr8,gr8,gr4
 	or		gr9,gr9,gr5
@@ -94,7 +94,7 @@ atomic64_add_return:
 #
 ###############################################################################
 	.globl		atomic64_sub_return
-        .type		atomic64_sub_return,@function
+	.type		atomic64_sub_return,@function
 atomic64_sub_return:
 	or.p		gr8,gr8,gr4
 	or		gr9,gr9,gr5
@@ -118,7 +118,7 @@ atomic64_sub_return:
 #
 ###############################################################################
 	.globl		__xchg_64
-        .type		__xchg_64,@function
+	.type		__xchg_64,@function
 __xchg_64:
 	or.p		gr8,gr8,gr4
 	or		gr9,gr9,gr5
@@ -140,7 +140,7 @@ __xchg_64:
 #
 ###############################################################################
 	.globl		__cmpxchg_64
-        .type		__cmpxchg_64,@function
+	.type		__cmpxchg_64,@function
 __cmpxchg_64:
 	or.p		gr8,gr8,gr4
 	or		gr9,gr9,gr5

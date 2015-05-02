@@ -172,8 +172,8 @@ transfer_to_handler:
 	b	3f
 
 2:	/* if from kernel, check interrupted DOZE/NAP mode and
-         * check for stack overflow
-         */
+	 * check for stack overflow
+	 */
 	lwz	r9,KSP_LIMIT(r12)
 	cmplw	r1,r9			/* if r1 <= ksp_limit */
 	ble-	stack_ovf		/* then the kernel stack overflowed */
@@ -486,7 +486,7 @@ syscall_exit_work:
 	stwcx.	r8,0,r12
 	bne-	3b
 	subi	r12,r12,TI_FLAGS
-	
+
 4:	/* Anything which requires enabling interrupts? */
 	andi.	r0,r9,(_TIF_SYSCALL_T_OR_A|_TIF_SINGLESTEP)
 	beq	ret_from_except

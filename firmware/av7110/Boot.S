@@ -81,8 +81,8 @@ wait:	ldrh	r1, [r4]        // wait for flag!=0
 	movs	r2, r2, lsr #6  // and divide by 64
 	moveq	r0, #2          // if 0, set flag to 2, else signal
 	strh	r0, [r4]        // that buffer is accepted by setting to 0
-        beq wait
-	
+	beq wait
+
 copyloop:
 	ldmia	r1!, {r5-r12}
 	stmia	r3!, {r5-r12}

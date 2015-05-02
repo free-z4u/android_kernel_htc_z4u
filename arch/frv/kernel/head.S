@@ -32,7 +32,7 @@
 	.balign		4
 
 	.globl		_boot, __head_reference
-        .type		_boot,@function
+	.type		_boot,@function
 _boot:
 __head_reference:
 	sethi.p		%hi(LED_ADDR),gr30

@@ -36,7 +36,7 @@
 	sd      k0, (k1)
 	dmtc0   $0, CP0_CACHEERR, 1
 
-        /* check whether this is a nested exception */
+	/* check whether this is a nested exception */
 	mfc0    k1, CP0_STATUS
 	andi    k1, k1, ST0_EXL
 	beqz    k1, 1f
@@ -56,8 +56,8 @@
   * space (uncached) to the 0xFFFFFFFF8XXXXXXX space (cached).  */
 	LEAF(handle_cache_err)
 	.set    push
-        .set    noreorder
-        .set    noat
+	.set    noreorder
+	.set    noat
 
 	SAVE_ALL
 	KMODE

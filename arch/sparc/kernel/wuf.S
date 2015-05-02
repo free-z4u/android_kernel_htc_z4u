@@ -214,7 +214,7 @@ fwin_user_finish_up:
 	/* LOCATION: Window 'T' */
 
 	wr	%t_psr, 0x0, %psr
-	WRITE_PAUSE	
+	WRITE_PAUSE
 
 	jmp	%t_pc
 	rett	%t_npc
@@ -280,7 +280,7 @@ sun4c_fwin_twopages:
 	srl	%l1, 29, %l1
 	andcc	%l1, 0x4, %g0
 	bne	sun4c_fwin_onepage
-	 lda	[%sp] ASI_PTE, %l1	
+	 lda	[%sp] ASI_PTE, %l1
 
 	b,a	fwin_user_stack_is_bolixed	/* Second page has bad perms */
 

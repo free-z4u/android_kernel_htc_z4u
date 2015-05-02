@@ -4,12 +4,12 @@
  * Zero an entire page.
  */
 
-        .text
-        .align 4
-        .global clear_page
-        .ent clear_page
+	.text
+	.align 4
+	.global clear_page
+	.ent clear_page
 clear_page:
-        .prologue 0
+	.prologue 0
 
 	lda	$0,128
 	lda	$1,125

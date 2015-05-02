@@ -256,7 +256,7 @@ SECTIONS
 	_edata_loc = __data_loc + SIZEOF(.data);
 
 #ifdef CONFIG_HAVE_TCM
-        /*
+	/*
 	 * We align everything to a page boundary so we can
 	 * free it after init has commenced and TCM contents have
 	 * been copied to its destination.

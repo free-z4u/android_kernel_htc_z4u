@@ -1,16 +1,16 @@
 /*
- * Compatibility mode system call entry point for x86-64. 
- * 		
+ * Compatibility mode system call entry point for x86-64.
+ *
  * Copyright 2000-2002 Andi Kleen, SuSE Labs.
- */		 
+ */
 
 #include <asm/dwarf2.h>
 #include <asm/calling.h>
 #include <asm/asm-offsets.h>
 #include <asm/current.h>
 #include <asm/errno.h>
-#include <asm/ia32_unistd.h>	
-#include <asm/thread_info.h>	
+#include <asm/ia32_unistd.h>
+#include <asm/thread_info.h>
 #include <asm/segment.h>
 #include <asm/irqflags.h>
 #include <linux/linkage.h>
@@ -37,9 +37,9 @@
 	xchg	%ecx,%esi
 	movl	%ebx,%edi
 	movl	%edx,%edx	/* zero extension */
-	.endm 
+	.endm
 
-	/* clobbers %eax */	
+	/* clobbers %eax */
 	.macro  CLEAR_RREGS offset=0, _r9=rax
 	xorl 	%eax,%eax
 	movq	%rax,\offset+R11(%rsp)
@@ -68,7 +68,7 @@
 	movl \offset+64(%rsp),%edi
 	movl %eax,%eax			/* zero extension */
 	.endm
-	
+
 	.macro CFI_STARTPROC32 simple
 	CFI_STARTPROC	\simple
 	CFI_UNDEFINED	r8
@@ -105,14 +105,14 @@ ENDPROC(native_irq_enable_sysexit)
  * %esi Arg4
  * %edi Arg5
  * %ebp user stack
- * 0(%ebp) Arg6	
- * 	
+ * 0(%ebp) Arg6
+ *
  * Interrupts off.
- *	
+ *
  * This is purely a fast path. For anything complicated we use the int 0x80
  * path below.	Set up a complete hardware stack frame to share code
  * with the int 0x80 path.
- */ 	
+ */
 ENTRY(ia32_sysenter_target)
 	CFI_STARTPROC32	simple
 	CFI_SIGNAL_FRAME
@@ -144,11 +144,11 @@ ENTRY(ia32_sysenter_target)
 	cld
 	SAVE_ARGS 0,1,0
  	/* no need to do an access_ok check here because rbp has been
- 	   32bit zero extended */ 
+ 	   32bit zero extended */
 1:	movl	(%rbp),%ebp
  	.section __ex_table,"a"
  	.quad 1b,ia32_badarg
- 	.previous	
+ 	.previous
 	orl     $TS_COMPAT,TI_status+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	testl   $_TIF_WORK_SYSCALL_ENTRY,TI_flags+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	CFI_REMEMBER_STATE
@@ -167,7 +167,7 @@ sysenter_dispatch:
 sysexit_from_sys_call:
 	andl    $~TS_COMPAT,TI_status+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	/* clear IF, that popfq doesn't enable interrupts early */
-	andl  $~0x200,EFLAGS-R11(%rsp) 
+	andl  $~0x200,EFLAGS-R11(%rsp)
 	movl	RIP-R11(%rsp),%edx		/* User %eip */
 	CFI_REGISTER rip,rdx
 	RESTORE_ARGS 0,24,0,0,0,0
@@ -205,7 +205,7 @@ sysexit_from_sys_call:
 	testl $(_TIF_ALLWORK_MASK & ~_TIF_SYSCALL_AUDIT),TI_flags+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	jnz ia32_ret_from_sys_call
 	TRACE_IRQS_ON
-	sti
+	ENABLE_INTERRUPTS(CLBR_NONE)
 	movl %eax,%esi		/* second arg, syscall return value */
 	cmpl $-MAX_ERRNO,%eax	/* is it an error ? */
 	jbe 1f
@@ -215,7 +215,7 @@ sysexit_from_sys_call:
 	call __audit_syscall_exit
 	movq RAX-ARGOFFSET(%rsp),%rax	/* reload syscall return value */
 	movl $(_TIF_ALLWORK_MASK & ~_TIF_SYSCALL_AUDIT),%edi
-	cli
+	DISABLE_INTERRUPTS(CLBR_NONE)
 	TRACE_IRQS_OFF
 	testl %edi,TI_flags+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	jz \exit
@@ -257,20 +257,20 @@ ENDPROC(ia32_sysenter_target)
  * Arguments:
  * %eax	System call number.
  * %ebx Arg1
- * %ecx return EIP 
+ * %ecx return EIP
  * %edx Arg3
  * %esi Arg4
  * %edi Arg5
  * %ebp Arg2    [note: not saved in the stack frame, should not be touched]
- * %esp user stack 
+ * %esp user stack
  * 0(%esp) Arg6
- * 	
+ *
  * Interrupts off.
- *	
+ *
  * This is purely a fast path. For anything complicated we use the int 0x80
  * path below.	Set up a complete hardware stack frame to share code
- * with the int 0x80 path.	
- */ 	
+ * with the int 0x80 path.
+ */
 ENTRY(ia32_cstar_target)
 	CFI_STARTPROC32	simple
 	CFI_SIGNAL_FRAME
@@ -297,15 +297,15 @@ ENTRY(ia32_cstar_target)
 	movq	$__USER32_DS,SS-ARGOFFSET(%rsp)
 	movq	%r11,EFLAGS-ARGOFFSET(%rsp)
 	/*CFI_REL_OFFSET rflags,EFLAGS-ARGOFFSET*/
-	movq	%r8,RSP-ARGOFFSET(%rsp)	
+	movq	%r8,RSP-ARGOFFSET(%rsp)
 	CFI_REL_OFFSET rsp,RSP-ARGOFFSET
 	/* no need to do an access_ok check here because r8 has been
-	   32bit zero extended */ 
-	/* hardware stack frame is complete now */	
+	   32bit zero extended */
+	/* hardware stack frame is complete now */
 1:	movl	(%r8),%r9d
 	.section __ex_table,"a"
 	.quad 1b,ia32_badarg
-	.previous	
+	.previous
 	orl     $TS_COMPAT,TI_status+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	testl   $_TIF_WORK_SYSCALL_ENTRY,TI_flags+THREAD_INFO(%rsp,RIP-ARGOFFSET)
 	CFI_REMEMBER_STATE
@@ -326,7 +326,7 @@ sysretl_from_sys_call:
 	RESTORE_ARGS 0,-ARG_SKIP,0,0,0
 	movl RIP-ARGOFFSET(%rsp),%ecx
 	CFI_REGISTER rip,rcx
-	movl EFLAGS-ARGOFFSET(%rsp),%r11d	
+	movl EFLAGS-ARGOFFSET(%rsp),%r11d
 	/*CFI_REGISTER rflags,r11*/
 	xorq	%r10,%r10
 	xorq	%r9,%r9
@@ -335,7 +335,7 @@ sysretl_from_sys_call:
 	movl RSP-ARGOFFSET(%rsp),%esp
 	CFI_RESTORE rsp
 	USERGS_SYSRET32
-	
+
 #ifdef CONFIG_AUDITSYSCALL
 cstar_auditsys:
 	CFI_RESTORE_STATE
@@ -366,16 +366,16 @@ cstar_tracesys:
 	ja int_ret_from_sys_call /* cstar_tracesys has set RAX(%rsp) */
 	jmp cstar_do_call
 END(ia32_cstar_target)
-				
+
 ia32_badarg:
 	movq $-EFAULT,%rax
 	jmp ia32_sysret
 	CFI_ENDPROC
 
-/* 
- * Emulated IA32 system calls via int 0x80. 
+/*
+ * Emulated IA32 system calls via int 0x80.
  *
- * Arguments:	 
+ * Arguments:
  * %eax	System call number.
  * %ebx Arg1
  * %ecx Arg2
@@ -385,13 +385,13 @@ ia32_badarg:
  * %ebp Arg6    [note: not saved in the stack frame, should not be touched]
  *
  * Notes:
- * Uses the same stack frame as the x86-64 version.	
+ * Uses the same stack frame as the x86-64 version.
  * All registers except %eax must be saved (but ptrace may violate that)
  * Arguments are zero extended. For system calls that want sign extension and
  * take long arguments a wrapper is needed. Most calls can just be called
  * directly.
- * Assumes it is only called from user space and entered with interrupts off.	
- */ 				
+ * Assumes it is only called from user space and entered with interrupts off.
+ */
 
 ENTRY(ia32_syscall)
 	CFI_STARTPROC32	simple
@@ -427,9 +427,9 @@ ia32_sysret:
 	movq %rax,RAX-ARGOFFSET(%rsp)
 ia32_ret_from_sys_call:
 	CLEAR_RREGS -ARGOFFSET
-	jmp int_ret_from_sys_call 
+	jmp int_ret_from_sys_call
 
-ia32_tracesys:			 
+ia32_tracesys:
 	SAVE_REST
 	CLEAR_RREGS
 	movq $-ENOSYS,RAX(%rsp)	/* ptrace can change this for a bad syscall */
@@ -448,13 +448,13 @@ ia32_badsys:
 	jmp ia32_sysret
 
 	CFI_ENDPROC
-	
+
 	.macro PTREGSCALL label, func, arg
 	ALIGN
 GLOBAL(\label)
 	leaq \func(%rip),%rax
 	leaq -ARGOFFSET+8(%rsp),\arg	/* 8 for return address */
-	jmp  ia32_ptregs_common	
+	jmp  ia32_ptregs_common
 	.endm
 
 	CFI_STARTPROC32

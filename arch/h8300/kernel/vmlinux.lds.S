@@ -55,20 +55,20 @@ ENTRY(__start)
 SECTIONS
 {
 #if defined(CONFIG_ROMKERNEL)
-	. = ROMTOP; 
+	. = ROMTOP;
 	.vectors :
 	{
 	__vector = . ;
 		*(.vectors*)
 	}
 #else
-	. = RAMTOP; 
-	.bootvec :	
+	. = RAMTOP;
+	.bootvec :
 	{
 		*(.bootvec)
 	}
 #endif
-        .text :
+	.text :
 	{
 	_text = .;
 #if defined(CONFIG_ROMKERNEL)
@@ -86,12 +86,12 @@ SECTIONS
 #if defined(CONFIG_ROMKERNEL)
 	SECURITY_INIT
 #endif
-	ROEND = .; 
+	ROEND = .;
 #if defined(CONFIG_ROMKERNEL)
 	. = RAMTOP;
 	.data :	AT(ROEND)
 #else
-	.data :	
+	.data :
 #endif
 	{
 	__sdata = . ;
@@ -101,13 +101,13 @@ SECTIONS
 	. = ALIGN(0x4) ;
 		DATA_DATA
 	. = ALIGN(0x4) ;
-		*(.data.*)	
+		*(.data.*)
 
 	. = ALIGN(0x4) ;
 	___init_begin = .;
-	__sinittext = .; 
+	__sinittext = .;
 		INIT_TEXT
-	__einittext = .; 
+	__einittext = .;
 		INIT_DATA
 	. = ALIGN(0x4) ;
 	INIT_SETUP(0x4)
@@ -128,8 +128,8 @@ SECTIONS
 	SECURITY_INIT
 #endif
 	__begin_data = LOADADDR(.data);
-        .bss : 
-        {
+	.bss :
+	{
 	. = ALIGN(0x4) ;
 	__sbss = . ;
 		*(.bss*)
@@ -140,13 +140,13 @@ SECTIONS
 	__end = . ;
 	__ramstart = .;
 	}
-        .romfs :	
+	.romfs :
 	{
 		*(.romfs*)
 	}
 	. = RAMTOP+RAMSIZE;
-        .dummy :
-        {
+	.dummy :
+	{
 	COMMAND_START = . - 0x200 ;
 	__ramend = . ;
 	}

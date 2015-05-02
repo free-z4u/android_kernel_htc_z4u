@@ -273,16 +273,16 @@ ENTRY(sys_call_table)
 	.long sys_utimes
 	.long sys_fadvise64_64
 	.long sys_ni_syscall		/* Reserved for sys_vserver */
-        .long sys_ni_syscall		/* Reserved for sys_mbind */
-        .long sys_ni_syscall		/* Reserved for sys_get_mempolicy */
-        .long sys_ni_syscall		/* Reserved for sys_set_mempolicy */
-        .long sys_mq_open
-        .long sys_mq_unlink
-        .long sys_mq_timedsend
-        .long sys_mq_timedreceive       /* 280 */
-        .long sys_mq_notify
-        .long sys_mq_getsetattr
-        .long sys_ni_syscall            /* reserved for kexec */
+	.long sys_ni_syscall		/* Reserved for sys_mbind */
+	.long sys_ni_syscall		/* Reserved for sys_get_mempolicy */
+	.long sys_ni_syscall		/* Reserved for sys_set_mempolicy */
+	.long sys_mq_open
+	.long sys_mq_unlink
+	.long sys_mq_timedsend
+	.long sys_mq_timedreceive       /* 280 */
+	.long sys_mq_notify
+	.long sys_mq_getsetattr
+	.long sys_ni_syscall            /* reserved for kexec */
 	.long sys_waitid
 	.long sys_ni_syscall		/* 285 */ /* available */
 	.long sys_add_key

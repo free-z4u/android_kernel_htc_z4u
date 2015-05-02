@@ -10,8 +10,8 @@
  */
 
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
@@ -21,8 +21,8 @@
 #         to caller's fixup routine, aborting the remainder of the copy
 #
 ###############################################################################
-        .globl		memcpy,__memcpy_end
-        .type		memcpy,@function
+	.globl		memcpy,__memcpy_end
+	.type		memcpy,@function
 memcpy:
 	or.p		gr8,gr9,gr4
 	orcc		gr10,gr0,gr0,icc3
@@ -105,8 +105,8 @@ __memcpy_end:
 # long __memcpy_user(void *dst, const void *src, size_t count)
 #
 ###############################################################################
-        .globl		__memcpy_user, __memcpy_user_error_lr, __memcpy_user_error_handler
-        .type		__memcpy_user,@function
+	.globl		__memcpy_user, __memcpy_user_error_lr, __memcpy_user_error_handler
+	.type		__memcpy_user,@function
 __memcpy_user:
 	movsg		lr,gr7
 	subi.p		sp,#8,sp

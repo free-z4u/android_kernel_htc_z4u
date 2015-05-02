@@ -302,10 +302,10 @@ ENTRY(kvm_interrupt)
 	;;
 .mem.offset 0,0; st8.spill [r16]=r8,16
 .mem.offset 8,0; st8.spill [r17]=r9,16
-        ;;
+	;;
 .mem.offset 0,0; st8.spill [r16]=r10,24
 .mem.offset 8,0; st8.spill [r17]=r11,24
-        ;;
+	;;
 	st8 [r16]=r28,16		/* save cr.iip */
 	st8 [r17]=r30,16		/* save cr.ifs */
 	mov r8=ar.fpsr		/* M */

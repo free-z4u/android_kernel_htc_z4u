@@ -201,17 +201,17 @@ _reloc:
 	# a10 destination end
 
 1:
-        l32i    a9, a8, 0
-        l32i    a11, a8, 4
-        s32i    a9, a6, 0
-        s32i    a11, a6, 4
-        l32i    a9, a8, 8
-        l32i    a11, a8, 12
-        s32i    a9, a6, 8
-        s32i    a11, a6, 12
-        addi    a6, a6, 16
-        addi    a8, a8, 16
-        blt     a6, a10, 1b
+	l32i    a9, a8, 0
+	l32i    a11, a8, 4
+	s32i    a9, a6, 0
+	s32i    a11, a6, 4
+	l32i    a9, a8, 8
+	l32i    a11, a8, 12
+	s32i    a9, a6, 8
+	s32i    a11, a6, 12
+	addi    a6, a6, 16
+	addi    a8, a8, 16
+	blt     a6, a10, 1b
 
 
 	/* jump to the kernel */

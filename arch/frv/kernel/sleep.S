@@ -55,7 +55,7 @@ __sleep_save_area:
 #
 ###############################################################################
 	.globl		frv_cpu_suspend
-        .type		frv_cpu_suspend,@function
+	.type		frv_cpu_suspend,@function
 frv_cpu_suspend:
 
 	#----------------------------------------------------
@@ -128,7 +128,7 @@ frv_cpu_suspend:
 #               gr8 holds desired psr sleep value
 #
 	.balign		L1_CACHE_BYTES
-        .type		__icache_lock_start,@function
+	.type		__icache_lock_start,@function
 __icache_lock_start:
 
 	#----------------------------------------------------
@@ -296,7 +296,7 @@ __ramboot_resume:
 #
 ###############################################################################
 	.globl		frv_cpu_core_sleep
-        .type		frv_cpu_core_sleep,@function
+	.type		frv_cpu_core_sleep,@function
 frv_cpu_core_sleep:
 
 	# Preload into icache.

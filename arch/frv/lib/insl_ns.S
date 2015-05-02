@@ -10,16 +10,16 @@
  */
 
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
 # void __insl_ns(unsigned int port, void *buf, int n)
 #
 ###############################################################################
-        .globl		__insl_ns
-        .type		__insl_ns,@function
+	.globl		__insl_ns
+	.type		__insl_ns,@function
 __insl_ns:
 	andicc.p	gr9,#3,gr0,icc0
 	setlos		#4,gr4

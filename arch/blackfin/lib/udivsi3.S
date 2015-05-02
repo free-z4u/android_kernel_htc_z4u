@@ -122,9 +122,9 @@ ENTRY(___udivsi3)
   R3 = 1;
 
   P2 = R1;
-                                  /* If either R0 or R1 have sign set, */
-                                  /* divide them by two, and note it's */
-                                  /* been done. */
+				  /* If either R0 or R1 have sign set, */
+				  /* divide them by two, and note it's */
+				  /* been done. */
   CC = R1 < 0;
   R2 = R1 >> 1;
   IF CC R1 = R2;                  /* Possibly-shifted R1 */
@@ -139,9 +139,9 @@ ENTRY(___udivsi3)
   IF CC P0 = R6;                  /* Number of values divided */
   IF !CC R2 = R0;                 /* Shifted R0 */
 
-                                  /* P0 is 0, 1 (NR/=2) or 2 (NR/=2, DR/=2) */
+				  /* P0 is 0, 1 (NR/=2) or 2 (NR/=2, DR/=2) */
 
-                                  /* r2 holds Copy dividend  */
+				  /* r2 holds Copy dividend  */
   R3 = 0;                         /* Clear partial remainder */
   R7 = 0;                         /* Initialise quotient bit */
 
@@ -152,7 +152,7 @@ ENTRY(___udivsi3)
        R3 = R3 << 1 || R5 = [SP];
        R3 = R3 | R6;              /* Include any carry */
        CC = R7 < 0;               /* Check quotient(AQ) */
-                                  /* If AQ==0, we'll sub divisor */
+				  /* If AQ==0, we'll sub divisor */
        IF CC R5 = R1;             /* and if AQ==1, we'll add it. */
        R3 = R3 + R5;              /* Add/sub divsor to partial remainder */
        R7 = R3 ^ R1;              /* Generate next quotient bit */

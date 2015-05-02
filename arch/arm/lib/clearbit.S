@@ -10,6 +10,6 @@
 #include <linux/linkage.h>
 #include <asm/assembler.h>
 #include "bitops.h"
-                .text
+		.text
 
 bitop	_clear_bit, bic

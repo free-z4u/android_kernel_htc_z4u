@@ -142,8 +142,8 @@ ENTRY(_ex_single_step)
 
 #ifdef CONFIG_KGDB
 	/* Don't do single step in hardware exception handler */
-        p5.l = lo(IPEND);
-        p5.h = hi(IPEND);
+	p5.l = lo(IPEND);
+	p5.h = hi(IPEND);
 	r6 = [p5];
 	cc = bittst(r6, 4);
 	if cc jump _bfin_return_from_exception;
@@ -408,7 +408,7 @@ ENTRY(_double_fault)
 	pseudo_long_call _double_fault_c, p5;
 	SP += 12;
 .L_double_fault_panic:
-        JUMP .L_double_fault_panic
+	JUMP .L_double_fault_panic
 
 ENDPROC(_double_fault)
 
@@ -1236,7 +1236,7 @@ ENDPROC(_ex_trace_buff_full)
 .section .l1.data.B
 #endif /* CONFIG_DEBUG_BFIN_HWTRACE_EXPAND_LEN */
 ENTRY(_trace_buff_offset)
-        .long 0;
+	.long 0;
 ALIGN
 ENTRY(_software_trace_buff)
 	.rept ((1 << CONFIG_DEBUG_BFIN_HWTRACE_EXPAND_LEN)*256);

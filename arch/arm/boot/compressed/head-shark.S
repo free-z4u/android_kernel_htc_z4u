@@ -15,11 +15,11 @@
 #include <linux/linkage.h>
 
 #include <asm/assembler.h>
-	
+
 		.section	".start", "ax"
 
 		b	__beginning
-	
+
 __ofw_data:	.long	0				@ the number of memory blocks
 		.space  128				@ (startaddr,size) ...
 		.space  128				@ bootargs
@@ -65,7 +65,7 @@ __beginning:	mov	r4, r0				@ save the entry to the firmware
 
 __copy_target:	.long	0x08507FFC
 __copy_end:	.long	0x08607FFC
-		
+
 		.word	_start
 		.word	__bss_start
 
@@ -77,7 +77,7 @@ __mmu_off:
 		ldr	r0, [r0, #4]
 		orr	r0, r0, #0x00600000
 		sub	r0, r0, #4
-	
+
 		ldr	r1, __copy_end
 		ldr	r3, __copy_target
 
@@ -100,7 +100,7 @@ __mmu_off:
 
 
 __MoveCode:	sub	r4, r4, #1
-	
+
 __Copy:		ldr	r2, [r0], #-4
 		str	r2, [r1], #-4
 		teq	r1, r3
@@ -134,6 +134,6 @@ __go_on:
 		adr	r0, __ofw_data
 		mov	lr, pc
 		b	create_params
-	
+
 		mov	r8, #0
 		mov	r7, #15

@@ -12,8 +12,8 @@
 #include <asm/spr-regs.h>
 #include <asm/cache.h>
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
@@ -21,8 +21,8 @@
 # - void frv_dcache_writeback(unsigned long start [GR8], unsigned long size [GR9])
 #
 ###############################################################################
-        .globl		frv_dcache_writeback
-        .type		frv_dcache_writeback,@function
+	.globl		frv_dcache_writeback
+	.type		frv_dcache_writeback,@function
 frv_dcache_writeback:
 	andi		gr8,~(L1_CACHE_BYTES-1),gr8
 
@@ -41,8 +41,8 @@ frv_dcache_writeback:
 # - void frv_cache_invalidate(unsigned long start [GR8], unsigned long end [GR9]);
 #
 ###############################################################################
-        .globl		frv_cache_invalidate
-        .type		frv_cache_invalidate,@function
+	.globl		frv_cache_invalidate
+	.type		frv_cache_invalidate,@function
 frv_cache_invalidate:
 	andi		gr8,~(L1_CACHE_BYTES-1),gr8
 
@@ -62,8 +62,8 @@ frv_cache_invalidate:
 # - void frv_icache_invalidate(unsigned long start [GR8], unsigned long end [GR9]);
 #
 ###############################################################################
-        .globl		frv_icache_invalidate
-        .type		frv_icache_invalidate,@function
+	.globl		frv_icache_invalidate
+	.type		frv_icache_invalidate,@function
 frv_icache_invalidate:
 	andi		gr8,~(L1_CACHE_BYTES-1),gr8
 
@@ -82,8 +82,8 @@ frv_icache_invalidate:
 # - void frv_cache_wback_inv(unsigned long start [GR8], unsigned long end [GR9])
 #
 ###############################################################################
-        .globl		frv_cache_wback_inv
-        .type		frv_cache_wback_inv,@function
+	.globl		frv_cache_wback_inv
+	.type		frv_cache_wback_inv,@function
 frv_cache_wback_inv:
 	andi		gr8,~(L1_CACHE_BYTES-1),gr8
 

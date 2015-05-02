@@ -139,8 +139,8 @@ EXPORT(nlm_boot_siblings)
 	/*
 	 * The new hardware thread starts at the next instruction
 	 * For all the cases other than core 0 thread 0, we will
-         * jump to the secondary wait function.
-         */
+	 * jump to the secondary wait function.
+	 */
 	mfc0	v0, CP0_EBASE, 1
 	andi	v0, 0x7f		/* v0 <- node/core */
 
@@ -150,9 +150,9 @@ EXPORT(nlm_boot_siblings)
 	bnez	v1, 2f
 	nop
 
-        li	t0, MMU_SETUP
-        li	t1, 0
-        mtcr	t1, t0
+	li	t0, MMU_SETUP
+	li	t1, 0
+	mtcr	t1, t0
 	ehb
 #endif
 

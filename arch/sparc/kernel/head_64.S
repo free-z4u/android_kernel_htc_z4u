@@ -32,7 +32,7 @@
 #include <asm/estate.h>
 #include <asm/sfafsr.h>
 #include <asm/unistd.h>
-	
+
 /* This section from from _start to sparc64_boot_end should fit into
  * 0x0000000000404000 to 0x0000000000408000.
  */
@@ -50,12 +50,12 @@ stext:
  * Fields should be kept upward compatible and whenever any change is made,
  * HdrS version should be incremented.
  */
-        .global root_flags, ram_flags, root_dev
-        .global sparc_ramdisk_image, sparc_ramdisk_size
+	.global root_flags, ram_flags, root_dev
+	.global sparc_ramdisk_image, sparc_ramdisk_size
 	.global sparc_ramdisk_image64
 
-        .ascii  "HdrS"
-        .word   LINUX_VERSION_CODE
+	.ascii  "HdrS"
+	.word   LINUX_VERSION_CODE
 
 	/* History:
 	 *
@@ -66,16 +66,16 @@ stext:
 	.half   0x0301          /* HdrS version */
 
 root_flags:
-        .half   1
+	.half   1
 root_dev:
-        .half   0
+	.half   0
 ram_flags:
-        .half   0
+	.half   0
 sparc_ramdisk_image:
-        .word   0
+	.word   0
 sparc_ramdisk_size:
-        .word   0
-        .xword  reboot_command
+	.word   0
+	.xword  reboot_command
 	.xword	bootstr_info
 sparc_ramdisk_image64:
 	.xword	0
@@ -437,7 +437,7 @@ sun4v_chip_type:
 	cmp	%g2, '2'
 	be,pt	%xcc, 5f
 	 mov	SUN4V_CHIP_NIAGARA2, %g4
-	
+
 4:
 	mov	SUN4V_CHIP_UNKNOWN, %g4
 5:	sethi	%hi(sun4v_chip_type), %g2
@@ -495,12 +495,12 @@ spitfire_boot:
 jump_to_sun4u_init:
 	/*
 	 * Make sure we are in privileged mode, have address masking,
-         * using the ordinary globals and have enabled floating
-         * point.
+	 * using the ordinary globals and have enabled floating
+	 * point.
 	 *
 	 * Again, typically PROM has left %pil at 13 or similar, and
 	 * (PSTATE_PRIV | PSTATE_PEF | PSTATE_IE) in %pstate.
-         */
+	 */
 	wrpr    %g0, (PSTATE_PRIV|PSTATE_PEF|PSTATE_IE), %pstate
 	wr	%g0, 0, %fprs
 

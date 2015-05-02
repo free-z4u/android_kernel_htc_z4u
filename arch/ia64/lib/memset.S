@@ -6,9 +6,9 @@
    Return: dest
 
    Inputs:
-        in0:    dest
-        in1:    value
-        in2:    count
+	in0:    dest
+	in1:    value
+	in2:    count
 
    The algorithm is fairly straightforward: set byte by byte until we
    we get to a 16B-aligned address, then loop on 128 B chunks using an

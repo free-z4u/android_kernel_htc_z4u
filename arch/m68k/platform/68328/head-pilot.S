@@ -45,7 +45,7 @@ _ramend:
 .long   0
 
 .text
-	
+
 _start:
 _stext:
 
@@ -163,8 +163,8 @@ L3:
 	cmpal	%a1, %a2
 	bhi	L3
 
-	movel	#_sdata, %d0	
-	movel	%d0, _rambase	
+	movel	#_sdata, %d0
+	movel	%d0, _rambase
 	movel	#_ebss,	%d0
 	movel	%d0, _ramstart
 

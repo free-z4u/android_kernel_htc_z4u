@@ -10,8 +10,8 @@
  */
 #include <asm/cache.h>
 
-        .section .text
-        .balign	L1_CACHE_BYTES
+	.section .text
+	.balign	L1_CACHE_BYTES
 
 ###############################################################################
 #
@@ -19,7 +19,7 @@
 #
 ###############################################################################
 	.globl	memset
-        .type	memset,@function
+	.type	memset,@function
 memset:
 	movm	[d2,d3],(sp)
 	mov	d0,(12,sp)

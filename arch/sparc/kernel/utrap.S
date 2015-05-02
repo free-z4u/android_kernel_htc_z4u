@@ -9,7 +9,7 @@ utrap_trap:		/* %g3=handler,%g4=level */
 	ba,pt		%xcc, etrap
 	 rd		%pc, %g7
 	mov		%l4, %o1
-        call		bad_trap
+	call		bad_trap
 	 add		%sp, PTREGS_OFF, %o0
 	ba,pt		%xcc, rtrap
 	 nop

@@ -23,7 +23,7 @@
 #
 ###############################################################################
 	.globl		atomic_test_and_ANDNOT_mask
-        .type		atomic_test_and_ANDNOT_mask,@function
+	.type		atomic_test_and_ANDNOT_mask,@function
 atomic_test_and_ANDNOT_mask:
 	not.p		gr8,gr10
 0:
@@ -45,7 +45,7 @@ atomic_test_and_ANDNOT_mask:
 #
 ###############################################################################
 	.globl		atomic_test_and_OR_mask
-        .type		atomic_test_and_OR_mask,@function
+	.type		atomic_test_and_OR_mask,@function
 atomic_test_and_OR_mask:
 	or.p		gr8,gr8,gr10
 0:
@@ -67,7 +67,7 @@ atomic_test_and_OR_mask:
 #
 ###############################################################################
 	.globl		atomic_test_and_XOR_mask
-        .type		atomic_test_and_XOR_mask,@function
+	.type		atomic_test_and_XOR_mask,@function
 atomic_test_and_XOR_mask:
 	or.p		gr8,gr8,gr10
 0:
@@ -89,7 +89,7 @@ atomic_test_and_XOR_mask:
 #
 ###############################################################################
 	.globl		atomic_add_return
-        .type		atomic_add_return,@function
+	.type		atomic_add_return,@function
 atomic_add_return:
 	or.p		gr8,gr8,gr10
 0:
@@ -111,7 +111,7 @@ atomic_add_return:
 #
 ###############################################################################
 	.globl		atomic_sub_return
-        .type		atomic_sub_return,@function
+	.type		atomic_sub_return,@function
 atomic_sub_return:
 	or.p		gr8,gr8,gr10
 0:
@@ -133,7 +133,7 @@ atomic_sub_return:
 #
 ###############################################################################
 	.globl		__xchg_32
-        .type		__xchg_32,@function
+	.type		__xchg_32,@function
 __xchg_32:
 	or.p		gr8,gr8,gr10
 0:
@@ -154,7 +154,7 @@ __xchg_32:
 #
 ###############################################################################
 	.globl		__cmpxchg_32
-        .type		__cmpxchg_32,@function
+	.type		__cmpxchg_32,@function
 __cmpxchg_32:
 	or.p		gr8,gr8,gr11
 0:

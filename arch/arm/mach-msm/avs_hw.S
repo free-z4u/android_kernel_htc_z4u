@@ -49,11 +49,11 @@ avs_test_delays:
 		fmxr fpexc, r3
 
 /*      Restore CPACR */
-                MCR p15, 0, r2, c1, c0, 2
+		MCR p15, 0, r2, c1, c0, 2
 
 /*      Restore CPMR */
 		mcr p15, 7, r1, c15, c0, 5
-                isb
+		isb
 
 		bx lr
 #endif
@@ -64,14 +64,14 @@ avs_test_delays:
 
 avs_get_avscsr:
 		mrc p15, 7, r0, c15, c1, 7
-                bx lr
+		bx lr
 
-        .global avs_get_avsdscr
+	.global avs_get_avsdscr
 /*      Read r0=AVSDSCR to get the AVS Delay Synthesizer control settings */
 
 avs_get_avsdscr:
 		mrc p15, 7, r0, c15, c0, 6
-                bx lr
+		bx lr
 
 
 
@@ -81,14 +81,14 @@ avs_get_avsdscr:
 
 avs_get_tscsr:
 		mrc p15, 7, r0, c15, c1, 0
-                bx lr
+		bx lr
 
-        .global avs_set_tscsr
+	.global avs_set_tscsr
 /*      Write TSCSR=r0 to set temperature sensor control and status  */
 
 avs_set_tscsr:
 		mcr p15, 7, r0, c15, c1, 0
-                bx lr
+		bx lr
 
 
 
@@ -111,7 +111,7 @@ avs_reset_delays:
 
 
 
-        .global avs_disable
+	.global avs_disable
 avs_disable:
 
 /*      Clear AVSCSR */

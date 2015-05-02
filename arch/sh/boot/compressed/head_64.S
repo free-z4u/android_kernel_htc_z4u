@@ -66,7 +66,7 @@ startup:
 	movi	ITLB_LAST_VAR_UNRESTRICTED+TLB_STEP, r22
 1:	putcfg	r21, 0, r63		/* Clear MMUIR[n].PTEH.V */
 	addi	r21, TLB_STEP, r21
-        bne	r21, r22, tr1
+	bne	r21, r22, tr1
 
 	/* Clear DTLBs */
 	pta	1f, tr1
@@ -74,7 +74,7 @@ startup:
 	movi	DTLB_LAST_VAR_UNRESTRICTED+TLB_STEP, r22
 1:	putcfg	r21, 0, r63		/* Clear MMUDR[n].PTEH.V */
 	addi	r21, TLB_STEP, r21
-        bne	r21, r22, tr1
+	bne	r21, r22, tr1
 
 	/* Map one big (512Mb) page for ITLB */
 	movi	ITLB_FIXED, r21

@@ -26,7 +26,7 @@ r_base = .
 	/* Compute the equivalent real-mode segment */
 	movl	%ebx, %ecx
 	shrl	$4, %ecx
-	
+
 	/* Patch post-real-mode segment jump */
 	movw	(dispatch_table - r_base)(%ebx,%eax,2),%ax
 	movw	%ax, (101f - r_base)(%ebx)

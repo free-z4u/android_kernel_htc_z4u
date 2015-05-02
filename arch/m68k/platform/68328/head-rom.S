@@ -1,4 +1,4 @@
-	
+
 	.global _start
 	.global _stext
 
@@ -62,21 +62,21 @@ _stext:	movew	#0x2700,%sr
 	moveal	#_sbss, %a0
 	moveal	#_ebss, %a1
 	/* Copy 0 to %a0 until %a0 == %a1 */
-	
+
 1:
 	clrl	%a0@+
 	cmpal	%a0, %a1
 	bhi	1b
 
-        movel   #_sdata, %d0    
-        movel   %d0, _rambase        
-        movel   #_ebss, %d0
-        movel   %d0, _ramstart
+	movel   #_sdata, %d0
+	movel   %d0, _rambase
+	movel   #_ebss, %d0
+	movel   %d0, _ramstart
 	movel	#RAMEND-CONFIG_MEMORY_RESERVE*0x100000, %d0
 	movel	%d0, _ramend
 	movel	#CONFIG_VECTORBASE,	%d0
 	movel	%d0, _ramvec
-	
+
 /*
  * load the current task pointer and stack
  */
@@ -84,7 +84,7 @@ _stext:	movew	#0x2700,%sr
 	lea	0x2000(%a0), %sp
 
 1:	jsr	start_kernel
-        bra 1b
+	bra 1b
 _exit:
 
 	jmp	_exit

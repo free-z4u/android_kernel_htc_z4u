@@ -12,7 +12,7 @@
 #include <asm/ppc_asm.h>
 #include <asm/asm-offsets.h>
 #include <asm/ptrace.h>
-	
+
 #define STK_PARM(i)     (48 + ((i)-3)*8)
 
 #ifdef CONFIG_TRACEPOINTS

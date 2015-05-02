@@ -94,13 +94,13 @@ Scale:     .long	0x00010000,0x80000000,0x00000000,0x00000000
 
 	|xref	t_avoid_unsupp
 
-        .global        smod
+	.global        smod
 smod:
 
    movel               #0,Mod_Flag(%a6)
    bras                Mod_Rem
 
-        .global        srem
+	.global        srem
 srem:
 
    movel               #1,Mod_Flag(%a6)

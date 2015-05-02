@@ -374,7 +374,7 @@ common_exception:
 	/* Save optional registers. */
 
 	save_xtregs_opt a1 a2 a4 a5 a6 a7 PT_XTREGS_OPT
-	
+
 	/* Go to second-level dispatcher. Set up parameters to pass to the
 	 * exception handler and call the exception handler.
 	 */
@@ -402,7 +402,7 @@ common_exception_return:
 	 * We need to check some flags for signal handling and rescheduling,
 	 * and have to restore WB and WS, extra states, and all registers
 	 * in the register file that were in use in the user task.
-	 * Note that we don't disable interrupts here. 
+	 * Note that we don't disable interrupts here.
 	 */
 
 	GET_THREAD_INFO(a2,a1)
@@ -856,7 +856,7 @@ ENTRY(fast_alloca)
 
 	_bnei	a0, 1, 1f		# no 'movsp a1, ax': jump
 
-        /* Move the save area. This implies the use of the L32E
+	/* Move the save area. This implies the use of the L32E
 	 * and S32E instructions, because this move must be done with
 	 * the user's PS.RING privilege levels, not with ring 0
 	 * (kernel's) privileges currently active with PS.EXCM
@@ -985,15 +985,15 @@ ENTRY(fast_syscall_user)
 
 ENTRY(fast_syscall_unrecoverable)
 
-        /* Restore all states. */
+	/* Restore all states. */
 
-        l32i    a0, a2, PT_AREG0        # restore a0
-        xsr     a2, DEPC                # restore a2, depc
-        rsr     a3, EXCSAVE_1
+	l32i    a0, a2, PT_AREG0        # restore a0
+	xsr     a2, DEPC                # restore a2, depc
+	rsr     a3, EXCSAVE_1
 
-        wsr     a0, EXCSAVE_1
-        movi    a0, unrecoverable_exception
-        callx0  a0
+	wsr     a0, EXCSAVE_1
+	movi    a0, unrecoverable_exception
+	callx0  a0
 
 
 
@@ -1228,9 +1228,9 @@ fast_syscall_spill_registers_fixup:
 
 	movi	a3, exc_table
 	rsr	a0, EXCCAUSE
-        addx4	a0, a0, a3              	# find entry in table
-        l32i	a0, a0, EXC_TABLE_FAST_USER     # load handler
-        jx	a0
+	addx4	a0, a0, a3              	# find entry in table
+	l32i	a0, a0, EXC_TABLE_FAST_USER     # load handler
+	jx	a0
 
 fast_syscall_spill_registers_fixup_return:
 
@@ -1605,8 +1605,8 @@ ENTRY(fast_second_level_miss)
 
 2:	/* Special case for cache aliasing.
 	 * We (should) only get here if a clear_user_page, copy_user_page
-	 * or the aliased cache flush functions got preemptively interrupted 
-	 * by another task. Re-establish temporary mapping to the 
+	 * or the aliased cache flush functions got preemptively interrupted
+	 * by another task. Re-establish temporary mapping to the
 	 * TLBTEMP_BASE areas.
 	 */
 

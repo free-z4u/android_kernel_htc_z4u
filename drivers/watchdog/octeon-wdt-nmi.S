@@ -10,7 +10,7 @@
 
 #define SAVE_REG(r)	sd $r, -32768+6912-(32-r)*8($0)
 
-        NESTED(octeon_wdt_nmi_stage2, 0, sp)
+	NESTED(octeon_wdt_nmi_stage2, 0, sp)
 	.set 	push
 	.set 	noreorder
 	.set 	noat

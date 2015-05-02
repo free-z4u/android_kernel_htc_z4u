@@ -240,7 +240,7 @@ L.3.17:
 	subcc	%o3,%o5,%o3
 	b	9f
 	 add	%o2, (1*2+1), %o2
-	
+
 L.4.17:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
@@ -306,7 +306,7 @@ L.2.15:
 	subcc	%o3,%o5,%o3
 	b	9f
 	 add	%o2, (-5*2+1), %o2
-	
+
 L.4.11:
 	! remainder is negative
 	addcc	%o3,%o5,%o3

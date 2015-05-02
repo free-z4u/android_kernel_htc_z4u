@@ -176,7 +176,7 @@ _stext:
 	/*
 	 * CPU detection and/or endianness settings (?). To Be Done.
 	 * Pure PIC code here, please ! Just save state into r30.
-         * After this block:
+	 * After this block:
 	 * r30 = CPU type/Platform Endianness
 	 */
 
@@ -191,7 +191,7 @@ _stext:
 clear_ITLB:
 	putcfg	r21, 0, ZERO		/* Clear MMUIR[n].PTEH.V */
 	addi	r21, MMUIR_STEP, r21
-        bne	r21, r22, tr1
+	bne	r21, r22, tr1
 
 	/* Clear DTLBs */
 	pta	clear_DTLB, tr1
@@ -200,7 +200,7 @@ clear_ITLB:
 clear_DTLB:
 	putcfg	r21, 0, ZERO		/* Clear MMUDR[n].PTEH.V */
 	addi	r21, MMUDR_STEP, r21
-        bne	r21, r22, tr1
+	bne	r21, r22, tr1
 
 	/* Map one big (512Mb) page for ITLB */
 	movi	MMUIR_FIRST, r21
@@ -251,7 +251,7 @@ clear_DTLB:
 
 	/*
 	 * Enable Caches and MMU. Do the first non-PIC jump.
-         * Now head.S global variables, constants and externs
+	 * Now head.S global variables, constants and externs
 	 * can be used.
 	 */
 	getcon	SR, r21
@@ -337,7 +337,7 @@ clear_quad:
 hopeless:
 	/*
 	 * Something's badly wrong here. Loop endlessly,
-         * there's nothing more we can do about it.
+	 * there's nothing more we can do about it.
 	 *
 	 * Note on hopeless: it can be jumped into invariably
 	 * before or after jumping into hyperspace. The only

@@ -78,18 +78,18 @@ ENTRY(_start)
 
 	jbsr	base_trap_init
 
-        jbsr    start_kernel
+	jbsr    start_kernel
 	trap	#15
 
-        .data
-        .even
+	.data
+	.even
 kpt:
-        .long 0
+	.long 0
 availmem:
-        .long 0
+	.long 0
 | todo: remove next two. --m
 is_medusa:
-        .long 0
+	.long 0
 m68k_pgtable_cachemode:
-        .long 0
+	.long 0
 

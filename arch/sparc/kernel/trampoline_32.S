@@ -108,7 +108,7 @@ __smp4d_processor_id:
 
 __leon_processor_id:
 	rd     %asr17,%g2
-        srl    %g2,28,%g2
+	srl    %g2,28,%g2
 	retl
 	 mov	%g1, %o7
 
@@ -171,14 +171,14 @@ sun4d_cpu_startup:
 
 	__CPUINIT
 	.align	4
-        .global leon_smp_cpu_startup, smp_penguin_ctable
+	.global leon_smp_cpu_startup, smp_penguin_ctable
 
 leon_smp_cpu_startup:
 
-        set smp_penguin_ctable,%g1
-        ld [%g1+4],%g1
-        srl %g1,4,%g1
-        set 0x00000100,%g5 /* SRMMU_CTXTBL_PTR */
+	set smp_penguin_ctable,%g1
+	ld [%g1+4],%g1
+	srl %g1,4,%g1
+	set 0x00000100,%g5 /* SRMMU_CTXTBL_PTR */
 	sta %g1, [%g5] ASI_M_MMUREGS
 
 	/* Set up a sane %psr -- PIL<0xf> S<0x1> PS<0x1> CWP<0x0> */
@@ -197,7 +197,7 @@ leon_smp_cpu_startup:
 	WRITE_PAUSE
 
 	/* Get our CPU id */
-        rd     %asr17,%g3
+	rd     %asr17,%g3
 
 	/* Give ourselves a stack and curptr. */
 	set	current_set, %g5

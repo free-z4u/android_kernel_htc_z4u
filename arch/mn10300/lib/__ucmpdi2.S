@@ -10,8 +10,8 @@
  */
 
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
@@ -21,8 +21,8 @@
 # - returns 0, 1, or 2 as a <, =, > b respectively.
 #
 ###############################################################################
-        .globl		__ucmpdi2
-        .type		__ucmpdi2,@function
+	.globl		__ucmpdi2
+	.type		__ucmpdi2,@function
 __ucmpdi2:
 	mov		(12,sp),a0		# b.lsw
 	mov		(16,sp),a1		# b.msw

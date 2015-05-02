@@ -10,16 +10,16 @@
  */
 
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
 # void __outsl_ns(unsigned int port, const void *buf, int n)
 #
 ###############################################################################
-        .globl		__outsl_ns
-        .type		__outsl_ns,@function
+	.globl		__outsl_ns
+	.type		__outsl_ns,@function
 __outsl_ns:
 	andicc.p	gr9,#3,gr0,icc0
 	setlos		#4,gr4

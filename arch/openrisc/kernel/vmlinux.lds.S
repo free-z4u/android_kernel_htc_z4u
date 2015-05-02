@@ -35,16 +35,16 @@ jiffies = jiffies_64 + 4;
 
 SECTIONS
 {
-        /* Read-only sections, merged into text segment: */
-        . = LOAD_BASE ;
+	/* Read-only sections, merged into text segment: */
+	. = LOAD_BASE ;
 
 	/* _s_kernel_ro must be page aligned */
 	. = ALIGN(PAGE_SIZE);
 	_s_kernel_ro = .;
 
-        .text                   : AT(ADDR(.text) - LOAD_OFFSET)
+	.text                   : AT(ADDR(.text) - LOAD_OFFSET)
 	{
-          _stext = .;
+	  _stext = .;
 	  TEXT_TEXT
 	  SCHED_TEXT
 	  LOCK_TEXT
@@ -69,7 +69,7 @@ SECTIONS
 	/* 32 here is cacheline size... recheck this */
 	RW_DATA_SECTION(32, PAGE_SIZE, PAGE_SIZE)
 
-        _edata  =  .;
+	_edata  =  .;
 
 	EXCEPTION_TABLE(4)
 	NOTES
@@ -88,7 +88,7 @@ SECTIONS
 
 	PERCPU_SECTION(L1_CACHE_BYTES)
 
-        __init_end = .;
+	__init_end = .;
 
 	. = ALIGN(PAGE_SIZE);
 	.initrd			: AT(ADDR(.initrd) - LOAD_OFFSET)
@@ -97,19 +97,19 @@ SECTIONS
 		*(.initrd)
 		__initrd_end = .;
 		FILL (0);
-                . = ALIGN (PAGE_SIZE);
+		. = ALIGN (PAGE_SIZE);
 	}
 
-        __vmlinux_end = .;            /* last address of the physical file */
+	__vmlinux_end = .;            /* last address of the physical file */
 
 	BSS_SECTION(0, 0, 0x20)
 
-        _end = .;
+	_end = .;
 
 	/* Throw in the debugging sections */
 	STABS_DEBUG
 	DWARF_DEBUG
 
-        /* Sections to be discarded -- must be last */
+	/* Sections to be discarded -- must be last */
 	DISCARDS
 }

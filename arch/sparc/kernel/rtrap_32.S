@@ -128,13 +128,13 @@ rtrap_patch2:	and	%glob_tmp, 0xff, %glob_tmp
 
 		wr	%glob_tmp, 0x0, %wim
 
-				/* Here comes the architecture specific 
+				/* Here comes the architecture specific
 				 * branch to the user stack checking routine
 				 * for return from traps.
 				 */
 				.globl	rtrap_mmu_patchme
 rtrap_mmu_patchme:	b	sun4c_rett_stackchk
-				 andcc	%fp, 0x7, %g0	
+				 andcc	%fp, 0x7, %g0
 
 ret_trap_userwins_ok:
 	LOAD_PT_PRIV(sp, t_psr, t_pc, t_npc)
@@ -156,7 +156,7 @@ ret_trap_userwins_ok:
 
 	jmp	%t_pc
 	rett	%t_npc
-	
+
 ret_trap_unaligned_pc:
 	ld	[%sp + STACKFRAME_SZ + PT_PC], %o1
 	ld	[%sp + STACKFRAME_SZ + PT_NPC], %o2

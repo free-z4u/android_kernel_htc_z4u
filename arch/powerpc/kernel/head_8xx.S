@@ -918,13 +918,13 @@ _GLOBAL(set_context)
 	li	r7, 0x3980
 	stw	r7, 12(r6)
 	lwz	r7, 12(r6)
-        mtspr   SPRN_M_TWB, r4               /* Update MMU base address */
+	mtspr   SPRN_M_TWB, r4               /* Update MMU base address */
 	li	r7, 0x3380
 	stw	r7, 12(r6)
 	lwz	r7, 12(r6)
-        mtspr   SPRN_M_CASID, r3             /* Update context */
+	mtspr   SPRN_M_CASID, r3             /* Update context */
 #else
-        mtspr   SPRN_M_CASID,r3		/* Update context */
+	mtspr   SPRN_M_CASID,r3		/* Update context */
 	tophys	(r4, r4)
 	mtspr	SPRN_M_TWB, r4		/* and pgd */
 #endif
@@ -944,7 +944,7 @@ set_dec_cpu6:
 	li	r4, 0x2c00
 	stw	r4, 8(r7)
 	lwz	r4, 8(r7)
-        mtspr   22, r3		/* Update Decrementer */
+	mtspr   22, r3		/* Update Decrementer */
 	SYNC
 	blr
 #endif

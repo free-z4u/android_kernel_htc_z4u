@@ -9,16 +9,16 @@
  * 2 of the License, or (at your option) any later version.
  */
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
 # signed long long __ashrdi3(signed long long value [GR8:GR9], unsigned by [GR10])
 #
 ###############################################################################
-        .globl		__ashrdi3
-        .type		__ashrdi3,@function
+	.globl		__ashrdi3
+	.type		__ashrdi3,@function
 __ashrdi3:
 	andicc.p	gr10,#63,gr10,icc0
 	setlos		#32,gr5

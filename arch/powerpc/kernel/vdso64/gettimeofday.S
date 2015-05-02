@@ -95,7 +95,7 @@ V_FUNCTION_BEGIN(__kernel_clock_gettime)
 	xor	r0,r0,r0
 	add	r3,r3,r0
 	ld	r0,CFG_TB_UPDATE_COUNT(r3)
-        cmpld   cr0,r0,r8		/* check if updated */
+	cmpld   cr0,r0,r8		/* check if updated */
 	bne-	50b
 
 	/* Add wall->monotonic offset and check for overflow or underflow.

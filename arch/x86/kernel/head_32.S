@@ -62,7 +62,7 @@
 
 /* Number of possible pages in the lowmem region */
 LOWMEM_PAGES = (((1<<32) - __PAGE_OFFSET) >> PAGE_SHIFT)
-	
+
 /* Enough space to fit pagetables for the low memory linear map */
 MAPPING_BEYOND_END = PAGE_TABLE_SIZE(LOWMEM_PAGES) << PAGE_SHIFT
 
@@ -86,7 +86,7 @@ RESERVE_BRK(pagetables, INIT_MAP_SIZE)
 __HEAD
 ENTRY(startup_32)
 	movl pa(stack_start),%ecx
-	
+
 	/* test KEEP_SEGMENTS flag to see if the bootloader is asking
 		us to not reload segments */
 	testb $(1<<6), BP_loadflags(%esi)
@@ -292,7 +292,7 @@ default_entry:
 
 /*
  *	New page tables may be in 4Mbyte page mode and may
- *	be using the global pages. 
+ *	be using the global pages.
  *
  *	NOTE! If we are on a 486 we may have no cr4 at all!
  *	So we do not try to touch it unless we really have

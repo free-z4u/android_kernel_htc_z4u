@@ -310,7 +310,7 @@ REDUCEX:
 
 	fmovemx	%fp2-%fp5,-(%a7)	| ...save FP2 through FP5
 	movel		%d2,-(%a7)
-        fmoves         #0x00000000,%fp1
+	fmoves         #0x00000000,%fp1
 
 |--If compact form of abs(arg) in d0=$7ffeffff, argument is so large that
 |--there is a danger of unwanted overflow in first LOOP iteration.  In this
@@ -344,7 +344,7 @@ red_neg:
 LOOP:
 	fmovex		%fp0,INARG(%a6)	| ...+-2**K * F, 1 <= F < 2
 	movew		INARG(%a6),%d0
-        movel          %d0,%a1		| ...save a copy of D0
+	movel          %d0,%a1		| ...save a copy of D0
 	andil		#0x00007FFF,%d0
 	subil		#0x00003FFF,%d0	| ...D0 IS K
 	cmpil		#28,%d0
@@ -380,8 +380,8 @@ WORK:
 |--US THE DESIRED VALUE IN FLOATING POINT.
 
 |--HIDE SIX CYCLES OF INSTRUCTION
-        movel		%a1,%d2
-        swap		%d2
+	movel		%a1,%d2
+	swap		%d2
 	andil		#0x80000000,%d2
 	oril		#0x5F000000,%d2	| ...D2 IS SIGN(INARG)*2**63 IN SGL
 	movel		%d2,TWOTO63(%a6)
@@ -393,7 +393,7 @@ WORK:
 	fadds		TWOTO63(%a6),%fp2	| ...THE FRACTIONAL PART OF FP1 IS ROUNDED
 
 |--HIDE 4 CYCLES OF INSTRUCTION; creating 2**(L)*Piby2_1  and  2**(L)*Piby2_2
-        movew		%d2,FP_SCR2(%a6)
+	movew		%d2,FP_SCR2(%a6)
 	clrw           FP_SCR2+2(%a6)
 	movel		#0xC90FDAA2,FP_SCR2+4(%a6)
 	clrl		FP_SCR2+8(%a6)		| ...FP_SCR2 is  2**(L) * Piby2_1
@@ -402,7 +402,7 @@ WORK:
 	fsubs		TWOTO63(%a6),%fp2		| ...FP2 is N
 
 	addil		#0x00003FDD,%d0
-        movew		%d0,FP_SCR3(%a6)
+	movew		%d0,FP_SCR3(%a6)
 	clrw           FP_SCR3+2(%a6)
 	movel		#0x85A308D3,FP_SCR3+4(%a6)
 	clrl		FP_SCR3+8(%a6)		| ...FP_SCR3 is 2**(L) * Piby2_2
@@ -422,7 +422,7 @@ WORK:
 	fsubx		%fp3,%fp4			| ...W-P
 
 	fsubx		%fp3,%fp0			| ...FP0 is A := R - P
-        faddx		%fp5,%fp4			| ...FP4 is p = (W-P)+w
+	faddx		%fp5,%fp4			| ...FP4 is p = (W-P)+w
 
 	fmovex		%fp0,%fp3			| ...FP3 A
 	fsubx		%fp4,%fp1			| ...FP1 is a := r - p
@@ -440,13 +440,13 @@ WORK:
 	bra		LOOP
 
 RESTORE:
-        fmovel		%fp2,N(%a6)
+	fmovel		%fp2,N(%a6)
 	movel		(%a7)+,%d2
 	fmovemx	(%a7)+,%fp2-%fp5
 
 
 	movel		N(%a6),%d0
-        rorl		#1,%d0
+	rorl		#1,%d0
 
 
 	bra		TANCONT

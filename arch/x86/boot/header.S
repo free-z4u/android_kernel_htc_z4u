@@ -357,8 +357,8 @@ min_alignment:		.byte MIN_KERNEL_ALIGN_LG2	# minimum alignment
 pad3:			.word 0
 
 cmdline_size:   .long   COMMAND_LINE_SIZE-1     #length of the command line,
-                                                #added with boot protocol
-                                                #version 2.06
+						#added with boot protocol
+						#version 2.06
 
 hardware_subarch:	.long 0			# subarchitecture, added with 2.07
 						# default to 0 for normal x86 PC

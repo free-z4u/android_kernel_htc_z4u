@@ -15,7 +15,7 @@ ENDPROC(copy_page_c)
 
 /* Don't use streaming store because it's better when the target
    ends up in cache. */
-	    
+
 /* Could vary the prefetch distance based on SMP/UP */
 
 ENTRY(copy_page)

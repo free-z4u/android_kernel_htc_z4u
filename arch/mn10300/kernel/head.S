@@ -422,7 +422,7 @@ ENTRY(__head_end)
 	.section .bss
 	.balign PAGE_SIZE
 ENTRY(swapper_pg_dir)
-        .space PTRS_PER_PGD*4
+	.space PTRS_PER_PGD*4
 
 /*
  * The page tables are initialized to only 8MB here - the final page

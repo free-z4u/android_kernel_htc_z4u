@@ -922,7 +922,7 @@ initial_mmu:
 	clrrwi	r3,r3,10		/* Mask off the effective page number */
 	ori	r3,r3,(TLB_VALID | TLB_PAGESZ(PAGESZ_16M))
 
-        li      r0,63                    /* TLB slot 63 */
+	li      r0,63                    /* TLB slot 63 */
 
 	tlbwe	r4,r0,TLB_DATA		/* Load the data portion of the entry */
 	tlbwe	r3,r0,TLB_TAG		/* Load the tag portion of the entry */
@@ -957,9 +957,9 @@ initial_mmu:
 	blr
 
 _GLOBAL(abort)
-        mfspr   r13,SPRN_DBCR0
-        oris    r13,r13,DBCR0_RST_SYSTEM@h
-        mtspr   SPRN_DBCR0,r13
+	mfspr   r13,SPRN_DBCR0
+	oris    r13,r13,DBCR0_RST_SYSTEM@h
+	mtspr   SPRN_DBCR0,r13
 
 _GLOBAL(set_context)
 

@@ -43,8 +43,8 @@ ___divsi3 :
 
   r3 = rot r3 by -1;
   r1 = abs r1;      /* now both positive, r3.30 means "negate result",
-                    ** r3.31 means overflow, add one to result
-                    */
+		    ** r3.31 means overflow, add one to result
+		    */
   cc = r0 < r1;
   if cc jump .Lret_zero;
   r2 = r1 >> 15;
@@ -121,20 +121,20 @@ ___divsi3 :
 
   LSETUP(.Llst,.Llend)  LC0 = P1;   /* Setup loop */
 .Llst:   R7 = R2 >> 31;            /* record copy of carry from R2 */
-        R2 = R2 << 1;             /* Shift 64 bit dividend up by 1 bit */
-        R0 = R0 << 1 || R5 = [SP];
-        R0 = R0 | R7;             /* and add carry */
-        CC = R6 < 0;              /* Check quotient(AQ) */
-                                  /* we might be subtracting divisor (AQ==0) */
-        IF CC R5 = R1;            /* or we might be adding divisor  (AQ==1)*/
-        R0 = R0 + R5;             /* do add or subtract, as indicated by AQ */
-        R6 = R0 ^ R1;             /* Generate next quotient bit */
-        R5 = R6 >> 31;
-                                  /* Assume AQ==1, shift in zero */
-        BITTGL(R5,0);             /* tweak AQ to be what we want to shift in */
+	R2 = R2 << 1;             /* Shift 64 bit dividend up by 1 bit */
+	R0 = R0 << 1 || R5 = [SP];
+	R0 = R0 | R7;             /* and add carry */
+	CC = R6 < 0;              /* Check quotient(AQ) */
+				  /* we might be subtracting divisor (AQ==0) */
+	IF CC R5 = R1;            /* or we might be adding divisor  (AQ==1)*/
+	R0 = R0 + R5;             /* do add or subtract, as indicated by AQ */
+	R6 = R0 ^ R1;             /* Generate next quotient bit */
+	R5 = R6 >> 31;
+				  /* Assume AQ==1, shift in zero */
+	BITTGL(R5,0);             /* tweak AQ to be what we want to shift in */
 .Llend:  R2 = R2 + R5;             /* and then set shifted-in value to
-                                  ** tweaked AQ.
-                                  */
+				  ** tweaked AQ.
+				  */
   r1 = r3 >> 31;
   r2 = r2 + r1;
   cc = bittst(r3,30);

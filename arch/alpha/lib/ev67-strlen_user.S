@@ -63,7 +63,7 @@ __strnlen_user:
 	insqh   t1, a0, t1	# U :
 	andnot  a0, 7, v0	# E :
 	or      t1, t0, t0	# E :
-	subq	a0, 1, a0	# E : get our +1 for the return 
+	subq	a0, 1, a0	# E : get our +1 for the return
 
 	cmpbge  zero, t0, t1	# E : t1 <- bitmask: bit i == 1 <==> i-th byte == 0
 	subq	a1, 7, t2	# E :

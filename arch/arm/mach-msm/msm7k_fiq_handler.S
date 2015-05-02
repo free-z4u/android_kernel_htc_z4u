@@ -21,7 +21,7 @@
 ENTRY(msm7k_fiq_start)
 	sub    r14, r14, #4 @return address
 	mov    r9, #0
-        mrc    p15, 0, r9, c0, c0, 5   /* MPIDR */
+	mrc    p15, 0, r9, c0, c0, 5   /* MPIDR */
 	and    r9, r9, #0x3		  @r9 = CPU_ID
 	ldr    r8, Lmsm_fiq_stack
 	ldr    sp, [r8, r9, LSL #2]       @get stack

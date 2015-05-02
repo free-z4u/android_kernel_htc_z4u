@@ -108,7 +108,7 @@ V_FUNCTION_BEGIN(__kernel_clock_gettime)
 	xor	r0,r0,r0
 	add	r9,r9,r0
 	lwz	r0,(CFG_TB_UPDATE_COUNT+LOPART)(r9)
-        cmpl    cr0,r8,r0		/* check if updated */
+	cmpl    cr0,r8,r0		/* check if updated */
 	bne-	50b
 
 	/* Calculate and store result. Note that this mimics the C code,
@@ -257,7 +257,7 @@ __do_get_tspec:
 	xor	r0,r6,r6
 	add	r9,r9,r0
 	lwz	r0,(CFG_TB_UPDATE_COUNT+LOPART)(r9)
-        cmplw	cr0,r8,r0		/* check if updated */
+	cmplw	cr0,r8,r0		/* check if updated */
 	bne-	1b
 
 	mulhwu	r4,r4,r7		/* convert to micro or nanoseconds */

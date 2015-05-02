@@ -50,8 +50,8 @@ fpu_emu:
 	GET_CURRENT(%d0)
 
 #if defined(CPU_M68020_OR_M68030) && defined(CPU_M68040_OR_M68060)
-        tst.l	m68k_is040or060
-        jeq	1f
+	tst.l	m68k_is040or060
+	jeq	1f
 #endif
 #if defined(CPU_M68040_OR_M68060)
 	move.l	(FPS_PC2,%sp),(FPS_PC,%sp)

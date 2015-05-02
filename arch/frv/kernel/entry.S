@@ -70,7 +70,7 @@
 #
 ###############################################################################
 	.globl		__entry_uspace_external_interrupt
-        .type		__entry_uspace_external_interrupt,@function
+	.type		__entry_uspace_external_interrupt,@function
 __entry_uspace_external_interrupt:
 	LEDS		0x6200
 	sethi.p		%hi(__kernel_frame0_ptr),gr28
@@ -191,7 +191,7 @@ __entry_uspace_external_interrupt_reentry:
 #
 ###############################################################################
 	.globl		__entry_kernel_external_interrupt
-        .type		__entry_kernel_external_interrupt,@function
+	.type		__entry_kernel_external_interrupt,@function
 __entry_kernel_external_interrupt:
 	LEDS		0x6210
 //	sub		sp,gr15,gr31
@@ -343,7 +343,7 @@ __entry_kernel_external_interrupt_virtual_reenable:
 #
 ###############################################################################
 	.globl		__entry_uspace_softprog_interrupt
-        .type		__entry_uspace_softprog_interrupt,@function
+	.type		__entry_uspace_softprog_interrupt,@function
 	.globl		__entry_uspace_handle_mmu_fault
 __entry_uspace_softprog_interrupt:
 	LEDS		0x6000
@@ -406,7 +406,7 @@ __entry_uspace_handle_mmu_fault_sstep:
 #
 ###############################################################################
 	.globl		__entry_kernel_softprog_interrupt
-        .type		__entry_kernel_softprog_interrupt,@function
+	.type		__entry_kernel_softprog_interrupt,@function
 __entry_kernel_softprog_interrupt:
 	LEDS		0x6004
 
@@ -494,7 +494,7 @@ __entry_kernel_handle_mmu_fault_sstep:
 #
 ###############################################################################
 	.globl		__entry_common
-        .type		__entry_common,@function
+	.type		__entry_common,@function
 __entry_common:
 	LEDS		0x6008
 

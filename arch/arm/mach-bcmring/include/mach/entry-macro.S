@@ -24,24 +24,24 @@
 		.macro	get_irqnr_and_base, irqnr, irqstat, base, tmp
 		ldr	\base, =(MM_IO_BASE_INTC0)
 		ldr	\irqstat, [\base, #0]		@ get status
-                ldr     \irqnr, [\base, #0x10]          @ mask with enable register
-                ands    \irqstat, \irqstat, \irqnr
+		ldr     \irqnr, [\base, #0x10]          @ mask with enable register
+		ands    \irqstat, \irqstat, \irqnr
 		mov	\irqnr, #IRQ_INTC0_START
 		cmp	\irqstat, #0
 		bne	1001f
 
 		ldr	\base, =(MM_IO_BASE_INTC1)
 		ldr	\irqstat, [\base, #0]		@ get status
-                ldr     \irqnr, [\base, #0x10]          @ mask with enable register
-                ands    \irqstat, \irqstat, \irqnr
+		ldr     \irqnr, [\base, #0x10]          @ mask with enable register
+		ands    \irqstat, \irqstat, \irqnr
 		mov	\irqnr, #IRQ_INTC1_START
 		cmp	\irqstat, #0
 		bne	1001f
 
 		ldr	\base, =(MM_IO_BASE_SINTC)
 		ldr	\irqstat, [\base, #0]		@ get status
-                ldr     \irqnr, [\base, #0x10]          @ mask with enable register
-                ands    \irqstat, \irqstat, \irqnr
+		ldr     \irqnr, [\base, #0x10]          @ mask with enable register
+		ands    \irqstat, \irqstat, \irqnr
 		mov	\irqnr, #0xffffffff             @ code meaning no interrupt bits set
 		cmp	\irqstat, #0
 		beq	1002f

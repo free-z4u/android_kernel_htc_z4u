@@ -1967,7 +1967,7 @@ p_write:
 | Also note that the dtag must be set to norm here - this is because
 | the 040 uses the dtag to execute the correct microcode.
 |
-        bfclr    DTAG(%a6){#0:#3}  |set dtag to norm
+	bfclr    DTAG(%a6){#0:#3}  |set dtag to norm
 
 	rts
 

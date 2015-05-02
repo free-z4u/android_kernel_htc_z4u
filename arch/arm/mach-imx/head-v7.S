@@ -92,7 +92,7 @@ ENDPROC(v7_secondary_startup)
 
 	.globl	phys_l2x0_saved_regs
 phys_l2x0_saved_regs:
-        .long   0
+	.long   0
 #else
 	.macro	pl310_resume
 	.endm

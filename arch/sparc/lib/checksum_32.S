@@ -149,38 +149,38 @@ __csum_partial_copy_start:
 #define EXECINSTR #execinstr
 #define EX(x,y,a,b)				\
 98:     x,y;                                    \
-        .section .fixup,ALLOC,EXECINSTR;	\
-        .align  4;                              \
+	.section .fixup,ALLOC,EXECINSTR;	\
+	.align  4;                              \
 99:     ba 30f;                                 \
-         a, b, %o3;                             \
-        .section __ex_table,ALLOC;		\
-        .align  4;                              \
-        .word   98b, 99b;                       \
-        .text;                                  \
-        .align  4
+	 a, b, %o3;                             \
+	.section __ex_table,ALLOC;		\
+	.align  4;                              \
+	.word   98b, 99b;                       \
+	.text;                                  \
+	.align  4
 
 #define EX2(x,y)				\
 98:     x,y;                                    \
-        .section __ex_table,ALLOC;		\
-        .align  4;                              \
-        .word   98b, 30f;                       \
-        .text;                                  \
-        .align  4
+	.section __ex_table,ALLOC;		\
+	.align  4;                              \
+	.word   98b, 30f;                       \
+	.text;                                  \
+	.align  4
 
 #define EX3(x,y)				\
 98:     x,y;                                    \
-        .section __ex_table,ALLOC;		\
-        .align  4;                              \
-        .word   98b, 96f;                       \
-        .text;                                  \
-        .align  4
+	.section __ex_table,ALLOC;		\
+	.align  4;                              \
+	.word   98b, 96f;                       \
+	.text;                                  \
+	.align  4
 
 #define EXT(start,end,handler)			\
-        .section __ex_table,ALLOC;		\
-        .align  4;                              \
-        .word   start, 0, end, handler;         \
-        .text;                                  \
-        .align  4
+	.section __ex_table,ALLOC;		\
+	.align  4;                              \
+	.word   start, 0, end, handler;         \
+	.text;                                  \
+	.align  4
 
 	/* This aligned version executes typically in 8.5 superscalar cycles, this
 	 * is the best I can do.  I say 8.5 because the final add will pair with
@@ -399,32 +399,32 @@ ccdbl:	CSUMCOPY_BIGCHUNK_ALIGNED(%o0,%o1,%g7,0x00,%o4,%o5,%g2,%g3,%g4,%g5,%o2,%o
 ccslow:	cmp	%g1, 0
 	mov	0, %g5
 	bleu	4f
-	 andcc	%o0, 1, %o5		
+	 andcc	%o0, 1, %o5
 	be,a	1f
-	 srl	%g1, 1, %g4		
-	sub	%g1, 1, %g1	
+	 srl	%g1, 1, %g4
+	sub	%g1, 1, %g1
 	EX(ldub	[%o0], %g5, add %g1, 1)
-	add	%o0, 1, %o0	
+	add	%o0, 1, %o0
 	EX2(stb	%g5, [%o1])
 	srl	%g1, 1, %g4
 	add	%o1, 1, %o1
-1:	cmp	%g4, 0		
+1:	cmp	%g4, 0
 	be,a	3f
 	 andcc	%g1, 1, %g0
-	andcc	%o0, 2, %g0	
+	andcc	%o0, 2, %g0
 	be,a	1f
 	 srl	%g4, 1, %g4
 	EX(lduh	[%o0], %o4, add %g1, 0)
-	sub	%g1, 2, %g1	
+	sub	%g1, 2, %g1
 	srl	%o4, 8, %g2
-	sub	%g4, 1, %g4	
+	sub	%g4, 1, %g4
 	EX2(stb	%g2, [%o1])
 	add	%o4, %g5, %g5
 	EX2(stb	%o4, [%o1 + 1])
-	add	%o0, 2, %o0	
+	add	%o0, 2, %o0
 	srl	%g4, 1, %g4
 	add	%o1, 2, %o1
-1:	cmp	%g4, 0		
+1:	cmp	%g4, 0
 	be,a	2f
 	 andcc	%g1, 2, %g0
 	EX3(ld	[%o0], %o4)
@@ -446,21 +446,21 @@ ccslow:	cmp	%g1, 0
 	srl	%g5, 16, %g5
 	srl	%g2, 16, %g2
 	andcc	%g1, 2, %g0
-	add	%g2, %g5, %g5 
-2:	be,a	3f		
+	add	%g2, %g5, %g5
+2:	be,a	3f
 	 andcc	%g1, 1, %g0
 	EX(lduh	[%o0], %o4, and %g1, 3)
 	andcc	%g1, 1, %g0
 	srl	%o4, 8, %g2
-	add	%o0, 2, %o0	
+	add	%o0, 2, %o0
 	EX2(stb	%g2, [%o1])
 	add	%g5, %o4, %g5
 	EX2(stb	%o4, [%o1 + 1])
 	add	%o1, 2, %o1
-3:	be,a	1f		
+3:	be,a	1f
 	 sll	%g5, 16, %o4
 	EX(ldub	[%o0], %g2, add %g0, 1)
-	sll	%g2, 8, %o4	
+	sll	%g2, 8, %o4
 	EX2(stb	%g2, [%o1])
 	add	%g5, %o4, %g5
 	sll	%g5, 16, %o4
@@ -475,7 +475,7 @@ ccslow:	cmp	%g1, 0
 	sll	%g2, 8, %g2
 	or	%g2, %o4, %g5
 4:	addcc	%g7, %g5, %g7
-	retl	
+	retl
 	 addx	%g0, %g7, %o0
 __csum_partial_copy_end:
 
@@ -553,13 +553,13 @@ __csum_partial_copy_end:
  * %o4 is faulting address
  * %o5 is %pc where fault occurred */
 	save	%sp, -104, %sp
-        mov     %i5, %o0
-        mov     %i7, %o1
-        mov	%i4, %o2
-        call    lookup_fault
+	mov     %i5, %o0
+	mov     %i7, %o1
+	mov	%i4, %o2
+	call    lookup_fault
 	 mov	%g7, %i4
 	cmp	%o0, 2
-	bne	1f	
+	bne	1f
 	 add	%g0, -EFAULT, %i5
 	tst	%i2
 	be	2f
@@ -583,7 +583,7 @@ __csum_partial_copy_end:
 	ret
 	 restore
 
-        .section __ex_table,#alloc
-        .align 4
-        .word 5b,2
+	.section __ex_table,#alloc
+	.align 4
+	.word 5b,2
 	.word 6b,2

@@ -192,8 +192,8 @@
 
 	.section .text
 	.p2align 4
-        .global memcpy
-        .type memcpy, @function
+	.global memcpy
+	.type memcpy, @function
 memcpy:
 {
 	p2 = cmp.eq(len, #0);		/*  =0 */
@@ -500,7 +500,7 @@ memcpy:
 {
 	if(ifbyte) memb(ptr_out) = data0;
 	ptr_out = sub(ptr_out, len);	/*  return dest pointer  */
-        jumpr r31;
+	jumpr r31;
 }
 /*  do byte copy for small n  */
 .Lbytes23orless:

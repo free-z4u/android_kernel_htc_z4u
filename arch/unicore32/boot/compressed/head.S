@@ -83,15 +83,15 @@ not_relocated:
 		/*
 		 * Turn on the cache.
 		 */
-                mov     r0, #0
-                movc    p0.c5, r0, #28		@ cache invalidate all
-                nop8
-                movc    p0.c6, r0, #6		@ tlb invalidate all
-                nop8
+		mov     r0, #0
+		movc    p0.c5, r0, #28		@ cache invalidate all
+		nop8
+		movc    p0.c6, r0, #6		@ tlb invalidate all
+		nop8
 
-                mov     r0, #0x1c		@ en icache and wb dcache
-                movc    p0.c1, r0, #0
-                nop8
+		mov     r0, #0x1c		@ en icache and wb dcache
+		movc    p0.c1, r0, #0
+		nop8
 
 		/*
 		 * Set up some pointers, for starting decompressing.
@@ -140,17 +140,17 @@ wont_overwrite:
 		 * Clean and flush the cache to maintain consistency.
 		 */
 		mov	r0, #0
-                movc    p0.c5, r0, #14		@ flush dcache
+		movc    p0.c5, r0, #14		@ flush dcache
 		nop8
-                movc    p0.c5, r0, #20		@ icache invalidate all
-                nop8
+		movc    p0.c5, r0, #20		@ icache invalidate all
+		nop8
 
 		/*
 		 * Turn off the Cache and MMU.
 		 */
 		mov	r0, #0			@ disable i/d cache and MMU
 		movc	p0.c1, r0, #0
-                nop8
+		nop8
 
 		mov	r0, #0			@ must be zero
 		ldw	r4, =KERNEL_IMAGE_START

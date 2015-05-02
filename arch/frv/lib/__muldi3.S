@@ -9,8 +9,8 @@
  * 2 of the License, or (at your option) any later version.
  */
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
@@ -18,8 +18,8 @@
 #                             unsigned long long y [GR10:GR11])
 #
 ###############################################################################
-        .globl		__muldi3, __mulll, __umulll
-        .type		__muldi3,@function
+	.globl		__muldi3, __mulll, __umulll
+	.type		__muldi3,@function
 __muldi3:
 __mulll:
 __umulll:

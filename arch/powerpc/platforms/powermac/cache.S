@@ -226,24 +226,24 @@ flush_disable_745x:
 	 * it even with a big hammer...
 	 */
 
-        lis     r4,0x0002
-        mtctr   r4
+	lis     r4,0x0002
+	mtctr   r4
  	li      r4,0
 1:
-        lwz     r0,0(r4)
-        addi    r4,r4,32                /* Go to start of next cache line */
-        bdnz    1b
-        isync
+	lwz     r0,0(r4)
+	addi    r4,r4,32                /* Go to start of next cache line */
+	bdnz    1b
+	isync
 
-        /* Now, flush the first 4MB of memory */
-        lis     r4,0x0002
-        mtctr   r4
+	/* Now, flush the first 4MB of memory */
+	lis     r4,0x0002
+	mtctr   r4
 	li      r4,0
-        sync
+	sync
 1:
-        dcbf    0,r4
-        addi    r4,r4,32                /* Go to start of next cache line */
-        bdnz    1b
+	dcbf    0,r4
+	addi    r4,r4,32                /* Go to start of next cache line */
+	bdnz    1b
 
 	/* Flush and disable the L1 data cache */
 	mfspr	r6,SPRN_LDSTCR

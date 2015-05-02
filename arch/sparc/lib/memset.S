@@ -57,7 +57,7 @@
 	.text
 	.align 4
 
-        .globl  __bzero_begin
+	.globl  __bzero_begin
 __bzero_begin:
 
 	.globl	__bzero

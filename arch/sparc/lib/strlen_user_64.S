@@ -17,7 +17,7 @@
 	.global __strlen_user, __strnlen_user
 __strlen_user:
 	sethi	%hi(32768), %o1
-__strnlen_user:	
+__strnlen_user:
 	mov	%o1, %g1
 	mov	%o0, %o1
 	andcc	%o0, 3, %g0
@@ -79,11 +79,11 @@ __strnlen_user:
 23:	retl
 	 mov	3, %o0
 
-        .section .fixup,#alloc,#execinstr
-        .align  4
+	.section .fixup,#alloc,#execinstr
+	.align  4
 30:
-        retl
-         clr    %o0
+	retl
+	 clr    %o0
 
 	.section __ex_table,"a"
 	.align	4

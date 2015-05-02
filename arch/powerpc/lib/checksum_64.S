@@ -1,7 +1,7 @@
 /*
  * This file contains assembly-language implementations
  * of IP-style 1's complement checksum routines.
- *	
+ *
  *    Copyright (C) 1995-1996 Gary Thomas (gdt@linuxppc.org)
  *
  *  This program is free software; you can redistribute it and/or
@@ -35,9 +35,9 @@ _GLOBAL(ip_fast_csum)
 	adde	r0,r0,r4
 	bdnz	1b
 	addze	r0,r0		/* add in final carry */
-        rldicl  r4,r0,32,0      /* fold two 32-bit halves together */
-        add     r0,r0,r4
-        srdi    r0,r0,32
+	rldicl  r4,r0,32,0      /* fold two 32-bit halves together */
+	add     r0,r0,r4
+	srdi    r0,r0,32
 	rlwinm	r3,r0,16,0,31	/* fold two halves together */
 	add	r3,r0,r3
 	not	r3,r3
@@ -50,15 +50,15 @@ _GLOBAL(ip_fast_csum)
  * No real gain trying to do this specially for 64 bit, but
  * the 32 bit addition may spill into the upper bits of
  * the doubleword so we still must fold it down from 64.
- */	
+ */
 _GLOBAL(csum_tcpudp_magic)
 	rlwimi	r5,r6,16,0,15	/* put proto in upper half of len */
 	addc	r0,r3,r4	/* add 4 32-bit words together */
 	adde	r0,r0,r5
 	adde	r0,r0,r7
-        rldicl  r4,r0,32,0      /* fold 64 bit value */
-        add     r0,r4,r0
-        srdi    r0,r0,32
+	rldicl  r4,r0,32,0      /* fold 64 bit value */
+	add     r0,r4,r0
+	srdi    r0,r0,32
 	rlwinm	r3,r0,16,0,31	/* fold two halves together */
 	add	r3,r0,r3
 	not	r3,r3

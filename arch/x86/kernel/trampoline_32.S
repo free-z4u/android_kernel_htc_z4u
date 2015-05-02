@@ -6,8 +6,8 @@
  *
  *	This is only used for booting secondary CPUs in SMP machine
  *
- *	Entry: CS:IP point to the start of our code, we are 
- *	in real mode with no stack, but the rest of the 
+ *	Entry: CS:IP point to the start of our code, we are
+ *	in real mode with no stack, but the rest of the
  *	trampoline page to make our stack and everything else
  *	is a mystery.
  *

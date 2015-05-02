@@ -94,7 +94,7 @@ ia64_do_tlb_purge:
 	srlz.i 			// srlz.i implies srlz.d
 	;;
 
-        // Now purge addresses formerly mapped by TR registers
+	// Now purge addresses formerly mapped by TR registers
 	// 1. Purge ITR&DTR for kernel.
 	movl r16=KERNEL_START
 	mov r18=KERNEL_TR_PAGE_SHIFT<<2
@@ -170,18 +170,18 @@ ia64_reload_tr:
 	;;
 	mov cr.itir=r18
 	mov cr.ifa=r17
-        mov r16=IA64_TR_KERNEL
+	mov r16=IA64_TR_KERNEL
 	mov r19=ip
 	movl r18=PAGE_KERNEL
 	;;
-        dep r17=0,r19,0, KERNEL_TR_PAGE_SHIFT
+	dep r17=0,r19,0, KERNEL_TR_PAGE_SHIFT
 	;;
 	or r18=r17,r18
 	;;
-        itr.i itr[r16]=r18
+	itr.i itr[r16]=r18
 	;;
-        itr.d dtr[r16]=r18
-        ;;
+	itr.d dtr[r16]=r18
+	;;
 	srlz.i
 	srlz.d
 	;;
@@ -247,7 +247,7 @@ done_tlb_purge_and_reload:
 	;;
 	mov r7=r2
 
-        // Enter virtual mode from physical mode
+	// Enter virtual mode from physical mode
 	VIRTUAL_MODE_ENTER(r2, r3, ia64_os_mca_virtual_begin, r4)
 
 	// This code returns to SAL via SOS r2, in general SAL has no unwind
@@ -356,7 +356,7 @@ ia64_os_init_dispatch:
 	;;
 	mov r7=r2
 
-        // Enter virtual mode from physical mode
+	// Enter virtual mode from physical mode
 	VIRTUAL_MODE_ENTER(r2, r3, ia64_os_init_virtual_begin, r4)
 
 	// This code returns to SAL via SOS r2, in general SAL has no unwind

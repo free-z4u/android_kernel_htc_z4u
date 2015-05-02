@@ -10,8 +10,8 @@
  */
 
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
@@ -22,8 +22,8 @@
 #         GR4, GR7, GR8, and GR11 must be managed
 #
 ###############################################################################
-        .globl		memset,__memset_end
-        .type		memset,@function
+	.globl		memset,__memset_end
+	.type		memset,@function
 memset:
 	orcc.p		gr10,gr0,gr5,icc3		; GR5 = count
 	andi		gr9,#0xff,gr9
@@ -155,8 +155,8 @@ __memset_end:
 # long __memset_user(void *p, size_t count)
 #
 ###############################################################################
-        .globl		__memset_user, __memset_user_error_lr, __memset_user_error_handler
-        .type		__memset_user,@function
+	.globl		__memset_user, __memset_user_error_lr, __memset_user_error_handler
+	.type		__memset_user,@function
 __memset_user:
 	movsg		lr,gr11
 

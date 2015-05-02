@@ -234,7 +234,7 @@ should_never_return:
 /*
  * BSS section
  */
-	
+
 __PAGE_ALIGNED_BSS
 #ifdef CONFIG_MMU
 ENTRY(swapper_pg_dir)

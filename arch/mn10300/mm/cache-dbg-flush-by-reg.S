@@ -27,7 +27,7 @@
 ###############################################################################
 	ALIGN
 	.globl	debugger_local_cache_flushinv
-        .type	debugger_local_cache_flushinv,@function
+	.type	debugger_local_cache_flushinv,@function
 debugger_local_cache_flushinv:
 	#
 	# firstly flush the dcache

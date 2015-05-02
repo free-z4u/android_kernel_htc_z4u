@@ -134,7 +134,7 @@
 
 	dmfc0	t9, $9,7	/* CvmCtl register. */
 
-        /* Save the COP2 CRC state */
+	/* Save the COP2 CRC state */
 	dmfc2	t0, 0x0201
 	dmfc2	t1, 0x0202
 	dmfc2	t2, 0x0200
@@ -153,7 +153,7 @@
 1:      bbit1	t9, 26, 3f	/* done if CvmCtl[NOCRYPTO] set */
 
 	/* Save the COP2 crypto state */
-        /* this part is mostly common to both pass 1 and later revisions */
+	/* this part is mostly common to both pass 1 and later revisions */
 	dmfc2 	t0, 0x0084
 	dmfc2 	t1, 0x0080
 	dmfc2 	t2, 0x0081
@@ -189,7 +189,7 @@
 	/* Skip to the Pass1 version of the remainder of the COP2 state */
 	beq	t3, t0, 2f
 
-        /* the non-pass1 state when !CvmCtl[NOCRYPTO] */
+	/* the non-pass1 state when !CvmCtl[NOCRYPTO] */
 	dmfc2	t1, 0x0240
 	dmfc2	t2, 0x0241
 	dmfc2	t3, 0x0242
@@ -281,13 +281,13 @@
 	.set push
 	.set noreorder
 	LEAF(octeon_cop2_restore)
-        /* First cache line was prefetched before the call */
-        pref    4,  128(a0)
+	/* First cache line was prefetched before the call */
+	pref    4,  128(a0)
 	dmfc0	t9, $9,7	/* CvmCtl register. */
 
-        pref    4,  256(a0)
+	pref    4,  256(a0)
 	ld	t0, OCTEON_CP2_CRC_IV(a0)
-        pref    4,  384(a0)
+	pref    4,  384(a0)
 	ld	t1, OCTEON_CP2_CRC_LENGTH(a0)
 	ld	t2, OCTEON_CP2_CRC_POLY(a0)
 
@@ -342,7 +342,7 @@
 	bne	t0, t3, 3f	/* Skip the next stuff for non-pass1 */
 	 dmtc2	t2, 0x0101
 
-        /* this code is specific for pass 1 */
+	/* this code is specific for pass 1 */
 	ld	t0, OCTEON_CP2_HSH_DATW(a0)
 	ld	t1, OCTEON_CP2_HSH_DATW+8(a0)
 	ld	t2, OCTEON_CP2_HSH_DATW+16(a0)
@@ -362,7 +362,7 @@
 	ld	t0, OCTEON_CP2_HSH_IVW+16(a0)
 	dmtc2	t1, 0x0048
 	dmtc2	t2, 0x0049
-        b done_restore   /* unconditional branch */
+	b done_restore   /* unconditional branch */
 	 dmtc2	t0, 0x004A
 
 3:      /* this is post-pass1 code */

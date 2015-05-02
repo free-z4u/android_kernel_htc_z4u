@@ -15,7 +15,7 @@
 	.global _ramvec
 	.global	_ramstart
 	.global	_ramend
-	
+
 	.data
 
 /*
@@ -116,7 +116,7 @@ _start:
 /*
  * Local functions
  */
- 
+
 #ifdef CRT_DEBUG
 putc:
 	moveb	%d7, 0xfffff907

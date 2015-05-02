@@ -38,7 +38,7 @@ __mtdcr_table:
 	mtdcr  0,r4; blr
 
 dcr     = 1
-        .rept   1023
+	.rept   1023
 	mfdcr   r3,dcr; blr
 	mtdcr   dcr,r4; blr
 	dcr     = dcr + 1

@@ -21,7 +21,7 @@
 /* Replaces the standard library function memset */
 
 
-        .macro HEXAGON_OPT_FUNC_BEGIN name
+	.macro HEXAGON_OPT_FUNC_BEGIN name
 	.text
 	.p2align 4
 	.globl \name

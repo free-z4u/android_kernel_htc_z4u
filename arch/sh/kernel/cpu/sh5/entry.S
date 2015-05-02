@@ -257,7 +257,7 @@ not_a_tlb_miss:
 	putcon	SP, KCR1
 
 	/* Save other original registers into reg_save_area */
-        movi  reg_save_area, SP
+	movi  reg_save_area, SP
 	st.q	SP, SAVED_R2, r2
 	st.q	SP, SAVED_R3, r3
 	st.q	SP, SAVED_R4, r4
@@ -419,7 +419,7 @@ interrupt:
 	putcon	SP, KCR1
 
 	/* Save other original registers into reg_save_area */
-        movi  reg_save_area, SP
+	movi  reg_save_area, SP
 	st.q	SP, SAVED_R2, r2
 	st.q	SP, SAVED_R3, r3
 	st.q	SP, SAVED_R4, r4
@@ -515,8 +515,8 @@ debug_exception:
 	movi	resvec_save_area-CONFIG_PAGE_OFFSET, SP
 
 	/* With the MMU off, we are bypassing the cache, so purge any
-         * data that will be made stale by the following stores.
-         */
+	 * data that will be made stale by the following stores.
+	 */
 	ocbp	SP, 0
 	synco
 
@@ -552,7 +552,7 @@ debug_exeception_2:
 	ld.q	SP, 8, r1
 
 	/* Save other original registers into reg_save_area */
-        movi  reg_save_area, SP
+	movi  reg_save_area, SP
 	st.q	SP, SAVED_R2, r2
 	st.q	SP, SAVED_R3, r3
 	st.q	SP, SAVED_R4, r4
@@ -827,7 +827,7 @@ no_underflow:
 	 *
 	 * To avoid this we raise the IMASK and then issue another PUTCON to
 	 * enable interrupts.
-         */
+	 */
 	getcon	SR, r6
 	movi	SR_IMASK | SR_FD, r7
 	or	r6, r7, r6
@@ -1116,8 +1116,8 @@ itlb_miss_or_IRQ:
 
 call_do_page_fault:
 	movi	do_page_fault, r6
-        ptabs	r6, tr0
-        blink	tr0, ZERO
+	ptabs	r6, tr0
+	blink	tr0, ZERO
 #endif /* CONFIG_MMU */
 
 fpu_error_or_IRQA:
@@ -1173,21 +1173,21 @@ unknown_trap:
 	/* Unknown Trap or User Trace */
 	movi	do_unknown_trapa, r6
 	ptabs	r6, tr0
-        ld.q    r3, FRAME_R(9), r2	/* r2 = #arg << 16 | syscall # */
-        andi    r2, 0x1ff, r2		/* r2 = syscall # */
+	ld.q    r3, FRAME_R(9), r2	/* r2 = #arg << 16 | syscall # */
+	andi    r2, 0x1ff, r2		/* r2 = syscall # */
 	blink	tr0, LINK
 
 	pta	syscall_ret, tr0
 	blink	tr0, ZERO
 
-        /* New syscall implementation*/
+	/* New syscall implementation*/
 system_call:
 	pta	unknown_trap, tr0
-        or      r5, ZERO, r4            /* TRA (=r5) -> r4 */
-        shlri   r4, 20, r4
+	or      r5, ZERO, r4            /* TRA (=r5) -> r4 */
+	shlri   r4, 20, r4
 	bnei	r4, 1, tr0		/* unknown_trap if not 0x1yzzzz */
 
-        /* It's a system call */
+	/* It's a system call */
 	st.q    r3, FRAME_S(FSYSCALL_ID), r5 	/* ID (0x1yzzzz) -> stack */
 	andi    r5, 0x1ff, r5			/* syscall # -> r5	  */
 
@@ -1381,7 +1381,7 @@ peek_real_address_q:
 	nop
 
 .peek0:	/* come here in real mode, don't touch caches!!
-           still in critical section (sr.bl==1) */
+	   still in critical section (sr.bl==1) */
 	putcon	r0, ssr
 	putcon	r37, spc
 	/* Here's the actual peek.  If the address is bad, all bets are now off
@@ -1430,7 +1430,7 @@ poke_real_address_q:
 	nop
 
 .poke0:	/* come here in real mode, don't touch caches!!
-           still in critical section (sr.bl==1) */
+	   still in critical section (sr.bl==1) */
 	putcon	r0, ssr
 	putcon	r37, spc
 	/* Here's the actual poke.  If the address is bad, all bets are now off

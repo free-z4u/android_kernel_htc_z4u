@@ -50,7 +50,7 @@ SECTIONS
 	PERCPU_SECTION(L1_CACHE_BYTES)
 	__init_end = .;
 
-        . = ALIGN(_PAGE_SIZE);
+	. = ALIGN(_PAGE_SIZE);
 	_stext = .;
 	.text : AT(ADDR(.text) - LOAD_OFFSET) {
 		_text = .;

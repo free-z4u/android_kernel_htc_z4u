@@ -82,7 +82,7 @@
 .macro MMU_REFILL_HANDLER handler, mmu
 	.data
 1:	.dword	0		; refill_count
-                                ;   == 0 <=> last_refill_cause is invalid
+				;   == 0 <=> last_refill_cause is invalid
 2:	.dword	0		; last_refill_cause
 	.text
 	.globl \handler
@@ -100,17 +100,17 @@
 
 	test.d	[$acr]	        ; refill_count == 0 ?
 	beq	5f		;   yes, last_refill_cause is invalid
-        move.d	$acr, $r1
+	move.d	$acr, $r1
 
 	; last_refill_cause is valid, investigate cause
-        addq    4, $r1          ; Point to last_refill_cause
+	addq    4, $r1          ; Point to last_refill_cause
 	move	$s3, $r0	; Get rw_mm_cause
 	move.d	[$r1], $r2	; Get last_refill_cause
 	cmp.d	$r0, $r2	; rw_mm_cause == last_refill_cause ?
 	beq	6f		;   yes, increment count
 	moveq	1, $r2
 
-        ; rw_mm_cause != last_refill_cause
+	; rw_mm_cause != last_refill_cause
 	move.d	$r2, [$acr]	; refill_count = 1
 	move.d	$r0, [$r1]	; last_refill_cause = rw_mm_cause
 
@@ -147,14 +147,14 @@
 
 5:      ; last_refill_cause is invalid
 	moveq	1, $r2
-        addq    4, $r1          ; Point to last_refill_cause
+	addq    4, $r1          ; Point to last_refill_cause
 	move.d	$r2, [$acr]	; refill_count = 1
 	move	$s3, $r0	; Get rw_mm_cause
-        ba      3b		; Continue normal processing
+	ba      3b		; Continue normal processing
 	move.d	$r0,[$r1]	; last_refill_cause = rw_mm_cause
 
 6:      ; rw_mm_cause == last_refill_cause
-        move.d  [$acr], $r2     ; Get refill_count
+	move.d  [$acr], $r2     ; Get refill_count
 	cmpq	4, $r2		; refill_count > 4 ?
 	bhi	7f		;   yes
 	addq	1, $r2	        ; refill_count++

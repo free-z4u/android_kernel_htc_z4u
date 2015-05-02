@@ -22,9 +22,9 @@
       - memory accessed as aligned quadwords only
       - uses cmpbge to compare 8 bytes in parallel
       - does binary search to find 0 byte in last
-        quadword (HAKMEM needed 12 instructions to
-        do this instead of the 9 instructions that
-        binary search needs).
+	quadword (HAKMEM needed 12 instructions to
+	do this instead of the 9 instructions that
+	binary search needs).
 
 For correctness consider that:
 
@@ -32,8 +32,8 @@ For correctness consider that:
       - the third argument is an unsigned long
 */
 
-        .set noreorder
-        .set noat
+	.set noreorder
+	.set noat
 
 	.globl memchr
 	.ent memchr
@@ -49,19 +49,19 @@ memchr:
 	zap	$18, 0x80, $5	#-e0	:
 
 	beq	$18, $not_found	# .. e1 :
-        ldq_u   $1, 0($16)	# e1	: load first quadword
+	ldq_u   $1, 0($16)	# e1	: load first quadword
 	insbl	$17, 1, $2	# .. e0 : $2 = 000000000000ch00
 	and	$17, 0xff, $17	#-e0    : $17 = 00000000000000ch
 	cmpult	$18, 9, $4	# .. e1 :
 	or	$2, $17, $17	# e0    : $17 = 000000000000chch
-        lda     $3, -1($31)	# .. e1 :
+	lda     $3, -1($31)	# .. e1 :
 	sll	$17, 16, $2	#-e0    : $2 = 00000000chch0000
 	addq	$16, $5, $5	# .. e1 :
 	or	$2, $17, $17	# e1    : $17 = 00000000chchchch
 	unop			#	:
 	sll	$17, 32, $2	#-e0    : $2 = chchchch00000000
 	or	$2, $17, $17	# e1	: $17 = chchchchchchchch
-	extql	$1, $16, $7	# e0    : 
+	extql	$1, $16, $7	# e0    :
 	beq	$4, $first_quad	# .. e1 :
 
 	ldq_u	$6, -1($5)	#-e1	: eight or less bytes to search
@@ -75,28 +75,28 @@ memchr:
 	#	$1 = ????c6c5c4c3c2c1
 $last_quad:
 	negq	$18, $6		#-e0	:
-        xor	$17, $1, $1	# .. e1 :
+	xor	$17, $1, $1	# .. e1 :
 	srl	$3, $6, $6	# e0    : $6 = mask of $18 bits set
-        cmpbge  $31, $1, $2	# .. e1 :
+	cmpbge  $31, $1, $2	# .. e1 :
 	and	$2, $6, $2	#-e0	:
-        beq     $2, $not_found	# .. e1 :
+	beq     $2, $not_found	# .. e1 :
 
 $found_it:
 	# Now, determine which byte matched:
-        negq    $2, $3		# e0	:
-        and     $2, $3, $2	# e1	:
+	negq    $2, $3		# e0	:
+	and     $2, $3, $2	# e1	:
 
-        and     $2, 0x0f, $1	#-e0	:
-        addq    $0, 4, $3	# .. e1 :
-        cmoveq  $1, $3, $0	# e0	:
+	and     $2, 0x0f, $1	#-e0	:
+	addq    $0, 4, $3	# .. e1 :
+	cmoveq  $1, $3, $0	# e0	:
 
-        addq    $0, 2, $3	# .. e1 :
-        and     $2, 0x33, $1	#-e0	:
-        cmoveq  $1, $3, $0	# .. e1 :
+	addq    $0, 2, $3	# .. e1 :
+	and     $2, 0x33, $1	#-e0	:
+	cmoveq  $1, $3, $0	# .. e1 :
 
-        and     $2, 0x55, $1	# e0	:
-        addq    $0, 1, $3	# .. e1 :
-        cmoveq  $1, $3, $0	#-e0	:
+	and     $2, 0x55, $1	# e0	:
+	addq    $0, 1, $3	# .. e1 :
+	cmoveq  $1, $3, $0	#-e0	:
 
 $done:	ret			# .. e1 :
 
@@ -105,11 +105,11 @@ $done:	ret			# .. e1 :
 	.align 4
 $first_quad:
 	andnot	$16, 0x7, $0	#-e1	:
-        insqh   $3, $16, $2	# .. e0	: $2 = 0000ffffffffffff ($16<0:2> ff)
-        xor	$1, $17, $1	# e0	:
+	insqh   $3, $16, $2	# .. e0	: $2 = 0000ffffffffffff ($16<0:2> ff)
+	xor	$1, $17, $1	# e0	:
 	or	$1, $2, $1	# e1	: $1 = ====ffffffffffff
-        cmpbge  $31, $1, $2	#-e0	:
-        bne     $2, $found_it	# .. e1 :
+	cmpbge  $31, $1, $2	#-e0	:
+	bne     $2, $found_it	# .. e1 :
 
 	# At least one byte left to process.
 
@@ -161,4 +161,4 @@ $not_found:
 	mov	$31, $0		#-e0	:
 	ret			# .. e1 :
 
-        .end memchr
+	.end memchr

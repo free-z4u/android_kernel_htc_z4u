@@ -11,7 +11,7 @@
  */
 #include <linux/linkage.h>
 #include <asm/assembler.h>
-                .text
+		.text
 
 /*
  * Purpose  : Find a 'zero' bit

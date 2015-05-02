@@ -10,17 +10,17 @@
  * published by the Free Software Foundation.
 */
 
-                .macro  addruart, rp, rv, tmp
+		.macro  addruart, rp, rv, tmp
 #ifdef __ARMEB__
-                mov     \rp, #3         @ Uart regs are at off set of 3 if
+		mov     \rp, #3         @ Uart regs are at off set of 3 if
 					@ byte writes used - Big Endian.
 #else
 		mov	\rp, #0
 #endif
-                orr     \rv, \rp, #0xff000000	@ virtual
+		orr     \rv, \rp, #0xff000000	@ virtual
 		orr	\rv, \rv, #0x00b00000
-                orr     \rp, \rp, #0xc8000000	@ physical
-                .endm
+		orr     \rp, \rp, #0xc8000000	@ physical
+		.endm
 
 #define UART_SHIFT	2
 #include <asm/hardware/debug-8250.S>

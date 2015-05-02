@@ -133,7 +133,7 @@ $a_loop:
 	 */
 $a_eos:
 	negq	t8, t12		# E : find low bit set
-	and	t8, t12, t12	# E : 
+	and	t8, t12, t12	# E :
 
 	/* We're doing a partial word store and so need to combine
 	   our source and original destination words.  */

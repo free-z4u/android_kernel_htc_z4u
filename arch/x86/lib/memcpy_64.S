@@ -192,7 +192,7 @@ ENDPROC(__memcpy)
 	 * original memcpy().
 	 * Otherwise, original memcpy() is used.
 	 * In .altinstructions section, ERMS feature is placed after REG_GOOD
-         * feature to implement the right patch order.
+	 * feature to implement the right patch order.
 	 *
 	 * Replace only beginning, memcpy is used to apply alternatives,
 	 * so it is silly to overwrite itself with nops - reboot is the

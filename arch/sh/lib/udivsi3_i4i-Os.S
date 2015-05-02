@@ -37,7 +37,7 @@ Boston, MA 02110-1301, USA.  */
    sdiv small divisor, negative result: 65 cycles (*)
    sdiv large divisor, negative result: 62 cycles (*)
    (*): r2 is restored in the rts delay slot and has a lingering latency
-        of two more cycles.  */
+	of two more cycles.  */
 	.balign 4
 	.global	__udivsi3_i4i
 	.global	__udivsi3_i4

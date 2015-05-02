@@ -42,16 +42,16 @@
 #define HOST_STACK_LR   (HOST_STACK_SIZE + 4) /* In caller stack frame. */
 
 #define NEED_INST_MASK ((1<<BOOKE_INTERRUPT_PROGRAM) | \
-                        (1<<BOOKE_INTERRUPT_DTLB_MISS) | \
-                        (1<<BOOKE_INTERRUPT_DEBUG))
+			(1<<BOOKE_INTERRUPT_DTLB_MISS) | \
+			(1<<BOOKE_INTERRUPT_DEBUG))
 
 #define NEED_DEAR_MASK ((1<<BOOKE_INTERRUPT_DATA_STORAGE) | \
-                        (1<<BOOKE_INTERRUPT_DTLB_MISS))
+			(1<<BOOKE_INTERRUPT_DTLB_MISS))
 
 #define NEED_ESR_MASK ((1<<BOOKE_INTERRUPT_DATA_STORAGE) | \
-                       (1<<BOOKE_INTERRUPT_INST_STORAGE) | \
-                       (1<<BOOKE_INTERRUPT_PROGRAM) | \
-                       (1<<BOOKE_INTERRUPT_DTLB_MISS))
+		       (1<<BOOKE_INTERRUPT_INST_STORAGE) | \
+		       (1<<BOOKE_INTERRUPT_PROGRAM) | \
+		       (1<<BOOKE_INTERRUPT_DTLB_MISS))
 
 .macro KVM_HANDLER ivor_nr
 _GLOBAL(kvmppc_handler_\ivor_nr)

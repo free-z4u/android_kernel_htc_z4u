@@ -5,8 +5,8 @@
  *	4 Jan 1997 Michael Chastain: changed to gnu as.
  *	15 Sept 2005 Eric Biederman: 64bit PIC support
  *
- *	Entry: CS:IP point to the start of our code, we are 
- *	in real mode with no stack, but the rest of the 
+ *	Entry: CS:IP point to the start of our code, we are
+ *	in real mode with no stack, but the rest of the
  *	trampoline page to make our stack and everything else
  *	is a mystery.
  *

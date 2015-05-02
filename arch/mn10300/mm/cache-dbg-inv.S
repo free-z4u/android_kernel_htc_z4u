@@ -30,7 +30,7 @@
 ###############################################################################
 	ALIGN
 	.globl	debugger_local_cache_flushinv
-        .type	debugger_local_cache_flushinv,@function
+	.type	debugger_local_cache_flushinv,@function
 debugger_local_cache_flushinv:
 	#
 	# we only need to invalidate the icache in this cache mode

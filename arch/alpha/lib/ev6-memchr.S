@@ -28,8 +28,8 @@
  * Try not to change the actual algorithm if possible for consistency.
  */
 
-        .set noreorder
-        .set noat
+	.set noreorder
+	.set noat
 
 	.align	4
 	.globl memchr
@@ -45,13 +45,13 @@ memchr:
 	# the length is the easiest way to avoid trouble.
 	zap	$18, 0x80, $5	# U : Bound length
 	beq	$18, $not_found	# U :
-        ldq_u   $1, 0($16)	# L : load first quadword Latency=3
+	ldq_u   $1, 0($16)	# L : load first quadword Latency=3
 	and	$17, 0xff, $17	# E : L L U U : 00000000000000ch
 
 	insbl	$17, 1, $2	# U : 000000000000ch00
 	cmpult	$18, 9, $4	# E : small (< 1 quad) string?
 	or	$2, $17, $17	# E : 000000000000chch
-        lda     $3, -1($31)	# E : U L L U
+	lda     $3, -1($31)	# E : U L L U
 
 	sll	$17, 16, $2	# U : 00000000chch0000
 	addq	$16, $5, $5	# E : Max search address
@@ -74,14 +74,14 @@ memchr:
 	#	$1 = ????c6c5c4c3c2c1
 $last_quad:
 	negq	$18, $6		# E :
-        xor	$17, $1, $1	# E :
+	xor	$17, $1, $1	# E :
 	srl	$3, $6, $6	# U : $6 = mask of $18 bits set
-        cmpbge  $31, $1, $2	# E : L U L U
+	cmpbge  $31, $1, $2	# E : L U L U
 
 	nop
 	nop
 	and	$2, $6, $2	# E :
-        beq     $2, $not_found	# U : U L U L
+	beq     $2, $not_found	# U : U L U L
 
 $found_it:
 #ifdef CONFIG_ALPHA_EV67
@@ -98,22 +98,22 @@ $found_it:
 	 * Slow and clunky.  It can probably be improved.
 	 * An exercise left for others.
 	 */
-        negq    $2, $3		# E :
-        and     $2, $3, $2	# E :
-        and     $2, 0x0f, $1	# E :
-        addq    $0, 4, $3	# E :
+	negq    $2, $3		# E :
+	and     $2, $3, $2	# E :
+	and     $2, 0x0f, $1	# E :
+	addq    $0, 4, $3	# E :
 
-        cmoveq  $1, $3, $0	# E : Latency 2, extra map cycle
+	cmoveq  $1, $3, $0	# E : Latency 2, extra map cycle
 	nop			# E : keep with cmov
-        and     $2, 0x33, $1	# E :
-        addq    $0, 2, $3	# E : U L U L : 2 cycle stall on $0
+	and     $2, 0x33, $1	# E :
+	addq    $0, 2, $3	# E : U L U L : 2 cycle stall on $0
 
-        cmoveq  $1, $3, $0	# E : Latency 2, extra map cycle
+	cmoveq  $1, $3, $0	# E : Latency 2, extra map cycle
 	nop			# E : keep with cmov
-        and     $2, 0x55, $1	# E :
-        addq    $0, 1, $3	# E : U L U L : 2 cycle stall on $0
+	and     $2, 0x55, $1	# E :
+	addq    $0, 1, $3	# E : U L U L : 2 cycle stall on $0
 
-        cmoveq  $1, $3, $0	# E : Latency 2, extra map cycle
+	cmoveq  $1, $3, $0	# E : Latency 2, extra map cycle
 	nop
 	nop
 	ret			# L0 : L U L U
@@ -124,12 +124,12 @@ $found_it:
 	.align 4
 $first_quad:
 	andnot	$16, 0x7, $0	# E :
-        insqh   $3, $16, $2	# U : $2 = 0000ffffffffffff ($16<0:2> ff)
-        xor	$1, $17, $1	# E :
+	insqh   $3, $16, $2	# U : $2 = 0000ffffffffffff ($16<0:2> ff)
+	xor	$1, $17, $1	# E :
 	or	$1, $2, $1	# E : U L U L $1 = ====ffffffffffff
 
-        cmpbge  $31, $1, $2	# E :
-        bne     $2, $found_it	# U :
+	cmpbge  $31, $1, $2	# E :
+	bne     $2, $found_it	# U :
 	# At least one byte left to process.
 	ldq	$1, 8($0)	# L :
 	subq	$5, 1, $18	# E : U L U L
@@ -188,4 +188,4 @@ $not_found:
 	nop			# E :
 	ret			# L0 :
 
-        .end memchr
+	.end memchr

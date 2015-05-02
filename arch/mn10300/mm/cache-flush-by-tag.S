@@ -47,7 +47,7 @@ mn10300_dcache_flush_inv_range2	= mn10300_local_dcache_flush_inv_range2
 ###############################################################################
 	ALIGN
 	.globl	mn10300_local_dcache_flush
-        .type	mn10300_local_dcache_flush,@function
+	.type	mn10300_local_dcache_flush,@function
 mn10300_local_dcache_flush:
 	movhu	(CHCTR),d0
 	btst	CHCTR_DCEN,d0

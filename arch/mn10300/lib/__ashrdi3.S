@@ -10,8 +10,8 @@
  */
 #include <asm/cache.h>
 
-        .text
-        .balign	L1_CACHE_BYTES
+	.text
+	.balign	L1_CACHE_BYTES
 
 ###############################################################################
 #
@@ -19,8 +19,8 @@
 #			       unsigned by [(12,SP)])
 #
 ###############################################################################
-        .globl	__ashrdi3
-        .type	__ashrdi3,@function
+	.globl	__ashrdi3
+	.type	__ashrdi3,@function
 __ashrdi3:
 	mov	(12,sp),a0
 	and	+63,a0

@@ -31,8 +31,8 @@ cris_spin_trylock:
 1:	move.b	[$r10], $r11
 	ax
 	clear.b [$r10]
-        bcs	1b
-        clearf	p
+	bcs	1b
+	clearf	p
 	ret
 	movu.b	$r11,$r10
 

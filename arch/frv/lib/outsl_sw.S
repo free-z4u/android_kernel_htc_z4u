@@ -10,16 +10,16 @@
  */
 
 
-        .text
-        .p2align	4
+	.text
+	.p2align	4
 
 ###############################################################################
 #
 # void __outsl_sw(unsigned int port, const void *buf, int n)
 #
 ###############################################################################
-        .globl		__outsl_sw
-        .type		__outsl_sw,@function
+	.globl		__outsl_sw
+	.type		__outsl_sw,@function
 __outsl_sw:
 	subi.p		gr9,#1,gr9
 	setlos		#1,gr4

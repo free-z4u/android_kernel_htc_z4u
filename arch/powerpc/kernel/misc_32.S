@@ -205,7 +205,7 @@ _GLOBAL(low_choose_7447a_dfs)
 	mfmsr	r7
 	rlwinm	r0,r7,0,17,15
 	mtmsr	r0
-	
+
 	/* Calc new HID1 value */
 	mfspr	r4,SPRN_HID1
 	insrwi	r4,r3,1,9	/* insert parameter into bit 9 */
@@ -603,7 +603,7 @@ _GLOBAL(atomic_set_mask)
  * R5    has shift count
  * result in R3/R4
  *
- *  ashrdi3: arithmetic right shift (sign propagation)	
+ *  ashrdi3: arithmetic right shift (sign propagation)
  *  lshrdi3: logical right shift
  *  ashldi3: left shift
  */
@@ -706,7 +706,7 @@ _GLOBAL(start_secondary_resume)
 	bl	start_secondary
 	b	.
 #endif /* CONFIG_SMP */
-	
+
 /*
  * This routine is just here to keep GCC happy - sigh...
  */

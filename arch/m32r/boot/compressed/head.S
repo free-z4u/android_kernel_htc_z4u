@@ -123,11 +123,11 @@ startup:
  */
 	mv	r0, sp
 	srli	r0, 31				/* MMU is ON or OFF */
-        seth	r1, #high(zimage_data)
-        or3	r1, r1, #low(zimage_data)
+	seth	r1, #high(zimage_data)
+	or3	r1, r1, #low(zimage_data)
 	add	r1, r12
-        seth	r2, #high(zimage_len)
-        or3	r2, r2, #low(zimage_len)
+	seth	r2, #high(zimage_len)
+	or3	r2, r2, #low(zimage_len)
 	mv	r3, sp
 
 	bl	decompress_kernel

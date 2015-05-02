@@ -937,7 +937,7 @@ skpinv:	addi	r4,r4,1				/* Increment */
 	li	r5,0
 	ori	r5,r5,(PPC44x_TLB_SW | PPC44x_TLB_SR | PPC44x_TLB_SX | PPC44x_TLB_G)
 
-        li      r0,63                    /* TLB slot 63 */
+	li      r0,63                    /* TLB slot 63 */
 
 	tlbwe	r3,r0,PPC44x_TLB_PAGEID	/* Load the pageid fields */
 	tlbwe	r4,r0,PPC44x_TLB_XLAT	/* Load the translation fields */
@@ -973,7 +973,7 @@ skpinv:	addi	r4,r4,1				/* Increment */
 
 	/* attrib fields */
 	li	r5,(PPC44x_TLB_SW|PPC44x_TLB_SR|PPC44x_TLB_I|PPC44x_TLB_G)
-        li      r0,62                    /* TLB slot 0 */
+	li      r0,62                    /* TLB slot 0 */
 
 	tlbwe	r3,r0,PPC44x_TLB_PAGEID
 	tlbwe	r4,r0,PPC44x_TLB_XLAT
@@ -1010,7 +1010,7 @@ skpinv:	addi	r4,r4,1				/* Increment */
 
 /* Entry point for secondary 47x processors */
 _GLOBAL(start_secondary_47x)
-        mr      r24,r3          /* CPU number */
+	mr      r24,r3          /* CPU number */
 
 	bl	init_cpu_state
 
@@ -1192,7 +1192,7 @@ clear_utlb_entry:
 	 * congruence class as the kernel, we need to make sure of it at
 	 * some point
 	 */
-        lis	r0,0x8d00
+	lis	r0,0x8d00
 	tlbwe	r3,r0,0
 	tlbwe	r4,r0,1
 	tlbwe	r5,r0,2

@@ -1060,7 +1060,7 @@ GLOBAL_ENTRY(account_sys_enter)
 	;;
 	ld8 r18=[r16],TI_AC_STIME-TI_AC_STAMP	// time at last check in kernel
 	ld8 r19=[r17],TI_AC_UTIME-TI_AC_LEAVE	// time at left from kernel
-        ;;
+	;;
 	ld8 r23=[r16],TI_AC_STAMP-TI_AC_STIME	// cumulated stime
 	ld8 r21=[r17]				// cumulated utime
 	sub r22=r19,r18				// stime before leave kernel

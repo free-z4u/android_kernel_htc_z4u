@@ -11,8 +11,8 @@
 
 #include <asm/cache.h>
 
-        .text
-        .balign	L1_CACHE_BYTES
+	.text
+	.balign	L1_CACHE_BYTES
 
 ###############################################################################
 #
@@ -20,8 +20,8 @@
 #			       unsigned by [(12,SP)])
 #
 ###############################################################################
-        .globl	__lshrdi3
-        .type	__lshrdi3,@function
+	.globl	__lshrdi3
+	.type	__lshrdi3,@function
 __lshrdi3:
 	mov	(12,sp),a0
 	and	+63,a0

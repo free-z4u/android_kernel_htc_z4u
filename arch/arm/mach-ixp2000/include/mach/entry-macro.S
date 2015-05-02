@@ -15,7 +15,7 @@
 		.macro  get_irqnr_and_base, irqnr, irqstat, base, tmp
 
 		mov	\irqnr, #0x0              @clear out irqnr as default
-                mov	\base, #0xfe000000
+		mov	\base, #0xfe000000
 		orr	\base, \base, #0x00e00000
 		orr	\base, \base, #0x08
 		ldr	\irqstat, [\base]         @ get interrupts

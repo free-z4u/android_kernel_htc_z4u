@@ -35,9 +35,9 @@ __ashrdi3:
 	sll     r3, r2
 	or      r1, r3		    ||	jmp	r14
 
-        .align  4
-        .globl __ashldi3
-        .globl __lshldi3
+	.align  4
+	.globl __ashldi3
+	.globl __lshldi3
 __ashldi3:
 __lshldi3:
 	cmpz	r2		    ||	ldi	r3, #32
@@ -92,9 +92,9 @@ __ashrdi3:
 	sll     r3, r2
 	or      r0, r3		    ||	jmp	r14
 
-        .align  4
-        .globl __ashldi3
-        .globl __lshldi3
+	.align  4
+	.globl __ashldi3
+	.globl __lshldi3
 __ashldi3:
 __lshldi3:
 	cmpz	r2		    ||	ldi	r3, #32
@@ -159,9 +159,9 @@ __ashrdi3:
 2:
 	jmp	r14
 
-        .align  4
-        .globl __ashldi3
-        .globl __lshldi3
+	.align  4
+	.globl __ashldi3
+	.globl __lshldi3
 __ashldi3:
 __lshldi3:
 	beqz	r2, 2f
@@ -236,9 +236,9 @@ __ashrdi3:
 2:
 	jmp	r14
 
-        .align  4
-        .globl __ashldi3
-        .globl __lshldi3
+	.align  4
+	.globl __ashldi3
+	.globl __lshldi3
 __ashldi3:
 __lshldi3:
 	beqz	r2, 2f

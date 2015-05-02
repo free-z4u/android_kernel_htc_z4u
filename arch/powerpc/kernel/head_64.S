@@ -295,7 +295,7 @@ _STATIC(__mmu_off)
  *
  *   r5 != NULL -> OF entry, we go to prom_init, "legacy" parameter content
  *                 in r3...r7
- *   
+ *
  *   r5 == NULL -> kexec style entry. r3 is a physical pointer to the
  *                 DT block, r4 is a physical pointer to the kernel itself
  *
@@ -422,7 +422,7 @@ _STATIC(__after_prom_start)
 	tovirt(r6,r6)			/* on booke, we already run at PAGE_OFFSET */
 #endif
 
-#ifdef CONFIG_CRASH_DUMP
+#ifdef CONFIG_RELOCATABLE
 /*
  * Check if the kernel has to be running as relocatable kernel based on the
  * variable __run_at_load, if it is set the kernel is treated as relocatable
@@ -514,7 +514,7 @@ __secondary_start_pmac_0:
 	b	1f
 	li	r24,3
 1:
-	
+
 _GLOBAL(pmac_secondary_start)
 	/* turn on 64-bit mode */
 	bl	.enable_64b_mode
@@ -619,7 +619,7 @@ __secondary_start:
 	RFI
 	b	.	/* prevent speculative execution */
 
-/* 
+/*
  * Running with relocation on at this point.  All we want to do is
  * zero the stack back-chain pointer and get the TOC virtual address
  * before going into C code.
@@ -746,7 +746,7 @@ _INIT_STATIC(start_here_multiplatform)
 	mtspr	SPRN_SRR1,r4
 	RFI
 	b	.	/* prevent speculative execution */
-	
+
 	/* This is where all platforms converge execution */
 _INIT_GLOBAL(start_here_common)
 	/* relocation is on at this point */

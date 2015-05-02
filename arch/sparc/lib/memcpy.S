@@ -159,7 +159,7 @@ FUNC(memmove)
 	add		%o0, %o2, %o0
 	sub		%o1, 1, %o1
 	sub		%o0, 1, %o0
-	
+
 1:	/* reverse_bytes */
 
 	ldub		[%o1], %o4
@@ -173,13 +173,13 @@ FUNC(memmove)
 	 mov		%g7, %o0
 
 /* NOTE: This code is executed just for the cases,
-         where %src (=%o1) & 3 is != 0.
+	 where %src (=%o1) & 3 is != 0.
 	 We need to align it to 4. So, for (%src & 3)
 	 1 we need to do ldub,lduh
 	 2 lduh
 	 3 just ldub
-         so even if it looks weird, the branches
-         are correct here. -jj
+	 so even if it looks weird, the branches
+	 are correct here. -jj
  */
 78:	/* dword_align */
 
@@ -402,7 +402,7 @@ FUNC(memcpy)	/* %o0=dst %o1=src %o2=len */
 	mov		32, %g2
 	be		4f
 	 sub		%g2, %g4, %l0
-	
+
 	blu		3f
 	 cmp		%g3, 0x8
 

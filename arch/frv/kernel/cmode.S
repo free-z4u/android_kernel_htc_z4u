@@ -46,7 +46,7 @@
 #
 ###############################################################################
 	.globl		frv_change_cmode
-        .type		frv_change_cmode,@function
+	.type		frv_change_cmode,@function
 
 .macro	LEDS v
 #ifdef DEBUG_CMODE
