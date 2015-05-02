@@ -3,7 +3,7 @@
  *     export functions to client drivers
  *     abstract OS and BUS specific details of SDIO
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -23,7 +23,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmsdh.h 414953 2013-07-26 17:36:27Z $
+ * $Id: bcmsdh.h 327460 2012-04-13 18:38:41Z $
  */
 
 /**
@@ -139,11 +139,11 @@ extern bool bcmsdh_regfail(void *sdh);
  */
 typedef void (*bcmsdh_cmplt_fn_t)(void *handle, int status, bool sync_waiting);
 extern int bcmsdh_send_buf(void *sdh, uint32 addr, uint fn, uint flags,
-                           uint8 *buf, uint nbytes, void *pkt,
-                           bcmsdh_cmplt_fn_t complete_fn, void *handle);
+			   uint8 *buf, uint nbytes, void *pkt,
+			   bcmsdh_cmplt_fn_t complete_fn, void *handle);
 extern int bcmsdh_recv_buf(void *sdh, uint32 addr, uint fn, uint flags,
-                           uint8 *buf, uint nbytes, void *pkt,
-                           bcmsdh_cmplt_fn_t complete_fn, void *handle);
+			   uint8 *buf, uint nbytes, void *pkt,
+			   bcmsdh_cmplt_fn_t complete_fn, void *handle);
 
 /* Flags bits */
 #define SDIO_REQ_4BYTE	0x1	/* Four-byte target (backplane) width (vs. two-byte) */
@@ -183,7 +183,7 @@ extern uint bcmsdh_query_iofnum(void *sdh);
 
 /* Miscellaneous knob tweaker. */
 extern int bcmsdh_iovar_op(void *sdh, const char *name,
-                           void *params, int plen, void *arg, int len, bool set);
+			   void *params, int plen, void *arg, int len, bool set);
 
 /* Reset and reinitialize the device */
 extern int bcmsdh_reset(bcmsdh_info_t *sdh);

@@ -1,7 +1,7 @@
 /*
  * Linux cfgp2p driver
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_cfgp2p.h 415640 2013-07-31 02:43:28Z $
+ * $Id: wl_cfgp2p.h 316197 2012-02-21 13:16:39Z $
  */
 #ifndef _wl_cfgp2p_h_
 #define _wl_cfgp2p_h_
@@ -157,10 +157,10 @@ extern s32
 wl_cfgp2p_set_firm_p2p(struct wl_priv *wl);
 extern s32
 wl_cfgp2p_set_p2p_mode(struct wl_priv *wl, u8 mode,
-            u32 channel, u16 listen_ms, int bssidx);
+	    u32 channel, u16 listen_ms, int bssidx);
 extern s32
 wl_cfgp2p_ifadd(struct wl_priv *wl, struct ether_addr *mac, u8 if_type,
-            chanspec_t chspec);
+	    chanspec_t chspec);
 extern s32
 wl_cfgp2p_ifdel(struct wl_priv *wl, struct ether_addr *mac);
 extern s32
@@ -197,7 +197,7 @@ extern wifi_wfd_ie_t *
 wl_cfgp2p_find_wfdie(u8 *parse, u32 len);
 extern s32
 wl_cfgp2p_set_management_ie(struct wl_priv *wl, struct net_device *ndev, s32 bssidx,
-            s32 pktflag, const u8 *vndr_ie, u32 vndr_ie_len);
+	    s32 pktflag, const u8 *vndr_ie, u32 vndr_ie_len);
 extern s32
 wl_cfgp2p_clear_management_ie(struct wl_priv *wl, s32 bssidx);
 
@@ -207,7 +207,7 @@ wl_cfgp2p_find_idx(struct wl_priv *wl, struct net_device *ndev);
 
 extern s32
 wl_cfgp2p_listen_complete(struct wl_priv *wl, struct net_device *ndev,
-            const wl_event_msg_t *e, void *data);
+	    const wl_event_msg_t *e, void *data);
 extern s32
 wl_cfgp2p_discover_listen(struct wl_priv *wl, s32 channel, u32 duration_ms);
 
@@ -216,14 +216,14 @@ wl_cfgp2p_discover_enable_search(struct wl_priv *wl, u8 enable);
 
 extern s32
 wl_cfgp2p_action_tx_complete(struct wl_priv *wl, struct net_device *ndev,
-            const wl_event_msg_t *e, void *data);
+	    const wl_event_msg_t *e, void *data);
 extern s32
 wl_cfgp2p_tx_action_frame(struct wl_priv *wl, struct net_device *dev,
 	wl_af_params_t *af_params, s32 bssidx);
 
 extern void
 wl_cfgp2p_generate_bss_mac(struct ether_addr *primary_addr, struct ether_addr *out_dev_addr,
-            struct ether_addr *out_int_addr);
+	    struct ether_addr *out_int_addr);
 
 extern void
 wl_cfg80211_change_ifaddr(u8* buf, struct ether_addr *p2p_int_addr, u8 element_id);

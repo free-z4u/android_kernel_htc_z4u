@@ -2,7 +2,7 @@
  * Linux-specific abstractions to gain some independence from linux kernel versions.
  * Pave over some 2.2 versus 2.4 versus 2.6 kernel differences.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +22,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: linuxver.h 417757 2013-08-12 12:24:45Z $
+ * $Id: linuxver.h 315203 2012-02-16 00:58:00Z $
  */
 
 #ifndef _linuxver_h_
@@ -284,7 +284,7 @@ static inline int get_order(unsigned long size)
 }
 
 static inline void *pci_alloc_consistent(struct pci_dev *hwdev, size_t size,
-                                         dma_addr_t *dma_handle)
+					 dma_addr_t *dma_handle)
 {
 	void *ret;
 	int gfp = GFP_ATOMIC | GFP_DMA;
@@ -298,7 +298,7 @@ static inline void *pci_alloc_consistent(struct pci_dev *hwdev, size_t size,
 	return ret;
 }
 static inline void pci_free_consistent(struct pci_dev *hwdev, size_t size,
-                                       void *vaddr, dma_addr_t dma_handle)
+				       void *vaddr, dma_addr_t dma_handle)
 {
 	free_pages((unsigned long)vaddr, get_order(size));
 }
@@ -346,8 +346,8 @@ static inline void tasklet_schedule(struct tasklet_struct *tasklet)
 }
 
 static inline void tasklet_init(struct tasklet_struct *tasklet,
-                                void (*func)(unsigned long),
-                                unsigned long data)
+				void (*func)(unsigned long),
+				unsigned long data)
 {
 	tasklet->next = NULL;
 	tasklet->sync = 0;
@@ -609,6 +609,6 @@ do {									\
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 0))
 #define netdev_priv(dev) dev->priv
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0) */
+#endif
 
-#endif /* _linuxver_h_ */
+#endif

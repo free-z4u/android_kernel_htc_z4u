@@ -54,10 +54,6 @@ module_param_named(stats_perms, proc_stats_perms, uint, S_IRUGO | S_IWUSR);
 
 static struct proc_dir_entry *xt_qtaguid_ctrl_file;
 #ifdef CONFIG_ANDROID_PARANOID_NETWORK
-
-/* Everybody can write. But proc_ctrl_write_limited is true by default which
- * limits what can be controlled. See the can_*() functions.
- */
 static unsigned int proc_ctrl_perms = S_IRUGO | S_IWUGO;
 #else
 static unsigned int proc_ctrl_perms = S_IRUGO | S_IWUSR;
@@ -69,6 +65,7 @@ module_param_named(ctrl_perms, proc_ctrl_perms, uint, S_IRUGO | S_IWUSR);
 static gid_t proc_stats_readall_gid = AID_NET_BW_STATS;
 static gid_t proc_ctrl_write_gid = AID_NET_BW_ACCT;
 #else
+/* 0 means, don't limit anybody */
 static gid_t proc_stats_readall_gid;
 static gid_t proc_ctrl_write_gid;
 #endif
@@ -1781,7 +1778,6 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 		 * A missing sk->sk_socket happens when packets are in-flight
 		 * and the matching socket is already closed and gone.
 		 */
-
 		sk = qtaguid_find_sk(skb, par);
 		/*
 		 * If we got the socket from the find_sk(), we will need to put
@@ -2592,7 +2588,7 @@ static int pp_stats_line(struct proc_print_info *ppi, int cnt_set)
 	} else {
 		tag_t tag = ppi->ts_entry->tn.tag;
 		uid_t stat_uid = get_uid_from_tag(tag);
-		/* Detailed tags are not available to everybody */
+
 		if (!can_read_other_uid_stats(stat_uid)) {
 			CT_DEBUG("qtaguid: stats line: "
 				 "%s 0x%llx %u: insufficient priv "

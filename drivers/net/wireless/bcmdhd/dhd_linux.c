@@ -3,13 +3,13 @@
  * Basically selected code segments from usb-cdc.c and usb-rndis.c
  *
  * Copyright (C) 1999-2012, Broadcom Corporation
- *
+ * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- *
+ * 
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -17,7 +17,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- *
+ * 
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -135,6 +135,9 @@ DECLARE_WAIT_QUEUE_HEAD(dhd_dpc_wait);
 #if defined(OOB_INTR_ONLY)
 extern void dhd_enable_oob_intr(struct dhd_bus *bus, bool enable);
 #endif /* defined(OOB_INTR_ONLY) */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
+static void dhd_hang_process(struct work_struct *work);
+#endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 0))
 MODULE_LICENSE("GPL v2");
 #endif /* LinuxVer */
@@ -257,6 +260,9 @@ typedef struct dhd_info {
 #endif /* DHDTHREAD */
 	bool dhd_tasklet_create;
 	tsk_ctl_t	thr_sysioc_ctl;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
+	struct work_struct work_hang;
+#endif
 
 	/* Wakelocks */
 #if defined(CONFIG_HAS_WAKELOCK) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
@@ -2058,6 +2064,7 @@ dhd_ethtool(dhd_info_t *dhd, void *uaddr)
 
 static bool dhd_check_hang(struct net_device *net, dhd_pub_t *dhdp, int error)
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 	if (!dhdp)
 		return FALSE;
 	if ((error == -ETIMEDOUT) || ((dhdp->busstate == DHD_BUS_DOWN) &&
@@ -2067,6 +2074,7 @@ static bool dhd_check_hang(struct net_device *net, dhd_pub_t *dhdp, int error)
 		net_os_send_hang_message(net);
 		return TRUE;
 	}
+#endif
 	return FALSE;
 }
 
@@ -2333,7 +2341,7 @@ dhd_cleanup_virt_ifaces(dhd_info_t *dhd)
 static int
 dhd_stop(struct net_device *net)
 {
-	int ifidx;
+	int ifidx = 0;
 	dhd_info_t *dhd = *(dhd_info_t **)netdev_priv(net);
 	DHD_OS_WAKE_LOCK(&dhd->pub);
 	DHD_TRACE(("%s: Enter %p\n", __FUNCTION__, net));
@@ -2368,15 +2376,15 @@ dhd_stop(struct net_device *net)
 	/* Stop the protocol module */
 	dhd_prot_stop(&dhd->pub);
 
+	OLD_MOD_DEC_USE_COUNT;
+exit:
 #if defined(WL_CFG80211)
 	if (ifidx == 0 && !dhd_download_fw_on_driverload)
 		wl_android_wifi_off(net);
 #endif
-	dhd->pub.hang_was_sent = 0;
 	dhd->pub.rxcnt_timeout = 0;
 	dhd->pub.txcnt_timeout = 0;
-	OLD_MOD_DEC_USE_COUNT;
-exit:
+
 	DHD_OS_WAKE_UNLOCK(&dhd->pub);
 	return 0;
 }
@@ -2400,6 +2408,7 @@ dhd_open(struct net_device *net)
 		firmware_path[0] = '\0';
 	}
 
+	dhd->pub.hang_was_sent = 0;
 #if !defined(WL_CFG80211)
 	/*
 	 * Force start if ifconfig_up gets called before START command
@@ -2407,7 +2416,7 @@ dhd_open(struct net_device *net)
 	 *  This should be removed in the future
 	 */
 	wl_control_wl_start(net);
-#endif
+#endif 
 
 	ifidx = dhd_net2idx(dhd, net);
 	DHD_TRACE(("%s: ifidx %d\n", __FUNCTION__, ifidx));
@@ -2435,7 +2444,7 @@ dhd_open(struct net_device *net)
 				goto exit;
 			}
 		}
-#endif
+#endif 
 
 		if (dhd->pub.busstate != DHD_BUS_DATA) {
 
@@ -2530,7 +2539,7 @@ dhd_osl_detach(osl_t *osh)
 #if	defined(BCMLXSDMMC)
 	up(&dhd_chipup_sem);
 #endif
-#endif
+#endif 
 }
 
 int
@@ -2801,7 +2810,9 @@ dhd_attach(osl_t *osh, struct dhd_bus *bus, uint bus_hdrlen)
 		dhd->thr_sysioc_ctl.thr_pid = -1;
 	}
 	dhd_state |= DHD_ATTACH_STATE_THREADS_CREATED;
-
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
+	INIT_WORK(&dhd->work_hang, dhd_hang_process);
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))  */
 	/*
 	 * Save the dhd_info into the priv
 	 */
@@ -2991,7 +3002,7 @@ dhd_concurrent_fw(dhd_pub_t *dhd)
 	}
 	return 0;
 }
-#endif
+#endif 
 int
 dhd_preinit_ioctls(dhd_pub_t *dhd)
 {
@@ -3098,7 +3109,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 #endif
 		}
 	}
-#endif
+#endif 
 
 #if !defined(AP) && defined(WL_CFG80211)
 	/* Check if firmware with HostAPD support used */
@@ -3118,7 +3129,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 #endif
 			}
 	}
-#endif
+#endif 
 
 	if ((dhd->op_mode != WFD_MASK) && (dhd->op_mode != HOSTAPD_MASK)) {
 		/* STA only operation mode */
@@ -3180,7 +3191,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 	if (ap_fw_loaded == TRUE) {
 		dhd_wl_ioctl_cmd(dhd, WLC_SET_DTIMPRD, (char *)&dtim, sizeof(dtim), TRUE, 0);
 	}
-#endif
+#endif 
 
 #if defined(KEEP_ALIVE)
 	{
@@ -3189,7 +3200,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 
 #if defined(SOFTAP)
 	if (ap_fw_loaded == FALSE)
-#endif
+#endif 
 		if ((res = dhd_keep_alive_onoff(dhd)) < 0)
 			DHD_ERROR(("%s set keeplive failed %d\n",
 			__FUNCTION__, res));
@@ -3265,7 +3276,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 	if (arpoe && !ap_fw_loaded) {
 #else
 	if (arpoe) {
-#endif
+#endif 
 		dhd_arp_offload_enable(dhd, TRUE);
 		dhd_arp_offload_set(dhd, dhd_arp_mode);
 	} else {
@@ -3579,7 +3590,7 @@ dhd_net_attach(dhd_pub_t *dhdp, int ifidx)
 	if (ifidx == 0) {
 		up(&dhd_registration_sem);
 	}
-#endif
+#endif 
 	return 0;
 
 fail:
@@ -3655,6 +3666,9 @@ void dhd_detach(dhd_pub_t *dhdp)
 	}
 #endif /* defined(CONFIG_HAS_EARLYSUSPEND) */
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
+	cancel_work_sync(&dhd->work_hang);
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))  */
 
 #if defined(CONFIG_WIRELESS_EXT)
 	if (dhd->dhd_state & DHD_ATTACH_STATE_WL_ATTACH) {
@@ -3805,7 +3819,7 @@ dhd_module_init(void)
 #if 1 && defined(BCMLXSDMMC) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 	int retry = POWERUP_MAX_RETRY;
 	int chip_up = 0;
-#endif
+#endif 
 
 	DHD_TRACE(("%s: Enter\n", __FUNCTION__));
 
@@ -3825,7 +3839,7 @@ dhd_module_init(void)
 		DHD_ERROR(("Invalid module parameters.\n"));
 		return -EINVAL;
 	} while (0);
-#endif
+#endif 
 
 #if 1 && defined(BCMLXSDMMC) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 	do {
@@ -3862,11 +3876,11 @@ dhd_module_init(void)
 		goto fail_1;
 #endif /* defined(CONFIG_WIFI_CONTROL_FUNC) */
 
-#endif
+#endif 
 
 #if 1 && (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 	sema_init(&dhd_registration_sem, 0);
-#endif
+#endif 
 
 
 	error = dhd_bus_register();
@@ -3905,7 +3919,7 @@ fail_1:
 
 #if defined(CONFIG_WIFI_CONTROL_FUNC)
 	wl_android_wifictrl_func_del();
-#endif
+#endif 
 
 	/* Call customer gpio to turn off power with WL_REG_ON signal */
 	dhd_customer_gpio_wlan_ctrl(WLAN_POWER_OFF);
@@ -3985,13 +3999,10 @@ dhd_os_ioctl_resp_wait(dhd_pub_t *pub, uint *condition, bool *pending)
 	 * Can be changed by another processor.
 	 */
 	smp_mb();
-	while (!(*condition) && (!signal_pending(current) && timeout)) {
+	while (!(*condition) && timeout) {
 		timeout = schedule_timeout(timeout);
 		smp_mb();
 	}
-
-	if (signal_pending(current))
-		*pending = TRUE;
 
 	set_current_state(TASK_RUNNING);
 	remove_wait_queue(&dhd->ioctl_resp_wait, &wait);
@@ -4523,6 +4534,28 @@ dhd_dev_get_pno_status(struct net_device *dev)
 
 #endif /* PNO_SUPPORT */
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
+static void dhd_hang_process(struct work_struct *work)
+{
+	dhd_info_t *dhd;
+	struct net_device *dev;
+
+	dhd = (dhd_info_t *)container_of(work, dhd_info_t, work_hang);
+	dev = dhd->iflist[0]->net;
+
+	if (dev) {
+		rtnl_lock();
+		dev_close(dev);
+		rtnl_unlock();
+#if defined(WL_WIRELESS_EXT)
+		wl_iw_send_priv_event(dev, "HANG");
+#endif
+#if defined(WL_CFG80211)
+		wl_cfg80211_hang(dev, WLAN_REASON_UNSPECIFIED);
+#endif
+	}
+}
+
 int net_os_send_hang_message(struct net_device *dev)
 {
 	dhd_info_t *dhd = *(dhd_info_t **)netdev_priv(dev);
@@ -4531,18 +4564,12 @@ int net_os_send_hang_message(struct net_device *dev)
 	if (dhd) {
 		if (!dhd->pub.hang_was_sent) {
 			dhd->pub.hang_was_sent = 1;
-#if defined(CONFIG_WIRELESS_EXT)
-			ret = wl_iw_send_priv_event(dev, "HANG");
-#endif
-#if defined(WL_CFG80211)
-			ret = wl_cfg80211_hang(dev, WLAN_REASON_UNSPECIFIED);
-			dev_close(dev);
-			dev_open(dev);
-#endif
+			schedule_work(&dhd->work_hang);
 		}
 	}
 	return ret;
 }
+#endif
 
 void dhd_bus_country_set(struct net_device *dev, wl_country_t *cspec)
 {

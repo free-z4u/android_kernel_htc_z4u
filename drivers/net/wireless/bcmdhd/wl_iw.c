@@ -1,7 +1,7 @@
 /*
  * Linux Wireless Extensions support
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_iw.c 396420 2013-04-12 06:55:45Z $
+ * $Id: wl_iw.c 312290 2012-02-02 02:52:18Z $
  */
 
 #if defined(USE_IW)
@@ -38,6 +38,7 @@
 #include <linux/if_arp.h>
 #include <asm/uaccess.h>
 
+
 typedef const struct si_pub	si_t;
 #include <wlioctl.h>
 
@@ -45,8 +46,6 @@ typedef const struct si_pub	si_t;
 #include <wl_dbg.h>
 #include <wl_iw.h>
 
-
-/* Broadcom extensions to WEXT, linux upstream has obsoleted WEXT */
 #ifdef BCMWAPI_WPI
 
 #ifndef IW_ENCODE_ALG_SM4
@@ -3695,13 +3694,13 @@ wl_iw_attach(struct net_device *dev, void * dhdp)
 		return -ENOMEM;
 	memset(iscan, 0, sizeof(iscan_info_t));
 	iscan->sysioc_pid = -1;
-	/* we only care about main interface so save a global here */
+
 	g_iscan = iscan;
 	iscan->dev = dev;
 	iscan->iscan_state = ISCAN_STATE_IDLE;
 
 
-	/* Set up the timer */
+
 	iscan->timer_ms    = 2000;
 	init_timer(&iscan->timer);
 	iscan->timer.data = (ulong)iscan;
@@ -3735,4 +3734,4 @@ void wl_iw_detach(void)
 	g_iscan = NULL;
 }
 
-#endif /* USE_IW */
+#endif

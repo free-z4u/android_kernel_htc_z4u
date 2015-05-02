@@ -673,9 +673,6 @@ void **radix_tree_next_chunk(struct radix_tree_root *root,
 	 * during iterating; it can be zero only at the beginning.
 	 * And we cannot overflow iter->next_index in a single step,
 	 * because RADIX_TREE_MAP_SHIFT < BITS_PER_LONG.
-	 *
-	 * This condition also used by radix_tree_next_slot() to stop
-	 * contiguous iterating, and forbid swithing to the next chunk.
 	 */
 	index = iter->next_index;
 	if (!index && iter->index)
@@ -1412,21 +1409,21 @@ static __init void radix_tree_init_maxindex(void)
 }
 
 static int radix_tree_callback(struct notifier_block *nfb,
-                            unsigned long action,
-                            void *hcpu)
+			    unsigned long action,
+			    void *hcpu)
 {
        int cpu = (long)hcpu;
        struct radix_tree_preload *rtp;
 
        /* Free per-cpu pool of perloaded nodes */
        if (action == CPU_DEAD || action == CPU_DEAD_FROZEN) {
-               rtp = &per_cpu(radix_tree_preloads, cpu);
-               while (rtp->nr) {
-                       kmem_cache_free(radix_tree_node_cachep,
-                                       rtp->nodes[rtp->nr-1]);
-                       rtp->nodes[rtp->nr-1] = NULL;
-                       rtp->nr--;
-               }
+	       rtp = &per_cpu(radix_tree_preloads, cpu);
+	       while (rtp->nr) {
+		       kmem_cache_free(radix_tree_node_cachep,
+				       rtp->nodes[rtp->nr-1]);
+		       rtp->nodes[rtp->nr-1] = NULL;
+		       rtp->nr--;
+	       }
        }
        return NOTIFY_OK;
 }

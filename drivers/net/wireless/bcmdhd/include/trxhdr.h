@@ -1,7 +1,7 @@
 /*
  * TRX image file header format.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: trxhdr.h 349211 2012-08-07 09:45:24Z $
+ * $Id: trxhdr.h 260898 2011-05-20 23:11:12Z $
  */
 
 #ifndef _TRX_HDR_H

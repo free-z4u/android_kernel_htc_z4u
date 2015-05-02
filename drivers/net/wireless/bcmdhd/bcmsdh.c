@@ -2,7 +2,7 @@
  *  BCMSDH interface glue
  *  implement bcmsdh API for SDIOH driver
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +22,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmsdh.c 373331 2012-12-07 04:46:22Z $
+ * $Id: bcmsdh.c 300445 2011-12-03 05:37:20Z $
  */
 
 /**
@@ -131,7 +131,7 @@ bcmsdh_detach(osl_t *osh, void *sdh)
 
 int
 bcmsdh_iovar_op(void *sdh, const char *name,
-                void *params, int plen, void *arg, int len, bool set)
+		void *params, int plen, void *arg, int len, bool set)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)sdh;
 	return sdioh_iovar_op(bcmsdh->sdioh, name, params, plen, arg, len, set);
@@ -490,8 +490,8 @@ bcmsdh_regfail(void *sdh)
 
 int
 bcmsdh_recv_buf(void *sdh, uint32 addr, uint fn, uint flags,
-                uint8 *buf, uint nbytes, void *pkt,
-                bcmsdh_cmplt_fn_t complete_fn, void *handle)
+		uint8 *buf, uint nbytes, void *pkt,
+		bcmsdh_cmplt_fn_t complete_fn, void *handle)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)sdh;
 	SDIOH_API_RC status;
@@ -528,8 +528,8 @@ bcmsdh_recv_buf(void *sdh, uint32 addr, uint fn, uint flags,
 
 int
 bcmsdh_send_buf(void *sdh, uint32 addr, uint fn, uint flags,
-                uint8 *buf, uint nbytes, void *pkt,
-                bcmsdh_cmplt_fn_t complete_fn, void *handle)
+		uint8 *buf, uint nbytes, void *pkt,
+		bcmsdh_cmplt_fn_t complete_fn, void *handle)
 {
 	bcmsdh_info_t *bcmsdh = (bcmsdh_info_t *)sdh;
 	SDIOH_API_RC status;

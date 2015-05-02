@@ -2,7 +2,7 @@
  * Misc utility routines for accessing chip-specific features
  * of the SiliconBackplane-based Broadcom chips.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +22,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: siutils.c 414368 2013-07-24 15:00:23Z $
+ * $Id: siutils.c 328733 2012-04-20 14:49:55Z $
  */
 
 #include <bcm_cfg.h>
@@ -45,12 +45,11 @@
 #include <bcmsdpcm.h>
 #include <hndpmu.h>
 
-
 #include "siutils_priv.h"
 
 /* local prototypes */
 static si_info_t *si_doattach(si_info_t *sii, uint devid, osl_t *osh, void *regs,
-                              uint bustype, void *sdh, char **vars, uint *varsz);
+			      uint bustype, void *sdh, char **vars, uint *varsz);
 static bool si_buscore_prep(si_info_t *sii, uint bustype, uint devid, void *sdh);
 static bool si_buscore_setup(si_info_t *sii, chipcregs_t *cc, uint bustype, uint32 savewin,
 	uint *origidx, void *regs);
@@ -75,7 +74,7 @@ int do_4360_pcie2_war = 0;
  */
 si_t *
 si_attach(uint devid, osl_t *osh, void *regs,
-                       uint bustype, void *sdh, char **vars, uint *varsz)
+		       uint bustype, void *sdh, char **vars, uint *varsz)
 {
 	si_info_t *sii;
 
@@ -310,7 +309,7 @@ si_buscore_setup(si_info_t *sii, chipcregs_t *cc, uint bustype, uint32 savewin,
 
 static si_info_t *
 si_doattach(si_info_t *sii, uint devid, osl_t *osh, void *regs,
-                       uint bustype, void *sdh, char **vars, uint *varsz)
+		       uint bustype, void *sdh, char **vars, uint *varsz)
 {
 	struct si_pub *sih = &sii->pub;
 	uint32 w, savewin;
@@ -525,7 +524,7 @@ si_setosh(si_t *sih, osl_t *osh)
 /* register driver interrupt disabling and restoring callback functions */
 void
 si_register_intr_callback(si_t *sih, void *intrsoff_fn, void *intrsrestore_fn,
-                          void *intrsenabled_fn, void *intr_arg)
+			  void *intrsenabled_fn, void *intr_arg)
 {
 	si_info_t *sii;
 

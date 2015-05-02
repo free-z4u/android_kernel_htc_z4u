@@ -1,7 +1,7 @@
 /*
  * Misc system wide definitions
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,38 +21,26 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmdefs.h 416231 2013-08-02 07:38:34Z $
+ * $Id: bcmdefs.h 316830 2012-02-23 20:29:22Z $
  */
 
 #ifndef	_bcmdefs_h_
 #define	_bcmdefs_h_
 
-/*
- * One doesn't need to include this file explicitly, gets included automatically if
- * typedefs.h is included.
- */
 
-/* Use BCM_REFERENCE to suppress warnings about intentionally-unused function
- * arguments or local variables.
- */
+
+
 #define BCM_REFERENCE(data)	((void)(data))
 
-/* Compile-time assert can be used in place of ASSERT if the expression evaluates
- * to a constant at compile time.
- */
+
 #define STATIC_ASSERT(expr) { \
-	/* Make sure the expression is constant. */ \
+	 \
 	typedef enum { _STATIC_ASSERT_NOT_CONSTANT = (expr) } _static_assert_e; \
-	/* Make sure the expression is true. */ \
+	 \
 	typedef char STATIC_ASSERT_FAIL[(expr) ? 1 : -1]; \
 }
 
-/* Reclaiming text and data :
- * The following macros specify special linker sections that can be reclaimed
- * after a system is considered 'up'.
- * BCMATTACHFN is also used for detach functions (it's not worth having a BCMDETACHFN,
- * as in most cases, the attach function calls the detach function to clean up on error).
- */
+
 
 #define bcmreclaimed 		0
 #define _data	_data
@@ -192,20 +180,14 @@ typedef struct {
 #define BCMEXTRAHDROOM 220
 #else
 #define BCMEXTRAHDROOM 172
-#endif /* BCM_RPC_NOCOPY || BCM_RPC_TXNOCOPY */
+#endif
 
-/* Packet alignment for most efficient SDIO (can change based on platform) */
+
 #ifndef SDALIGN
 #define SDALIGN	32
 #endif
 
-/* Headroom required for dongle-to-host communication.  Packets allocated
- * locally in the dongle (e.g. for CDC ioctls or RNDIS messages) should
- * leave this much room in front for low-level message headers which may
- * be needed to get across the dongle bus to the host.  (These messages
- * don't go over the network, so room for the full WL header above would
- * be a waste.).
-*/
+
 #define BCMDONGLEHDRSZ 12
 #define BCMDONGLEPADSZ 16
 
@@ -221,16 +203,7 @@ typedef struct {
 #define BCMASSERT_SUPPORT
 #endif
 
-/* Macros for doing definition and get/set of bitfields
- * Usage example, e.g. a three-bit field (bits 4-6):
- *    #define <NAME>_M	BITFIELD_MASK(3)
- *    #define <NAME>_S	4
- * ...
- *    regval = R_REG(osh, &regs->regfoo);
- *    field = GFIELD(regval, <NAME>);
- *    regval = SFIELD(regval, <NAME>, 1);
- *    W_REG(osh, &regs->regfoo, regval);
- */
+
 #define BITFIELD_MASK(width) \
 		(((unsigned)1 << (width)) - 1)
 #define GFIELD(val, field) \
@@ -239,28 +212,28 @@ typedef struct {
 		(((val) & (~(field ## _M << field ## _S))) | \
 		 ((unsigned)(bits) << field ## _S))
 
-/* define BCMSMALL to remove misc features for memory-constrained environments */
+
 #ifdef BCMSMALL
 #undef	BCMSPACE
-#define bcmspace	FALSE	/* if (bcmspace) code is discarded */
+#define bcmspace	FALSE
 #else
 #define	BCMSPACE
-#define bcmspace	TRUE	/* if (bcmspace) code is retained */
+#define bcmspace	TRUE
 #endif
 
-/* Max. nvram variable table size */
+
 #define	MAXSZ_NVRAM_VARS	4096
 
 
-/* Max size for reclaimable NVRAM array */
+
 #ifdef DL_NVRAM
 #define NVRAM_ARRAY_MAXSIZE	DL_NVRAM
 #else
 #define NVRAM_ARRAY_MAXSIZE	MAXSZ_NVRAM_VARS
-#endif /* DL_NVRAM */
+#endif
 
 #ifdef BCMUSBDEV_ENABLED
 extern uint32 gFWID;
 #endif
 
-#endif /* _bcmdefs_h_ */
+#endif

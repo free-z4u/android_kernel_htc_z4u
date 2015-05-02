@@ -1,7 +1,7 @@
 /*
  * BCMSDH Function Driver for the native SDIO/MMC driver in the Linux Kernel
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmsdh_sdmmc.c 418714 2013-08-16 13:21:09Z $
+ * $Id: bcmsdh_sdmmc.c 321372 2012-03-15 01:10:32Z $
  */
 #include <typedefs.h>
 
@@ -407,7 +407,7 @@ const bcm_iovar_t sdioh_iovars[] = {
 
 int
 sdioh_iovar_op(sdioh_info_t *si, const char *name,
-                           void *params, int plen, void *arg, int len, bool set)
+			   void *params, int plen, void *arg, int len, bool set)
 {
 	const bcm_iovar_t *vi = NULL;
 	int bcmerror = 0;
@@ -846,7 +846,7 @@ sdioh_request_byte(sdioh_info_t *sd, uint rw, uint func, uint regaddr, uint8 *by
 
 extern SDIOH_API_RC
 sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint addr,
-                                   uint32 *word, uint nbytes)
+				   uint32 *word, uint nbytes)
 {
 	int err_ret = SDIOH_API_RC_FAIL;
 
@@ -894,7 +894,7 @@ sdioh_request_word(sdioh_info_t *sd, uint cmd_type, uint rw, uint func, uint add
 
 static SDIOH_API_RC
 sdioh_request_packet(sdioh_info_t *sd, uint fix_inc, uint write, uint func,
-                     uint addr, void *pkt)
+		     uint addr, void *pkt)
 {
 	bool fifo = (fix_inc == SDIOH_DATA_FIX);
 	uint32	SGCount = 0;
@@ -1073,7 +1073,7 @@ sdioh_request_packet(sdioh_info_t *sd, uint fix_inc, uint write, uint func,
  */
 extern SDIOH_API_RC
 sdioh_request_buffer(sdioh_info_t *sd, uint pio_dma, uint fix_inc, uint write, uint func,
-                     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
+		     uint addr, uint reg_width, uint buflen_u, uint8 *buffer, void *pkt)
 {
 	SDIOH_API_RC Status;
 	void *mypkt = NULL;

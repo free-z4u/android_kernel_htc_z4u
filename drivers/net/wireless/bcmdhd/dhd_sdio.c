@@ -1,7 +1,7 @@
 /*
  * DHD Bus Module for SDIO
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: dhd_sdio.c 419981 2013-08-23 19:49:45Z $
+ * $Id: dhd_sdio.c 329638 2012-04-26 05:41:43Z $
  */
 
 #include <typedefs.h>
@@ -509,7 +509,7 @@ static void dhdsdio_release_malloc(dhd_bus_t *bus, osl_t *osh);
 static void dhdsdio_disconnect(void *ptr);
 static bool dhdsdio_chipmatch(uint16 chipid);
 static bool dhdsdio_probe_attach(dhd_bus_t *bus, osl_t *osh, void *sdh,
-                                 void * regsva, uint16  devid);
+				 void * regsva, uint16  devid);
 static bool dhdsdio_probe_malloc(dhd_bus_t *bus, osl_t *osh, void *sdh);
 static bool dhdsdio_probe_init(dhd_bus_t *bus, osl_t *osh, void *sdh);
 static void dhdsdio_release_dongle(dhd_bus_t *bus, osl_t *osh, bool dongle_isolation,
@@ -2680,7 +2680,7 @@ dhd_serialconsole(dhd_bus_t *bus, bool set, bool enable, int *bcmerror)
 
 static int
 dhdsdio_doiovar(dhd_bus_t *bus, const bcm_iovar_t *vi, uint32 actionid, const char *name,
-                void *params, int plen, void *arg, int len, int val_size)
+		void *params, int plen, void *arg, int len, int val_size)
 {
 	int bcmerror = 0;
 	int32 int_val = 0;
@@ -3412,7 +3412,7 @@ fail:
 
 int
 dhd_bus_iovar_op(dhd_pub_t *dhdp, const char *name,
-                 void *params, int plen, void *arg, int len, bool set)
+		 void *params, int plen, void *arg, int len, bool set)
 {
 	dhd_bus_t *bus = dhdp->bus;
 	const bcm_iovar_t *vi = NULL;
@@ -6030,7 +6030,7 @@ fail:
 
 static bool
 dhdsdio_probe_attach(struct dhd_bus *bus, osl_t *osh, void *sdh, void *regsva,
-                     uint16 devid)
+		     uint16 devid)
 {
 	int err = 0;
 	uint8 clkctl = 0;
@@ -6311,7 +6311,7 @@ dhdsdio_probe_init(dhd_bus_t *bus, osl_t *osh, void *sdh)
 
 bool
 dhd_bus_download_firmware(struct dhd_bus *bus, osl_t *osh,
-                          char *pfw_path, char *pnv_path)
+			  char *pfw_path, char *pnv_path)
 {
 	bool ret;
 	bus->fw_path = pfw_path;

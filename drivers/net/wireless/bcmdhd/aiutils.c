@@ -2,7 +2,7 @@
  * Misc utility routines for accessing chip-specific features
  * of the SiliconBackplane-based Broadcom chips.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +22,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: aiutils.c 385510 2013-02-15 21:02:07Z $
+ * $Id: aiutils.c 321247 2012-03-14 21:14:33Z $
  */
 #include <bcm_cfg.h>
 #include <typedefs.h>
@@ -79,7 +79,7 @@ get_erom_ent(si_t *sih, uint32 **eromptr, uint32 mask, uint32 match)
 
 static uint32
 get_asd(si_t *sih, uint32 **eromptr, uint sp, uint ad, uint st, uint32 *addrl, uint32 *addrh,
-        uint32 *sizel, uint32 *sizeh)
+	uint32 *sizel, uint32 *sizeh)
 {
 	uint32 asd, sz, szd;
 

@@ -4,7 +4,7 @@
  * Provides type definitions and function prototypes used to link the
  * DHD OS, bus, and protocol modules.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -24,7 +24,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: dhd_proto.h 390836 2013-03-13 23:43:53Z $
+ * $Id: dhd_proto.h 303834 2011-12-20 06:17:39Z $
  */
 
 #ifndef _dhd_proto_h_
@@ -71,7 +71,7 @@ extern int dhd_prot_ctl_complete(dhd_pub_t *dhd);
 
 /* Check for and handle local prot-specific iovar commands */
 extern int dhd_prot_iovar_op(dhd_pub_t *dhdp, const char *name,
-                             void *params, int plen, void *arg, int len, bool set);
+			     void *params, int plen, void *arg, int len, bool set);
 
 /* Add prot dump output to a buffer */
 extern void dhd_prot_dump(dhd_pub_t *dhdp, struct bcmstrbuf *strbuf);

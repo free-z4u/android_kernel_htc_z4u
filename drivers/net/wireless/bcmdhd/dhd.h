@@ -4,7 +4,7 @@
  * Provides type definitions and function prototypes used to link the
  * DHD OS, bus, and protocol modules.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -24,7 +24,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: dhd.h 419132 2013-08-19 21:33:05Z $
+ * $Id: dhd.h 329678 2012-04-26 08:51:32Z $
  */
 
 /****************
@@ -454,11 +454,11 @@ extern bool dhd_os_check_hang(dhd_pub_t *dhdp, int ifidx, int ret);
 extern int dhd_pno_enable(dhd_pub_t *dhd, int pfn_enabled);
 extern int dhd_pno_clean(dhd_pub_t *dhd);
 extern int dhd_pno_set(dhd_pub_t *dhd, wlc_ssid_t* ssids_local, int nssid,
-                       ushort  scan_fr, int pno_repeat, int pno_freq_expo_max);
+		       ushort  scan_fr, int pno_repeat, int pno_freq_expo_max);
 extern int dhd_pno_get_status(dhd_pub_t *dhd);
 extern int dhd_dev_pno_reset(struct net_device *dev);
 extern int dhd_dev_pno_set(struct net_device *dev, wlc_ssid_t* ssids_local,
-                           int nssid, ushort  scan_fr, int pno_repeat, int pno_freq_expo_max);
+			   int nssid, ushort  scan_fr, int pno_repeat, int pno_freq_expo_max);
 extern int dhd_dev_pno_enable(struct net_device *dev,  int pfn_enabled);
 extern int dhd_dev_get_pno_status(struct net_device *dev);
 #endif /* PNO_SUPPORT */
@@ -496,12 +496,12 @@ extern int dhd_ifname2idx(struct dhd_info *dhd, char *name);
 extern int dhd_net2idx(struct dhd_info *dhd, struct net_device *net);
 extern struct net_device * dhd_idx2net(void *pub, int ifidx);
 extern int wl_host_event(dhd_pub_t *dhd_pub, int *idx, void *pktdata,
-                         wl_event_msg_t *, void **data_ptr);
+			 wl_event_msg_t *, void **data_ptr);
 extern void wl_event_to_host_order(wl_event_msg_t * evt);
 
 extern int dhd_wl_ioctl(dhd_pub_t *dhd_pub, int ifindex, wl_ioctl_t *ioc, void *buf, int len);
 extern int dhd_wl_ioctl_cmd(dhd_pub_t *dhd_pub, int cmd, void *arg, int len, uint8 set,
-                            int ifindex);
+			    int ifindex);
 
 extern void dhd_common_init(osl_t *osh);
 
@@ -770,7 +770,7 @@ extern int dhd_pno_enable(dhd_pub_t *dhd, int pfn_enabled);
 extern int dhd_pnoenable(dhd_pub_t *dhd, int pfn_enabled);
 extern int dhd_pno_clean(dhd_pub_t *dhd);
 extern int dhd_pno_set(dhd_pub_t *dhd, wlc_ssid_t* ssids_local, int nssid,
-                       ushort  scan_fr, int pno_repeat, int pno_freq_expo_max);
+		       ushort  scan_fr, int pno_repeat, int pno_freq_expo_max);
 extern int dhd_pno_get_status(dhd_pub_t *dhd);
 extern int dhd_pno_set_add(dhd_pub_t *dhd, wl_pfn_t *netinfo, int nssid, ushort scan_fr,
 	ushort slowscan_fr, uint8 pno_repeat, uint8 pno_freq_expo_max, int16 flags);

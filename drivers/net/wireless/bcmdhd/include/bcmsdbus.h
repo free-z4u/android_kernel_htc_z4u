@@ -2,7 +2,7 @@
  * Definitions for API from sdio common code (bcmsdh) to individual
  * host controller drivers.
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,7 +22,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: bcmsdbus.h 408155 2013-06-17 21:52:27Z $
+ * $Id: bcmsdbus.h 320190 2012-03-09 19:13:53Z $
  */
 
 #ifndef	_sdio_api_h_
@@ -97,7 +97,7 @@ extern uint sdioh_query_iofnum(sdioh_info_t *si);
 
 /* handle iovars */
 extern int sdioh_iovar_op(sdioh_info_t *si, const char *name,
-                          void *params, int plen, void *arg, int len, bool set);
+			  void *params, int plen, void *arg, int len, bool set);
 
 /* Issue abort to the specified function and clear controller as needed */
 extern int sdioh_abort(sdioh_info_t *si, uint fnc);

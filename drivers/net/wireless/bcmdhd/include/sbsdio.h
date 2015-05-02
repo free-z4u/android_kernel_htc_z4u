@@ -119,7 +119,8 @@
 #define SBSDIO_DEVCTL_SB_RST_CTL	0x30		/* Force SD->SB reset mapping (rev 11) */
 #define SBSDIO_DEVCTL_RST_CORECTL	0x00		/*   Determined by CoreControl bit */
 #define SBSDIO_DEVCTL_RST_BPRESET	0x10		/*   Force backplane reset */
-#define SBSDIO_DEVCTL_RST_NOBPRESET	0x20		/* Isolate sdio clk and cmd (non-data) */
+#define SBSDIO_DEVCTL_RST_NOBPRESET	0x20		/*   Force no backplane reset */
+
 
 /* SBSDIO_FUNC1_CHIPCLKCSR */
 #define SBSDIO_FORCE_ALP		0x01		/* Force ALP request to backplane */

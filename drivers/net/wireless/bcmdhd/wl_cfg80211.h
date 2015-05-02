@@ -1,7 +1,7 @@
 /*
  * Linux cfg80211 driver
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,7 +21,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_cfg80211.h 418267 2013-08-14 12:49:52Z $
+ * $Id: wl_cfg80211.h 316895 2012-02-24 00:05:41Z $
  */
 
 #ifndef _wl_cfg80211_h_
@@ -208,7 +208,7 @@ struct wl_conf {
 };
 
 typedef s32(*EVENT_HANDLER) (struct wl_priv *wl,
-                            struct net_device *ndev, const wl_event_msg_t *e, void *data);
+			    struct net_device *ndev, const wl_event_msg_t *e, void *data);
 
 /* bss inform structure for cfg80211 interface */
 struct wl_cfg80211_bss_info {
@@ -627,7 +627,7 @@ extern s32 wl_cfg80211_attach_post(struct net_device *ndev);
 extern void wl_cfg80211_detach(void *para);
 
 extern void wl_cfg80211_event(struct net_device *ndev, const wl_event_msg_t *e,
-            void *data);
+	    void *data);
 void wl_cfg80211_set_parent_dev(void *dev);
 struct device *wl_cfg80211_get_parent_dev(void);
 

@@ -1,8 +1,7 @@
-
 /*
  * Linux cfg80211 driver
  *
- * Copyright (C) 1999-2013, Broadcom Corporation
+ * Copyright (C) 1999-2012, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -22,9 +21,9 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_cfg80211.c 419844 2013-08-23 00:07:03Z $
+ * $Id: wl_cfg80211.c 328984 2012-04-23 14:08:37Z $
  */
-/* */
+
 #include <typedefs.h>
 #include <linuxver.h>
 #include <osl.h>
@@ -43,6 +42,7 @@
 #include <dhdioctl.h>
 #include <wlioctl.h>
 #include <dhd_cfg80211.h>
+
 #include <proto/ethernet.h>
 #include <linux/kernel.h>
 #include <linux/kthread.h>
@@ -308,7 +308,7 @@ static s32 wl_set_set_sharedkey(struct net_device *dev,
 	struct cfg80211_connect_params *sme);
 #ifdef BCMWAPI_WPI
 static s32 wl_set_set_wapi_ie(struct net_device *dev,
-        struct cfg80211_connect_params *sme);
+	struct cfg80211_connect_params *sme);
 #endif
 static s32 wl_get_assoc_ies(struct wl_priv *wl, struct net_device *ndev);
 static void wl_ch_to_chanspec(int ch,
@@ -5181,7 +5181,7 @@ static s32 wl_get_assoc_ies(struct wl_priv *wl, struct net_device *ndev)
 }
 
 static void wl_ch_to_chanspec(int ch, struct wl_join_params *join_params,
-        size_t *join_params_size)
+	size_t *join_params_size)
 {
 	chanspec_t chanspec = 0;
 
