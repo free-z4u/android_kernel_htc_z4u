@@ -289,7 +289,7 @@ int msm_allocate_iova_address(unsigned int iommu_domain,
 	if (!pool->gpool)
 		return -EINVAL;
 
-	va = gen_pool_alloc_aligned(pool->gpool, size, ilog2(align));
+	va = gen_pool_alloc(pool->gpool, size);
 	if (va) {
 		pool->free -= size;
 		/* Offset because genpool can't handle 0 addresses */

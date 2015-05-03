@@ -146,12 +146,8 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 
 	pr_debug("kobject: '%s' (%p): %s\n",
 		 kobject_name(kobj), kobj, __func__);
-	if(!strcmp("h2w", kobject_name(kobj)) || !strcmp("Beats", kobject_name(kobj)) || !strcmp("battery", kobject_name(kobj))) {
-		pr_info("kobject: '%s' (%p): %s\n",
-			kobject_name(kobj), kobj, __func__);
-	}
 
-
+	/* search the kset we belong to */
 	top_kobj = kobj;
 	while (!top_kobj->kset && top_kobj->parent)
 		top_kobj = top_kobj->parent;
@@ -160,44 +156,29 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		pr_debug("kobject: '%s' (%p): %s: attempted to send uevent "
 			 "without kset!\n", kobject_name(kobj), kobj,
 			 __func__);
-		if(!strcmp("h2w", kobject_name(kobj)) || !strcmp("Beats", kobject_name(kobj)) || !strcmp("battery", kobject_name(kobj))) {
-			pr_info("kobject: '%s' (%p): %s: attempted to send uevent "
-				 "without kset!\n", kobject_name(kobj), kobj,
-				 __func__);
-		}
 		return -EINVAL;
 	}
 
 	kset = top_kobj->kset;
 	uevent_ops = kset->uevent_ops;
 
-
+	/* skip the event, if uevent_suppress is set*/
 	if (kobj->uevent_suppress) {
 		pr_debug("kobject: '%s' (%p): %s: uevent_suppress "
 				 "caused the event to drop!\n",
 				 kobject_name(kobj), kobj, __func__);
-		if(!strcmp("h2w", kobject_name(kobj)) || !strcmp("Beats", kobject_name(kobj)) || !strcmp("battery", kobject_name(kobj))) {
-			pr_info("kobject: '%s' (%p): %s: uevent_suppress "
-					 "caused the event to drop!\n",
-					 kobject_name(kobj), kobj, __func__);
-		}
 		return 0;
 	}
-
+	/* skip the event, if the filter returns zero. */
 	if (uevent_ops && uevent_ops->filter)
 		if (!uevent_ops->filter(kset, kobj)) {
 			pr_debug("kobject: '%s' (%p): %s: filter function "
 				 "caused the event to drop!\n",
 				 kobject_name(kobj), kobj, __func__);
-			if(!strcmp("h2w", kobject_name(kobj)) || !strcmp("Beats", kobject_name(kobj)) || !strcmp("battery", kobject_name(kobj))) {
-				pr_info("kobject: '%s' (%p): %s: filter function "
-					 "caused the event to drop!\n",
-					 kobject_name(kobj), kobj, __func__);
-			}
 			return 0;
 		}
 
-
+	/* originating subsystem */
 	if (uevent_ops && uevent_ops->name)
 		subsystem = uevent_ops->name(kset, kobj);
 	else
@@ -206,27 +187,22 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		pr_debug("kobject: '%s' (%p): %s: unset subsystem caused the "
 			 "event to drop!\n", kobject_name(kobj), kobj,
 			 __func__);
-		if(!strcmp("h2w", kobject_name(kobj)) || !strcmp("Beats", kobject_name(kobj)) || !strcmp("battery", kobject_name(kobj))) {
-			pr_info("kobject: '%s' (%p): %s: unset subsystem caused the "
-				 "event to drop!\n", kobject_name(kobj), kobj,
-				 __func__);
-		}
 		return 0;
 	}
 
-
+	/* environment buffer */
 	env = kzalloc(sizeof(struct kobj_uevent_env), GFP_KERNEL);
 	if (!env)
 		return -ENOMEM;
 
-
+	/* complete object path */
 	devpath = kobject_get_path(kobj, GFP_KERNEL);
 	if (!devpath) {
 		retval = -ENOENT;
 		goto exit;
 	}
 
-
+	/* default keys */
 	retval = add_uevent_var(env, "ACTION=%s", action_string);
 	if (retval)
 		goto exit;
@@ -237,7 +213,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 	if (retval)
 		goto exit;
 
-
+	/* keys passed in from the caller */
 	if (envp_ext) {
 		for (i = 0; envp_ext[i]; i++) {
 			retval = add_uevent_var(env, "%s", envp_ext[i]);
@@ -246,18 +222,13 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		}
 	}
 
-
+	/* let the kset specific function add its stuff */
 	if (uevent_ops && uevent_ops->uevent) {
 		retval = uevent_ops->uevent(kset, kobj, env);
 		if (retval) {
 			pr_debug("kobject: '%s' (%p): %s: uevent() returned "
 				 "%d\n", kobject_name(kobj), kobj,
 				 __func__, retval);
-			if(!strcmp("h2w", kobject_name(kobj)) || !strcmp("Beats", kobject_name(kobj)) || !strcmp("battery", kobject_name(kobj))) {
-				pr_info("kobject: '%s' (%p): %s: uevent() returned "
-					 "%d\n", kobject_name(kobj), kobj,
-					 __func__, retval);
-			}
 			goto exit;
 		}
 	}

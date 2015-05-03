@@ -173,12 +173,11 @@ static void *__alloc(struct mem_pool *mpool, unsigned long size,
 	void __iomem *vaddr;
 
 	unsigned long aligned_size;
-	int log_align = ilog2(align);
 
 	struct alloc *node;
 
 	aligned_size = PFN_ALIGN(size);
-	paddr = gen_pool_alloc_aligned(mpool->gpool, aligned_size, log_align);
+	paddr = gen_pool_alloc(mpool->gpool, aligned_size);
 	if (!paddr)
 		return NULL;
 
@@ -293,14 +292,13 @@ unsigned long _allocate_contiguous_memory_nomap(unsigned long size,
 
 	struct alloc *node;
 	struct mem_pool *mpool;
-	int log_align = ilog2(align);
 
 	mpool = mem_type_to_memory_pool(mem_type);
 	if (!mpool || !mpool->gpool)
 		return 0;
 
 	aligned_size = PFN_ALIGN(size);
-	paddr = gen_pool_alloc_aligned(mpool->gpool, aligned_size, log_align);
+	paddr = gen_pool_alloc(mpool->gpool, aligned_size);
 	if (!paddr)
 		return 0;
 

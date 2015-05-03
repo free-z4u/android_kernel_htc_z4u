@@ -152,8 +152,8 @@ static void __rb_erase_color(struct rb_node *node, struct rb_node *parent,
 				__rb_rotate_left(parent, root);
 				other = parent->rb_right;
 			}
-			if (other && ((!other->rb_left || rb_is_black(other->rb_left)) &&
-			    (!other->rb_right || rb_is_black(other->rb_right))))
+			if ((!other->rb_left || rb_is_black(other->rb_left)) &&
+			    (!other->rb_right || rb_is_black(other->rb_right)))
 			{
 				rb_set_red(other);
 				node = parent;
@@ -161,7 +161,7 @@ static void __rb_erase_color(struct rb_node *node, struct rb_node *parent,
 			}
 			else
 			{
-				if (other && (!other->rb_right || rb_is_black(other->rb_right)))
+				if (!other->rb_right || rb_is_black(other->rb_right))
 				{
 					rb_set_black(other->rb_left);
 					rb_set_red(other);

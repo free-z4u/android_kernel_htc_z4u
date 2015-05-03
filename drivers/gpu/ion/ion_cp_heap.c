@@ -339,8 +339,8 @@ ion_phys_addr_t ion_cp_allocate(struct ion_heap *heap,
 	cp_heap->allocated_bytes += size;
 	mutex_unlock(&cp_heap->lock);
 
-	offset = gen_pool_alloc_aligned(cp_heap->pool,
-					size, ilog2(align));
+	offset = gen_pool_alloc(cp_heap->pool,
+					size);
 
 	if (!offset) {
 		mutex_lock(&cp_heap->lock);
