@@ -29,14 +29,14 @@ early_param("threadirqs", setup_forced_irqthreads);
 #endif
 
 /**
- *      synchronize_irq - wait for pending IRQ handlers (on other CPUs)
- *      @irq: interrupt number to wait for
+ *	synchronize_irq - wait for pending IRQ handlers (on other CPUs)
+ *	@irq: interrupt number to wait for
  *
- *      This function waits for any pending IRQ handlers for this interrupt
- *      to complete before returning. If you use this function while
- *      holding a resource the IRQ handler may need you will deadlock.
+ *	This function waits for any pending IRQ handlers for this interrupt
+ *	to complete before returning. If you use this function while
+ *	holding a resource the IRQ handler may need you will deadlock.
  *
- *      This function may be called - with care - from IRQ context.
+ *	This function may be called - with care - from IRQ context.
  */
 void synchronize_irq(unsigned int irq)
 {
@@ -76,8 +76,8 @@ EXPORT_SYMBOL(synchronize_irq);
 cpumask_var_t irq_default_affinity;
 
 /**
- *      irq_can_set_affinity - Check if the affinity of a given irq can be set
- *      @irq:           Interrupt to check
+ *	irq_can_set_affinity - Check if the affinity of a given irq can be set
+ *	@irq:		Interrupt to check
  *
  */
 int irq_can_set_affinity(unsigned int irq)
@@ -92,13 +92,13 @@ int irq_can_set_affinity(unsigned int irq)
 }
 
 /**
- *      irq_set_thread_affinity - Notify irq threads to adjust affinity
- *      @desc:          irq descriptor which has affitnity changed
+ *	irq_set_thread_affinity - Notify irq threads to adjust affinity
+ *	@desc:		irq descriptor which has affitnity changed
  *
- *      We just set IRQTF_AFFINITY and delegate the affinity setting
- *      to the interrupt thread itself. We can not call
- *      set_cpus_allowed_ptr() here as we hold desc->lock and this
- *      code can be called from hard interrupt context.
+ *	We just set IRQTF_AFFINITY and delegate the affinity setting
+ *	to the interrupt thread itself. We can not call
+ *	set_cpus_allowed_ptr() here as we hold desc->lock and this
+ *	code can be called from hard interrupt context.
  */
 void irq_set_thread_affinity(struct irq_desc *desc)
 {
@@ -172,9 +172,9 @@ int __irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask)
 }
 
 /**
- *      irq_set_affinity - Set the irq affinity of a given irq
- *      @irq:           Interrupt to set affinity
- *      @mask:          cpumask
+ *	irq_set_affinity - Set the irq affinity of a given irq
+ *	@irq:		Interrupt to set affinity
+ *	@mask:		cpumask
  *
  */
 int irq_set_affinity(unsigned int irq, const struct cpumask *mask)
@@ -231,15 +231,15 @@ out:
 }
 
 /**
- *      irq_set_affinity_notifier - control notification of IRQ affinity changes
- *      @irq:           Interrupt for which to enable/disable notification
- *      @notify:        Context for notification, or %NULL to disable
- *                      notification.  Function pointers must be initialised;
- *                      the other fields will be initialised by this function.
+ *	irq_set_affinity_notifier - control notification of IRQ affinity changes
+ *	@irq:		Interrupt for which to enable/disable notification
+ *	@notify:	Context for notification, or %NULL to disable
+ *			notification.  Function pointers must be initialised;
+ *			the other fields will be initialised by this function.
  *
- *      Must be called in process context.  Notification may only be enabled
- *      after the IRQ is allocated and must be disabled before the IRQ is
- *      freed using free_irq().
+ *	Must be called in process context.  Notification may only be enabled
+ *	after the IRQ is allocated and must be disabled before the IRQ is
+ *	freed using free_irq().
  */
 int
 irq_set_affinity_notifier(unsigned int irq, struct irq_affinity_notify *notify)
@@ -373,15 +373,15 @@ static int __disable_irq_nosync(unsigned int irq)
 }
 
 /**
- *      disable_irq_nosync - disable an irq without waiting
- *      @irq: Interrupt to disable
+ *	disable_irq_nosync - disable an irq without waiting
+ *	@irq: Interrupt to disable
  *
- *      Disable the selected interrupt line.  Disables and Enables are
- *      nested.
- *      Unlike disable_irq(), this function does not ensure existing
- *      instances of the IRQ handler have completed before returning.
+ *	Disable the selected interrupt line.  Disables and Enables are
+ *	nested.
+ *	Unlike disable_irq(), this function does not ensure existing
+ *	instances of the IRQ handler have completed before returning.
  *
- *      This function may be called from IRQ context.
+ *	This function may be called from IRQ context.
  */
 void disable_irq_nosync(unsigned int irq)
 {
@@ -390,16 +390,16 @@ void disable_irq_nosync(unsigned int irq)
 EXPORT_SYMBOL(disable_irq_nosync);
 
 /**
- *      disable_irq - disable an irq and wait for completion
- *      @irq: Interrupt to disable
+ *	disable_irq - disable an irq and wait for completion
+ *	@irq: Interrupt to disable
  *
- *      Disable the selected interrupt line.  Enables and Disables are
- *      nested.
- *      This function waits for any pending IRQ handlers for this interrupt
- *      to complete before returning. If you use this function while
- *      holding a resource the IRQ handler may need you will deadlock.
+ *	Disable the selected interrupt line.  Enables and Disables are
+ *	nested.
+ *	This function waits for any pending IRQ handlers for this interrupt
+ *	to complete before returning. If you use this function while
+ *	holding a resource the IRQ handler may need you will deadlock.
  *
- *      This function may be called - with care - from IRQ context.
+ *	This function may be called - with care - from IRQ context.
  */
 void disable_irq(unsigned int irq)
 {
@@ -442,15 +442,15 @@ void __enable_irq(struct irq_desc *desc, unsigned int irq, bool resume)
 }
 
 /**
- *      enable_irq - enable handling of an irq
- *      @irq: Interrupt to enable
+ *	enable_irq - enable handling of an irq
+ *	@irq: Interrupt to enable
  *
- *      Undoes the effect of one call to disable_irq().  If this
- *      matches the last disable, processing of interrupts on this
- *      IRQ line is re-enabled.
+ *	Undoes the effect of one call to disable_irq().  If this
+ *	matches the last disable, processing of interrupts on this
+ *	IRQ line is re-enabled.
  *
- *      This function may be called from IRQ context only when
- *      desc->irq_data.chip->bus_lock and desc->chip->bus_sync_unlock are NULL !
+ *	This function may be called from IRQ context only when
+ *	desc->irq_data.chip->bus_lock and desc->chip->bus_sync_unlock are NULL !
  */
 void enable_irq(unsigned int irq)
 {
@@ -484,16 +484,16 @@ static int set_irq_wake_real(unsigned int irq, unsigned int on)
 }
 
 /**
- *      irq_set_irq_wake - control irq power management wakeup
- *      @irq:   interrupt to control
- *      @on:    enable/disable power management wakeup
+ *	irq_set_irq_wake - control irq power management wakeup
+ *	@irq:	interrupt to control
+ *	@on:	enable/disable power management wakeup
  *
- *      Enable/disable power management wakeup mode, which is
- *      disabled by default.  Enables and disables must match,
- *      just as they match for non-wakeup mode support.
+ *	Enable/disable power management wakeup mode, which is
+ *	disabled by default.  Enables and disables must match,
+ *	just as they match for non-wakeup mode support.
  *
- *      Wakeup mode lets this IRQ wake the system from sleep
- *      states like "suspend to RAM".
+ *	Wakeup mode lets this IRQ wake the system from sleep
+ *	states like "suspend to RAM".
  */
 int irq_set_irq_wake(unsigned int irq, unsigned int on)
 {
@@ -542,18 +542,18 @@ EXPORT_SYMBOL(irq_set_irq_wake);
  */
 int irq_read_line(unsigned int irq)
 {
-	struct irq_desc *desc = irq_to_desc(irq);
-	int val;
+        struct irq_desc *desc = irq_to_desc(irq);
+        int val;
 
-	if (!desc || !desc->irq_data.chip->irq_read_line)
-		return -EINVAL;
+        if (!desc || !desc->irq_data.chip->irq_read_line)
+                return -EINVAL;
 
-	chip_bus_lock(desc);
-	raw_spin_lock(&desc->lock);
-	val = desc->irq_data.chip->irq_read_line(&desc->irq_data);
-	raw_spin_unlock(&desc->lock);
-	chip_bus_sync_unlock(desc);
-	return val;
+        chip_bus_lock(desc);
+        raw_spin_lock(&desc->lock);
+        val = desc->irq_data.chip->irq_read_line(&desc->irq_data);
+        raw_spin_unlock(&desc->lock);
+        chip_bus_sync_unlock(desc);
+        return val;
 }
 EXPORT_SYMBOL_GPL(irq_read_line);
 
@@ -1172,9 +1172,9 @@ out_mput:
 }
 
 /**
- *      setup_irq - setup an interrupt
- *      @irq: Interrupt line to setup
- *      @act: irqaction for the interrupt
+ *	setup_irq - setup an interrupt
+ *	@irq: Interrupt line to setup
+ *	@act: irqaction for the interrupt
  *
  * Used to statically setup interrupts in the early boot process.
  */
@@ -1240,15 +1240,8 @@ static struct irqaction *__free_irq(unsigned int irq, void *dev_id)
 #endif
 
 	/* If this was the last handler, shut down the IRQ line: */
-	if (!desc->action) {
+	if (!desc->action)
 		irq_shutdown(desc);
-
-		/* Explicitly mask the interrupt */
-		if (desc->irq_data.chip->irq_mask)
-			desc->irq_data.chip->irq_mask(&desc->irq_data);
-		else if (desc->irq_data.chip->irq_mask_ack)
-			desc->irq_data.chip->irq_mask_ack(&desc->irq_data);
-	}
 
 #ifdef CONFIG_SMP
 	/* make sure affinity_hint is cleaned up */
@@ -1289,9 +1282,9 @@ static struct irqaction *__free_irq(unsigned int irq, void *dev_id)
 }
 
 /**
- *      remove_irq - free an interrupt
- *      @irq: Interrupt line to free
- *      @act: irqaction for the interrupt
+ *	remove_irq - free an interrupt
+ *	@irq: Interrupt line to free
+ *	@act: irqaction for the interrupt
  *
  * Used to remove interrupts statically setup by the early boot process.
  */
@@ -1305,18 +1298,18 @@ void remove_irq(unsigned int irq, struct irqaction *act)
 EXPORT_SYMBOL_GPL(remove_irq);
 
 /**
- *      free_irq - free an interrupt allocated with request_irq
- *      @irq: Interrupt line to free
- *      @dev_id: Device identity to free
+ *	free_irq - free an interrupt allocated with request_irq
+ *	@irq: Interrupt line to free
+ *	@dev_id: Device identity to free
  *
- *      Remove an interrupt handler. The handler is removed and if the
- *      interrupt line is no longer in use by any driver it is disabled.
- *      On a shared IRQ the caller must ensure the interrupt is disabled
- *      on the card it drives before calling this function. The function
- *      does not return until any executing interrupts for this IRQ
- *      have completed.
+ *	Remove an interrupt handler. The handler is removed and if the
+ *	interrupt line is no longer in use by any driver it is disabled.
+ *	On a shared IRQ the caller must ensure the interrupt is disabled
+ *	on the card it drives before calling this function. The function
+ *	does not return until any executing interrupts for this IRQ
+ *	have completed.
  *
- *      This function must not be called from interrupt context.
+ *	This function must not be called from interrupt context.
  */
 void free_irq(unsigned int irq, void *dev_id)
 {
@@ -1337,42 +1330,42 @@ void free_irq(unsigned int irq, void *dev_id)
 EXPORT_SYMBOL(free_irq);
 
 /**
- *      request_threaded_irq - allocate an interrupt line
- *      @irq: Interrupt line to allocate
- *      @handler: Function to be called when the IRQ occurs.
- *                Primary handler for threaded interrupts
- *                If NULL and thread_fn != NULL the default
- *                primary handler is installed
- *      @thread_fn: Function called from the irq handler thread
- *                  If NULL, no irq thread is created
- *      @irqflags: Interrupt type flags
- *      @devname: An ascii name for the claiming device
- *      @dev_id: A cookie passed back to the handler function
+ *	request_threaded_irq - allocate an interrupt line
+ *	@irq: Interrupt line to allocate
+ *	@handler: Function to be called when the IRQ occurs.
+ *		  Primary handler for threaded interrupts
+ *		  If NULL and thread_fn != NULL the default
+ *		  primary handler is installed
+ *	@thread_fn: Function called from the irq handler thread
+ *		    If NULL, no irq thread is created
+ *	@irqflags: Interrupt type flags
+ *	@devname: An ascii name for the claiming device
+ *	@dev_id: A cookie passed back to the handler function
  *
- *      This call allocates interrupt resources and enables the
- *      interrupt line and IRQ handling. From the point this
- *      call is made your handler function may be invoked. Since
- *      your handler function must clear any interrupt the board
- *      raises, you must take care both to initialise your hardware
- *      and to set up the interrupt handler in the right order.
+ *	This call allocates interrupt resources and enables the
+ *	interrupt line and IRQ handling. From the point this
+ *	call is made your handler function may be invoked. Since
+ *	your handler function must clear any interrupt the board
+ *	raises, you must take care both to initialise your hardware
+ *	and to set up the interrupt handler in the right order.
  *
- *      If you want to set up a threaded irq handler for your device
- *      then you need to supply @handler and @thread_fn. @handler is
- *      still called in hard interrupt context and has to check
- *      whether the interrupt originates from the device. If yes it
- *      needs to disable the interrupt on the device and return
- *      IRQ_WAKE_THREAD which will wake up the handler thread and run
- *      @thread_fn. This split handler design is necessary to support
- *      shared interrupts.
+ *	If you want to set up a threaded irq handler for your device
+ *	then you need to supply @handler and @thread_fn. @handler is
+ *	still called in hard interrupt context and has to check
+ *	whether the interrupt originates from the device. If yes it
+ *	needs to disable the interrupt on the device and return
+ *	IRQ_WAKE_THREAD which will wake up the handler thread and run
+ *	@thread_fn. This split handler design is necessary to support
+ *	shared interrupts.
  *
- *      Dev_id must be globally unique. Normally the address of the
- *      device data structure is used as the cookie. Since the handler
- *      receives this value it makes sense to use it.
+ *	Dev_id must be globally unique. Normally the address of the
+ *	device data structure is used as the cookie. Since the handler
+ *	receives this value it makes sense to use it.
  *
- *      If your interrupt is shared you must pass a non NULL dev_id
- *      as this is required when freeing the interrupt.
+ *	If your interrupt is shared you must pass a non NULL dev_id
+ *	as this is required when freeing the interrupt.
  *
- *      Flags:
+ *	Flags:
  *
  *	IRQF_SHARED		Interrupt is shared
  *	IRQF_TRIGGER_*		Specify active edge(s) or level
@@ -1450,21 +1443,21 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 EXPORT_SYMBOL(request_threaded_irq);
 
 /**
- *      request_any_context_irq - allocate an interrupt line
- *      @irq: Interrupt line to allocate
- *      @handler: Function to be called when the IRQ occurs.
- *                Threaded handler for threaded interrupts.
- *      @flags: Interrupt type flags
- *      @name: An ascii name for the claiming device
- *      @dev_id: A cookie passed back to the handler function
+ *	request_any_context_irq - allocate an interrupt line
+ *	@irq: Interrupt line to allocate
+ *	@handler: Function to be called when the IRQ occurs.
+ *		  Threaded handler for threaded interrupts.
+ *	@flags: Interrupt type flags
+ *	@name: An ascii name for the claiming device
+ *	@dev_id: A cookie passed back to the handler function
  *
- *      This call allocates interrupt resources and enables the
- *      interrupt line and IRQ handling. It selects either a
- *      hardirq or threaded handling method depending on the
- *      context.
+ *	This call allocates interrupt resources and enables the
+ *	interrupt line and IRQ handling. It selects either a
+ *	hardirq or threaded handling method depending on the
+ *	context.
  *
- *      On failure, it returns a negative value. On success,
- *      it returns either IRQC_IS_HARDIRQ or IRQC_IS_NESTED.
+ *	On failure, it returns a negative value. On success,
+ *	it returns either IRQC_IS_HARDIRQ or IRQC_IS_NESTED.
  */
 int request_any_context_irq(unsigned int irq, irq_handler_t handler,
 			    unsigned long flags, const char *name, void *dev_id)
@@ -1488,14 +1481,14 @@ EXPORT_SYMBOL_GPL(request_any_context_irq);
 
 void irq_set_pending(unsigned int irq)
 {
-	struct irq_desc *desc = irq_to_desc(irq);
-	unsigned long flags;
+        struct irq_desc *desc = irq_to_desc(irq);
+        unsigned long flags;
 
-	if (desc) {
-		raw_spin_lock_irqsave(&desc->lock, flags);
-		desc->istate |= IRQS_PENDING;
-		raw_spin_unlock_irqrestore(&desc->lock, flags);
-	}
+        if (desc) {
+                raw_spin_lock_irqsave(&desc->lock, flags);
+                desc->istate |= IRQS_PENDING;
+                raw_spin_unlock_irqrestore(&desc->lock, flags);
+        }
 }
 EXPORT_SYMBOL_GPL(irq_set_pending);
 
@@ -1582,9 +1575,9 @@ bad:
 }
 
 /**
- *      remove_percpu_irq - free a per-cpu interrupt
- *      @irq: Interrupt line to free
- *      @act: irqaction for the interrupt
+ *	remove_percpu_irq - free a per-cpu interrupt
+ *	@irq: Interrupt line to free
+ *	@act: irqaction for the interrupt
  *
  * Used to remove interrupts statically setup by the early boot process.
  */
@@ -1597,16 +1590,16 @@ void remove_percpu_irq(unsigned int irq, struct irqaction *act)
 }
 
 /**
- *      free_percpu_irq - free an interrupt allocated with request_percpu_irq
- *      @irq: Interrupt line to free
- *      @dev_id: Device identity to free
+ *	free_percpu_irq - free an interrupt allocated with request_percpu_irq
+ *	@irq: Interrupt line to free
+ *	@dev_id: Device identity to free
  *
- *      Remove a percpu interrupt handler. The handler is removed, but
- *      the interrupt line is not disabled. This must be done on each
- *      CPU before calling this function. The function does not return
- *      until any executing interrupts for this IRQ have completed.
+ *	Remove a percpu interrupt handler. The handler is removed, but
+ *	the interrupt line is not disabled. This must be done on each
+ *	CPU before calling this function. The function does not return
+ *	until any executing interrupts for this IRQ have completed.
  *
- *      This function must not be called from interrupt context.
+ *	This function must not be called from interrupt context.
  */
 void free_percpu_irq(unsigned int irq, void __percpu *dev_id)
 {
@@ -1621,9 +1614,9 @@ void free_percpu_irq(unsigned int irq, void __percpu *dev_id)
 }
 
 /**
- *      setup_percpu_irq - setup a per-cpu interrupt
- *      @irq: Interrupt line to setup
- *      @act: irqaction for the interrupt
+ *	setup_percpu_irq - setup a per-cpu interrupt
+ *	@irq: Interrupt line to setup
+ *	@act: irqaction for the interrupt
  *
  * Used to statically setup per-cpu interrupts in the early boot process.
  */
@@ -1642,19 +1635,19 @@ int setup_percpu_irq(unsigned int irq, struct irqaction *act)
 }
 
 /**
- *      request_percpu_irq - allocate a percpu interrupt line
- *      @irq: Interrupt line to allocate
- *      @handler: Function to be called when the IRQ occurs.
- *      @devname: An ascii name for the claiming device
- *      @dev_id: A percpu cookie passed back to the handler function
+ *	request_percpu_irq - allocate a percpu interrupt line
+ *	@irq: Interrupt line to allocate
+ *	@handler: Function to be called when the IRQ occurs.
+ *	@devname: An ascii name for the claiming device
+ *	@dev_id: A percpu cookie passed back to the handler function
  *
- *      This call allocates interrupt resources, but doesn't
- *      automatically enable the interrupt. It has to be done on each
- *      CPU using enable_percpu_irq().
+ *	This call allocates interrupt resources, but doesn't
+ *	automatically enable the interrupt. It has to be done on each
+ *	CPU using enable_percpu_irq().
  *
- *      Dev_id must be globally unique. It is a per-cpu variable, and
- *      the handler gets called with the interrupted CPU's instance of
- *      that variable.
+ *	Dev_id must be globally unique. It is a per-cpu variable, and
+ *	the handler gets called with the interrupted CPU's instance of
+ *	that variable.
  */
 int request_percpu_irq(unsigned int irq, irq_handler_t handler,
 		       const char *devname, void __percpu *dev_id)

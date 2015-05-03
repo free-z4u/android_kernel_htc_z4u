@@ -238,8 +238,6 @@ static int __die(const char *str, int err, struct thread_info *thread, struct pt
 	struct task_struct *tsk = thread->task;
 	static int die_counter;
 	int ret;
-	unsigned long work_func;
-	char func_sym[KSYM_SYMBOL_LEN];
 
 	printk(KERN_EMERG "Internal error: %s: %x [#%d]" S_PREEMPT S_SMP
 	       S_ISA "\n", str, err, ++die_counter);
@@ -253,14 +251,6 @@ static int __die(const char *str, int err, struct thread_info *thread, struct pt
 	__show_regs(regs);
 	printk(KERN_EMERG "Process %.*s (pid: %d, stack limit = 0x%p)\n",
 		TASK_COMM_LEN, tsk->comm, task_pid_nr(tsk), thread + 1);
-
-	if (tsk->flags & PF_WQ_WORKER) {
-		work_func = get_work_func_of_task_struct(tsk);
-		if (work_func) {
-			sprint_symbol(func_sym, work_func);
-			printk(KERN_EMERG "Worker function: %.*s\n", KSYM_SYMBOL_LEN, func_sym);
-		}
-	}
 
 	if (!user_mode(regs) || in_interrupt()) {
 		dump_mem(KERN_EMERG, "Stack: ", regs->ARM_sp,

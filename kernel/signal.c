@@ -43,14 +43,6 @@
  * SLAB caches for signal bits.
  */
 
-static struct dying_pid dying_pid_buf[MAX_DYING_PROC_COUNT];
-static unsigned int dying_pid_buf_idx;
-
-
-/*
- * SLAB caches for signal bits.
- */
-
 static struct kmem_cache *sigqueue_cachep;
 
 int print_fatal_signals __read_mostly;
@@ -1157,32 +1149,10 @@ ret:
 	return ret;
 }
 
-int dying_processors_read_proc(char *page, char **start, off_t off,
-			   int count, int *eof, void *data)
-{
-	char *p = page;
-	unsigned long jiffy = jiffies;
-	int i;
-
-	for (i = 0; i < MAX_DYING_PROC_COUNT; i++)
-		p += sprintf(p, "%ld:%ld\n", (long int)dying_pid_buf[i].pid, (dying_pid_buf[i].pid == 0? 0: (jiffy - dying_pid_buf[i].jiffy)));
-
-	return p - page;
-}
-
 static int send_signal(int sig, struct siginfo *info, struct task_struct *t,
 			int group)
 {
 	int from_ancestor_ns = 0;
-
-
-	if (sig == SIGKILL) {
-		dying_pid_buf[dying_pid_buf_idx].pid = t->pid;
-		dying_pid_buf[dying_pid_buf_idx].jiffy = jiffies;
-
-		dying_pid_buf_idx++;
-		dying_pid_buf_idx = (dying_pid_buf_idx % MAX_DYING_PROC_COUNT);
-	}
 
 #ifdef CONFIG_PID_NS
 	from_ancestor_ns = si_fromuser(info) &&
@@ -2241,7 +2211,7 @@ relock:
 	 * Now that we woke up, it's crucial if we're supposed to be
 	 * frozen that we freeze now before running anything substantial.
 	 */
-	try_to_freeze();
+	try_to_freeze_nowarn();
 
 	spin_lock_irq(&sighand->siglock);
 	/*
@@ -2801,7 +2771,7 @@ int do_sigtimedwait(const sigset_t *which, siginfo_t *info,
 		recalc_sigpending();
 		spin_unlock_irq(&tsk->sighand->siglock);
 
-		timeout = schedule_timeout_interruptible(timeout);
+		timeout = freezable_schedule_timeout_interruptible(timeout);
 
 		spin_lock_irq(&tsk->sighand->siglock);
 		__set_task_blocked(tsk, &tsk->real_blocked);

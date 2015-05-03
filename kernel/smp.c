@@ -150,8 +150,6 @@ void generic_exec_single(int cpu, struct call_single_data *data, int wait)
 	list_add_tail(&data->list, &dst->list);
 	raw_spin_unlock_irqrestore(&dst->lock, flags);
 
-
-	smp_mb();
 	/*
 	 * The list addition should be visible before sending the IPI
 	 * handler locks the list to pull the entry off it because of
@@ -163,7 +161,7 @@ void generic_exec_single(int cpu, struct call_single_data *data, int wait)
 	 * locking and barrier primitives. Generic code isn't really
 	 * equipped to do the right thing...
 	 */
-	if (ipi || wait)
+	if (ipi)
 		arch_send_call_function_single_ipi(cpu);
 
 	if (wait)

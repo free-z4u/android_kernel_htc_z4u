@@ -44,7 +44,6 @@
 
 #include <asm/uaccess.h>
 
-#include <mach/msm_rtb.h>
 #define CREATE_TRACE_POINTS
 #include <trace/events/printk.h>
 
@@ -773,20 +772,6 @@ module_param_named(time, printk_time, bool, S_IRUGO | S_IWUSR);
 static bool always_kmsg_dump;
 module_param_named(always_kmsg_dump, always_kmsg_dump, bool, S_IRUGO | S_IWUSR);
 
-#if defined(CONFIG_PRINTK_CPU_ID)
-static int printk_cpu_id = 1;
-#else
-static int printk_cpu_id = 0;
-#endif
-module_param_named(cpu, printk_cpu_id, int, S_IRUGO | S_IWUSR);
-
-#if defined(CONFIG_PRINTK_PID)
-static int printk_pid = 1;
-#else
-static int printk_pid;
-#endif
-module_param_named(pid, printk_pid, int, S_IRUGO | S_IWUSR);
-
 /* Check if we have any console registered that can be called early in boot. */
 static int have_callable_console(void)
 {
@@ -825,11 +810,6 @@ asmlinkage int printk(const char *fmt, ...)
 {
 	va_list args;
 	int r;
-#ifdef CONFIG_MSM_RTB
-	void *caller = __builtin_return_address(0);
-
-	uncached_logk_pc(LOGK_LOGBUF, caller, (void *)log_end);
-#endif
 
 #ifdef CONFIG_KGDB_KDB
 	if (unlikely(kdb_trap_printk)) {
@@ -1026,30 +1006,6 @@ asmlinkage int vprintk(const char *fmt, va_list args)
 				tlen = sprintf(tbuf, "[%5lu.%06lu] ",
 						(unsigned long) t,
 						nanosec_rem / 1000);
-
-				for (tp = tbuf; tp < tbuf + tlen; tp++)
-					emit_log_char(*tp);
-				printed_len += tlen;
-			}
-
-			if (printk_cpu_id) {
-
-				char tbuf[10], *tp;
-				unsigned tlen;
-
-				tlen = sprintf(tbuf, "C%u ", printk_cpu);
-
-				for (tp = tbuf; tp < tbuf + tlen; tp++)
-					emit_log_char(*tp);
-				printed_len += tlen;
-			}
-
-			if (printk_pid) {
-
-				char tbuf[10], *tp;
-				unsigned tlen;
-
-				tlen = sprintf(tbuf, "%6u ", current->pid);
 
 				for (tp = tbuf; tp < tbuf + tlen; tp++)
 					emit_log_char(*tp);
@@ -1254,14 +1210,6 @@ void resume_console(void)
 	console_unlock();
 }
 
-static void __cpuinit console_flush(struct work_struct *work)
-{
-	console_lock();
-	console_unlock();
-}
-
-static __cpuinitdata DECLARE_WORK(console_cpu_notify_work, console_flush);
-
 /**
  * console_cpu_notify - print deferred console messages after CPU hotplug
  * @self: notifier struct
@@ -1283,13 +1231,6 @@ static int __cpuinit console_cpu_notify(struct notifier_block *self,
 	case CPU_UP_CANCELED:
 		console_lock();
 		console_unlock();
-		break;
-	case CPU_DYING:
-
-		if (!console_trylock())
-			schedule_work(&console_cpu_notify_work);
-		else
-			console_unlock();
 	}
 	return NOTIFY_OK;
 }
@@ -1438,8 +1379,6 @@ again:
 	raw_spin_lock(&logbuf_lock);
 	if (con_start != log_end)
 		retry = 1;
-	else
-		retry = 0;
 	raw_spin_unlock_irqrestore(&logbuf_lock, flags);
 
 	if (retry && console_trylock())
@@ -1754,7 +1693,6 @@ EXPORT_SYMBOL(unregister_console);
 static int __init printk_late_init(void)
 {
 	struct console *con;
-	return 0;
 
 	for_each_console(con) {
 		if (!keep_bootcon && con->flags & CON_BOOT) {

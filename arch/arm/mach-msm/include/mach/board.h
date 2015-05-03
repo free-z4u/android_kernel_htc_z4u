@@ -814,9 +814,6 @@ void msm_snddev_tx_route_deconfig(void);
 
 extern unsigned int msm_shared_ram_phys; /* defined in arch/arm/mach-msm/io.c */
 
-extern int dying_processors_read_proc(char *page, char **start, off_t off,
-	int count, int *eof, void *data);
-
 extern int get_partition_num_by_name(char *name);
 extern const char *get_partition_name_by_num(int partnum);
 

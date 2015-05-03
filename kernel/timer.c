@@ -1651,19 +1651,21 @@ static int __cpuinit init_timers_cpu(int cpu)
 	int j;
 	struct tvec_base *base;
 	static char __cpuinitdata tvec_base_done[NR_CPUS];
-	unsigned long flags;
 
 	if (!tvec_base_done[cpu]) {
 		static char boot_done;
 
 		if (boot_done) {
+			/*
+			 * The APs use this path later in boot
+			 */
 			base = kmalloc_node(sizeof(*base),
 						GFP_KERNEL | __GFP_ZERO,
 						cpu_to_node(cpu));
 			if (!base)
 				return -ENOMEM;
 
-
+			/* Make sure that tvec_base is 2 byte aligned */
 			if (tbase_get_deferrable(base)) {
 				WARN_ON(1);
 				kfree(base);
@@ -1671,6 +1673,12 @@ static int __cpuinit init_timers_cpu(int cpu)
 			}
 			per_cpu(tvec_bases, cpu) = base;
 		} else {
+			/*
+			 * This is for the boot CPU - we use compile-time
+			 * static initialisation because per-cpu memory isn't
+			 * ready yet and because the memory allocators are not
+			 * initialised either.
+			 */
 			boot_done = 1;
 			base = &boot_tvec_bases;
 		}
@@ -1680,7 +1688,6 @@ static int __cpuinit init_timers_cpu(int cpu)
 		base = per_cpu(tvec_bases, cpu);
 	}
 
-	spin_lock_irqsave(&base->lock, flags);
 
 	for (j = 0; j < TVN_SIZE; j++) {
 		INIT_LIST_HEAD(base->tv5.vec + j);
@@ -1693,9 +1700,6 @@ static int __cpuinit init_timers_cpu(int cpu)
 
 	base->timer_jiffies = jiffies;
 	base->next_timer = base->timer_jiffies;
-
-	spin_unlock_irqrestore(&base->lock, flags);
-
 	return 0;
 }
 
@@ -1724,6 +1728,10 @@ static void __cpuinit migrate_timers(int cpu)
 	BUG_ON(cpu_online(cpu));
 	old_base = per_cpu(tvec_bases, cpu);
 	new_base = get_cpu_var(tvec_bases);
+	/*
+	 * The caller is globally serialized and nobody else
+	 * takes two locks at once, deadlock is not possible.
+	 */
 	spin_lock_irq(&new_base->lock);
 	spin_lock_nested(&old_base->lock, SINGLE_DEPTH_NESTING);
 
@@ -1742,7 +1750,7 @@ static void __cpuinit migrate_timers(int cpu)
 	spin_unlock_irq(&new_base->lock);
 	put_cpu_var(tvec_bases);
 }
-#endif
+#endif /* CONFIG_HOTPLUG_CPU */
 
 static int __cpuinit timer_cpu_notify(struct notifier_block *self,
 				unsigned long action, void *hcpu)
@@ -1786,6 +1794,10 @@ void __init init_timers(void)
 	open_softirq(TIMER_SOFTIRQ, run_timer_softirq);
 }
 
+/**
+ * msleep - sleep safely even with waitqueue interruptions
+ * @msecs: Time in milliseconds to sleep for
+ */
 void msleep(unsigned int msecs)
 {
 	unsigned long timeout = msecs_to_jiffies(msecs) + 1;
@@ -1796,6 +1808,10 @@ void msleep(unsigned int msecs)
 
 EXPORT_SYMBOL(msleep);
 
+/**
+ * msleep_interruptible - sleep waiting for signals
+ * @msecs: Time in milliseconds to sleep for
+ */
 unsigned long msleep_interruptible(unsigned int msecs)
 {
 	unsigned long timeout = msecs_to_jiffies(msecs) + 1;

@@ -64,40 +64,14 @@ void __weak panic_smp_self_stop(void)
 		cpu_relax();
 }
 
-static void dump_mem(const char *str, const char *log_lvl,
-	     unsigned int bottom, unsigned int size)
-{
-	unsigned int p;
-	int i;
-	unsigned int top = bottom + size;
-
-	if (bottom == 0) {
-		goto out;
-	}
-
-	printk("%s%s(0x%08x to 0x%08x)\n", log_lvl, str, bottom, top);
-
-	for (p = bottom & ~31; p < top; ) {
-	printk("%s%04x: ", log_lvl, p & 0xffff);
-
-	for (i = 0; i < 4; i++, p += 4) {
-	        unsigned int val;
-
-			val = *(unsigned int*)((void __iomem *)p);
-
-	        if (p < bottom || p >= top)
-	                printk("         ");
-	        else {
-	                printk("%08x ", val);
-	        }
-	}
-	printk("\n");
-	}
-
-out:
-	return;
-}
-
+/**
+ *	panic - halt the system
+ *	@fmt: The text string to print
+ *
+ *	Display a message, then perform cleanups.
+ *
+ *	This function never returns.
+ */
 void panic(const char *fmt, ...)
 {
 	static DEFINE_SPINLOCK(panic_lock);
@@ -105,7 +79,6 @@ void panic(const char *fmt, ...)
 	va_list args;
 	long i, i_next = 0;
 	int state = 0;
-	extern void __iomem *virt_start_ptr;
 
 	/*
 	 * Disable local interrupts. This will prevent panic_smp_self_stop
@@ -135,13 +108,19 @@ void panic(const char *fmt, ...)
 	va_end(args);
 	printk(KERN_EMERG "Kernel panic - not syncing: %s\n",buf);
 #ifdef CONFIG_DEBUG_BUGVERBOSE
+	/*
+	 * Avoid nested stack-dumping if a panic occurs during oops processing
+	 */
 	if (!test_taint(TAINT_DIE) && oops_in_progress <= 1)
 		dump_stack();
 #endif
 
+	/*
+	 * If we have crashed and we have a crash kernel loaded let it handle
+	 * everything else.
+	 * Do we want to call this before we try to display a message?
+	 */
 	crash_kexec(NULL);
-
-	kmsg_dump(KMSG_DUMP_PANIC);
 
 	/*
 	 * Note smp_send_stop is the usual smp shutdown function, which
@@ -158,9 +137,6 @@ void panic(const char *fmt, ...)
 
 	if (!panic_blink)
 		panic_blink = no_blink;
-
-
-	dump_mem("dump", "virt_start_ptr ", (unsigned int)virt_start_ptr, 0x200);
 
 	if (panic_timeout > 0) {
 		/*

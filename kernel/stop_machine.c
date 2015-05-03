@@ -1,10 +1,10 @@
 /*
  * kernel/stop_machine.c
  *
- * Copyright (C) 2008, 2005     IBM Corporation.
- * Copyright (C) 2008, 2005     Rusty Russell rusty@rustcorp.com.au
- * Copyright (C) 2010           SUSE Linux Products GmbH
- * Copyright (C) 2010           Tejun Heo <tj@kernel.org>
+ * Copyright (C) 2008, 2005	IBM Corporation.
+ * Copyright (C) 2008, 2005	Rusty Russell rusty@rustcorp.com.au
+ * Copyright (C) 2010		SUSE Linux Products GmbH
+ * Copyright (C) 2010		Tejun Heo <tj@kernel.org>
  *
  * This file is released under the GPLv2 and any later version.
  */
@@ -26,18 +26,18 @@
  * be shared by works on different cpus.
  */
 struct cpu_stop_done {
-	atomic_t                nr_todo;        /* nr left to execute */
-	bool                    executed;       /* actually executed? */
-	int                     ret;            /* collected return value */
-	struct completion       completion;     /* fired if nr_todo reaches 0 */
+	atomic_t		nr_todo;	/* nr left to execute */
+	bool			executed;	/* actually executed? */
+	int			ret;		/* collected return value */
+	struct completion	completion;	/* fired if nr_todo reaches 0 */
 };
 
 /* the actual stopper, one per every possible cpu, enabled on online cpus */
 struct cpu_stopper {
-	spinlock_t              lock;
-	bool                    enabled;        /* is this stopper enabled? */
-	struct list_head        works;          /* list of pending works */
-	struct task_struct      *thread;        /* stopper thread */
+	spinlock_t		lock;
+	bool			enabled;	/* is this stopper enabled? */
+	struct list_head	works;		/* list of pending works */
+	struct task_struct	*thread;	/* stopper thread */
 };
 
 static DEFINE_PER_CPU(struct cpu_stopper, cpu_stopper);
@@ -133,8 +133,8 @@ void stop_one_cpu_nowait(unsigned int cpu, cpu_stop_fn_t fn, void *arg,
 	cpu_stop_queue_work(&per_cpu(cpu_stopper, cpu), work_buf);
 }
 
-DEFINE_MUTEX(stop_cpus_mutex);
 /* static data for stop_cpus */
+static DEFINE_MUTEX(stop_cpus_mutex);
 static DEFINE_PER_CPU(struct cpu_stop_work, stop_cpus_work);
 
 static void queue_stop_cpus_work(const struct cpumask *cpumask,
@@ -251,7 +251,7 @@ static int cpu_stopper_thread(void *data)
 	int ret;
 
 repeat:
-	set_current_state(TASK_INTERRUPTIBLE);  /* mb paired w/ kthread_stop */
+	set_current_state(TASK_INTERRUPTIBLE);	/* mb paired w/ kthread_stop */
 
 	if (kthread_should_stop()) {
 		__set_current_state(TASK_RUNNING);
@@ -363,8 +363,8 @@ static int __cpuinit cpu_stop_cpu_callback(struct notifier_block *nfb,
  * migration_notifier.
  */
 static struct notifier_block __cpuinitdata cpu_stop_cpu_notifier = {
-	.notifier_call  = cpu_stop_cpu_callback,
-	.priority       = 10,
+	.notifier_call	= cpu_stop_cpu_callback,
+	.priority	= 10,
 };
 
 static int __init cpu_stop_init(void)
@@ -410,14 +410,14 @@ enum stopmachine_state {
 };
 
 struct stop_machine_data {
-	int                     (*fn)(void *);
-	void                    *data;
+	int			(*fn)(void *);
+	void			*data;
 	/* Like num_online_cpus(), but hotplug cpu uses us, so we need this. */
-	unsigned int            num_threads;
-	const struct cpumask    *active_cpus;
+	unsigned int		num_threads;
+	const struct cpumask	*active_cpus;
 
-	enum stopmachine_state  state;
-	atomic_t                thread_ack;
+	enum stopmachine_state	state;
+	atomic_t		thread_ack;
 };
 
 static void set_state(struct stop_machine_data *smdata,
@@ -556,7 +556,7 @@ int stop_machine_from_inactive_cpu(int (*fn)(void *), void *data,
 
 	/* Local CPU must be inactive and CPU hotplug in progress. */
 	BUG_ON(cpu_active(raw_smp_processor_id()));
-	smdata.num_threads = num_active_cpus() + 1;     /* +1 for local */
+	smdata.num_threads = num_active_cpus() + 1;	/* +1 for local */
 
 	/* No proper task established and can't sleep - busy wait for lock. */
 	while (!mutex_trylock(&stop_cpus_mutex))
@@ -577,4 +577,4 @@ int stop_machine_from_inactive_cpu(int (*fn)(void *), void *data,
 	return ret ?: done.ret;
 }
 
-#endif  /* CONFIG_STOP_MACHINE */
+#endif	/* CONFIG_STOP_MACHINE */

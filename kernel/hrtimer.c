@@ -45,6 +45,7 @@
 #include <linux/debugobjects.h>
 #include <linux/sched.h>
 #include <linux/timer.h>
+#include <linux/freezer.h>
 
 #include <asm/uaccess.h>
 
@@ -224,13 +225,10 @@ again:
 		raw_spin_unlock(&base->cpu_base->lock);
 		raw_spin_lock(&new_base->cpu_base->lock);
 
-		this_cpu = smp_processor_id();
-
-		if (cpu != this_cpu && (hrtimer_check_target(timer, new_base)
-			|| !cpu_online(cpu))) {
+		if (cpu != this_cpu && hrtimer_check_target(timer, new_base)) {
+			cpu = this_cpu;
 			raw_spin_unlock(&new_base->cpu_base->lock);
 			raw_spin_lock(&base->cpu_base->lock);
-			cpu = smp_processor_id();
 			timer->base = base;
 			goto again;
 		}
@@ -673,7 +671,6 @@ static void retrigger_next_event(void *arg)
 	if (!hrtimer_hres_active())
 		return;
 
-	/* Adjust CLOCK_REALTIME offset */
 	raw_spin_lock(&base->lock);
 	hrtimer_update_base(base);
 	hrtimer_force_reprogram(base, 0);
@@ -1531,7 +1528,7 @@ static int __sched do_nanosleep(struct hrtimer_sleeper *t, enum hrtimer_mode mod
 			t->task = NULL;
 
 		if (likely(t->task))
-			schedule();
+			freezable_schedule();
 
 		hrtimer_cancel(&t->timer);
 		mode = HRTIMER_MODE_ABS;
@@ -1647,16 +1644,7 @@ SYSCALL_DEFINE2(nanosleep, struct timespec __user *, rqtp,
 static void __cpuinit init_hrtimers_cpu(int cpu)
 {
 	struct hrtimer_cpu_base *cpu_base = &per_cpu(hrtimer_bases, cpu);
-	static char __cpuinitdata cpu_base_done[NR_CPUS];
 	int i;
-	unsigned long flags;
-
-	if (!cpu_base_done[cpu]) {
-		raw_spin_lock_init(&cpu_base->lock);
-		cpu_base_done[cpu] = 1;
-	}
-
-	raw_spin_lock_irqsave(&cpu_base->lock, flags);
 
 	for (i = 0; i < HRTIMER_MAX_CLOCK_BASES; i++) {
 		cpu_base->clock_base[i].cpu_base = cpu_base;
@@ -1664,8 +1652,6 @@ static void __cpuinit init_hrtimers_cpu(int cpu)
 	}
 
 	hrtimer_init_hres(cpu_base);
-
-	raw_spin_unlock_irqrestore(&cpu_base->lock, flags);
 }
 
 #ifdef CONFIG_HOTPLUG_CPU

@@ -31,9 +31,6 @@ extern unsigned long max_mapnr;
 
 extern unsigned long num_physpages;
 extern unsigned long totalram_pages;
-#ifdef CONFIG_FIX_MOVABLE_ZONE
-extern unsigned long total_unmovable_pages;
-#endif
 extern void * high_memory;
 extern int page_cluster;
 
@@ -203,7 +200,7 @@ struct vm_fault {
 /*
  * These are the virtual MM functions - opening of an area, closing and
  * unmapping it (needed to keep files on disk up-to-date etc), pointer
- * to the functions called when a no-page or a wp-page exception occurs.
+ * to the functions called when a no-page or a wp-page exception occurs. 
  */
 struct vm_operations_struct {
 	void (*open)(struct vm_area_struct * area);
@@ -1127,6 +1124,11 @@ static inline void update_hiwater_vm(struct mm_struct *mm)
 		mm->hiwater_vm = mm->total_vm;
 }
 
+static inline void reset_mm_hiwater_rss(struct mm_struct *mm)
+{
+	mm->hiwater_rss = get_mm_rss(mm);
+}
+
 static inline void setmax_mm_hiwater_rss(unsigned long *maxrss,
 					 struct mm_struct *mm)
 {
@@ -1402,16 +1404,16 @@ extern unsigned long mmap_region(struct file *file, unsigned long addr,
 	unsigned long len, unsigned long flags,
 	vm_flags_t vm_flags, unsigned long pgoff);
 extern unsigned long do_mmap(struct file *, unsigned long,
-	unsigned long, unsigned long,
-	unsigned long, unsigned long);
+        unsigned long, unsigned long,
+        unsigned long, unsigned long);
 extern int do_munmap(struct mm_struct *, unsigned long, size_t);
 
 /* These take the mm semaphore themselves */
 extern unsigned long vm_brk(unsigned long, unsigned long);
 extern int vm_munmap(unsigned long, size_t);
 extern unsigned long vm_mmap(struct file *, unsigned long,
-	unsigned long, unsigned long,
-	unsigned long, unsigned long);
+        unsigned long, unsigned long,
+        unsigned long, unsigned long);
 
 /* truncate.c */
 extern void truncate_inode_pages(struct address_space *, loff_t);

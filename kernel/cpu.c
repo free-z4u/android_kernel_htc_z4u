@@ -17,12 +17,6 @@
 #include <linux/gfp.h>
 #include <linux/suspend.h>
 
-#ifdef CONFIG_HTC_ACPU_DEBUG
-#include <mach/proc_comm.h>
-#endif
-
-extern int wifi_is_powering_onoff;
-
 #ifdef CONFIG_SMP
 /* Serializes the updates to cpu_online_mask, cpu_present_mask */
 static DEFINE_MUTEX(cpu_add_remove_lock);
@@ -289,12 +283,6 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 
 	check_for_tasks(cpu);
 
-	#ifdef CONFIG_HTC_ACPU_DEBUG
-	{
-		unsigned int status = 0;
-		msm_proc_comm(PCOM_BACKUP_CPU_STATUS, (unsigned*)&cpu, (unsigned*) &status);
-	}
-	#endif
 out_release:
 	cpu_hotplug_done();
 	if (!err)
@@ -306,11 +294,9 @@ int __ref cpu_down(unsigned int cpu)
 {
 	int err;
 
-	printk("Take CPU%u down - Begin\n", cpu);
-
 	cpu_maps_update_begin();
 
-	if (cpu_hotplug_disabled || wifi_is_powering_onoff) {
+	if (cpu_hotplug_disabled) {
 		err = -EBUSY;
 		goto out;
 	}
@@ -319,8 +305,6 @@ int __ref cpu_down(unsigned int cpu)
 
 out:
 	cpu_maps_update_done();
-
-	printk("Take CPU%u down - End\n", cpu);
 	return err;
 }
 EXPORT_SYMBOL(cpu_down);
@@ -354,12 +338,6 @@ static int __cpuinit _cpu_up(unsigned int cpu, int tasks_frozen)
 	/* Now call notifier in preparation. */
 	cpu_notify(CPU_ONLINE | mod, hcpu);
 
-	#ifdef CONFIG_HTC_ACPU_DEBUG
-	{
-		unsigned int status = 1;
-		msm_proc_comm(PCOM_BACKUP_CPU_STATUS, (unsigned*)&cpu, (unsigned*) &status);
-	}
-	#endif
 out_notify:
 	if (ret != 0)
 		__cpu_notify(CPU_UP_CANCELED | mod, hcpu, nr_calls, NULL);
@@ -408,11 +386,10 @@ int __cpuinit cpu_up(unsigned int cpu)
 		mutex_unlock(&zonelists_mutex);
 	}
 #endif
-	printk("Take CPU%u UP - Begin\n", cpu);
 
 	cpu_maps_update_begin();
 
-	if (cpu_hotplug_disabled || wifi_is_powering_onoff) {
+	if (cpu_hotplug_disabled) {
 		err = -EBUSY;
 		goto out;
 	}
@@ -421,7 +398,6 @@ int __cpuinit cpu_up(unsigned int cpu)
 
 out:
 	cpu_maps_update_done();
-	printk("Take CPU%u UP - End\n", cpu);
 	return err;
 }
 EXPORT_SYMBOL_GPL(cpu_up);

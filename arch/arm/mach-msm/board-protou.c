@@ -2345,11 +2345,6 @@ static void __init msm7x2x_init(void)
 	printk(KERN_ERR "%s: create_proc_read_entry()\n", __func__);
 	if (!entry)
 		printk(KERN_ERR"Create /proc/emmc failed!\n");
-
-	entry = create_proc_read_entry("dying_processes", 0, NULL, dying_processors_read_proc, NULL);
-	if (!entry)
-		printk(KERN_ERR"Create /proc/dying_processes FAILED!\n");
-
 #endif
 
 	/* display initializations*/

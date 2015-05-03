@@ -42,6 +42,7 @@
 #include <linux/ctype.h>
 #include <linux/mm.h>
 #include <linux/mempolicy.h>
+#include <linux/sched.h>
 
 #include <linux/compat.h>
 #include <linux/syscalls.h>
@@ -55,11 +56,6 @@
 #include <asm/uaccess.h>
 #include <asm/io.h>
 #include <asm/unistd.h>
-
-#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
-#include <linux/i2c/cpld.h>
-#include <asm/htc_version.h>
-#endif
 
 #ifndef SET_UNALIGN_CTL
 # define SET_UNALIGN_CTL(a,b)	(-EINVAL)
@@ -92,6 +88,10 @@
 # define SET_TSC_CTL(a)		(-EINVAL)
 #endif
 
+/*
+ * this is where the system-wide overflow UID and GID are defined, for
+ * architectures that now have 32-bit UID/GID but didn't in the past
+ */
 
 int overflowuid = DEFAULT_OVERFLOWUID;
 int overflowgid = DEFAULT_OVERFLOWGID;
@@ -101,6 +101,10 @@ EXPORT_SYMBOL(overflowuid);
 EXPORT_SYMBOL(overflowgid);
 #endif
 
+/*
+ * the same as above, but for filesystems which can only store a 16-bit
+ * UID and GID. as such, this is needed on all architectures
+ */
 
 int fs_overflowuid = DEFAULT_FS_OVERFLOWUID;
 int fs_overflowgid = DEFAULT_FS_OVERFLOWUID;
@@ -108,14 +112,26 @@ int fs_overflowgid = DEFAULT_FS_OVERFLOWUID;
 EXPORT_SYMBOL(fs_overflowuid);
 EXPORT_SYMBOL(fs_overflowgid);
 
+/*
+ * this indicates whether you can reboot with ctrl-alt-del: the default is yes
+ */
 
 int C_A_D = 1;
 struct pid *cad_pid;
 EXPORT_SYMBOL(cad_pid);
 
+/*
+ * If set, this is used for preparing the system to power off.
+ */
 
 void (*pm_power_off_prepare)(void);
 
+/*
+ * Returns true if current's euid is same as p's uid or euid,
+ * or has CAP_SYS_NICE to p's user_ns.
+ *
+ * Called with rcu_read_lock, creds are safe
+ */
 static bool set_one_prio_perm(struct task_struct *p)
 {
 	const struct cred *cred = current_cred(), *pcred = __task_cred(p);
@@ -129,6 +145,10 @@ static bool set_one_prio_perm(struct task_struct *p)
 	return false;
 }
 
+/*
+ * set the priority of a task
+ * - the caller must hold the RCU read lock
+ */
 static int set_one_prio(struct task_struct *p, int niceval, int error)
 {
 	int no_nice;
@@ -164,7 +184,7 @@ SYSCALL_DEFINE3(setpriority, int, which, int, who, int, niceval)
 	if (which > PRIO_USER || which < PRIO_PROCESS)
 		goto out;
 
-
+	/* normalize: avoid signed division (rounding problems) */
 	error = -ESRCH;
 	if (niceval < -20)
 		niceval = -20;
@@ -197,14 +217,14 @@ SYSCALL_DEFINE3(setpriority, int, which, int, who, int, niceval)
 				who = cred->uid;
 			else if ((who != cred->uid) &&
 				 !(user = find_user(who)))
-				goto out_unlock;
+				goto out_unlock;	/* No processes for this user */
 
 			do_each_thread(g, p) {
 				if (__task_cred(p)->uid == who)
 					error = set_one_prio(p, niceval, error);
 			} while_each_thread(g, p);
 			if (who != cred->uid)
-				free_uid(user);
+				free_uid(user);		/* For find_user() */
 			break;
 	}
 out_unlock:
@@ -214,6 +234,12 @@ out:
 	return error;
 }
 
+/*
+ * Ugh. To avoid negative return values, "getpriority()" will
+ * not return the normal nice-value, but a negated value that
+ * has been offset by 20 (ie it returns 40..1 instead of -20..19)
+ * to stay compatible.
+ */
 SYSCALL_DEFINE2(getpriority, int, which, int, who)
 {
 	struct task_struct *g, *p;
@@ -256,7 +282,7 @@ SYSCALL_DEFINE2(getpriority, int, which, int, who)
 				who = cred->uid;
 			else if ((who != cred->uid) &&
 				 !(user = find_user(who)))
-				goto out_unlock;
+				goto out_unlock;	/* No processes for this user */
 
 			do_each_thread(g, p) {
 				if (__task_cred(p)->uid == who) {
@@ -266,7 +292,7 @@ SYSCALL_DEFINE2(getpriority, int, which, int, who)
 				}
 			} while_each_thread(g, p);
 			if (who != cred->uid)
-				free_uid(user);
+				free_uid(user);		/* for find_user() */
 			break;
 	}
 out_unlock:
@@ -276,6 +302,14 @@ out_unlock:
 	return retval;
 }
 
+/**
+ *	emergency_restart - reboot the system
+ *
+ *	Without shutting down any hardware or taking any locks
+ *	reboot the system.  This is called when we know we are in
+ *	trouble so this is our best effort to reboot.  This is
+ *	safe to call in interrupt context.
+ */
 void emergency_restart(void)
 {
 	kmsg_dump(KMSG_DUMP_EMERG);
@@ -283,69 +317,39 @@ void emergency_restart(void)
 }
 EXPORT_SYMBOL_GPL(emergency_restart);
 
-#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
-void ps_hold_en_pull_low(void)
-{
-	int ret = -1;
-	int retry_num = 3;
-
-	for(; retry_num >0; retry_num--){
-		ret = cpld_gpio_write(CPLD_EXT_GPIO_PS_HOLD_EN, 0);
-		if(ret >= 0 )   break;
-	}
-	if(!retry_num)
-		printk(KERN_ERR "[SHUTDOWN] %s: fail to pull low PS_HOLD_EN.\n", __func__);
-}
-
-
-void set_ps_hold_en(void)
-{
-#if defined(CONFIG_MACH_DUMMY)
-	if(htc_get_board_revision() <= BOARD_CPEDUG_EVT_XC)
-		ps_hold_en_pull_low();
-#endif
-
-#if defined(CONFIG_MACH_DUMMY)
-	if(htc_get_board_revision() <= BOARD_CPEDTG_EVT_XB)
-		ps_hold_en_pull_low();
-#endif
-
-#if defined(CONFIG_MACH_DUMMY)
-	if(htc_get_board_revision() <= BOARD_CPEDCG_EVT_XB)
-		ps_hold_en_pull_low();
-#endif
-
-#if defined(CONFIG_MACH_DUMMY)
-	if(htc_get_board_revision() <= BOARD_CPEU_EVT_XA)
-		ps_hold_en_pull_low();
-#endif
-}
-
-#endif
-
-extern void msm_pm_indicate_restart(int restart);
-
 void kernel_restart_prepare(char *cmd)
 {
-	msm_pm_indicate_restart(1);
-
-
-#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
-	set_ps_hold_en();
-#endif
-
 	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
 	system_state = SYSTEM_RESTART;
 	usermodehelper_disable();
 	device_shutdown();
 }
 
+/**
+ *	register_reboot_notifier - Register function to be called at reboot time
+ *	@nb: Info about notifier function to be called
+ *
+ *	Registers a function with the list of functions
+ *	to be called at reboot time.
+ *
+ *	Currently always returns zero, as blocking_notifier_chain_register()
+ *	always returns zero.
+ */
 int register_reboot_notifier(struct notifier_block *nb)
 {
 	return blocking_notifier_chain_register(&reboot_notifier_list, nb);
 }
 EXPORT_SYMBOL(register_reboot_notifier);
 
+/**
+ *	unregister_reboot_notifier - Unregister previously registered reboot notifier
+ *	@nb: Hook to be unregistered
+ *
+ *	Unregisters a previously registered reboot
+ *	notifier function.
+ *
+ *	Returns zero on success, or %-ENOENT on failure.
+ */
 int unregister_reboot_notifier(struct notifier_block *nb)
 {
 	return blocking_notifier_chain_unregister(&reboot_notifier_list, nb);
@@ -399,18 +403,17 @@ EXPORT_SYMBOL_GPL(kernel_restart);
 
 static void kernel_shutdown_prepare(enum system_states state)
 {
-	msm_pm_indicate_restart(1);
-
-#if defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_DUMMY) || defined(CONFIG_MACH_Z4U)
-
-	set_ps_hold_en();
-#endif
 	blocking_notifier_call_chain(&reboot_notifier_list,
 		(state == SYSTEM_HALT)?SYS_HALT:SYS_POWER_OFF, NULL);
 	system_state = state;
 	usermodehelper_disable();
 	device_shutdown();
 }
+/**
+ *	kernel_halt - halt the system
+ *
+ *	Shutdown everything and perform a clean system halt.
+ */
 void kernel_halt(void)
 {
 	kernel_shutdown_prepare(SYSTEM_HALT);
@@ -423,6 +426,11 @@ void kernel_halt(void)
 
 EXPORT_SYMBOL_GPL(kernel_halt);
 
+/**
+ *	kernel_power_off - power_off the system
+ *
+ *	Shutdown everything and perform a clean system power_off.
+ */
 void kernel_power_off(void)
 {
 	kernel_shutdown_prepare(SYSTEM_POWER_OFF);
@@ -438,31 +446,25 @@ EXPORT_SYMBOL_GPL(kernel_power_off);
 
 static DEFINE_MUTEX(reboot_mutex);
 
+/*
+ * Reboot system call: for obvious reasons only root may call it,
+ * and even root needs to set up some magic numbers in the registers
+ * so that some mistake won't make this reboot the whole machine.
+ * You can also set the meaning of the ctrl-alt-del-key here.
+ *
+ * reboot doesn't sync: do that yourself before calling this.
+ */
 SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 		void __user *, arg)
 {
 	char buffer[256];
 	int ret = 0;
-	int res = 0;
-	unsigned int len;
-	char path[64];
-	struct task_struct *task = current;
-	struct mm_struct *mm = get_task_mm(task);
 
-	len = mm->arg_end - mm->arg_start;
-	if (len > PAGE_SIZE)
-		len = PAGE_SIZE;
+	/* We only trust the superuser with rebooting the system. */
+	if (!capable(CAP_SYS_BOOT))
+		return -EPERM;
 
-	res = access_process_vm(task, mm->arg_start, path, len, 0);
-	mmput(mm);
-
-	if (!(!strcmp("/system/bin/reboot", path) && cmd == LINUX_REBOOT_CMD_RESTART2)) {
-
-		if (!capable(CAP_SYS_BOOT))
-			return -EPERM;
-	}
-
-
+	/* For safety, we require "magic" arguments. */
 	if (magic1 != LINUX_REBOOT_MAGIC1 ||
 	    (magic2 != LINUX_REBOOT_MAGIC2 &&
 	                magic2 != LINUX_REBOOT_MAGIC2A &&
@@ -470,20 +472,25 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 	                magic2 != LINUX_REBOOT_MAGIC2C))
 		return -EINVAL;
 
+	/*
+	 * If pid namespaces are enabled and the current task is in a child
+	 * pid_namespace, the command is handled by reboot_pid_ns() which will
+	 * call do_exit().
+	 */
 	ret = reboot_pid_ns(task_active_pid_ns(current), cmd);
 	if (ret)
 		return ret;
 
+	/* Instead of trying to make the power_off code look like
+	 * halt when pm_power_off is not set do it the easy way.
+	 */
 	if ((cmd == LINUX_REBOOT_CMD_POWER_OFF) && !pm_power_off)
 		cmd = LINUX_REBOOT_CMD_HALT;
 
 	mutex_lock(&reboot_mutex);
 	switch (cmd) {
 	case LINUX_REBOOT_CMD_RESTART:
-		buffer[sizeof(buffer) - 1] = '\0';
-		printk(KERN_EMERG "emergency_remount (LINUX_REBOOT_CMD_RESTART).\n");
-		emergency_remount();
-		kernel_restart(buffer);
+		kernel_restart(NULL);
 		break;
 
 	case LINUX_REBOOT_CMD_CAD_ON:
@@ -495,15 +502,11 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 		break;
 
 	case LINUX_REBOOT_CMD_HALT:
-		printk(KERN_EMERG "emergency_remount (LINUX_REBOOT_CMD_HALT).\n");
-		emergency_remount();
 		kernel_halt();
 		do_exit(0);
 		panic("cannot halt");
 
 	case LINUX_REBOOT_CMD_POWER_OFF:
-		printk(KERN_EMERG "emergency_remount (LINUX_REBOOT_CMD_POWER_OFF).\n");
-		emergency_remount();
 		kernel_power_off();
 		do_exit(0);
 		break;
@@ -514,10 +517,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 			break;
 		}
 		buffer[sizeof(buffer) - 1] = '\0';
-		if (strlen(buffer) != 0 && strncmp(buffer, "oem-00", 6)) {
-			printk(KERN_EMERG "emergency_remount (LINUX_REBOOT_CMD_RESTART2).\n");
-			emergency_remount();
-		}
+
 		kernel_restart(buffer);
 		break;
 
@@ -1934,7 +1934,7 @@ static int prctl_set_vma_anon_name(unsigned long start, unsigned long end,
 			tmp = end;
 
 		/* Here vma->vm_start <= start < tmp <= (end|vma->vm_end). */
-		error = prctl_update_vma_anon_name(vma, &prev, start, end,
+		error = prctl_update_vma_anon_name(vma, &prev, start, tmp,
 				(const char __user *)arg);
 		if (error)
 			return error;
@@ -1993,6 +1993,7 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 		unsigned long, arg4, unsigned long, arg5)
 {
 	struct task_struct *me = current;
+	struct task_struct *tsk;
 	unsigned char comm[sizeof(me->comm)];
 	long error;
 
@@ -2152,6 +2153,36 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 		case PR_SET_VMA:
 			error = prctl_set_vma(arg2, arg3, arg4, arg5);
 			break;
+		case PR_SET_TIMERSLACK_PID:
+			if (task_pid_vnr(current) != (pid_t)arg3 &&
+					!capable(CAP_SYS_NICE))
+				return -EPERM;
+			rcu_read_lock();
+			tsk = find_task_by_vpid((pid_t)arg3);
+			if (tsk == NULL) {
+				rcu_read_unlock();
+				return -EINVAL;
+			}
+			get_task_struct(tsk);
+			rcu_read_unlock();
+			if (arg2 <= 0)
+				tsk->timer_slack_ns =
+					tsk->default_timer_slack_ns;
+			else
+				tsk->timer_slack_ns = arg2;
+			put_task_struct(tsk);
+			error = 0;
+			break;
+		case PR_SET_NO_NEW_PRIVS:
+			if (arg2 != 1 || arg3 || arg4 || arg5)
+				return -EINVAL;
+
+			task_set_no_new_privs(current);
+			break;
+		case PR_GET_NO_NEW_PRIVS:
+			if (arg2 || arg3 || arg4 || arg5)
+				return -EINVAL;
+			return task_no_new_privs(current) ? 1 : 0;
 		default:
 			error = -EINVAL;
 			break;
