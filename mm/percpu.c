@@ -969,7 +969,7 @@ bool is_kernel_percpu_address(unsigned long addr)
 
 		if ((void *)addr >= start && (void *)addr < start + static_size)
 			return true;
-	}
+        }
 #endif
 	/* on UP, can't distinguish from other static vars, always false */
 	return false;

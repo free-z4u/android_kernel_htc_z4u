@@ -1,6 +1,6 @@
 /*
  *   linux/mm/fremap.c
- *
+ * 
  * Explicit pagetable population and nonlinear (random) mappings support.
  *
  * started by Ingo Molnar, Copyright (C) 2002, 2003
@@ -95,7 +95,7 @@ static int populate_range(struct mm_struct *mm, struct vm_area_struct *vma,
 		pgoff++;
 	} while (size);
 
-	return 0;
+        return 0;
 
 }
 

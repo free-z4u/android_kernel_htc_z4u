@@ -1487,20 +1487,20 @@ void throttle_vm_writeout(gfp_t gfp_mask)
 	unsigned long background_thresh;
 	unsigned long dirty_thresh;
 
-	for ( ; ; ) {
+        for ( ; ; ) {
 		global_dirty_limits(&background_thresh, &dirty_thresh);
 		dirty_thresh = hard_dirty_limit(dirty_thresh);
 
-		/*
-		 * Boost the allowable dirty threshold a bit for page
-		 * allocators so they don't get DoS'ed by heavy writers
-		 */
-		dirty_thresh += dirty_thresh / 10;      /* wheeee... */
+                /*
+                 * Boost the allowable dirty threshold a bit for page
+                 * allocators so they don't get DoS'ed by heavy writers
+                 */
+                dirty_thresh += dirty_thresh / 10;      /* wheeee... */
 
-		if (global_page_state(NR_UNSTABLE_NFS) +
+                if (global_page_state(NR_UNSTABLE_NFS) +
 			global_page_state(NR_WRITEBACK) <= dirty_thresh)
-				break;
-		congestion_wait(BLK_RW_ASYNC, HZ/10);
+                        	break;
+                congestion_wait(BLK_RW_ASYNC, HZ/10);
 
 		/*
 		 * The caller might hold locks which can prevent IO completion
@@ -1509,7 +1509,7 @@ void throttle_vm_writeout(gfp_t gfp_mask)
 		 */
 		if ((gfp_mask & (__GFP_FS|__GFP_IO)) != (__GFP_FS|__GFP_IO))
 			break;
-	}
+        }
 }
 
 /*

@@ -18,7 +18,10 @@
 #include <linux/pagevec.h>
 #include <linux/pagemap.h>
 
-#include <trace/events/mmcio.h>
+/*
+ * Initialise a struct file's readahead state.  Assumes that the caller has
+ * memset *ra to zero.
+ */
 void
 file_ra_state_init(struct file_ra_state *ra, struct address_space *mapping)
 {
@@ -29,6 +32,13 @@ EXPORT_SYMBOL_GPL(file_ra_state_init);
 
 #define list_to_page(head) (list_entry((head)->prev, struct page, lru))
 
+/*
+ * see if a page needs releasing upon read_cache_pages() failure
+ * - the caller of read_cache_pages() may have set PG_private or PG_fscache
+ *   before calling, such as the NFS fs marking pages that are cached locally
+ *   on disk, thus we need to give the fs a chance to clean up in the event of
+ *   an error
+ */
 static void read_cache_pages_invalidate_page(struct address_space *mapping,
 					     struct page *page)
 {
@@ -43,6 +53,9 @@ static void read_cache_pages_invalidate_page(struct address_space *mapping,
 	page_cache_release(page);
 }
 
+/*
+ * release a list of pages, invalidating them first if need be
+ */
 static void read_cache_pages_invalidate_pages(struct address_space *mapping,
 					      struct list_head *pages)
 {
@@ -55,6 +68,16 @@ static void read_cache_pages_invalidate_pages(struct address_space *mapping,
 	}
 }
 
+/**
+ * read_cache_pages - populate an address space with some pages & start reads against them
+ * @mapping: the address_space
+ * @pages: The address of a list_head which contains the target pages.  These
+ *   pages have their ->index populated and are otherwise uninitialised.
+ * @filler: callback routine for filling a single page.
+ * @data: private data for the callback routine.
+ *
+ * Hides the details of the LRU cache etc from the filesystems.
+ */
 int read_cache_pages(struct address_space *mapping, struct list_head *pages,
 			int (*filler)(void *, struct page *), void *data)
 {
@@ -94,7 +117,7 @@ static int read_pages(struct address_space *mapping, struct file *filp,
 
 	if (mapping->a_ops->readpages) {
 		ret = mapping->a_ops->readpages(filp, mapping, pages, nr_pages);
-
+		/* Clean up the remaining pages */
 		put_pages_list(pages);
 		goto out;
 	}
@@ -116,6 +139,14 @@ out:
 	return ret;
 }
 
+/*
+ * __do_page_cache_readahead() actually reads a chunk of disk.  It allocates all
+ * the pages first, then submits them all for I/O. This avoids the very bad
+ * behaviour which would occur if page allocations are causing VM writeback.
+ * We really don't want to intermingle reads and writes like that.
+ *
+ * Returns the number of pages requested, or the maximum amount of I/O allowed.
+ */
 static int
 __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 			pgoff_t offset, unsigned long nr_to_read,
@@ -123,7 +154,7 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 {
 	struct inode *inode = mapping->host;
 	struct page *page;
-	unsigned long end_index;
+	unsigned long end_index;	/* The last page we want to read */
 	LIST_HEAD(page_pool);
 	int page_idx;
 	int ret = 0;
@@ -134,6 +165,9 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 
 	end_index = ((isize - 1) >> PAGE_CACHE_SHIFT);
 
+	/*
+	 * Preallocate as many pages as we will need.
+	 */
 	for (page_idx = 0; page_idx < nr_to_read; page_idx++) {
 		pgoff_t page_offset = offset + page_idx;
 
@@ -156,10 +190,13 @@ __do_page_cache_readahead(struct address_space *mapping, struct file *filp,
 		ret++;
 	}
 
-	if (ret) {
-		trace_readahead(filp, ret);
+	/*
+	 * Now start the IO.  We ignore I/O errors - if the page is not
+	 * uptodate then the caller will launch readpage again, and
+	 * will then handle the error.
+	 */
+	if (ret)
 		read_pages(mapping, filp, &page_pool, ret);
-	}
 	BUG_ON(!list_empty(&page_pool));
 out:
 	return ret;
