@@ -58,6 +58,7 @@
 #define	PCI_CFG_PIN		0x3d
 #define	PCI_CFG_MINGNT		0x3e
 #define	PCI_CFG_MAXLAT		0x3f
+#define	PCI_CFG_DEVCTRL		0xd8
 #define	PCI_BAR0_WIN		0x80	/* backplane addres space accessed by BAR0 */
 #define	PCI_BAR1_WIN		0x84	/* backplane addres space accessed by BAR1 */
 #define	PCI_SPROM_CONTROL	0x88	/* sprom property control */

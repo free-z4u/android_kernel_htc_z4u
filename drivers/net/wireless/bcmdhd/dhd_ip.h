@@ -1,7 +1,9 @@
 /*
- * 802.1Q VLAN protocol definitions
+ * Header file describing the common ip parser function.
  *
- * Copyright (C) 1999-2012, Broadcom Corporation
+ * Provides type definitions and function prototypes used to parse ip packet.
+ *
+ * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
@@ -21,49 +23,20 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: vlan.h 241182 2011-02-17 21:50:03Z $
+ * $Id$
  */
 
-#ifndef _vlan_h_
-#define _vlan_h_
+#ifndef _dhd_ip_h_
+#define _dhd_ip_h_
 
-#ifndef _TYPEDEFS_H_
-#include <typedefs.h>
-#endif
+typedef enum pkt_frag
+{
+	DHD_PKT_FRAG_NONE = 0,
+	DHD_PKT_FRAG_FIRST,
+	DHD_PKT_FRAG_CONT,
+	DHD_PKT_FRAG_LAST
+} pkt_frag_t;
 
+extern pkt_frag_t pkt_frag_info(osl_t *osh, void *p);
 
-#include <packed_section_start.h>
-
-#define VLAN_VID_MASK		0xfff
-#define	VLAN_CFI_SHIFT		12
-#define VLAN_PRI_SHIFT		13
-
-#define VLAN_PRI_MASK		7
-
-#define	VLAN_TAG_LEN		4
-#define	VLAN_TAG_OFFSET		(2 * ETHER_ADDR_LEN)
-
-#define VLAN_TPID		0x8100
-
-struct ethervlan_header {
-	uint8	ether_dhost[ETHER_ADDR_LEN];
-	uint8	ether_shost[ETHER_ADDR_LEN];
-	uint16	vlan_type;
-	uint16	vlan_tag;
-	uint16	ether_type;
-};
-
-#define	ETHERVLAN_HDR_LEN	(ETHER_HDR_LEN + VLAN_TAG_LEN)
-
-
-
-#include <packed_section_end.h>
-
-#define ETHERVLAN_MOVE_HDR(d, s) \
-do { \
-	struct ethervlan_header t; \
-	t = *(struct ethervlan_header *)(s); \
-	*(struct ethervlan_header *)(d) = t; \
-} while (0)
-
-#endif
+#endif /* _dhd_ip_h_ */

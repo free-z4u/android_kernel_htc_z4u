@@ -146,7 +146,12 @@
 #define SDPCM_GLOMDESC(p)	(((uint8 *)p)[1] & 0x80)
 
 /* For TEST_CHANNEL packets, define another 4-byte header */
-#define SDPCM_TEST_HDRLEN		4	/* Packet count filed legth */
+#define SDPCM_TEST_HDRLEN		4	/* Generally: Cmd(1), Ext(1), Len(2);
+						 * Semantics of Ext byte depend on command.
+						 * Len is current or requested frame length, not
+						 * including test header; sent little-endian.
+						 */
+#define SDPCM_TEST_PKT_CNT_FLD_LEN	4	/* Packet count filed legth */
 #define SDPCM_TEST_DISCARD		0x01	/* Receiver discards. Ext is a pattern id. */
 #define SDPCM_TEST_ECHOREQ		0x02	/* Echo request. Ext is a pattern id. */
 #define SDPCM_TEST_ECHORSP		0x03	/* Echo response. Ext is a pattern id. */

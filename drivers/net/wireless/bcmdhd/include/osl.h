@@ -71,19 +71,33 @@ typedef void  (*osl_wreg_fn_t)(void *ctx, volatile void *reg, unsigned int val, 
 #endif /* OSL_SYSUPTIME */
 
 #if !defined(PKTC)
-#define	PKTCCNT(skb)		(0)
-#define	PKTCLEN(skb)		(0)
+#define	PKTCGETATTR(s)		(0)
+#define	PKTCSETATTR(skb, f, p, b)
+#define	PKTCCLRATTR(skb)
+#define	PKTCCNT(skb)		(1)
+#define	PKTCLEN(skb)		PKTLEN(NULL, skb)
+#define	PKTCGETFLAGS(skb)	(0)
+#define	PKTCSETFLAGS(skb, f)
+#define	PKTCCLRFLAGS(skb)
 #define	PKTCFLAGS(skb)		(0)
 #define	PKTCSETCNT(skb, c)
+#define	PKTCINCRCNT(skb)
+#define	PKTCADDCNT(skb, c)
 #define	PKTCSETLEN(skb, l)
+#define	PKTCADDLEN(skb, l)
 #define	PKTCSETFLAG(skb, fb)
 #define	PKTCCLRFLAG(skb, fb)
-#define	PKTCLINK(skb)		PKTLINK(skb)
-#define	PKTSETCLINK(skb, x)	PKTSETLINK((skb), (x))
-#define	PKTISCHAINED(skb)	FALSE
+#define	PKTCLINK(skb)		NULL
+#define	PKTSETCLINK(skb, x)
 #define FOREACH_CHAINED_PKT(skb, nskb) \
 	for ((nskb) = NULL; (skb) != NULL; (skb) = (nskb))
 #define	PKTCFREE		PKTFREE
+#endif /* !linux || !PKTC */
+
+#ifndef HNDCTF
+#define PKTSETCHAINED(osh, skb)
+#define PKTCLRCHAINED(osh, skb)
+#define PKTISCHAINED(skb)	(FALSE)
 #endif
 
 #endif	/* _osl_h_ */

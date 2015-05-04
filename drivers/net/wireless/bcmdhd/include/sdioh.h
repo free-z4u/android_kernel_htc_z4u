@@ -90,6 +90,11 @@
 #define SD3_PresetVal_SDR104	0x06c
 #define SD3_PresetVal_DDR50		0x06e
 /* SDIO3.0 Revx specific Registers */
+#define SD3_Tuning_Info_Register 0x0EC
+#define SD3_WL_BT_reset_register 0x0F0
+
+
+/* preset value indices */
 #define SD3_PRESETVAL_INITIAL_IX	0
 #define SD3_PRESETVAL_DESPEED_IX	1
 #define SD3_PRESETVAL_HISPEED_IX	2

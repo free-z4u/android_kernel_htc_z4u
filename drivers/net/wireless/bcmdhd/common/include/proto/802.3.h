@@ -1,6 +1,4 @@
 /*
- * Linux cfg80211 driver - Dongle Host Driver (DHD) related
- *
  * Copyright (C) 1999-2013, Broadcom Corporation
  *
  *      Unless you and Broadcom execute a separate written software license
@@ -21,33 +19,34 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: wl_cfg80211.c,v 1.1.4.1.2.14 2011/02/09 01:40:07 Exp $
+ * Fundamental constants relating to 802.3
+ *
+ * $Id: 802.3.h 417942 2013-08-13 07:53:57Z $
  */
 
+#ifndef _802_3_h_
+#define _802_3_h_
 
-#ifndef __DHD_CFG80211__
-#define __DHD_CFG80211__
+/* This marks the start of a packed structure section. */
+#include <packed_section_start.h>
 
-#include <wl_cfg80211.h>
-#include <wl_cfgp2p.h>
+#define SNAP_HDR_LEN	6	/* 802.3 SNAP header length */
+#define DOT3_OUI_LEN	3	/* 802.3 oui length */
 
-s32 dhd_cfg80211_init(struct wl_priv *wl);
-s32 dhd_cfg80211_deinit(struct wl_priv *wl);
-s32 dhd_cfg80211_down(struct wl_priv *wl);
-s32 dhd_cfg80211_set_p2p_info(struct wl_priv *wl, int val);
-s32 dhd_cfg80211_clean_p2p_info(struct wl_priv *wl);
-s32 dhd_config_dongle(struct wl_priv *wl, bool need_lock);
+BWL_PRE_PACKED_STRUCT struct dot3_mac_llc_snap_header {
+	uint8	ether_dhost[ETHER_ADDR_LEN];	/* dest mac */
+	uint8	ether_shost[ETHER_ADDR_LEN];	/* src mac */
+	uint16	length;				/* frame length incl header */
+	uint8	dsap;				/* always 0xAA */
+	uint8	ssap;				/* always 0xAA */
+	uint8	ctl;				/* always 0x03 */
+	uint8	oui[DOT3_OUI_LEN];		/* RFC1042: 0x00 0x00 0x00
+						 * Bridge-Tunnel: 0x00 0x00 0xF8
+						 */
+	uint16	type;				/* ethertype */
+} BWL_POST_PACKED_STRUCT;
 
-#ifdef CONFIG_NL80211_TESTMODE
-int dhd_cfg80211_testmode_cmd(struct wiphy *wiphy, void *data, int len);
-#else
-static inline int dhd_cfg80211_testmode_cmd(struct wiphy *wiphy, void *data, int len)
-{
-	return 0;
-}
-#endif
+/* This marks the end of a packed structure section. */
+#include <packed_section_end.h>
 
-int wl_cfg80211_btcoex_init(struct wl_priv *wl);
-void wl_cfg80211_btcoex_deinit(struct wl_priv *wl);
-
-#endif /* __DHD_CFG80211__ */
+#endif	/* #ifndef _802_3_h_ */

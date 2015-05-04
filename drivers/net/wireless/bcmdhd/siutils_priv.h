@@ -204,6 +204,7 @@ extern si_t *ai_kattach(osl_t *osh);
 extern void ai_scan(si_t *sih, void *regs, uint devid);
 
 extern uint ai_flag(si_t *sih);
+extern uint ai_flag_alt(si_t *sih);
 extern void ai_setint(si_t *sih, int siflag);
 extern uint ai_coreidx(si_t *sih);
 extern uint ai_corevendor(si_t *sih);
