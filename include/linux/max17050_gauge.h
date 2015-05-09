@@ -1,5 +1,6 @@
 #ifndef __MAX17050_GAUGE_H__
 #define __MAX17050_GAUGE_H__
+#include <linux/wakelock.h>
 
 #define MAX17050_I2C_BUS_ID   	1
 #define MAX17050_I2C_SLAVE_ADDR 0x36

@@ -838,7 +838,7 @@ dhd_pno_enable(dhd_pub_t *dhd, int enable)
 }
 
 static wlc_ssid_ext_t * dhd_pno_get_legacy_pno_ssid(dhd_pub_t *dhd,
-	    dhd_pno_status_info_t *pno_state)
+            dhd_pno_status_info_t *pno_state)
 {
 	int err = BCME_OK;
 	int i;

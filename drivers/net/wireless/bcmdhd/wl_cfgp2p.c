@@ -2,13 +2,13 @@
  * Linux cfgp2p driver
  *
  * Copyright (C) 1999-2013, Broadcom Corporation
- *
+ * 
  *      Unless you and Broadcom execute a separate written software license
  * agreement governing use of this software, this software is licensed to you
  * under the terms of the GNU General Public License version 2 (the "GPL"),
  * available at http://www.broadcom.com/licenses/GPLv2.php, with the
  * following added to such license:
- *
+ * 
  *      As a special exception, the copyright holders of this software give you
  * permission to link this software with independent modules, and to copy and
  * distribute the resulting executable under terms of your choice, provided that
@@ -16,7 +16,7 @@
  * the license of that module.  An independent module is a module which is not
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
- *
+ * 
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
@@ -54,7 +54,7 @@ wl_cfgp2p_has_ie(u8 *ie, u8 **tlvs, u32 *tlvs_len, const u8 *oui, u32 oui_len, u
 
 static u32
 wl_cfgp2p_vndr_ie(struct wl_priv *wl, u8 *iebuf, s32 pktflag,
-	    s8 *oui, s32 ie_id, s8 *data, s32 datalen, const s8* add_del_cmd);
+            s8 *oui, s32 ie_id, s8 *data, s32 datalen, const s8* add_del_cmd);
 static s32 wl_cfgp2p_cancel_listen(struct wl_priv *wl, struct net_device *ndev,
 	struct wireless_dev *wdev, bool notify);
 
@@ -400,7 +400,7 @@ wl_cfgp2p_set_firm_p2p(struct wl_priv *wl)
  */
 s32
 wl_cfgp2p_ifadd(struct wl_priv *wl, struct ether_addr *mac, u8 if_type,
-	    chanspec_t chspec)
+            chanspec_t chspec)
 {
 	wl_p2p_if_t ifreq;
 	s32 err;
@@ -478,7 +478,7 @@ wl_cfgp2p_ifdel(struct wl_priv *wl, struct ether_addr *mac)
  */
 s32
 wl_cfgp2p_ifchange(struct wl_priv *wl, struct ether_addr *mac, u8 if_type,
-	    chanspec_t chspec)
+            chanspec_t chspec)
 {
 	wl_p2p_if_t ifreq;
 	s32 err;
@@ -1396,7 +1396,7 @@ wl_cfgp2p_find_wfdie(u8 *parse, u32 len)
 }
 static u32
 wl_cfgp2p_vndr_ie(struct wl_priv *wl, u8 *iebuf, s32 pktflag,
-	    s8 *oui, s32 ie_id, s8 *data, s32 datalen, const s8* add_del_cmd)
+            s8 *oui, s32 ie_id, s8 *data, s32 datalen, const s8* add_del_cmd)
 {
 	vndr_ie_setbuf_t hdr;	/* aligned temporary vndr_ie buffer header */
 	s32 iecount;
@@ -1626,7 +1626,7 @@ wl_cfgp2p_listen_expired(unsigned long data)
  */
 static s32
 wl_cfgp2p_cancel_listen(struct wl_priv *wl, struct net_device *ndev,
-			 struct wireless_dev *wdev, bool notify)
+                         struct wireless_dev *wdev, bool notify)
 {
 	WL_DBG(("Enter \n"));
 	/* Irrespective of whether timer is running or not, reset
@@ -1747,7 +1747,7 @@ wl_cfgp2p_discover_enable_search(struct wl_priv *wl, u8 enable)
  */
 s32
 wl_cfgp2p_action_tx_complete(struct wl_priv *wl, bcm_struct_cfgdev *cfgdev,
-	    const wl_event_msg_t *e, void *data)
+            const wl_event_msg_t *e, void *data)
 {
 	s32 ret = BCME_OK;
 	u32 event_type = ntoh32(e->event_type);
@@ -1858,7 +1858,7 @@ exit:
  */
 void
 wl_cfgp2p_generate_bss_mac(struct ether_addr *primary_addr,
-	    struct ether_addr *out_dev_addr, struct ether_addr *out_int_addr)
+            struct ether_addr *out_dev_addr, struct ether_addr *out_int_addr)
 {
 	memset(out_dev_addr, 0, sizeof(*out_dev_addr));
 	memset(out_int_addr, 0, sizeof(*out_int_addr));

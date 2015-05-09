@@ -198,6 +198,8 @@ struct input_keymap_entry {
 #define SYN_CONFIG		1
 #define SYN_MT_REPORT		2
 #define SYN_DROPPED		3
+#define SYN_TIME_SEC		4
+#define SYN_TIME_NSEC		5
 
 /*
  * Keys and buttons
@@ -462,10 +464,14 @@ struct input_keymap_entry {
 #define KEY_VIDEO_NEXT		241	/* drive next video source */
 #define KEY_VIDEO_PREV		242	/* drive previous video source */
 #define KEY_BRIGHTNESS_CYCLE	243	/* brightness up, after max is min */
-#define KEY_BRIGHTNESS_ZERO	244	/* brightness off, use ambient */
+#define KEY_BRIGHTNESS_AUTO	244	/* Set Auto Brightness: manual
+					  brightness control is off,
+					  rely on ambient */
+#define KEY_BRIGHTNESS_ZERO	KEY_BRIGHTNESS_AUTO
 #define KEY_DISPLAY_OFF		245	/* display device to off state */
 
-#define KEY_WIMAX		246
+#define KEY_WWAN		246	/* Wireless WAN (LTE, UMTS, GSM, etc.) */
+#define KEY_WIMAX		KEY_WWAN
 #define KEY_RFKILL		247	/* Key that controls all radios */
 
 #define KEY_CAMCORDER		248
@@ -510,11 +516,15 @@ struct input_keymap_entry {
 #define BTN_DEAD		0x12f
 
 #define BTN_GAMEPAD		0x130
-#define BTN_A			0x130
-#define BTN_B			0x131
+#define BTN_SOUTH		0x130
+#define BTN_A			BTN_SOUTH
+#define BTN_EAST		0x131
+#define BTN_B			BTN_EAST
 #define BTN_C			0x132
-#define BTN_X			0x133
-#define BTN_Y			0x134
+#define BTN_NORTH		0x133
+#define BTN_X			BTN_NORTH
+#define BTN_WEST		0x134
+#define BTN_Y			BTN_WEST
 #define BTN_Z			0x135
 #define BTN_TL			0x136
 #define BTN_TR			0x137
@@ -611,24 +621,25 @@ struct input_keymap_entry {
 #define KEY_DIGITS		0x19d
 #define KEY_TEEN		0x19e
 #define KEY_TWEN		0x19f
-#define KEY_VIDEOPHONE		0x1a0
-#define KEY_GAMES		0x1a1
-#define KEY_ZOOMIN		0x1a2
-#define KEY_ZOOMOUT		0x1a3
-#define KEY_ZOOMRESET		0x1a4
-#define KEY_WORDPROCESSOR	0x1a5
-#define KEY_EDITOR		0x1a6
-#define KEY_SPREADSHEET		0x1a7
-#define KEY_GRAPHICSEDITOR	0x1a8
-#define KEY_PRESENTATION	0x1a9
-#define KEY_DATABASE		0x1aa
-#define KEY_NEWS		0x1ab
-#define KEY_VOICEMAIL		0x1ac
-#define KEY_ADDRESSBOOK		0x1ad
-#define KEY_MESSENGER		0x1ae
-#define KEY_DISPLAYTOGGLE	0x1af
-#define KEY_SPELLCHECK		0x1b0
-#define KEY_LOGOFF		0x1b1
+#define KEY_VIDEOPHONE		0x1a0	/* Media Select Video Phone */
+#define KEY_GAMES		0x1a1	/* Media Select Games */
+#define KEY_ZOOMIN		0x1a2	/* AC Zoom In */
+#define KEY_ZOOMOUT		0x1a3	/* AC Zoom Out */
+#define KEY_ZOOMRESET		0x1a4	/* AC Zoom */
+#define KEY_WORDPROCESSOR	0x1a5	/* AL Word Processor */
+#define KEY_EDITOR		0x1a6	/* AL Text Editor */
+#define KEY_SPREADSHEET		0x1a7	/* AL Spreadsheet */
+#define KEY_GRAPHICSEDITOR	0x1a8	/* AL Graphics Editor */
+#define KEY_PRESENTATION	0x1a9	/* AL Presentation App */
+#define KEY_DATABASE		0x1aa	/* AL Database App */
+#define KEY_NEWS		0x1ab	/* AL Newsreader */
+#define KEY_VOICEMAIL		0x1ac	/* AL Voicemail */
+#define KEY_ADDRESSBOOK		0x1ad	/* AL Contacts/Address Book */
+#define KEY_MESSENGER		0x1ae	/* AL Instant Messaging */
+#define KEY_DISPLAYTOGGLE	0x1af	/* Turn display (LCD) on and off */
+#define KEY_BRIGHTNESS_TOGGLE	KEY_DISPLAYTOGGLE
+#define KEY_SPELLCHECK		0x1b0   /* AL Spell Check */
+#define KEY_LOGOFF		0x1b1   /* AL Logoff */
 
 #define KEY_DOLLAR		0x1b2
 #define KEY_EURO		0x1b3
@@ -705,6 +716,24 @@ struct input_keymap_entry {
 #define KEY_CAMERA_DOWN		0x218
 #define KEY_CAMERA_LEFT		0x219
 #define KEY_CAMERA_RIGHT	0x21a
+
+#define BTN_DPAD_UP		0x220
+#define BTN_DPAD_DOWN		0x221
+#define BTN_DPAD_LEFT		0x222
+#define BTN_DPAD_RIGHT		0x223
+
+#define KEY_ALS_TOGGLE		0x230	/* Ambient light sensor */
+
+#define KEY_BUTTONCONFIG		0x240	/* AL Button Configuration */
+#define KEY_TASKMANAGER		0x241	/* AL Task/Project Manager */
+#define KEY_JOURNAL		0x242	/* AL Log/Journal/Timecard */
+#define KEY_CONTROLPANEL		0x243	/* AL Control Panel */
+#define KEY_APPSELECT		0x244	/* AL Select Task/Application */
+#define KEY_SCREENSAVER		0x245	/* AL Screen Saver */
+#define KEY_VOICECOMMAND		0x246	/* Listening Voice Command */
+
+#define KEY_BRIGHTNESS_MIN		0x250	/* Set Brightness to Minimum */
+#define KEY_BRIGHTNESS_MAX		0x251	/* Set Brightness to Maximum */
 
 #define BTN_TRIGGER_HAPPY		0x2c0
 #define BTN_TRIGGER_HAPPY1		0x2c0
