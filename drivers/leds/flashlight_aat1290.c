@@ -300,6 +300,7 @@ static void fl_lcdev_brightness_set(struct led_classdev *led_cdev,
 	return;
 }
 
+#ifdef CONFIG_HAS_EARLYSUSPEND
 static void flashlight_early_suspend(struct early_suspend *handler)
 {
 	struct flashlight_struct *fl_str = container_of(handler,
@@ -321,6 +322,7 @@ static void flashlight_late_resume(struct early_suspend *handler)
 			struct flashlight_struct, early_suspend_flashlight);
 	*/
 }
+#endif
 
 static int flashlight_setup_gpio(struct flashlight_platform_data *flashlight,
 					struct flashlight_struct *fl_str)
