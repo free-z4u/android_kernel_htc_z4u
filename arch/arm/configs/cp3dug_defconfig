@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 3.4.67 Kernel Configuration
+# Linux/arm 3.4.68 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_ARM_HAS_SG_CHAIN=y
@@ -1368,8 +1368,6 @@ CONFIG_LIBRA_SDIOIF=m
 # CONFIG_IWM is not set
 # CONFIG_LIBERTAS is not set
 # CONFIG_MWIFIEX is not set
-# CONFIG_BCMDHD_4330 is not set
-# CONFIG_HTC_IGNORE_SKB_ALIGNMENT is not set
 
 #
 # Enable WiMAX (Networking options) to see the WiMAX drivers
