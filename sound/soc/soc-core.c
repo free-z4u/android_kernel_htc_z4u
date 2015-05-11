@@ -2934,6 +2934,7 @@ int snd_soc_put_volsw_2r_sx(struct snd_kcontrol *kcontrol,
 }
 EXPORT_SYMBOL_GPL(snd_soc_put_volsw_2r_sx);
 
+#if 0
 int snd_soc_bytes_info(struct snd_kcontrol *kcontrol,
 		       struct snd_ctl_elem_info *uinfo)
 {
@@ -3042,6 +3043,7 @@ int snd_soc_bytes_put(struct snd_kcontrol *kcontrol,
 	return ret;
 }
 EXPORT_SYMBOL_GPL(snd_soc_bytes_put);
+#endif
 
 /**
  * snd_soc_dai_set_sysclk - configure DAI system or master clock.

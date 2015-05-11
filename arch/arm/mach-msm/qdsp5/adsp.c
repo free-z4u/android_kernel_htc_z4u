@@ -947,18 +947,18 @@ static int adsp_rtos_read_ctrl_word_cmd_tast_to_h_v(
 	}
 #endif /* CONFIG_DEBUG_FS */
 
-	
+
 	module_irq_cnt[0]++;
-	if (!strncmp(module->name, "QCAMTASK", sizeof(module->name)))
+	if (!strcmp(module->name, "QCAMTASK"))
 		module_irq_cnt[1]++;
-	else if(!strncmp(module->name, "VFETASK", sizeof(module->name)))
+	else if(!strcmp(module->name, "VFETASK"))
 		module_irq_cnt[2]++;
-	else if(!strncmp(module->name, "VIDEOENCTASK", sizeof(module->name)))
+	else if(!strcmp(module->name, "VIDEOENCTASK"))
 		module_irq_cnt[3]++;
 
 	if((module_irq_cnt[0]%200) == 0)
 		pr_info("adsp: module_irq_cnt %d,%d,%d,%d", module_irq_cnt[0], module_irq_cnt[1], module_irq_cnt[2], module_irq_cnt[3]);
-	
+
 
 	module->ops->event(module->driver_data, msg_id, msg_length, func);
 
@@ -1141,19 +1141,19 @@ int msm_adsp_enable(struct msm_adsp_module *module)
 	MM_INFO("enable '%s'state[%d] id[%d]\n",
 				module->name, module->state, module->id);
 
-	
-	if (!strncmp(module->name, "QCAMTASK", sizeof(module->name)))
-		module_irq_cnt[1] = 0;
-	else if(!strncmp(module->name, "VFETASK", sizeof(module->name)))
-		module_irq_cnt[2] = 0;
-	else if(!strncmp(module->name, "VIDEOENCTASK", sizeof(module->name)))
-		module_irq_cnt[3] = 0;
-	
 
-	if (!strncmp(module->name, "JPEGTASK", sizeof(module->name))) {
+	if (!strcmp(module->name, "QCAMTASK"))
+		module_irq_cnt[1] = 0;
+	else if(!strcmp(module->name, "VFETASK"))
+		module_irq_cnt[2] = 0;
+	else if(!strcmp(module->name, "VIDEOENCTASK"))
+		module_irq_cnt[3] = 0;
+
+
+	if (!strcmp(module->name, "JPEGTASK")) {
 		module_en = find_adsp_module_by_name(&adsp_info, "VIDEOTASK");
 		module_en_2 = find_adsp_module_by_name(&adsp_info, "VIDEOENCTASK");
-	} else if (!strncmp(module->name, "VIDEOTASK", sizeof(module->name)))
+	} else if (!strcmp(module->name, "VIDEOTASK"))
 		module_en = find_adsp_module_by_name(&adsp_info, "JPEGTASK");
 	if (module_en) {
 		mutex_lock(&module_en->lock);
