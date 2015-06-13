@@ -3,8 +3,8 @@
  *
  * Allocation pools for DMAable (coherent) memory.
  *
- * This file is licensed under  the terms of the GNU General Public 
- * License version 2. This program is licensed "as is" without any 
+ * This file is licensed under  the terms of the GNU General Public
+ * License version 2. This program is licensed "as is" without any
  * warranty of any kind, whether express or implied.
  */
 
@@ -14,7 +14,7 @@
 #include <asm/io.h>
 #include <asm/scatterlist.h>
 
-struct dma_pool *dma_pool_create(const char *name, struct device *dev, 
+struct dma_pool *dma_pool_create(const char *name, struct device *dev,
 			size_t size, size_t align, size_t allocation);
 
 void dma_pool_destroy(struct dma_pool *pool);
@@ -24,6 +24,9 @@ void *dma_pool_alloc(struct dma_pool *pool, gfp_t mem_flags,
 
 void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t addr);
 
+/*
+ * Managed DMA pool
+ */
 struct dma_pool *dmam_pool_create(const char *name, struct device *dev,
 				  size_t size, size_t align, size_t allocation);
 void dmam_pool_destroy(struct dma_pool *pool);

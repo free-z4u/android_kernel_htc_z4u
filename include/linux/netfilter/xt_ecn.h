@@ -3,7 +3,7 @@
  * (C) 2002 Harald Welte <laforge@gnumonks.org>
  *
  * This software is distributed under GNU GPL v2, 1991
- * 
+ *
  * ipt_ecn.h,v 1.4 2002/08/05 19:39:00 laforge Exp
 */
 #ifndef _XT_ECN_H
@@ -20,6 +20,7 @@
 
 #define XT_ECN_OP_MATCH_MASK	0xce
 
+/* match info */
 struct xt_ecn_info {
 	__u8 operation;
 	__u8 invert;
@@ -31,4 +32,4 @@ struct xt_ecn_info {
 	} proto;
 };
 
-#endif 
+#endif /* _XT_ECN_H */

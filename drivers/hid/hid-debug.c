@@ -1,3 +1,10 @@
+/*
+ *  (c) 1999 Andreas Gal		<gal@cs.uni-magdeburg.de>
+ *  (c) 2000-2001 Vojtech Pavlik	<vojtech@ucw.cz>
+ *  (c) 2007-2009 Jiri Kosina
+ *
+ *  HID debugging support
+ */
 
 /*
  * This program is free software; you can redistribute it and/or modify
@@ -167,65 +174,65 @@ static const struct hid_usage_entry hid_usage_table[] = {
       {0, 0x23, "Parameter_Block_Offset"},
       {0, 0x24, "ROM_Flag"},
       {0, 0x25, "Effect_Type"},
-        {0, 0x26, "ET_Constant_Force"},
-        {0, 0x27, "ET_Ramp"},
-        {0, 0x28, "ET_Custom_Force_Data"},
-        {0, 0x30, "ET_Square"},
-        {0, 0x31, "ET_Sine"},
-        {0, 0x32, "ET_Triangle"},
-        {0, 0x33, "ET_Sawtooth_Up"},
-        {0, 0x34, "ET_Sawtooth_Down"},
-        {0, 0x40, "ET_Spring"},
-        {0, 0x41, "ET_Damper"},
-        {0, 0x42, "ET_Inertia"},
-        {0, 0x43, "ET_Friction"},
+	{0, 0x26, "ET_Constant_Force"},
+	{0, 0x27, "ET_Ramp"},
+	{0, 0x28, "ET_Custom_Force_Data"},
+	{0, 0x30, "ET_Square"},
+	{0, 0x31, "ET_Sine"},
+	{0, 0x32, "ET_Triangle"},
+	{0, 0x33, "ET_Sawtooth_Up"},
+	{0, 0x34, "ET_Sawtooth_Down"},
+	{0, 0x40, "ET_Spring"},
+	{0, 0x41, "ET_Damper"},
+	{0, 0x42, "ET_Inertia"},
+	{0, 0x43, "ET_Friction"},
       {0, 0x50, "Duration"},
       {0, 0x51, "Sample_Period"},
       {0, 0x52, "Gain"},
       {0, 0x53, "Trigger_Button"},
       {0, 0x54, "Trigger_Repeat_Interval"},
       {0, 0x55, "Axes_Enable"},
-        {0, 0x56, "Direction_Enable"},
+	{0, 0x56, "Direction_Enable"},
       {0, 0x57, "Direction"},
       {0, 0x58, "Type_Specific_Block_Offset"},
-        {0, 0x59, "Block_Type"},
-        {0, 0x5A, "Set_Envelope_Report"},
-          {0, 0x5B, "Attack_Level"},
-          {0, 0x5C, "Attack_Time"},
-          {0, 0x5D, "Fade_Level"},
-          {0, 0x5E, "Fade_Time"},
-        {0, 0x5F, "Set_Condition_Report"},
-        {0, 0x60, "CP_Offset"},
-        {0, 0x61, "Positive_Coefficient"},
-        {0, 0x62, "Negative_Coefficient"},
-        {0, 0x63, "Positive_Saturation"},
-        {0, 0x64, "Negative_Saturation"},
-        {0, 0x65, "Dead_Band"},
+	{0, 0x59, "Block_Type"},
+	{0, 0x5A, "Set_Envelope_Report"},
+	  {0, 0x5B, "Attack_Level"},
+	  {0, 0x5C, "Attack_Time"},
+	  {0, 0x5D, "Fade_Level"},
+	  {0, 0x5E, "Fade_Time"},
+	{0, 0x5F, "Set_Condition_Report"},
+	{0, 0x60, "CP_Offset"},
+	{0, 0x61, "Positive_Coefficient"},
+	{0, 0x62, "Negative_Coefficient"},
+	{0, 0x63, "Positive_Saturation"},
+	{0, 0x64, "Negative_Saturation"},
+	{0, 0x65, "Dead_Band"},
       {0, 0x66, "Download_Force_Sample"},
       {0, 0x67, "Isoch_Custom_Force_Enable"},
       {0, 0x68, "Custom_Force_Data_Report"},
-        {0, 0x69, "Custom_Force_Data"},
-        {0, 0x6A, "Custom_Force_Vendor_Defined_Data"},
+	{0, 0x69, "Custom_Force_Data"},
+	{0, 0x6A, "Custom_Force_Vendor_Defined_Data"},
       {0, 0x6B, "Set_Custom_Force_Report"},
-        {0, 0x6C, "Custom_Force_Data_Offset"},
-        {0, 0x6D, "Sample_Count"},
+	{0, 0x6C, "Custom_Force_Data_Offset"},
+	{0, 0x6D, "Sample_Count"},
       {0, 0x6E, "Set_Periodic_Report"},
-        {0, 0x6F, "Offset"},
-        {0, 0x70, "Magnitude"},
-        {0, 0x71, "Phase"},
-        {0, 0x72, "Period"},
+	{0, 0x6F, "Offset"},
+	{0, 0x70, "Magnitude"},
+	{0, 0x71, "Phase"},
+	{0, 0x72, "Period"},
       {0, 0x73, "Set_Constant_Force_Report"},
-        {0, 0x74, "Set_Ramp_Force_Report"},
-        {0, 0x75, "Ramp_Start"},
-        {0, 0x76, "Ramp_End"},
+	{0, 0x74, "Set_Ramp_Force_Report"},
+	{0, 0x75, "Ramp_Start"},
+	{0, 0x76, "Ramp_End"},
       {0, 0x77, "Effect_Operation_Report"},
-        {0, 0x78, "Effect_Operation"},
-          {0, 0x79, "Op_Effect_Start"},
-          {0, 0x7A, "Op_Effect_Start_Solo"},
-          {0, 0x7B, "Op_Effect_Stop"},
-          {0, 0x7C, "Loop_Count"},
+	{0, 0x78, "Effect_Operation"},
+	  {0, 0x79, "Op_Effect_Start"},
+	  {0, 0x7A, "Op_Effect_Start_Solo"},
+	  {0, 0x7B, "Op_Effect_Stop"},
+	  {0, 0x7C, "Loop_Count"},
       {0, 0x7D, "Device_Gain_Report"},
-        {0, 0x7E, "Device_Gain"},
+	{0, 0x7E, "Device_Gain"},
     {0, 0x7F, "PID_Pool_Report"},
       {0, 0x80, "RAM_Pool_Size"},
       {0, 0x81, "ROM_Pool_Size"},
@@ -247,13 +254,13 @@ static const struct hid_usage_entry hid_usage_table[] = {
     {0, 0x92, "PID_State_Report"},
       {0, 0x94, "Effect_Playing"},
       {0, 0x95, "PID_Device_Control_Report"},
-        {0, 0x96, "PID_Device_Control"},
-        {0, 0x97, "DC_Enable_Actuators"},
-        {0, 0x98, "DC_Disable_Actuators"},
-        {0, 0x99, "DC_Stop_All_Effects"},
-        {0, 0x9A, "DC_Device_Reset"},
-        {0, 0x9B, "DC_Device_Pause"},
-        {0, 0x9C, "DC_Device_Continue"},
+	{0, 0x96, "PID_Device_Control"},
+	{0, 0x97, "DC_Enable_Actuators"},
+	{0, 0x98, "DC_Disable_Actuators"},
+	{0, 0x99, "DC_Stop_All_Effects"},
+	{0, 0x9A, "DC_Device_Reset"},
+	{0, 0x9B, "DC_Device_Pause"},
+	{0, 0x9C, "DC_Device_Continue"},
       {0, 0x9F, "Device_Paused"},
       {0, 0xA0, "Actuators_Enabled"},
       {0, 0xA4, "Safety_Switch"},
@@ -347,11 +354,20 @@ static const struct hid_usage_entry hid_usage_table[] = {
     { 0x85, 0x8f, "iOEMInformation" },
     { 0x85, 0x8d, "CapacityGranularity1" },
     { 0x85, 0xd0, "ACPresent" },
-  
+  /* pages 0xff00 to 0xffff are vendor-specific */
   { 0xffff, 0, "Vendor-specific-FF" },
   { 0, 0, NULL }
 };
 
+/* Either output directly into simple seq_file, or (if f == NULL)
+ * allocate a separate buffer that will then be passed to the 'events'
+ * ringbuffer.
+ *
+ * This is because these functions can be called both for "one-shot"
+ * "rdesc" while resolving, or for blocking "events".
+ *
+ * This holds both for resolv_usage_page() and hid_resolv_usage().
+ */
 static char *resolv_usage_page(unsigned page, struct seq_file *f) {
 	const struct hid_usage_entry *p;
 	char *buf = NULL;
@@ -475,9 +491,9 @@ void hid_dump_field(struct hid_field *field, int n, struct seq_file *f) {
 
 		int i;
 		int sys;
-                __u32 data = field->unit;
+		__u32 data = field->unit;
 
-		
+		/* First nibble tells us which system we're in. */
 		sys = data & 0xf;
 		data >>= 4;
 
@@ -497,7 +513,7 @@ void hid_dump_field(struct hid_field *field, int n, struct seq_file *f) {
 						seq_printf(f, "*");
 					seq_printf(f, "%s", units[sys][i]);
 					if(nibble != 1) {
-						
+						/* This is a _signed_ nibble(!) */
 
 						int val = nibble & 0x7;
 						if(nibble & 0x08)
@@ -558,6 +574,7 @@ void hid_dump_device(struct hid_device *device, struct seq_file *f)
 }
 EXPORT_SYMBOL_GPL(hid_dump_device);
 
+/* enqueue string to 'events' ring buffer */
 void hid_debug_event(struct hid_device *hdev, char *buf)
 {
 	int i;
@@ -568,7 +585,7 @@ void hid_debug_event(struct hid_device *hdev, char *buf)
 			list->hid_debug_buf[(list->tail + i) % HID_DEBUG_BUFSIZE] =
 				buf[i];
 		list->tail = (list->tail + i) % HID_DEBUG_BUFSIZE;
-        }
+	}
 
 	wake_up_interruptible(&hdev->debug_wait);
 }
@@ -588,7 +605,7 @@ void hid_dump_input(struct hid_device *hdev, struct hid_usage *usage, __s32 valu
 	hid_debug_event(hdev, buf);
 
 	kfree(buf);
-        wake_up_interruptible(&hdev->debug_wait);
+	wake_up_interruptible(&hdev->debug_wait);
 
 }
 EXPORT_SYMBOL_GPL(hid_dump_input);
@@ -900,12 +917,12 @@ static int hid_debug_rdesc_show(struct seq_file *f, void *p)
 	struct hid_device *hdev = f->private;
 	int i;
 
-	
+	/* dump HID report descriptor */
 	for (i = 0; i < hdev->rsize; i++)
 		seq_printf(f, "%02x ", hdev->rdesc[i]);
 	seq_printf(f, "\n\n");
 
-	
+	/* dump parsed data and input mappings */
 	hid_dump_device(hdev, f);
 	seq_printf(f, "\n");
 	hid_dump_input_mapping(hdev, f);
@@ -971,7 +988,7 @@ static ssize_t hid_debug_events_read(struct file *file, char __user *buffer,
 					break;
 				}
 
-				
+				/* allow O_NONBLOCK from other threads */
 				mutex_unlock(&list->read_mutex);
 				schedule();
 				mutex_lock(&list->read_mutex);
@@ -985,7 +1002,7 @@ static ssize_t hid_debug_events_read(struct file *file, char __user *buffer,
 		if (ret)
 			goto out;
 
-		
+		/* pass the ringbuffer contents to userspace */
 copy_rest:
 		if (list->tail == list->head)
 			goto out;

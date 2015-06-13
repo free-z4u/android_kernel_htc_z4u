@@ -1,3 +1,13 @@
+/*
+ * linux/arch/arm/boot/compressed/ofw-shark.c
+ *
+ * by Alexander Schulz
+ *
+ * This file is used to get some basic information
+ * about the memory layout of the shark we are running
+ * on. Memory is usually divided in blocks a 8 MB.
+ * And bootargs are copied from OpenFirmware.
+ */
 
 
 #include <linux/kernel.h>
@@ -9,27 +19,27 @@
 asmlinkage void
 create_params (unsigned long *buffer)
 {
-	
+	/* Is there a better address? Also change in mach-shark/core.c */
 	struct tag *tag = (struct tag *) 0x08003000;
 	int j,i,m,k,nr_banks,size;
 	unsigned char *c;
 
 	k = 0;
 
-	
+	/* Head of the taglist */
 	tag->hdr.tag  = ATAG_CORE;
 	tag->hdr.size = tag_size(tag_core);
 	tag->u.core.flags = 1;
 	tag->u.core.pagesize = PAGE_SIZE;
 	tag->u.core.rootdev = 0;
 
-	
+	/* Build up one tagged block for each memory region */
 	size=0;
 	nr_banks=(unsigned int) buffer[0];
 	for (j=0;j<nr_banks;j++){
-		
-		
-		
+		/* search the lowest address and put it into the next entry   */
+		/* not a fast sort algorithm, but there are at most 8 entries */
+		/* and this is used only once anyway                          */
 		m=0xffffffff;
 		for (i=0;i<(unsigned int) buffer[0];i++){
 			if (buffer[2*i+1]<m) {
@@ -37,7 +47,7 @@ create_params (unsigned long *buffer)
 				k=i;
 			}
 		}
-	  
+
 		tag = tag_next(tag);
 		tag->hdr.tag = ATAG_MEM;
 		tag->hdr.size = tag_size(tag_mem32);
@@ -46,13 +56,13 @@ create_params (unsigned long *buffer)
 
 		size += buffer[2*k+2];
 
-		buffer[2*k+1]=0xffffffff;                    
+		buffer[2*k+1]=0xffffffff;                    /* mark as copied */
 	}
-	
-	
+
+	/* The command line */
 	tag = tag_next(tag);
 	tag->hdr.tag = ATAG_CMDLINE;
-	
+
 	c=(unsigned char *)(&buffer[34]);
 	j=0;
 	while (*c) tag->u.cmdline.cmdline[j++]=*c++;
@@ -60,13 +70,13 @@ create_params (unsigned long *buffer)
 	tag->u.cmdline.cmdline[j]=0;
 	tag->hdr.size = (j + 7 + sizeof(struct tag_header)) >> 2;
 
-	
+	/* Hardware revision */
 	tag = tag_next(tag);
 	tag->hdr.tag = ATAG_REVISION;
 	tag->hdr.size = tag_size(tag_revision);
 	tag->u.revision.rev = ((unsigned char) buffer[33])-'0';
 
-	
+	/* End of the taglist */
 	tag = tag_next(tag);
 	tag->hdr.tag = 0;
 	tag->hdr.size = 0;
@@ -75,6 +85,11 @@ create_params (unsigned long *buffer)
 
 typedef int (*ofw_handle_t)(void *);
 
+/* Everything below is called with a wrong MMU setting.
+ * This means: no string constants, no initialization of
+ * arrays, no global variables! This is ugly but I didn't
+ * want to write this in assembler :-)
+ */
 
 int
 of_decode_int(const unsigned char *p)
@@ -84,7 +99,7 @@ of_decode_int(const unsigned char *p)
 	i = (i + *p++) << 8;
 	return (i + *p);
 }
-  
+
 int
 OF_finddevice(ofw_handle_t openfirmware, char *name)
 {
@@ -141,7 +156,7 @@ OF_getproplen(ofw_handle_t openfirmware, int handle, char *prop)
 		return -1;
 	return args[5];
 }
-  
+
 int
 OF_getprop(ofw_handle_t openfirmware, int handle, char *prop, void *buf, unsigned int buflen)
 {
@@ -169,12 +184,12 @@ OF_getprop(ofw_handle_t openfirmware, int handle, char *prop, void *buf, unsigne
 		return -1;
 	return args[7];
 }
-  
+
 asmlinkage void ofw_init(ofw_handle_t o, int *nomr, int *pointer)
 {
 	int phandle,i,mem_len,buffer[32];
 	char temp[15];
-  
+
 	temp[0]='/';
 	temp[1]='m';
 	temp[2]='e';

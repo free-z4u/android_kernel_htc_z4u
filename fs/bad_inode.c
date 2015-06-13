@@ -24,13 +24,13 @@ static loff_t bad_file_llseek(struct file *file, loff_t offset, int origin)
 static ssize_t bad_file_read(struct file *filp, char __user *buf,
 			size_t size, loff_t *ppos)
 {
-        return -EIO;
+	return -EIO;
 }
 
 static ssize_t bad_file_write(struct file *filp, const char __user *buf,
 			size_t siz, loff_t *ppos)
 {
-        return -EIO;
+	return -EIO;
 }
 
 static ssize_t bad_file_aio_read(struct kiocb *iocb, const struct iovec *iov,
@@ -281,8 +281,10 @@ static const struct inode_operations bad_inode_ops =
 	.mknod		= bad_inode_mknod,
 	.rename		= bad_inode_rename,
 	.readlink	= bad_inode_readlink,
-	
-	
+	/* follow_link must be no-op, otherwise unmounting this inode
+	   won't work */
+	/* put_link returns void */
+	/* truncate returns void */
 	.permission	= bad_inode_permission,
 	.getattr	= bad_inode_getattr,
 	.setattr	= bad_inode_setattr,
@@ -290,12 +292,28 @@ static const struct inode_operations bad_inode_ops =
 	.getxattr	= bad_inode_getxattr,
 	.listxattr	= bad_inode_listxattr,
 	.removexattr	= bad_inode_removexattr,
-	
+	/* truncate_range returns void */
 };
 
 
- 
- 
+/*
+ * When a filesystem is unable to read an inode due to an I/O error in
+ * its read_inode() function, it can call make_bad_inode() to return a
+ * set of stubs which will return EIO errors as required.
+ *
+ * We only need to do limited initialisation: all other fields are
+ * preinitialised to zero automatically.
+ */
+
+/**
+ *	make_bad_inode - mark an inode bad due to an I/O error
+ *	@inode: Inode to mark bad
+ *
+ *	When an inode cannot be read due to a media or remote network
+ *	failure this function makes the inode "bad" and causes I/O operations
+ *	on it to fail from this point on.
+ */
+
 void make_bad_inode(struct inode *inode)
 {
 	remove_inode_hash(inode);
@@ -303,20 +321,37 @@ void make_bad_inode(struct inode *inode)
 	inode->i_mode = S_IFREG;
 	inode->i_atime = inode->i_mtime = inode->i_ctime =
 		current_fs_time(inode->i_sb);
-	inode->i_op = &bad_inode_ops;	
-	inode->i_fop = &bad_file_ops;	
+	inode->i_op = &bad_inode_ops;
+	inode->i_fop = &bad_file_ops;
 }
 EXPORT_SYMBOL(make_bad_inode);
 
- 
- 
+/*
+ * This tests whether an inode has been flagged as bad. The test uses
+ * &bad_inode_ops to cover the case of invalidated inodes as well as
+ * those created by make_bad_inode() above.
+ */
+
+/**
+ *	is_bad_inode - is an inode errored
+ *	@inode: inode to test
+ *
+ *	Returns true if the inode in question has been marked as bad.
+ */
+
 int is_bad_inode(struct inode *inode)
 {
-	return (inode->i_op == &bad_inode_ops);	
+	return (inode->i_op == &bad_inode_ops);
 }
 
 EXPORT_SYMBOL(is_bad_inode);
 
+/**
+ * iget_failed - Mark an under-construction inode as dead and release it
+ * @inode: The inode to discard
+ *
+ * Mark an under-construction inode as dead and release it.
+ */
 void iget_failed(struct inode *inode)
 {
 	make_bad_inode(inode);
