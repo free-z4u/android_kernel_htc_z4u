@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 1995-2003 Russell King
  *               2001-2002 Keith Owens
- *     
+ *
  * Generate definitions needed by assembly language modules.
  * This code generates raw asm output which is post-processed to extract
  * and format the required data.
@@ -23,9 +23,19 @@
 #include <asm/hardware/cache-l2x0.h>
 #include <linux/kbuild.h>
 
+/*
+ * Make sure that the compiler and target are compatible.
+ */
 #if defined(__APCS_26__)
 #error Sorry, your compiler targets APCS-26 but this kernel requires APCS-32
 #endif
+/*
+ * GCC 3.0, 3.1: general bad code generation.
+ * GCC 3.2.0: incorrect function argument offset calculation.
+ * GCC 3.2.x: miscompiles NEW_AUX_ENT in fs/binfmt_elf.c
+ *            (http://gcc.gnu.org/PR8896) and incorrect structure
+ *	      initialisation in fs/jffs2/erase.c
+ */
 #if (__GNUC__ == 3 && __GNUC_MINOR__ < 3)
 #error Your compiler is too buggy; it is known to miscompile kernels.
 #error    Known good compilers: 3.3
@@ -134,5 +144,5 @@ int main(void)
   DEFINE(DMA_BIDIRECTIONAL,	DMA_BIDIRECTIONAL);
   DEFINE(DMA_TO_DEVICE,		DMA_TO_DEVICE);
   DEFINE(DMA_FROM_DEVICE,	DMA_FROM_DEVICE);
-  return 0; 
+  return 0;
 }

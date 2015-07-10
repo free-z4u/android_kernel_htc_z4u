@@ -30,7 +30,7 @@
 #define simcfg(code)						\
 ({					   \
 	__asm__  __volatile__( \
-        "sltiu $0,$0, %0" \
+	"sltiu $0,$0, %0" \
 		::"i"(code)					\
 		); \
 })

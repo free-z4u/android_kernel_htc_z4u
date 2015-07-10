@@ -61,18 +61,18 @@ extern void nf_conntrack_timeout_fini(struct net *net);
 #else
 static inline int nf_conntrack_timeout_init(struct net *net)
 {
-        return 0;
+	return 0;
 }
 
 static inline void nf_conntrack_timeout_fini(struct net *net)
 {
-        return;
+	return;
 }
-#endif 
+#endif /* CONFIG_NF_CONNTRACK_TIMEOUT */
 
 #ifdef CONFIG_NF_CONNTRACK_TIMEOUT
 extern struct ctnl_timeout *(*nf_ct_timeout_find_get_hook)(const char *name);
 extern void (*nf_ct_timeout_put_hook)(struct ctnl_timeout *timeout);
 #endif
 
-#endif 
+#endif /* _NF_CONNTRACK_TIMEOUT_H */

@@ -87,9 +87,9 @@ int  __cpcmd(const char *cmd, char *response, int rlen, int *response_code)
 		response_len = rlen;
 		rc = diag8_response(cmdlen, response, &rlen);
 		EBCASC(response, response_len);
-        } else {
+	} else {
 		rc = diag8_noresponse(cmdlen);
-        }
+	}
 	if (response_code)
 		*response_code = rc;
 	return rlen;

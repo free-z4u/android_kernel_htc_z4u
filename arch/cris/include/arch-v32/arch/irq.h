@@ -112,7 +112,7 @@ __asm__ (				\
 	".text\n\t"			\
 	"IRQ" #nr "_interrupt:\n\t"	\
 	SAVE_ALL			\
-        KGDB_FIXUP                      \
+	KGDB_FIXUP                      \
 	"move.d "#nr",$r10\n\t"		\
 	"move.d $sp,$r12\n\t"		\
 	"jsr crisv32_do_IRQ\n\t"	\

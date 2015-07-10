@@ -1,11 +1,11 @@
 /*
  * Symmetric key ciphers.
- * 
+ *
  * Copyright (c) 2007 Herbert Xu <herbert@gondor.apana.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) 
+ * Software Foundation; either version 2 of the License, or (at your option)
  * any later version.
  *
  */
@@ -17,6 +17,12 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 
+/**
+ *	struct skcipher_givcrypt_request - Crypto request with IV generation
+ *	@seq: Sequence number for IV generation
+ *	@giv: Space for generated IV
+ *	@creq: The crypto request itself
+ */
 struct skcipher_givcrypt_request {
 	u64 seq;
 	u8 *giv;
@@ -100,5 +106,5 @@ static inline void skcipher_givcrypt_set_giv(
 	req->seq = seq;
 }
 
-#endif	
+#endif	/* _CRYPTO_SKCIPHER_H */
 

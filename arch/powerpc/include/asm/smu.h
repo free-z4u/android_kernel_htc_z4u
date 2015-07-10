@@ -164,7 +164,7 @@
   * in the future by adding a polling facility.
   */
 #define SMU_CMD_I2C_COMMAND			0x9a
-          /* transfer types */
+	  /* transfer types */
 #define   SMU_I2C_TRANSFER_SIMPLE	0x00
 #define   SMU_I2C_TRANSFER_STDSUB	0x01
 #define   SMU_I2C_TRANSFER_COMBINED	0x02

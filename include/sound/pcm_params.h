@@ -22,43 +22,43 @@
  *
  */
 
-int snd_pcm_hw_param_first(struct snd_pcm_substream *pcm, 
+int snd_pcm_hw_param_first(struct snd_pcm_substream *pcm,
 			   struct snd_pcm_hw_params *params,
 			   snd_pcm_hw_param_t var, int *dir);
-int snd_pcm_hw_param_last(struct snd_pcm_substream *pcm, 
+int snd_pcm_hw_param_last(struct snd_pcm_substream *pcm,
 			  struct snd_pcm_hw_params *params,
 			  snd_pcm_hw_param_t var, int *dir);
 int snd_pcm_hw_param_value(const struct snd_pcm_hw_params *params,
 			   snd_pcm_hw_param_t var, int *dir);
 
-#define SNDRV_MASK_BITS	64	
+#define SNDRV_MASK_BITS	64	/* we use so far 64bits only */
 #define SNDRV_MASK_SIZE	(SNDRV_MASK_BITS / 32)
 #define MASK_OFS(i)	((i) >> 5)
 #define MASK_BIT(i)	(1U << ((i) & 31))
 
 static inline unsigned int ld2(u_int32_t v)
 {
-        unsigned r = 0;
+	unsigned r = 0;
 
-        if (v >= 0x10000) {
-                v >>= 16;
-                r += 16;
-        }
-        if (v >= 0x100) {
-                v >>= 8;
-                r += 8;
-        }
-        if (v >= 0x10) {
-                v >>= 4;
-                r += 4;
-        }
-        if (v >= 4) {
-                v >>= 2;
-                r += 2;
-        }
-        if (v >= 2)
-                r++;
-        return r;
+	if (v >= 0x10000) {
+		v >>= 16;
+		r += 16;
+	}
+	if (v >= 0x100) {
+		v >>= 8;
+		r += 8;
+	}
+	if (v >= 0x10) {
+		v >>= 4;
+		r += 4;
+	}
+	if (v >= 4) {
+		v >>= 2;
+		r += 2;
+	}
+	if (v >= 2)
+		r++;
+	return r;
 }
 
 static inline size_t snd_mask_sizeof(void)
@@ -269,7 +269,7 @@ static inline int snd_interval_empty(const struct snd_interval *i)
 
 static inline int snd_interval_single(const struct snd_interval *i)
 {
-	return (i->min == i->max || 
+	return (i->min == i->max ||
 		(i->min + 1 == i->max && i->openmax));
 }
 
@@ -352,4 +352,4 @@ params_period_bytes(const struct snd_pcm_hw_params *p)
 		params_channels(p)) / 8;
 }
 
-#endif 
+#endif /* __SOUND_PCM_PARAMS_H */

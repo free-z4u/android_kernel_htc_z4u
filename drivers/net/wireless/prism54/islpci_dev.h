@@ -83,7 +83,7 @@ typedef struct {
 
 	/* our mib cache */
 	u32 iw_mode;
-        struct rw_semaphore mib_sem;
+	struct rw_semaphore mib_sem;
 	void **mib;
 	char nickname[IW_ESSID_MAX_SIZE+1];
 

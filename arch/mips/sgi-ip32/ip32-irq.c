@@ -271,11 +271,11 @@ static void disable_maceisa_irq(struct irq_data *d)
 	unsigned int crime_int = 0;
 
 	maceisa_mask &= ~(1 << (d->irq - MACEISA_AUDIO_SW_IRQ));
-        if (!(maceisa_mask & MACEISA_AUDIO_INT))
+	if (!(maceisa_mask & MACEISA_AUDIO_INT))
 		crime_int |= MACE_AUDIO_INT;
-        if (!(maceisa_mask & MACEISA_MISC_INT))
+	if (!(maceisa_mask & MACEISA_MISC_INT))
 		crime_int |= MACE_MISC_INT;
-        if (!(maceisa_mask & MACEISA_SUPERIO_INT))
+	if (!(maceisa_mask & MACEISA_SUPERIO_INT))
 		crime_int |= MACE_SUPERIO_INT;
 	crime_mask &= ~crime_int;
 	crime->imask = crime_mask;

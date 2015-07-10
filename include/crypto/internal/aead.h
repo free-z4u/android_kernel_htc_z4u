@@ -1,11 +1,11 @@
 /*
  * AEAD: Authenticated Encryption with Associated Data
- * 
+ *
  * Copyright (c) 2007 Herbert Xu <herbert@gondor.apana.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) 
+ * Software Foundation; either version 2 of the License, or (at your option)
  * any later version.
  *
  */
@@ -78,5 +78,5 @@ static inline void aead_givcrypt_complete(struct aead_givcrypt_request *req,
 	aead_request_complete(&req->areq, err);
 }
 
-#endif	
+#endif	/* _CRYPTO_INTERNAL_AEAD_H */
 

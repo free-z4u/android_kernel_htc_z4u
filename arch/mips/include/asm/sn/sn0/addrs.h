@@ -146,7 +146,7 @@
 
 #ifndef __ASSEMBLY__
 #define KERN_NMI_ADDR(nasid, slice)					\
-                    TO_NODE_UNCAC((nasid), IP27_NMI_KREGS_OFFSET + 	\
+		    TO_NODE_UNCAC((nasid), IP27_NMI_KREGS_OFFSET + 	\
 				  (IP27_NMI_KREGS_CPU_SIZE * (slice)))
 #endif /* !__ASSEMBLY__ */
 

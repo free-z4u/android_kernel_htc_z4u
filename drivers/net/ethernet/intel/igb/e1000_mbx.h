@@ -48,11 +48,11 @@
  * Message ACK's are the value or'd with 0xF0000000
  */
 #define E1000_VT_MSGTYPE_ACK      0x80000000  /* Messages below or'd with
-                                               * this are the ACK */
+					       * this are the ACK */
 #define E1000_VT_MSGTYPE_NACK     0x40000000  /* Messages below or'd with
-                                               * this are the NACK */
+					       * this are the NACK */
 #define E1000_VT_MSGTYPE_CTS      0x20000000  /* Indicates that VF is still
-                                                 clear to send requests */
+						 clear to send requests */
 #define E1000_VT_MSGINFO_SHIFT    16
 /* bits 23:16 are used for exra info for certain messages */
 #define E1000_VT_MSGINFO_MASK     (0xFF << E1000_VT_MSGINFO_SHIFT)

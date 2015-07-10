@@ -1,4 +1,4 @@
-/* 
+/*
  * Cryptographic API.
  *
  * MD5 Message Digest Algorithm (RFC1321).
@@ -8,10 +8,10 @@
  *
  * Copyright (c) Cryptoapi developers.
  * Copyright (c) 2002 James Morris <jmorris@intercode.com.au>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) 
+ * Software Foundation; either version 2 of the License, or (at your option)
  * any later version.
  *
  */
@@ -24,6 +24,7 @@
 #include <linux/cryptohash.h>
 #include <asm/byteorder.h>
 
+/* XXX: this stuff can be optimized */
 static inline void le32_to_cpu_array(u32 *buf, unsigned int words)
 {
 	while (words--) {

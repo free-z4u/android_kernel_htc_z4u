@@ -2,7 +2,7 @@
 /* i2c-pcf8584.h: PCF 8584 global defines				*/
 /* -------------------------------------------------------------------- */
 /*   Copyright (C) 1996 Simon G. Vogl
-                   1999 Hans Berglund
+		   1999 Hans Berglund
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -696,23 +696,23 @@ typedef union md_pdir_loent {
  */
 
 typedef	union	md_dir_high	{
-        md_sdir_high_t	md_sdir_high;
-        md_pdir_high_t	md_pdir_high;
+	md_sdir_high_t	md_sdir_high;
+	md_pdir_high_t	md_pdir_high;
 } md_dir_high_t;
 
 typedef	union	md_dir_low	{
-        md_sdir_low_t	md_sdir_low;
-        md_pdir_low_t	md_pdir_low;
+	md_sdir_low_t	md_sdir_low;
+	md_pdir_low_t	md_pdir_low;
 } md_dir_low_t;
 
 typedef	struct	bddir_entry	{
-        md_dir_low_t	md_dir_low;
-        md_dir_high_t	md_dir_high;
+	md_dir_low_t	md_dir_low;
+	md_dir_high_t	md_dir_high;
 } bddir_entry_t;
 
 typedef struct	dir_mem_entry	{
-        u64		prcpf[MAX_REGIONS];
-        bddir_entry_t	directory_words[MD_PAGE_SIZE/CACHE_SLINE_SIZE];
+	u64		prcpf[MAX_REGIONS];
+	bddir_entry_t	directory_words[MD_PAGE_SIZE/CACHE_SLINE_SIZE];
 } dir_mem_entry_t;
 
 

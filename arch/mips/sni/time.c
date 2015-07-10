@@ -15,7 +15,7 @@
 #define SNI_COUNTER0_DIV        ((SNI_CLOCK_TICK_RATE / SNI_COUNTER2_DIV) / HZ)
 
 static void a20r_set_mode(enum clock_event_mode mode,
-                          struct clock_event_device *evt)
+			  struct clock_event_device *evt)
 {
 	switch (mode) {
 	case CLOCK_EVT_MODE_PERIODIC:
@@ -33,14 +33,14 @@ static void a20r_set_mode(enum clock_event_mode mode,
 		*(volatile u8 *)(A20R_PT_CLOCK_BASE +  8) = SNI_COUNTER2_DIV >> 8;
 		wmb();
 
-                break;
-        case CLOCK_EVT_MODE_ONESHOT:
-        case CLOCK_EVT_MODE_UNUSED:
-        case CLOCK_EVT_MODE_SHUTDOWN:
-                break;
-        case CLOCK_EVT_MODE_RESUME:
-                break;
-        }
+		break;
+	case CLOCK_EVT_MODE_ONESHOT:
+	case CLOCK_EVT_MODE_UNUSED:
+	case CLOCK_EVT_MODE_SHUTDOWN:
+		break;
+	case CLOCK_EVT_MODE_RESUME:
+		break;
+	}
 }
 
 static struct clock_event_device a20r_clockevent_device = {

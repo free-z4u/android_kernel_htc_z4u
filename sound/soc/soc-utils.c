@@ -5,7 +5,7 @@
  *
  * Author: Mark Brown <broonie@opensource.wolfsonmicro.com>
  *         Liam Girdwood <lrg@slimlogic.co.uk>
- *         
+ *
  *
  *  This program is free software; you can redistribute  it and/or modify it
  *  under  the terms of  the GNU General  Public License as published by the
@@ -63,7 +63,7 @@ static const struct snd_pcm_hardware dummy_dma_hardware = {
 	.channels_min		= 1,
 	.channels_max		= UINT_MAX,
 
-	
+	/* Random values to keep userspace happy when checking constraints */
 	.info			= SNDRV_PCM_INFO_INTERLEAVED |
 				  SNDRV_PCM_INFO_BLOCK_TRANSFER,
 	.buffer_bytes_max	= 128*1024,

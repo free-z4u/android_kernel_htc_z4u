@@ -1,3 +1,11 @@
+/*
+ * Definitions and Declarations for tuple.
+ *
+ * 16 Dec 2003: Yasuyuki Kozakai @USAGI <yasuyuki.kozakai@toshiba.co.jp>
+ *	- generalize L3 protocol dependent part.
+ *
+ * Derived from include/linux/netfiter_ipv4/ip_conntrack_tuple.h
+ */
 
 #ifndef _NF_CONNTRACK_TUPLE_H
 #define _NF_CONNTRACK_TUPLE_H
@@ -6,24 +14,33 @@
 #include <linux/netfilter/nf_conntrack_tuple_common.h>
 #include <linux/list_nulls.h>
 
+/* A `tuple' is a structure containing the information to uniquely
+  identify a connection.  ie. if two packets have the same tuple, they
+  are in the same connection; if not, they are not.
+
+  We divide the structure along "manipulatable" and
+  "non-manipulatable" lines, for the benefit of the NAT code.
+*/
 
 #define NF_CT_TUPLE_L3SIZE	ARRAY_SIZE(((union nf_inet_addr *)NULL)->all)
 
+/* The manipulable part of the tuple. */
 struct nf_conntrack_man {
 	union nf_inet_addr u3;
 	union nf_conntrack_man_proto u;
-	
+	/* Layer 3 protocol */
 	u_int16_t l3num;
 };
 
+/* This contains the information to distinguish a connection. */
 struct nf_conntrack_tuple {
 	struct nf_conntrack_man src;
 
-	
+	/* These are the parts of the tuple which are fixed. */
 	struct {
 		union nf_inet_addr u3;
 		union {
-			
+			/* Add other protocols here. */
 			__be16 all;
 
 			struct {
@@ -46,10 +63,10 @@ struct nf_conntrack_tuple {
 			} gre;
 		} u;
 
-		
+		/* The protocol. */
 		u_int8_t protonum;
 
-		
+		/* The direction (for tuplehash) */
 		u_int8_t dir;
 	} dst;
 };
@@ -93,9 +110,11 @@ static inline void nf_ct_dump_tuple(const struct nf_conntrack_tuple *t)
 	}
 }
 
+/* If we're the first tuple, it's the original dir. */
 #define NF_CT_DIRECTION(h)						\
 	((enum ip_conntrack_dir)(h)->tuple.dst.dir)
 
+/* Connections have two entries in the hash table: one for each way */
 struct nf_conntrack_tuple_hash {
 	struct hlist_nulls_node hnnode;
 	struct nf_conntrack_tuple tuple;
@@ -103,7 +122,7 @@ struct nf_conntrack_tuple_hash {
 
 static inline bool __nf_ct_tuple_src_equal(const struct nf_conntrack_tuple *t1,
 					   const struct nf_conntrack_tuple *t2)
-{ 
+{
 	return (nf_inet_addr_cmp(&t1->src.u3, &t2->src.u3) &&
 		t1->src.u.all == t2->src.u.all &&
 		t1->src.l3num == t2->src.l3num);
@@ -164,4 +183,4 @@ nf_ct_tuple_mask_cmp(const struct nf_conntrack_tuple *t,
 	       __nf_ct_tuple_dst_equal(t, tuple);
 }
 
-#endif 
+#endif /* _NF_CONNTRACK_TUPLE_H */

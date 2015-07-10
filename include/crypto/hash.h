@@ -1,11 +1,11 @@
 /*
  * Hash: Hash algorithms under the crypto API
- * 
+ *
  * Copyright (c) 2008 Herbert Xu <herbert@gondor.apana.org.au>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) 
+ * Software Foundation; either version 2 of the License, or (at your option)
  * any later version.
  *
  */
@@ -31,7 +31,7 @@ struct ahash_request {
 	struct scatterlist *src;
 	u8 *result;
 
-	
+	/* This field may only be used by the ahash API code. */
 	void *priv;
 
 	void *__ctx[] CRYPTO_MINALIGN_ATTR;
@@ -74,7 +74,7 @@ struct shash_alg {
 
 	unsigned int descsize;
 
-	
+	/* These fields must match hash_alg_common. */
 	unsigned int digestsize
 		__attribute__ ((aligned(__alignof__(struct hash_alg_common))));
 	unsigned int statesize;
@@ -350,4 +350,4 @@ int crypto_shash_final(struct shash_desc *desc, u8 *out);
 int crypto_shash_finup(struct shash_desc *desc, const u8 *data,
 		       unsigned int len, u8 *out);
 
-#endif	
+#endif	/* _CRYPTO_HASH_H */
