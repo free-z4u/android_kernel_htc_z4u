@@ -131,6 +131,7 @@ endif
 endif
 endif
 endif
+endif
 obj-$(CONFIG_MSM_SDIO_TTY) += sdio_tty.o
 obj-$(CONFIG_MSM_SMD_TTY) += smd_tty.o
 obj-$(CONFIG_MSM_SMD_QMI) += smd_qmi.o
@@ -289,11 +290,11 @@ obj-$(CONFIG_MACH_Z4DUG) +=  board-z4dug.o devices_htc.o board-7627a-all.o nand_
 obj-$(CONFIG_MACH_Z4DCG) +=  board-z4dcg.o devices_htc.o board-7627a-all.o nand_partitions.o htc_bdaddress.o htc_awb_cal.o board-z4dcg-camera.o z4_change_mode.o
 obj-$(CONFIG_MACH_Z4U) +=  board-z4u.o devices_htc.o board-7627a-all.o nand_partitions.o htc_bdaddress.o htc_awb_cal.o board-z4u-camera.o z4_change_mode.o
 obj-$(CONFIG_MACH_Z4U) +=  board-cp3-wifi.o htc_wifi_nvs.o board-z4u-keypad.o board-z4u-storage.o radio_feedback.o
-obj-$(CONFIG_ARCH_MSM7X30) += devices-msm7x30.o memory_topology.o devices_htc.o emmc_partitions.o msm_vibrator.o
+obj-$(CONFIG_ARCH_MSM7X30) += devices-msm7x30.o memory_topology.o devices_htc.o nand_partitions.o msm_vibrator.o
 obj-$(CONFIG_ARCH_MSM7X30) += clock-local.o clock-7x30.o acpuclock-7x30.o htc_awb_cal.o
 obj-$(CONFIG_MACH_MSM7X25_SURF) += board-msm7x27.o devices-msm7x25.o
 obj-$(CONFIG_MACH_MSM7X25_FFA) += board-msm7x27.o devices-msm7x25.o
-obj-$(CONFIG_MACH_SPADE) += board-spade.o 
+obj-$(CONFIG_MACH_SPADE) += board-spade.o
 obj-$(CONFIG_MACH_SPADE) += board-spade-microp.o board-spade-rfkill.o
 obj-$(CONFIG_MACH_SPADE) += board-spade-keypad.o board-spade-audio.o
 obj-$(CONFIG_MACH_SPADE) += board-spade-mmc.o board-spade-wifi.o
