@@ -673,6 +673,13 @@ config MACH_MSM7X30_FLUID
        help
          Support for the Qualcomm MSM7x30 FLUID eval board.
 
+config MACH_SPADE
+       depends on ARCH_MSM7X30
+       default n
+       bool "Spade"
+       help
+         Support for the Qualcomm Spade board.
+
 config MACH_SAPPHIRE
 	depends on ARCH_MSM7X01A
 	default n

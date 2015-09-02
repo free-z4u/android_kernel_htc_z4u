@@ -119,6 +119,7 @@ endif
 endif
 ifndef CONFIG_ARCH_MSM8960
 ifndef CONFIG_ARCH_MSM8X60
+ifndef CONFIG_ARCH_MSM7X30
 ifndef CONFIG_ARCH_APQ8064
 ifndef CONFIG_ARCH_MSM8974
 ifndef CONFIG_ARCH_MSM9625
@@ -159,7 +160,7 @@ obj-$(CONFIG_MSM_RPCSERVER_WATCHDOG) += rpc_server_dog_keepalive.o
 obj-$(CONFIG_MSM_RPCSERVER_TIME_REMOTE) += rpc_server_time_remote.o
 obj-$(CONFIG_MSM_DALRPC) += dal.o
 obj-$(CONFIG_MSM_DALRPC_TEST) += dal_remotetest.o
-obj-$(CONFIG_ARCH_MSM7X30) += dal_axi.o
+obj-$(CONFIG_ARCH_MSM7X30) += dal_axi.o htc_sdservice.o
 obj-$(CONFIG_ARCH_MSM7X27A) += dal_axi.o htc_sdservice.o htc_drm.o htc_debug.o
 obj-$(CONFIG_MSM_ADSP) += qdsp5/
 obj-$(CONFIG_MSM7KV2_AUDIO) += qdsp5v2/
@@ -175,6 +176,7 @@ obj-$(CONFIG_MSM_IDLE_STATS) += pm-stats.o
 ifndef CONFIG_HTC_PM2_SYNC
 obj-$(CONFIG_MSM_PM2) += pm2_pre.o
 else
+obj-$(CONFIG_ARCH_MSM7X30) += arch-init-7x30.
 obj-$(CONFIG_MSM_PM2) += pm2.o
 endif
 obj-$(CONFIG_MSM_PM) += pm.o
@@ -287,8 +289,15 @@ obj-$(CONFIG_MACH_Z4DUG) +=  board-z4dug.o devices_htc.o board-7627a-all.o nand_
 obj-$(CONFIG_MACH_Z4DCG) +=  board-z4dcg.o devices_htc.o board-7627a-all.o nand_partitions.o htc_bdaddress.o htc_awb_cal.o board-z4dcg-camera.o z4_change_mode.o
 obj-$(CONFIG_MACH_Z4U) +=  board-z4u.o devices_htc.o board-7627a-all.o nand_partitions.o htc_bdaddress.o htc_awb_cal.o board-z4u-camera.o z4_change_mode.o
 obj-$(CONFIG_MACH_Z4U) +=  board-cp3-wifi.o htc_wifi_nvs.o board-z4u-keypad.o board-z4u-storage.o radio_feedback.o
+obj-$(CONFIG_ARCH_MSM7X30) += devices-msm7x30.o memory_topology.o devices_htc.o emmc_partitions.o msm_vibrator.o
+obj-$(CONFIG_ARCH_MSM7X30) += clock-local.o clock-7x30.o acpuclock-7x30.o htc_awb_cal.o
 obj-$(CONFIG_MACH_MSM7X25_SURF) += board-msm7x27.o devices-msm7x25.o
 obj-$(CONFIG_MACH_MSM7X25_FFA) += board-msm7x27.o devices-msm7x25.o
+obj-$(CONFIG_MACH_SPADE) += board-spade.o 
+obj-$(CONFIG_MACH_SPADE) += board-spade-microp.o board-spade-rfkill.o
+obj-$(CONFIG_MACH_SPADE) += board-spade-keypad.o board-spade-audio.o
+obj-$(CONFIG_MACH_SPADE) += board-spade-mmc.o board-spade-wifi.o
+obj-$(CONFIG_MACH_SPADE) += htc_bdaddress.o
 obj-$(CONFIG_ARCH_MSM8960) += clock-local.o clock-dss-8960.o clock-8960.o clock-rpm.o clock-pll.o
 obj-$(CONFIG_ARCH_MSM8960) += footswitch-8x60.o
 obj-$(CONFIG_ARCH_MSM8960) += acpuclock-8960.o
