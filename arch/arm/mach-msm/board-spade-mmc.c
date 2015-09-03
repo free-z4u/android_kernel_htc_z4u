@@ -34,6 +34,7 @@
 #include "devices.h"
 #include "board-spade.h"
 #include "proc_comm.h"
+#include <linux/export.h>
 
 /*#define SPADE_SDMC_CD_N_TO_SYS PM8058_GPIO_PM_TO_SYS(SPADE_GPIO_SDMC_CD_N)*/
 
@@ -73,6 +74,19 @@ static uint32_t movinand_on_gpio_table[] = {
 	PCOM_GPIO_CFG(113, 1, GPIO_OUTPUT, GPIO_NO_PULL, GPIO_10MA), /* DAT6 */
 	PCOM_GPIO_CFG(112, 1, GPIO_OUTPUT, GPIO_NO_PULL, GPIO_10MA), /* DAT7 */
 };
+
+void config_gpio_table(uint32_t *table, int len)
+{
+	int n, rc;
+	for (n = 0; n < len; n++) {
+		rc = gpio_tlmm_config(table[n], GPIO_CFG_ENABLE);
+		if (rc) {
+			pr_err("[WLAN] %s: gpio_tlmm_config(%#x)=%d\n",
+				__func__, table[n], rc);
+			break;
+		}
+	}
+}
 
 #if 0
 static int __init spade_disablesdcard_setup(char *str)

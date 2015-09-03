@@ -28,6 +28,7 @@
 
 #include <linux/mfd/pmic8058.h>
 #include <linux/input/matrix_keypad.h>
+#include <linux/module.h>
 
 static char *keycaps = "--qwerty";
 #undef MODULE_PARAM_PREFIX

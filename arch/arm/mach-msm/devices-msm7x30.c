@@ -42,6 +42,19 @@
 #include "pm.h"
 #include "irq.h"
 
+void config_gpio_table(uint32_t *table, int len)
+{
+	int n, rc;
+	for (n = 0; n < len; n++) {
+		rc = gpio_tlmm_config(table[n], GPIO_CFG_ENABLE);
+		if (rc) {
+			pr_err("[WLAN] %s: gpio_tlmm_config(%#x)=%d\n",
+				__func__, table[n], rc);
+			break;
+		}
+	}
+}
+
 struct platform_device msm7x30_device_acpuclk = {
 	.name		= "acpuclk-7x30",
 	.id		= -1,
