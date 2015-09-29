@@ -177,8 +177,11 @@ static uint8_t msm_irq_to_smsm[NR_IRQS] = {
 	[INT_PWB_I2C] = 5,
 	[INT_SDC1_0] = 6,
 	[INT_SDC1_1] = 7,
+#ifdef CONFIG_MACH_PRIMODS
+	[INT_SDC2_0] = 32,
+#else
 	[INT_SDC2_0] = 8,
-
+#endif
 	[INT_SDC2_1] = 9,
 	[INT_ADSP_A9_A11] = 10,
 	[INT_UART1] = 11,
@@ -211,14 +214,18 @@ static uint8_t msm_irq_to_smsm[NR_IRQS] = {
 	[INT_SDC3_1] = 31,
 	[INT_SDC3_0] = 32,
 
-	
+	/* fake wakeup interrupts */
 	[INT_GPIO_GROUP1] = SMSM_FAKE_IRQ,
 	[INT_GPIO_GROUP2] = SMSM_FAKE_IRQ,
 	[INT_A9_M2A_0] = SMSM_FAKE_IRQ,
 	[INT_A9_M2A_1] = SMSM_FAKE_IRQ,
+#ifdef 	CONFIG_ARCH_MSM8625
 	[INT_A9_M2A_2] = SMSM_FAKE_IRQ,
+#endif
 	[INT_A9_M2A_5] = SMSM_FAKE_IRQ,
+#ifdef CONFIG_ARCH_MSM8625
 	[INT_PBUS_ARM11] = SMSM_FAKE_IRQ,
+#endif
 	[INT_GP_TIMER_EXP] = SMSM_FAKE_IRQ,
 	[INT_DEBUG_TIMER_EXP] = SMSM_FAKE_IRQ,
 	[INT_ADSP_A11] = SMSM_FAKE_IRQ,
@@ -227,7 +234,7 @@ static uint8_t msm_irq_to_smsm[NR_IRQS] = {
 	[INT_SIRC_1] = SMSM_FAKE_IRQ,
 #endif
 };
-# else 
+# else /* CONFIG_ARCH_FSM9XXX */
 static uint8_t msm_irq_to_smsm[NR_IRQS] = {
 	[INT_UART1] = 11,
 	[INT_A9_M2A_0] = SMSM_FAKE_IRQ,
@@ -238,7 +245,7 @@ static uint8_t msm_irq_to_smsm[NR_IRQS] = {
 	[INT_SIRC_0] = 10,
 	[INT_ADSP_A11] = SMSM_FAKE_IRQ,
 };
-#endif 
+#endif /* CONFIG_ARCH_FSM9XXX */
 
 static inline void msm_irq_write_all_regs(void __iomem *base, unsigned int val)
 {
@@ -397,6 +404,10 @@ int msm_irq_idle_sleep_allowed(void)
 	return !disable;
 }
 
+/*
+ * Prepare interrupt subsystem for entering sleep -- phase 1.
+ * If modem_wake is true, return currently enabled interrupts in *irq_mask.
+ */
 void msm_irq_enter_sleep1(bool modem_wake, int from_idle, uint32_t *irq_mask)
 {
 	if (modem_wake) {
@@ -407,6 +418,15 @@ void msm_irq_enter_sleep1(bool modem_wake, int from_idle, uint32_t *irq_mask)
 	}
 }
 
+/*
+ * Prepare interrupt subsystem for entering sleep -- phase 2.
+ * Detect any pending interrupts and configure interrupt hardware.
+ *
+ * Return value:
+ * -EAGAIN: there are pending interrupt(s); interrupt configuration
+ *          is not changed.
+ *       0: success
+ */
 int msm_irq_enter_sleep2(bool modem_wake, int from_idle)
 {
 	int i, limit = 10;
@@ -415,7 +435,7 @@ int msm_irq_enter_sleep2(bool modem_wake, int from_idle)
 	if (from_idle && !modem_wake)
 		return 0;
 
-	
+	/* edge triggered interrupt may get lost if this mode is used */
 	WARN_ON_ONCE(!modem_wake && !from_idle);
 
 	if (msm_irq_debug_mask & IRQ_DEBUG_SLEEP)
@@ -426,6 +446,10 @@ int msm_irq_enter_sleep2(bool modem_wake, int from_idle)
 		pending[i] &= msm_irq_shadow_reg[i].int_en[!from_idle];
 	}
 
+	/*
+	 * Clear INT_A9_M2A_5 since requesting sleep triggers it.
+	 * In some arch e.g. FSM9XXX, INT_A9_M2A_5 may not be in the first set.
+	 */
 	pending[INT_A9_M2A_5 / 32] &= ~(1U << (INT_A9_M2A_5 % 32));
 
 	for (i = 0; i < VIC_NUM_REGS; i++) {
@@ -465,6 +489,10 @@ int msm_irq_enter_sleep2(bool modem_wake, int from_idle)
 	return 0;
 }
 
+/*
+ * Restore interrupt subsystem from sleep -- phase 1.
+ * Configure interrupt hardware.
+ */
 void msm_irq_exit_sleep1(uint32_t irq_mask, uint32_t wakeup_reason,
 	uint32_t pending_irqs)
 {
@@ -492,6 +520,10 @@ void msm_irq_exit_sleep1(uint32_t irq_mask, uint32_t wakeup_reason,
 			__func__, irq_mask, pending_irqs, wakeup_reason);
 }
 
+/*
+ * Restore interrupt subsystem from sleep -- phase 2.
+ * Poke the specified pending interrupts into interrupt hardware.
+ */
 void msm_irq_exit_sleep2(uint32_t irq_mask, uint32_t wakeup_reason,
 	uint32_t pending)
 {
@@ -536,6 +568,10 @@ void msm_irq_exit_sleep2(uint32_t irq_mask, uint32_t wakeup_reason,
 	mb();
 }
 
+/*
+ * Restore interrupt subsystem from sleep -- phase 3.
+ * Print debug information.
+ */
 void msm_irq_exit_sleep3(uint32_t irq_mask, uint32_t wakeup_reason,
 	uint32_t pending_irqs)
 {
@@ -559,19 +595,19 @@ void __init msm_init_irq(void)
 {
 	unsigned n;
 
-	
+	/* select level interrupts */
 	msm_irq_write_all_regs(VIC_INT_TYPE0, 0);
 
-	
+	/* select highlevel interrupts */
 	msm_irq_write_all_regs(VIC_INT_POLARITY0, 0);
 
-	
+	/* select IRQ for all INTs */
 	msm_irq_write_all_regs(VIC_INT_SELECT0, 0);
 
-	
+	/* disable all INTs */
 	msm_irq_write_all_regs(VIC_INT_EN0, 0);
 
-	
+	/* don't use vic */
 	writel(0, VIC_CONFIG);
 
 
@@ -580,7 +616,7 @@ void __init msm_init_irq(void)
 		set_irq_flags(n, IRQF_VALID);
 	}
 
-	
+	/* enable interrupt controller */
 	writel(3, VIC_INT_MASTEREN);
 	mb();
 }
@@ -661,6 +697,7 @@ void msm_fiq_unselect(int irq)
 	mb();
 	local_irq_restore(flags);
 }
+/* set_fiq_handler originally from arch/arm/kernel/fiq.c */
 static void set_fiq_handler(void *start, unsigned int length)
 {
 	memcpy((void *)0xffff001c, start, length);
