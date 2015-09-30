@@ -144,13 +144,13 @@ int htc_get_board_revision(void)
 {
     unsigned int htc_skuid = 0, htc_pcbid = 0;
 
-    
+
     htc_skuid = htc_get_skuid();
     htc_pcbid = htc_get_pcbid();
 
-    
+
     if (htc_skuid == 0) {
-        return BOARD_EVM;       
+        return BOARD_EVM;
     }
     else {
         if ((htc_pcbid >= HTC_PCBID_EVT_MIN) && (htc_pcbid <= HTC_PCBID_EVT_MAX)) {
@@ -161,7 +161,7 @@ int htc_get_board_revision(void)
         }
         else {
             printk(KERN_ERR "%s(%d): Unknown board revision!! skuid=[0x%08X], pcbid=[0x%02X].\n", __func__, __LINE__, htc_skuid, htc_pcbid);
-            return BOARD_UNKNOWN;   
+            return BOARD_UNKNOWN;
         }
     }
 }
@@ -476,7 +476,7 @@ static int __init board_bootloader_setup(char *str)
 
 	strcpy(temp, str);
 
-	
+
 	while ((p = strsep(&args, ".")) != NULL) build = p;
 
 	if (build) {
@@ -650,3 +650,15 @@ unsigned int get_tamper_sf(void)
 }
 EXPORT_SYMBOL(get_tamper_sf);
 
+void config_gpio_table(uint32_t *table, int len)
+{
+	int n, rc;
+	for (n = 0; n < len; n++) {
+		rc = gpio_tlmm_config(table[n], GPIO_CFG_ENABLE);
+		if (rc) {
+			pr_err("[WLAN] %s: gpio_tlmm_config(%#x)=%d\n",
+				__func__, table[n], rc);
+			break;
+		}
+	}
+}

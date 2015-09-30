@@ -24,9 +24,10 @@
 #include <linux/kernel.h>
 #include <linux/spi/spi.h>
 #include <linux/platform_device.h>
+#include <linux/msm_mdp.h>
 #include <mach/msm_fb.h>
 #include <mach/msm_iomap.h>
-#include <mach/atmega_microp.h>
+//#include <mach/atmega_microp.h>
 #include <mach/vreg.h>
 #include <mach/panel_id.h>
 
@@ -240,11 +241,6 @@ static struct lcdc_platform_data lcdc_pdata = {
 	.lcdc_power_save = lcdc_panel_power,
 };
 
-struct msm_list_device spade_fb_devices[] = {
-  { "mdp", &mdp_pdata },
-  { "lcdc", &lcdc_pdata }
-};
-
 static int panel_init_power(void)
 {
   vreg_lcm_1v8 = vreg_get(0, "gp13");
@@ -259,18 +255,18 @@ static int panel_init_power(void)
 int __init spade_init_panel(void)
 {
   int ret;
-  
+
   ret = panel_init_power();
   if (ret)
     return ret;
-  
-  msm_fb_add_devices(
-                     spade_fb_devices, ARRAY_SIZE(spade_fb_devices));
 
   ret = platform_device_register(&lcdc_spadewvga_panel_device);
   if (ret != 0)
     return ret;
-  
+
+  msm_fb_register_device("mdp", &mdp_pdata);
+  msm_fb_register_device("lcdc", &lcdc_pdata);
+
   return 0;
 }
 
