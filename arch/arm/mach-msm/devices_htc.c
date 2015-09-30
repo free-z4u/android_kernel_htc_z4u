@@ -29,7 +29,7 @@
 #include <linux/debugfs.h>
 
 #include <asm/htc_version.h>
-
+#include <linux/gpio.h>
 
 #define MFG_GPIO_TABLE_MAX_SIZE        0x400
 static unsigned char mfg_gpio_table[MFG_GPIO_TABLE_MAX_SIZE];

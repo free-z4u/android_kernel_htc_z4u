@@ -1466,10 +1466,8 @@ static int htc_rpc_charger_switch(unsigned enable)
 				BATT_ERR("%s: msm_rpc_call failed (%d)!", __func__, ret);
 		}
 #if defined(CONFIG_BATTERY_DS2746)
-#if 0
 		if (htc_batt_info.guage_driver == GUAGE_DS2746)
 			ds2746_charger_switch(enable);
-#endif
 #elif defined(CONFIG_BATTERY_MAX17050)
 		if (htc_batt_info.guage_driver == GAUGE_MAX17050)
 			max17050_charger_switch(enable);
@@ -1576,10 +1574,8 @@ static void __context_event_handler(enum batt_context_event event)
 		if (suspend_highfreq_check_reason & SUSPEND_HIGHFREQ_CHECK_BIT_TALK) {
 			htc_batt_phone_call = 1;
 #if defined(CONFIG_BATTERY_DS2746)
-#if 0
 			if (htc_batt_info.guage_driver == GUAGE_DS2746)
 				ds2746_phone_call_in(htc_batt_phone_call);
-#endif
 #elif defined(CONFIG_BATTERY_MAX17050)
 			if (htc_batt_info.guage_driver == GAUGE_MAX17050)
 				max17050_phone_call_in(htc_batt_phone_call);
@@ -1600,10 +1596,8 @@ static void __context_event_handler(enum batt_context_event event)
 		if (suspend_highfreq_check_reason & SUSPEND_HIGHFREQ_CHECK_BIT_TALK) {
 			htc_batt_phone_call = 0;
 #if defined(CONFIG_BATTERY_DS2746)
-#if 0
 			if (htc_batt_info.guage_driver == GUAGE_DS2746)
 				ds2746_phone_call_in(htc_batt_phone_call);
-#endif
 #elif defined(CONFIG_BATTERY_MAX17050)
 			if (htc_batt_info.guage_driver == GAUGE_MAX17050)
 				max17050_phone_call_in(htc_batt_phone_call);
