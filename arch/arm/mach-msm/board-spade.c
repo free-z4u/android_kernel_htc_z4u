@@ -18,9 +18,9 @@
 #include <linux/delay.h>
 #include <linux/bootmem.h>
 #include <linux/io.h>
-#ifdef CONFIG_ION_MSM
-#include <linux/msm_ion.h>
-#endif
+//#ifdef CONFIG_ION_MSM
+//#include <linux/msm_ion.h>
+//#endif
 #ifdef CONFIG_SPI_QSD
 #include <linux/spi/spi.h>
 #endif
@@ -610,10 +610,12 @@ static struct microp_led_platform_data microp_leds_data = {
 	.led_config	= up_led_config,
 };
 
+#ifdef CONFIG_BOSCH_BMA150
 static struct bma150_platform_data bravo_g_sensor_pdata = {
 	.microp_new_cmd = 1,
 	.chip_layout = 0,
 };
+#endif
 
 static struct platform_device microp_devices[] = {
 	{
@@ -623,12 +625,14 @@ static struct platform_device microp_devices[] = {
 			.platform_data = &microp_leds_data,
 		},
 	},
+#ifdef CONFIG_BOSCH_BMA150
 	{
 		.name = BMA150_G_SENSOR_NAME,
 		.dev = {
 			.platform_data = &bravo_g_sensor_pdata,
 		},
 	},
+#endif
 	{
 		.name	= "HTC_HEADSET_MGR",
 		.id	= -1,
@@ -954,10 +958,10 @@ static struct msm_ssbi_platform_data msm7x30_ssbi_pm8058_pdata __devinitdata = {
 	.controller_type = MSM_SBI_CTRL_PMIC_ARBITER,
 	.slave	= {
 		.name			= "pm8058-core",
-		.irq = MSM_GPIO_TO_INT(PMIC_GPIO_INT),
+		//.irq = MSM_GPIO_TO_INT(PMIC_GPIO_INT),
 		.platform_data		= &pm8058_7x30_data,
 	},
-	.rspinlock_name	= "D:PMIC_SSBI",
+	.rsl_id = "D:PMIC_SSBI",
 };
 #endif
 
@@ -967,7 +971,7 @@ static int __init buses_init(void)
                                 GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_ENABLE))
     pr_err("%s: gpio_tlmm_config (gpio=%d) failed\n",
            __func__, spade_get_PMIC_GPIO_INT());
-  
+
   return 0;
 }
 
@@ -1607,6 +1611,48 @@ static void msm_qsd_spi_gpio_release(void)
 	config_gpio_table(qsd_spi_gpio_off_table,
 		ARRAY_SIZE(qsd_spi_gpio_off_table));
 }
+
+static struct resource qsd_spi_resources[] = {
+	{
+		.name   = "spi_irq_in",
+		.start	= INT_SPI_INPUT,
+		.end	= INT_SPI_INPUT,
+		.flags	= IORESOURCE_IRQ,
+	},
+	{
+		.name   = "spi_irq_out",
+		.start	= INT_SPI_OUTPUT,
+		.end	= INT_SPI_OUTPUT,
+		.flags	= IORESOURCE_IRQ,
+	},
+	{
+		.name   = "spi_irq_err",
+		.start	= INT_SPI_ERROR,
+		.end	= INT_SPI_ERROR,
+		.flags	= IORESOURCE_IRQ,
+	},
+	{
+		.name   = "spi_base",
+		.start	= 0xA8000000,
+		.end	= 0xA8000000 + SZ_4K - 1,
+		.flags	= IORESOURCE_MEM,
+	},
+	{
+		.name   = "spidm_channels",
+		.flags  = IORESOURCE_DMA,
+	},
+	{
+		.name   = "spidm_crci",
+		.flags  = IORESOURCE_DMA,
+	},
+};
+
+static struct platform_device qsd_device_spi = {
+	.name		= "spi_qsd",
+	.id		= 0,
+	.num_resources	= ARRAY_SIZE(qsd_spi_resources),
+	.resource	= qsd_spi_resources,
+};
 
 static struct msm_spi_platform_data qsd_spi_pdata = {
 	.max_clock_speed = 26331429,
@@ -2804,7 +2850,6 @@ static struct mmc_platform_data msm7x30_sdc2_data = {
 	.msmsdcc_fmax	= 50000000,
 	.slot_type		= &spade_sdc2_slot_type,
 	.nonremovable	= 1,
-	.emmc_dma_ch	= 7,
 };
 #endif
 
@@ -2911,8 +2956,8 @@ static void __init msm7x30_init_mmc(void)
 		msm7x30_sdc2_data.msmsdcc_fmax =  24576000;
 	sdcc_vreg_data[1].vreg_data = vreg_s3;
 	sdcc_vreg_data[1].level = 1800;
-	msm7x30_sdc2_data.swfi_latency =
-		msm_pm_data[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].latency;
+	/*msm7x30_sdc2_data.swfi_latency =
+		msm_pm_data[MSM_PM_SLEEP_MODE_WAIT_FOR_INTERRUPT].latency;*/
 	msm_add_sdcc(2, &msm7x30_sdc2_data);
 #endif
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
@@ -2935,7 +2980,7 @@ static void __init msm7x30_init_mmc(void)
 }
 
 static struct msm_spm_platform_data msm_spm_data __initdata = {
-	.reg_base_addr = MSM_SAW_BASE,
+	.reg_base_addr = MSM_SAW0_BASE,
 
 	.reg_init_values[MSM_SPM_REG_SAW_CFG] = 0x05,
 	.reg_init_values[MSM_SPM_REG_SAW_SPM_CTL] = 0x18,
@@ -3309,7 +3354,7 @@ struct ion_platform_heap msm7x30_heaps[] = {
 			.extra_data = (void *)&co_ion_pdata,
 		},
 #endif
-		
+
 };
 
 static struct ion_platform_data ion_pdata = {
@@ -3379,7 +3424,7 @@ static void __init reserve_pmem_memory(void)
 	msm7x30_reserve_table[MEMTYPE_EBI0].size += PMEM_KERNEL_EBI0_SIZE;
 #ifndef CONFIG_MSM_MULTIMEDIA_USE_ION
 	reserve_memory_for(&android_pmem_pdata);
-	
+
 #endif
 #endif
 }

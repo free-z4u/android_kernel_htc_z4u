@@ -7015,7 +7015,9 @@ static void __init msm7x30_init(void)
 #endif
 
 	atv_dac_power_init();
+#ifdef CONFIG_BOSCH_BMA150
 	sensors_ldo_init();
+#endif
 	hdmi_init_regs();
 	msm_fb_add_devices();
 	msm_pm_set_platform_data(msm_pm_data, ARRAY_SIZE(msm_pm_data));

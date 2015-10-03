@@ -88,8 +88,10 @@
 
 #if !defined(CONFIG_SPARSE_IRQ)
 #define NR_IRQS (NR_MSM_IRQS + NR_GPIO_IRQS + NR_BOARD_IRQS)
+#define NR_SIRC_IRQS 0
 #define MSM_GPIO_TO_INT(n) (NR_MSM_IRQS + (n))
 #define FIRST_GPIO_IRQ MSM_GPIO_TO_INT(0)
+#define FIRST_BOARD_IRQ (NR_MSM_IRQS + NR_SIRC_IRQS + NR_GPIO_IRQS)
 #define MSM_INT_TO_REG(base, irq) (base + irq / 32)
 #endif
 
@@ -97,5 +99,9 @@
 #define MSM_PCIE_MSI_INT(n) (NR_MSM_IRQS + NR_GPIO_IRQS + NR_PM8921_IRQS +  \
 		NR_PM8821_IRQS + NR_TABLA_IRQS + NR_GPIO_EXPANDER_IRQS + (n))
 #endif
+
+//FIRST_MICROP_IRQ=((128 + 0 + 182) + 64)
+#define MSM_uP_TO_INT(n) (((NR_MSM_IRQS + NR_SIRC_IRQS + NR_GPIO_IRQS) + 64/*NR_BOARD_IRQS*/) + (n))
+#define FIRST_MICROP_IRQ MSM_uP_TO_INT(0)
 
 #endif
