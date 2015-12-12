@@ -64,6 +64,11 @@ include/linux/version.h
 include/generated
 arch/*/include/generated
 
+#
+# Generated build output
+#
+arch/arm/mach-msm/smd_rpc_sym.c
+
 # stgit generated dirs
 patches-*
 
