@@ -132,3 +132,83 @@ struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
 
 	return mdesc_best;
 }
+
+/**
+ * setup_safe_machine_fdt - Machine setup when an dtb was included to the kernel
+ * @dt_phys: physical address of dt blob
+ *
+ * If a dtb was passed to the kernel in r2, then use it to choose the
+ * correct machine_desc and to setup the system.
+ */
+void __init setup_safe_machine_fdt(char *dt_phys)
+{
+	struct boot_param_header *devtree;
+	struct machine_desc *mdesc, *mdesc_best = NULL;
+	unsigned int score, mdesc_score = ~1;
+	unsigned long dt_root;
+	const char *model;
+
+	if (!dt_phys)
+		return;
+
+	devtree = (struct boot_param_header *)dt_phys;
+
+	/* check device tree validity */
+	if (be32_to_cpu(devtree->magic) != OF_DT_HEADER) {
+		early_print("No device tree included");
+		return;
+	}
+	early_print("Some device tree included");
+
+	/* Search the mdescs for the 'best' compatible value match */
+	initial_boot_params = devtree;
+	dt_root = of_get_flat_dt_root();
+	for_each_machine_desc(mdesc) {
+		score = of_flat_dt_match(dt_root, mdesc->dt_compat);
+
+		if (score > 0 && score < mdesc_score) {
+			mdesc_best = mdesc;
+			mdesc_score = score;
+		}
+	}
+	if (!mdesc_best) {
+		const char *prop;
+		long size;
+
+		early_print("\nSafe Error: unrecognized/unsupported "
+			    "device tree compatible list:\n[ ");
+
+		prop = of_get_flat_dt_prop(dt_root, "compatible", &size);
+		while (size > 0) {
+			early_print("'%s' ", prop);
+			size -= strlen(prop) + 1;
+			prop += strlen(prop) + 1;
+		}
+		early_print("]\n\n");
+		early_print("Available machine support:\n\nID (hex)\tNAME\n");
+		for_each_machine_desc(mdesc)
+			early_print("%08x\t%s\n", mdesc->nr, mdesc->name);
+		return;
+	}
+
+	model = of_get_flat_dt_prop(dt_root, "model", NULL);
+	if (!model)
+		model = of_get_flat_dt_prop(dt_root, "compatible", NULL);
+	if (!model)
+		model = "<unknown>";
+	pr_info("Safe machine: %s, model: %s\n", mdesc_best->name, model);
+
+	return;
+
+	/* Retrieve various information from the /chosen node */
+	of_scan_flat_dt(early_init_dt_scan_chosen, boot_command_line);
+	/* Initialize {size,address}-cells info */
+	of_scan_flat_dt(early_init_dt_scan_root, NULL);
+	/* Setup memory, calling early_init_dt_add_memory_arch */
+	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
+
+	/* Change machine number to match the mdesc we're using */
+	__machine_arch_type = mdesc_best->nr;
+
+	pr_info("Safe machine arch type: %d\n", mdesc_best->nr);
+}

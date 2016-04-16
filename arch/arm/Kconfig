@@ -2117,6 +2117,13 @@ config ZBOOT_ROM_SH_MOBILE_SDHI
 
 endchoice
 
+config ARM_INSERT_DTB
+	bool "Use insert device tree blob to kernel (EXPERIMENTAL)"
+	default y
+	depends on OF && !ZBOOT_ROM && EXPERIMENTAL
+	help
+	    Insert device tree blob into kernel code
+
 config ARM_APPENDED_DTB
 	bool "Use appended device tree blob to zImage (EXPERIMENTAL)"
 	depends on OF && !ZBOOT_ROM && EXPERIMENTAL

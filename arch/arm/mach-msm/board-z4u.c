@@ -2847,14 +2847,20 @@ static void __init qrd7627a_init_early(void)
 
 }
 
+static const char * const qcom_dt_match[] __initconst = {
+	"qcom,msm8225q",
+	NULL
+};
+
 MACHINE_START(Z4U, "z4u")
-        .atag_offset    = PHYS_OFFSET + 0x100,
-        .fixup          = z4u_fixup,
-        .map_io         = msm8625_map_io,
-        .reserve        = msm8625_reserve,
-        .init_irq       = msm8625_init_irq,
-        .init_machine   = msm_z4u_init,
-        .timer          = &msm_timer,
-        .init_early     = qrd7627a_init_early,
-        .handle_irq     = gic_handle_irq,
+	.atag_offset    = PHYS_OFFSET + 0x100,
+	.fixup          = z4u_fixup,
+	.map_io         = msm8625_map_io,
+	.reserve        = msm8625_reserve,
+	.init_irq       = msm8625_init_irq,
+	.init_machine   = msm_z4u_init,
+	.timer          = &msm_timer,
+	.init_early     = qrd7627a_init_early,
+	.handle_irq     = gic_handle_irq,
+	.dt_compat = qcom_dt_match,
 MACHINE_END

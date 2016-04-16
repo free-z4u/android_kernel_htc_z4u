@@ -14,6 +14,9 @@
 #ifdef CONFIG_OF
 
 extern struct machine_desc *setup_machine_fdt(unsigned int dt_phys);
+#ifdef CONFIG_ARM_INSERT_DTB
+extern void setup_safe_machine_fdt(char *dt_phys);
+#endif
 extern void arm_dt_memblock_reserve(void);
 
 #else /* CONFIG_OF */
