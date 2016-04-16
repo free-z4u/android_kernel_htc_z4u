@@ -6,7 +6,11 @@
 
 	#address-cells = <1>;
 	#size-cells = <1>;
-	chosen { };
+	chosen {
+		bootargs = "boot_magic=0xC0C0C0C1 board_z4u.disable_uart3=0 board_z4u.usb_h2w_sw=0 board_z4u.disable_sdcard=0 diag.enabled=0 radio2flag=0x0 console=null board_z4u.debug_uart=0 smisize=0 userdata_sel=0 androidboot.emmc=true androidboot.pagesize=4096 skuid=0 ddt=20 ats=0 androidboot.lb=1 uif=?000 td.sf=0 hlog.ofs=628 un.ofs=696 imc_online_log=0 androidboot.baseband=14.16.36Q4.22 androidboot.cid=HTC__A48 androidboot.devicerev=2 androidboot.batt_poweron=good_battery androidboot.carrier=COMMON androidboot.mid=0P3Z11200 enable_zcharge=33 androidboot.keycaps=qwerty androidboot.dq=PASS androidboot.mode=recovery androidboot.serialno=xxxxxxxxxxxx androidboot.bootloader=1.03.0001 bpht=0x3E8 androidboot.nledhw=1 zygote_oneshot=on kmemleak=off rpm_debug.enable=0 no_console_suspend=1 console=null";
+		linux,initrd-end = <0x4d957ee>;
+		linux,initrd-start = <0x4b00000>;
+	};
 	aliases { };
 	memory { device_type = "memory"; reg = <0 0>; };
 };
