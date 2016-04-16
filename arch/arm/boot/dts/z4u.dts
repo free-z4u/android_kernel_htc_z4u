@@ -12,5 +12,14 @@
 		linux,initrd-start = <0x4b00000>;
 	};
 	aliases { };
-	memory { device_type = "memory"; reg = <0 0>; };
+
+	memory@0 {
+		device_type = "memory";
+		reg = <0x03B00000 0x0C500000>;
+	};
+
+	memory@1 {
+		device_type = "memory";
+		reg = <0x10000000 0x2FA00000>;
+	};
 };

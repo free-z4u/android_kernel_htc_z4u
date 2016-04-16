@@ -2821,27 +2821,6 @@ static void __init msm_z4u_init(void)
 #endif
 }
 
-static unsigned int radio_security = 0;
-
-static void __init z4u_fixup(struct tag *tags, char **cmdline, struct meminfo *mi)
-{
-    radio_security = parse_tag_security((const struct tag *)tags);
-    printk(KERN_INFO "%s: security_atag=0x%x\n", __func__, radio_security);
-
-    mi->nr_banks = 2;
-    mi->bank[0].start = 0x03B00000;
-    mi->bank[0].size = 0x0C500000;
-    mi->bank[1].start = 0x10000000;
-
-    if(radio_security && 0x1){
-
-      mi->bank[1].size = 0x2E600000;
-    }
-    else{
-      mi->bank[1].size = 0x2FA00000;
-    }
-}
-
 static void __init qrd7627a_init_early(void)
 {
 
@@ -2854,7 +2833,6 @@ static const char * const qcom_dt_match[] __initconst = {
 
 MACHINE_START(Z4U, "z4u")
 	.atag_offset    = PHYS_OFFSET + 0x100,
-	.fixup          = z4u_fixup,
 	.map_io         = msm8625_map_io,
 	.reserve        = msm8625_reserve,
 	.init_irq       = msm8625_init_irq,
